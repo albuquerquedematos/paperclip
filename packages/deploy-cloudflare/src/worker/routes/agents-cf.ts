@@ -19,6 +19,12 @@
  *                                                         calls fs.access on cwd
  *   GET    /api/companies/:companyId/adapters/:type/detect-model
  *                                                       — runs claude to query model
+ *   GET    /api/heartbeat-runs/:runId/log               — fs read of run log
+ *                                                         (fs.stat .catch swallows the
+ *                                                         CF shim error and returns 404,
+ *                                                         so we have to route this by path
+ *                                                         instead of relying on auto-fallback)
+ *   GET    /api/workspace-operations/:operationId/log   — same: fs read of op log
  *
  * Without these CF-native shadows the auto-bridged server handlers run
  * inside the worker and fail with `node:fs/promises not available` or
@@ -102,4 +108,11 @@ export function registerAgentCfRoutes(app: Hono<{ Bindings: Env }>): void {
   // touch the filesystem (resolveCommandPath, fs.access on cwd, etc.).
   app.post("/api/companies/:companyId/adapters/:type/test-environment", handler);
   app.get("/api/companies/:companyId/adapters/:type/detect-model", handler);
+
+  // Run log + workspace-operation log: fs.stat is wrapped in `.catch(() => null)`
+  // which swallows the CF shim "not available" error as if the file is missing,
+  // returning a 404 to the user. Route them directly to the sidecar so
+  // node:fs.createReadStream / fs.stat work against the real disk.
+  app.get("/api/heartbeat-runs/:runId/log", handler);
+  app.get("/api/workspace-operations/:operationId/log", handler);
 }
