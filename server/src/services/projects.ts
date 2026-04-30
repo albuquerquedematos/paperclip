@@ -419,11 +419,24 @@ export function projectService(db: Db) {
     },
 
     getById: async (id: string): Promise<ProjectWithGoals | null> => {
-      const row = await db
-        .select()
-        .from(projects)
-        .where(eq(projects.id, id))
-        .then((rows) => rows[0] ?? null);
+      const trimmed = id.trim();
+
+      let row: ProjectRow | null = null;
+      if (isUuidLike(trimmed)) {
+        row = await db
+          .select()
+          .from(projects)
+          .where(eq(projects.id, trimmed))
+          .then((rows) => rows[0] ?? null);
+      } else {
+        // URL key (e.g. "onboarding") — scan and match by deriveProjectUrlKey.
+        // The route handler enforces company access on the resolved project.
+        const urlKey = normalizeProjectUrlKey(trimmed);
+        if (!urlKey) return null;
+        const allRows = await db.select().from(projects);
+        row = allRows.find((r) => deriveProjectUrlKey(r.name, r.id) === urlKey) ?? null;
+      }
+
       if (!row) return null;
       const [withGoals] = await attachGoals(db, [row]);
       if (!withGoals) return null;

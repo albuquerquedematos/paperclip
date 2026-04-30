@@ -608,7 +608,10 @@ export function agentRoutes(
 
     const companyId = await resolveCompanyIdForAgentReference(ctx);
     if (!companyId) {
-      throw unprocessable("Agent shortname lookup requires companyId query parameter");
+      // No company context to scope the lookup. Leave the raw value in place
+      // so handlers can resolve it via svc.getById (which scans by URL key
+      // and lets the route handler enforce assertCompanyAccess afterwards).
+      return raw;
     }
 
     const resolved = await svc.resolveByReference(companyId, raw);
@@ -616,7 +619,9 @@ export function agentRoutes(
       throw conflict("Agent shortname is ambiguous in this company. Use the agent ID.");
     }
     if (!resolved.agent) {
-      throw notFound("Agent not found");
+      // Don't throw here either — return raw and let the handler decide.
+      // svc.getById is the single source of truth for resolution + 404 behavior.
+      return raw;
     }
     return resolved.agent.id;
   }

@@ -35,7 +35,7 @@ const BASE_URL = process.env.CF_SMOKE_BASE_URL ?? "http://localhost:8787";
 interface Company { id: string; name: string }
 interface Issue { id: string; humanKey?: string; companyId: string }
 interface Agent { id: string; companyId: string; urlKey?: string; name?: string }
-interface Project { id: string; companyId: string }
+interface Project { id: string; companyId: string; urlKey?: string }
 
 let company: Company | null = null;
 let issue: Issue | null = null;
@@ -321,13 +321,20 @@ describe("CF Worker smoke — issue lifecycle mutation", () => {
 // 7. Project-scoped reads
 // ---------------------------------------------------------------------------
 
-describe("CF Worker smoke — project-scoped reads", () => {
+describe("CF Worker smoke — project-scoped reads (regression: URL-key resolution)", () => {
   // Only routes that the server actually defines (server/src/routes/projects.ts).
   const routes = ["", "workspaces"];
   for (const tail of routes) {
-    it(`GET /api/projects/:id${tail ? "/" + tail : ""}`, async () => {
+    it(`GET /api/projects/:uuid${tail ? "/" + tail : ""}`, async () => {
       if (!project) return;
       const path = `/api/projects/${project.id}${tail ? "/" + tail : ""}`;
+      const r = await get(path);
+      expectNoCrash(`GET ${path}`, r.status);
+    });
+
+    it(`GET /api/projects/:urlKey${tail ? "/" + tail : ""} (regression)`, async () => {
+      if (!project?.urlKey) return;
+      const path = `/api/projects/${project.urlKey}${tail ? "/" + tail : ""}`;
       const r = await get(path);
       expectNoCrash(`GET ${path}`, r.status);
     });

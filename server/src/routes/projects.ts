@@ -218,7 +218,7 @@ export function projectRoutes(db: Db) {
         fieldPath: "env",
       });
     }
-    const project = await svc.update(id, body);
+    const project = await svc.update(existing.id, body);
     if (!project) {
       return Response.json({ error: "Project not found" }, { status: 404 });
     }
@@ -251,7 +251,7 @@ export function projectRoutes(db: Db) {
       return Response.json({ error: "Project not found" }, { status: 404 });
     }
     assertCompanyAccess(ctx, existing.companyId);
-    const workspaces = await svc.listWorkspaces(id);
+    const workspaces = await svc.listWorkspaces(existing.id);
     return Response.json(workspaces);
   };
 
@@ -268,7 +268,7 @@ export function projectRoutes(db: Db) {
       ctx,
       collectProjectWorkspaceCommandPaths(body),
     );
-    const workspace = await svc.createWorkspace(id, body);
+    const workspace = await svc.createWorkspace(existing.id, body);
     if (!workspace) {
       return Response.json({ error: "Invalid project workspace payload" }, { status: 422 });
     }
@@ -281,7 +281,7 @@ export function projectRoutes(db: Db) {
       agentId: actor.agentId,
       action: "project.workspace_created",
       entityType: "project",
-      entityId: id,
+      entityId: existing.id,
       details: {
         workspaceId: workspace.id,
         name: workspace.name,
@@ -307,11 +307,11 @@ export function projectRoutes(db: Db) {
       ctx,
       collectProjectWorkspaceCommandPaths(body),
     );
-    const workspaceExists = (await svc.listWorkspaces(id)).some((workspace) => workspace.id === workspaceId);
+    const workspaceExists = (await svc.listWorkspaces(existing.id)).some((workspace) => workspace.id === workspaceId);
     if (!workspaceExists) {
       return Response.json({ error: "Project workspace not found" }, { status: 404 });
     }
-    const workspace = await svc.updateWorkspace(id, workspaceId, body);
+    const workspace = await svc.updateWorkspace(existing.id, workspaceId, body);
     if (!workspace) {
       return Response.json({ error: "Invalid project workspace payload" }, { status: 422 });
     }
@@ -324,7 +324,7 @@ export function projectRoutes(db: Db) {
       agentId: actor.agentId,
       action: "project.workspace_updated",
       entityType: "project",
-      entityId: id,
+      entityId: existing.id,
       details: {
         workspaceId: workspace.id,
         changedKeys: Object.keys(body as Record<string, unknown>).sort(),
@@ -606,7 +606,7 @@ export function projectRoutes(db: Db) {
       return Response.json({ error: "Project not found" }, { status: 404 });
     }
     assertCompanyAccess(ctx, existing.companyId);
-    const workspace = await svc.removeWorkspace(id, workspaceId);
+    const workspace = await svc.removeWorkspace(existing.id, workspaceId);
     if (!workspace) {
       return Response.json({ error: "Project workspace not found" }, { status: 404 });
     }
@@ -619,7 +619,7 @@ export function projectRoutes(db: Db) {
       agentId: actor.agentId,
       action: "project.workspace_deleted",
       entityType: "project",
-      entityId: id,
+      entityId: existing.id,
       details: {
         workspaceId: workspace.id,
         name: workspace.name,
@@ -636,7 +636,7 @@ export function projectRoutes(db: Db) {
       return Response.json({ error: "Project not found" }, { status: 404 });
     }
     assertCompanyAccess(ctx, existing.companyId);
-    const project = await svc.remove(id);
+    const project = await svc.remove(existing.id);
     if (!project) {
       return Response.json({ error: "Project not found" }, { status: 404 });
     }
