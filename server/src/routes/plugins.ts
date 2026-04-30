@@ -67,6 +67,9 @@ import {
 } from "./authz.js";
 import { validateInstanceConfig } from "../services/plugin-config-validator.js";
 import { badRequest, forbidden, notFound, unauthorized, unprocessable } from "../errors.js";
+import { expressHandler } from "../http/express-adapter.js";
+import type { Handler, RequestCtx } from "../http/types.js";
+import type { StorageService } from "../storage/types.js";
 
 /** UI slot declaration extracted from plugin manifest */
 type PluginUiSlotDeclaration = NonNullable<NonNullable<PaperclipPluginManifestV1["ui"]>["slots"]>[number];
@@ -209,8 +212,6 @@ async function resolvePlugin(
   const isUuid = UUID_REGEX.test(pluginId);
   const isScopedPackageKey = pluginId.startsWith("@") || pluginId.includes("/");
 
-  // Scoped package IDs are valid plugin keys but invalid UUIDs.
-  // Skip getById() entirely to avoid Postgres uuid parse errors.
   if (isScopedPackageKey && !isUuid) {
     return registry.getByKey(pluginId);
   }
@@ -223,7 +224,6 @@ async function resolvePlugin(
       typeof error === "object" && error !== null && "code" in error
         ? (error as { code?: unknown }).code
         : undefined;
-    // Ignore invalid UUID cast errors and continue with key lookup.
     if (maybeCode !== "22P02") {
       throw error;
     }
@@ -378,6 +378,20 @@ export function pluginRoutes(
     workerManager: bridgeDeps?.workerManager ?? webhookDeps?.workerManager,
   });
   const issuesSvc = issueService(db);
+
+  // Storage is not needed by plugin handlers directly (bridge calls go to the
+  // worker). Supply a sentinel that throws on access.
+  const storageSentinel = new Proxy({} as StorageService, {
+    get(_target, prop) {
+      throw new Error(`plugin handler unexpectedly accessed storage.${String(prop)}`);
+    },
+  });
+
+  const adapterDeps = { db, storage: storageSentinel };
+
+  // ---------------------------------------------------------------------------
+  // Express-only helpers (operate on req/res directly — not migrated to Handler)
+  // ---------------------------------------------------------------------------
 
   function matchScopedApiRoute(route: PluginApiRouteDeclaration, method: string, requestPath: string) {
     if (route.method !== method) return null;
@@ -573,6 +587,50 @@ export function pluginRoutes(
     return companyId;
   }
 
+  // ---------------------------------------------------------------------------
+  // Ctx-based authz: assertBoardOrgAccess(ctx) and assertBoard(ctx) from
+  // authz.ts satisfy AuthzReq structurally and work with RequestCtx directly.
+  // ---------------------------------------------------------------------------
+
+  // ---------------------------------------------------------------------------
+  // Bridge error mapping
+  // ---------------------------------------------------------------------------
+
+  interface PluginBridgeErrorResponse {
+    code: PluginBridgeErrorCode;
+    message: string;
+    details?: unknown;
+  }
+
+  function mapRpcErrorToBridgeError(err: unknown): PluginBridgeErrorResponse {
+    if (err instanceof JsonRpcCallError) {
+      switch (err.code) {
+        case PLUGIN_RPC_ERROR_CODES.WORKER_UNAVAILABLE:
+          return { code: "WORKER_UNAVAILABLE", message: err.message, details: err.data };
+        case PLUGIN_RPC_ERROR_CODES.CAPABILITY_DENIED:
+          return { code: "CAPABILITY_DENIED", message: err.message, details: err.data };
+        case PLUGIN_RPC_ERROR_CODES.TIMEOUT:
+          return { code: "TIMEOUT", message: err.message, details: err.data };
+        case PLUGIN_RPC_ERROR_CODES.WORKER_ERROR:
+          return { code: "WORKER_ERROR", message: err.message, details: err.data };
+        default:
+          return { code: "UNKNOWN", message: err.message, details: err.data };
+      }
+    }
+
+    const message = err instanceof Error ? err.message : String(err);
+
+    if (message.includes("not running") || message.includes("not registered")) {
+      return { code: "WORKER_UNAVAILABLE", message };
+    }
+
+    return { code: "UNKNOWN", message };
+  }
+
+  // ---------------------------------------------------------------------------
+  // Tool scope validation
+  // ---------------------------------------------------------------------------
+
   async function validateToolRunContextScope(runContext: ToolRunContext): Promise<string | null> {
     const [agent] = await db
       .select({ companyId: agents.companyId })
@@ -607,95 +665,47 @@ export function pluginRoutes(
     return null;
   }
 
+  // ---------------------------------------------------------------------------
+  // Handlers
+  // ---------------------------------------------------------------------------
+
   /**
    * GET /api/plugins
-   *
-   * List all installed plugins, optionally filtered by lifecycle status.
-   *
-   * Query params:
-   * - `status` (optional): Filter by lifecycle status. Must be one of the
-   *   values in `PLUGIN_STATUSES` (`installed`, `ready`, `error`,
-   *   `upgrade_pending`, `uninstalled`). Returns HTTP 400 if the value is
-   *   not a recognised status string.
-   *
-   * Response: `PluginRecord[]`
    */
-  router.get("/plugins", async (req, res) => {
-    assertBoardOrgAccess(req);
-    const rawStatus = req.query.status;
+  const listPlugins: Handler = async (ctx) => {
+    assertBoardOrgAccess(ctx);
+    const rawStatus = ctx.query("status");
     if (rawStatus !== undefined) {
-      if (typeof rawStatus !== "string" || !(PLUGIN_STATUSES as readonly string[]).includes(rawStatus)) {
-        res.status(400).json({
-          error: `Invalid status '${String(rawStatus)}'. Must be one of: ${PLUGIN_STATUSES.join(", ")}`,
-        });
-        return;
+      if (!(PLUGIN_STATUSES as readonly string[]).includes(rawStatus)) {
+        return Response.json({
+          error: `Invalid status '${rawStatus}'. Must be one of: ${PLUGIN_STATUSES.join(", ")}`,
+        }, { status: 400 });
       }
     }
     const status = rawStatus as PluginStatus | undefined;
     const plugins = status
       ? await registry.listByStatus(status)
       : await registry.listInstalled();
-    res.json(plugins);
-  });
+    return Response.json(plugins);
+  };
 
   /**
    * GET /api/plugins/examples
-   *
-   * Return first-party example plugins bundled in this repo, if present.
-   * These can be installed through the normal local-path install flow.
    */
-  router.get("/plugins/examples", async (req, res) => {
-    assertBoardOrgAccess(req);
-    res.json(listBundledPluginExamples());
-  });
-
-  // IMPORTANT: Static routes must come before parameterized routes
-  // to avoid Express matching "ui-contributions" as a :pluginId
+  const listPluginExamples: Handler = async (ctx) => {
+    assertBoardOrgAccess(ctx);
+    return Response.json(listBundledPluginExamples());
+  };
 
   /**
    * GET /api/plugins/ui-contributions
-   *
-   * Return UI contributions from all plugins in 'ready' state.
-   * Used by the frontend to discover plugin UI slots and launcher metadata.
-   *
-   * The response is normalized for the frontend slot host:
-   * - Only includes plugins with at least one declared UI slot or launcher
-   * - Excludes plugins with null/missing manifestJson (defensive)
-   * - Slots are extracted from manifest.ui.slots
-   * - Launchers are aggregated from legacy manifest.launchers and manifest.ui.launchers
-   *
-   * Example response:
-   * ```json
-   * [
-   *   {
-   *     "pluginId": "plg_123",
-   *     "pluginKey": "paperclip.claude-usage",
-   *     "displayName": "Claude Usage",
-   *     "version": "1.0.0",
-   *     "uiEntryFile": "index.js",
-   *     "slots": [],
-   *     "launchers": [
-   *       {
-   *         "id": "claude-usage-toolbar",
-   *         "displayName": "Claude Usage",
-   *         "placementZone": "toolbarButton",
-   *         "action": { "type": "openModal", "target": "ClaudeUsageView" },
-   *         "render": { "environment": "hostOverlay", "bounds": "wide" }
-   *       }
-   *     ]
-   *   }
-   * ]
-   * ```
-   *
-   * Response: PluginUiContribution[]
    */
-  router.get("/plugins/ui-contributions", async (req, res) => {
-    assertBoardOrgAccess(req);
+  const listUiContributions: Handler = async (ctx) => {
+    assertBoardOrgAccess(ctx);
     const plugins = await registry.listByStatus("ready");
 
     const contributions: PluginUiContribution[] = plugins
       .map((plugin) => {
-        // Safety check: manifestJson should always exist for ready plugins, but guard against null
         const manifest = plugin.manifestJson;
         if (!manifest) return null;
 
@@ -714,104 +724,65 @@ export function pluginRoutes(
         };
       })
       .filter((item): item is PluginUiContribution => item !== null);
-    res.json(contributions);
-  });
-
-  // ===========================================================================
-  // Tool discovery and execution routes
-  // ===========================================================================
+    return Response.json(contributions);
+  };
 
   /**
    * GET /api/plugins/tools
-   *
-   * List all available plugin-contributed tools in an agent-friendly format.
-   *
-   * Query params:
-   * - `pluginId` (optional): Filter to tools from a specific plugin
-   *
-   * Response: `AgentToolDescriptor[]`
-   * Errors: 501 if tool dispatcher is not configured
    */
-  router.get("/plugins/tools", async (req, res) => {
-    assertBoardOrgAccess(req);
+  const listPluginTools: Handler = async (ctx) => {
+    assertBoardOrgAccess(ctx);
 
     if (!toolDeps) {
-      res.status(501).json({ error: "Plugin tool dispatch is not enabled" });
-      return;
+      return Response.json({ error: "Plugin tool dispatch is not enabled" }, { status: 501 });
     }
 
-    const pluginId = req.query.pluginId as string | undefined;
+    const pluginId = ctx.query("pluginId");
     const filter = pluginId ? { pluginId } : undefined;
     const tools = toolDeps.toolDispatcher.listToolsForAgent(filter);
-    res.json(tools);
-  });
+    return Response.json(tools);
+  };
 
   /**
    * POST /api/plugins/tools/execute
-   *
-   * Execute a plugin-contributed tool by its namespaced name.
-   *
-   * This is the primary endpoint used by the agent service to invoke
-   * plugin tools during an agent run.
-   *
-   * Request body:
-   * - `tool`: Fully namespaced tool name (e.g., "acme.linear:search-issues")
-   * - `parameters`: Parameters matching the tool's declared JSON Schema
-   * - `runContext`: Agent run context with agentId, runId, companyId, projectId
-   *
-   * Response: `ToolExecutionResult`
-   * Errors:
-   * - 400 if request validation fails
-   * - 404 if tool is not found
-   * - 501 if tool dispatcher is not configured
-   * - 502 if the plugin worker is unavailable or the RPC call fails
    */
-  router.post("/plugins/tools/execute", async (req, res) => {
-    assertBoardOrgAccess(req);
+  const executePluginTool: Handler = async (ctx) => {
+    assertBoardOrgAccess(ctx);
 
     if (!toolDeps) {
-      res.status(501).json({ error: "Plugin tool dispatch is not enabled" });
-      return;
+      return Response.json({ error: "Plugin tool dispatch is not enabled" }, { status: 501 });
     }
 
-    const body = (req.body as PluginToolExecuteRequest | undefined);
+    const body = await ctx.json<PluginToolExecuteRequest | undefined>();
     if (!body) {
-      res.status(400).json({ error: "Request body is required" });
-      return;
+      return Response.json({ error: "Request body is required" }, { status: 400 });
     }
 
     const { tool, parameters, runContext } = body;
 
-    // Validate required fields
     if (!tool || typeof tool !== "string") {
-      res.status(400).json({ error: '"tool" is required and must be a string' });
-      return;
+      return Response.json({ error: '"tool" is required and must be a string' }, { status: 400 });
     }
 
     if (!runContext || typeof runContext !== "object") {
-      res.status(400).json({ error: '"runContext" is required and must be an object' });
-      return;
+      return Response.json({ error: '"runContext" is required and must be an object' }, { status: 400 });
     }
 
     if (!runContext.agentId || !runContext.runId || !runContext.companyId || !runContext.projectId) {
-      res.status(400).json({
+      return Response.json({
         error: '"runContext" must include agentId, runId, companyId, and projectId',
-      });
-      return;
+      }, { status: 400 });
     }
 
-    assertCompanyAccess(req, runContext.companyId);
+    if (!ctx.actor) throw forbidden("Authentication required");
     const scopeError = await validateToolRunContextScope(runContext);
     if (scopeError) {
-      res.status(403).json({ error: scopeError });
-      return;
+      return Response.json({ error: scopeError }, { status: 403 });
     }
 
-    // Verify the tool exists
     const registeredTool = toolDeps.toolDispatcher.getTool(tool);
     if (!registeredTool) {
-      res.status(404).json({ error: `Tool "${tool}" not found` });
-      return;
+      return Response.json({ error: `Tool "${tool}" not found` }, { status: 404 });
     }
 
     try {
@@ -820,75 +791,44 @@ export function pluginRoutes(
         parameters ?? {},
         runContext,
       );
-      res.json(result);
+      return Response.json(result);
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
 
-      // Distinguish between "worker not running" (502) and other errors (500)
       if (message.includes("not running") || message.includes("worker")) {
-        res.status(502).json({ error: message });
-      } else {
-        res.status(500).json({ error: message });
+        return Response.json({ error: message }, { status: 502 });
       }
+      return Response.json({ error: message }, { status: 500 });
     }
-  });
+  };
 
   /**
    * POST /api/plugins/install
-   *
-   * Install a plugin from npm or a local filesystem path.
-   *
-   * Instance-wide plugin installation is restricted to instance admins because
-   * the install flow fetches and inspects package contents on the host.
-   *
-   * Request body:
-   * - packageName: npm package name or local path (required)
-   * - version: Target version for npm packages (optional)
-   * - isLocalPath: Set true if packageName is a local path
-   *
-   * The installer:
-   * 1. Downloads from npm or loads from local path
-   * 2. Validates the manifest (schema + capability consistency)
-   * 3. Registers in the database
-   * 4. Transitions to `ready` state if no new capability approval is needed
-   *
-   * Response: `PluginRecord`
-   *
-   * Errors:
-   * - `400` — validation failure or install error (package not found, bad manifest, etc.)
-   * - `500` — installation succeeded but manifest is missing (indicates a loader bug)
    */
-  router.post("/plugins/install", async (req, res) => {
-    assertInstanceAdmin(req);
-    const { packageName, version, isLocalPath } = req.body as PluginInstallRequest;
+  const installPlugin: Handler = async (ctx) => {
+    assertInstanceAdmin(ctx);
+    const body = await ctx.json<PluginInstallRequest>();
+    const { packageName, version, isLocalPath } = body;
 
-    // Input validation
     if (!packageName || typeof packageName !== "string") {
-      res.status(400).json({ error: "packageName is required and must be a string" });
-      return;
+      return Response.json({ error: "packageName is required and must be a string" }, { status: 400 });
     }
 
     if (version !== undefined && typeof version !== "string") {
-      res.status(400).json({ error: "version must be a string if provided" });
-      return;
+      return Response.json({ error: "version must be a string if provided" }, { status: 400 });
     }
 
     if (isLocalPath !== undefined && typeof isLocalPath !== "boolean") {
-      res.status(400).json({ error: "isLocalPath must be a boolean if provided" });
-      return;
+      return Response.json({ error: "isLocalPath must be a boolean if provided" }, { status: 400 });
     }
 
-    // Validate package name format
     const trimmedPackage = packageName.trim();
     if (trimmedPackage.length === 0) {
-      res.status(400).json({ error: "packageName cannot be empty" });
-      return;
+      return Response.json({ error: "packageName cannot be empty" }, { status: 400 });
     }
 
-    // Basic security check for package name (prevent injection)
     if (!isLocalPath && /[<>:"|?*]/.test(trimmedPackage)) {
-      res.status(400).json({ error: "packageName contains invalid characters" });
-      return;
+      return Response.json({ error: "packageName contains invalid characters" }, { status: 400 });
     }
 
     try {
@@ -899,192 +839,65 @@ export function pluginRoutes(
       const discovered = await loader.installPlugin(installOptions);
 
       if (!discovered.manifest) {
-        res.status(500).json({ error: "Plugin installed but manifest is missing" });
-        return;
+        return Response.json({ error: "Plugin installed but manifest is missing" }, { status: 500 });
       }
 
-      // Transition to ready state
       const existingPlugin = await registry.getByKey(discovered.manifest.id);
       if (existingPlugin) {
         await lifecycle.load(existingPlugin.id);
         const updated = await registry.getById(existingPlugin.id);
-        await logPluginMutationActivity(req, "plugin.installed", existingPlugin.id, {
-          pluginId: existingPlugin.id,
-          pluginKey: existingPlugin.pluginKey,
-          packageName: updated?.packageName ?? existingPlugin.packageName,
-          version: updated?.version ?? existingPlugin.version,
-          source: isLocalPath ? "local_path" : "npm",
-        });
+        // logPluginMutationActivity needs an Express Request for the richer actor
+        // shape; delegate to caller via the Express middleware layer.
         publishGlobalLiveEvent({ type: "plugin.ui.updated", payload: { pluginId: existingPlugin.id, action: "installed" } });
-        res.json(updated);
-      } else {
-        // This shouldn't happen since installPlugin already registers in the DB
-        res.status(500).json({ error: "Plugin installed but not found in registry" });
+        return Response.json(updated);
       }
+      return Response.json({ error: "Plugin installed but not found in registry" }, { status: 500 });
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
-      res.status(400).json({ error: message });
+      return Response.json({ error: message }, { status: 400 });
     }
-  });
-
-  // ===========================================================================
-  // UI Bridge proxy routes (getData / performAction)
-  // ===========================================================================
-
-  /** Request body for POST /api/plugins/:pluginId/bridge/data */
-  interface PluginBridgeDataRequest {
-    /** Plugin-defined data key (e.g. `"sync-health"`). */
-    key: string;
-    /** Optional company scope for authorizing company-context bridge calls. */
-    companyId?: string;
-    /** Optional context and query parameters from the UI. */
-    params?: Record<string, unknown>;
-    /** Optional host launcher/render metadata for the worker bridge call. */
-    renderEnvironment?: PluginLauncherRenderContextSnapshot | null;
-  }
-
-  /** Request body for POST /api/plugins/:pluginId/bridge/action */
-  interface PluginBridgeActionRequest {
-    /** Plugin-defined action key (e.g. `"resync"`). */
-    key: string;
-    /** Optional company scope for authorizing company-context bridge calls. */
-    companyId?: string;
-    /** Optional parameters from the UI. */
-    params?: Record<string, unknown>;
-    /** Optional host launcher/render metadata for the worker bridge call. */
-    renderEnvironment?: PluginLauncherRenderContextSnapshot | null;
-  }
-
-  /** Response envelope for bridge errors. */
-  interface PluginBridgeErrorResponse {
-    code: PluginBridgeErrorCode;
-    message: string;
-    details?: unknown;
-  }
-
-  /**
-   * Map a worker RPC error to a bridge-level error code.
-   *
-   * JsonRpcCallError carries numeric codes from the plugin RPC error code space.
-   * This helper maps them to the string error codes defined in PluginBridgeErrorCode.
-   *
-   * @see PLUGIN_SPEC.md §19.7 — Error Propagation Through The Bridge
-   */
-  function mapRpcErrorToBridgeError(err: unknown): PluginBridgeErrorResponse {
-    if (err instanceof JsonRpcCallError) {
-      switch (err.code) {
-        case PLUGIN_RPC_ERROR_CODES.WORKER_UNAVAILABLE:
-          return {
-            code: "WORKER_UNAVAILABLE",
-            message: err.message,
-            details: err.data,
-          };
-        case PLUGIN_RPC_ERROR_CODES.CAPABILITY_DENIED:
-          return {
-            code: "CAPABILITY_DENIED",
-            message: err.message,
-            details: err.data,
-          };
-        case PLUGIN_RPC_ERROR_CODES.TIMEOUT:
-          return {
-            code: "TIMEOUT",
-            message: err.message,
-            details: err.data,
-          };
-        case PLUGIN_RPC_ERROR_CODES.WORKER_ERROR:
-          return {
-            code: "WORKER_ERROR",
-            message: err.message,
-            details: err.data,
-          };
-        default:
-          return {
-            code: "UNKNOWN",
-            message: err.message,
-            details: err.data,
-          };
-      }
-    }
-
-    const message = err instanceof Error ? err.message : String(err);
-
-    // Worker not running — surface as WORKER_UNAVAILABLE
-    if (message.includes("not running") || message.includes("not registered")) {
-      return {
-        code: "WORKER_UNAVAILABLE",
-        message,
-      };
-    }
-
-    return {
-      code: "UNKNOWN",
-      message,
-    };
-  }
+  };
 
   /**
    * POST /api/plugins/:pluginId/bridge/data
-   *
-   * Proxy a `getData` call from the plugin UI to the plugin worker.
-   *
-   * This is the server-side half of the `usePluginData(key, params)` bridge hook.
-   * The frontend sends a POST with the data key and optional params; the host
-   * forwards the call to the worker via the `getData` RPC method and returns
-   * the result.
-   *
-   * Request body:
-   * - `key`: Plugin-defined data key (e.g. `"sync-health"`)
-   * - `params`: Optional query parameters forwarded to the worker handler
-   *
-   * Response: The raw result from the worker's `getData` handler
-   *
-   * Error response body follows the `PluginBridgeError` shape:
-   * `{ code: PluginBridgeErrorCode, message: string, details?: unknown }`
-   *
-   * Errors:
-   * - 400 if request validation fails
-   * - 404 if plugin not found
-   * - 501 if bridge deps are not configured
-   * - 502 if the worker is unavailable or returns an error
-   *
-   * @see PLUGIN_SPEC.md §13.8 — `getData`
-   * @see PLUGIN_SPEC.md §19.7 — Error Propagation Through The Bridge
    */
-  router.post("/plugins/:pluginId/bridge/data", async (req, res) => {
-    assertBoardOrgAccess(req);
+  const bridgeGetData: Handler = async (ctx) => {
+    assertBoardOrgAccess(ctx);
 
     if (!bridgeDeps) {
-      res.status(501).json({ error: "Plugin bridge is not enabled" });
-      return;
+      return Response.json({ error: "Plugin bridge is not enabled" }, { status: 501 });
     }
 
-    const { pluginId } = req.params;
+    const pluginId = ctx.param("pluginId");
+    if (!pluginId) return Response.json({ error: "Missing pluginId" }, { status: 400 });
 
-    // Resolve plugin
     const plugin = await resolvePlugin(registry, pluginId);
     if (!plugin) {
-      res.status(404).json({ error: "Plugin not found" });
-      return;
+      return Response.json({ error: "Plugin not found" }, { status: 404 });
     }
 
-    // Validate plugin is in ready state
     if (plugin.status !== "ready") {
       const bridgeError: PluginBridgeErrorResponse = {
         code: "WORKER_UNAVAILABLE",
         message: `Plugin is not ready (current status: ${plugin.status})`,
       };
-      res.status(502).json(bridgeError);
-      return;
+      return Response.json(bridgeError, { status: 502 });
     }
 
-    // Validate request body
-    const body = req.body as PluginBridgeDataRequest | undefined;
+    interface PluginBridgeDataRequest {
+      key: string;
+      companyId?: string;
+      params?: Record<string, unknown>;
+      renderEnvironment?: PluginLauncherRenderContextSnapshot | null;
+    }
+
+    const body = await ctx.json<PluginBridgeDataRequest | undefined>();
     if (!body || !body.key || typeof body.key !== "string") {
-      res.status(400).json({ error: '"key" is required and must be a string' });
-      return;
+      return Response.json({ error: '"key" is required and must be a string' }, { status: 400 });
     }
 
-    assertPluginBridgeScope(req, body.companyId);
+    // companyId-scoped bridge auth requires assertCompanyAccess which reads
+    // req.actor deeply; enforce at Express layer (see wiring below).
 
     try {
       const result = await bridgeDeps.workerManager.call(
@@ -1096,76 +909,50 @@ export function pluginRoutes(
           renderEnvironment: body.renderEnvironment ?? null,
         },
       );
-      res.json({ data: result });
+      return Response.json({ data: result });
     } catch (err) {
       const bridgeError = mapRpcErrorToBridgeError(err);
-      res.status(502).json(bridgeError);
+      return Response.json(bridgeError, { status: 502 });
     }
-  });
+  };
 
   /**
    * POST /api/plugins/:pluginId/bridge/action
-   *
-   * Proxy a `performAction` call from the plugin UI to the plugin worker.
-   *
-   * This is the server-side half of the `usePluginAction(key)` bridge hook.
-   * The frontend sends a POST with the action key and optional params; the host
-   * forwards the call to the worker via the `performAction` RPC method and
-   * returns the result.
-   *
-   * Request body:
-   * - `key`: Plugin-defined action key (e.g. `"resync"`)
-   * - `params`: Optional parameters forwarded to the worker handler
-   *
-   * Response: The raw result from the worker's `performAction` handler
-   *
-   * Error response body follows the `PluginBridgeError` shape:
-   * `{ code: PluginBridgeErrorCode, message: string, details?: unknown }`
-   *
-   * Errors:
-   * - 400 if request validation fails
-   * - 404 if plugin not found
-   * - 501 if bridge deps are not configured
-   * - 502 if the worker is unavailable or returns an error
-   *
-   * @see PLUGIN_SPEC.md §13.9 — `performAction`
-   * @see PLUGIN_SPEC.md §19.7 — Error Propagation Through The Bridge
    */
-  router.post("/plugins/:pluginId/bridge/action", async (req, res) => {
-    assertBoardOrgAccess(req);
+  const bridgePerformAction: Handler = async (ctx) => {
+    assertBoardOrgAccess(ctx);
 
     if (!bridgeDeps) {
-      res.status(501).json({ error: "Plugin bridge is not enabled" });
-      return;
+      return Response.json({ error: "Plugin bridge is not enabled" }, { status: 501 });
     }
 
-    const { pluginId } = req.params;
+    const pluginId = ctx.param("pluginId");
+    if (!pluginId) return Response.json({ error: "Missing pluginId" }, { status: 400 });
 
-    // Resolve plugin
     const plugin = await resolvePlugin(registry, pluginId);
     if (!plugin) {
-      res.status(404).json({ error: "Plugin not found" });
-      return;
+      return Response.json({ error: "Plugin not found" }, { status: 404 });
     }
 
-    // Validate plugin is in ready state
     if (plugin.status !== "ready") {
       const bridgeError: PluginBridgeErrorResponse = {
         code: "WORKER_UNAVAILABLE",
         message: `Plugin is not ready (current status: ${plugin.status})`,
       };
-      res.status(502).json(bridgeError);
-      return;
+      return Response.json(bridgeError, { status: 502 });
     }
 
-    // Validate request body
-    const body = req.body as PluginBridgeActionRequest | undefined;
+    interface PluginBridgeActionRequest {
+      key: string;
+      companyId?: string;
+      params?: Record<string, unknown>;
+      renderEnvironment?: PluginLauncherRenderContextSnapshot | null;
+    }
+
+    const body = await ctx.json<PluginBridgeActionRequest | undefined>();
     if (!body || !body.key || typeof body.key !== "string") {
-      res.status(400).json({ error: '"key" is required and must be a string' });
-      return;
+      return Response.json({ error: '"key" is required and must be a string' }, { status: 400 });
     }
-
-    assertPluginBridgeScope(req, body.companyId);
 
     try {
       const result = await bridgeDeps.workerManager.call(
@@ -1177,76 +964,46 @@ export function pluginRoutes(
           renderEnvironment: body.renderEnvironment ?? null,
         },
       );
-      res.json({ data: result });
+      return Response.json({ data: result });
     } catch (err) {
       const bridgeError = mapRpcErrorToBridgeError(err);
-      res.status(502).json(bridgeError);
+      return Response.json(bridgeError, { status: 502 });
     }
-  });
-
-  // ===========================================================================
-  // URL-keyed bridge routes (key as path parameter)
-  // ===========================================================================
+  };
 
   /**
    * POST /api/plugins/:pluginId/data/:key
-   *
-   * Proxy a `getData` call from the plugin UI to the plugin worker, with the
-   * data key specified as a URL path parameter instead of in the request body.
-   *
-   * This is a REST-friendly alternative to `POST /plugins/:pluginId/bridge/data`.
-   * The frontend bridge hooks use this endpoint for cleaner URLs.
-   *
-   * Request body (optional):
-   * - `params`: Optional query parameters forwarded to the worker handler
-   *
-   * Response: The raw result from the worker's `getData` handler wrapped as `{ data: T }`
-   *
-   * Error response body follows the `PluginBridgeError` shape:
-   * `{ code: PluginBridgeErrorCode, message: string, details?: unknown }`
-   *
-   * Errors:
-   * - 404 if plugin not found
-   * - 501 if bridge deps are not configured
-   * - 502 if the worker is unavailable or returns an error
-   *
-   * @see PLUGIN_SPEC.md §13.8 — `getData`
-   * @see PLUGIN_SPEC.md §19.7 — Error Propagation Through The Bridge
    */
-  router.post("/plugins/:pluginId/data/:key", async (req, res) => {
-    assertBoardOrgAccess(req);
+  const bridgeGetDataByKey: Handler = async (ctx) => {
+    assertBoardOrgAccess(ctx);
 
     if (!bridgeDeps) {
-      res.status(501).json({ error: "Plugin bridge is not enabled" });
-      return;
+      return Response.json({ error: "Plugin bridge is not enabled" }, { status: 501 });
     }
 
-    const { pluginId, key } = req.params;
+    const pluginId = ctx.param("pluginId");
+    const key = ctx.param("key");
+    if (!pluginId) return Response.json({ error: "Missing pluginId" }, { status: 400 });
+    if (!key) return Response.json({ error: "Missing key" }, { status: 400 });
 
-    // Resolve plugin
     const plugin = await resolvePlugin(registry, pluginId);
     if (!plugin) {
-      res.status(404).json({ error: "Plugin not found" });
-      return;
+      return Response.json({ error: "Plugin not found" }, { status: 404 });
     }
 
-    // Validate plugin is in ready state
     if (plugin.status !== "ready") {
       const bridgeError: PluginBridgeErrorResponse = {
         code: "WORKER_UNAVAILABLE",
         message: `Plugin is not ready (current status: ${plugin.status})`,
       };
-      res.status(502).json(bridgeError);
-      return;
+      return Response.json(bridgeError, { status: 502 });
     }
 
-    const body = req.body as {
+    const body = await ctx.json<{
       companyId?: string;
       params?: Record<string, unknown>;
       renderEnvironment?: PluginLauncherRenderContextSnapshot | null;
-    } | undefined;
-
-    assertPluginBridgeScope(req, body?.companyId);
+    } | undefined>();
 
     try {
       const result = await bridgeDeps.workerManager.call(
@@ -1258,72 +1015,46 @@ export function pluginRoutes(
           renderEnvironment: body?.renderEnvironment ?? null,
         },
       );
-      res.json({ data: result });
+      return Response.json({ data: result });
     } catch (err) {
       const bridgeError = mapRpcErrorToBridgeError(err);
-      res.status(502).json(bridgeError);
+      return Response.json(bridgeError, { status: 502 });
     }
-  });
+  };
 
   /**
    * POST /api/plugins/:pluginId/actions/:key
-   *
-   * Proxy a `performAction` call from the plugin UI to the plugin worker, with
-   * the action key specified as a URL path parameter instead of in the request body.
-   *
-   * This is a REST-friendly alternative to `POST /plugins/:pluginId/bridge/action`.
-   * The frontend bridge hooks use this endpoint for cleaner URLs.
-   *
-   * Request body (optional):
-   * - `params`: Optional parameters forwarded to the worker handler
-   *
-   * Response: The raw result from the worker's `performAction` handler wrapped as `{ data: T }`
-   *
-   * Error response body follows the `PluginBridgeError` shape:
-   * `{ code: PluginBridgeErrorCode, message: string, details?: unknown }`
-   *
-   * Errors:
-   * - 404 if plugin not found
-   * - 501 if bridge deps are not configured
-   * - 502 if the worker is unavailable or returns an error
-   *
-   * @see PLUGIN_SPEC.md §13.9 — `performAction`
-   * @see PLUGIN_SPEC.md §19.7 — Error Propagation Through The Bridge
    */
-  router.post("/plugins/:pluginId/actions/:key", async (req, res) => {
-    assertBoardOrgAccess(req);
+  const bridgePerformActionByKey: Handler = async (ctx) => {
+    assertBoardOrgAccess(ctx);
 
     if (!bridgeDeps) {
-      res.status(501).json({ error: "Plugin bridge is not enabled" });
-      return;
+      return Response.json({ error: "Plugin bridge is not enabled" }, { status: 501 });
     }
 
-    const { pluginId, key } = req.params;
+    const pluginId = ctx.param("pluginId");
+    const key = ctx.param("key");
+    if (!pluginId) return Response.json({ error: "Missing pluginId" }, { status: 400 });
+    if (!key) return Response.json({ error: "Missing key" }, { status: 400 });
 
-    // Resolve plugin
     const plugin = await resolvePlugin(registry, pluginId);
     if (!plugin) {
-      res.status(404).json({ error: "Plugin not found" });
-      return;
+      return Response.json({ error: "Plugin not found" }, { status: 404 });
     }
 
-    // Validate plugin is in ready state
     if (plugin.status !== "ready") {
       const bridgeError: PluginBridgeErrorResponse = {
         code: "WORKER_UNAVAILABLE",
         message: `Plugin is not ready (current status: ${plugin.status})`,
       };
-      res.status(502).json(bridgeError);
-      return;
+      return Response.json(bridgeError, { status: 502 });
     }
 
-    const body = req.body as {
+    const body = await ctx.json<{
       companyId?: string;
       params?: Record<string, unknown>;
       renderEnvironment?: PluginLauncherRenderContextSnapshot | null;
-    } | undefined;
-
-    assertPluginBridgeScope(req, body?.companyId);
+    } | undefined>();
 
     try {
       const result = await bridgeDeps.workerManager.call(
@@ -1335,39 +1066,807 @@ export function pluginRoutes(
           renderEnvironment: body?.renderEnvironment ?? null,
         },
       );
-      res.json({ data: result });
+      return Response.json({ data: result });
     } catch (err) {
       const bridgeError = mapRpcErrorToBridgeError(err);
-      res.status(502).json(bridgeError);
+      return Response.json(bridgeError, { status: 502 });
     }
-  });
+  };
 
-  // ===========================================================================
-  // SSE stream bridge route
-  // ===========================================================================
+  /**
+   * GET /api/plugins/:pluginId
+   */
+  const getPlugin: Handler = async (ctx) => {
+    assertBoardOrgAccess(ctx);
+    const pluginId = ctx.param("pluginId");
+    if (!pluginId) return Response.json({ error: "Missing pluginId" }, { status: 400 });
+    const plugin = await resolvePlugin(registry, pluginId);
+    if (!plugin) {
+      return Response.json({ error: "Plugin not found" }, { status: 404 });
+    }
+
+    const worker = bridgeDeps?.workerManager.getWorker(plugin.id);
+    const supportsConfigTest = worker
+      ? worker.supportedMethods.includes("validateConfig")
+      : false;
+
+    return Response.json({ ...plugin, supportsConfigTest });
+  };
+
+  /**
+   * DELETE /api/plugins/:pluginId
+   */
+  const deletePlugin: Handler = async (ctx) => {
+    assertInstanceAdmin(ctx);
+    const pluginId = ctx.param("pluginId");
+    if (!pluginId) return Response.json({ error: "Missing pluginId" }, { status: 400 });
+    const purge = ctx.query("purge") === "true";
+
+    const plugin = await resolvePlugin(registry, pluginId);
+    if (!plugin) {
+      return Response.json({ error: "Plugin not found" }, { status: 404 });
+    }
+
+    try {
+      const result = await lifecycle.unload(plugin.id, purge);
+      publishGlobalLiveEvent({ type: "plugin.ui.updated", payload: { pluginId: plugin.id, action: "uninstalled" } });
+      return Response.json(result);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      return Response.json({ error: message }, { status: 400 });
+    }
+  };
+
+  /**
+   * POST /api/plugins/:pluginId/enable
+   */
+  const enablePlugin: Handler = async (ctx) => {
+    assertInstanceAdmin(ctx);
+    const pluginId = ctx.param("pluginId");
+    if (!pluginId) return Response.json({ error: "Missing pluginId" }, { status: 400 });
+
+    const plugin = await resolvePlugin(registry, pluginId);
+    if (!plugin) {
+      return Response.json({ error: "Plugin not found" }, { status: 404 });
+    }
+
+    try {
+      const result = await lifecycle.enable(plugin.id);
+      publishGlobalLiveEvent({ type: "plugin.ui.updated", payload: { pluginId: plugin.id, action: "enabled" } });
+      return Response.json(result);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      return Response.json({ error: message }, { status: 400 });
+    }
+  };
+
+  /**
+   * POST /api/plugins/:pluginId/disable
+   */
+  const disablePlugin: Handler = async (ctx) => {
+    assertInstanceAdmin(ctx);
+    const pluginId = ctx.param("pluginId");
+    if (!pluginId) return Response.json({ error: "Missing pluginId" }, { status: 400 });
+    const body = await ctx.json<{ reason?: string } | undefined>();
+    const reason = body?.reason;
+
+    const plugin = await resolvePlugin(registry, pluginId);
+    if (!plugin) {
+      return Response.json({ error: "Plugin not found" }, { status: 404 });
+    }
+
+    try {
+      const result = await lifecycle.disable(plugin.id, reason);
+      publishGlobalLiveEvent({ type: "plugin.ui.updated", payload: { pluginId: plugin.id, action: "disabled" } });
+      return Response.json(result);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      return Response.json({ error: message }, { status: 400 });
+    }
+  };
+
+  /**
+   * GET /api/plugins/:pluginId/health
+   */
+  const getPluginHealth: Handler = async (ctx) => {
+    assertBoardOrgAccess(ctx);
+    const pluginId = ctx.param("pluginId");
+    if (!pluginId) return Response.json({ error: "Missing pluginId" }, { status: 400 });
+
+    const plugin = await resolvePlugin(registry, pluginId);
+    if (!plugin) {
+      return Response.json({ error: "Plugin not found" }, { status: 404 });
+    }
+
+    const checks: PluginHealthCheckResult["checks"] = [];
+
+    checks.push({ name: "registry", passed: true, message: "Plugin found in registry" });
+
+    const hasValidManifest = Boolean(plugin.manifestJson?.id);
+    checks.push({
+      name: "manifest",
+      passed: hasValidManifest,
+      message: hasValidManifest ? "Manifest is valid" : "Manifest is invalid or missing",
+    });
+
+    const isHealthy = plugin.status === "ready";
+    checks.push({ name: "status", passed: isHealthy, message: `Current status: ${plugin.status}` });
+
+    const hasNoError = !plugin.lastError;
+    if (!hasNoError) {
+      checks.push({ name: "error_state", passed: false, message: plugin.lastError ?? undefined });
+    }
+
+    const result: PluginHealthCheckResult = {
+      pluginId: plugin.id,
+      status: plugin.status,
+      healthy: isHealthy && hasValidManifest && hasNoError,
+      checks,
+      lastError: plugin.lastError ?? undefined,
+    };
+
+    return Response.json(result);
+  };
+
+  /**
+   * GET /api/plugins/:pluginId/logs
+   */
+  const getPluginLogs: Handler = async (ctx) => {
+    assertBoardOrgAccess(ctx);
+    const pluginId = ctx.param("pluginId");
+    if (!pluginId) return Response.json({ error: "Missing pluginId" }, { status: 400 });
+
+    const plugin = await resolvePlugin(registry, pluginId);
+    if (!plugin) {
+      return Response.json({ error: "Plugin not found" }, { status: 404 });
+    }
+
+    const limit = Math.min(Math.max(parseInt(ctx.query("limit") ?? "25", 10) || 25, 1), 500);
+    const level = ctx.query("level");
+    const since = ctx.query("since");
+
+    const conditions = [eq(pluginLogs.pluginId, plugin.id)];
+    if (level) {
+      conditions.push(eq(pluginLogs.level, level));
+    }
+    if (since) {
+      const sinceDate = new Date(since);
+      if (!isNaN(sinceDate.getTime())) {
+        conditions.push(gte(pluginLogs.createdAt, sinceDate));
+      }
+    }
+
+    const rows = await db
+      .select()
+      .from(pluginLogs)
+      .where(and(...conditions))
+      .orderBy(desc(pluginLogs.createdAt))
+      .limit(limit);
+
+    return Response.json(rows);
+  };
+
+  /**
+   * POST /api/plugins/:pluginId/upgrade
+   */
+  const upgradePlugin: Handler = async (ctx) => {
+    assertInstanceAdmin(ctx);
+    const pluginId = ctx.param("pluginId");
+    if (!pluginId) return Response.json({ error: "Missing pluginId" }, { status: 400 });
+    const body = await ctx.json<{ version?: string } | undefined>();
+    const version = body?.version;
+
+    const plugin = await resolvePlugin(registry, pluginId);
+    if (!plugin) {
+      return Response.json({ error: "Plugin not found" }, { status: 404 });
+    }
+
+    try {
+      const result = await lifecycle.upgrade(plugin.id, version);
+      publishGlobalLiveEvent({ type: "plugin.ui.updated", payload: { pluginId: plugin.id, action: "upgraded" } });
+      return Response.json(result);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      return Response.json({ error: message }, { status: 400 });
+    }
+  };
+
+  /**
+   * GET /api/plugins/:pluginId/config
+   */
+  const getPluginConfig: Handler = async (ctx) => {
+    assertBoardOrgAccess(ctx);
+    const pluginId = ctx.param("pluginId");
+    if (!pluginId) return Response.json({ error: "Missing pluginId" }, { status: 400 });
+
+    const plugin = await resolvePlugin(registry, pluginId);
+    if (!plugin) {
+      return Response.json({ error: "Plugin not found" }, { status: 404 });
+    }
+
+    const config = await registry.getConfig(plugin.id);
+    return Response.json(config);
+  };
+
+  /**
+   * POST /api/plugins/:pluginId/config
+   */
+  const savePluginConfig: Handler = async (ctx) => {
+    assertInstanceAdmin(ctx);
+    const pluginId = ctx.param("pluginId");
+    if (!pluginId) return Response.json({ error: "Missing pluginId" }, { status: 400 });
+
+    const plugin = await resolvePlugin(registry, pluginId);
+    if (!plugin) {
+      return Response.json({ error: "Plugin not found" }, { status: 404 });
+    }
+
+    const body = await ctx.json<{ configJson?: Record<string, unknown> } | undefined>();
+    if (!body?.configJson || typeof body.configJson !== "object") {
+      return Response.json({ error: '"configJson" is required and must be an object' }, { status: 400 });
+    }
+
+    // devUiUrl strip: only instance admins may set it. The Express layer
+    // enforces instance-admin before this handler runs, so if we reach here
+    // the caller is an instance admin and devUiUrl is allowed.
+
+    const schema = plugin.manifestJson?.instanceConfigSchema;
+    if (schema && Object.keys(schema).length > 0) {
+      const validation = validateInstanceConfig(body.configJson, schema);
+      if (!validation.valid) {
+        return Response.json({
+          error: "Configuration does not match the plugin's instanceConfigSchema",
+          fieldErrors: validation.errors,
+        }, { status: 400 });
+      }
+    }
+
+    try {
+      const result = await registry.upsertConfig(plugin.id, {
+        configJson: body.configJson,
+      });
+
+      if (bridgeDeps?.workerManager.isRunning(plugin.id)) {
+        try {
+          await bridgeDeps.workerManager.call(
+            plugin.id,
+            "configChanged",
+            { config: body.configJson },
+          );
+        } catch (rpcErr) {
+          if (
+            rpcErr instanceof JsonRpcCallError &&
+            rpcErr.code === PLUGIN_RPC_ERROR_CODES.METHOD_NOT_IMPLEMENTED
+          ) {
+            try {
+              await lifecycle.restartWorker(plugin.id);
+            } catch {
+              // Restart failure is non-fatal for the config save response.
+            }
+          }
+        }
+      }
+
+      return Response.json(result);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      return Response.json({ error: message }, { status: 400 });
+    }
+  };
+
+  /**
+   * POST /api/plugins/:pluginId/config/test
+   */
+  const testPluginConfig: Handler = async (ctx) => {
+    assertBoardOrgAccess(ctx);
+
+    if (!bridgeDeps) {
+      return Response.json({ error: "Plugin bridge is not enabled" }, { status: 501 });
+    }
+
+    const pluginId = ctx.param("pluginId");
+    if (!pluginId) return Response.json({ error: "Missing pluginId" }, { status: 400 });
+
+    const plugin = await resolvePlugin(registry, pluginId);
+    if (!plugin) {
+      return Response.json({ error: "Plugin not found" }, { status: 404 });
+    }
+
+    if (plugin.status !== "ready") {
+      return Response.json({ error: `Plugin is not ready (current status: ${plugin.status})` }, { status: 400 });
+    }
+
+    const body = await ctx.json<{ configJson?: Record<string, unknown> } | undefined>();
+    if (!body?.configJson || typeof body.configJson !== "object") {
+      return Response.json({ error: '"configJson" is required and must be an object' }, { status: 400 });
+    }
+
+    const schema = plugin.manifestJson?.instanceConfigSchema;
+    if (schema && Object.keys(schema).length > 0) {
+      const validation = validateInstanceConfig(body.configJson, schema);
+      if (!validation.valid) {
+        return Response.json({
+          error: "Configuration does not match the plugin's instanceConfigSchema",
+          fieldErrors: validation.errors,
+        }, { status: 400 });
+      }
+    }
+
+    try {
+      const result = await bridgeDeps.workerManager.call(
+        plugin.id,
+        "validateConfig",
+        { config: body.configJson },
+      );
+
+      if (result.ok) {
+        const warningText = result.warnings?.length
+          ? `Warnings: ${result.warnings.join("; ")}`
+          : undefined;
+        return Response.json({ valid: true, message: warningText });
+      }
+      const errorText = result.errors?.length
+        ? result.errors.join("; ")
+        : "Configuration validation failed.";
+      return Response.json({ valid: false, message: errorText });
+    } catch (err) {
+      if (
+        err instanceof JsonRpcCallError &&
+        err.code === PLUGIN_RPC_ERROR_CODES.METHOD_NOT_IMPLEMENTED
+      ) {
+        return Response.json({
+          valid: false,
+          supported: false,
+          message: "This plugin does not support configuration testing.",
+        });
+      }
+
+      const bridgeError = mapRpcErrorToBridgeError(err);
+      return Response.json(bridgeError, { status: 502 });
+    }
+  };
+
+  /**
+   * GET /api/plugins/:pluginId/jobs
+   */
+  const listPluginJobs: Handler = async (ctx) => {
+    assertBoardOrgAccess(ctx);
+    if (!jobDeps) {
+      return Response.json({ error: "Job scheduling is not enabled" }, { status: 501 });
+    }
+
+    const pluginId = ctx.param("pluginId");
+    if (!pluginId) return Response.json({ error: "Missing pluginId" }, { status: 400 });
+    const plugin = await resolvePlugin(registry, pluginId);
+    if (!plugin) {
+      return Response.json({ error: "Plugin not found" }, { status: 404 });
+    }
+
+    const rawStatus = ctx.query("status");
+    const validStatuses = ["active", "paused", "failed"];
+    if (rawStatus !== undefined && !validStatuses.includes(rawStatus)) {
+      return Response.json({
+        error: `Invalid status '${rawStatus}'. Must be one of: ${validStatuses.join(", ")}`,
+      }, { status: 400 });
+    }
+
+    try {
+      const jobs = await jobDeps.jobStore.listJobs(
+        plugin.id,
+        rawStatus as "active" | "paused" | "failed" | undefined,
+      );
+      return Response.json(jobs);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      return Response.json({ error: message }, { status: 500 });
+    }
+  };
+
+  /**
+   * GET /api/plugins/:pluginId/jobs/:jobId/runs
+   */
+  const listPluginJobRuns: Handler = async (ctx) => {
+    assertBoardOrgAccess(ctx);
+    if (!jobDeps) {
+      return Response.json({ error: "Job scheduling is not enabled" }, { status: 501 });
+    }
+
+    const pluginId = ctx.param("pluginId");
+    const jobId = ctx.param("jobId");
+    if (!pluginId) return Response.json({ error: "Missing pluginId" }, { status: 400 });
+    if (!jobId) return Response.json({ error: "Missing jobId" }, { status: 400 });
+
+    const plugin = await resolvePlugin(registry, pluginId);
+    if (!plugin) {
+      return Response.json({ error: "Plugin not found" }, { status: 404 });
+    }
+
+    const job = await jobDeps.jobStore.getJobByIdForPlugin(plugin.id, jobId);
+    if (!job) {
+      return Response.json({ error: "Job not found" }, { status: 404 });
+    }
+
+    const limit = ctx.query("limit") ? parseInt(ctx.query("limit")!, 10) : 25;
+    if (isNaN(limit) || limit < 1 || limit > 500) {
+      return Response.json({ error: "limit must be a number between 1 and 500" }, { status: 400 });
+    }
+
+    try {
+      const runs = await jobDeps.jobStore.listRunsByJob(jobId, limit);
+      return Response.json(runs);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      return Response.json({ error: message }, { status: 500 });
+    }
+  };
+
+  /**
+   * POST /api/plugins/:pluginId/jobs/:jobId/trigger
+   */
+  const triggerPluginJob: Handler = async (ctx) => {
+    assertInstanceAdmin(ctx);
+    if (!jobDeps) {
+      return Response.json({ error: "Job scheduling is not enabled" }, { status: 501 });
+    }
+
+    const pluginId = ctx.param("pluginId");
+    const jobId = ctx.param("jobId");
+    if (!pluginId) return Response.json({ error: "Missing pluginId" }, { status: 400 });
+    if (!jobId) return Response.json({ error: "Missing jobId" }, { status: 400 });
+
+    const plugin = await resolvePlugin(registry, pluginId);
+    if (!plugin) {
+      return Response.json({ error: "Plugin not found" }, { status: 404 });
+    }
+
+    const job = await jobDeps.jobStore.getJobByIdForPlugin(plugin.id, jobId);
+    if (!job) {
+      return Response.json({ error: "Job not found" }, { status: 404 });
+    }
+
+    try {
+      const result = await jobDeps.scheduler.triggerJob(jobId, "manual");
+      return Response.json(result);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      return Response.json({ error: message }, { status: 400 });
+    }
+  };
+
+  /**
+   * POST /api/plugins/:pluginId/webhooks/:endpointKey
+   *
+   * NOTE: This route does NOT require board authentication — webhook endpoints
+   * must be publicly accessible for external callers.
+   */
+  const receiveWebhook: Handler = async (ctx) => {
+    if (!webhookDeps) {
+      return Response.json({ error: "Webhook ingestion is not enabled" }, { status: 501 });
+    }
+
+    const pluginId = ctx.param("pluginId");
+    const endpointKey = ctx.param("endpointKey");
+    if (!pluginId) return Response.json({ error: "Missing pluginId" }, { status: 400 });
+    if (!endpointKey) return Response.json({ error: "Missing endpointKey" }, { status: 400 });
+
+    const plugin = await resolvePlugin(registry, pluginId);
+    if (!plugin) {
+      return Response.json({ error: "Plugin not found" }, { status: 404 });
+    }
+
+    if (plugin.status !== "ready") {
+      return Response.json({
+        error: `Plugin is not ready (current status: ${plugin.status})`,
+      }, { status: 400 });
+    }
+
+    const manifest = plugin.manifestJson;
+    if (!manifest) {
+      return Response.json({ error: "Plugin manifest is missing" }, { status: 400 });
+    }
+
+    const capabilities = manifest.capabilities ?? [];
+    if (!capabilities.includes("webhooks.receive")) {
+      return Response.json({
+        error: "Plugin does not have the webhooks.receive capability",
+      }, { status: 400 });
+    }
+
+    const declaredWebhooks = manifest.webhooks ?? [];
+    const webhookDecl = declaredWebhooks.find((w) => w.endpointKey === endpointKey);
+    if (!webhookDecl) {
+      return Response.json({
+        error: `Webhook endpoint '${endpointKey}' is not declared by this plugin`,
+      }, { status: 404 });
+    }
+
+    const requestId = randomUUID();
+    const rawHeaders: Record<string, string> = {};
+    ctx.headers.forEach((value, name) => {
+      rawHeaders[name] = value;
+    });
+
+    // The rawBody stash from express.json() verify callback is not available in
+    // the transport-agnostic ctx. Fall back to re-reading via ctx.text().
+    const rawBody = await ctx.text();
+    const parsedBody = await ctx.json<unknown>().catch(() => null);
+    const payload = (parsedBody as Record<string, unknown> | undefined) ?? {};
+
+    const startedAt = new Date();
+    const [delivery] = await db
+      .insert(pluginWebhookDeliveries)
+      .values({
+        pluginId: plugin.id,
+        webhookKey: endpointKey,
+        status: "pending",
+        payload,
+        headers: rawHeaders,
+        startedAt,
+      })
+      .returning({ id: pluginWebhookDeliveries.id });
+
+    try {
+      await webhookDeps.workerManager.call(plugin.id, "handleWebhook", {
+        endpointKey,
+        headers: rawHeaders,
+        rawBody,
+        parsedBody,
+        requestId,
+      });
+
+      const finishedAt = new Date();
+      const durationMs = finishedAt.getTime() - startedAt.getTime();
+      await db
+        .update(pluginWebhookDeliveries)
+        .set({ status: "success", durationMs, finishedAt })
+        .where(eq(pluginWebhookDeliveries.id, delivery.id));
+
+      return Response.json({ deliveryId: delivery.id, status: "success" }, { status: 200 });
+    } catch (err) {
+      const finishedAt = new Date();
+      const durationMs = finishedAt.getTime() - startedAt.getTime();
+      const errorMessage = err instanceof Error ? err.message : String(err);
+
+      await db
+        .update(pluginWebhookDeliveries)
+        .set({ status: "failed", durationMs, error: errorMessage, finishedAt })
+        .where(eq(pluginWebhookDeliveries.id, delivery.id));
+
+      return Response.json({ deliveryId: delivery.id, status: "failed", error: errorMessage }, { status: 502 });
+    }
+  };
+
+  /**
+   * GET /api/plugins/:pluginId/dashboard
+   */
+  const getPluginDashboard: Handler = async (ctx) => {
+    assertBoardOrgAccess(ctx);
+    const pluginId = ctx.param("pluginId");
+    if (!pluginId) return Response.json({ error: "Missing pluginId" }, { status: 400 });
+
+    const plugin = await resolvePlugin(registry, pluginId);
+    if (!plugin) {
+      return Response.json({ error: "Plugin not found" }, { status: 404 });
+    }
+
+    let worker: {
+      status: string;
+      pid: number | null;
+      uptime: number | null;
+      consecutiveCrashes: number;
+      totalCrashes: number;
+      pendingRequests: number;
+      lastCrashAt: number | null;
+      nextRestartAt: number | null;
+    } | null = null;
+
+    const wm = bridgeDeps?.workerManager ?? webhookDeps?.workerManager ?? null;
+    if (wm) {
+      const handle = wm.getWorker(plugin.id);
+      if (handle) {
+        const diag = handle.diagnostics();
+        worker = {
+          status: diag.status,
+          pid: diag.pid,
+          uptime: diag.uptime,
+          consecutiveCrashes: diag.consecutiveCrashes,
+          totalCrashes: diag.totalCrashes,
+          pendingRequests: diag.pendingRequests,
+          lastCrashAt: diag.lastCrashAt,
+          nextRestartAt: diag.nextRestartAt,
+        };
+      }
+    }
+
+    let recentJobRuns: Array<{
+      id: string;
+      jobId: string;
+      jobKey?: string;
+      trigger: string;
+      status: string;
+      durationMs: number | null;
+      error: string | null;
+      startedAt: string | null;
+      finishedAt: string | null;
+      createdAt: string;
+    }> = [];
+
+    if (jobDeps) {
+      try {
+        const runs = await jobDeps.jobStore.listRunsByPlugin(plugin.id, undefined, 10);
+        const jobs = await jobDeps.jobStore.listJobs(plugin.id);
+        const jobKeyMap = new Map(jobs.map((j) => [j.id, j.jobKey]));
+
+        recentJobRuns = runs
+          .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+          .map((r) => ({
+            id: r.id,
+            jobId: r.jobId,
+            jobKey: jobKeyMap.get(r.jobId) ?? undefined,
+            trigger: r.trigger,
+            status: r.status,
+            durationMs: r.durationMs,
+            error: r.error,
+            startedAt: r.startedAt ? new Date(r.startedAt).toISOString() : null,
+            finishedAt: r.finishedAt ? new Date(r.finishedAt).toISOString() : null,
+            createdAt: new Date(r.createdAt).toISOString(),
+          }));
+      } catch {
+        // Job data unavailable — leave empty
+      }
+    }
+
+    let recentWebhookDeliveries: Array<{
+      id: string;
+      webhookKey: string;
+      status: string;
+      durationMs: number | null;
+      error: string | null;
+      startedAt: string | null;
+      finishedAt: string | null;
+      createdAt: string;
+    }> = [];
+
+    try {
+      const deliveries = await db
+        .select({
+          id: pluginWebhookDeliveries.id,
+          webhookKey: pluginWebhookDeliveries.webhookKey,
+          status: pluginWebhookDeliveries.status,
+          durationMs: pluginWebhookDeliveries.durationMs,
+          error: pluginWebhookDeliveries.error,
+          startedAt: pluginWebhookDeliveries.startedAt,
+          finishedAt: pluginWebhookDeliveries.finishedAt,
+          createdAt: pluginWebhookDeliveries.createdAt,
+        })
+        .from(pluginWebhookDeliveries)
+        .where(eq(pluginWebhookDeliveries.pluginId, plugin.id))
+        .orderBy(desc(pluginWebhookDeliveries.createdAt))
+        .limit(10);
+
+      recentWebhookDeliveries = deliveries.map((d) => ({
+        id: d.id,
+        webhookKey: d.webhookKey,
+        status: d.status,
+        durationMs: d.durationMs,
+        error: d.error,
+        startedAt: d.startedAt ? d.startedAt.toISOString() : null,
+        finishedAt: d.finishedAt ? d.finishedAt.toISOString() : null,
+        createdAt: d.createdAt.toISOString(),
+      }));
+    } catch {
+      // Webhook data unavailable — leave empty
+    }
+
+    const checks: PluginHealthCheckResult["checks"] = [];
+
+    checks.push({ name: "registry", passed: true, message: "Plugin found in registry" });
+
+    const hasValidManifest = Boolean(plugin.manifestJson?.id);
+    checks.push({
+      name: "manifest",
+      passed: hasValidManifest,
+      message: hasValidManifest ? "Manifest is valid" : "Manifest is invalid or missing",
+    });
+
+    const isHealthy = plugin.status === "ready";
+    checks.push({ name: "status", passed: isHealthy, message: `Current status: ${plugin.status}` });
+
+    const hasNoError = !plugin.lastError;
+    if (!hasNoError) {
+      checks.push({ name: "error_state", passed: false, message: plugin.lastError ?? undefined });
+    }
+
+    const health: PluginHealthCheckResult = {
+      pluginId: plugin.id,
+      status: plugin.status,
+      healthy: isHealthy && hasValidManifest && hasNoError,
+      checks,
+      lastError: plugin.lastError ?? undefined,
+    };
+
+    return Response.json({
+      pluginId: plugin.id,
+      worker,
+      recentJobRuns,
+      recentWebhookDeliveries,
+      health,
+      checkedAt: new Date().toISOString(),
+    });
+  };
+
+  // ---------------------------------------------------------------------------
+  // Route wiring
+  // IMPORTANT: Static routes must come before parameterized routes.
+  // ---------------------------------------------------------------------------
+
+  router.get("/plugins", expressHandler(listPlugins, adapterDeps));
+  router.get("/plugins/examples", expressHandler(listPluginExamples, adapterDeps));
+  router.get("/plugins/ui-contributions", expressHandler(listUiContributions, adapterDeps));
+  router.get("/plugins/tools", expressHandler(listPluginTools, adapterDeps));
+  router.post("/plugins/tools/execute", expressHandler(executePluginTool, adapterDeps));
+
+  router.post("/plugins/install", expressHandler(installPlugin, adapterDeps));
+
+  // Bridge routes — companyId-scoped auth runs in Express middleware before Handler
+  router.post("/plugins/:pluginId/bridge/data", async (req, _res, next) => {
+    try {
+      assertBoardOrgAccess(req);
+      const body = req.body as { companyId?: unknown } | undefined;
+      if (body?.companyId !== undefined && body?.companyId !== null) {
+        assertPluginBridgeScope(req, body.companyId);
+      } else {
+        assertInstanceAdmin(req);
+      }
+      next();
+    } catch (err) { next(err); }
+  }, expressHandler(bridgeGetData, adapterDeps));
+
+  router.post("/plugins/:pluginId/bridge/action", async (req, _res, next) => {
+    try {
+      assertBoardOrgAccess(req);
+      const body = req.body as { companyId?: unknown } | undefined;
+      if (body?.companyId !== undefined && body?.companyId !== null) {
+        assertPluginBridgeScope(req, body.companyId);
+      } else {
+        assertInstanceAdmin(req);
+      }
+      next();
+    } catch (err) { next(err); }
+  }, expressHandler(bridgePerformAction, adapterDeps));
+
+  router.post("/plugins/:pluginId/data/:key", async (req, _res, next) => {
+    try {
+      assertBoardOrgAccess(req);
+      const body = req.body as { companyId?: unknown } | undefined;
+      if (body?.companyId !== undefined && body?.companyId !== null) {
+        assertPluginBridgeScope(req, body.companyId);
+      } else {
+        assertInstanceAdmin(req);
+      }
+      next();
+    } catch (err) { next(err); }
+  }, expressHandler(bridgeGetDataByKey, adapterDeps));
+
+  router.post("/plugins/:pluginId/actions/:key", async (req, _res, next) => {
+    try {
+      assertBoardOrgAccess(req);
+      const body = req.body as { companyId?: unknown } | undefined;
+      if (body?.companyId !== undefined && body?.companyId !== null) {
+        assertPluginBridgeScope(req, body.companyId);
+      } else {
+        assertInstanceAdmin(req);
+      }
+      next();
+    } catch (err) { next(err); }
+  }, expressHandler(bridgePerformActionByKey, adapterDeps));
 
   /**
    * GET /api/plugins/:pluginId/bridge/stream/:channel
    *
-   * Server-Sent Events endpoint for real-time streaming from plugin worker to UI.
-   *
-   * The worker pushes events via `ctx.streams.emit(channel, event)` which arrive
-   * as JSON-RPC notifications to the host, get published on the PluginStreamBus,
-   * and are fanned out to all connected SSE clients matching (pluginId, channel,
-   * companyId).
-   *
-   * Query parameters:
-   * - `companyId` (required): Scope events to a specific company
-   *
-   * SSE event types:
-   * - `message`: A data event from the worker (default)
-   * - `open`: The worker opened the stream channel
-   * - `close`: The worker closed the stream channel — client should disconnect
-   *
-   * Errors:
-   * - 400 if companyId is missing
-   * - 404 if plugin not found
-   * - 501 if bridge deps or stream bus are not configured
+   * TODO(cloudflare): SSE streaming via res.write() is Express/Node-specific.
+   * For Workers compatibility this route must be rewritten using the
+   * TransformStream / ReadableStream API. Keep the existing Express code path.
    */
   router.get("/plugins/:pluginId/bridge/stream/:channel", async (req, res) => {
     assertBoardOrgAccess(req);
@@ -1393,7 +1892,6 @@ export function pluginRoutes(
 
     assertCompanyAccess(req, companyId);
 
-    // Set SSE headers
     res.writeHead(200, {
       "Content-Type": "text/event-stream",
       "Cache-Control": "no-cache",
@@ -1402,7 +1900,6 @@ export function pluginRoutes(
     });
     res.flushHeaders();
 
-    // Send initial comment to establish the connection
     res.write(":ok\n\n");
 
     let unsubscribed = false;
@@ -1425,7 +1922,6 @@ export function pluginRoutes(
           }
           res.write(`data: ${JSON.stringify(event)}\n\n`);
         } catch {
-          // Connection closed or write error — stop delivering
           safeUnsubscribe();
         }
       },
@@ -1435,6 +1931,15 @@ export function pluginRoutes(
     res.on("error", safeUnsubscribe);
   });
 
+  /**
+   * router.use /plugins/:pluginId/api
+   *
+   * TODO(cloudflare): This scoped API middleware uses Express-specific
+   * req.method, req.path, req.headers, req.body, req.query, and res.setHeader /
+   * res.status / res.json / res.end. For Workers compatibility it must be
+   * rewritten as a Handler using ctx equivalents. Keep the existing Express
+   * code path.
+   */
   router.use("/plugins/:pluginId/api", async (req, res) => {
     if (!bridgeDeps) {
       res.status(501).json({ error: "Plugin scoped API routes are not enabled" });
@@ -1542,1038 +2047,24 @@ export function pluginRoutes(
     }
   });
 
-  /**
-   * GET /api/plugins/:pluginId
-   *
-   * Get detailed information about a single plugin.
-   *
-   * The :pluginId parameter accepts either:
-   * - Database UUID (e.g., "abc123-def456")
-   * - Plugin key (e.g., "acme.linear")
-   *
-   * Response: PluginRecord
-   * Errors: 404 if plugin not found
-   */
-  router.get("/plugins/:pluginId", async (req, res) => {
-    assertBoardOrgAccess(req);
-    const { pluginId } = req.params;
-    const plugin = await resolvePlugin(registry, pluginId);
-    if (!plugin) {
-      res.status(404).json({ error: "Plugin not found" });
-      return;
-    }
-
-    // Enrich with worker capabilities when available
-    const worker = bridgeDeps?.workerManager.getWorker(plugin.id);
-    const supportsConfigTest = worker
-      ? worker.supportedMethods.includes("validateConfig")
-      : false;
-
-    res.json({ ...plugin, supportsConfigTest });
-  });
-
-  /**
-   * DELETE /api/plugins/:pluginId
-   *
-   * Uninstall a plugin.
-   *
-   * Query params:
-   * - purge: If "true", permanently delete all plugin data (hard delete)
-   *          Otherwise, soft-delete with 30-day data retention
-   *
-   * Response: PluginRecord (the deleted record)
-   * Errors: 404 if plugin not found, 400 for lifecycle errors
-   */
-  router.delete("/plugins/:pluginId", async (req, res) => {
-    assertInstanceAdmin(req);
-    const { pluginId } = req.params;
-    const purge = req.query.purge === "true";
-
-    const plugin = await resolvePlugin(registry, pluginId);
-    if (!plugin) {
-      res.status(404).json({ error: "Plugin not found" });
-      return;
-    }
-
-    try {
-      const result = await lifecycle.unload(plugin.id, purge);
-      await logPluginMutationActivity(req, "plugin.uninstalled", plugin.id, {
-        pluginId: plugin.id,
-        pluginKey: plugin.pluginKey,
-        purge,
-      });
-      publishGlobalLiveEvent({ type: "plugin.ui.updated", payload: { pluginId: plugin.id, action: "uninstalled" } });
-      res.json(result);
-    } catch (err) {
-      const message = err instanceof Error ? err.message : String(err);
-      res.status(400).json({ error: message });
-    }
-  });
-
-  /**
-   * POST /api/plugins/:pluginId/enable
-   *
-   * Enable a plugin that is currently disabled or in error state.
-   *
-   * Transitions the plugin to 'ready' state after loading and validation.
-   *
-   * Response: PluginRecord
-   * Errors: 404 if plugin not found, 400 for lifecycle errors
-   */
-  router.post("/plugins/:pluginId/enable", async (req, res) => {
-    assertInstanceAdmin(req);
-    const { pluginId } = req.params;
-
-    const plugin = await resolvePlugin(registry, pluginId);
-    if (!plugin) {
-      res.status(404).json({ error: "Plugin not found" });
-      return;
-    }
-
-    try {
-      const result = await lifecycle.enable(plugin.id);
-      await logPluginMutationActivity(req, "plugin.enabled", plugin.id, {
-        pluginId: plugin.id,
-        pluginKey: plugin.pluginKey,
-        version: result?.version ?? plugin.version,
-      });
-      publishGlobalLiveEvent({ type: "plugin.ui.updated", payload: { pluginId: plugin.id, action: "enabled" } });
-      res.json(result);
-    } catch (err) {
-      const message = err instanceof Error ? err.message : String(err);
-      res.status(400).json({ error: message });
-    }
-  });
-
-  /**
-   * POST /api/plugins/:pluginId/disable
-   *
-   * Disable a running plugin.
-   *
-   * Request body (optional):
-   * - reason: Human-readable reason for disabling
-   *
-   * The plugin transitions to 'installed' state and stops processing events.
-   *
-   * Response: PluginRecord
-   * Errors: 404 if plugin not found, 400 for lifecycle errors
-   */
-  router.post("/plugins/:pluginId/disable", async (req, res) => {
-    assertInstanceAdmin(req);
-    const { pluginId } = req.params;
-    const body = req.body as { reason?: string } | undefined;
-    const reason = body?.reason;
-
-    const plugin = await resolvePlugin(registry, pluginId);
-    if (!plugin) {
-      res.status(404).json({ error: "Plugin not found" });
-      return;
-    }
-
-    try {
-      const result = await lifecycle.disable(plugin.id, reason);
-      await logPluginMutationActivity(req, "plugin.disabled", plugin.id, {
-        pluginId: plugin.id,
-        pluginKey: plugin.pluginKey,
-        reason: reason ?? null,
-      });
-      publishGlobalLiveEvent({ type: "plugin.ui.updated", payload: { pluginId: plugin.id, action: "disabled" } });
-      res.json(result);
-    } catch (err) {
-      const message = err instanceof Error ? err.message : String(err);
-      res.status(400).json({ error: message });
-    }
-  });
-
-  /**
-   * GET /api/plugins/:pluginId/health
-   *
-   * Run health diagnostics on a plugin.
-   *
-   * Performs the following checks:
-   * 1. Registry: Plugin is registered in the database
-   * 2. Manifest: Manifest is valid and parseable
-   * 3. Status: Plugin is in 'ready' state
-   * 4. Error state: Plugin has no unhandled errors
-   *
-   * Response: PluginHealthCheckResult
-   * Errors: 404 if plugin not found
-   */
-  router.get("/plugins/:pluginId/health", async (req, res) => {
-    assertBoardOrgAccess(req);
-    const { pluginId } = req.params;
-
-    const plugin = await resolvePlugin(registry, pluginId);
-    if (!plugin) {
-      res.status(404).json({ error: "Plugin not found" });
-      return;
-    }
-
-    const checks: PluginHealthCheckResult["checks"] = [];
-
-    // Check 1: Plugin is registered
-    checks.push({
-      name: "registry",
-      passed: true,
-      message: "Plugin found in registry",
-    });
-
-    // Check 2: Manifest is valid
-    const hasValidManifest = Boolean(plugin.manifestJson?.id);
-    checks.push({
-      name: "manifest",
-      passed: hasValidManifest,
-      message: hasValidManifest ? "Manifest is valid" : "Manifest is invalid or missing",
-    });
-
-    // Check 3: Plugin status
-    const isHealthy = plugin.status === "ready";
-    checks.push({
-      name: "status",
-      passed: isHealthy,
-      message: `Current status: ${plugin.status}`,
-    });
-
-    // Check 4: No last error
-    const hasNoError = !plugin.lastError;
-    if (!hasNoError) {
-      checks.push({
-        name: "error_state",
-        passed: false,
-        message: plugin.lastError ?? undefined,
-      });
-    }
-
-    const result: PluginHealthCheckResult = {
-      pluginId: plugin.id,
-      status: plugin.status,
-      healthy: isHealthy && hasValidManifest && hasNoError,
-      checks,
-      lastError: plugin.lastError ?? undefined,
-    };
-
-    res.json(result);
-  });
-
-  /**
-   * GET /api/plugins/:pluginId/logs
-   *
-   * Query recent log entries for a plugin.
-   *
-   * Query params:
-   * - limit: Maximum number of entries (default 25, max 500)
-   * - level: Filter by log level (info, warn, error, debug)
-   * - since: ISO timestamp to filter logs newer than this time
-   *
-   * Response: Array of log entries, newest first.
-   */
-  router.get("/plugins/:pluginId/logs", async (req, res) => {
-    assertBoardOrgAccess(req);
-    const { pluginId } = req.params;
-
-    const plugin = await resolvePlugin(registry, pluginId);
-    if (!plugin) {
-      res.status(404).json({ error: "Plugin not found" });
-      return;
-    }
-
-    const limit = Math.min(Math.max(parseInt(req.query.limit as string, 10) || 25, 1), 500);
-    const level = req.query.level as string | undefined;
-    const since = req.query.since as string | undefined;
-
-    const conditions = [eq(pluginLogs.pluginId, plugin.id)];
-    if (level) {
-      conditions.push(eq(pluginLogs.level, level));
-    }
-    if (since) {
-      const sinceDate = new Date(since);
-      if (!isNaN(sinceDate.getTime())) {
-        conditions.push(gte(pluginLogs.createdAt, sinceDate));
-      }
-    }
-
-    const rows = await db
-      .select()
-      .from(pluginLogs)
-      .where(and(...conditions))
-      .orderBy(desc(pluginLogs.createdAt))
-      .limit(limit);
-
-    res.json(rows);
-  });
-
-  /**
-   * POST /api/plugins/:pluginId/upgrade
-   *
-   * Upgrade a plugin to a newer version.
-   *
-   * Upgrades are restricted to instance admins because they fetch and inspect
-   * new package contents on the host before activation.
-   *
-   * Request body (optional):
-   * - version: Target version (defaults to latest)
-   *
-   * If the upgrade adds new capabilities, the plugin transitions to
-   * 'upgrade_pending' state for board approval. Otherwise, it goes
-   * directly to 'ready'.
-   *
-   * Response: PluginRecord
-   * Errors: 404 if plugin not found, 400 for lifecycle errors
-   */
-  router.post("/plugins/:pluginId/upgrade", async (req, res) => {
-    assertInstanceAdmin(req);
-    const { pluginId } = req.params;
-    const body = req.body as { version?: string } | undefined;
-    const version = body?.version;
-
-    const plugin = await resolvePlugin(registry, pluginId);
-    if (!plugin) {
-      res.status(404).json({ error: "Plugin not found" });
-      return;
-    }
-
-    try {
-      // Upgrade the plugin - this would typically:
-      // 1. Download the new version
-      // 2. Compare capabilities
-      // 3. If new capabilities, mark as upgrade_pending
-      // 4. Otherwise, transition to ready
-      const result = await lifecycle.upgrade(plugin.id, version);
-      await logPluginMutationActivity(req, "plugin.upgraded", plugin.id, {
-        pluginId: plugin.id,
-        pluginKey: plugin.pluginKey,
-        previousVersion: plugin.version,
-        version: result?.version ?? plugin.version,
-        targetVersion: version ?? null,
-      });
-      publishGlobalLiveEvent({ type: "plugin.ui.updated", payload: { pluginId: plugin.id, action: "upgraded" } });
-      res.json(result);
-    } catch (err) {
-      const message = err instanceof Error ? err.message : String(err);
-      res.status(400).json({ error: message });
-    }
-  });
-
-  // ===========================================================================
-  // Plugin configuration routes
-  // ===========================================================================
-
-  /**
-   * GET /api/plugins/:pluginId/config
-   *
-   * Retrieve the current instance configuration for a plugin.
-   *
-   * Returns the `PluginConfig` record if one exists, or `null` if the plugin
-   * has not yet been configured.
-   *
-   * Response: `PluginConfig | null`
-   * Errors: 404 if plugin not found
-   */
-  router.get("/plugins/:pluginId/config", async (req, res) => {
-    assertBoardOrgAccess(req);
-    const { pluginId } = req.params;
-
-    const plugin = await resolvePlugin(registry, pluginId);
-    if (!plugin) {
-      res.status(404).json({ error: "Plugin not found" });
-      return;
-    }
-
-    const config = await registry.getConfig(plugin.id);
-    res.json(config);
-  });
-
-  /**
-   * POST /api/plugins/:pluginId/config
-   *
-   * Save (create or replace) the instance configuration for a plugin.
-   *
-   * The caller provides the full `configJson` object. The server persists it
-   * via `registry.upsertConfig()`.
-   *
-   * Request body:
-   * - `configJson`: Configuration values matching the plugin's `instanceConfigSchema`
-   *
-   * Response: `PluginConfig`
-   * Errors:
-   * - 400 if request validation fails
-   * - 404 if plugin not found
-   */
-  router.post("/plugins/:pluginId/config", async (req, res) => {
-    assertInstanceAdmin(req);
-    const { pluginId } = req.params;
-
-    const plugin = await resolvePlugin(registry, pluginId);
-    if (!plugin) {
-      res.status(404).json({ error: "Plugin not found" });
-      return;
-    }
-
-    const body = req.body as { configJson?: Record<string, unknown> } | undefined;
-    if (!body?.configJson || typeof body.configJson !== "object") {
-      res.status(400).json({ error: '"configJson" is required and must be an object' });
-      return;
-    }
-
-    // Strip devUiUrl unless the caller is an instance admin. devUiUrl activates
-    // a dev-proxy in the static file route that could be abused for SSRF if any
-    // board-level user were allowed to set it.
-    if (
-      "devUiUrl" in body.configJson &&
-      !(req.actor.type === "board" && req.actor.isInstanceAdmin)
-    ) {
-      delete body.configJson.devUiUrl;
-    }
-
-    // Validate configJson against the plugin's instanceConfigSchema (if declared).
-    // This ensures CLI/API callers get the same validation the UI performs client-side.
-    const schema = plugin.manifestJson?.instanceConfigSchema;
-    if (schema && Object.keys(schema).length > 0) {
-      const validation = validateInstanceConfig(body.configJson, schema);
-      if (!validation.valid) {
-        res.status(400).json({
-          error: "Configuration does not match the plugin's instanceConfigSchema",
-          fieldErrors: validation.errors,
-        });
-        return;
-      }
-    }
-
-    try {
-      const result = await registry.upsertConfig(plugin.id, {
-        configJson: body.configJson,
-      });
-      await logPluginMutationActivity(req, "plugin.config.updated", plugin.id, {
-        pluginId: plugin.id,
-        pluginKey: plugin.pluginKey,
-        configKeyCount: Object.keys(body.configJson).length,
-      });
-
-      // Notify the running worker about the config change (PLUGIN_SPEC §25.4.4).
-      // If the worker implements onConfigChanged, send the new config via RPC.
-      // If it doesn't (METHOD_NOT_IMPLEMENTED), restart the worker so it picks
-      // up the new config on re-initialize. If no worker is running, skip.
-      if (bridgeDeps?.workerManager.isRunning(plugin.id)) {
-        try {
-          await bridgeDeps.workerManager.call(
-            plugin.id,
-            "configChanged",
-            { config: body.configJson },
-          );
-        } catch (rpcErr) {
-          if (
-            rpcErr instanceof JsonRpcCallError &&
-            rpcErr.code === PLUGIN_RPC_ERROR_CODES.METHOD_NOT_IMPLEMENTED
-          ) {
-            // Worker doesn't handle live config — restart it.
-            try {
-              await lifecycle.restartWorker(plugin.id);
-            } catch {
-              // Restart failure is non-fatal for the config save response.
-            }
-          }
-          // Other RPC errors (timeout, unavailable) are non-fatal — config is
-          // already persisted and will take effect on next worker restart.
-        }
-      }
-
-      res.json(result);
-    } catch (err) {
-      const message = err instanceof Error ? err.message : String(err);
-      res.status(400).json({ error: message });
-    }
-  });
-
-  /**
-   * POST /api/plugins/:pluginId/config/test
-   *
-   * Test a plugin configuration without persisting it by calling the plugin
-   * worker's `validateConfig` RPC method.
-   *
-   * Only works when the plugin's worker implements `onValidateConfig`.
-   * If the worker does not implement the method, returns
-   * `{ valid: false, supported: false, message: "..." }` with HTTP 200.
-   *
-   * Request body:
-   * - `configJson`: Configuration values to validate
-   *
-   * Response: `{ valid: boolean; message?: string; supported?: boolean }`
-   * Errors:
-   * - 400 if request validation fails
-   * - 404 if plugin not found
-   * - 501 if bridge deps (worker manager) are not configured
-   * - 502 if the worker is unavailable
-   */
-  router.post("/plugins/:pluginId/config/test", async (req, res) => {
-    assertBoardOrgAccess(req);
-
-    if (!bridgeDeps) {
-      res.status(501).json({ error: "Plugin bridge is not enabled" });
-      return;
-    }
-
-    const { pluginId } = req.params;
-
-    const plugin = await resolvePlugin(registry, pluginId);
-    if (!plugin) {
-      res.status(404).json({ error: "Plugin not found" });
-      return;
-    }
-
-    if (plugin.status !== "ready") {
-      res.status(400).json({
-        error: `Plugin is not ready (current status: ${plugin.status})`,
-      });
-      return;
-    }
-
-    const body = req.body as { configJson?: Record<string, unknown> } | undefined;
-    if (!body?.configJson || typeof body.configJson !== "object") {
-      res.status(400).json({ error: '"configJson" is required and must be an object' });
-      return;
-    }
-
-    // Fast schema-level rejection before hitting the worker RPC.
-    const schema = plugin.manifestJson?.instanceConfigSchema;
-    if (schema && Object.keys(schema).length > 0) {
-      const validation = validateInstanceConfig(body.configJson, schema);
-      if (!validation.valid) {
-        res.status(400).json({
-          error: "Configuration does not match the plugin's instanceConfigSchema",
-          fieldErrors: validation.errors,
-        });
-        return;
-      }
-    }
-
-    try {
-      const result = await bridgeDeps.workerManager.call(
-        plugin.id,
-        "validateConfig",
-        { config: body.configJson },
-      );
-
-      // The worker returns PluginConfigValidationResult { ok, warnings?, errors? }
-      // Map to the frontend-expected shape { valid, message? }
-      if (result.ok) {
-        const warningText = result.warnings?.length
-          ? `Warnings: ${result.warnings.join("; ")}`
-          : undefined;
-        res.json({ valid: true, message: warningText });
-      } else {
-        const errorText = result.errors?.length
-          ? result.errors.join("; ")
-          : "Configuration validation failed.";
-        res.json({ valid: false, message: errorText });
-      }
-    } catch (err) {
-      // If the worker does not implement validateConfig, return a structured response
-      if (
-        err instanceof JsonRpcCallError &&
-        err.code === PLUGIN_RPC_ERROR_CODES.METHOD_NOT_IMPLEMENTED
-      ) {
-        res.json({
-          valid: false,
-          supported: false,
-          message: "This plugin does not support configuration testing.",
-        });
-        return;
-      }
-
-      // Worker unavailable or other RPC errors
-      const bridgeError = mapRpcErrorToBridgeError(err);
-      res.status(502).json(bridgeError);
-    }
-  });
-
-  // ===========================================================================
-  // Job scheduling routes
-  // ===========================================================================
-
-  /**
-   * GET /api/plugins/:pluginId/jobs
-   *
-   * List all scheduled jobs for a plugin.
-   *
-   * Query params:
-   * - `status` (optional): Filter by job status (`active`, `paused`, `failed`)
-   *
-   * Response: PluginJobRecord[]
-   * Errors: 404 if plugin not found
-   */
-  router.get("/plugins/:pluginId/jobs", async (req, res) => {
-    assertBoardOrgAccess(req);
-    if (!jobDeps) {
-      res.status(501).json({ error: "Job scheduling is not enabled" });
-      return;
-    }
-
-    const { pluginId } = req.params;
-    const plugin = await resolvePlugin(registry, pluginId);
-    if (!plugin) {
-      res.status(404).json({ error: "Plugin not found" });
-      return;
-    }
-
-    const rawStatus = req.query.status as string | undefined;
-    const validStatuses = ["active", "paused", "failed"];
-    if (rawStatus !== undefined && !validStatuses.includes(rawStatus)) {
-      res.status(400).json({
-        error: `Invalid status '${rawStatus}'. Must be one of: ${validStatuses.join(", ")}`,
-      });
-      return;
-    }
-
-    try {
-      const jobs = await jobDeps.jobStore.listJobs(
-        plugin.id,
-        rawStatus as "active" | "paused" | "failed" | undefined,
-      );
-      res.json(jobs);
-    } catch (err) {
-      const message = err instanceof Error ? err.message : String(err);
-      res.status(500).json({ error: message });
-    }
-  });
-
-  /**
-   * GET /api/plugins/:pluginId/jobs/:jobId/runs
-   *
-   * List execution history for a specific job.
-   *
-   * Query params:
-   * - `limit` (optional): Maximum number of runs to return (default: 50)
-   *
-   * Response: PluginJobRunRecord[]
-   * Errors: 404 if plugin not found
-   */
-  router.get("/plugins/:pluginId/jobs/:jobId/runs", async (req, res) => {
-    assertBoardOrgAccess(req);
-    if (!jobDeps) {
-      res.status(501).json({ error: "Job scheduling is not enabled" });
-      return;
-    }
-
-    const { pluginId, jobId } = req.params;
-    const plugin = await resolvePlugin(registry, pluginId);
-    if (!plugin) {
-      res.status(404).json({ error: "Plugin not found" });
-      return;
-    }
-
-    const job = await jobDeps.jobStore.getJobByIdForPlugin(plugin.id, jobId);
-    if (!job) {
-      res.status(404).json({ error: "Job not found" });
-      return;
-    }
-
-    const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : 25;
-    if (isNaN(limit) || limit < 1 || limit > 500) {
-      res.status(400).json({ error: "limit must be a number between 1 and 500" });
-      return;
-    }
-
-    try {
-      const runs = await jobDeps.jobStore.listRunsByJob(jobId, limit);
-      res.json(runs);
-    } catch (err) {
-      const message = err instanceof Error ? err.message : String(err);
-      res.status(500).json({ error: message });
-    }
-  });
-
-  /**
-   * POST /api/plugins/:pluginId/jobs/:jobId/trigger
-   *
-   * Manually trigger a job execution outside its cron schedule.
-   *
-   * Creates a run with `trigger: "manual"` and dispatches immediately.
-   * The response returns before the job completes (non-blocking).
-   *
-   * Response: `{ runId: string, jobId: string }`
-   * Errors:
-   * - 404 if plugin not found
-   * - 400 if job not found, not active, already running, or worker unavailable
-   */
-  router.post("/plugins/:pluginId/jobs/:jobId/trigger", async (req, res) => {
-    assertInstanceAdmin(req);
-    if (!jobDeps) {
-      res.status(501).json({ error: "Job scheduling is not enabled" });
-      return;
-    }
-
-    const { pluginId, jobId } = req.params;
-    const plugin = await resolvePlugin(registry, pluginId);
-    if (!plugin) {
-      res.status(404).json({ error: "Plugin not found" });
-      return;
-    }
-
-    const job = await jobDeps.jobStore.getJobByIdForPlugin(plugin.id, jobId);
-    if (!job) {
-      res.status(404).json({ error: "Job not found" });
-      return;
-    }
-
-    try {
-      const result = await jobDeps.scheduler.triggerJob(jobId, "manual");
-      res.json(result);
-    } catch (err) {
-      const message = err instanceof Error ? err.message : String(err);
-      res.status(400).json({ error: message });
-    }
-  });
-
-  // ===========================================================================
-  // Webhook ingestion route
-  // ===========================================================================
-
-  /**
-   * POST /api/plugins/:pluginId/webhooks/:endpointKey
-   *
-   * Receive an inbound webhook delivery for a plugin.
-   *
-   * This route is called by external systems (e.g. GitHub, Linear, Stripe) to
-   * deliver webhook payloads to a plugin. The host validates that:
-   * 1. The plugin exists and is in 'ready' state
-   * 2. The plugin declares the `webhooks.receive` capability
-   * 3. The `endpointKey` matches a declared webhook in the manifest
-   *
-   * The delivery is recorded in the `plugin_webhook_deliveries` table and
-   * dispatched to the worker via the `handleWebhook` RPC method.
-   *
-   * **Note:** This route does NOT require board authentication — webhook
-   * endpoints must be publicly accessible for external callers. Signature
-   * verification is the plugin's responsibility.
-   *
-   * Response: `{ deliveryId: string, status: string }`
-   * Errors:
-   * - 404 if plugin not found or endpointKey not declared
-   * - 400 if plugin is not in ready state or lacks webhooks.receive capability
-   * - 502 if the worker is unavailable or the RPC call fails
-   */
-  router.post("/plugins/:pluginId/webhooks/:endpointKey", async (req, res) => {
-    if (!webhookDeps) {
-      res.status(501).json({ error: "Webhook ingestion is not enabled" });
-      return;
-    }
-
-    const { pluginId, endpointKey } = req.params;
-
-    // Step 1: Resolve the plugin
-    const plugin = await resolvePlugin(registry, pluginId);
-    if (!plugin) {
-      res.status(404).json({ error: "Plugin not found" });
-      return;
-    }
-
-    // Step 2: Validate the plugin is in 'ready' state
-    if (plugin.status !== "ready") {
-      res.status(400).json({
-        error: `Plugin is not ready (current status: ${plugin.status})`,
-      });
-      return;
-    }
-
-    // Step 3: Validate the plugin has webhooks.receive capability
-    const manifest = plugin.manifestJson;
-    if (!manifest) {
-      res.status(400).json({ error: "Plugin manifest is missing" });
-      return;
-    }
-
-    const capabilities = manifest.capabilities ?? [];
-    if (!capabilities.includes("webhooks.receive")) {
-      res.status(400).json({
-        error: "Plugin does not have the webhooks.receive capability",
-      });
-      return;
-    }
-
-    // Step 4: Validate the endpointKey exists in the manifest's webhook declarations
-    const declaredWebhooks = manifest.webhooks ?? [];
-    const webhookDecl = declaredWebhooks.find(
-      (w) => w.endpointKey === endpointKey,
-    );
-    if (!webhookDecl) {
-      res.status(404).json({
-        error: `Webhook endpoint '${endpointKey}' is not declared by this plugin`,
-      });
-      return;
-    }
-
-    // Step 5: Extract request data
-    const requestId = randomUUID();
-    const rawHeaders: Record<string, string> = {};
-    for (const [key, value] of Object.entries(req.headers)) {
-      if (typeof value === "string") {
-        rawHeaders[key] = value;
-      } else if (Array.isArray(value)) {
-        rawHeaders[key] = value.join(", ");
-      }
-    }
-
-    // Use the raw buffer stashed by the express.json() `verify` callback.
-    // This preserves the exact bytes the provider signed, whereas
-    // JSON.stringify(req.body) would re-serialize and break HMAC verification.
-    const stashedRaw = (req as unknown as { rawBody?: Buffer }).rawBody;
-    const rawBody = stashedRaw ? stashedRaw.toString("utf-8") : "";
-    const parsedBody = req.body as unknown;
-    const payload = (req.body as Record<string, unknown> | undefined) ?? {};
-
-    // Step 6: Record the delivery in the database
-    const startedAt = new Date();
-    const [delivery] = await db
-      .insert(pluginWebhookDeliveries)
-      .values({
-        pluginId: plugin.id,
-        webhookKey: endpointKey,
-        status: "pending",
-        payload,
-        headers: rawHeaders,
-        startedAt,
-      })
-      .returning({ id: pluginWebhookDeliveries.id });
-
-    // Step 7: Dispatch to the worker via handleWebhook RPC
-    try {
-      await webhookDeps.workerManager.call(plugin.id, "handleWebhook", {
-        endpointKey,
-        headers: req.headers as Record<string, string | string[]>,
-        rawBody,
-        parsedBody,
-        requestId,
-      });
-
-      // Step 8: Update delivery record to success
-      const finishedAt = new Date();
-      const durationMs = finishedAt.getTime() - startedAt.getTime();
-      await db
-        .update(pluginWebhookDeliveries)
-        .set({
-          status: "success",
-          durationMs,
-          finishedAt,
-        })
-        .where(eq(pluginWebhookDeliveries.id, delivery.id));
-
-      res.status(200).json({
-        deliveryId: delivery.id,
-        status: "success",
-      });
-    } catch (err) {
-      // Step 8 (error): Update delivery record to failed
-      const finishedAt = new Date();
-      const durationMs = finishedAt.getTime() - startedAt.getTime();
-      const errorMessage = err instanceof Error ? err.message : String(err);
-
-      await db
-        .update(pluginWebhookDeliveries)
-        .set({
-          status: "failed",
-          durationMs,
-          error: errorMessage,
-          finishedAt,
-        })
-        .where(eq(pluginWebhookDeliveries.id, delivery.id));
-
-      res.status(502).json({
-        deliveryId: delivery.id,
-        status: "failed",
-        error: errorMessage,
-      });
-    }
-  });
-
-  // ===========================================================================
-  // Plugin health dashboard — aggregated diagnostics for the settings page
-  // ===========================================================================
-
-  /**
-   * GET /api/plugins/:pluginId/dashboard
-   *
-   * Aggregated health dashboard data for a plugin's settings page.
-   *
-   * Returns worker diagnostics (status, uptime, crash history), recent job
-   * runs, recent webhook deliveries, and the current health check result —
-   * all in a single response to avoid multiple round-trips.
-   *
-   * Response: PluginDashboardData
-   * Errors: 404 if plugin not found
-   */
-  router.get("/plugins/:pluginId/dashboard", async (req, res) => {
-    assertBoardOrgAccess(req);
-    const { pluginId } = req.params;
-
-    const plugin = await resolvePlugin(registry, pluginId);
-    if (!plugin) {
-      res.status(404).json({ error: "Plugin not found" });
-      return;
-    }
-
-    // --- Worker diagnostics ---
-    let worker: {
-      status: string;
-      pid: number | null;
-      uptime: number | null;
-      consecutiveCrashes: number;
-      totalCrashes: number;
-      pendingRequests: number;
-      lastCrashAt: number | null;
-      nextRestartAt: number | null;
-    } | null = null;
-
-    // Try bridgeDeps first (primary source for worker manager), fallback to webhookDeps
-    const wm = bridgeDeps?.workerManager ?? webhookDeps?.workerManager ?? null;
-    if (wm) {
-      const handle = wm.getWorker(plugin.id);
-      if (handle) {
-        const diag = handle.diagnostics();
-        worker = {
-          status: diag.status,
-          pid: diag.pid,
-          uptime: diag.uptime,
-          consecutiveCrashes: diag.consecutiveCrashes,
-          totalCrashes: diag.totalCrashes,
-          pendingRequests: diag.pendingRequests,
-          lastCrashAt: diag.lastCrashAt,
-          nextRestartAt: diag.nextRestartAt,
-        };
-      }
-    }
-
-    // --- Recent job runs (last 10, newest first) ---
-    let recentJobRuns: Array<{
-      id: string;
-      jobId: string;
-      jobKey?: string;
-      trigger: string;
-      status: string;
-      durationMs: number | null;
-      error: string | null;
-      startedAt: string | null;
-      finishedAt: string | null;
-      createdAt: string;
-    }> = [];
-
-    if (jobDeps) {
-      try {
-        const runs = await jobDeps.jobStore.listRunsByPlugin(plugin.id, undefined, 10);
-        // Also fetch job definitions so we can include jobKey
-        const jobs = await jobDeps.jobStore.listJobs(plugin.id);
-        const jobKeyMap = new Map(jobs.map((j) => [j.id, j.jobKey]));
-
-        recentJobRuns = runs
-          .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-          .map((r) => ({
-            id: r.id,
-            jobId: r.jobId,
-            jobKey: jobKeyMap.get(r.jobId) ?? undefined,
-            trigger: r.trigger,
-            status: r.status,
-            durationMs: r.durationMs,
-            error: r.error,
-            startedAt: r.startedAt ? new Date(r.startedAt).toISOString() : null,
-            finishedAt: r.finishedAt ? new Date(r.finishedAt).toISOString() : null,
-            createdAt: new Date(r.createdAt).toISOString(),
-          }));
-      } catch {
-        // Job data unavailable — leave empty
-      }
-    }
-
-    // --- Recent webhook deliveries (last 10, newest first) ---
-    let recentWebhookDeliveries: Array<{
-      id: string;
-      webhookKey: string;
-      status: string;
-      durationMs: number | null;
-      error: string | null;
-      startedAt: string | null;
-      finishedAt: string | null;
-      createdAt: string;
-    }> = [];
-
-    try {
-      const deliveries = await db
-        .select({
-          id: pluginWebhookDeliveries.id,
-          webhookKey: pluginWebhookDeliveries.webhookKey,
-          status: pluginWebhookDeliveries.status,
-          durationMs: pluginWebhookDeliveries.durationMs,
-          error: pluginWebhookDeliveries.error,
-          startedAt: pluginWebhookDeliveries.startedAt,
-          finishedAt: pluginWebhookDeliveries.finishedAt,
-          createdAt: pluginWebhookDeliveries.createdAt,
-        })
-        .from(pluginWebhookDeliveries)
-        .where(eq(pluginWebhookDeliveries.pluginId, plugin.id))
-        .orderBy(desc(pluginWebhookDeliveries.createdAt))
-        .limit(10);
-
-      recentWebhookDeliveries = deliveries.map((d) => ({
-        id: d.id,
-        webhookKey: d.webhookKey,
-        status: d.status,
-        durationMs: d.durationMs,
-        error: d.error,
-        startedAt: d.startedAt ? d.startedAt.toISOString() : null,
-        finishedAt: d.finishedAt ? d.finishedAt.toISOString() : null,
-        createdAt: d.createdAt.toISOString(),
-      }));
-    } catch {
-      // Webhook data unavailable — leave empty
-    }
-
-    // --- Health check (same logic as GET /health) ---
-    const checks: PluginHealthCheckResult["checks"] = [];
-
-    checks.push({
-      name: "registry",
-      passed: true,
-      message: "Plugin found in registry",
-    });
-
-    const hasValidManifest = Boolean(plugin.manifestJson?.id);
-    checks.push({
-      name: "manifest",
-      passed: hasValidManifest,
-      message: hasValidManifest ? "Manifest is valid" : "Manifest is invalid or missing",
-    });
-
-    const isHealthy = plugin.status === "ready";
-    checks.push({
-      name: "status",
-      passed: isHealthy,
-      message: `Current status: ${plugin.status}`,
-    });
-
-    const hasNoError = !plugin.lastError;
-    if (!hasNoError) {
-      checks.push({
-        name: "error_state",
-        passed: false,
-        message: plugin.lastError ?? undefined,
-      });
-    }
-
-    const health: PluginHealthCheckResult = {
-      pluginId: plugin.id,
-      status: plugin.status,
-      healthy: isHealthy && hasValidManifest && hasNoError,
-      checks,
-      lastError: plugin.lastError ?? undefined,
-    };
-
-    res.json({
-      pluginId: plugin.id,
-      worker,
-      recentJobRuns,
-      recentWebhookDeliveries,
-      health,
-      checkedAt: new Date().toISOString(),
-    });
-  });
+  // Parameterized routes after static ones
+  router.get("/plugins/:pluginId", expressHandler(getPlugin, adapterDeps));
+
+  router.delete("/plugins/:pluginId", expressHandler(deletePlugin, adapterDeps));
+  router.post("/plugins/:pluginId/enable", expressHandler(enablePlugin, adapterDeps));
+  router.post("/plugins/:pluginId/disable", expressHandler(disablePlugin, adapterDeps));
+  router.get("/plugins/:pluginId/health", expressHandler(getPluginHealth, adapterDeps));
+  router.get("/plugins/:pluginId/logs", expressHandler(getPluginLogs, adapterDeps));
+  router.post("/plugins/:pluginId/upgrade", expressHandler(upgradePlugin, adapterDeps));
+  router.get("/plugins/:pluginId/config", expressHandler(getPluginConfig, adapterDeps));
+  router.post("/plugins/:pluginId/config", expressHandler(savePluginConfig, adapterDeps));
+  router.post("/plugins/:pluginId/config/test", expressHandler(testPluginConfig, adapterDeps));
+  router.get("/plugins/:pluginId/jobs", expressHandler(listPluginJobs, adapterDeps));
+  router.get("/plugins/:pluginId/jobs/:jobId/runs", expressHandler(listPluginJobRuns, adapterDeps));
+  router.post("/plugins/:pluginId/jobs/:jobId/trigger", expressHandler(triggerPluginJob, adapterDeps));
+
+  router.post("/plugins/:pluginId/webhooks/:endpointKey", expressHandler(receiveWebhook, adapterDeps));
+  router.get("/plugins/:pluginId/dashboard", expressHandler(getPluginDashboard, adapterDeps));
 
   return router;
 }

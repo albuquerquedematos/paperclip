@@ -7,6 +7,9 @@ import { accessService } from "../services/access.js";
 import { dashboardService } from "../services/dashboard.js";
 import { collapseDuplicatePendingHumanJoinRequests } from "../lib/join-request-dedupe.js";
 import { assertCompanyAccess } from "./authz.js";
+import { expressHandler } from "../http/express-adapter.js";
+import type { Handler } from "../http/types.js";
+import type { StorageService } from "../storage/types.js";
 
 function buildDismissedAtByKey(
   dismissals: Array<{ itemKey: string; dismissedAt: Date | string }>,
@@ -16,23 +19,25 @@ function buildDismissedAtByKey(
   );
 }
 
-export function sidebarBadgeRoutes(db: Db) {
-  const router = Router();
+function buildHandlers(db: Db) {
   const svc = sidebarBadgeService(db);
   const access = accessService(db);
   const dashboard = dashboardService(db);
 
-  router.get("/companies/:companyId/sidebar-badges", async (req, res) => {
-    const companyId = req.params.companyId as string;
-    assertCompanyAccess(req, companyId);
+  // server/src/routes/sidebar-badges.ts:25
+  const getSidebarBadges: Handler = async (ctx) => {
+    const companyId = ctx.param("companyId") ?? "";
+    assertCompanyAccess(ctx, companyId);
+
     let canApproveJoins = false;
-    if (req.actor.type === "board") {
-      canApproveJoins =
-        req.actor.source === "local_implicit" ||
-        Boolean(req.actor.isInstanceAdmin) ||
-        (await access.canUser(companyId, req.actor.userId, "joins:approve"));
-    } else if (req.actor.type === "agent" && req.actor.agentId) {
-      canApproveJoins = await access.hasPermission(companyId, "agent", req.actor.agentId, "joins:approve");
+    if (ctx.actor?.type === "board") {
+      if (ctx.actor.source === "local_implicit" || ctx.actor.isInstanceAdmin) {
+        canApproveJoins = true;
+      } else {
+        canApproveJoins = await access.canUser(companyId, ctx.actor.userId, "joins:approve");
+      }
+    } else if (ctx.actor?.type === "agent" && ctx.actor.agentId) {
+      canApproveJoins = await access.hasPermission(companyId, "agent", ctx.actor.agentId, "joins:approve");
     }
 
     const visibleJoinRequests = canApproveJoins
@@ -57,11 +62,11 @@ export function sidebarBadgeRoutes(db: Db) {
       : [];
 
     const dismissedAtByKey =
-      req.actor.type === "board" && req.actor.userId
+      ctx.actor?.type === "board" && ctx.actor.userId
         ? await db
           .select({ itemKey: inboxDismissals.itemKey, dismissedAt: inboxDismissals.dismissedAt })
           .from(inboxDismissals)
-          .where(and(eq(inboxDismissals.companyId, companyId), eq(inboxDismissals.userId, req.actor.userId)))
+          .where(and(eq(inboxDismissals.companyId, companyId), eq(inboxDismissals.userId, ctx.actor.userId)))
           .then(buildDismissedAtByKey)
         : new Map<string, number>();
 
@@ -76,8 +81,24 @@ export function sidebarBadgeRoutes(db: Db) {
       (summary.costs.monthBudgetCents > 0 && summary.costs.monthUtilizationPercent >= 80 ? 1 : 0);
     badges.inbox = badges.failedRuns + alertsCount + badges.joinRequests + badges.approvals;
 
-    res.json(badges);
+    return Response.json(badges);
+  };
+
+  return { getSidebarBadges };
+}
+
+export function sidebarBadgeRoutes(db: Db) {
+  const router = Router();
+  const { getSidebarBadges } = buildHandlers(db);
+
+  const storageSentinel = new Proxy({} as StorageService, {
+    get(_target, prop) {
+      throw new Error(`sidebarBadge handler unexpectedly accessed storage.${String(prop)}`);
+    },
   });
+  const deps = { db, storage: storageSentinel };
+
+  router.get("/companies/:companyId/sidebar-badges", expressHandler(getSidebarBadges, deps));
 
   return router;
 }

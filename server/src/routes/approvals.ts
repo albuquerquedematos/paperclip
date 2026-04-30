@@ -1,4 +1,4 @@
-import { Router, type Request } from "express";
+import { Router } from "express";
 import type { Db } from "@paperclipai/db";
 import {
   addApprovalCommentSchema,
@@ -19,6 +19,8 @@ import {
 import { assertBoard, assertCompanyAccess, getActorInfo } from "./authz.js";
 import { redactEventPayload } from "../redaction.js";
 import type { PluginWorkerManager } from "../services/plugin-worker-manager.js";
+import type { Handler, RequestCtx } from "../http/types.js";
+import { expressHandler } from "../http/express-adapter.js";
 
 function redactApprovalPayload<T extends { payload: Record<string, unknown> }>(approval: T): T {
   return {
@@ -40,59 +42,61 @@ export function approvalRoutes(
   const secretsSvc = secretService(db);
   const strictSecretsMode = process.env.PAPERCLIP_SECRETS_STRICT_MODE === "true";
 
-  async function requireApprovalAccess(req: Request, id: string) {
+  async function requireApprovalAccess(ctx: RequestCtx, id: string) {
     const approval = await svc.getById(id);
     if (!approval) {
       return null;
     }
-    assertCompanyAccess(req, approval.companyId);
+    assertCompanyAccess(ctx, approval.companyId);
     return approval;
   }
 
-  router.get("/companies/:companyId/approvals", async (req, res) => {
-    const companyId = req.params.companyId as string;
-    assertCompanyAccess(req, companyId);
-    const status = req.query.status as string | undefined;
-    const result = await svc.list(companyId, status);
-    res.json(result.map((approval) => redactApprovalPayload(approval)));
-  });
+  const deps = { db, storage: null as never };
 
-  router.get("/approvals/:id", async (req, res) => {
-    const id = req.params.id as string;
+  const listApprovals: Handler = async (ctx) => {
+    const companyId = ctx.param("companyId")!;
+    assertCompanyAccess(ctx, companyId);
+    const status = ctx.query("status");
+    const result = await svc.list(companyId, status);
+    return Response.json(result.map((approval) => redactApprovalPayload(approval)));
+  };
+
+  const getApproval: Handler = async (ctx) => {
+    const id = ctx.param("id")!;
     const approval = await svc.getById(id);
     if (!approval) {
-      res.status(404).json({ error: "Approval not found" });
-      return;
+      return Response.json({ error: "Approval not found" }, { status: 404 });
     }
-    assertCompanyAccess(req, approval.companyId);
-    res.json(redactApprovalPayload(approval));
-  });
+    assertCompanyAccess(ctx, approval.companyId);
+    return Response.json(redactApprovalPayload(approval));
+  };
 
-  router.post("/companies/:companyId/approvals", validate(createApprovalSchema), async (req, res) => {
-    const companyId = req.params.companyId as string;
-    assertCompanyAccess(req, companyId);
-    const rawIssueIds = req.body.issueIds;
+  const createApproval: Handler = async (ctx) => {
+    const companyId = ctx.param("companyId")!;
+    assertCompanyAccess(ctx, companyId);
+    const body = await ctx.json<Record<string, unknown>>();
+    const rawIssueIds = body.issueIds;
     const issueIds = Array.isArray(rawIssueIds)
       ? rawIssueIds.filter((value: unknown): value is string => typeof value === "string")
       : [];
     const uniqueIssueIds = Array.from(new Set(issueIds));
-    const { issueIds: _issueIds, ...approvalInput } = req.body;
+    const { issueIds: _issueIds, ...approvalInput } = body;
     const normalizedPayload =
       approvalInput.type === "hire_agent"
         ? await secretsSvc.normalizeHireApprovalPayloadForPersistence(
             companyId,
-            approvalInput.payload,
+            approvalInput.payload as Record<string, unknown>,
             { strictMode: strictSecretsMode },
           )
         : approvalInput.payload;
 
-    const actor = getActorInfo(req);
+    const actor = getActorInfo(ctx);
     const approval = await svc.create(companyId, {
       ...approvalInput,
       payload: normalizedPayload,
       requestedByUserId: actor.actorType === "user" ? actor.actorId : null,
       requestedByAgentId:
-        approvalInput.requestedByAgentId ?? (actor.actorType === "agent" ? actor.actorId : null),
+        (approvalInput.requestedByAgentId as string | null | undefined) ?? (actor.actorType === "agent" ? actor.actorId : null),
       status: "pending",
       decisionNote: null,
       decidedByUserId: null,
@@ -118,30 +122,29 @@ export function approvalRoutes(
       details: { type: approval.type, issueIds: uniqueIssueIds },
     });
 
-    res.status(201).json(redactApprovalPayload(approval));
-  });
+    return Response.json(redactApprovalPayload(approval), { status: 201 });
+  };
 
-  router.get("/approvals/:id/issues", async (req, res) => {
-    const id = req.params.id as string;
+  const getApprovalIssues: Handler = async (ctx) => {
+    const id = ctx.param("id")!;
     const approval = await svc.getById(id);
     if (!approval) {
-      res.status(404).json({ error: "Approval not found" });
-      return;
+      return Response.json({ error: "Approval not found" }, { status: 404 });
     }
-    assertCompanyAccess(req, approval.companyId);
+    assertCompanyAccess(ctx, approval.companyId);
     const issues = await issueApprovalsSvc.listIssuesForApproval(id);
-    res.json(issues);
-  });
+    return Response.json(issues);
+  };
 
-  router.post("/approvals/:id/approve", validate(resolveApprovalSchema), async (req, res) => {
-    assertBoard(req);
-    const id = req.params.id as string;
-    if (!(await requireApprovalAccess(req, id))) {
-      res.status(404).json({ error: "Approval not found" });
-      return;
+  const approveApproval: Handler = async (ctx) => {
+    assertBoard(ctx);
+    const id = ctx.param("id")!;
+    if (!(await requireApprovalAccess(ctx, id))) {
+      return Response.json({ error: "Approval not found" }, { status: 404 });
     }
-    const decidedByUserId = req.actor.userId ?? "board";
-    const { approval, applied } = await svc.approve(id, decidedByUserId, req.body.decisionNote);
+    const body = await ctx.json<{ decisionNote?: string | null }>();
+    const decidedByUserId = ctx.actor?.type === "board" ? (ctx.actor.userId ?? "board") : "board";
+    const { approval, applied } = await svc.approve(id, decidedByUserId, body.decisionNote ?? null);
 
     if (applied) {
       const linkedIssues = await issueApprovalsSvc.listIssuesForApproval(approval.id);
@@ -151,7 +154,7 @@ export function approvalRoutes(
       await logActivity(db, {
         companyId: approval.companyId,
         actorType: "user",
-        actorId: req.actor.userId ?? "board",
+        actorId: decidedByUserId,
         action: "approval.approved",
         entityType: "approval",
         entityId: approval.id,
@@ -175,7 +178,7 @@ export function approvalRoutes(
               issueIds: linkedIssueIds,
             },
             requestedByActorType: "user",
-            requestedByActorId: req.actor.userId ?? "board",
+            requestedByActorId: decidedByUserId,
             contextSnapshot: {
               source: "approval.approved",
               approvalId: approval.id,
@@ -190,7 +193,7 @@ export function approvalRoutes(
           await logActivity(db, {
             companyId: approval.companyId,
             actorType: "user",
-            actorId: req.actor.userId ?? "board",
+            actorId: decidedByUserId,
             action: "approval.requester_wakeup_queued",
             entityType: "approval",
             entityId: approval.id,
@@ -212,7 +215,7 @@ export function approvalRoutes(
           await logActivity(db, {
             companyId: approval.companyId,
             actorType: "user",
-            actorId: req.actor.userId ?? "board",
+            actorId: decidedByUserId,
             action: "approval.requester_wakeup_failed",
             entityType: "approval",
             entityId: approval.id,
@@ -226,24 +229,24 @@ export function approvalRoutes(
       }
     }
 
-    res.json(redactApprovalPayload(approval));
-  });
+    return Response.json(redactApprovalPayload(approval));
+  };
 
-  router.post("/approvals/:id/reject", validate(resolveApprovalSchema), async (req, res) => {
-    assertBoard(req);
-    const id = req.params.id as string;
-    if (!(await requireApprovalAccess(req, id))) {
-      res.status(404).json({ error: "Approval not found" });
-      return;
+  const rejectApproval: Handler = async (ctx) => {
+    assertBoard(ctx);
+    const id = ctx.param("id")!;
+    if (!(await requireApprovalAccess(ctx, id))) {
+      return Response.json({ error: "Approval not found" }, { status: 404 });
     }
-    const decidedByUserId = req.actor.userId ?? "board";
-    const { approval, applied } = await svc.reject(id, decidedByUserId, req.body.decisionNote);
+    const body = await ctx.json<{ decisionNote?: string | null }>();
+    const decidedByUserId = ctx.actor?.type === "board" ? (ctx.actor.userId ?? "board") : "board";
+    const { approval, applied } = await svc.reject(id, decidedByUserId, body.decisionNote ?? null);
 
     if (applied) {
       await logActivity(db, {
         companyId: approval.companyId,
         actorType: "user",
-        actorId: req.actor.userId ?? "board",
+        actorId: decidedByUserId,
         action: "approval.rejected",
         entityType: "approval",
         entityId: approval.id,
@@ -251,61 +254,56 @@ export function approvalRoutes(
       });
     }
 
-    res.json(redactApprovalPayload(approval));
-  });
+    return Response.json(redactApprovalPayload(approval));
+  };
 
-  router.post(
-    "/approvals/:id/request-revision",
-    validate(requestApprovalRevisionSchema),
-    async (req, res) => {
-      assertBoard(req);
-      const id = req.params.id as string;
-      if (!(await requireApprovalAccess(req, id))) {
-        res.status(404).json({ error: "Approval not found" });
-        return;
-      }
-      const decidedByUserId = req.actor.userId ?? "board";
-      const approval = await svc.requestRevision(id, decidedByUserId, req.body.decisionNote);
+  const requestRevision: Handler = async (ctx) => {
+    assertBoard(ctx);
+    const id = ctx.param("id")!;
+    if (!(await requireApprovalAccess(ctx, id))) {
+      return Response.json({ error: "Approval not found" }, { status: 404 });
+    }
+    const body = await ctx.json<{ decisionNote?: string | null }>();
+    const decidedByUserId = ctx.actor?.type === "board" ? (ctx.actor.userId ?? "board") : "board";
+    const approval = await svc.requestRevision(id, decidedByUserId, body.decisionNote ?? null);
 
-      await logActivity(db, {
-        companyId: approval.companyId,
-        actorType: "user",
-        actorId: req.actor.userId ?? "board",
-        action: "approval.revision_requested",
-        entityType: "approval",
-        entityId: approval.id,
-        details: { type: approval.type },
-      });
+    await logActivity(db, {
+      companyId: approval.companyId,
+      actorType: "user",
+      actorId: decidedByUserId,
+      action: "approval.revision_requested",
+      entityType: "approval",
+      entityId: approval.id,
+      details: { type: approval.type },
+    });
 
-      res.json(redactApprovalPayload(approval));
-    },
-  );
+    return Response.json(redactApprovalPayload(approval));
+  };
 
-  router.post("/approvals/:id/resubmit", validate(resubmitApprovalSchema), async (req, res) => {
-    const id = req.params.id as string;
+  const resubmitApproval: Handler = async (ctx) => {
+    const id = ctx.param("id")!;
     const existing = await svc.getById(id);
     if (!existing) {
-      res.status(404).json({ error: "Approval not found" });
-      return;
+      return Response.json({ error: "Approval not found" }, { status: 404 });
     }
-    assertCompanyAccess(req, existing.companyId);
+    assertCompanyAccess(ctx, existing.companyId);
 
-    if (req.actor.type === "agent" && req.actor.agentId !== existing.requestedByAgentId) {
-      res.status(403).json({ error: "Only requesting agent can resubmit this approval" });
-      return;
+    if (ctx.actor?.type === "agent" && ctx.actor.agentId !== existing.requestedByAgentId) {
+      return Response.json({ error: "Only requesting agent can resubmit this approval" }, { status: 403 });
     }
 
-    const normalizedPayload = req.body.payload
+    const body = await ctx.json<{ payload?: Record<string, unknown> }>();
+    const normalizedPayload = body.payload
       ? existing.type === "hire_agent"
         ? await secretsSvc.normalizeHireApprovalPayloadForPersistence(
             existing.companyId,
-            req.body.payload,
+            body.payload,
             { strictMode: strictSecretsMode },
           )
-        : req.body.payload
+        : body.payload
       : undefined;
     const approval = await svc.resubmit(id, normalizedPayload);
-    const actor = getActorInfo(req);
+    const actor = getActorInfo(ctx);
     await logActivity(db, {
       companyId: approval.companyId,
       actorType: actor.actorType,
@@ -316,31 +314,30 @@ export function approvalRoutes(
       entityId: approval.id,
       details: { type: approval.type },
     });
-    res.json(redactApprovalPayload(approval));
-  });
+    return Response.json(redactApprovalPayload(approval));
+  };
 
-  router.get("/approvals/:id/comments", async (req, res) => {
-    const id = req.params.id as string;
+  const listApprovalComments: Handler = async (ctx) => {
+    const id = ctx.param("id")!;
     const approval = await svc.getById(id);
     if (!approval) {
-      res.status(404).json({ error: "Approval not found" });
-      return;
+      return Response.json({ error: "Approval not found" }, { status: 404 });
     }
-    assertCompanyAccess(req, approval.companyId);
+    assertCompanyAccess(ctx, approval.companyId);
     const comments = await svc.listComments(id);
-    res.json(comments);
-  });
+    return Response.json(comments);
+  };
 
-  router.post("/approvals/:id/comments", validate(addApprovalCommentSchema), async (req, res) => {
-    const id = req.params.id as string;
+  const addApprovalComment: Handler = async (ctx) => {
+    const id = ctx.param("id")!;
     const approval = await svc.getById(id);
     if (!approval) {
-      res.status(404).json({ error: "Approval not found" });
-      return;
+      return Response.json({ error: "Approval not found" }, { status: 404 });
     }
-    assertCompanyAccess(req, approval.companyId);
-    const actor = getActorInfo(req);
-    const comment = await svc.addComment(id, req.body.body, {
+    assertCompanyAccess(ctx, approval.companyId);
+    const body = await ctx.json<{ body: string }>();
+    const actor = getActorInfo(ctx);
+    const comment = await svc.addComment(id, body.body, {
       agentId: actor.agentId ?? undefined,
       userId: actor.actorType === "user" ? actor.actorId : undefined,
     });
@@ -356,8 +353,43 @@ export function approvalRoutes(
       details: { commentId: comment.id },
     });
 
-    res.status(201).json(comment);
-  });
+    return Response.json(comment, { status: 201 });
+  };
+
+  router.get("/companies/:companyId/approvals", expressHandler(listApprovals, deps));
+  router.get("/approvals/:id", expressHandler(getApproval, deps));
+  router.post(
+    "/companies/:companyId/approvals",
+    validate(createApprovalSchema),
+    expressHandler(createApproval, deps),
+  );
+  router.get("/approvals/:id/issues", expressHandler(getApprovalIssues, deps));
+  router.post(
+    "/approvals/:id/approve",
+    validate(resolveApprovalSchema),
+    expressHandler(approveApproval, deps),
+  );
+  router.post(
+    "/approvals/:id/reject",
+    validate(resolveApprovalSchema),
+    expressHandler(rejectApproval, deps),
+  );
+  router.post(
+    "/approvals/:id/request-revision",
+    validate(requestApprovalRevisionSchema),
+    expressHandler(requestRevision, deps),
+  );
+  router.post(
+    "/approvals/:id/resubmit",
+    validate(resubmitApprovalSchema),
+    expressHandler(resubmitApproval, deps),
+  );
+  router.get("/approvals/:id/comments", expressHandler(listApprovalComments, deps));
+  router.post(
+    "/approvals/:id/comments",
+    validate(addApprovalCommentSchema),
+    expressHandler(addApprovalComment, deps),
+  );
 
   return router;
 }

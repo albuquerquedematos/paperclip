@@ -1,9 +1,8 @@
 import { and, eq, inArray, isNull, ne, or } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import { agents, issues } from "@paperclipai/db";
-import type { Request } from "express";
 import { forbidden } from "../errors.js";
-import { assertCompanyAccess } from "./authz.js";
+import { assertCompanyAccess, type AuthzReq } from "./authz.js";
 
 const WORKSPACE_RUNTIME_ELIGIBLE_ISSUE_STATUSES: string[] = [
   "backlog",
@@ -48,7 +47,7 @@ async function listReportingSubtreeAgentIds(db: Db, companyId: string, actorAgen
 
 async function assertAgentCanManageRuntimeServicesForWorkspace(
   db: Db,
-  req: Request,
+  req: AuthzReq,
   input: {
     companyId: string;
     projectWorkspaceId?: string | null;
@@ -56,7 +55,7 @@ async function assertAgentCanManageRuntimeServicesForWorkspace(
     sourceIssueId?: string | null;
   },
 ) {
-  if (req.actor.type !== "agent" || !req.actor.agentId) {
+  if (req.actor?.type !== "agent" || !req.actor.agentId) {
     throw forbidden("Agent authentication required");
   }
 
@@ -112,20 +111,20 @@ async function assertAgentCanManageRuntimeServicesForWorkspace(
 
 export async function assertCanManageProjectWorkspaceRuntimeServices(
   db: Db,
-  req: Request,
+  req: AuthzReq,
   input: {
     companyId: string;
     projectWorkspaceId: string;
   },
 ) {
   assertCompanyAccess(req, input.companyId);
-  if (req.actor.type === "board") return;
+  if (req.actor?.type === "board") return;
   await assertAgentCanManageRuntimeServicesForWorkspace(db, req, input);
 }
 
 export async function assertCanManageExecutionWorkspaceRuntimeServices(
   db: Db,
-  req: Request,
+  req: AuthzReq,
   input: {
     companyId: string;
     executionWorkspaceId: string;
@@ -133,6 +132,6 @@ export async function assertCanManageExecutionWorkspaceRuntimeServices(
   },
 ) {
   assertCompanyAccess(req, input.companyId);
-  if (req.actor.type === "board") return;
+  if (req.actor?.type === "board") return;
   await assertAgentCanManageRuntimeServicesForWorkspace(db, req, input);
 }

@@ -1,32 +1,39 @@
-import { Router, type Request } from "express";
+import { Router } from "express";
 import type { Db } from "@paperclipai/db";
 import { AGENT_ICON_NAMES } from "@paperclipai/shared";
 import { forbidden } from "../errors.js";
 import { listServerAdapters } from "../adapters/index.js";
 import { agentService } from "../services/agents.js";
+import { expressHandler } from "../http/express-adapter.js";
+import type { Handler, RequestCtx } from "../http/types.js";
+import type { StorageService } from "../storage/types.js";
 
 function hasCreatePermission(agent: { role: string; permissions: Record<string, unknown> | null | undefined }) {
   if (!agent.permissions || typeof agent.permissions !== "object") return false;
   return Boolean((agent.permissions as Record<string, unknown>).canCreateAgents);
 }
 
-export function llmRoutes(db: Db) {
-  const router = Router();
+function textPlain(body: string): Response {
+  return new Response(body, { headers: { "content-type": "text/plain; charset=utf-8" } });
+}
+
+function buildHandlers(db: Db) {
   const agentsSvc = agentService(db);
 
-  async function assertCanRead(req: Request) {
-    if (req.actor.type === "board") return;
-    if (req.actor.type !== "agent" || !req.actor.agentId) {
+  async function assertCanRead(ctx: RequestCtx) {
+    if (ctx.actor?.type === "board") return;
+    if (ctx.actor?.type !== "agent" || !ctx.actor.agentId) {
       throw forbidden("Board or permitted agent authentication required");
     }
-    const actorAgent = await agentsSvc.getById(req.actor.agentId);
+    const actorAgent = await agentsSvc.getById(ctx.actor.agentId);
     if (!actorAgent || !hasCreatePermission(actorAgent)) {
       throw forbidden("Missing permission to read agent configuration reflection");
     }
   }
 
-  router.get("/llms/agent-configuration.txt", async (req, res) => {
-    await assertCanRead(req);
+  // server/src/routes/llms.ts:28
+  const getAgentConfigurationIndex: Handler = async (ctx) => {
+    await assertCanRead(ctx);
     const adapters = listServerAdapters().sort((a, b) => a.type.localeCompare(b.type));
     const lines = [
       "# Paperclip Agent Configuration Index",
@@ -49,11 +56,12 @@ export function llmRoutes(db: Db) {
       "- Timer heartbeats are opt-in for new hires. Leave runtimeConfig.heartbeat.enabled false unless the role truly needs scheduled work or the user explicitly asked for it.",
       "",
     ];
-    res.type("text/plain").send(lines.join("\n"));
-  });
+    return textPlain(lines.join("\n"));
+  };
 
-  router.get("/llms/agent-icons.txt", async (req, res) => {
-    await assertCanRead(req);
+  // server/src/routes/llms.ts:55
+  const getAgentIcons: Handler = async (ctx) => {
+    await assertCanRead(ctx);
     const lines = [
       "# Paperclip Agent Icon Names",
       "",
@@ -64,24 +72,43 @@ export function llmRoutes(db: Db) {
       '{ "name": "SearchOps", "role": "researcher", "icon": "search" }',
       "",
     ];
-    res.type("text/plain").send(lines.join("\n"));
-  });
+    return textPlain(lines.join("\n"));
+  };
 
-  router.get("/llms/agent-configuration/:adapterType.txt", async (req, res) => {
-    await assertCanRead(req);
-    const adapterType = req.params.adapterType as string;
+  // server/src/routes/llms.ts:70
+  const getAdapterConfiguration: Handler = async (ctx) => {
+    await assertCanRead(ctx);
+    const adapterType = ctx.param("adapterType") ?? "";
     const adapter = listServerAdapters().find((entry) => entry.type === adapterType);
     if (!adapter) {
-      res.status(404).type("text/plain").send(`Unknown adapter type: ${adapterType}`);
-      return;
+      return new Response(`Unknown adapter type: ${adapterType}`, {
+        status: 404,
+        headers: { "content-type": "text/plain; charset=utf-8" },
+      });
     }
-    res
-      .type("text/plain")
-      .send(
-        adapter.agentConfigurationDoc ??
-          `# ${adapterType} agent configuration\n\nNo adapter-specific documentation registered.`,
-      );
+    return textPlain(
+      adapter.agentConfigurationDoc ??
+        `# ${adapterType} agent configuration\n\nNo adapter-specific documentation registered.`,
+    );
+  };
+
+  return { getAgentConfigurationIndex, getAgentIcons, getAdapterConfiguration };
+}
+
+export function llmRoutes(db: Db) {
+  const router = Router();
+  const { getAgentConfigurationIndex, getAgentIcons, getAdapterConfiguration } = buildHandlers(db);
+
+  const storageSentinel = new Proxy({} as StorageService, {
+    get(_target, prop) {
+      throw new Error(`llm handler unexpectedly accessed storage.${String(prop)}`);
+    },
   });
+  const deps = { db, storage: storageSentinel };
+
+  router.get("/llms/agent-configuration.txt", expressHandler(getAgentConfigurationIndex, deps));
+  router.get("/llms/agent-icons.txt", expressHandler(getAgentIcons, deps));
+  router.get("/llms/agent-configuration/:adapterType.txt", expressHandler(getAdapterConfiguration, deps));
 
   return router;
 }

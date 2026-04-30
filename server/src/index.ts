@@ -530,6 +530,23 @@ export async function startServer(): Promise<StartedServer> {
   });
   const uiMode = config.uiDevMiddleware ? "vite-dev" : config.serveUi ? "static" : "none";
   const storageService = createStorageServiceFromConfig(config);
+
+  // Deployment platform awareness — log the configured platform at startup.
+  // When deploymentPlatform is "cloudflare" the R2-backed run-log store,
+  // workspace-operation-log store, and scheduler are managed inside the
+  // Cloudflare Worker (packages/deploy-cloudflare). The Node server acts as a
+  // sidecar for database access and scheduled work; all R2/Workers-only storage
+  // paths are therefore NOT initialized here. Configuration of those bindings
+  // belongs in the deploy-cloudflare Worker entry point.
+  if (config.deploymentPlatform === "cloudflare") {
+    logger.warn(
+      { deploymentPlatform: config.deploymentPlatform },
+      "Cloudflare platform mode is configured. The run-log store, workspace-operation-log store, " +
+        "and scheduler are managed by the deploy-cloudflare Worker — this Node server is acting as " +
+        "the sidecar. Ensure the deploy-cloudflare Worker is deployed and bound to the same database.",
+    );
+  }
+
   const feedback = feedbackService(db as any, {
     shareClient: createFeedbackTraceShareClientFromConfig(config),
   });

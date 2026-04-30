@@ -7,6 +7,9 @@ export const MAX_COMPANY_ATTACHMENT_MAX_BYTES = 1024 * 1024 * 1024;
 export const DEPLOYMENT_MODES = ["local_trusted", "authenticated"] as const;
 export type DeploymentMode = (typeof DEPLOYMENT_MODES)[number];
 
+export const DEPLOYMENT_PLATFORMS = ["node", "cloudflare"] as const;
+export type DeploymentPlatform = (typeof DEPLOYMENT_PLATFORMS)[number];
+
 export const DEPLOYMENT_EXPOSURES = ["private", "public"] as const;
 export type DeploymentExposure = (typeof DEPLOYMENT_EXPOSURES)[number];
 

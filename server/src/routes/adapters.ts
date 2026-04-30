@@ -45,6 +45,9 @@ import { loadExternalAdapterPackage, getUiParserSource, getOrExtractUiParserSour
 import { logger } from "../middleware/logger.js";
 import { assertBoardOrgAccess, assertInstanceAdmin } from "./authz.js";
 import { BUILTIN_ADAPTER_TYPES } from "../adapters/builtin-adapter-types.js";
+import { expressHandler } from "../http/express-adapter.js";
+import type { Handler } from "../http/types.js";
+import type { StorageService } from "../storage/types.js";
 
 const execFileAsync = promisify(execFile);
 
@@ -195,6 +198,37 @@ function registerWithSessionManagement(adapter: ServerAdapterModule): void {
 export function adapterRoutes() {
   const router = Router();
 
+  // Storage is not used by any adapter handler.
+  const storageSentinel = new Proxy({} as StorageService, {
+    get(_target, prop) {
+      throw new Error(`adapter handler unexpectedly accessed storage.${String(prop)}`);
+    },
+  });
+
+  // A placeholder Db sentinel — adapter routes do not touch the database.
+  // expressHandler requires a Db in deps; supply a proxy that throws on access.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const dbSentinel = new Proxy({} as any, {
+    get(_target, prop) {
+      throw new Error(`adapter handler unexpectedly accessed db.${String(prop)}`);
+    },
+  });
+
+  const adapterDeps = { db: dbSentinel, storage: storageSentinel };
+
+  // ---------------------------------------------------------------------------
+  // Authz helpers — assertBoardOrgAccess and assertInstanceAdmin from authz.ts
+  // accept RequestCtx directly (both satisfy the AuthzReq structural interface).
+  // ---------------------------------------------------------------------------
+
+  // config schema cache shared across the router's lifetime
+  const configSchemaCache = new Map<string, {
+    adapter: ServerAdapterModule;
+    schema: AdapterConfigSchema;
+    fetchedAt: number;
+  }>();
+  const CONFIG_SCHEMA_TTL_MS = 30_000;
+
   /**
    * GET /api/adapters
    *
@@ -202,11 +236,8 @@ export function adapterRoutes() {
    * Each entry includes whether the adapter is built-in or external,
    * its model count, and load status.
    */
-  router.get("/adapters", async (_req, res) => {
-    // Adapter inventory is needed by ordinary board members when creating or
-    // editing company agents. Mutating adapter management routes below remain
-    // instance-admin only because they affect the whole server runtime.
-    assertBoardOrgAccess(_req);
+  const listAdapters: Handler = async (ctx) => {
+    assertBoardOrgAccess(ctx);
 
     const registeredAdapters = listServerAdapters();
     const externalRecords = new Map(
@@ -218,8 +249,8 @@ export function adapterRoutes() {
       buildAdapterInfo(adapter, externalRecords.get(adapter.type), disabledSet),
     ).sort((a, b) => a.type.localeCompare(b.type));
 
-    res.json(result);
-  });
+    return Response.json(result);
+  };
 
   /**
    * POST /api/adapters/install
@@ -231,24 +262,20 @@ export function adapterRoutes() {
    * - isLocalPath?: boolean (default false)
    * - version?: string — target version for npm packages
    */
-  router.post("/adapters/install", async (req, res) => {
-    assertInstanceAdmin(req);
-
-    const { packageName, isLocalPath = false, version } = req.body as AdapterInstallRequest;
+  const installAdapter: Handler = async (ctx) => {
+    assertInstanceAdmin(ctx);
+    const body = await ctx.json<AdapterInstallRequest>();
+    const { packageName, isLocalPath = false, version } = body;
 
     if (!packageName || typeof packageName !== "string") {
-      res.status(400).json({ error: "packageName is required and must be a string." });
-      return;
+      return Response.json({ error: "packageName is required and must be a string." }, { status: 400 });
     }
 
     // Strip version suffix if the UI sends "pkg@1.2.3" instead of separating it
-    // e.g. "@henkey/hermes-paperclip-adapter@0.3.0" → packageName + version
     let canonicalName = packageName;
     let explicitVersion = version;
     const versionSuffix = packageName.match(/@(\d+\.\d+\.\d+.*)$/);
     if (versionSuffix) {
-      // For scoped packages: "@scope/name@1.2.3" → "@scope/name" + "1.2.3"
-      // For unscoped: "name@1.2.3" → "name" + "1.2.3"
       const lastAtIndex = packageName.lastIndexOf("@");
       if (lastAtIndex > 0 && !explicitVersion) {
         canonicalName = packageName.slice(0, lastAtIndex);
@@ -261,7 +288,6 @@ export function adapterRoutes() {
       let moduleLocalPath: string | undefined;
 
       if (!isLocalPath) {
-        // npm install into the managed directory
         const pluginsDir = getAdapterPluginsDir();
         const spec = explicitVersion ? `${canonicalName}@${explicitVersion}` : canonicalName;
 
@@ -272,7 +298,6 @@ export function adapterRoutes() {
           timeout: 120_000,
         });
 
-        // Read installed version from package.json
         // TODO(cloudflare): reading package.json from the npm install directory
         // uses node:fs/promises at request time. For Workers compatibility the
         // installed version should be persisted to the DB by the install job and
@@ -289,7 +314,6 @@ export function adapterRoutes() {
           installedVersion = explicitVersion;
         }
       } else {
-        // Local path — normalize (e.g., Windows → WSL) and use the resolved path
         moduleLocalPath = path.resolve(await normalizeLocalPath(packageName));
         // TODO(cloudflare): reading package.json from a local-path adapter
         // directory uses node:fs/promises at request time. For Workers
@@ -306,18 +330,14 @@ export function adapterRoutes() {
         }
       }
 
-      // Load and register the adapter (use canonicalName for path resolution)
       const adapterModule = await loadExternalAdapterPackage(canonicalName, moduleLocalPath);
 
-      // Check if this type conflicts with a built-in adapter
       if (BUILTIN_ADAPTER_TYPES.has(adapterModule.type)) {
-        res.status(409).json({
+        return Response.json({
           error: `Adapter type "${adapterModule.type}" is a built-in adapter and cannot be overwritten.`,
-        });
-        return;
+        }, { status: 409 });
       }
 
-      // Check if already registered (indicates a reinstall/update)
       const existing = findServerAdapter(adapterModule.type);
       const isReinstall = existing !== null;
       if (existing) {
@@ -325,10 +345,8 @@ export function adapterRoutes() {
         logger.info({ type: adapterModule.type }, "Unregistered existing adapter for replacement");
       }
 
-      // Register the new adapter
       registerWithSessionManagement(adapterModule);
 
-      // Persist the record (use canonicalName without version suffix)
       const record: AdapterPluginRecord = {
         packageName: canonicalName,
         localPath: moduleLocalPath,
@@ -343,50 +361,45 @@ export function adapterRoutes() {
         "External adapter installed and registered",
       );
 
-      res.status(201).json({
+      return Response.json({
         type: adapterModule.type,
         packageName: canonicalName,
         version: installedVersion ?? explicitVersion,
         installedAt: record.installedAt,
         requiresRestart: isReinstall,
-      });
+      }, { status: 201 });
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
       logger.error({ err, packageName }, "Failed to install external adapter");
 
-      // Distinguish npm errors from load errors
       if (message.includes("npm") || message.includes("ERR!")) {
-        res.status(500).json({ error: `npm install failed: ${message}` });
-      } else {
-        res.status(500).json({ error: `Failed to install adapter: ${message}` });
+        return Response.json({ error: `npm install failed: ${message}` }, { status: 500 });
       }
+      return Response.json({ error: `Failed to install adapter: ${message}` }, { status: 500 });
     }
-  });
+  };
 
   /**
    * PATCH /api/adapters/:type
    *
-   * Enable or disable an adapter. Disabled adapters are hidden from agent
-   * creation menus but remain functional for existing agents.
+   * Enable or disable an adapter.
    *
    * Request body: { "disabled": boolean }
    */
-  router.patch("/adapters/:type", async (req, res) => {
-    assertInstanceAdmin(req);
-
-    const adapterType = req.params.type;
-    const { disabled } = req.body as { disabled?: boolean };
+  const patchAdapter: Handler = async (ctx) => {
+    assertInstanceAdmin(ctx);
+    const adapterType = ctx.param("type");
+    if (!adapterType) return Response.json({ error: "Adapter type is required." }, { status: 400 });
+    const body = await ctx.json<{ disabled?: boolean }>();
+    const { disabled } = body;
 
     if (typeof disabled !== "boolean") {
-      res.status(400).json({ error: "Request body must include { \"disabled\": true|false }." });
-      return;
+      return Response.json({ error: "Request body must include { \"disabled\": true|false }." }, { status: 400 });
     }
 
-    // Check that the adapter exists in the registry
     const existing = findServerAdapter(adapterType);
     if (!existing) {
-      res.status(404).json({ error: `Adapter "${adapterType}" is not registered.` });
-      return;
+      return Response.json({ error: `Adapter "${adapterType}" is not registered.` }, { status: 404 });
     }
 
     const changed = setAdapterDisabled(adapterType, disabled);
@@ -395,82 +408,69 @@ export function adapterRoutes() {
       logger.info({ type: adapterType, disabled }, "Adapter enabled/disabled");
     }
 
-    res.json({ type: adapterType, disabled, changed });
-  });
+    return Response.json({ type: adapterType, disabled, changed });
+  };
 
   /**
    * PATCH /api/adapters/:type/override
    *
    * Pause or resume an external adapter's override of a builtin type.
-   * When paused, the server returns the builtin adapter for all new requests
-   * (execute, listModels, config schema, etc.).  Already-running sessions
-   * keep the adapter they started with.
    */
-  router.patch("/adapters/:type/override", async (req, res) => {
-    assertInstanceAdmin(req);
-
-    const adapterType = req.params.type;
-    const { paused } = req.body as { paused?: boolean };
+  const patchAdapterOverride: Handler = async (ctx) => {
+    assertInstanceAdmin(ctx);
+    const adapterType = ctx.param("type");
+    if (!adapterType) return Response.json({ error: "Adapter type is required." }, { status: 400 });
+    const body = await ctx.json<{ paused?: boolean }>();
+    const { paused } = body;
 
     if (typeof paused !== "boolean") {
-      res.status(400).json({ error: "\"paused\" (boolean) is required in request body." });
-      return;
+      return Response.json({ error: "\"paused\" (boolean) is required in request body." }, { status: 400 });
     }
 
     if (!BUILTIN_ADAPTER_TYPES.has(adapterType)) {
-      res.status(400).json({ error: `Type "${adapterType}" is not a builtin adapter.` });
-      return;
+      return Response.json({ error: `Type "${adapterType}" is not a builtin adapter.` }, { status: 400 });
     }
 
     const changed = setOverridePaused(adapterType, paused);
 
     logger.info({ type: adapterType, paused, changed }, "Adapter override toggle");
 
-    res.json({ type: adapterType, paused, changed });
-  });
+    return Response.json({ type: adapterType, paused, changed });
+  };
 
   /**
    * DELETE /api/adapters/:type
    *
    * Unregister an external adapter. Built-in adapters cannot be removed.
    */
-  router.delete("/adapters/:type", async (req, res) => {
-    assertInstanceAdmin(req);
-
-    const adapterType = req.params.type;
+  const deleteAdapter: Handler = async (ctx) => {
+    assertInstanceAdmin(ctx);
+    const adapterType = ctx.param("type");
 
     if (!adapterType) {
-      res.status(400).json({ error: "Adapter type is required." });
-      return;
+      return Response.json({ error: "Adapter type is required." }, { status: 400 });
     }
 
-    // Prevent removal of built-in adapters
     if (BUILTIN_ADAPTER_TYPES.has(adapterType)) {
-      res.status(403).json({
+      return Response.json({
         error: `Cannot remove built-in adapter "${adapterType}".`,
-      });
-      return;
+      }, { status: 403 });
     }
 
-    // Check that the adapter exists in the registry
     const existing = findServerAdapter(adapterType);
     if (!existing) {
-      res.status(404).json({
+      return Response.json({
         error: `Adapter "${adapterType}" is not registered.`,
-      });
-      return;
+      }, { status: 404 });
     }
 
-    // Check that it's an external adapter
     const externalRecord = getAdapterPluginByType(adapterType);
     if (!externalRecord) {
-      res.status(404).json({
+      return Response.json({
         error: `Adapter "${adapterType}" is not an externally installed adapter.`,
-      });
-      return;
+      }, { status: 404 });
     }
 
-    // If installed via npm (has packageName but no localPath), run npm uninstall
     if (externalRecord.packageName && !externalRecord.localPath) {
       try {
         const pluginsDir = getAdapterPluginsDir();
@@ -490,52 +490,39 @@ export function adapterRoutes() {
       }
     }
 
-    // Unregister from the runtime registry
     unregisterServerAdapter(adapterType);
-
-    // Remove from the persistent store
     removeAdapterPlugin(adapterType);
 
     logger.info({ type: adapterType }, "External adapter unregistered and removed");
 
-    res.json({ type: adapterType, removed: true });
-  });
+    return Response.json({ type: adapterType, removed: true });
+  };
 
   /**
    * POST /api/adapters/:type/reload
    *
-   * Reload an external adapter at runtime (for dev iteration without server restart).
-   * Busts the ESM module cache, re-imports the adapter, and re-registers it.
-   *
-   * Cannot be used on built-in adapter types.
+   * Reload an external adapter at runtime.
    */
-  router.post("/adapters/:type/reload", async (req, res) => {
-    assertInstanceAdmin(req);
+  const reloadAdapter: Handler = async (ctx) => {
+    assertInstanceAdmin(ctx);
+    const type = ctx.param("type");
+    if (!type) return Response.json({ error: "Adapter type is required." }, { status: 400 });
 
-    const type = req.params.type;
-
-    // Built-in adapters cannot be reloaded unless overridden by an external one
     if (BUILTIN_ADAPTER_TYPES.has(type) && !getAdapterPluginByType(type)) {
-      res.status(400).json({ error: "Cannot reload built-in adapter." });
-      return;
+      return Response.json({ error: "Cannot reload built-in adapter." }, { status: 400 });
     }
 
-    // Reload the adapter module (busts ESM cache, re-imports)
     try {
       const newModule = await reloadExternalAdapter(type);
 
-      // Not found in the external adapter store
       if (!newModule) {
-        res.status(404).json({ error: `Adapter "${type}" is not an externally installed adapter.` });
-        return;
+        return Response.json({ error: `Adapter "${type}" is not an externally installed adapter.` }, { status: 404 });
       }
 
-      // Swap in the reloaded module
       unregisterServerAdapter(type);
       registerWithSessionManagement(newModule);
       configSchemaCache.delete(type);
 
-      // Sync store.version from package.json (store may be missing version for local installs).
       const record = getAdapterPluginByType(type);
       let newVersion: string | undefined;
       if (record) {
@@ -547,39 +534,35 @@ export function adapterRoutes() {
 
       logger.info({ type, version: newVersion }, "External adapter reloaded at runtime");
 
-      res.json({ type, version: newVersion, reloaded: true });
+      return Response.json({ type, version: newVersion, reloaded: true });
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
       logger.error({ err, type }, "Failed to reload external adapter");
-      res.status(500).json({ error: `Failed to reload adapter: ${message}` });
+      return Response.json({ error: `Failed to reload adapter: ${message}` }, { status: 500 });
     }
-  });
+  };
 
-  // ── POST /api/adapters/:type/reinstall ──────────────────────────────────
-  // Reinstall an npm-sourced external adapter (pulls latest from registry).
-  // Local-path adapters cannot be reinstalled — use Reload instead.
-  //
-  // This is a convenience shortcut for remove + install with the same
-  // package name, but without the risk of losing the store record.
-  router.post("/adapters/:type/reinstall", async (req, res) => {
-    assertInstanceAdmin(req);
-
-    const type = req.params.type;
+  /**
+   * POST /api/adapters/:type/reinstall
+   *
+   * Reinstall an npm-sourced external adapter.
+   */
+  const reinstallAdapter: Handler = async (ctx) => {
+    assertInstanceAdmin(ctx);
+    const type = ctx.param("type");
+    if (!type) return Response.json({ error: "Adapter type is required." }, { status: 400 });
 
     if (BUILTIN_ADAPTER_TYPES.has(type) && !getAdapterPluginByType(type)) {
-      res.status(400).json({ error: "Cannot reinstall built-in adapter." });
-      return;
+      return Response.json({ error: "Cannot reinstall built-in adapter." }, { status: 400 });
     }
 
     const record = getAdapterPluginByType(type);
     if (!record) {
-      res.status(404).json({ error: `Adapter "${type}" is not an externally installed adapter.` });
-      return;
+      return Response.json({ error: `Adapter "${type}" is not an externally installed adapter.` }, { status: 404 });
     }
 
     if (record.localPath) {
-      res.status(400).json({ error: "Local-path adapters cannot be reinstalled. Use Reload instead." });
-      return;
+      return Response.json({ error: "Local-path adapters cannot be reinstalled. Use Reload instead." }, { status: 400 });
     }
 
     try {
@@ -592,18 +575,15 @@ export function adapterRoutes() {
         timeout: 120_000,
       });
 
-      // Reload the freshly installed adapter
       const newModule = await reloadExternalAdapter(type);
       if (!newModule) {
-        res.status(500).json({ error: "npm install succeeded but adapter reload failed." });
-        return;
+        return Response.json({ error: "npm install succeeded but adapter reload failed." }, { status: 500 });
       }
 
       unregisterServerAdapter(type);
       registerWithSessionManagement(newModule);
       configSchemaCache.delete(type);
 
-      // Sync store version from disk
       let newVersion: string | undefined;
       const updatedRecord = getAdapterPluginByType(type);
       if (updatedRecord) {
@@ -615,77 +595,79 @@ export function adapterRoutes() {
 
       logger.info({ type, version: newVersion }, "Adapter reinstalled from npm");
 
-      res.json({ type, version: newVersion, reinstalled: true });
+      return Response.json({ type, version: newVersion, reinstalled: true });
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
       logger.error({ err, type }, "Failed to reinstall adapter");
-      res.status(500).json({ error: `Reinstall failed: ${message}` });
+      return Response.json({ error: `Reinstall failed: ${message}` }, { status: 500 });
     }
-  });
+  };
 
-  // ── GET /api/adapters/:type/config-schema ────────────────────────────────
-  // Serve a declarative config schema for an adapter's UI form fields.
-  // The adapter's getConfigSchema() resolves all options (static and dynamic)
-  // so the UI receives a fully hydrated schema in a single fetch.
-  const configSchemaCache = new Map<string, {
-    adapter: ServerAdapterModule;
-    schema: AdapterConfigSchema;
-    fetchedAt: number;
-  }>();
-  const CONFIG_SCHEMA_TTL_MS = 30_000;
-
-  router.get("/adapters/:type/config-schema", async (req, res) => {
-    // Config schemas are read-only form metadata used when org members create
-    // or edit agents; they do not install or execute new adapter code.
-    assertBoardOrgAccess(req);
-    const { type } = req.params;
+  /**
+   * GET /api/adapters/:type/config-schema
+   *
+   * Serve a declarative config schema for an adapter's UI form fields.
+   */
+  const getAdapterConfigSchema: Handler = async (ctx) => {
+    assertBoardOrgAccess(ctx);
+    const type = ctx.param("type");
+    if (!type) return Response.json({ error: "Adapter type is required." }, { status: 400 });
 
     const adapter = findActiveServerAdapter(type);
     if (!adapter) {
-      res.status(404).json({ error: `Adapter "${type}" is not registered.` });
-      return;
+      return Response.json({ error: `Adapter "${type}" is not registered.` }, { status: 404 });
     }
     if (!adapter.getConfigSchema) {
-      res.status(404).json({ error: `Adapter "${type}" does not provide a config schema.` });
-      return;
+      return Response.json({ error: `Adapter "${type}" does not provide a config schema.` }, { status: 404 });
     }
 
     const cached = configSchemaCache.get(type);
     if (cached && cached.adapter === adapter && Date.now() - cached.fetchedAt < CONFIG_SCHEMA_TTL_MS) {
-      res.json(cached.schema);
-      return;
+      return Response.json(cached.schema);
     }
 
     try {
       const schema = await adapter.getConfigSchema();
       configSchemaCache.set(type, { adapter, schema, fetchedAt: Date.now() });
-      res.json(schema);
+      return Response.json(schema);
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
       logger.error({ err, type }, "Failed to resolve config schema");
-      res.status(500).json({ error: `Failed to resolve config schema: ${message}` });
+      return Response.json({ error: `Failed to resolve config schema: ${message}` }, { status: 500 });
     }
-  });
+  };
 
-  // ── GET /api/adapters/:type/ui-parser.js ─────────────────────────────────
-  // Serve the self-contained UI parser JS for an adapter type.
-  // This allows external adapters to provide custom run-log parsing
-  // without modifying Paperclip's source code.
-  //
-  // The adapter package must export a "./ui-parser" entry in package.json
-  // pointing to a self-contained ESM module with zero runtime dependencies.
-  router.get("/adapters/:type/ui-parser.js", (req, res) => {
-    // UI parsers are read-only assets for displaying existing run output.
-    // Runtime-changing adapter management routes above require instance admin.
-    assertBoardOrgAccess(req);
-    const { type } = req.params;
+  /**
+   * GET /api/adapters/:type/ui-parser.js
+   *
+   * Serve the self-contained UI parser JS for an adapter type.
+   */
+  const getAdapterUiParser: Handler = async (ctx) => {
+    assertBoardOrgAccess(ctx);
+    const type = ctx.param("type");
+    if (!type) return Response.json({ error: "Adapter type is required." }, { status: 400 });
     const source = getOrExtractUiParserSource(type);
     if (!source) {
-      res.status(404).json({ error: `No UI parser available for adapter "${type}".` });
-      return;
+      return Response.json({ error: `No UI parser available for adapter "${type}".` }, { status: 404 });
     }
-    res.type("application/javascript").send(source);
-  });
+    return new Response(source, {
+      headers: { "Content-Type": "application/javascript" },
+    });
+  };
+
+  // ---------------------------------------------------------------------------
+  // Wire handlers via expressHandler
+  // ---------------------------------------------------------------------------
+
+  router.get("/adapters", expressHandler(listAdapters, adapterDeps));
+  router.post("/adapters/install", expressHandler(installAdapter, adapterDeps));
+  router.patch("/adapters/:type", expressHandler(patchAdapter, adapterDeps));
+  router.patch("/adapters/:type/override", expressHandler(patchAdapterOverride, adapterDeps));
+  router.delete("/adapters/:type", expressHandler(deleteAdapter, adapterDeps));
+  router.post("/adapters/:type/reload", expressHandler(reloadAdapter, adapterDeps));
+  router.post("/adapters/:type/reinstall", expressHandler(reinstallAdapter, adapterDeps));
+  router.get("/adapters/:type/config-schema", expressHandler(getAdapterConfigSchema, adapterDeps));
+  router.get("/adapters/:type/ui-parser.js", expressHandler(getAdapterUiParser, adapterDeps));
 
   return router;
 }

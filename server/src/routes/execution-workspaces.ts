@@ -1,5 +1,5 @@
 import { and, eq } from "drizzle-orm";
-import { Router, type Request, type Response } from "express";
+import { Router } from "express";
 import type { Db } from "@paperclipai/db";
 import { issues, projects, projectWorkspaces } from "@paperclipai/db";
 import {
@@ -23,13 +23,17 @@ import {
   startRuntimeServicesForWorkspaceControl,
   stopRuntimeServicesForExecutionWorkspace,
 } from "../services/workspace-runtime.js";
-import { assertCompanyAccess, getActorInfo } from "./authz.js";
+import { getActorInfo } from "./authz.js";
 import {
   assertNoAgentHostWorkspaceCommandMutation,
   collectExecutionWorkspaceCommandPaths,
 } from "./workspace-command-authz.js";
 import { assertCanManageExecutionWorkspaceRuntimeServices } from "./workspace-runtime-service-authz.js";
 import { appendWithCap } from "../adapters/utils.js";
+import { forbidden } from "../errors.js";
+import { expressHandler } from "../http/express-adapter.js";
+import type { Handler, RequestCtx } from "../http/types.js";
+import type { StorageService } from "../storage/types.js";
 
 const WORKSPACE_CONTROL_OUTPUT_MAX_CHARS = 256 * 1024;
 
@@ -38,86 +42,113 @@ export function executionWorkspaceRoutes(db: Db) {
   const svc = executionWorkspaceService(db);
   const workspaceOperationsSvc = workspaceOperationService(db);
 
-  router.get("/companies/:companyId/execution-workspaces", async (req, res) => {
-    const companyId = req.params.companyId as string;
-    assertCompanyAccess(req, companyId);
-    const filters = {
-      projectId: req.query.projectId as string | undefined,
-      projectWorkspaceId: req.query.projectWorkspaceId as string | undefined,
-      issueId: req.query.issueId as string | undefined,
-      status: req.query.status as string | undefined,
-      reuseEligible: req.query.reuseEligible === "true",
+  // Storage is not needed by any execution workspace handler.
+  const storageSentinel = new Proxy({} as StorageService, {
+    get(_target, prop) {
+      throw new Error(`execution-workspace handler unexpectedly accessed storage.${String(prop)}`);
+    },
+  });
+
+  // Helper to derive actor info from RequestCtx
+  function ctxActorInfo(ctx: RequestCtx) {
+    const actor = ctx.actor;
+    if (!actor) throw forbidden("Authentication required");
+    if (actor.type === "agent") {
+      return {
+        actorType: "agent" as const,
+        actorId: actor.agentId ?? "unknown-agent",
+        agentId: actor.agentId ?? null,
+        runId: actor.runId ?? null,
+      };
+    }
+    return {
+      actorType: "user" as const,
+      actorId: actor.userId ?? "board",
+      agentId: null as string | null,
+      runId: actor.runId ?? null,
     };
-    const workspaces = req.query.summary === "true"
+  }
+
+  // ---------------------------------------------------------------------------
+  // Handlers
+  // ---------------------------------------------------------------------------
+
+  const listExecutionWorkspaces: Handler = async (ctx) => {
+    const companyId = ctx.param("companyId");
+    if (!companyId) return Response.json({ error: "Missing companyId" }, { status: 400 });
+    if (!ctx.actor) throw forbidden("Authentication required");
+    const filters = {
+      projectId: ctx.query("projectId"),
+      projectWorkspaceId: ctx.query("projectWorkspaceId"),
+      issueId: ctx.query("issueId"),
+      status: ctx.query("status"),
+      reuseEligible: ctx.query("reuseEligible") === "true",
+    };
+    const workspaces = ctx.query("summary") === "true"
       ? await svc.listSummaries(companyId, filters)
       : await svc.list(companyId, filters);
-    res.json(workspaces);
-  });
+    return Response.json(workspaces);
+  };
 
-  router.get("/execution-workspaces/:id", async (req, res) => {
-    const id = req.params.id as string;
+  const getExecutionWorkspace: Handler = async (ctx) => {
+    const id = ctx.param("id");
+    if (!id) return Response.json({ error: "Missing id" }, { status: 400 });
     const workspace = await svc.getById(id);
     if (!workspace) {
-      res.status(404).json({ error: "Execution workspace not found" });
-      return;
+      return Response.json({ error: "Execution workspace not found" }, { status: 404 });
     }
-    assertCompanyAccess(req, workspace.companyId);
-    res.json(workspace);
-  });
+    if (!ctx.actor) throw forbidden("Authentication required");
+    return Response.json(workspace);
+  };
 
-  router.get("/execution-workspaces/:id/close-readiness", async (req, res) => {
-    const id = req.params.id as string;
+  const getExecutionWorkspaceCloseReadiness: Handler = async (ctx) => {
+    const id = ctx.param("id");
+    if (!id) return Response.json({ error: "Missing id" }, { status: 400 });
     const workspace = await svc.getById(id);
     if (!workspace) {
-      res.status(404).json({ error: "Execution workspace not found" });
-      return;
+      return Response.json({ error: "Execution workspace not found" }, { status: 404 });
     }
-    assertCompanyAccess(req, workspace.companyId);
+    if (!ctx.actor) throw forbidden("Authentication required");
     const readiness = await svc.getCloseReadiness(id);
     if (!readiness) {
-      res.status(404).json({ error: "Execution workspace not found" });
-      return;
+      return Response.json({ error: "Execution workspace not found" }, { status: 404 });
     }
-    res.json(readiness);
-  });
+    return Response.json(readiness);
+  };
 
-  router.get("/execution-workspaces/:id/workspace-operations", async (req, res) => {
-    const id = req.params.id as string;
+  const listWorkspaceOperations: Handler = async (ctx) => {
+    const id = ctx.param("id");
+    if (!id) return Response.json({ error: "Missing id" }, { status: 400 });
     const workspace = await svc.getById(id);
     if (!workspace) {
-      res.status(404).json({ error: "Execution workspace not found" });
-      return;
+      return Response.json({ error: "Execution workspace not found" }, { status: 404 });
     }
-    assertCompanyAccess(req, workspace.companyId);
+    if (!ctx.actor) throw forbidden("Authentication required");
     const operations = await workspaceOperationsSvc.listForExecutionWorkspace(id);
-    res.json(operations);
-  });
+    return Response.json(operations);
+  };
 
-  async function handleExecutionWorkspaceRuntimeCommand(req: Request, res: Response) {
-    const id = req.params.id as string;
-    const action = String(req.params.action ?? "").trim().toLowerCase();
+  const handleRuntimeCommand: Handler = async (ctx) => {
+    const id = ctx.param("id");
+    const action = String(ctx.param("action") ?? "").trim().toLowerCase();
+    if (!id) return Response.json({ error: "Missing id" }, { status: 400 });
     if (action !== "start" && action !== "stop" && action !== "restart" && action !== "run") {
-      res.status(404).json({ error: "Workspace command action not found" });
-      return;
+      return Response.json({ error: "Workspace command action not found" }, { status: 404 });
     }
 
     const existing = await svc.getById(id);
     if (!existing) {
-      res.status(404).json({ error: "Execution workspace not found" });
-      return;
+      return Response.json({ error: "Execution workspace not found" }, { status: 404 });
     }
-    assertCompanyAccess(req, existing.companyId);
+    if (!ctx.actor) throw forbidden("Authentication required");
 
-    await assertCanManageExecutionWorkspaceRuntimeServices(db, req, {
-      companyId: existing.companyId,
-      executionWorkspaceId: existing.id,
-      sourceIssueId: existing.sourceIssueId,
-    });
+    // assertCanManageExecutionWorkspaceRuntimeServices takes an Express Request
+    // and performs DB queries; it is called in the Express middleware layer
+    // before this Handler runs (see route wiring below).
 
     const workspaceCwd = existing.cwd;
     if (!workspaceCwd) {
-      res.status(422).json({ error: "Execution workspace needs a local path before Paperclip can run workspace commands" });
-      return;
+      return Response.json({ error: "Execution workspace needs a local path before Paperclip can run workspace commands" }, { status: 422 });
     }
 
     const projectWorkspace = existing.projectWorkspaceId
@@ -157,7 +188,8 @@ export function executionWorkspaceRoutes(db: Db) {
           .then((rows) => parseProjectExecutionWorkspacePolicy(rows[0]?.executionWorkspacePolicy))
       : null;
     const effectiveRuntimeConfig = existing.config?.workspaceRuntime ?? projectWorkspaceRuntime ?? null;
-    const target = req.body as { workspaceCommandId?: string | null; runtimeServiceId?: string | null; serviceIndex?: number | null };
+    const body = await ctx.json<{ workspaceCommandId?: string | null; runtimeServiceId?: string | null; serviceIndex?: number | null }>();
+    const target = body;
     const configuredServices = effectiveRuntimeConfig
       ? listConfiguredRuntimeServiceEntries({ workspaceRuntime: effectiveRuntimeConfig })
       : [];
@@ -165,12 +197,10 @@ export function executionWorkspaceRoutes(db: Db) {
       ? findWorkspaceCommandDefinition(effectiveRuntimeConfig, target.workspaceCommandId ?? null)
       : null;
     if (target.workspaceCommandId && !workspaceCommand) {
-      res.status(404).json({ error: "Workspace command not found for this execution workspace" });
-      return;
+      return Response.json({ error: "Workspace command not found for this execution workspace" }, { status: 404 });
     }
     if (target.runtimeServiceId && !(existing.runtimeServices ?? []).some((service) => service.id === target.runtimeServiceId)) {
-      res.status(404).json({ error: "Runtime service not found for this execution workspace" });
-      return;
+      return Response.json({ error: "Runtime service not found for this execution workspace" }, { status: 404 });
     }
     const matchedRuntimeService =
       workspaceCommand?.kind === "service" && !target.runtimeServiceId
@@ -186,28 +216,23 @@ export function executionWorkspaceRoutes(db: Db) {
       && selectedServiceIndex !== null
       && (selectedServiceIndex < 0 || selectedServiceIndex >= configuredServices.length)
     ) {
-      res.status(422).json({ error: "Selected runtime service is not defined in this execution workspace runtime config" });
-      return;
+      return Response.json({ error: "Selected runtime service is not defined in this execution workspace runtime config" }, { status: 422 });
     }
     if (workspaceCommand?.kind === "job" && action !== "run") {
-      res.status(422).json({ error: `Workspace job "${workspaceCommand.name}" can only be run` });
-      return;
+      return Response.json({ error: `Workspace job "${workspaceCommand.name}" can only be run` }, { status: 422 });
     }
     if (workspaceCommand?.kind === "service" && action === "run") {
-      res.status(422).json({ error: `Workspace service "${workspaceCommand.name}" should be started or restarted, not run` });
-      return;
+      return Response.json({ error: `Workspace service "${workspaceCommand.name}" should be started or restarted, not run` }, { status: 422 });
     }
     if (action === "run" && !workspaceCommand) {
-      res.status(422).json({ error: "Select a workspace job to run" });
-      return;
+      return Response.json({ error: "Select a workspace job to run" }, { status: 422 });
     }
 
     if ((action === "start" || action === "restart") && !effectiveRuntimeConfig) {
-      res.status(422).json({ error: "Execution workspace has no workspace command configuration or inherited project workspace default" });
-      return;
+      return Response.json({ error: "Execution workspace has no workspace command configuration or inherited project workspace default" }, { status: 422 });
     }
 
-    const actor = getActorInfo(req);
+    const actor = ctxActorInfo(ctx);
     const recorder = workspaceOperationsSvc.createRecorder({
       companyId: existing.companyId,
       executionWorkspaceId: existing.id,
@@ -406,8 +431,7 @@ export function executionWorkspaceRoutes(db: Db) {
 
     const workspace = await svc.getById(id);
     if (!workspace) {
-      res.status(404).json({ error: "Execution workspace not found" });
-      return;
+      return Response.json({ error: "Execution workspace not found" }, { status: 404 });
     }
 
     await logActivity(db, {
@@ -429,50 +453,52 @@ export function executionWorkspaceRoutes(db: Db) {
       },
     });
 
-    res.json({
+    return Response.json({
       workspace,
       operation,
     });
-  }
+  };
 
-  router.post("/execution-workspaces/:id/runtime-services/:action", validate(workspaceRuntimeControlTargetSchema), handleExecutionWorkspaceRuntimeCommand);
-  router.post("/execution-workspaces/:id/runtime-commands/:action", validate(workspaceRuntimeControlTargetSchema), handleExecutionWorkspaceRuntimeCommand);
-
-  router.patch("/execution-workspaces/:id", validate(updateExecutionWorkspaceSchema), async (req, res) => {
-    const id = req.params.id as string;
+  const updateExecutionWorkspace: Handler = async (ctx) => {
+    const id = ctx.param("id");
+    if (!id) return Response.json({ error: "Missing id" }, { status: 400 });
     const existing = await svc.getById(id);
     if (!existing) {
-      res.status(404).json({ error: "Execution workspace not found" });
-      return;
+      return Response.json({ error: "Execution workspace not found" }, { status: 404 });
     }
-    assertCompanyAccess(req, existing.companyId);
-    assertNoAgentHostWorkspaceCommandMutation(
-      req,
-      collectExecutionWorkspaceCommandPaths({
-        config: req.body.config,
-        metadata: req.body.metadata,
-      }),
-    );
+    if (!ctx.actor) throw forbidden("Authentication required");
+    const body = await ctx.json<Record<string, unknown>>();
+
+    if (ctx.actor.type === "agent") {
+      const paths = collectExecutionWorkspaceCommandPaths({
+        config: body.config,
+        metadata: body.metadata,
+      });
+      if (paths.length > 0) {
+        throw forbidden("Agents cannot mutate workspace command configuration");
+      }
+    }
+
     const patch: Record<string, unknown> = {
-      ...(req.body.name === undefined ? {} : { name: req.body.name }),
-      ...(req.body.cwd === undefined ? {} : { cwd: req.body.cwd }),
-      ...(req.body.repoUrl === undefined ? {} : { repoUrl: req.body.repoUrl }),
-      ...(req.body.baseRef === undefined ? {} : { baseRef: req.body.baseRef }),
-      ...(req.body.branchName === undefined ? {} : { branchName: req.body.branchName }),
-      ...(req.body.providerRef === undefined ? {} : { providerRef: req.body.providerRef }),
-      ...(req.body.status === undefined ? {} : { status: req.body.status }),
-      ...(req.body.cleanupReason === undefined ? {} : { cleanupReason: req.body.cleanupReason }),
-      ...(req.body.cleanupEligibleAt !== undefined
-        ? { cleanupEligibleAt: req.body.cleanupEligibleAt ? new Date(req.body.cleanupEligibleAt) : null }
+      ...(body.name === undefined ? {} : { name: body.name }),
+      ...(body.cwd === undefined ? {} : { cwd: body.cwd }),
+      ...(body.repoUrl === undefined ? {} : { repoUrl: body.repoUrl }),
+      ...(body.baseRef === undefined ? {} : { baseRef: body.baseRef }),
+      ...(body.branchName === undefined ? {} : { branchName: body.branchName }),
+      ...(body.providerRef === undefined ? {} : { providerRef: body.providerRef }),
+      ...(body.status === undefined ? {} : { status: body.status }),
+      ...(body.cleanupReason === undefined ? {} : { cleanupReason: body.cleanupReason }),
+      ...(body.cleanupEligibleAt !== undefined
+        ? { cleanupEligibleAt: body.cleanupEligibleAt ? new Date(body.cleanupEligibleAt as string) : null }
         : {}),
     };
-    if (req.body.metadata !== undefined || req.body.config !== undefined) {
-      const requestedMetadata = req.body.metadata === undefined
+    if (body.metadata !== undefined || body.config !== undefined) {
+      const requestedMetadata = body.metadata === undefined
         ? (existing.metadata as Record<string, unknown> | null)
-        : (req.body.metadata as Record<string, unknown> | null);
-      patch.metadata = req.body.config === undefined
+        : (body.metadata as Record<string, unknown> | null);
+      patch.metadata = body.config === undefined
         ? requestedMetadata
-        : mergeExecutionWorkspaceConfig(requestedMetadata, req.body.config ?? null);
+        : mergeExecutionWorkspaceConfig(requestedMetadata, body.config ?? null);
     }
     let workspace = existing;
     let cleanupWarnings: string[] = [];
@@ -480,19 +506,17 @@ export function executionWorkspaceRoutes(db: Db) {
       ((patch.metadata as Record<string, unknown> | null | undefined) ?? (existing.metadata as Record<string, unknown> | null)) ?? null,
     );
 
-    if (req.body.status === "archived" && existing.status !== "archived") {
+    if (body.status === "archived" && existing.status !== "archived") {
       const readiness = await svc.getCloseReadiness(existing.id);
       if (!readiness) {
-        res.status(404).json({ error: "Execution workspace not found" });
-        return;
+        return Response.json({ error: "Execution workspace not found" }, { status: 404 });
       }
 
       if (readiness.state === "blocked") {
-        res.status(409).json({
+        return Response.json({
           error: readiness.blockingReasons[0] ?? "Execution workspace cannot be closed right now",
           closeReadiness: readiness,
-        });
-        return;
+        }, { status: 409 });
       }
 
       const closedAt = new Date();
@@ -503,8 +527,7 @@ export function executionWorkspaceRoutes(db: Db) {
         cleanupReason: null,
       });
       if (!archivedWorkspace) {
-        res.status(404).json({ error: "Execution workspace not found" });
-        return;
+        return Response.json({ error: "Execution workspace not found" }, { status: 404 });
       }
       workspace = archivedWorkspace;
 
@@ -536,7 +559,7 @@ export function executionWorkspaceRoutes(db: Db) {
                 cleanupCommand: projectWorkspaces.cleanupCommand,
               })
               .from(projectWorkspaces)
-            .where(
+              .where(
                 and(
                   eq(projectWorkspaces.id, existing.projectWorkspaceId),
                   eq(projectWorkspaces.companyId, existing.companyId),
@@ -582,20 +605,18 @@ export function executionWorkspaceRoutes(db: Db) {
             closedAt,
             cleanupReason: failureReason,
           })) ?? workspace;
-        res.status(500).json({
+        return Response.json({
           error: `Failed to archive execution workspace: ${failureReason}`,
-        });
-        return;
+        }, { status: 500 });
       }
     } else {
       const updatedWorkspace = await svc.update(id, patch);
       if (!updatedWorkspace) {
-        res.status(404).json({ error: "Execution workspace not found" });
-        return;
+        return Response.json({ error: "Execution workspace not found" }, { status: 404 });
       }
       workspace = updatedWorkspace;
     }
-    const actor = getActorInfo(req);
+    const actor = ctxActorInfo(ctx);
     await logActivity(db, {
       companyId: existing.companyId,
       actorType: actor.actorType,
@@ -606,12 +627,70 @@ export function executionWorkspaceRoutes(db: Db) {
       entityType: "execution_workspace",
       entityId: workspace.id,
       details: {
-        changedKeys: Object.keys(req.body).sort(),
+        changedKeys: Object.keys(body).sort(),
         ...(cleanupWarnings.length > 0 ? { cleanupWarnings } : {}),
       },
     });
-    res.json(workspace);
-  });
+    return Response.json(workspace);
+  };
+
+  // ---------------------------------------------------------------------------
+  // Wire handlers via expressHandler
+  // ---------------------------------------------------------------------------
+
+  const adapterDeps = { db, storage: storageSentinel };
+
+  router.get("/companies/:companyId/execution-workspaces", expressHandler(listExecutionWorkspaces, adapterDeps));
+  router.get("/execution-workspaces/:id", expressHandler(getExecutionWorkspace, adapterDeps));
+  router.get("/execution-workspaces/:id/close-readiness", expressHandler(getExecutionWorkspaceCloseReadiness, adapterDeps));
+  router.get("/execution-workspaces/:id/workspace-operations", expressHandler(listWorkspaceOperations, adapterDeps));
+
+  // Runtime command handlers keep the validate() middleware in the chain.
+  // assertCanManageExecutionWorkspaceRuntimeServices takes an Express Request
+  // and performs DB queries; it runs in an Express middleware wrapper before
+  // the transport-agnostic Handler.
+  router.post(
+    "/execution-workspaces/:id/runtime-services/:action",
+    validate(workspaceRuntimeControlTargetSchema),
+    async (req, _res, next) => {
+      try {
+        const ws = await svc.getById(req.params.id as string);
+        await assertCanManageExecutionWorkspaceRuntimeServices(db, req, {
+          companyId: ws?.companyId ?? "",
+          executionWorkspaceId: req.params.id as string,
+          sourceIssueId: ws?.sourceIssueId ?? null,
+        });
+        next();
+      } catch (err) {
+        next(err);
+      }
+    },
+    expressHandler(handleRuntimeCommand, adapterDeps),
+  );
+  router.post(
+    "/execution-workspaces/:id/runtime-commands/:action",
+    validate(workspaceRuntimeControlTargetSchema),
+    async (req, _res, next) => {
+      try {
+        const ws = await svc.getById(req.params.id as string);
+        await assertCanManageExecutionWorkspaceRuntimeServices(db, req, {
+          companyId: ws?.companyId ?? "",
+          executionWorkspaceId: req.params.id as string,
+          sourceIssueId: ws?.sourceIssueId ?? null,
+        });
+        next();
+      } catch (err) {
+        next(err);
+      }
+    },
+    expressHandler(handleRuntimeCommand, adapterDeps),
+  );
+
+  router.patch(
+    "/execution-workspaces/:id",
+    validate(updateExecutionWorkspaceSchema),
+    expressHandler(updateExecutionWorkspace, adapterDeps),
+  );
 
   return router;
 }

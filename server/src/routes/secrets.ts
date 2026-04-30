@@ -7,9 +7,13 @@ import {
   rotateSecretSchema,
   updateSecretSchema,
 } from "@paperclipai/shared";
+import { forbidden } from "../errors.js";
 import { validate } from "../middleware/validate.js";
 import { assertBoard, assertCompanyAccess } from "./authz.js";
 import { logActivity, secretService } from "../services/index.js";
+import { expressHandler } from "../http/express-adapter.js";
+import type { Handler, RequestCtx } from "../http/types.js";
+import type { StorageService } from "../storage/types.js";
 
 export function secretRoutes(db: Db) {
   const router = Router();
@@ -21,145 +25,181 @@ export function secretRoutes(db: Db) {
       : "local_encrypted"
   ) as SecretProvider;
 
-  router.get("/companies/:companyId/secret-providers", (req, res) => {
-    assertBoard(req);
-    const companyId = req.params.companyId as string;
-    assertCompanyAccess(req, companyId);
-    res.json(svc.listProviders());
+  // Storage is not needed by any secret handler.
+  const storageSentinel = new Proxy({} as StorageService, {
+    get(_target, prop) {
+      throw new Error(`secret handler unexpectedly accessed storage.${String(prop)}`);
+    },
   });
 
-  router.get("/companies/:companyId/secrets", async (req, res) => {
-    assertBoard(req);
-    const companyId = req.params.companyId as string;
-    assertCompanyAccess(req, companyId);
+  // ---------------------------------------------------------------------------
+  // Internal authz helpers operating on RequestCtx
+  // ---------------------------------------------------------------------------
+
+  function assertBoardCtx(ctx: RequestCtx) {
+    if (!ctx.actor || ctx.actor.type !== "board") {
+      throw forbidden("Board access required");
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Handlers
+  // ---------------------------------------------------------------------------
+
+  const listSecretProviders: Handler = async (ctx) => {
+    assertBoardCtx(ctx);
+    const companyId = ctx.param("companyId");
+    if (!companyId) return Response.json({ error: "Missing companyId" }, { status: 400 });
+    return Response.json(svc.listProviders());
+  };
+
+  const listSecrets: Handler = async (ctx) => {
+    assertBoardCtx(ctx);
+    const companyId = ctx.param("companyId");
+    if (!companyId) return Response.json({ error: "Missing companyId" }, { status: 400 });
     const secrets = await svc.list(companyId);
-    res.json(secrets);
-  });
+    return Response.json(secrets);
+  };
 
-  router.post("/companies/:companyId/secrets", validate(createSecretSchema), async (req, res) => {
-    assertBoard(req);
-    const companyId = req.params.companyId as string;
-    assertCompanyAccess(req, companyId);
+  const createSecret: Handler = async (ctx) => {
+    assertBoardCtx(ctx);
+    const companyId = ctx.param("companyId");
+    if (!companyId) return Response.json({ error: "Missing companyId" }, { status: 400 });
+    const body = await ctx.json<Record<string, unknown>>();
+    const actor = ctx.actor!;
 
     const created = await svc.create(
       companyId,
       {
-        name: req.body.name,
-        provider: req.body.provider ?? defaultProvider,
-        value: req.body.value,
-        description: req.body.description,
-        externalRef: req.body.externalRef,
+        name: body.name as string,
+        provider: (body.provider as SecretProvider | undefined) ?? defaultProvider,
+        value: body.value as string,
+        description: body.description as string | undefined,
+        externalRef: body.externalRef as string | undefined,
       },
-      { userId: req.actor.userId ?? "board", agentId: null },
+      { userId: actor.userId ?? "board", agentId: null },
     );
 
     await logActivity(db, {
       companyId,
       actorType: "user",
-      actorId: req.actor.userId ?? "board",
+      actorId: actor.userId ?? "board",
       action: "secret.created",
       entityType: "secret",
       entityId: created.id,
       details: { name: created.name, provider: created.provider },
     });
 
-    res.status(201).json(created);
-  });
+    return Response.json(created, { status: 201 });
+  };
 
-  router.post("/secrets/:id/rotate", validate(rotateSecretSchema), async (req, res) => {
-    assertBoard(req);
-    const id = req.params.id as string;
+  const rotateSecret: Handler = async (ctx) => {
+    assertBoardCtx(ctx);
+    const id = ctx.param("id");
+    if (!id) return Response.json({ error: "Missing id" }, { status: 400 });
     const existing = await svc.getById(id);
     if (!existing) {
-      res.status(404).json({ error: "Secret not found" });
-      return;
+      return Response.json({ error: "Secret not found" }, { status: 404 });
     }
-    assertCompanyAccess(req, existing.companyId);
+    const actor = ctx.actor!;
+    const body = await ctx.json<Record<string, unknown>>();
 
     const rotated = await svc.rotate(
       id,
       {
-        value: req.body.value,
-        externalRef: req.body.externalRef,
+        value: body.value as string | undefined,
+        externalRef: body.externalRef as string | undefined,
       },
-      { userId: req.actor.userId ?? "board", agentId: null },
+      { userId: actor.userId ?? "board", agentId: null },
     );
 
     await logActivity(db, {
       companyId: rotated.companyId,
       actorType: "user",
-      actorId: req.actor.userId ?? "board",
+      actorId: actor.userId ?? "board",
       action: "secret.rotated",
       entityType: "secret",
       entityId: rotated.id,
       details: { version: rotated.latestVersion },
     });
 
-    res.json(rotated);
-  });
+    return Response.json(rotated);
+  };
 
-  router.patch("/secrets/:id", validate(updateSecretSchema), async (req, res) => {
-    assertBoard(req);
-    const id = req.params.id as string;
+  const updateSecret: Handler = async (ctx) => {
+    assertBoardCtx(ctx);
+    const id = ctx.param("id");
+    if (!id) return Response.json({ error: "Missing id" }, { status: 400 });
     const existing = await svc.getById(id);
     if (!existing) {
-      res.status(404).json({ error: "Secret not found" });
-      return;
+      return Response.json({ error: "Secret not found" }, { status: 404 });
     }
-    assertCompanyAccess(req, existing.companyId);
+    const actor = ctx.actor!;
+    const body = await ctx.json<Record<string, unknown>>();
 
     const updated = await svc.update(id, {
-      name: req.body.name,
-      description: req.body.description,
-      externalRef: req.body.externalRef,
+      name: body.name as string | undefined,
+      description: body.description as string | undefined,
+      externalRef: body.externalRef as string | undefined,
     });
 
     if (!updated) {
-      res.status(404).json({ error: "Secret not found" });
-      return;
+      return Response.json({ error: "Secret not found" }, { status: 404 });
     }
 
     await logActivity(db, {
       companyId: updated.companyId,
       actorType: "user",
-      actorId: req.actor.userId ?? "board",
+      actorId: actor.userId ?? "board",
       action: "secret.updated",
       entityType: "secret",
       entityId: updated.id,
       details: { name: updated.name },
     });
 
-    res.json(updated);
-  });
+    return Response.json(updated);
+  };
 
-  router.delete("/secrets/:id", async (req, res) => {
-    assertBoard(req);
-    const id = req.params.id as string;
+  const deleteSecret: Handler = async (ctx) => {
+    assertBoardCtx(ctx);
+    const id = ctx.param("id");
+    if (!id) return Response.json({ error: "Missing id" }, { status: 400 });
     const existing = await svc.getById(id);
     if (!existing) {
-      res.status(404).json({ error: "Secret not found" });
-      return;
+      return Response.json({ error: "Secret not found" }, { status: 404 });
     }
-    assertCompanyAccess(req, existing.companyId);
+    const actor = ctx.actor!;
 
     const removed = await svc.remove(id);
     if (!removed) {
-      res.status(404).json({ error: "Secret not found" });
-      return;
+      return Response.json({ error: "Secret not found" }, { status: 404 });
     }
 
     await logActivity(db, {
       companyId: removed.companyId,
       actorType: "user",
-      actorId: req.actor.userId ?? "board",
+      actorId: actor.userId ?? "board",
       action: "secret.deleted",
       entityType: "secret",
       entityId: removed.id,
       details: { name: removed.name },
     });
 
-    res.json({ ok: true });
-  });
+    return Response.json({ ok: true });
+  };
+
+  // ---------------------------------------------------------------------------
+  // Wire handlers via expressHandler
+  // ---------------------------------------------------------------------------
+
+  const adapterDeps = { db, storage: storageSentinel };
+
+  router.get("/companies/:companyId/secret-providers", expressHandler(listSecretProviders, adapterDeps));
+  router.get("/companies/:companyId/secrets", expressHandler(listSecrets, adapterDeps));
+  router.post("/companies/:companyId/secrets", validate(createSecretSchema), expressHandler(createSecret, adapterDeps));
+  router.post("/secrets/:id/rotate", validate(rotateSecretSchema), expressHandler(rotateSecret, adapterDeps));
+  router.patch("/secrets/:id", validate(updateSecretSchema), expressHandler(updateSecret, adapterDeps));
+  router.delete("/secrets/:id", expressHandler(deleteSecret, adapterDeps));
 
   return router;
 }

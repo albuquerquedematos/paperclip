@@ -1,4 +1,4 @@
-import { Router, type Request } from "express";
+import { Router } from "express";
 import type { Db } from "@paperclipai/db";
 import {
   AGENT_ADAPTER_TYPES,
@@ -30,6 +30,9 @@ import { assertCompanyAccess, getActorInfo } from "./authz.js";
 import type { PluginWorkerManager } from "../services/plugin-worker-manager.js";
 import { environmentService } from "../services/environments.js";
 import { executionWorkspaceService } from "../services/execution-workspaces.js";
+import { expressHandler } from "../http/express-adapter.js";
+import type { Handler, RequestCtx } from "../http/types.js";
+import type { StorageService } from "../storage/types.js";
 
 export function environmentRoutes(
   db: Db,
@@ -44,6 +47,14 @@ export function environmentRoutes(
   const projects = projectService(db);
   const secrets = secretService(db);
 
+  // Storage is not needed by any environment handler; supply a sentinel that
+  // throws if accidentally accessed, keeping the adapter type contract honest.
+  const storageSentinel = new Proxy({} as StorageService, {
+    get(_target, prop) {
+      throw new Error(`environment handler unexpectedly accessed storage.${String(prop)}`);
+    },
+  });
+
   function parseObject(value: unknown): Record<string, unknown> {
     return value && typeof value === "object" && !Array.isArray(value)
       ? (value as Record<string, unknown>)
@@ -55,23 +66,28 @@ export function environmentRoutes(
     return Boolean((agent.permissions as Record<string, unknown>).canCreateAgents);
   }
 
-  async function assertCanMutateEnvironments(req: Request, companyId: string) {
-    assertCompanyAccess(req, companyId);
+  // ---------------------------------------------------------------------------
+  // Internal authz helpers operating on RequestCtx (not Express Request)
+  // ---------------------------------------------------------------------------
 
-    if (req.actor.type === "board") {
-      if (req.actor.source === "local_implicit" || req.actor.isInstanceAdmin) return;
-      const allowed = await access.canUser(companyId, req.actor.userId, "environments:manage");
+  async function assertCanMutateEnvironments(ctx: RequestCtx, companyId: string) {
+    // ctx.actor is null when type was "none"; express-adapter normalises that.
+    if (!ctx.actor) throw forbidden("Authentication required");
+    const actor = ctx.actor;
+
+    if (actor.type === "board") {
+      const allowed = await access.canUser(companyId, actor.userId ?? "", "environments:manage");
       if (!allowed) {
         throw forbidden("Missing permission: environments:manage");
       }
       return;
     }
 
-    if (!req.actor.agentId) {
+    if (!actor.agentId) {
       throw forbidden("Agent authentication required");
     }
 
-    const actorAgent = await agents.getById(req.actor.agentId);
+    const actorAgent = await agents.getById(actor.agentId);
     if (!actorAgent || actorAgent.companyId !== companyId) {
       throw forbidden("Agent key cannot access another company");
     }
@@ -84,16 +100,16 @@ export function environmentRoutes(
     throw forbidden("Missing permission: environments:manage");
   }
 
-  async function actorCanReadEnvironmentConfigurations(req: Request, companyId: string) {
-    assertCompanyAccess(req, companyId);
+  async function actorCanReadEnvironmentConfigurations(ctx: RequestCtx, companyId: string) {
+    if (!ctx.actor) return false;
+    const actor = ctx.actor;
 
-    if (req.actor.type === "board") {
-      if (req.actor.source === "local_implicit" || req.actor.isInstanceAdmin) return true;
-      return access.canUser(companyId, req.actor.userId, "environments:manage");
+    if (actor.type === "board") {
+      return access.canUser(companyId, actor.userId ?? "", "environments:manage");
     }
 
-    if (!req.actor.agentId) return false;
-    const actorAgent = await agents.getById(req.actor.agentId);
+    if (!actor.agentId) return false;
+    const actorAgent = await agents.getById(actor.agentId);
     if (!actorAgent || actorAgent.companyId !== companyId) return false;
     const allowedByGrant = await access.hasPermission(companyId, "agent", actorAgent.id, "environments:manage");
     return allowedByGrant || canCreateAgents(actorAgent);
@@ -146,29 +162,54 @@ export function environmentRoutes(
     return details;
   }
 
-  router.get("/companies/:companyId/environments", async (req, res) => {
-    const companyId = req.params.companyId as string;
-    assertCompanyAccess(req, companyId);
-    const rows = await svc.list(companyId, {
-      status: req.query.status as string | undefined,
-      driver: req.query.driver as string | undefined,
-    });
-    const canReadConfigs = await actorCanReadEnvironmentConfigurations(req, companyId);
-    if (canReadConfigs) {
-      res.json(rows);
-      return;
+  // Helper to derive actorInfo-equivalent from RequestCtx
+  function ctxActorInfo(ctx: RequestCtx) {
+    const actor = ctx.actor;
+    if (!actor) throw forbidden("Authentication required");
+    if (actor.type === "agent") {
+      return {
+        actorType: "agent" as const,
+        actorId: actor.agentId ?? "unknown-agent",
+        agentId: actor.agentId ?? null,
+        runId: actor.runId ?? null,
+      };
     }
-    res.json(rows.map((environment) => redactEnvironmentForRestrictedView(environment)));
-  });
+    return {
+      actorType: "user" as const,
+      actorId: actor.userId ?? "board",
+      agentId: null as string | null,
+      runId: actor.runId ?? null,
+    };
+  }
 
-  router.get("/companies/:companyId/environments/capabilities", async (req, res) => {
-    const companyId = req.params.companyId as string;
-    assertCompanyAccess(req, companyId);
+  // ---------------------------------------------------------------------------
+  // Handlers
+  // ---------------------------------------------------------------------------
+
+  const listEnvironments: Handler = async (ctx) => {
+    const companyId = ctx.param("companyId");
+    if (!companyId) return Response.json({ error: "Missing companyId" }, { status: 400 });
+    if (!ctx.actor) throw forbidden("Authentication required");
+    const rows = await svc.list(companyId, {
+      status: ctx.query("status"),
+      driver: ctx.query("driver"),
+    });
+    const canReadConfigs = await actorCanReadEnvironmentConfigurations(ctx, companyId);
+    if (canReadConfigs) {
+      return Response.json(rows);
+    }
+    return Response.json(rows.map((environment) => redactEnvironmentForRestrictedView(environment)));
+  };
+
+  const getEnvironmentCapabilitiesHandler: Handler = async (ctx) => {
+    const companyId = ctx.param("companyId");
+    if (!companyId) return Response.json({ error: "Missing companyId" }, { status: 400 });
+    if (!ctx.actor) throw forbidden("Authentication required");
     const pluginDrivers = await listReadyPluginEnvironmentDrivers({
       db,
       workerManager: options.pluginWorkerManager,
     });
-    res.json(getEnvironmentCapabilities(
+    return Response.json(getEnvironmentCapabilities(
       AGENT_ADAPTER_TYPES,
       {
         sandboxProviders: Object.fromEntries(pluginDrivers.map((driver) => [
@@ -189,20 +230,22 @@ export function environmentRoutes(
         ])),
       },
     ));
-  });
+  };
 
-  router.post("/companies/:companyId/environments", validate(createEnvironmentSchema), async (req, res) => {
-    const companyId = req.params.companyId as string;
-    await assertCanMutateEnvironments(req, companyId);
-    const actor = getActorInfo(req);
+  const createEnvironment: Handler = async (ctx) => {
+    const companyId = ctx.param("companyId");
+    if (!companyId) return Response.json({ error: "Missing companyId" }, { status: 400 });
+    await assertCanMutateEnvironments(ctx, companyId);
+    const actor = ctxActorInfo(ctx);
+    const body = await ctx.json<Record<string, unknown>>();
     const input = {
-      ...req.body,
+      ...body,
       config: await normalizeEnvironmentConfigForPersistence({
         db,
         companyId,
-        environmentName: req.body.name,
-        driver: req.body.driver,
-        config: req.body.config,
+        environmentName: body.name as string,
+        driver: body.driver as string,
+        config: body.config,
         actor: {
           agentId: actor.agentId,
           userId: actor.actorType === "user" ? actor.actorId : null,
@@ -226,79 +269,83 @@ export function environmentRoutes(
         status: environment.status,
       },
     });
-    res.status(201).json(environment);
-  });
+    return Response.json(environment, { status: 201 });
+  };
 
-  router.get("/environments/:id", async (req, res) => {
-    const environment = await svc.getById(req.params.id as string);
+  const getEnvironment: Handler = async (ctx) => {
+    const id = ctx.param("id");
+    if (!id) return Response.json({ error: "Missing id" }, { status: 400 });
+    const environment = await svc.getById(id);
     if (!environment) {
-      res.status(404).json({ error: "Environment not found" });
-      return;
+      return Response.json({ error: "Environment not found" }, { status: 404 });
     }
-    assertCompanyAccess(req, environment.companyId);
-    const canReadConfigs = await actorCanReadEnvironmentConfigurations(req, environment.companyId);
+    if (!ctx.actor) throw forbidden("Authentication required");
+    const canReadConfigs = await actorCanReadEnvironmentConfigurations(ctx, environment.companyId);
     if (canReadConfigs) {
-      res.json(environment);
-      return;
+      return Response.json(environment);
     }
-    res.json(redactEnvironmentForRestrictedView(environment));
-  });
+    return Response.json(redactEnvironmentForRestrictedView(environment));
+  };
 
-  router.get("/environments/:id/leases", async (req, res) => {
-    const environment = await svc.getById(req.params.id as string);
+  const listEnvironmentLeases: Handler = async (ctx) => {
+    const id = ctx.param("id");
+    if (!id) return Response.json({ error: "Missing id" }, { status: 400 });
+    const environment = await svc.getById(id);
     if (!environment) {
-      res.status(404).json({ error: "Environment not found" });
-      return;
+      return Response.json({ error: "Environment not found" }, { status: 404 });
     }
-    assertCompanyAccess(req, environment.companyId);
-    const canReadConfigs = await actorCanReadEnvironmentConfigurations(req, environment.companyId);
+    if (!ctx.actor) throw forbidden("Authentication required");
+    const canReadConfigs = await actorCanReadEnvironmentConfigurations(ctx, environment.companyId);
     if (!canReadConfigs) {
       throw forbidden("Missing permission: environments:manage");
     }
     const leases = await svc.listLeases(environment.id, {
-      status: req.query.status as string | undefined,
+      status: ctx.query("status"),
     });
-    res.json(leases);
-  });
+    return Response.json(leases);
+  };
 
-  router.get("/environment-leases/:leaseId", async (req, res) => {
-    const lease = await svc.getLeaseById(req.params.leaseId as string);
+  const getEnvironmentLease: Handler = async (ctx) => {
+    const leaseId = ctx.param("leaseId");
+    if (!leaseId) return Response.json({ error: "Missing leaseId" }, { status: 400 });
+    const lease = await svc.getLeaseById(leaseId);
     if (!lease) {
-      res.status(404).json({ error: "Environment lease not found" });
-      return;
+      return Response.json({ error: "Environment lease not found" }, { status: 404 });
     }
-    assertCompanyAccess(req, lease.companyId);
-    const canReadConfigs = await actorCanReadEnvironmentConfigurations(req, lease.companyId);
+    if (!ctx.actor) throw forbidden("Authentication required");
+    const canReadConfigs = await actorCanReadEnvironmentConfigurations(ctx, lease.companyId);
     if (!canReadConfigs) {
       throw forbidden("Missing permission: environments:manage");
     }
-    res.json(lease);
-  });
+    return Response.json(lease);
+  };
 
-  router.patch("/environments/:id", validate(updateEnvironmentSchema), async (req, res) => {
-    const existing = await svc.getById(req.params.id as string);
+  const updateEnvironment: Handler = async (ctx) => {
+    const id = ctx.param("id");
+    if (!id) return Response.json({ error: "Missing id" }, { status: 400 });
+    const existing = await svc.getById(id);
     if (!existing) {
-      res.status(404).json({ error: "Environment not found" });
-      return;
+      return Response.json({ error: "Environment not found" }, { status: 404 });
     }
-    await assertCanMutateEnvironments(req, existing.companyId);
-    const actor = getActorInfo(req);
-    const nextDriver = req.body.driver ?? existing.driver;
-    const nextName = req.body.name ?? existing.name;
+    await assertCanMutateEnvironments(ctx, existing.companyId);
+    const actor = ctxActorInfo(ctx);
+    const body = await ctx.json<Record<string, unknown>>();
+    const nextDriver = (body.driver as string | undefined) ?? existing.driver;
+    const nextName = (body.name as string | undefined) ?? existing.name;
     const configSource =
-      req.body.config !== undefined
-        ? req.body.driver !== undefined && req.body.driver !== existing.driver
-          ? req.body.config
+      body.config !== undefined
+        ? body.driver !== undefined && body.driver !== existing.driver
+          ? body.config
           : {
               ...parseObject(existing.config),
-              ...parseObject(req.body.config),
+              ...parseObject(body.config),
             }
-        : req.body.driver !== undefined && req.body.driver !== existing.driver
+        : body.driver !== undefined && body.driver !== existing.driver
           ? {}
           : existing.config;
     const patch = {
-      ...req.body,
-      ...(req.body.config !== undefined || req.body.driver !== undefined
+      ...body,
+      ...(body.config !== undefined || body.driver !== undefined
         ? {
             config: await normalizeEnvironmentConfigForPersistence({
               db,
@@ -317,8 +364,7 @@ export function environmentRoutes(
     };
     const environment = await svc.update(existing.id, patch);
     if (!environment) {
-      res.status(404).json({ error: "Environment not found" });
-      return;
+      return Response.json({ error: "Environment not found" }, { status: 404 });
     }
     await logActivity(db, {
       companyId: environment.companyId,
@@ -331,16 +377,17 @@ export function environmentRoutes(
       entityId: environment.id,
       details: summarizeEnvironmentUpdate(patch as Record<string, unknown>, environment),
     });
-    res.json(environment);
-  });
+    return Response.json(environment);
+  };
 
-  router.delete("/environments/:id", async (req, res) => {
-    const existing = await svc.getById(req.params.id as string);
+  const deleteEnvironment: Handler = async (ctx) => {
+    const id = ctx.param("id");
+    if (!id) return Response.json({ error: "Missing id" }, { status: 400 });
+    const existing = await svc.getById(id);
     if (!existing) {
-      res.status(404).json({ error: "Environment not found" });
-      return;
+      return Response.json({ error: "Environment not found" }, { status: 404 });
     }
-    await assertCanMutateEnvironments(req, existing.companyId);
+    await assertCanMutateEnvironments(ctx, existing.companyId);
     await Promise.all([
       executionWorkspaces.clearEnvironmentSelection(existing.companyId, existing.id),
       issues.clearExecutionWorkspaceEnvironmentSelection(existing.companyId, existing.id),
@@ -348,14 +395,13 @@ export function environmentRoutes(
     ]);
     const removed = await svc.remove(existing.id);
     if (!removed) {
-      res.status(404).json({ error: "Environment not found" });
-      return;
+      return Response.json({ error: "Environment not found" }, { status: 404 });
     }
     const secretId = readSshEnvironmentPrivateKeySecretId(existing);
     if (secretId) {
       await secrets.remove(secretId);
     }
-    const actor = getActorInfo(req);
+    const actor = ctxActorInfo(ctx);
     await logActivity(db, {
       companyId: existing.companyId,
       actorType: actor.actorType,
@@ -371,17 +417,18 @@ export function environmentRoutes(
         status: removed.status,
       },
     });
-    res.json(removed);
-  });
+    return Response.json(removed);
+  };
 
-  router.post("/environments/:id/probe", async (req, res) => {
-    const environment = await svc.getById(req.params.id as string);
+  const probeEnvironmentHandler: Handler = async (ctx) => {
+    const id = ctx.param("id");
+    if (!id) return Response.json({ error: "Missing id" }, { status: 400 });
+    const environment = await svc.getById(id);
     if (!environment) {
-      res.status(404).json({ error: "Environment not found" });
-      return;
+      return Response.json({ error: "Environment not found" }, { status: 404 });
     }
-    await assertCanMutateEnvironments(req, environment.companyId);
-    const actor = getActorInfo(req);
+    await assertCanMutateEnvironments(ctx, environment.companyId);
+    const actor = ctxActorInfo(ctx);
     const probe = await probeEnvironment(db, environment, {
       pluginWorkerManager: options.pluginWorkerManager,
     });
@@ -400,59 +447,78 @@ export function environmentRoutes(
         summary: probe.summary,
       },
     });
-    res.json(probe);
-  });
+    return Response.json(probe);
+  };
 
+  const probeEnvironmentConfig: Handler = async (ctx) => {
+    const companyId = ctx.param("companyId");
+    if (!companyId) return Response.json({ error: "Missing companyId" }, { status: 400 });
+    await assertCanMutateEnvironments(ctx, companyId);
+    const actor = ctxActorInfo(ctx);
+    const body = await ctx.json<Record<string, unknown>>();
+    const normalizedConfig = await normalizeEnvironmentConfigForProbe({
+      db,
+      driver: body.driver as string,
+      config: body.config,
+      pluginWorkerManager: options.pluginWorkerManager,
+    });
+    const environment = {
+      id: "unsaved",
+      companyId,
+      name: (typeof body.name === "string" ? body.name.trim() : "") || "Unsaved environment",
+      description: (body.description as string | undefined) ?? null,
+      driver: body.driver as string,
+      status: "active" as const,
+      config: normalizedConfig,
+      metadata: (body.metadata as Record<string, unknown> | undefined) ?? null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    const probe = await probeEnvironment(db, environment, {
+      pluginWorkerManager: options.pluginWorkerManager,
+      resolvedConfig: {
+        driver: body.driver as string,
+        config: normalizedConfig,
+      } as ParsedEnvironmentConfig,
+    });
+    await logActivity(db, {
+      companyId,
+      actorType: actor.actorType,
+      actorId: actor.actorId,
+      agentId: actor.agentId,
+      runId: actor.runId,
+      action: "environment.probed_unsaved",
+      entityType: "environment",
+      entityId: "unsaved",
+      details: {
+        driver: environment.driver,
+        ok: probe.ok,
+        summary: probe.summary,
+        configTopLevelKeyCount: Object.keys(environment.config).length,
+      },
+    });
+    return Response.json(probe);
+  };
+
+  // ---------------------------------------------------------------------------
+  // Wire handlers via expressHandler
+  // ---------------------------------------------------------------------------
+
+  const adapterDeps = { db, storage: storageSentinel };
+
+  router.get("/companies/:companyId/environments", expressHandler(listEnvironments, adapterDeps));
+  router.get("/companies/:companyId/environments/capabilities", expressHandler(getEnvironmentCapabilitiesHandler, adapterDeps));
+  router.post("/companies/:companyId/environments", validate(createEnvironmentSchema), expressHandler(createEnvironment, adapterDeps));
+  router.get("/environments/:id", expressHandler(getEnvironment, adapterDeps));
+  router.get("/environments/:id/leases", expressHandler(listEnvironmentLeases, adapterDeps));
+  router.get("/environment-leases/:leaseId", expressHandler(getEnvironmentLease, adapterDeps));
+  router.patch("/environments/:id", validate(updateEnvironmentSchema), expressHandler(updateEnvironment, adapterDeps));
+  router.delete("/environments/:id", expressHandler(deleteEnvironment, adapterDeps));
+  router.post("/environments/:id/probe", expressHandler(probeEnvironmentHandler, adapterDeps));
   router.post(
     "/companies/:companyId/environments/probe-config",
     validate(probeEnvironmentConfigSchema),
-    async (req, res) => {
-      const companyId = req.params.companyId as string;
-      await assertCanMutateEnvironments(req, companyId);
-      const actor = getActorInfo(req);
-      const normalizedConfig = await normalizeEnvironmentConfigForProbe({
-        db,
-        driver: req.body.driver,
-        config: req.body.config,
-        pluginWorkerManager: options.pluginWorkerManager,
-      });
-      const environment = {
-        id: "unsaved",
-        companyId,
-        name: req.body.name?.trim() || "Unsaved environment",
-        description: req.body.description ?? null,
-        driver: req.body.driver,
-        status: "active" as const,
-        config: normalizedConfig,
-        metadata: req.body.metadata ?? null,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      };
-      const probe = await probeEnvironment(db, environment, {
-        pluginWorkerManager: options.pluginWorkerManager,
-        resolvedConfig: {
-          driver: req.body.driver,
-          config: normalizedConfig,
-        } as ParsedEnvironmentConfig,
-      });
-      await logActivity(db, {
-        companyId,
-        actorType: actor.actorType,
-        actorId: actor.actorId,
-        agentId: actor.agentId,
-        runId: actor.runId,
-        action: "environment.probed_unsaved",
-        entityType: "environment",
-        entityId: "unsaved",
-        details: {
-          driver: environment.driver,
-          ok: probe.ok,
-          summary: probe.summary,
-          configTopLevelKeyCount: Object.keys(environment.config).length,
-        },
-      });
-      res.json(probe);
-    },
+    expressHandler(probeEnvironmentConfig, adapterDeps),
   );
 
   return router;

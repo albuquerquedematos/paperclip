@@ -1,69 +1,75 @@
 import { Router } from "express";
 import { z } from "zod";
 import type { Db } from "@paperclipai/db";
-import { validate } from "../middleware/validate.js";
-import { assertCompanyAccess, getActorInfo } from "./authz.js";
+import { assertBoard, assertCompanyAccess } from "./authz.js";
 import { inboxDismissalService, logActivity } from "../services/index.js";
+import { expressHandler } from "../http/express-adapter.js";
+import type { Handler } from "../http/types.js";
+import type { StorageService } from "../storage/types.js";
 
 const inboxDismissalSchema = z.object({
   itemKey: z.string().trim().min(1).regex(/^(approval|join|run):.+$/, "Unsupported inbox item key"),
 });
 
-export function inboxDismissalRoutes(db: Db) {
-  const router = Router();
+function buildHandlers(db: Db) {
   const svc = inboxDismissalService(db);
 
-  router.get("/companies/:companyId/inbox-dismissals", async (req, res) => {
-    const companyId = req.params.companyId as string;
-    assertCompanyAccess(req, companyId);
-    if (req.actor.type !== "board") {
-      res.status(403).json({ error: "Board authentication required" });
-      return;
-    }
-    if (!req.actor.userId) {
-      res.status(403).json({ error: "Board user context required" });
-      return;
-    }
-    const dismissals = await svc.list(companyId, req.actor.userId);
-    res.json(dismissals);
-  });
+  // server/src/routes/inbox-dismissals.ts:16
+  const getInboxDismissals: Handler = async (ctx) => {
+    const companyId = ctx.param("companyId") ?? "";
+    assertCompanyAccess(ctx, companyId);
+    assertBoard(ctx);
+    const dismissals = await svc.list(companyId, (ctx.actor as { userId: string }).userId);
+    return Response.json(dismissals);
+  };
 
-  router.post(
-    "/companies/:companyId/inbox-dismissals",
-    validate(inboxDismissalSchema),
-    async (req, res) => {
-      const companyId = req.params.companyId as string;
-      assertCompanyAccess(req, companyId);
-      if (req.actor.type !== "board") {
-        res.status(403).json({ error: "Board authentication required" });
-        return;
-      }
-      if (!req.actor.userId) {
-        res.status(403).json({ error: "Board user context required" });
-        return;
-      }
+  // server/src/routes/inbox-dismissals.ts:31
+  const postInboxDismissal: Handler = async (ctx) => {
+    const companyId = ctx.param("companyId") ?? "";
+    assertCompanyAccess(ctx, companyId);
+    assertBoard(ctx);
+    const boardActor = ctx.actor as { type: "board"; userId: string; runId?: string };
 
-      const dismissal = await svc.dismiss(companyId, req.actor.userId, req.body.itemKey, new Date());
-      const actor = getActorInfo(req);
-      await logActivity(db, {
-        companyId,
-        actorType: actor.actorType,
-        actorId: actor.actorId,
-        agentId: actor.agentId,
-        runId: actor.runId,
-        action: "inbox.dismissed",
-        entityType: "company",
-        entityId: companyId,
-        details: {
-          userId: req.actor.userId,
-          itemKey: dismissal.itemKey,
-          dismissedAt: dismissal.dismissedAt,
-        },
-      });
+    const body = await ctx.json();
+    const parsed = inboxDismissalSchema.parse(body);
 
-      res.status(201).json(dismissal);
+    const dismissal = await svc.dismiss(companyId, boardActor.userId, parsed.itemKey, new Date());
+
+    await logActivity(db, {
+      companyId,
+      actorType: "user",
+      actorId: boardActor.userId,
+      agentId: null,
+      runId: ctx.actor?.runId ?? null,
+      action: "inbox.dismissed",
+      entityType: "company",
+      entityId: companyId,
+      details: {
+        userId: boardActor.userId,
+        itemKey: dismissal.itemKey,
+        dismissedAt: dismissal.dismissedAt,
+      },
+    });
+
+    return Response.json(dismissal, { status: 201 });
+  };
+
+  return { getInboxDismissals, postInboxDismissal };
+}
+
+export function inboxDismissalRoutes(db: Db) {
+  const router = Router();
+  const { getInboxDismissals, postInboxDismissal } = buildHandlers(db);
+
+  const storageSentinel = new Proxy({} as StorageService, {
+    get(_target, prop) {
+      throw new Error(`inboxDismissal handler unexpectedly accessed storage.${String(prop)}`);
     },
-  );
+  });
+  const deps = { db, storage: storageSentinel };
+
+  router.get("/companies/:companyId/inbox-dismissals", expressHandler(getInboxDismissals, deps));
+  router.post("/companies/:companyId/inbox-dismissals", expressHandler(postInboxDismissal, deps));
 
   return router;
 }

@@ -4,6 +4,7 @@ import {
   BIND_MODES,
   DEPLOYMENT_EXPOSURES,
   DEPLOYMENT_MODES,
+  DEPLOYMENT_PLATFORMS,
   SECRET_PROVIDERS,
   STORAGE_PROVIDERS,
 } from "./constants.js";
@@ -47,6 +48,7 @@ export const loggingConfigSchema = z.object({
 
 export const serverConfigSchema = z.object({
   deploymentMode: z.enum(DEPLOYMENT_MODES).default("local_trusted"),
+  deploymentPlatform: z.enum(DEPLOYMENT_PLATFORMS).default("node"),
   exposure: z.enum(DEPLOYMENT_EXPOSURES).default("private"),
   bind: z.enum(BIND_MODES).optional(),
   customBindHost: z.string().optional(),

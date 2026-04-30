@@ -1,7 +1,7 @@
 import type { RequestHandler } from "express";
 import type { Db } from "@paperclipai/db";
 import type { StorageService } from "../storage/types.js";
-import type { ActorContext, Handler, RequestCtx } from "./types.js";
+import type { ActorContext, ActorMembership, Handler, RequestCtx } from "./types.js";
 
 export interface AdapterDeps {
   db: Db;
@@ -30,15 +30,30 @@ export function expressHandler(handler: Handler, deps: AdapterDeps): RequestHand
       const baseUrl = `${protocol}://${req.hostname}`;
       const url = new URL(req.originalUrl, baseUrl);
 
-      // Translate the Express actor (which may be "none") to ActorContext | null.
+      // Translate the Express actor to ActorContext | null. "none" → null.
       const expressActor = req.actor;
       let actor: ActorContext | null = null;
-      if (expressActor && expressActor.type !== "none") {
+      if (expressActor?.type === "board") {
         actor = {
-          type: expressActor.type,
-          userId: expressActor.userId,
-          agentId: expressActor.agentId,
-          companyId: expressActor.companyId,
+          type: "board",
+          source: expressActor.source as ActorContext["source"],
+          userId: expressActor.userId ?? "unknown",
+          userName: (expressActor as { userName?: string | null }).userName ?? null,
+          userEmail: (expressActor as { userEmail?: string | null }).userEmail ?? null,
+          isInstanceAdmin: Boolean((expressActor as { isInstanceAdmin?: boolean }).isInstanceAdmin),
+          companyIds: (expressActor as { companyIds?: string[] }).companyIds,
+          memberships: (expressActor as { memberships?: ActorMembership[] }).memberships,
+          keyId: (expressActor as { keyId?: string }).keyId,
+          runId: expressActor.runId,
+        };
+      } else if (expressActor?.type === "agent") {
+        actor = {
+          type: "agent",
+          source: expressActor.source as ActorContext["source"],
+          agentId: expressActor.agentId ?? "unknown",
+          companyId: expressActor.companyId ?? "",
+          keyId: (expressActor as { keyId?: string }).keyId,
+          runId: expressActor.runId,
         };
       }
 

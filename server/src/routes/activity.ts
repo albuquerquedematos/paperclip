@@ -6,6 +6,8 @@ import { activityService, normalizeActivityLimit } from "../services/activity.js
 import { assertAuthenticated, assertBoard, assertCompanyAccess } from "./authz.js";
 import { heartbeatService, issueService } from "../services/index.js";
 import { sanitizeRecord } from "../redaction.js";
+import type { Handler } from "../http/types.js";
+import { expressHandler } from "../http/express-adapter.js";
 
 const createActivitySchema = z.object({
   actorType: z.enum(["agent", "user", "system", "plugin"]).optional().default("system"),
@@ -30,69 +32,79 @@ export function activityRoutes(db: Db) {
     return issueSvc.getById(rawId);
   }
 
-  router.get("/companies/:companyId/activity", async (req, res) => {
-    const companyId = req.params.companyId as string;
-    assertCompanyAccess(req, companyId);
+  const getCompanyActivity: Handler = async (ctx) => {
+    const companyId = ctx.param("companyId")!;
+    assertCompanyAccess(ctx, companyId);
 
     const filters = {
       companyId,
-      agentId: req.query.agentId as string | undefined,
-      entityType: req.query.entityType as string | undefined,
-      entityId: req.query.entityId as string | undefined,
-      limit: normalizeActivityLimit(Number(req.query.limit)),
+      agentId: ctx.query("agentId"),
+      entityType: ctx.query("entityType"),
+      entityId: ctx.query("entityId"),
+      limit: normalizeActivityLimit(Number(ctx.query("limit"))),
     };
     const result = await svc.list(filters);
-    res.json(result);
-  });
+    return Response.json(result);
+  };
 
-  router.post("/companies/:companyId/activity", validate(createActivitySchema), async (req, res) => {
-    assertBoard(req);
-    const companyId = req.params.companyId as string;
-    assertCompanyAccess(req, companyId);
+  const createCompanyActivity: Handler = async (ctx) => {
+    assertBoard(ctx);
+    const companyId = ctx.param("companyId")!;
+    assertCompanyAccess(ctx, companyId);
+    const body = await ctx.json<z.infer<typeof createActivitySchema>>();
     const event = await svc.create({
       companyId,
-      ...req.body,
-      details: req.body.details ? sanitizeRecord(req.body.details) : null,
+      ...body,
+      details: body.details ? sanitizeRecord(body.details as Record<string, unknown>) : null,
     });
-    res.status(201).json(event);
-  });
+    return Response.json(event, { status: 201 });
+  };
 
-  router.get("/issues/:id/activity", async (req, res) => {
-    const rawId = req.params.id as string;
+  const getIssueActivity: Handler = async (ctx) => {
+    const rawId = ctx.param("id")!;
     const issue = await resolveIssueByRef(rawId);
     if (!issue) {
-      res.status(404).json({ error: "Issue not found" });
-      return;
+      return Response.json({ error: "Issue not found" }, { status: 404 });
     }
-    assertCompanyAccess(req, issue.companyId);
+    assertCompanyAccess(ctx, issue.companyId);
     const result = await svc.forIssue(issue.id);
-    res.json(result);
-  });
+    return Response.json(result);
+  };
 
-  router.get("/issues/:id/runs", async (req, res) => {
-    const rawId = req.params.id as string;
+  const getIssueRuns: Handler = async (ctx) => {
+    const rawId = ctx.param("id")!;
     const issue = await resolveIssueByRef(rawId);
     if (!issue) {
-      res.status(404).json({ error: "Issue not found" });
-      return;
+      return Response.json({ error: "Issue not found" }, { status: 404 });
     }
-    assertCompanyAccess(req, issue.companyId);
+    assertCompanyAccess(ctx, issue.companyId);
     const result = await svc.runsForIssue(issue.companyId, issue.id);
-    res.json(result);
-  });
+    return Response.json(result);
+  };
 
-  router.get("/heartbeat-runs/:runId/issues", async (req, res) => {
-    assertAuthenticated(req);
-    const runId = req.params.runId as string;
+  const getRunIssues: Handler = async (ctx) => {
+    assertAuthenticated(ctx);
+    const runId = ctx.param("runId")!;
     const run = await heartbeat.getRun(runId);
     if (!run) {
-      res.json([]);
-      return;
+      return Response.json([]);
     }
-    assertCompanyAccess(req, run.companyId);
+    assertCompanyAccess(ctx, run.companyId);
     const result = await svc.issuesForRun(runId);
-    res.json(result);
-  });
+    return Response.json(result);
+  };
+
+  const deps = { db, storage: null as never };
+
+  router.get("/companies/:companyId/activity", expressHandler(getCompanyActivity, deps));
+  router.post(
+    "/companies/:companyId/activity",
+    validate(createActivitySchema),
+    expressHandler(createCompanyActivity, deps),
+  );
+  router.get("/issues/:id/activity", expressHandler(getIssueActivity, deps));
+  router.get("/issues/:id/runs", expressHandler(getIssueRuns, deps));
+  router.get("/heartbeat-runs/:runId/issues", expressHandler(getRunIssues, deps));
 
   return router;
 }

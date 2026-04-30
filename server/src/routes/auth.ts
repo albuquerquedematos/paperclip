@@ -8,7 +8,9 @@ import {
   updateCurrentUserProfileSchema,
 } from "@paperclipai/shared";
 import { unauthorized } from "../errors.js";
-import { validate } from "../middleware/validate.js";
+import { expressHandler } from "../http/express-adapter.js";
+import type { Handler } from "../http/types.js";
+import type { StorageService } from "../storage/types.js";
 
 async function loadCurrentUserProfile(db: Db, userId: string) {
   const user = await db
@@ -34,38 +36,40 @@ async function loadCurrentUserProfile(db: Db, userId: string) {
   });
 }
 
-export function authRoutes(db: Db) {
-  const router = Router();
-
-  router.get("/get-session", async (req, res) => {
-    if (req.actor.type !== "board" || !req.actor.userId) {
+function buildHandlers(db: Db) {
+  // server/src/routes/auth.ts:40
+  const getSession: Handler = async (ctx) => {
+    if (ctx.actor?.type !== "board" || !ctx.actor.userId) {
       throw unauthorized("Board authentication required");
     }
 
-    const user = await loadCurrentUserProfile(db, req.actor.userId);
-    res.json(authSessionSchema.parse({
+    const user = await loadCurrentUserProfile(db, ctx.actor.userId);
+    return Response.json(authSessionSchema.parse({
       session: {
-        id: `paperclip:${req.actor.source ?? "none"}:${req.actor.userId}`,
-        userId: req.actor.userId,
+        id: `paperclip:${ctx.actor.source}:${ctx.actor.userId}`,
+        userId: ctx.actor.userId,
       },
       user,
     }));
-  });
+  };
 
-  router.get("/profile", async (req, res) => {
-    if (req.actor.type !== "board" || !req.actor.userId) {
+  // server/src/routes/auth.ts:55
+  const getProfile: Handler = async (ctx) => {
+    if (ctx.actor?.type !== "board" || !ctx.actor.userId) {
       throw unauthorized("Board authentication required");
     }
 
-    res.json(await loadCurrentUserProfile(db, req.actor.userId));
-  });
+    return Response.json(await loadCurrentUserProfile(db, ctx.actor.userId));
+  };
 
-  router.patch("/profile", validate(updateCurrentUserProfileSchema), async (req, res) => {
-    if (req.actor.type !== "board" || !req.actor.userId) {
+  // server/src/routes/auth.ts:63
+  const patchProfile: Handler = async (ctx) => {
+    if (ctx.actor?.type !== "board" || !ctx.actor.userId) {
       throw unauthorized("Board authentication required");
     }
 
-    const patch = updateCurrentUserProfileSchema.parse(req.body);
+    const body = await ctx.json();
+    const patch = updateCurrentUserProfileSchema.parse(body);
     const now = new Date();
 
     const updated = await db
@@ -75,7 +79,7 @@ export function authRoutes(db: Db) {
         ...(patch.image !== undefined ? { image: patch.image } : {}),
         updatedAt: now,
       })
-      .where(eq(authUsers.id, req.actor.userId))
+      .where(eq(authUsers.id, ctx.actor.userId))
       .returning({
         id: authUsers.id,
         email: authUsers.email,
@@ -88,13 +92,33 @@ export function authRoutes(db: Db) {
       throw unauthorized("Signed-in user not found");
     }
 
-    res.json(currentUserProfileSchema.parse({
+    return Response.json(currentUserProfileSchema.parse({
       id: updated.id,
       email: updated.email ?? null,
       name: updated.name ?? null,
       image: updated.image ?? null,
     }));
+  };
+
+  return { getSession, getProfile, patchProfile };
+}
+
+export function authRoutes(db: Db) {
+  const router = Router();
+  const { getSession, getProfile, patchProfile } = buildHandlers(db);
+
+  // None of these handlers touch storage; supply a sentinel so expressHandler's
+  // AdapterDeps type is satisfied without widening the public signature.
+  const storageSentinel = new Proxy({} as StorageService, {
+    get(_target, prop) {
+      throw new Error(`auth handler unexpectedly accessed storage.${String(prop)}`);
+    },
   });
+  const deps = { db, storage: storageSentinel };
+
+  router.get("/get-session", expressHandler(getSession, deps));
+  router.get("/profile", expressHandler(getProfile, deps));
+  router.patch("/profile", expressHandler(patchProfile, deps));
 
   return router;
 }

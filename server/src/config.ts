@@ -10,12 +10,14 @@ import {
   BIND_MODES,
   DEPLOYMENT_EXPOSURES,
   DEPLOYMENT_MODES,
+  DEPLOYMENT_PLATFORMS,
   SECRET_PROVIDERS,
   STORAGE_PROVIDERS,
   type BindMode,
   type AuthBaseUrlMode,
   type DeploymentExposure,
   type DeploymentMode,
+  type DeploymentPlatform,
   type SecretProvider,
   type StorageProvider,
   inferBindModeFromHost,
@@ -51,6 +53,7 @@ type DatabaseMode = "embedded-postgres" | "postgres";
 
 export interface Config {
   deploymentMode: DeploymentMode;
+  deploymentPlatform: DeploymentPlatform;
   deploymentExposure: DeploymentExposure;
   bind: BindMode;
   customBindHost: string | undefined;
@@ -168,6 +171,14 @@ export function loadConfig(): Config {
       ? (deploymentModeFromEnvRaw as DeploymentMode)
       : null;
   const deploymentMode: DeploymentMode = deploymentModeFromEnv ?? fileConfig?.server.deploymentMode ?? "local_trusted";
+  const deploymentPlatformFromEnvRaw = process.env.PAPERCLIP_DEPLOYMENT_PLATFORM;
+  const deploymentPlatformFromEnv =
+    deploymentPlatformFromEnvRaw &&
+    DEPLOYMENT_PLATFORMS.includes(deploymentPlatformFromEnvRaw as DeploymentPlatform)
+      ? (deploymentPlatformFromEnvRaw as DeploymentPlatform)
+      : null;
+  const deploymentPlatform: DeploymentPlatform =
+    deploymentPlatformFromEnv ?? fileConfig?.server.deploymentPlatform ?? "node";
   const deploymentExposureFromEnvRaw = process.env.PAPERCLIP_DEPLOYMENT_EXPOSURE;
   const deploymentExposureFromEnv =
     deploymentExposureFromEnvRaw &&
@@ -287,6 +298,7 @@ export function loadConfig(): Config {
 
   return {
     deploymentMode,
+    deploymentPlatform,
     deploymentExposure,
     bind: resolvedBind.bind,
     customBindHost: resolvedBind.customBindHost,

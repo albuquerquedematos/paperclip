@@ -1,13 +1,44 @@
 import type { Db } from "@paperclipai/db";
 import type { StorageService } from "../storage/types.js";
 
-/** Normalized actor from auth middleware — only set when authenticated (not "none"). */
-export interface ActorContext {
-  type: "board" | "agent";
-  userId?: string;
-  agentId?: string;
-  companyId?: string;
+export interface ActorMembership {
+  companyId: string;
+  membershipRole: string;
+  status: string;
 }
+
+export type ActorSource =
+  | "local_implicit"
+  | "session"
+  | "board_key"
+  | "agent_jwt"
+  | "agent_key"
+  | "none";
+
+export interface BoardActor {
+  type: "board";
+  source: ActorSource;
+  userId: string;
+  userName: string | null;
+  userEmail: string | null;
+  isInstanceAdmin: boolean;
+  companyIds?: string[];
+  memberships?: ActorMembership[];
+  keyId?: string;
+  runId?: string;
+}
+
+export interface AgentActor {
+  type: "agent";
+  source: ActorSource;
+  agentId: string;
+  companyId: string;
+  keyId?: string;
+  runId?: string;
+}
+
+/** Full actor — mirrors the shape set by actorMiddleware. null when unauthenticated ("none"). */
+export type ActorContext = BoardActor | AgentActor;
 
 /** Minimal normalized request passed to every handler. */
 export interface RequestCtx {

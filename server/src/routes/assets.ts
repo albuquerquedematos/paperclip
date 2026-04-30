@@ -8,6 +8,9 @@ import type { StorageService } from "../storage/types.js";
 import { assetService, logActivity } from "../services/index.js";
 import { isAllowedContentType, MAX_ATTACHMENT_BYTES } from "../attachment-types.js";
 import { assertCompanyAccess, getActorInfo } from "./authz.js";
+import { expressHandler } from "../http/express-adapter.js";
+import type { Handler } from "../http/types.js";
+
 const SVG_CONTENT_TYPE = "image/svg+xml";
 const ALLOWED_COMPANY_LOGO_CONTENT_TYPES = new Set([
   "image/png",
@@ -107,6 +110,10 @@ export function assetRoutes(db: Db, storage: StorageService) {
     });
   }
 
+  // ---------------------------------------------------------------------------
+  // POST /companies/:companyId/assets/images
+  // TODO(cloudflare): file upload requires R2 multipart
+  // ---------------------------------------------------------------------------
   router.post("/companies/:companyId/assets/images", async (req, res) => {
     const companyId = req.params.companyId as string;
     assertCompanyAccess(req, companyId);
@@ -210,6 +217,10 @@ export function assetRoutes(db: Db, storage: StorageService) {
     });
   });
 
+  // ---------------------------------------------------------------------------
+  // POST /companies/:companyId/logo
+  // TODO(cloudflare): file upload requires R2 multipart
+  // ---------------------------------------------------------------------------
   router.post("/companies/:companyId/logo", async (req, res) => {
     const companyId = req.params.companyId as string;
     assertCompanyAccess(req, companyId);
@@ -309,32 +320,40 @@ export function assetRoutes(db: Db, storage: StorageService) {
     });
   });
 
-  router.get("/assets/:assetId/content", async (req, res, next) => {
-    const assetId = req.params.assetId as string;
+  // ---------------------------------------------------------------------------
+  // GET /assets/:assetId/content — streaming response
+  // ---------------------------------------------------------------------------
+
+  const getAssetContent: Handler = async (ctx) => {
+    const assetId = ctx.param("assetId");
+    if (!assetId) return Response.json({ error: "Missing assetId" }, { status: 400 });
     const asset = await svc.getById(assetId);
     if (!asset) {
-      res.status(404).json({ error: "Asset not found" });
-      return;
+      return Response.json({ error: "Asset not found" }, { status: 404 });
     }
-    assertCompanyAccess(req, asset.companyId);
+    if (!ctx.actor) {
+      return Response.json({ error: "Authentication required" }, { status: 401 });
+    }
 
     const object = await storage.getObject(asset.companyId, asset.objectKey);
     const responseContentType = asset.contentType || object.contentType || "application/octet-stream";
-    res.setHeader("Content-Type", responseContentType);
-    res.setHeader("Content-Length", String(asset.byteSize || object.contentLength || 0));
-    res.setHeader("Cache-Control", "private, max-age=60");
-    res.setHeader("X-Content-Type-Options", "nosniff");
-    if (responseContentType === SVG_CONTENT_TYPE) {
-      res.setHeader("Content-Security-Policy", "sandbox; default-src 'none'; img-src 'self' data:; style-src 'unsafe-inline'");
-    }
     const filename = asset.originalFilename ?? "asset";
-    res.setHeader("Content-Disposition", `inline; filename=\"${filename.replaceAll("\"", "")}\"`);
 
-    object.stream.on("error", (err) => {
-      next(err);
-    });
-    object.stream.pipe(res);
-  });
+    const headers: Record<string, string> = {
+      "Content-Type": responseContentType,
+      "Content-Length": String(asset.byteSize || object.contentLength || 0),
+      "Cache-Control": "private, max-age=60",
+      "X-Content-Type-Options": "nosniff",
+      "Content-Disposition": `inline; filename="${filename.replaceAll('"', '')}"`,
+    };
+    if (responseContentType === SVG_CONTENT_TYPE) {
+      headers["Content-Security-Policy"] = "sandbox; default-src 'none'; img-src 'self' data:; style-src 'unsafe-inline'";
+    }
+
+    return new Response(object.stream as unknown as ReadableStream, { headers });
+  };
+
+  router.get("/assets/:assetId/content", expressHandler(getAssetContent, { db, storage }));
 
   return router;
 }

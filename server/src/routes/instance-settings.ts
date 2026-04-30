@@ -1,150 +1,187 @@
-import { Router, type Request } from "express";
+import { Router } from "express";
 import type { Db } from "@paperclipai/db";
 import {
   issueGraphLivenessAutoRecoveryRequestSchema,
   patchInstanceExperimentalSettingsSchema,
   patchInstanceGeneralSettingsSchema,
 } from "@paperclipai/shared";
-import { forbidden } from "../errors.js";
-import { validate } from "../middleware/validate.js";
+import { assertBoardOrgAccess, assertInstanceAdmin } from "./authz.js";
 import { heartbeatService, instanceSettingsService, logActivity } from "../services/index.js";
-import { assertBoardOrgAccess, getActorInfo } from "./authz.js";
+import { expressHandler } from "../http/express-adapter.js";
+import type { Handler } from "../http/types.js";
+import type { StorageService } from "../storage/types.js";
 
-function assertCanManageInstanceSettings(req: Request) {
-  if (req.actor.type !== "board") {
-    throw forbidden("Board access required");
-  }
-  if (req.actor.source === "local_implicit" || req.actor.isInstanceAdmin) {
-    return;
-  }
-  throw forbidden("Instance admin access required");
+function buildHandlers(db: Db) {
+  const svc = instanceSettingsService(db);
+  const heartbeat = heartbeatService(db);
+
+  // server/src/routes/instance-settings.ts:28
+  const getGeneralSettings: Handler = async (ctx) => {
+    assertBoardOrgAccess(ctx);
+    return Response.json(await svc.getGeneral());
+  };
+
+  // server/src/routes/instance-settings.ts:35
+  const patchGeneralSettings: Handler = async (ctx) => {
+    assertInstanceAdmin(ctx);
+    const body = await ctx.json();
+    const patch = patchInstanceGeneralSettingsSchema.parse(body);
+    const updated = await svc.updateGeneral(patch);
+
+    const actorType = ctx.actor!.type === "agent" ? "agent" as const : "user" as const;
+    const actorId = ctx.actor!.type === "agent"
+      ? (ctx.actor!.agentId ?? "unknown-agent")
+      : (ctx.actor!.userId ?? "board");
+    const companyIds = await svc.listCompanyIds();
+    await Promise.all(
+      companyIds.map((companyId) =>
+        logActivity(db, {
+          companyId,
+          actorType,
+          actorId,
+          agentId: ctx.actor!.type === "agent" ? (ctx.actor!.agentId ?? null) : null,
+          runId: ctx.actor?.runId ?? null,
+          action: "instance.settings.general_updated",
+          entityType: "instance_settings",
+          entityId: updated.id,
+          details: {
+            general: updated.general,
+            changedKeys: Object.keys(patch).sort(),
+          },
+        }),
+      ),
+    );
+    return Response.json(updated.general);
+  };
+
+  // server/src/routes/instance-settings.ts:65
+  const getExperimentalSettings: Handler = async (ctx) => {
+    assertBoardOrgAccess(ctx);
+    return Response.json(await svc.getExperimental());
+  };
+
+  // server/src/routes/instance-settings.ts:72
+  const patchExperimentalSettings: Handler = async (ctx) => {
+    assertInstanceAdmin(ctx);
+    const body = await ctx.json();
+    const patch = patchInstanceExperimentalSettingsSchema.parse(body);
+    const updated = await svc.updateExperimental(patch);
+
+    const actorType = ctx.actor!.type === "agent" ? "agent" as const : "user" as const;
+    const actorId = ctx.actor!.type === "agent"
+      ? (ctx.actor!.agentId ?? "unknown-agent")
+      : (ctx.actor!.userId ?? "board");
+    const companyIds = await svc.listCompanyIds();
+    await Promise.all(
+      companyIds.map((companyId) =>
+        logActivity(db, {
+          companyId,
+          actorType,
+          actorId,
+          agentId: ctx.actor!.type === "agent" ? (ctx.actor!.agentId ?? null) : null,
+          runId: ctx.actor?.runId ?? null,
+          action: "instance.settings.experimental_updated",
+          entityType: "instance_settings",
+          entityId: updated.id,
+          details: {
+            experimental: updated.experimental,
+            changedKeys: Object.keys(patch).sort(),
+          },
+        }),
+      ),
+    );
+    return Response.json(updated.experimental);
+  };
+
+  // server/src/routes/instance-settings.ts:103
+  const previewIssueGraphLivenessAutoRecovery: Handler = async (ctx) => {
+    assertInstanceAdmin(ctx);
+    const body = await ctx.json();
+    const parsed = issueGraphLivenessAutoRecoveryRequestSchema.parse(body);
+    return Response.json(await heartbeat.buildIssueGraphLivenessAutoRecoveryPreview({
+      lookbackHours: parsed.lookbackHours,
+    }));
+  };
+
+  // server/src/routes/instance-settings.ts:113
+  const runIssueGraphLivenessAutoRecovery: Handler = async (ctx) => {
+    assertInstanceAdmin(ctx);
+    const body = await ctx.json();
+    const parsed = issueGraphLivenessAutoRecoveryRequestSchema.parse(body);
+
+    const actorType = ctx.actor!.type === "agent" ? "agent" as const : "user" as const;
+    const actorId = ctx.actor!.type === "agent"
+      ? (ctx.actor!.agentId ?? "unknown-agent")
+      : (ctx.actor!.userId ?? "board");
+    const result = await heartbeat.reconcileIssueGraphLiveness({
+      runId: null,
+      force: true,
+      lookbackHours: parsed.lookbackHours,
+    });
+    const companyIds = await svc.listCompanyIds();
+    await Promise.all(
+      companyIds.map((companyId) =>
+        logActivity(db, {
+          companyId,
+          actorType,
+          actorId,
+          agentId: ctx.actor!.type === "agent" ? (ctx.actor!.agentId ?? null) : null,
+          runId: ctx.actor?.runId ?? null,
+          action: "instance.settings.issue_graph_liveness_auto_recovery_run",
+          entityType: "instance_settings",
+          entityId: "default",
+          details: {
+            lookbackHours: result.lookbackHours,
+            escalationsCreated: result.escalationsCreated,
+            existingEscalations: result.existingEscalations,
+            skippedOutsideLookback: result.skippedOutsideLookback,
+            escalationIssueIds: result.escalationIssueIds,
+          },
+        }),
+      ),
+    );
+    return Response.json(result);
+  };
+
+  return {
+    getGeneralSettings,
+    patchGeneralSettings,
+    getExperimentalSettings,
+    patchExperimentalSettings,
+    previewIssueGraphLivenessAutoRecovery,
+    runIssueGraphLivenessAutoRecovery,
+  };
 }
 
 export function instanceSettingsRoutes(db: Db) {
   const router = Router();
-  const svc = instanceSettingsService(db);
-  const heartbeat = heartbeatService(db);
+  const {
+    getGeneralSettings,
+    patchGeneralSettings,
+    getExperimentalSettings,
+    patchExperimentalSettings,
+    previewIssueGraphLivenessAutoRecovery,
+    runIssueGraphLivenessAutoRecovery,
+  } = buildHandlers(db);
 
-  router.get("/instance/settings/general", async (req, res) => {
-    // General settings (e.g. keyboardShortcuts) are readable by any
-    // authenticated org member or instance admin. Only PATCH requires instance-admin.
-    assertBoardOrgAccess(req);
-    res.json(await svc.getGeneral());
-  });
-
-  router.patch(
-    "/instance/settings/general",
-    validate(patchInstanceGeneralSettingsSchema),
-    async (req, res) => {
-      assertCanManageInstanceSettings(req);
-      const updated = await svc.updateGeneral(req.body);
-      const actor = getActorInfo(req);
-      const companyIds = await svc.listCompanyIds();
-      await Promise.all(
-        companyIds.map((companyId) =>
-          logActivity(db, {
-            companyId,
-            actorType: actor.actorType,
-            actorId: actor.actorId,
-            agentId: actor.agentId,
-            runId: actor.runId,
-            action: "instance.settings.general_updated",
-            entityType: "instance_settings",
-            entityId: updated.id,
-            details: {
-              general: updated.general,
-              changedKeys: Object.keys(req.body).sort(),
-            },
-          }),
-        ),
-      );
-      res.json(updated.general);
+  const storageSentinel = new Proxy({} as StorageService, {
+    get(_target, prop) {
+      throw new Error(`instanceSettings handler unexpectedly accessed storage.${String(prop)}`);
     },
-  );
-
-  router.get("/instance/settings/experimental", async (req, res) => {
-    // Experimental settings are readable by any authenticated org member
-    // or instance admin. Only PATCH requires instance-admin.
-    assertBoardOrgAccess(req);
-    res.json(await svc.getExperimental());
   });
+  const deps = { db, storage: storageSentinel };
 
-  router.patch(
-    "/instance/settings/experimental",
-    validate(patchInstanceExperimentalSettingsSchema),
-    async (req, res) => {
-      assertCanManageInstanceSettings(req);
-      const updated = await svc.updateExperimental(req.body);
-      const actor = getActorInfo(req);
-      const companyIds = await svc.listCompanyIds();
-      await Promise.all(
-        companyIds.map((companyId) =>
-          logActivity(db, {
-            companyId,
-            actorType: actor.actorType,
-            actorId: actor.actorId,
-            agentId: actor.agentId,
-            runId: actor.runId,
-            action: "instance.settings.experimental_updated",
-            entityType: "instance_settings",
-            entityId: updated.id,
-            details: {
-              experimental: updated.experimental,
-              changedKeys: Object.keys(req.body).sort(),
-            },
-          }),
-        ),
-      );
-      res.json(updated.experimental);
-    },
-  );
-
+  router.get("/instance/settings/general", expressHandler(getGeneralSettings, deps));
+  router.patch("/instance/settings/general", expressHandler(patchGeneralSettings, deps));
+  router.get("/instance/settings/experimental", expressHandler(getExperimentalSettings, deps));
+  router.patch("/instance/settings/experimental", expressHandler(patchExperimentalSettings, deps));
   router.post(
     "/instance/settings/experimental/issue-graph-liveness-auto-recovery/preview",
-    validate(issueGraphLivenessAutoRecoveryRequestSchema),
-    async (req, res) => {
-      assertCanManageInstanceSettings(req);
-      res.json(await heartbeat.buildIssueGraphLivenessAutoRecoveryPreview({
-        lookbackHours: req.body.lookbackHours,
-      }));
-    },
+    expressHandler(previewIssueGraphLivenessAutoRecovery, deps),
   );
-
   router.post(
     "/instance/settings/experimental/issue-graph-liveness-auto-recovery/run",
-    validate(issueGraphLivenessAutoRecoveryRequestSchema),
-    async (req, res) => {
-      assertCanManageInstanceSettings(req);
-      const actor = getActorInfo(req);
-      const result = await heartbeat.reconcileIssueGraphLiveness({
-        runId: actor.runId,
-        force: true,
-        lookbackHours: req.body.lookbackHours,
-      });
-      const companyIds = await svc.listCompanyIds();
-      await Promise.all(
-        companyIds.map((companyId) =>
-          logActivity(db, {
-            companyId,
-            actorType: actor.actorType,
-            actorId: actor.actorId,
-            agentId: actor.agentId,
-            runId: actor.runId,
-            action: "instance.settings.issue_graph_liveness_auto_recovery_run",
-            entityType: "instance_settings",
-            entityId: "default",
-            details: {
-              lookbackHours: result.lookbackHours,
-              escalationsCreated: result.escalationsCreated,
-              existingEscalations: result.existingEscalations,
-              skippedOutsideLookback: result.skippedOutsideLookback,
-              escalationIssueIds: result.escalationIssueIds,
-            },
-          }),
-        ),
-      );
-      res.json(result);
-    },
+    expressHandler(runIssueGraphLivenessAutoRecovery, deps),
   );
 
   return router;

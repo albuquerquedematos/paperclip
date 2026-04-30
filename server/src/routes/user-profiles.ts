@@ -18,6 +18,9 @@ import type {
 } from "@paperclipai/shared";
 import { notFound } from "../errors.js";
 import { assertCompanyAccess } from "./authz.js";
+import { expressHandler } from "../http/express-adapter.js";
+import type { Handler } from "../http/types.js";
+import type { StorageService } from "../storage/types.js";
 
 type CompanyUserRow = {
   id: string;
@@ -297,13 +300,12 @@ async function loadDailyStats(db: Db, companyId: string, userId: string): Promis
   return [...points.values()];
 }
 
-export function userProfileRoutes(db: Db) {
-  const router = Router();
-
-  router.get("/companies/:companyId/users/:userSlug/profile", async (req, res) => {
-    const companyId = req.params.companyId as string;
-    const userSlug = req.params.userSlug as string;
-    assertCompanyAccess(req, companyId);
+function buildHandlers(db: Db) {
+  // server/src/routes/user-profiles.ts:303
+  const getUserProfile: Handler = async (ctx) => {
+    const companyId = ctx.param("companyId") ?? "";
+    const userSlug = ctx.param("userSlug") ?? "";
+    assertCompanyAccess(ctx, companyId);
 
     const row = await resolveCompanyUser(db, companyId, userSlug);
     if (!row) throw notFound("User not found");
@@ -429,8 +431,24 @@ export function userProfileRoutes(db: Db) {
       })),
     };
 
-    res.json(payload);
+    return Response.json(payload);
+  };
+
+  return { getUserProfile };
+}
+
+export function userProfileRoutes(db: Db) {
+  const router = Router();
+  const { getUserProfile } = buildHandlers(db);
+
+  const storageSentinel = new Proxy({} as StorageService, {
+    get(_target, prop) {
+      throw new Error(`userProfile handler unexpectedly accessed storage.${String(prop)}`);
+    },
   });
+  const deps = { db, storage: storageSentinel };
+
+  router.get("/companies/:companyId/users/:userSlug/profile", expressHandler(getUserProfile, deps));
 
   return router;
 }

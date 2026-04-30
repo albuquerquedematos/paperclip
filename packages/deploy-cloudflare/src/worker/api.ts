@@ -13,6 +13,9 @@
 import { Hono } from "hono";
 import { createSetupApp } from "./setup.js";
 import { bootCloudflare } from "../boot.js";
+import { SidecarClient } from "../sidecar-client.js";
+import { CfCompanySkillsService } from "../services/cf-company-skills.js";
+import { CfAgentInstructionsService } from "../services/cf-agent-instructions.js";
 
 // createHyperdriveDb is imported here to make it available for use when the
 // HTTP adapter migration lands (PR #6/#7). Remove the comment and use it in
@@ -54,6 +57,12 @@ export interface Env {
   // MASTER_ENCRYPTION_KEY: string  — encrypts all other secrets stored in DB
   // SANDBOX_BRIDGE_URL: string
   // SANDBOX_BRIDGE_API_KEY: string
+
+  // Sidecar — the Node server running alongside the Workers deployment.
+  // Workers delegate filesystem, child-process, and plugin-loading operations
+  // to this process over HTTP (see SidecarClient).
+  SIDECAR_URL: string;
+  SIDECAR_API_KEY: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -143,6 +152,40 @@ export default {
     // Boot the Cloudflare implementations on first request
     // (idempotent — registerStorageProvider uses a Map, safe to call multiple times)
     bootCloudflare(env);
+
+    // ---------------------------------------------------------------------------
+    // CF service layer — instantiated per-request (Workers are stateless).
+    //
+    // SidecarClient delegates Node-only operations (filesystem, child processes,
+    // plugin loading) to the Paperclip Node server running alongside this Worker.
+    //
+    // CfCompanySkillsService stores skill file content in R2 under the key
+    // pattern `skills/{companyId}/{skillId}/{relativePath}` and falls back to
+    // the sidecar for local_path / catalog source types.
+    //
+    // CfAgentInstructionsService stores per-agent Markdown instruction files in
+    // R2 under `instructions/{companyId}/{agentId}/{filename}`.
+    //
+    // TODO(PR #6/#7): pass these instances into the Hono context (via app.use)
+    // or directly into route handler factories once route modules are mounted:
+    //
+    //   app.use("*", async (c, next) => {
+    //     c.set("sidecar", sidecar);
+    //     c.set("skills", skillsService);
+    //     c.set("instructions", instructionsService);
+    //     return next();
+    //   });
+    // ---------------------------------------------------------------------------
+    const sidecar = new SidecarClient({
+      baseUrl: env.SIDECAR_URL,
+      apiKey: env.SIDECAR_API_KEY,
+    });
+    const skillsService = new CfCompanySkillsService(env.PAPERCLIP_STORAGE, sidecar);
+    const instructionsService = new CfAgentInstructionsService(env.PAPERCLIP_STORAGE);
+
+    // Suppress unused-variable warnings until routes are mounted.
+    void skillsService;
+    void instructionsService;
 
     return app.fetch(request, env, ctx);
   },
