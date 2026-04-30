@@ -26,6 +26,10 @@ Core fields:
 - command (string, optional): defaults to "claude"
 - extraArgs (string[], optional): additional CLI args
 - env (object, optional): KEY=VALUE environment variables
+- authMode (string, optional, default "auto"): how Claude authenticates. One of:
+  - "auto": claude CLI decides based on env vars (ANTHROPIC_API_KEY > Bedrock > subscription).
+  - "subscription": force Claude Code login. ANTHROPIC_API_KEY and Bedrock vars are stripped from the spawned env.
+  - "api_key": force ANTHROPIC_API_KEY auth. Test environment fails if no key is set.
 - workspaceStrategy (object, optional): execution workspace strategy; currently supports { type: "git_worktree", baseRef?, branchTemplate?, worktreeParentDir? }
 - workspaceRuntime (object, optional): reserved for workspace runtime metadata; workspace runtime services are manually controlled from the workspace UI and are not auto-started by heartbeats
 

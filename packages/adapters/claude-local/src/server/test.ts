@@ -133,7 +133,48 @@ export async function testEnvironment(
 
   const configApiKey = env.ANTHROPIC_API_KEY;
   const hostApiKey = considerHostEnv ? process.env.ANTHROPIC_API_KEY : undefined;
-  if (hasBedrock) {
+
+  // authMode: per-agent override that lets the operator pin auth without
+  // touching shell env. "subscription" forces Claude Code login by hiding
+  // ANTHROPIC_API_KEY/Bedrock vars from the spawned CLI; "api_key" requires
+  // ANTHROPIC_API_KEY to be set; "auto" (default) is the legacy behaviour.
+  const authMode = asString(config.authMode, "auto").trim().toLowerCase();
+
+  if (authMode === "subscription") {
+    if (isNonEmpty(configApiKey) || isNonEmpty(hostApiKey) || hasBedrock) {
+      checks.push({
+        code: "claude_auth_mode_subscription",
+        level: "info",
+        message:
+          "Auth mode is 'subscription'. ANTHROPIC_API_KEY / Bedrock vars in the environment will be ignored.",
+        hint: "Run `claude login` once on the host so the CLI has subscription credentials.",
+      });
+    } else {
+      checks.push({
+        code: "claude_auth_mode_subscription",
+        level: "info",
+        message: "Auth mode is 'subscription'. Using Claude Code login.",
+      });
+    }
+  } else if (authMode === "api_key") {
+    if (!isNonEmpty(configApiKey) && !isNonEmpty(hostApiKey)) {
+      checks.push({
+        code: "claude_auth_mode_api_key_missing",
+        level: "error",
+        message:
+          "Auth mode is 'api_key' but ANTHROPIC_API_KEY is not set in the adapter env or the server environment.",
+        hint: "Set ANTHROPIC_API_KEY, or change authMode to 'subscription' / 'auto'.",
+      });
+    } else {
+      const source = isNonEmpty(configApiKey) ? "adapter config env" : "server environment";
+      checks.push({
+        code: "claude_auth_mode_api_key",
+        level: "info",
+        message: "Auth mode is 'api_key'. Using ANTHROPIC_API_KEY.",
+        detail: `Detected in ${source}.`,
+      });
+    }
+  } else if (hasBedrock) {
     const source =
       env.CLAUDE_CODE_USE_BEDROCK === "1" ||
       env.CLAUDE_CODE_USE_BEDROCK === "true" ||
@@ -155,7 +196,7 @@ export async function testEnvironment(
       message:
         "ANTHROPIC_API_KEY is set. Claude will use API-key auth instead of subscription credentials.",
       detail: `Detected in ${source}.`,
-      hint: "Unset ANTHROPIC_API_KEY if you want subscription-based Claude login behavior.",
+      hint: "Unset ANTHROPIC_API_KEY, or set authMode='subscription' to force Claude login.",
     });
   } else if (!targetIsRemote) {
     checks.push({

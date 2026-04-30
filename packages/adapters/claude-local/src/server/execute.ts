@@ -354,11 +354,26 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
     0,
     asNumber(config.terminalResultCleanupGraceMs, 5_000),
   );
-  const effectiveEnv = Object.fromEntries(
+  const rawEffectiveEnv = Object.fromEntries(
     Object.entries({ ...process.env, ...env }).filter(
       (entry): entry is [string, string] => typeof entry[1] === "string",
     ),
   );
+  // authMode: "auto" (default; current behaviour — claude picks subscription
+  // or API key based on whatever env vars are present), "subscription" (force
+  // Claude Code login by stripping API/Bedrock env vars), or "api_key" (keep
+  // ANTHROPIC_API_KEY; surface a config error in test.ts if missing). Lets the
+  // operator pin auth without touching shell env vars.
+  const authMode = asString(config.authMode, "auto").trim().toLowerCase();
+  const effectiveEnv = (() => {
+    if (authMode !== "subscription") return rawEffectiveEnv;
+    const scrubbed = { ...rawEffectiveEnv };
+    delete scrubbed.ANTHROPIC_API_KEY;
+    delete scrubbed.ANTHROPIC_AUTH_TOKEN;
+    delete scrubbed.CLAUDE_CODE_USE_BEDROCK;
+    delete scrubbed.ANTHROPIC_BEDROCK_BASE_URL;
+    return scrubbed;
+  })();
   const billingType = resolveClaudeBillingType(effectiveEnv);
   const claudeSkillEntries = await readPaperclipRuntimeSkillEntries(config, __moduleDir);
   const desiredSkillNames = new Set(resolveClaudeDesiredSkillNames(config, claudeSkillEntries));
