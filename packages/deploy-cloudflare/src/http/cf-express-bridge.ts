@@ -116,7 +116,7 @@ function createMockRes(): MockRes {
       if (typeof data === "string") {
         _resolve(new Response(data, { status: this._status, headers: this._headers }));
       } else if (data instanceof Uint8Array || data instanceof ArrayBuffer) {
-        _resolve(new Response(data, { status: this._status, headers: this._headers }));
+        _resolve(new Response(data as ArrayBuffer, { status: this._status, headers: this._headers }));
       } else if (data == null) {
         _resolve(new Response(null, { status: this._status }));
       } else {

@@ -39,7 +39,7 @@ export default {
   fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     // Boot CF implementations (idempotent — safe to call on every request).
     bootCloudflare(env);
-    return app.fetch(request, env, ctx);
+    return Promise.resolve(app.fetch(request, env, ctx));
   },
 
   // -------------------------------------------------------------------------

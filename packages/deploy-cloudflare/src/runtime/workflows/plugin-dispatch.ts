@@ -75,11 +75,9 @@ export class PluginDispatchWorkflow extends WorkflowEntrypoint<Env, PluginDispat
       if (this.env.SIDECAR_SERVICE) {
         return this.env.SIDECAR_SERVICE.fetch(`http://sidecar${path}`, init);
       }
-      const authHeaders = bridgeApiKey ? { Authorization: `Bearer ${bridgeApiKey}` } : {};
-      return fetch(`${bridgeUrl}${path}`, {
-        ...init,
-        headers: { ...init.headers as Record<string, string>, ...authHeaders },
-      });
+      const headers: Record<string, string> = { "Content-Type": "application/json" };
+      if (bridgeApiKey) headers.Authorization = `Bearer ${bridgeApiKey}`;
+      return fetch(`${bridgeUrl}${path}`, { method: "POST", headers, body: JSON.stringify(body) });
     };
 
     // ------------------------------------------------------------------
