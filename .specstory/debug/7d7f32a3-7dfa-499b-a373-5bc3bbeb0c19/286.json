@@ -1,0 +1,26 @@
+{
+  "agentId": "adabf466a1a877701",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "716\t      .catch((err) =\u003e {\n717\t        logger.error({ err }, \"startup heartbeat recovery failed\");\n718\t      });\n719\t    const scheduler = createNodeScheduler();\n720\t    scheduler.every(\"heartbeat\", config.heartbeatSchedulerIntervalMs, async () =\u003e {\n721\t      void heartbeat\n722\t        .tickTimers(new Date())\n723\t        .then((result) =\u003e {\n724\t          if (result.enqueued \u003e 0) {\n725\t            logger.info({ ...result }, \"heartbeat timer tick enqueued runs\");",
+        "tool_use_id": "toolu_01THBiKzSpqFGp4fygNvSEaA",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "70d53f18-617f-48ef-91c3-5b0e771f21af",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "70d53f18-617f-48ef-91c3-5b0e771f21af",
+  "timestamp": "2026-04-30T14:50:46.411Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "54aa3abb-caaf-4f01-871d-6c9ef6f4327e",
+  "version": "2.1.123"
+}

@@ -1,0 +1,61 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "signature": "EvoDClsIDRgCKkC6y1OhH+5Y8XBXVicW3id4YGGLPX26HeFBLwzmMlnwo7BvTz1VWGtRwLkN5in/8k+GNjdfaiDNCoWdpU7ylzGWMhFjbGF1ZGUtc29ubmV0LTQtNjgAEgy47CmAScKT1ScpxQoaDGGw04dZA3tiz7KwfSIwiYXJeHXFEkTxkgvnrj1Y4x88EmWlx+zs9tRRubK38N3/pYrH7hL/8HZZEHM2Kx68KswCgZSmof+Oe+ySt2WmlmjgnULJt1AKjFIUWV8cAXlbmQqt/z0BABRdyBOqAYhMfOTzmbDl4sq9A6xf1L1d8zuEhrlci1AzqUzl6Dz9LuH3r82jyQu6rLljWh+WCAAudbYLvDXhLMqPRlBbPj5tekOjwCskHYFkacmt2R2qfBI8tIc9IRkTNppOy9p015fKYetaI4S/DkC6aEp7VqIv/PPngurwf5WyChCjD7CGvofZ2KkyLEyM2+SnYVwB+o7i5D66Ue1kZFsk+3jAmgpufq+KnmFO7c3w2IrhzMvFhnlH+QsGIJjvnWgWnGLeHITbxcqPCcjIhrBo6y1LNN+Z9MtC2KEJk3dcrX9sAQCOsERSSnZfo5yRTjgDcGZGTgKK0e06Mqv3hB5CiZB+YCKU1pmPQeVeX0y2UZjBQ3fYgXVZkl2w26SVE54rmWg03dEYAQ==",
+        "thinking": "Now let me read more files to understand what I need:\n1. The constants.ts to understand the STORAGE_PROVIDERS\n2. The packages/db/src/index.ts to understand exports\n3. The adapter-utils server-utils.ts to understand the runChildProcess signature\n4. The server/src/index.ts to understand the scheduler/setInterval setup",
+        "type": "thinking"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01ThwiqtuyedXuJYfq3gbJfT",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 4051
+      },
+      "cache_creation_input_tokens": 4051,
+      "cache_read_input_tokens": 61971,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 4051
+          },
+          "cache_creation_input_tokens": 4051,
+          "cache_read_input_tokens": 61971,
+          "input_tokens": 1,
+          "output_tokens": 414,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 414,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "02faf32e-5384-420f-9374-13a7bf8d507c",
+  "requestId": "req_011Caa8zWd1ytMSAxr4avtdn",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "timestamp": "2026-04-30T14:47:35.036Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "5a8fd154-5dd0-4cdc-8d21-f0efc141a1cf",
+  "version": "2.1.123"
+}

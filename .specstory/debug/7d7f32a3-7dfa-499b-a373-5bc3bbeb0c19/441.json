@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "540\t    return null;\n541\t  }\n542\t}\n543\t\n544\tasync function ensureManagedProjectWorkspace(input: {\n545\t  companyId: string;\n546\t  projectId: string;\n547\t  repoUrl: string | null;\n548\t}): Promise\u003c{ cwd: string; warning: string | null }\u003e {\n549\t  const cwd = resolveManagedProjectWorkspaceDir({\n550\t    companyId: input.companyId,\n551\t    projectId: input.projectId,\n552\t    repoName: deriveRepoNameFromRepoUrl(input.repoUrl),\n553\t  });\n554\t  await fs.mkdir(path.dirname(cwd), { recursive: true });\n555\t  const stats = await fs.stat(cwd).catch(() =\u003e null);\n556\t\n557\t  if (!input.repoUrl) {\n558\t    if (!stats) {\n559\t      await fs.mkdir(cwd, { recursive: true });\n560\t    }\n561\t    return { cwd, warning: null };\n562\t  }\n563\t\n564\t  const gitDirExists = await fs\n565\t    .stat(path.resolve(cwd, \".git\"))\n566\t    .then((entry) =\u003e entry.isDirectory())\n567\t    .catch(() =\u003e false);\n568\t  if (gitDirExists) {\n569\t    return { cwd, warning: null };\n570\t  }\n571\t\n572\t  if (stats) {\n573\t    const entries = await fs.readdir(cwd).catch(() =\u003e []);\n574\t    if (entries.length \u003e 0) {\n575\t      return {\n576\t        cwd,\n577\t        warning: `Managed workspace path \"${cwd}\" already exists but is not a git checkout. Using it as-is.`,\n578\t      };\n579\t    }\n580\t    await fs.rm(cwd, { recursive: true, force: true });\n581\t  }\n582\t\n583\t  try {\n584\t    await execFile(\"git\", [\"clone\", input.repoUrl, cwd], {\n585\t      env: sanitizeRuntimeServiceBaseEnv(process.env),\n586\t      timeout: MANAGED_WORKSPACE_GIT_CLONE_TIMEOUT_MS,\n587\t    });\n588\t    return { cwd, warning: null };\n589\t  } catch (error) {",
+        "tool_use_id": "toolu_01HutM8EafumeAoVYBYeViFP",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "0e9bc460-ffcb-40d9-aad4-a4ce2cdf2fcf",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "0e9bc460-ffcb-40d9-aad4-a4ce2cdf2fcf",
+  "timestamp": "2026-04-30T14:52:17.867Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "c40d5b49-2efa-4784-89a8-383275301de4",
+  "version": "2.1.123"
+}

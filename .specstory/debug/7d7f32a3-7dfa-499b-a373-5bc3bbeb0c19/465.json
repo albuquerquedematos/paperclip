@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { createHash } from \"node:crypto\";\n2\timport { promises as fs } from \"node:fs\";\n3\timport path from \"node:path\";\n4\timport { fileURLToPath } from \"node:url\";\n5\timport { and, asc, eq } from \"drizzle-orm\";\n6\timport type { Db } from \"@paperclipai/db\";\n7\timport { companies, companySkills } from \"@paperclipai/db\";\n8\timport { readPaperclipSkillSyncPreference } from \"@paperclipai/adapter-utils/server-utils\";\n9\timport type { PaperclipSkillEntry } from \"@paperclipai/adapter-utils/server-utils\";\n10\timport type {\n11\t  CompanySkill,\n12\t  CompanySkillCreateRequest,\n13\t  CompanySkillCompatibility,\n14\t  CompanySkillDetail,\n15\t  CompanySkillFileDetail,\n16\t  CompanySkillFileInventoryEntry,\n17\t  CompanySkillImportResult,\n18\t  CompanySkillListItem,\n19\t  CompanySkillProjectScanConflict,\n20\t  CompanySkillProjectScanRequest,\n21\t  CompanySkillProjectScanResult,\n22\t  CompanySkillProjectScanSkipped,\n23\t  CompanySkillSourceBadge,\n24\t  CompanySkillSourceType,\n25\t  CompanySkillTrustLevel,\n26\t  CompanySkillUpdateStatus,\n27\t  CompanySkillUsageAgent,\n28\t} from \"@paperclipai/shared\";\n29\timport { normalizeAgentUrlKey } from \"@paperclipai/shared\";\n30\timport { resolvePaperclipInstanceRoot } from \"../home-paths.js\";",
+        "tool_use_id": "toolu_01PyUz6ZtUuRD3zbQPwUQCLw",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "ed810551-bd55-4db8-83e2-512d16dc6938",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "ed810551-bd55-4db8-83e2-512d16dc6938",
+  "timestamp": "2026-04-30T14:52:30.433Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "8d5d2adb-d1d2-4658-a7de-730a5edb1a25",
+  "version": "2.1.123"
+}

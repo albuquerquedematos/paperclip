@@ -1,0 +1,61 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "text": "Now confirm only pre-existing errors remain:",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01Fd36srPGo9Mb7E7MaAKrbk",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 268
+      },
+      "cache_creation_input_tokens": 268,
+      "cache_read_input_tokens": 65310,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 268
+          },
+          "cache_creation_input_tokens": 268,
+          "cache_read_input_tokens": 65310,
+          "input_tokens": 1,
+          "output_tokens": 171,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 171,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "ca2f3c76-a7a8-4071-9a97-b09d8a3825ce",
+  "requestId": "req_011CaaHGqZvacXfNR5X9nvN2",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "timestamp": "2026-04-30T16:36:09.340Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "5965a009-5008-4ff0-935c-502440fdbb4e",
+  "version": "2.1.123"
+}

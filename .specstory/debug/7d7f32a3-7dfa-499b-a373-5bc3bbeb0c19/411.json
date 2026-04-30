@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "140\t  const normalized = skillName.trim().toLowerCase();\n141\t  if (\n142\t    normalized !== \"paperclip\" \u0026\u0026\n143\t    normalized !== \"paperclip-create-agent\" \u0026\u0026\n144\t    normalized !== \"paperclip-create-plugin\" \u0026\u0026\n145\t    normalized !== \"paperclip-converting-plans-to-tasks\" \u0026\u0026\n146\t    normalized !== \"para-memory-files\"\n147\t  )\n148\t    return null;\n149\t  const moduleDir = path.dirname(fileURLToPath(import.meta.url));\n150\t  const candidates = [\n151\t    path.resolve(moduleDir, \"../../skills\", normalized, \"SKILL.md\"), // published: dist/routes/ -\u003e \u003cpkg\u003e/skills/\n152\t    path.resolve(process.cwd(), \"skills\", normalized, \"SKILL.md\"), // cwd (e.g. monorepo root)\n153\t    path.resolve(moduleDir, \"../../../skills\", normalized, \"SKILL.md\") // dev: src/routes/ -\u003e repo root/skills/\n154\t  ];\n155\t  for (const skillPath of candidates) {\n156\t    try {\n157\t      return fs.readFileSync(skillPath, \"utf8\");\n158\t    } catch {\n159\t      // Continue to next candidate.\n160\t    }\n161\t  }\n162\t  return null;\n163\t}\n164\t\n165\t/** Resolve the Paperclip repo skills directory (built-in / managed skills). */\n166\tfunction resolvePaperclipSkillsDir(): string | null {\n167\t  const moduleDir = path.dirname(fileURLToPath(import.meta.url));\n168\t  const candidates = [\n169\t    path.resolve(moduleDir, \"../../skills\"),         // published\n170\t    path.resolve(process.cwd(), \"skills\"),           // cwd (monorepo root)\n171\t    path.resolve(moduleDir, \"../../../skills\"),       // dev\n172\t  ];\n173\t  for (const candidate of candidates) {\n174\t    try {\n175\t      if (fs.statSync(candidate).isDirectory()) return candidate;\n176\t    } catch { /* skip */ }\n177\t  }\n178\t  return null;\n179\t}\n180\t\n181\t/** Parse YAML frontmatter from a SKILL.md file to extract the description. */\n182\tfunction parseSkillFrontmatter(markdown: string): { description: string } {\n183\t  const match = markdown.match(/^---\\n([\\s\\S]*?)\\n---/);\n184\t  if (!match) return { description: \"\" };\n185\t  const yaml = match[1];\n186\t  // Extract description — handles both single-line and multi-line YAML values\n187\t  const descMatch = yaml.match(\n188\t    /^description:\\s*(?:\u003e\\s*\\n((?:\\s{2,}[^\\n]*\\n?)+)|[|]\\s*\\n((?:\\s{2,}[^\\n]*\\n?)+)|[\"']?(.*?)[\"']?\\s*$)/m\n189\t  );\n190\t  if (!descMatch) return { description: \"\" };\n191\t  const raw = descMatch[1] ?? descMatch[2] ?? descMatch[3] ?? \"\";\n192\t  return {\n193\t    description: raw\n194\t      .split(\"\\n\")\n195\t      .map((l: string) =\u003e l.trim())\n196\t      .filter(Boolean)\n197\t      .join(\" \")\n198\t      .trim(),\n199\t  };\n200\t}\n201\t\n202\tinterface AvailableSkill {\n203\t  name: string;\n204\t  description: string;\n205\t  isPaperclipManaged: boolean;\n206\t}\n207\t\n208\t/** Discover all available Claude Code skills from ~/.claude/skills/. */\n209\tfunction listAvailableSkills(): AvailableSkill[] {\n210\t  const homeDir = process.env.HOME || process.env.USERPROFILE || \"\";\n211\t  const claudeSkillsDir = path.join(homeDir, \".claude\", \"skills\");\n212\t  const paperclipSkillsDir = resolvePaperclipSkillsDir();\n213\t\n214\t  // Build set of Paperclip-managed skill names\n215\t  const paperclipSkillNames = new Set\u003cstring\u003e();\n216\t  if (paperclipSkillsDir) {\n217\t    try {\n218\t      for (const entry of fs.readdirSync(paperclipSkillsDir, { withFileTypes: true })) {\n219\t        if (entry.isDirectory()) paperclipSkillNames.add(entry.name);\n220\t      }\n221\t    } catch { /* skip */ }\n222\t  }\n223\t\n224\t  const skills: AvailableSkill[] = [];\n225\t\n226\t  try {\n227\t    const entries = fs.readdirSync(claudeSkillsDir, { withFileTypes: true });\n228\t    for (const entry of entries) {\n229\t      if (!entry.isDirectory() \u0026\u0026 !entry.isSymbolicLink()) continue;\n230\t      if (entry.name.startsWith(\".\")) continue;\n231\t      const skillMdPath = path.join(claudeSkillsDir, entry.name, \"SKILL.md\");\n232\t      let description = \"\";\n233\t      try {\n234\t        const md = fs.readFileSync(skillMdPath, \"utf8\");\n235\t        description = parseSkillFrontmatter(md).description;\n236\t      } catch { /* no SKILL.md or unreadable */ }\n237\t      skills.push({\n238\t        name: entry.name,\n239\t        description,",
+        "tool_use_id": "toolu_01Va116C8QsvH5oBRxvboQTP",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "3c12e18e-d636-4603-bea6-53ab4c66278e",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "3c12e18e-d636-4603-bea6-53ab4c66278e",
+  "timestamp": "2026-04-30T14:52:05.020Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "68f379ed-b6f3-46ec-8ecc-9b19a47bc873",
+  "version": "2.1.123"
+}

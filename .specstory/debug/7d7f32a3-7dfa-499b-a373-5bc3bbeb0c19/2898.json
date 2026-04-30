@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "1700\t      spentMonthlyCents: 0,\n1701\t      lastHeartbeatAt: null,\n1702\t    });\n1703\t    const agent = await materializeDefaultInstructionsBundleForNewAgent(createdAgent, instructionsBundle);\n1704\t\n1705\t    let approval: Awaited\u003cReturnType\u003ctypeof approvalsSvc.getById\u003e\u003e | null = null;\n1706\t    const actor = getActorInfo(ctx);\n1707\t\n1708\t    if (requiresApproval) {\n1709\t      const requestedAdapterType = normalizedHireInput.adapterType ?? agent.adapterType;\n1710\t      const requestedAdapterConfig =\n1711\t        redactEventPayload(\n1712\t          (agent.adapterConfig ?? normalizedHireInput.adapterConfig) as Record\u003cstring, unknown\u003e,\n1713\t        ) ?? {};\n1714\t      const requestedRuntimeConfig =\n1715\t        redactEventPayload(\n1716\t          (normalizedHireInput.runtimeConfig ?? agent.runtimeConfig) as Record\u003cstring, unknown\u003e,\n1717\t        ) ?? {};\n1718\t      const requestedMetadata =\n1719\t        redactEventPayload(\n1720\t          ((normalizedHireInput.metadata ?? agent.metadata ?? {}) as Record\u003cstring, unknown\u003e),\n1721\t        ) ?? {};\n1722\t      approval = await approvalsSvc.create(companyId, {\n1723\t        type: \"hire_agent\",\n1724\t        requestedByAgentId: actor.actorType === \"agent\" ? actor.actorId : null,\n1725\t        requestedByUserId: actor.actorType === \"user\" ? actor.actorId : null,\n1726\t        status: \"pending\",\n1727\t        payload: {\n1728\t          name: normalizedHireInput.name,\n1729\t          role: normalizedHireInput.role,\n1730\t          title: normalizedHireInput.title ?? null,\n1731\t          icon: normalizedHireInput.icon ?? null,\n1732\t          reportsTo: normalizedHireInput.reportsTo ?? null,\n1733\t          capabilities: normalizedHireInput.capabilities ?? null,\n1734\t          adapterType: requestedAdapterType,\n1735\t          adapterConfig: requestedAdapterConfig,\n1736\t          runtimeConfig: requestedRuntimeConfig,\n1737\t          budgetMonthlyCents:\n1738\t            typeof normalizedHireInput.budgetMonthlyCents === \"number\"\n1739\t              ? normalizedHireInput.budgetMonthlyCents\n1740\t              : agent.budgetMonthlyCents,\n1741\t          desiredSkills: desiredSkillAssignment.desiredSkills,\n1742\t          metadata: requestedMetadata,\n1743\t          agentId: agent.id,\n1744\t          requestedByAgentId: actor.actorType === \"agent\" ? actor.actorId : null,",
+        "tool_use_id": "toolu_014mT1KEBuBTef6MyJrvZtux",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "709a9c24-7961-41e4-9095-aacfc9ab9761",
+  "promptId": "ba96a81e-2351-4b03-969f-bc172383cdd1",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "709a9c24-7961-41e4-9095-aacfc9ab9761",
+  "timestamp": "2026-04-30T16:35:50.150Z",
+  "toolUseResult": {
+    "file": {
+      "content": "      spentMonthlyCents: 0,\n      lastHeartbeatAt: null,\n    });\n    const agent = await materializeDefaultInstructionsBundleForNewAgent(createdAgent, instructionsBundle);\n\n    let approval: Awaited\u003cReturnType\u003ctypeof approvalsSvc.getById\u003e\u003e | null = null;\n    const actor = getActorInfo(ctx);\n\n    if (requiresApproval) {\n      const requestedAdapterType = normalizedHireInput.adapterType ?? agent.adapterType;\n      const requestedAdapterConfig =\n        redactEventPayload(\n          (agent.adapterConfig ?? normalizedHireInput.adapterConfig) as Record\u003cstring, unknown\u003e,\n        ) ?? {};\n      const requestedRuntimeConfig =\n        redactEventPayload(\n          (normalizedHireInput.runtimeConfig ?? agent.runtimeConfig) as Record\u003cstring, unknown\u003e,\n        ) ?? {};\n      const requestedMetadata =\n        redactEventPayload(\n          ((normalizedHireInput.metadata ?? agent.metadata ?? {}) as Record\u003cstring, unknown\u003e),\n        ) ?? {};\n      approval = await approvalsSvc.create(companyId, {\n        type: \"hire_agent\",\n        requestedByAgentId: actor.actorType === \"agent\" ? actor.actorId : null,\n        requestedByUserId: actor.actorType === \"user\" ? actor.actorId : null,\n        status: \"pending\",\n        payload: {\n          name: normalizedHireInput.name,\n          role: normalizedHireInput.role,\n          title: normalizedHireInput.title ?? null,\n          icon: normalizedHireInput.icon ?? null,\n          reportsTo: normalizedHireInput.reportsTo ?? null,\n          capabilities: normalizedHireInput.capabilities ?? null,\n          adapterType: requestedAdapterType,\n          adapterConfig: requestedAdapterConfig,\n          runtimeConfig: requestedRuntimeConfig,\n          budgetMonthlyCents:\n            typeof normalizedHireInput.budgetMonthlyCents === \"number\"\n              ? normalizedHireInput.budgetMonthlyCents\n              : agent.budgetMonthlyCents,\n          desiredSkills: desiredSkillAssignment.desiredSkills,\n          metadata: requestedMetadata,\n          agentId: agent.id,\n          requestedByAgentId: actor.actorType === \"agent\" ? actor.actorId : null,",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/agents.ts",
+      "numLines": 45,
+      "startLine": 1700,
+      "totalLines": 2972
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "a6529a24-6f2a-4645-afe2-e0b662612c02",
+  "version": "2.1.123"
+}

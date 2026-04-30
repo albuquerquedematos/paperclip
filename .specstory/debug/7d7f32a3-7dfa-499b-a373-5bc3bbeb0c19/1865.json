@@ -1,0 +1,28 @@
+{
+  "agentId": "a4ad4aa75ca105b41",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "\u003ctool_use_error\u003eInputValidationError: Read failed due to the following issue:\nThe parameter `offset` type is expected as `number` but provided as `string`\u003c/tool_use_error\u003e",
+        "is_error": true,
+        "tool_use_id": "toolu_01HYXcHYSbj58cSDnn1uCy4b",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "89409dd8-1279-449b-a5c5-79755fc2cfee",
+  "promptId": "e14e6903-86b2-440b-8601-db2551c5adc3",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "89409dd8-1279-449b-a5c5-79755fc2cfee",
+  "timestamp": "2026-04-30T15:21:13.632Z",
+  "toolUseResult": "InputValidationError: [\n  {\n    \"expected\": \"number\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"offset\"\n    ],\n    \"message\": \"Invalid input: expected number, received string\"\n  }\n]",
+  "type": "user",
+  "userType": "external",
+  "uuid": "d533f135-e4ff-4244-99b7-c2022bbbef4e",
+  "version": "2.1.123"
+}

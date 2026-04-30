@@ -1,0 +1,26 @@
+{
+  "agentId": "a6710083ef9195699",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { spawn, type ChildProcess } from \"node:child_process\";\n2\timport { constants as fsConstants, promises as fs, type Dirent } from \"node:fs\";\n3\timport path from \"node:path\";\n4\timport { buildSshSpawnTarget, type SshRemoteExecutionSpec } from \"./ssh.js\";\n5\timport type {\n6\t  AdapterSkillEntry,\n7\t  AdapterSkillSnapshot,\n8\t} from \"./types.js\";\n9\t\n10\texport interface RunProcessResult {\n11\t  exitCode: number | null;\n12\t  signal: string | null;\n13\t  timedOut: boolean;\n14\t  stdout: string;\n15\t  stderr: string;\n16\t  pid: number | null;\n17\t  startedAt: string | null;\n18\t}\n19\t\n20\texport interface TerminalResultCleanupOptions {\n21\t  hasTerminalResult: (output: { stdout: string; stderr: string }) =\u003e boolean;\n22\t  graceMs?: number;\n23\t}\n24\t\n25\tinterface RunningProcess {\n26\t  child: ChildProcess;\n27\t  graceSec: number;\n28\t  processGroupId: number | null;\n29\t}\n30\t\n31\tinterface SpawnTarget {\n32\t  command: string;\n33\t  args: string[];\n34\t  cwd?: string;\n35\t  cleanup?: () =\u003e Promise\u003cvoid\u003e;\n36\t}\n37\t\n38\ttype RemoteExecutionSpec = SshRemoteExecutionSpec;\n39\t\n40\ttype ChildProcessWithEvents = ChildProcess \u0026 {\n41\t  on(event: \"error\", listener: (err: Error) =\u003e void): ChildProcess;\n42\t  on(\n43\t    event: \"exit\",\n44\t    listener: (code: number | null, signal: NodeJS.Signals | null) =\u003e void,\n45\t  ): ChildProcess;\n46\t  on(\n47\t    event: \"close\",\n48\t    listener: (code: number | null, signal: NodeJS.Signals | null) =\u003e void,\n49\t  ): ChildProcess;\n50\t};",
+        "tool_use_id": "toolu_01RMEaTSRV9oz1CvicrFmRTc",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "4abb8681-ad0e-41e5-b4ac-5ed1d86fb4f9",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "4abb8681-ad0e-41e5-b4ac-5ed1d86fb4f9",
+  "timestamp": "2026-04-30T14:51:45.406Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "93273a20-1f3d-4c54-928e-c78b5a83c851",
+  "version": "2.1.123"
+}

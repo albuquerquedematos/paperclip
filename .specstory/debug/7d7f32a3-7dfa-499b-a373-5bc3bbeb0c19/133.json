@@ -1,0 +1,35 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "60\t    const value = runtimeEnv[key];\n61\t    if (typeof value !== \"string\" || value.length === 0) continue;\n62\t    merged[key] = value;\n63\t  }\n64\t\n65\t  const resolvedCommand = options.resolvedCommand?.trim();\n66\t  if (resolvedCommand) {\n67\t    merged[options.resolvedCommandEnvKey ?? \"PAPERCLIP_RESOLVED_COMMAND\"] = resolvedCommand;\n68\t  }\n69\t\n70\t  return redactEnvForLogs(merged);\n71\t}\n72\t\n73\t// Re-export runChildProcess with the server's pino logger wired in.\n74\timport type { RunProcessResult } from \"@paperclipai/adapter-utils/server-utils\";\n75\tconst _runChildProcess = serverUtils.runChildProcess;\n76\t\n77\texport async function runChildProcess(\n78\t  runId: string,\n79\t  command: string,\n80\t  args: string[],\n81\t  opts: {\n82\t    cwd: string;\n83\t    env: Record\u003cstring, string\u003e;\n84\t    timeoutSec: number;\n85\t    graceSec: number;\n86\t    onLog: (stream: \"stdout\" | \"stderr\", chunk: string) =\u003e Promise\u003cvoid\u003e;\n87\t  },\n88\t): Promise\u003cRunProcessResult\u003e {\n89\t  return _runChildProcess(runId, command, args, {\n90\t    ...opts,\n91\t    onLogError: (err, id, msg) =\u003e logger.warn({ err, runId: id }, msg),\n92\t  });\n93\t}\n94\t",
+        "tool_use_id": "toolu_01KRwLtwaKceRLosbeQyP2eL",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "6390bc50-cdcb-4407-bfcf-6fce5fbd0d6d",
+  "promptId": "721340db-55e4-4f08-9c81-1d2e399ba682",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "6390bc50-cdcb-4407-bfcf-6fce5fbd0d6d",
+  "timestamp": "2026-04-30T13:29:38.114Z",
+  "toolUseResult": {
+    "file": {
+      "content": "    const value = runtimeEnv[key];\n    if (typeof value !== \"string\" || value.length === 0) continue;\n    merged[key] = value;\n  }\n\n  const resolvedCommand = options.resolvedCommand?.trim();\n  if (resolvedCommand) {\n    merged[options.resolvedCommandEnvKey ?? \"PAPERCLIP_RESOLVED_COMMAND\"] = resolvedCommand;\n  }\n\n  return redactEnvForLogs(merged);\n}\n\n// Re-export runChildProcess with the server's pino logger wired in.\nimport type { RunProcessResult } from \"@paperclipai/adapter-utils/server-utils\";\nconst _runChildProcess = serverUtils.runChildProcess;\n\nexport async function runChildProcess(\n  runId: string,\n  command: string,\n  args: string[],\n  opts: {\n    cwd: string;\n    env: Record\u003cstring, string\u003e;\n    timeoutSec: number;\n    graceSec: number;\n    onLog: (stream: \"stdout\" | \"stderr\", chunk: string) =\u003e Promise\u003cvoid\u003e;\n  },\n): Promise\u003cRunProcessResult\u003e {\n  return _runChildProcess(runId, command, args, {\n    ...opts,\n    onLogError: (err, id, msg) =\u003e logger.warn({ err, runId: id }, msg),\n  });\n}\n",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/adapters/utils.ts",
+      "numLines": 35,
+      "startLine": 60,
+      "totalLines": 94
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "f52840b9-9f68-48fd-b1e2-7dfdeffa725e",
+  "version": "2.1.123"
+}

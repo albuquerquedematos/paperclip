@@ -1,0 +1,26 @@
+{
+  "agentId": "acedaf1c4054eec72",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { createHash } from \"node:crypto\";\n2\timport type { Request, RequestHandler } from \"express\";\n3\timport { and, eq, isNull } from \"drizzle-orm\";\n4\timport type { Db } from \"@paperclipai/db\";\n5\timport { agentApiKeys, agents, companyMemberships, instanceUserRoles } from \"@paperclipai/db\";\n6\timport { verifyLocalAgentJwt } from \"../agent-auth-jwt.js\";\n7\timport type { DeploymentMode } from \"@paperclipai/shared\";\n8\timport type { BetterAuthSessionResult } from \"../auth/better-auth.js\";\n9\timport { logger } from \"./logger.js\";\n10\timport { boardAuthService } from \"../services/board-auth.js\";\n11\t\n12\tfunction hashToken(token: string) {\n13\t  return createHash(\"sha256\").update(token).digest(\"hex\");\n14\t}\n15\t\n16\tinterface ActorMiddlewareOptions {\n17\t  deploymentMode: DeploymentMode;\n18\t  resolveSession?: (req: Request) =\u003e Promise\u003cBetterAuthSessionResult | null\u003e;\n19\t}\n20\t\n21\texport function actorMiddleware(db: Db, opts: ActorMiddlewareOptions): RequestHandler {\n22\t  const boardAuth = boardAuthService(db);\n23\t  return async (req, _res, next) =\u003e {\n24\t    req.actor =\n25\t      opts.deploymentMode === \"local_trusted\"\n26\t        ? {\n27\t            type: \"board\",\n28\t            userId: \"local-board\",\n29\t            userName: \"Local Board\",\n30\t            userEmail: null,\n31\t            isInstanceAdmin: true,\n32\t            source: \"local_implicit\",\n33\t          }\n34\t        : { type: \"none\", source: \"none\" };\n35\t\n36\t    const runIdHeader = req.header(\"x-paperclip-run-id\");\n37\t\n38\t    const authHeader = req.header(\"authorization\");\n39\t    if (!authHeader?.toLowerCase().startsWith(\"bearer \")) {\n40\t      if (opts.deploymentMode === \"authenticated\" \u0026\u0026 opts.resolveSession) {\n41\t        let session: BetterAuthSessionResult | null = null;\n42\t        try {\n43\t          session = await opts.resolveSession(req);\n44\t        } catch (err) {\n45\t          logger.warn(\n46\t            { err, method: req.method, url: req.originalUrl },\n47\t            \"Failed to resolve auth session from request headers\",\n48\t          );\n49\t        }\n50\t        if (session?.user?.id) {\n51\t          const userId = session.user.id;\n52\t          const [roleRow, memberships] = await Promise.all([\n53\t            db\n54\t              .select({ id: instanceUserRoles.id })\n55\t              .from(instanceUserRoles)\n56\t              .where(and(eq(instanceUserRoles.userId, userId), eq(instanceUserRoles.role, \"instance_admin\")))\n57\t              .then((rows) =\u003e rows[0] ?? null),\n58\t            db\n59\t              .select({\n60\t                companyId: companyMemberships.companyId,\n61\t                membershipRole: companyMemberships.membershipRole,\n62\t                status: companyMemberships.status,\n63\t              })\n64\t              .from(companyMemberships)\n65\t              .where(\n66\t                and(\n67\t                  eq(companyMemberships.principalType, \"user\"),\n68\t                  eq(companyMemberships.principalId, userId),\n69\t                  eq(companyMemberships.status, \"active\"),\n70\t                ),\n71\t              ),\n72\t          ]);\n73\t          req.actor = {\n74\t            type: \"board\",\n75\t            userId,\n76\t            userName: session.user.name ?? null,\n77\t            userEmail: session.user.email ?? null,\n78\t            companyIds: memberships.map((row) =\u003e row.companyId),\n79\t            memberships,\n80\t            isInstanceAdmin: Boolean(roleRow),",
+        "tool_use_id": "toolu_014DwDB2YyBF5rMKX1zsWoEA",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "1fdb0cd1-654a-44e0-81dc-8753a0481bd1",
+  "promptId": "41a5cab3-78a5-4305-8404-9daa35591aac",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "1fdb0cd1-654a-44e0-81dc-8753a0481bd1",
+  "timestamp": "2026-04-30T15:05:26.555Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "b3013aba-8119-45eb-80c7-5555e7d8d621",
+  "version": "2.1.123"
+}

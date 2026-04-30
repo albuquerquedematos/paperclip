@@ -1,0 +1,26 @@
+{
+  "agentId": "a63f4a588ad785603",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "2500\t          id: pluginWebhookDeliveries.id,\n2501\t          webhookKey: pluginWebhookDeliveries.webhookKey,\n2502\t          status: pluginWebhookDeliveries.status,\n2503\t          durationMs: pluginWebhookDeliveries.durationMs,\n2504\t          error: pluginWebhookDeliveries.error,\n2505\t          startedAt: pluginWebhookDeliveries.startedAt,\n2506\t          finishedAt: pluginWebhookDeliveries.finishedAt,\n2507\t          createdAt: pluginWebhookDeliveries.createdAt,\n2508\t        })\n2509\t        .from(pluginWebhookDeliveries)\n2510\t        .where(eq(pluginWebhookDeliveries.pluginId, plugin.id))\n2511\t        .orderBy(desc(pluginWebhookDeliveries.createdAt))\n2512\t        .limit(10);\n2513\t\n2514\t      recentWebhookDeliveries = deliveries.map((d) =\u003e ({\n2515\t        id: d.id,\n2516\t        webhookKey: d.webhookKey,\n2517\t        status: d.status,\n2518\t        durationMs: d.durationMs,\n2519\t        error: d.error,\n2520\t        startedAt: d.startedAt ? d.startedAt.toISOString() : null,\n2521\t        finishedAt: d.finishedAt ? d.finishedAt.toISOString() : null,\n2522\t        createdAt: d.createdAt.toISOString(),\n2523\t      }));\n2524\t    } catch {\n2525\t      // Webhook data unavailable — leave empty\n2526\t    }\n2527\t\n2528\t    // --- Health check (same logic as GET /health) ---\n2529\t    const checks: PluginHealthCheckResult[\"checks\"] = [];\n2530\t\n2531\t    checks.push({\n2532\t      name: \"registry\",\n2533\t      passed: true,\n2534\t      message: \"Plugin found in registry\",\n2535\t    });\n2536\t\n2537\t    const hasValidManifest = Boolean(plugin.manifestJson?.id);\n2538\t    checks.push({\n2539\t      name: \"manifest\",\n2540\t      passed: hasValidManifest,\n2541\t      message: hasValidManifest ? \"Manifest is valid\" : \"Manifest is invalid or missing\",\n2542\t    });\n2543\t\n2544\t    const isHealthy = plugin.status === \"ready\";\n2545\t    checks.push({\n2546\t      name: \"status\",\n2547\t      passed: isHealthy,\n2548\t      message: `Current status: ${plugin.status}`,\n2549\t    });\n2550\t\n2551\t    const hasNoError = !plugin.lastError;\n2552\t    if (!hasNoError) {\n2553\t      checks.push({\n2554\t        name: \"error_state\",\n2555\t        passed: false,\n2556\t        message: plugin.lastError ?? undefined,\n2557\t      });\n2558\t    }\n2559\t\n2560\t    const health: PluginHealthCheckResult = {\n2561\t      pluginId: plugin.id,\n2562\t      status: plugin.status,\n2563\t      healthy: isHealthy \u0026\u0026 hasValidManifest \u0026\u0026 hasNoError,\n2564\t      checks,\n2565\t      lastError: plugin.lastError ?? undefined,\n2566\t    };\n2567\t\n2568\t    res.json({\n2569\t      pluginId: plugin.id,\n2570\t      worker,\n2571\t      recentJobRuns,\n2572\t      recentWebhookDeliveries,\n2573\t      health,\n2574\t      checkedAt: new Date().toISOString(),\n2575\t    });\n2576\t  });\n2577\t\n2578\t  return router;\n2579\t}\n2580\t",
+        "tool_use_id": "toolu_0114YH5aEh6WA1thomotNzBP",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "d82b6c0e-c4c8-46a9-affb-ef7edbd4418f",
+  "promptId": "41a5cab3-78a5-4305-8404-9daa35591aac",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "d82b6c0e-c4c8-46a9-affb-ef7edbd4418f",
+  "timestamp": "2026-04-30T15:05:56.846Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "32a0b69c-5779-4be5-b25e-035adcce9002",
+  "version": "2.1.123"
+}

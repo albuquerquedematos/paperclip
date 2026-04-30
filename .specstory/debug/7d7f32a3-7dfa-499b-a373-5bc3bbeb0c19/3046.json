@@ -1,0 +1,28 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "/**\n * Main Cloudflare Worker entry point for the Paperclip API.\n *\n * This file:\n *   1. Creates a Hono app and mounts route definitions extracted from the\n *      server's Express routers via the express-router-bridge.\n *   2. Implements the first-run setup gate (redirects to /setup until KV flag is set).\n *   3. Handles Cloudflare Queues message batches (plugin job fanout, heartbeat dispatch).\n *   4. Handles Cloudflare Cron Triggers (heartbeat sweep, budget checks, DB backup).\n *   5. Re-exports all Durable Object and Workflow classes so Wrangler can\n *      register them -- they must be named exports from the Worker's main module.\n *\n * Routes skipped (use Node-only features -- left as 501 TODOs):\n *   - adapterRoutes       -- reads packages from disk\n *   - pluginRoutes        -- SSE, child processes, scoped plugin API\n *   - pluginUiStaticRoutes -- fs.readFileSync / res.sendFile\n *   - companySkillRoutes  -- local filesystem (CF version: cf-company-skills.ts)\n *   - accessRoutes        -- reads bundled SKILL.md files from disk\n *   - instanceDatabaseBackupRoutes -- pg_dump\n *\n * Architecture note: Hono route registration happens once at module load time.\n * Per-request dependencies (db, storage, actor) are resolved inside each route\n * handler by reading the Env binding from the Hono context. This avoids the\n * anti-pattern of re-registering routes on every request.\n */\n\nimport { Hono } from \"hono\";\nimport { createSetupApp } from \"./setup.js\";\nimport { bootCloudflare } from \"../boot.js\";\nimport { SidecarClient } from \"../sidecar-client.js\";\nimport { CfCompanySkillsService } from \"../services/cf-company-skills.js\";\nimport { CfAgentInstructionsService } from \"../services/cf-agent-instructions.js\";\nimport { createHyperdriveDb } from \"../db/hyperdrive.js\";\nimport { R2Provider } from \"../storage/r2-provider.js\";\nimport { createCfStorageService } from \"../storage/cf-storage-service.js\";\nimport { extractRoutesFromRouter } from \"../http/express-router-bridge.js\";\nimport { mountRoutes } from \"../http/hono-adapter.js\";\nimport { resolveActorFromRequest } from \"../auth/resolve-actor.js\";\nimport { runHeartbeatSweep } from \"../cron/heartbeat-sweep.js\";\nimport { mountUploadRoutes } from \"../routes/cf-uploads.js\";\nimport type { RouteDefinition } from \"../../../server/src/http/types.js\";\n\n// Server-side route factories (transport-agnostic, no Node-only deps at factory\n// call time -- Node deps are only invoked inside individual handler closures).\nimport { companyRoutes } from \"../../../server/src/routes/companies.js\";\nimport { agentRoutes } from \"../../../server/src/routes/agents.js\";\nimport { assetRoutes } from \"../../../server/src/routes/assets.js\";\nimport { projectRoutes } from \"../../../server/src/routes/projects.js\";\nimport { issueRoutes } from \"../../../server/src/routes/issues.js\";\nimport { issueTreeControlRoutes } from \"../../../server/src/routes/issue-tree-control.js\";",
+        "is_error": false,
+        "tool_use_id": "toolu_01JRyrTSSj3icRjJCA4SsEso",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "0157803e-f206-4a1c-8e71-3e79e6e32a1c",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "0157803e-f206-4a1c-8e71-3e79e6e32a1c",
+  "timestamp": "2026-04-30T16:40:28.397Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "469988f8-5701-4fbf-948f-705c13138c40",
+  "version": "2.1.123"
+}

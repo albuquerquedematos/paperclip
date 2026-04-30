@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { execFile } from \"node:child_process\";\n2\timport { createHash } from \"node:crypto\";\n3\timport fs from \"node:fs/promises\";\n4\timport path from \"node:path\";\n5\timport { setTimeout as delay } from \"node:timers/promises\";\n6\timport { promisify } from \"node:util\";\n7\timport { resolvePaperclipInstanceRoot } from \"../home-paths.js\";\n8\t\n9\tconst execFileAsync = promisify(execFile);\n10\t",
+        "tool_use_id": "toolu_01DvG6eYgbxwu4HYBHNs6EC7",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "656ebf1a-d028-4085-aadc-0aa9dc889c76",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "656ebf1a-d028-4085-aadc-0aa9dc889c76",
+  "timestamp": "2026-04-30T14:56:00.413Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "cb0059e1-6865-4d02-a3b9-e3221fb02db3",
+  "version": "2.1.123"
+}

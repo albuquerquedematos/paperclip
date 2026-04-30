@@ -1,0 +1,27 @@
+{
+  "agentId": "ac82afa7422550819",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1178\t  router.get(\"/issues/:id/documents/:key\", expressHandler(getIssueDocument, deps));\n1179\t\n1180\t  router.put(\"/issues/:id/documents/:key\", validate(upsertIssueDocumentSchema), async (req, res) =\u003e {\n1181\t    const id = req.params.id as string;\n1182\t    const issue = await svc.getById(id);\n1183\t    if (!issue) {\n1184\t      res.status(404).json({ error: \"Issue not found\" });\n1185\t      return;\n1186\t    }\n1187\t    assertCompanyAccess(req, issue.companyId);\n1188\t    if (!(await assertAgentIssueMutationAllowed(req, res, issue))) return;\n1189\t    const keyParsed = issueDocumentKeySchema.safeParse(String(req.params.key ?? \"\").trim().toLowerCase());\n1190\t    if (!keyParsed.success) {\n1191\t      res.status(400).json({ error: \"Invalid document key\", details: keyParsed.error.issues });\n1192\t      return;\n1193\t    }\n1194\t\n1195\t    const actor = getActorInfo(req);\n1196\t    const referenceSummaryBefore = await issueReferencesSvc.listIssueReferenceSummary(issue.id);\n1197\t    const result = await documentsSvc.upsertIssueDocument({",
+        "tool_use_id": "toolu_01WzSf6AnjrpJeLTwsT38Qmv",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "34f248a5-cb7a-4fc9-b2e3-9bbe006cef7c",
+  "promptId": "dc405341-3479-47dd-8d57-3077b7af430f",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "34f248a5-cb7a-4fc9-b2e3-9bbe006cef7c",
+  "timestamp": "2026-04-30T15:30:49.492Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "5d0a965a-1170-420e-9680-47b897252f0e",
+  "version": "2.1.123"
+}

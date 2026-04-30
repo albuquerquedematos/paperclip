@@ -1,0 +1,26 @@
+{
+  "agentId": "aa8a93567f69d0116",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { Router } from \"express\";\n2\timport type { Db } from \"@paperclipai/db\";\n3\timport { createGoalSchema, updateGoalSchema } from \"@paperclipai/shared\";\n4\timport { trackGoalCreated } from \"@paperclipai/shared/telemetry\";\n5\timport { validate } from \"../middleware/validate.js\";\n6\timport { goalService, logActivity } from \"../services/index.js\";\n7\timport { assertCompanyAccess, getActorInfo } from \"./authz.js\";\n8\timport { getTelemetryClient } from \"../telemetry.js\";\n9\t\n10\texport function goalRoutes(db: Db) {\n11\t  const router = Router();\n12\t  const svc = goalService(db);\n13\t\n14\t  router.get(\"/companies/:companyId/goals\", async (req, res) =\u003e {\n15\t    const companyId = req.params.companyId as string;\n16\t    assertCompanyAccess(req, companyId);\n17\t    const result = await svc.list(companyId);\n18\t    res.json(result);\n19\t  });\n20\t\n21\t  router.get(\"/goals/:id\", async (req, res) =\u003e {\n22\t    const id = req.params.id as string;\n23\t    const goal = await svc.getById(id);\n24\t    if (!goal) {\n25\t      res.status(404).json({ error: \"Goal not found\" });\n26\t      return;\n27\t    }\n28\t    assertCompanyAccess(req, goal.companyId);\n29\t    res.json(goal);\n30\t  });\n31\t\n32\t  router.post(\"/companies/:companyId/goals\", validate(createGoalSchema), async (req, res) =\u003e {\n33\t    const companyId = req.params.companyId as string;\n34\t    assertCompanyAccess(req, companyId);\n35\t    const goal = await svc.create(companyId, req.body);\n36\t    const actor = getActorInfo(req);\n37\t    await logActivity(db, {\n38\t      companyId,\n39\t      actorType: actor.actorType,\n40\t      actorId: actor.actorId,\n41\t      agentId: actor.agentId,\n42\t      action: \"goal.created\",\n43\t      entityType: \"goal\",\n44\t      entityId: goal.id,\n45\t      details: { title: goal.title },\n46\t    });\n47\t    const telemetryClient = getTelemetryClient();\n48\t    if (telemetryClient) {\n49\t      trackGoalCreated(telemetryClient, { goalLevel: goal.level });\n50\t    }\n51\t    res.status(201).json(goal);\n52\t  });\n53\t\n54\t  router.patch(\"/goals/:id\", validate(updateGoalSchema), async (req, res) =\u003e {\n55\t    const id = req.params.id as string;\n56\t    const existing = await svc.getById(id);\n57\t    if (!existing) {\n58\t      res.status(404).json({ error: \"Goal not found\" });\n59\t      return;\n60\t    }\n61\t    assertCompanyAccess(req, existing.companyId);\n62\t    const goal = await svc.update(id, req.body);\n63\t    if (!goal) {\n64\t      res.status(404).json({ error: \"Goal not found\" });\n65\t      return;\n66\t    }\n67\t\n68\t    const actor = getActorInfo(req);\n69\t    await logActivity(db, {\n70\t      companyId: goal.companyId,\n71\t      actorType: actor.actorType,\n72\t      actorId: actor.actorId,\n73\t      agentId: actor.agentId,\n74\t      action: \"goal.updated\",\n75\t      entityType: \"goal\",\n76\t      entityId: goal.id,\n77\t      details: req.body,\n78\t    });\n79\t\n80\t    res.json(goal);\n81\t  });\n82\t\n83\t  router.delete(\"/goals/:id\", async (req, res) =\u003e {\n84\t    const id = req.params.id as string;\n85\t    const existing = await svc.getById(id);\n86\t    if (!existing) {\n87\t      res.status(404).json({ error: \"Goal not found\" });\n88\t      return;\n89\t    }\n90\t    assertCompanyAccess(req, existing.companyId);\n91\t    const goal = await svc.remove(id);\n92\t    if (!goal) {\n93\t      res.status(404).json({ error: \"Goal not found\" });\n94\t      return;\n95\t    }\n96\t\n97\t    const actor = getActorInfo(req);\n98\t    await logActivity(db, {\n99\t      companyId: goal.companyId,\n100\t      actorType: actor.actorType,\n101\t      actorId: actor.actorId,\n102\t      agentId: actor.agentId,\n103\t      action: \"goal.deleted\",\n104\t      entityType: \"goal\",\n105\t      entityId: goal.id,\n106\t    });\n107\t\n108\t    res.json(goal);\n109\t  });\n110\t\n111\t  return router;\n112\t}\n113\t",
+        "tool_use_id": "toolu_01FPL9y39Uvp1FQiAVCj4JTh",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "79f99d9c-4ac2-459e-a5fd-884d28e4c605",
+  "promptId": "41a5cab3-78a5-4305-8404-9daa35591aac",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "79f99d9c-4ac2-459e-a5fd-884d28e4c605",
+  "timestamp": "2026-04-30T15:04:51.910Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "1a478f9f-7eca-4da2-991e-1516a6c7bae6",
+  "version": "2.1.123"
+}

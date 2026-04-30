@@ -1,0 +1,26 @@
+{
+  "agentId": "a8fd5512baf043009",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "396\t    });\n397\t    return Response.json(company);\n398\t  };\n399\t\n400\t  const archiveCompany: Handler = async (ctx) =\u003e {\n401\t    assertBoard(ctx);\n402\t    const companyId = ctx.param(\"companyId\")!;\n403\t    assertCompanyAccess(ctx, companyId);\n404\t    const company = await svc.archive(companyId);\n405\t    if (!company) {\n406\t      return Response.json({ error: \"Company not found\" }, { status: 404 });\n407\t    }\n408\t    await logActivity(db, {\n409\t      companyId,\n410\t      actorType: \"user\",\n411\t      actorId: ctx.actor?.userId ?? \"board\",\n412\t      action: \"company.archived\",\n413\t      entityType: \"company\",\n414\t      entityId: companyId,\n415\t    });\n416\t    return Response.json(company);\n417\t  };\n418\t\n419\t  const deleteCompany: Handler = async (ctx) =\u003e {\n420\t    assertBoard(ctx);\n421\t    const companyId = ctx.param(\"companyId\")!;\n422\t    assertCompanyAccess(ctx, companyId);\n423\t    const company = await svc.remove(companyId);\n424\t    if (!company) {\n425\t      return Response.json({ error: \"Company not found\" }, { status: 404 });",
+        "tool_use_id": "toolu_01AR7XedLmDbduFEUzm6rkZj",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "4e5f4417-596d-4051-aecd-cb9b284aabee",
+  "promptId": "f70e47c2-d340-4417-9b6f-d01ec6a1d002",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "4e5f4417-596d-4051-aecd-cb9b284aabee",
+  "timestamp": "2026-04-30T15:16:52.050Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "2b1685b6-6167-45f9-ac94-5f8ff53568a4",
+  "version": "2.1.123"
+}

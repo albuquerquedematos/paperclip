@@ -1,0 +1,27 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "3595\t      dueAt: schedule.dueAt,\n3596\t      attempt: schedule.attempt,\n3597\t      maxAttempts: schedule.maxAttempts,\n3598\t    };\n3599\t  }\n3600\t\n3601\t  async function promoteDueScheduledRetries(now = new Date()) {\n3602\t    const dueRuns = await db\n3603\t      .select()\n3604\t      .from(heartbeatRuns)\n3605\t      .where(\n3606\t        and(\n3607\t          eq(heartbeatRuns.status, \"scheduled_retry\"),\n3608\t          lte(heartbeatRuns.scheduledRetryAt, now),\n3609\t        ),\n3610\t      )\n3611\t      .orderBy(asc(heartbeatRuns.scheduledRetryAt), asc(heartbeatRuns.createdAt), asc(heartbeatRuns.id))\n3612\t      .limit(50);\n3613\t\n3614\t    const promotedRunIds: string[] = [];\n3615\t\n3616\t    for (const dueRun of dueRuns) {\n3617\t      const dueRunIssueId = readNonEmptyString(parseObject(dueRun.contextSnapshot).issueId);\n3618\t      if (dueRunIssueId) {\n3619\t        const issue = await db\n3620\t          .select({\n3621\t            id: issues.id,\n3622\t            status: issues.status,\n3623\t            assigneeAgentId: issues.assigneeAgentId,\n3624\t            executionRunId: issues.executionRunId,\n3625\t          })\n3626\t          .from(issues)\n3627\t          .where(and(eq(issues.id, dueRunIssueId), eq(issues.companyId, dueRun.companyId)))\n3628\t          .then((rows) =\u003e rows[0] ?? null);\n3629\t\n3630\t        if (issue \u0026\u0026 (issue.assigneeAgentId !== dueRun.agentId || issue.status === \"cancelled\")) {\n3631\t          const issueCancelled = issue.status === \"cancelled\";\n3632\t          const reason = issueCancelled\n3633\t            ? \"Cancelled because the issue was cancelled before the scheduled retry became due\"\n3634\t            : \"Cancelled because the issue was reassigned before the scheduled retry became due\";",
+        "tool_use_id": "toolu_017wKic56yHuAyMv3mkgDyCS",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "f2aba4f6-e9a4-4393-93f5-d2c2f6b5624e",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "f2aba4f6-e9a4-4393-93f5-d2c2f6b5624e",
+  "timestamp": "2026-04-30T16:24:43.506Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "d5d25412-28a9-479a-9b4c-8e08aec3efae",
+  "version": "2.1.123"
+}

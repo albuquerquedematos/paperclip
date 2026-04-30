@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "1\t/**\n2\t * boot.ts — Cloudflare deployment boot sequence.\n3\t *\n4\t * Registers all Cloudflare-specific service implementations into the shared\n5\t * provider registries. Called once on first Worker request (or on every cold\n6\t * start — all registrations are idempotent Map.set calls).\n7\t *\n8\t * This is the only file in `packages/deploy-cloudflare/` that touches the\n9\t * server package's registry. Every other file in this package is self-contained.\n10\t *\n11\t * The import of `provider-registry` uses a workspace-relative path. Wrangler\n12\t * (esbuild) resolves it through the workspace symlink at bundle time, so no\n13\t * runtime module resolution occurs.\n14\t *\n15\t * NOTE: `server/src/storage/provider-registry.ts` must be free of Node-only\n16\t * imports (it currently is — it only imports types). If that changes, this\n17\t * import path will need to move to a standalone `@paperclipai/storage-core`\n18\t * package (tracked as an optional follow-up to PR #2).\n19\t */\n20\t\n21\timport { registerStorageProvider } from \"../../../server/src/storage/provider-registry.js\";\n22\timport { R2Provider } from \"./storage/r2-provider.js\";\n23\t\n24\t/**\n25\t * Environment bindings required at boot time.\n26\t */\n27\texport interface BootEnv {\n28\t  /** R2 bucket binding — declared as `PAPERCLIP_STORAGE` in wrangler.toml. */\n29\t  PAPERCLIP_STORAGE: R2Bucket;\n30\t  /**\n31\t   * Logical bucket name stored on object metadata (informational).\n32\t   * Defaults to `\"paperclip-storage\"` if absent.\n33\t   */\n34\t  STORAGE_R2_BUCKET?: string;\n35\t  /**\n36\t   * Optional key prefix applied to every stored object key.\n37\t   * Useful when sharing a single R2 bucket across multiple environments\n38\t   * (e.g. `\"staging/\"` vs `\"prod/\"`).\n39\t   */\n40\t  STORAGE_R2_PREFIX?: string;\n41\t}\n42\t\n43\t/**\n44\t * Registers the Cloudflare R2 storage provider with the shared provider\n45\t * registry from `server/src/storage/provider-registry.ts`.\n46\t *\n47\t * After registration, calling `createStorageProviderFromConfig` with\n48\t * `config.storageProvider === \"r2\"` returns an `R2Provider` backed by the\n49\t * `PAPERCLIP_STORAGE` R2 bucket binding.\n50\t *\n51\t * The registry uses a plain `Map`; calling `bootCloudflare` multiple times\n52\t * (e.g. on each warm-start invocation) is safe — subsequent calls overwrite\n53\t * the previous factory with an equivalent one.\n54\t *\n55\t * @param env - The Worker environment bindings injected by the CF runtime.\n56\t */\n57\texport function bootCloudflare(env: BootEnv): void {\n58\t  const bucketName = env.STORAGE_R2_BUCKET ?? \"paperclip-storage\";\n59\t  const prefix = env.STORAGE_R2_PREFIX ?? \"\";\n60\t\n61\t  registerStorageProvider(\"r2\", (_config) =\u003e {\n62\t    return new R2Provider(env.PAPERCLIP_STORAGE, { bucket: bucketName, prefix });\n63\t  });\n64\t}\n65\t",
+        "tool_use_id": "toolu_01FwmnHbhQC6U3dPLehzANUb",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "dfdfab38-013c-41fd-bfc6-3e7a90bd0895",
+  "promptId": "76fdb1bb-64b4-4188-b850-7eeac0540eca",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "dfdfab38-013c-41fd-bfc6-3e7a90bd0895",
+  "timestamp": "2026-04-30T16:50:47.045Z",
+  "toolUseResult": {
+    "file": {
+      "content": "/**\n * boot.ts — Cloudflare deployment boot sequence.\n *\n * Registers all Cloudflare-specific service implementations into the shared\n * provider registries. Called once on first Worker request (or on every cold\n * start — all registrations are idempotent Map.set calls).\n *\n * This is the only file in `packages/deploy-cloudflare/` that touches the\n * server package's registry. Every other file in this package is self-contained.\n *\n * The import of `provider-registry` uses a workspace-relative path. Wrangler\n * (esbuild) resolves it through the workspace symlink at bundle time, so no\n * runtime module resolution occurs.\n *\n * NOTE: `server/src/storage/provider-registry.ts` must be free of Node-only\n * imports (it currently is — it only imports types). If that changes, this\n * import path will need to move to a standalone `@paperclipai/storage-core`\n * package (tracked as an optional follow-up to PR #2).\n */\n\nimport { registerStorageProvider } from \"../../../server/src/storage/provider-registry.js\";\nimport { R2Provider } from \"./storage/r2-provider.js\";\n\n/**\n * Environment bindings required at boot time.\n */\nexport interface BootEnv {\n  /** R2 bucket binding — declared as `PAPERCLIP_STORAGE` in wrangler.toml. */\n  PAPERCLIP_STORAGE: R2Bucket;\n  /**\n   * Logical bucket name stored on object metadata (informational).\n   * Defaults to `\"paperclip-storage\"` if absent.\n   */\n  STORAGE_R2_BUCKET?: string;\n  /**\n   * Optional key prefix applied to every stored object key.\n   * Useful when sharing a single R2 bucket across multiple environments\n   * (e.g. `\"staging/\"` vs `\"prod/\"`).\n   */\n  STORAGE_R2_PREFIX?: string;\n}\n\n/**\n * Registers the Cloudflare R2 storage provider with the shared provider\n * registry from `server/src/storage/provider-registry.ts`.\n *\n * After registration, calling `createStorageProviderFromConfig` with\n * `config.storageProvider === \"r2\"` returns an `R2Provider` backed by the\n * `PAPERCLIP_STORAGE` R2 bucket binding.\n *\n * The registry uses a plain `Map`; calling `bootCloudflare` multiple times\n * (e.g. on each warm-start invocation) is safe — subsequent calls overwrite\n * the previous factory with an equivalent one.\n *\n * @param env - The Worker environment bindings injected by the CF runtime.\n */\nexport function bootCloudflare(env: BootEnv): void {\n  const bucketName = env.STORAGE_R2_BUCKET ?? \"paperclip-storage\";\n  const prefix = env.STORAGE_R2_PREFIX ?? \"\";\n\n  registerStorageProvider(\"r2\", (_config) =\u003e {\n    return new R2Provider(env.PAPERCLIP_STORAGE, { bucket: bucketName, prefix });\n  });\n}\n",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/boot.ts",
+      "numLines": 65,
+      "startLine": 1,
+      "totalLines": 65
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "a1c49cfa-b1bc-4e27-be8c-f3a124e70bc4",
+  "version": "2.1.123"
+}

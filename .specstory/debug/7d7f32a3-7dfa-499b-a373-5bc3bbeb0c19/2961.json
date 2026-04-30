@@ -1,0 +1,29 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "\u003ctool_use_error\u003eString to replace not found in file.\nString: import { Hono } from \"hono\";\nimport type { Context } from \"hono\";\nimport { createSetupApp } from \"./setup.js\";\nimport { bootCloudflare } from \"../boot.js\";\nimport { SidecarClient } from \"../sidecar-client.js\";\nimport { CfCompanySkillsService } from \"../services/cf-company-skills.js\";\nimport { CfAgentInstructionsService } from \"../services/cf-agent-instructions.js\";\nimport { createHyperdriveDb } from \"../db/hyperdrive.js\";\nimport { R2Provider } from \"../storage/r2-provider.js\";\nimport { createCfStorageService } from \"../storage/cf-storage-service.js\";\nimport { extractRoutesFromRouter } from \"../http/express-router-bridge.js\";\nimport { mountRoutes } from \"../http/hono-adapter.js\";\nimport { resolveActorFromRequest } from \"../auth/resolve-actor.js\";\nimport { runHeartbeatSweep } from \"../cron/heartbeat-sweep.js\";\nimport { HttpError } from \"../../../server/src/errors.js\";\nimport type { RouteDefinition } from \"../../../server/src/http/types.js\";\nimport type { StorageService } from \"../../../server/src/storage/types.js\";\nimport type { Db } from \"@paperclipai/db\";\u003c/tool_use_error\u003e",
+        "is_error": true,
+        "tool_use_id": "toolu_01HoexmDYbDrgDDHUneaQjZg",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "efc514c4-acbb-423d-9f53-afd85f3f76bf",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "efc514c4-acbb-423d-9f53-afd85f3f76bf",
+  "timestamp": "2026-04-30T16:38:20.655Z",
+  "toolUseResult": "Error: String to replace not found in file.\nString: import { Hono } from \"hono\";\nimport type { Context } from \"hono\";\nimport { createSetupApp } from \"./setup.js\";\nimport { bootCloudflare } from \"../boot.js\";\nimport { SidecarClient } from \"../sidecar-client.js\";\nimport { CfCompanySkillsService } from \"../services/cf-company-skills.js\";\nimport { CfAgentInstructionsService } from \"../services/cf-agent-instructions.js\";\nimport { createHyperdriveDb } from \"../db/hyperdrive.js\";\nimport { R2Provider } from \"../storage/r2-provider.js\";\nimport { createCfStorageService } from \"../storage/cf-storage-service.js\";\nimport { extractRoutesFromRouter } from \"../http/express-router-bridge.js\";\nimport { mountRoutes } from \"../http/hono-adapter.js\";\nimport { resolveActorFromRequest } from \"../auth/resolve-actor.js\";\nimport { runHeartbeatSweep } from \"../cron/heartbeat-sweep.js\";\nimport { HttpError } from \"../../../server/src/errors.js\";\nimport type { RouteDefinition } from \"../../../server/src/http/types.js\";\nimport type { StorageService } from \"../../../server/src/storage/types.js\";\nimport type { Db } from \"@paperclipai/db\";",
+  "type": "user",
+  "userType": "external",
+  "uuid": "bb195c7b-b2fb-47bd-a47d-b071737c26e3",
+  "version": "2.1.123"
+}

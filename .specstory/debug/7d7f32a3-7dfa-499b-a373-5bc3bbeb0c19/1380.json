@@ -1,0 +1,26 @@
+{
+  "agentId": "ac82afa7422550819",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport type { Request } from \"express\";\n2\timport { forbidden } from \"../errors.js\";\n3\t\n4\tfunction isRecord(value: unknown): value is Record\u003cstring, unknown\u003e {\n5\t  return typeof value === \"object\" \u0026\u0026 value !== null \u0026\u0026 !Array.isArray(value);\n6\t}\n7\t\n8\tfunction hasOwn(value: Record\u003cstring, unknown\u003e, key: string) {\n9\t  return Object.prototype.hasOwnProperty.call(value, key);\n10\t}\n11\t\n12\tfunction prefixPath(prefix: string, key: string) {\n13\t  return prefix.length \u003e 0 ? `${prefix}.${key}` : key;\n14\t}\n15\t\n16\tfunction collectWorkspaceStrategyCommandPaths(raw: unknown, prefix: string): string[] {\n17\t  if (!isRecord(raw)) return [];\n18\t  const paths: string[] = [];\n19\t  if (hasOwn(raw, \"provisionCommand\")) {\n20\t    paths.push(prefixPath(prefix, \"provisionCommand\"));\n21\t  }\n22\t  if (hasOwn(raw, \"teardownCommand\")) {\n23\t    paths.push(prefixPath(prefix, \"teardownCommand\"));\n24\t  }\n25\t  return paths;\n26\t}\n27\t\n28\tfunction collectExecutionWorkspaceConfigCommandPaths(raw: unknown, prefix: string): string[] {\n29\t  if (!isRecord(raw)) return [];\n30\t  const paths: string[] = [];\n31\t  if (hasOwn(raw, \"provisionCommand\")) {\n32\t    paths.push(prefixPath(prefix, \"provisionCommand\"));\n33\t  }\n34\t  if (hasOwn(raw, \"teardownCommand\")) {\n35\t    paths.push(prefixPath(prefix, \"teardownCommand\"));\n36\t  }\n37\t  if (hasOwn(raw, \"cleanupCommand\")) {\n38\t    paths.push(prefixPath(prefix, \"cleanupCommand\"));\n39\t  }\n40\t  return paths;\n41\t}\n42\t\n43\texport function assertNoAgentHostWorkspaceCommandMutation(req: Request, paths: string[]) {\n44\t  if (req.actor.type !== \"agent\" || paths.length === 0) return;\n45\t  throw forbidden(\n46\t    `Agent keys cannot modify host-executed workspace commands (${paths.join(\", \")}).`,\n47\t  );\n48\t}\n49\t\n50\texport function collectAgentAdapterWorkspaceCommandPaths(adapterConfig: unknown): string[] {\n51\t  if (!isRecord(adapterConfig)) return [];\n52\t  return collectWorkspaceStrategyCommandPaths(\n53\t    adapterConfig.workspaceStrategy,\n54\t    \"adapterConfig.workspaceStrategy\",\n55\t  );\n56\t}\n57\t\n58\texport function collectProjectExecutionWorkspaceCommandPaths(policy: unknown): string[] {\n59\t  if (!isRecord(policy)) return [];\n60\t  return collectWorkspaceStrategyCommandPaths(\n61\t    policy.workspaceStrategy,\n62\t    \"executionWorkspacePolicy.workspaceStrategy\",\n63\t  );\n64\t}\n65\t\n66\texport function collectProjectWorkspaceCommandPaths(\n67\t  workspacePatch: unknown,\n68\t  prefix = \"\",\n69\t): string[] {\n70\t  if (!isRecord(workspacePatch)) return [];\n71\t  return hasOwn(workspacePatch, \"cleanupCommand\")\n72\t    ? [prefixPath(prefix, \"cleanupCommand\")]\n73\t    : [];\n74\t}\n75\t\n76\texport function collectIssueWorkspaceCommandPaths(input: {\n77\t  executionWorkspaceSettings?: unknown;\n78\t  assigneeAdapterOverrides?: unknown;\n79\t}): string[] {\n80\t  const paths: string[] = [];\n81\t  if (isRecord(input.executionWorkspaceSettings)) {\n82\t    paths.push(\n83\t      ...collectWorkspaceStrategyCommandPaths(\n84\t        input.executionWorkspaceSettings.workspaceStrategy,\n85\t        \"executionWorkspaceSettings.workspaceStrategy\",\n86\t      ),\n87\t    );\n88\t  }\n89\t  if (isRecord(input.assigneeAdapterOverrides)) {\n90\t    const adapterConfig = input.assigneeAdapterOverrides.adapterConfig;\n91\t    if (isRecord(adapterConfig)) {\n92\t      paths.push(\n93\t        ...collectWorkspaceStrategyCommandPaths(\n94\t          adapterConfig.workspaceStrategy,\n95\t          \"assigneeAdapterOverrides.adapterConfig.workspaceStrategy\",\n96\t        ),\n97\t      );\n98\t    }\n99\t  }\n100\t  return paths;\n101\t}\n102\t\n103\texport function collectExecutionWorkspaceCommandPaths(input: {\n104\t  config?: unknown;\n105\t  metadata?: unknown;\n106\t}): string[] {\n107\t  const paths: string[] = [];\n108\t  if (input.config !== undefined) {\n109\t    paths.push(...collectExecutionWorkspaceConfigCommandPaths(input.config, \"config\"));\n110\t  }\n111\t  if (isRecord(input.metadata) \u0026\u0026 hasOwn(input.metadata, \"config\")) {\n112\t    paths.push(...collectExecutionWorkspaceConfigCommandPaths(input.metadata.config, \"metadata.config\"));\n113\t  }\n114\t  return paths;\n115\t}\n116\t",
+        "tool_use_id": "toolu_01JdNXoXJ7DA5huk8vLY4aTM",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "9b192dfe-9f20-4b30-a7e2-f776fc120bc9",
+  "promptId": "f8ab24c1-de42-4dc6-b59c-8c9364db9ca7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "9b192dfe-9f20-4b30-a7e2-f776fc120bc9",
+  "timestamp": "2026-04-30T15:11:33.210Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "28611abb-635b-4058-80f2-3e04b3a27cb4",
+  "version": "2.1.123"
+}

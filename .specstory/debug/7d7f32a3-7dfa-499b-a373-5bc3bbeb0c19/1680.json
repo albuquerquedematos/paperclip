@@ -1,0 +1,26 @@
+{
+  "agentId": "a63f4a588ad785603",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "700\t  }, expressHandler(reloadAdapter, adapterDeps));\n701\t\n702\t  router.post(\"/adapters/:type/reinstall\", (req, _res, next) =\u003e {\n703\t    try { assertInstanceAdmin(req); next(); } catch (err) { next(err); }\n704\t  }, expressHandler(reinstallAdapter, adapterDeps));\n705\t\n706\t  router.get(\"/adapters/:type/config-schema\", expressHandler(getAdapterConfigSchema, adapterDeps));\n707\t  router.get(\"/adapters/:type/ui-parser.js\", expressHandler(getAdapterUiParser, adapterDeps));\n708\t\n709\t  return router;\n710\t}\n711\t",
+        "tool_use_id": "toolu_01UiRYvKskNFkoW8pCkke6yh",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "3dace1bb-7138-47a1-97c2-908c1bcadba6",
+  "promptId": "f70e47c2-d340-4417-9b6f-d01ec6a1d002",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "3dace1bb-7138-47a1-97c2-908c1bcadba6",
+  "timestamp": "2026-04-30T15:17:29.780Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "56eb04ac-58eb-4b4f-8db2-9e7c97c3bc64",
+  "version": "2.1.123"
+}

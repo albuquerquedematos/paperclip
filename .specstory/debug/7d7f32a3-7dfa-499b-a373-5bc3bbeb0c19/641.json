@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\t/**\n2\t * PluginLoader — discovery, installation, and runtime activation of plugins.\n3\t *\n4\t * This service is the entry point for the plugin system's I/O boundary:\n5\t *\n6\t * 1. **Discovery** — Scans the local plugin directory\n7\t *    (`~/.paperclip/plugins/`) and `node_modules` for packages matching\n8\t *    the `paperclip-plugin-*` naming convention. Aggregates results with\n9\t *    path-based deduplication.\n10\t *\n11\t * 2. **Installation** — `installPlugin()` downloads from npm (or reads a\n12\t *    local path), validates the manifest, checks capability consistency,\n13\t *    and persists the install record.\n14\t *\n15\t * 3. **Runtime activation** — `activatePlugin()` wires up a loaded plugin\n16\t *    with all runtime services: resolves its entrypoint, builds\n17\t *    capability-gated host handlers, spawns a worker process, syncs job\n18\t *    declarations, registers event subscriptions, and discovers tools.\n19\t *\n20\t * 4. **Shutdown** — `shutdownAll()` gracefully stops all active workers\n21\t *    and unregisters runtime hooks.\n22\t *\n23\t * @see PLUGIN_SPEC.md §8 — Plugin Discovery\n24\t * @see PLUGIN_SPEC.md §10 — Package Contract\n25\t * @see PLUGIN_SPEC.md §12 — Process Model\n26\t */\n27\timport { existsSync } from \"node:fs\";\n28\timport { readdir, readFile, rm, stat } from \"node:fs/promises\";\n29\timport { execFile } from \"node:child_process\";\n30\timport os from \"node:os\";\n31\timport path from \"node:path\";\n32\timport { fileURLToPath } from \"node:url\";\n33\timport { promisify } from \"node:util\";\n34\timport type { Db } from \"@paperclipai/db\";\n35\timport type {",
+        "tool_use_id": "toolu_012ag5hYqfU9NjKwV9PJYqGa",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "ee6fa812-6227-490d-a91c-800c09238d99",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "ee6fa812-6227-490d-a91c-800c09238d99",
+  "timestamp": "2026-04-30T14:57:23.587Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "98bb3d23-f933-4216-92fc-8449c1479497",
+  "version": "2.1.123"
+}

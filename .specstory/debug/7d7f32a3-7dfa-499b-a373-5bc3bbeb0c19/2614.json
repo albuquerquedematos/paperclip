@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "2268\t      }\n2269\t      let rawEffectiveAdapterConfig = requestedAdapterConfig ?? existingAdapterConfig;\n2270\t      if (requestedAdapterConfig \u0026\u0026 !changingAdapterType \u0026\u0026 !replaceAdapterConfig) {\n2271\t        rawEffectiveAdapterConfig = { ...existingAdapterConfig, ...requestedAdapterConfig };\n2272\t      }\n2273\t      if (changingAdapterType) {\n2274\t        // Preserve adapter-agnostic keys (env, cwd, etc.) from the existing config\n2275\t        // when the adapter type changes. Without this, a PATCH that includes\n2276\t        // adapterConfig but omits these keys would silently drop them.\n2277\t        const ADAPTER_AGNOSTIC_KEYS = [\n2278\t          \"env\", \"cwd\", \"timeoutSec\", \"graceSec\",\n2279\t          \"promptTemplate\", \"bootstrapPromptTemplate\",\n2280\t        ] as const;\n2281\t        for (const key of ADAPTER_AGNOSTIC_KEYS) {\n2282\t          if (rawEffectiveAdapterConfig[key] === undefined \u0026\u0026 existingAdapterConfig[key] !== undefined) {",
+        "tool_use_id": "toolu_01EouWTW6CW3XNjkcBsWoZNb",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "f001169a-b0ff-4703-98f8-ea576f095973",
+  "promptId": "ba96a81e-2351-4b03-969f-bc172383cdd1",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "f001169a-b0ff-4703-98f8-ea576f095973",
+  "timestamp": "2026-04-30T16:27:54.794Z",
+  "toolUseResult": {
+    "file": {
+      "content": "      }\n      let rawEffectiveAdapterConfig = requestedAdapterConfig ?? existingAdapterConfig;\n      if (requestedAdapterConfig \u0026\u0026 !changingAdapterType \u0026\u0026 !replaceAdapterConfig) {\n        rawEffectiveAdapterConfig = { ...existingAdapterConfig, ...requestedAdapterConfig };\n      }\n      if (changingAdapterType) {\n        // Preserve adapter-agnostic keys (env, cwd, etc.) from the existing config\n        // when the adapter type changes. Without this, a PATCH that includes\n        // adapterConfig but omits these keys would silently drop them.\n        const ADAPTER_AGNOSTIC_KEYS = [\n          \"env\", \"cwd\", \"timeoutSec\", \"graceSec\",\n          \"promptTemplate\", \"bootstrapPromptTemplate\",\n        ] as const;\n        for (const key of ADAPTER_AGNOSTIC_KEYS) {\n          if (rawEffectiveAdapterConfig[key] === undefined \u0026\u0026 existingAdapterConfig[key] !== undefined) {",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/agents.ts",
+      "numLines": 15,
+      "startLine": 2268,
+      "totalLines": 3037
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "55233e81-b01f-47e7-8c1f-8651b4323ffc",
+  "version": "2.1.123"
+}

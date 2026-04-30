@@ -1,0 +1,26 @@
+{
+  "agentId": "a3573a14f101d1112",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\t// TODO(cloudflare): company-skills.ts reads and writes skill Markdown files\n2\t// directly on the local host filesystem using node:fs/promises (readdir, stat,\n3\t// readFile, writeFile, mkdir, rm). Operations include:\n4\t//   - walkLocalFiles / collectLocalSkillInventory: directory traversal for\n5\t//     skill file discovery (local_path and catalog source types)\n6\t//   - readFile: reads SKILL.md and supporting files at request time\n7\t//   - createLocalSkill / updateFile: writes skill Markdown to disk\n8\t//   - materializeCatalogSkillFiles / materializeRuntimeSkillFiles: copies skill\n9\t//     files into a runtime-materialized directory tree\n10\t// For Workers compatibility the managed skill storage must migrate to R2 (file\n11\t// contents keyed by companyId/skillId/relativePath), with directory listing\n12\t// replaced by a database-backed file inventory. Local-path skills referencing\n13\t// host directories cannot be supported in a stateless Worker deployment.\n14\timport { createHash } from \"node:crypto\";\n15\timport { promises as fs } from \"node:fs\";\n16\timport path from \"node:path\";\n17\timport { fileURLToPath } from \"node:url\";\n18\timport { and, asc, eq } from \"drizzle-orm\";\n19\timport type { Db } from \"@paperclipai/db\";\n20\timport { companies, companySkills } from \"@paperclipai/db\";\n21\timport { readPaperclipSkillSyncPreference } from \"@paperclipai/adapter-utils/server-utils\";\n22\timport type { PaperclipSkillEntry } from \"@paperclipai/adapter-utils/server-utils\";\n23\timport type {\n24\t  CompanySkill,\n25\t  CompanySkillCreateRequest,\n26\t  CompanySkillCompatibility,\n27\t  CompanySkillDetail,\n28\t  CompanySkillFileDetail,\n29\t  CompanySkillFileInventoryEntry,\n30\t  CompanySkillImportResult,\n31\t  CompanySkillListItem,\n32\t  CompanySkillProjectScanConflict,\n33\t  CompanySkillProjectScanRequest,\n34\t  CompanySkillProjectScanResult,\n35\t  CompanySkillProjectScanSkipped,\n36\t  CompanySkillSourceBadge,\n37\t  CompanySkillSourceType,\n38\t  CompanySkillTrustLevel,\n39\t  CompanySkillUpdateStatus,\n40\t  CompanySkillUsageAgent,\n41\t} from \"@paperclipai/shared\";\n42\timport { normalizeAgentUrlKey } from \"@paperclipai/shared\";\n43\timport { resolvePaperclipInstanceRoot } from \"../home-paths.js\";\n44\timport { notFound, unprocessable } from \"../errors.js\";\n45\timport { ghFetch, gitHubApiBase, resolveRawGitHubUrl } from \"./github-fetch.js\";\n46\timport { agentService } from \"./agents.js\";\n47\timport { projectService } from \"./projects.js\";\n48\t\n49\ttype CompanySkillRow = typeof companySkills.$inferSelect;\n50\ttype CompanySkillListDbRow = Pick\u003c\n51\t  CompanySkillRow,\n52\t  | \"id\"\n53\t  | \"companyId\"\n54\t  | \"key\"\n55\t  | \"slug\"\n56\t  | \"name\"\n57\t  | \"description\"\n58\t  | \"sourceType\"\n59\t  | \"sourceLocator\"\n60\t  | \"sourceRef\"\n61\t  | \"trustLevel\"\n62\t  | \"compatibility\"\n63\t  | \"fileInventory\"\n64\t  | \"metadata\"\n65\t  | \"createdAt\"\n66\t  | \"updatedAt\"\n67\t\u003e;\n68\ttype CompanySkillListRow = Pick\u003c\n69\t  CompanySkill,\n70\t  | \"id\"\n71\t  | \"companyId\"\n72\t  | \"key\"\n73\t  | \"slug\"\n74\t  | \"name\"\n75\t  | \"description\"\n76\t  | \"sourceType\"\n77\t  | \"sourceLocator\"\n78\t  | \"sourceRef\"\n79\t  | \"trustLevel\"\n80\t  | \"compatibility\"\n81\t  | \"fileInventory\"\n82\t  | \"metadata\"\n83\t  | \"createdAt\"\n84\t  | \"updatedAt\"\n85\t\u003e;\n86\ttype CompanySkillReferenceRow = Pick\u003c\n87\t  CompanySkillRow,\n88\t  | \"id\"\n89\t  | \"key\"\n90\t  | \"slug\"\n91\t\u003e;\n92\ttype SkillReferenceTarget = Pick\u003cCompanySkill, \"id\" | \"key\" | \"slug\"\u003e;\n93\ttype SkillSourceInfoTarget = Pick\u003c\n94\t  CompanySkill,\n95\t  | \"companyId\"\n96\t  | \"sourceType\"\n97\t  | \"sourceLocator\"\n98\t  | \"metadata\"\n99\t\u003e;\n100\t",
+        "tool_use_id": "toolu_01DLA2D7D6obKtGiaQrETZw5",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "387324b9-3ce1-43f1-9bf2-3e9678e3c881",
+  "promptId": "41a5cab3-78a5-4305-8404-9daa35591aac",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "387324b9-3ce1-43f1-9bf2-3e9678e3c881",
+  "timestamp": "2026-04-30T15:05:41.016Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "605769d7-a9bf-4ced-b0c1-7b5767cb0686",
+  "version": "2.1.123"
+}

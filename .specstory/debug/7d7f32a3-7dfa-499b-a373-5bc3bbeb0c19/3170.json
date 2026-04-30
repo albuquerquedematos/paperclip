@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "export class HttpError extends Error {\n  status: number;\n  details?: unknown;\n\n  constructor(status: number, message: string, details?: unknown) {",
+        "is_error": false,
+        "tool_use_id": "toolu_013mtthFPxcdUzUw1k63fFuS",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "b0c4290f-544b-450c-a0fc-cf37d28808dc",
+  "promptId": "76fdb1bb-64b4-4188-b850-7eeac0540eca",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "b0c4290f-544b-450c-a0fc-cf37d28808dc",
+  "timestamp": "2026-04-30T16:46:22.644Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "export class HttpError extends Error {\n  status: number;\n  details?: unknown;\n\n  constructor(status: number, message: string, details?: unknown) {"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "38704c6e-5e79-4b69-a497-2a5304acf39a",
+  "version": "2.1.123"
+}

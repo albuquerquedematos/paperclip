@@ -1,0 +1,27 @@
+{
+  "agentId": "a63f4a588ad785603",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "49:import { expressHandler } from \"../http/express-adapter.js\";\n257:  const listAdapters: Handler = async (ctx) =\u003e {\n283:  const installAdapter: Handler = async (ctx) =\u003e {\n409:  const patchAdapter: Handler = async (ctx) =\u003e {\n438:  const patchAdapterOverride: Handler = async (ctx) =\u003e {\n464:  const deleteAdapter: Handler = async (ctx) =\u003e {\n523:  const reloadAdapter: Handler = async (ctx) =\u003e {\n566:  const reinstallAdapter: Handler = async (ctx) =\u003e {\n626:  const getAdapterConfigSchema: Handler = async (ctx) =\u003e {\n660:  const getAdapterUiParser: Handler = async (ctx) =\u003e {\n682:  router.post(\"/adapters/install\", (req, _res, next) =\u003e {\n686:  router.patch(\"/adapters/:type\", (req, _res, next) =\u003e {\n690:  router.patch(\"/adapters/:type/override\", (req, _res, next) =\u003e {\n694:  router.delete(\"/adapters/:type\", (req, _res, next) =\u003e {\n698:  router.post(\"/adapters/:type/reload\", (req, _res, next) =\u003e {\n702:  router.post(\"/adapters/:type/reinstall\", (req, _res, next) =\u003e {",
+        "is_error": false,
+        "tool_use_id": "toolu_01TnQfNnGGfchtvbrVbRqRqD",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "9bb8a720-fef9-4e37-baad-a612c4ee245a",
+  "promptId": "f70e47c2-d340-4417-9b6f-d01ec6a1d002",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "9bb8a720-fef9-4e37-baad-a612c4ee245a",
+  "timestamp": "2026-04-30T15:17:24.176Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "55ed64c7-c0c1-45c6-9f68-8bab01747c13",
+  "version": "2.1.123"
+}

@@ -1,0 +1,27 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\t/**\n2\t * Main Cloudflare Worker entry point for the Paperclip API.\n3\t *\n4\t * This file:\n5\t *   1. Creates a Hono app and mounts route definitions extracted from the\n6\t *      server's Express routers via the express-router-bridge.\n7\t *   2. Implements the first-run setup gate (redirects to /setup until KV flag is set).\n8\t *   3. Handles Cloudflare Queues message batches (plugin job fanout, heartbeat dispatch).\n9\t *   4. Handles Cloudflare Cron Triggers (heartbeat sweep, budget checks, DB backup).\n10\t *   5. Re-exports all Durable Object and Workflow classes so Wrangler can\n11\t *      register them -- they must be named exports from the Worker's main module.\n12\t *\n13\t * Routes skipped (use Node-only features -- left as 501 TODOs):\n14\t *   - adapterRoutes       -- reads packages from disk\n15\t *   - pluginRoutes        -- SSE, child processes, scoped plugin API\n16\t *   - pluginUiStaticRoutes -- fs.readFileSync / res.sendFile\n17\t *   - companySkillRoutes  -- local filesystem (CF version: cf-company-skills.ts)\n18\t *   - accessRoutes        -- reads bundled SKILL.md files from disk\n19\t *   - instanceDatabaseBackupRoutes -- pg_dump\n20\t *\n21\t * Architecture note on per-request DB injection:\n22\t *   Route handlers (Handler functions) capture a `db` and `storage` reference\n23\t *   from the service factories at the time the Express Router is built. Because\n24\t *   the real `db` comes from Hyperdrive (a per-request binding), we rebuild the\n25\t *   Express Routers on the FIRST request of each cold start and cache the\n26\t *   extracted route definitions for subsequent requests in the same isolate.\n27\t *\n28\t *   Hono routes are registered at module load time as thin proxies that\n29\t *   forward to the lazily-built route definitions.\n30\t */\n31\t\n32\timport { Hono } from \"hono\";\n33\timport type { Context } from \"hono\";\n34\timport { createSetupApp } from \"./setup.js\";\n35\timport { bootCloudflare } from \"../boot.js\";\n36\timport { SidecarClient } from \"../sidecar-client.js\";\n37\timport { CfCompanySkillsService } from \"../services/cf-company-skills.js\";\n38\timport { CfAgentInstructionsService } from \"../services/cf-agent-instructions.js\";\n39\timport { createHyperdriveDb } from \"../db/hyperdrive.js\";\n40\timport { R2Provider } from \"../storage/r2-provider.js\";\n41\timport { createCfStorageService } from \"../storage/cf-storage-service.js\";\n42\timport { extractRoutesFromRouter } from \"../http/express-router-bridge.js\";\n43\timport { resolveActorFromRequest } from \"../auth/resolve-actor.js\";\n44\timport { runHeartbeatSweep } from \"../cron/heartbeat-sweep.js\";\n45\timport { HttpError } from \"../../../server/src/errors.js\";\n46\timport type { RouteDefinition } from \"../../../server/src/http/types.js\";\n47\timport type { StorageService } from \"../../../server/src/storage/types.js\";\n48\timport type { Db } from \"@paperclipai/db\";\n49\t\n50\t// Server-side route factories",
+        "tool_use_id": "toolu_017czsKScuW7hB3drU96se7w",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "211c5136-ae8e-4892-b9c6-697eecbb3a1c",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "211c5136-ae8e-4892-b9c6-697eecbb3a1c",
+  "timestamp": "2026-04-30T16:38:23.149Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "7ee776ca-2a6f-4f35-a04c-2daf31985ae9",
+  "version": "2.1.123"
+}

@@ -1,0 +1,27 @@
+{
+  "agentId": "a63f4a588ad785603",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "14:import { expressHandler } from \"../http/express-adapter.js\";\n49:  const listSecretProviders: Handler = async (ctx) =\u003e {\n56:  const listSecrets: Handler = async (ctx) =\u003e {\n64:  const createSecret: Handler = async (ctx) =\u003e {\n96:  const rotateSecret: Handler = async (ctx) =\u003e {\n129:  const updateSecret: Handler = async (ctx) =\u003e {\n163:  const deleteSecret: Handler = async (ctx) =\u003e {\n192:  // Wire handlers via expressHandler\n197:  router.get(\"/companies/:companyId/secret-providers\", expressHandler(listSecretProviders, adapterDeps));\n198:  router.get(\"/companies/:companyId/secrets\", expressHandler(listSecrets, adapterDeps));\n199:  router.post(\"/companies/:companyId/secrets\", validate(createSecretSchema), expressHandler(createSecret, adapterDeps));\n200:  router.post(\"/secrets/:id/rotate\", validate(rotateSecretSchema), expressHandler(rotateSecret, adapterDeps));\n201:  router.patch(\"/secrets/:id\", validate(updateSecretSchema), expressHandler(updateSecret, adapterDeps));\n202:  router.delete(\"/secrets/:id\", expressHandler(deleteSecret, adapterDeps));",
+        "is_error": false,
+        "tool_use_id": "toolu_016hgyrjZWueQTtHVpz42F7B",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "d4924a64-ecad-4b7e-8969-ddb1c77301e8",
+  "promptId": "f70e47c2-d340-4417-9b6f-d01ec6a1d002",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "d4924a64-ecad-4b7e-8969-ddb1c77301e8",
+  "timestamp": "2026-04-30T15:17:11.793Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "385800a0-4a60-48cc-adad-cff4801c1d2a",
+  "version": "2.1.123"
+}

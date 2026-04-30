@@ -1,0 +1,52 @@
+{
+  "agentId": "acedaf1c4054eec72",
+  "attributionAgent": "backend-architect",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01MwQmhbMrT253zFg5R2Svm8",
+        "input": {
+          "command": "grep -r \"actor\\.\" /Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/middleware/ --include=\"*.ts\" -l",
+          "description": "Find middleware files that define actor shape"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01EJbXQCrKDUcvpKyP1ZM5qk",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": null,
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 1344
+      },
+      "cache_creation_input_tokens": 1344,
+      "cache_read_input_tokens": 33838,
+      "inference_geo": "global",
+      "input_tokens": 1,
+      "output_tokens": 2,
+      "service_tier": "standard"
+    }
+  },
+  "parentUuid": "8c33b8a8-1847-4db1-8858-20c191c9f6ca",
+  "requestId": "req_011CaaAM3Ltdq9itgfBsHFqV",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "timestamp": "2026-04-30T15:05:23.052Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "42f5b7f4-de5c-4a7c-bad3-460dfd1e14cf",
+  "version": "2.1.123"
+}

@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "2545\t        workspaceId: null,\n2546\t        repoUrl: null,\n2547\t        repoRef: null,\n2548\t        workspaceHints,\n2549\t        warnings: managedWorkspace.warning ? [managedWorkspace.warning] : [],\n2550\t      };\n2551\t    }\n2552\t\n2553\t    const sessionCwd = readNonEmptyString(previousSessionParams?.cwd);\n2554\t    if (sessionCwd) {\n2555\t      const sessionCwdExists = await fs\n2556\t        .stat(sessionCwd)\n2557\t        .then((stats) =\u003e stats.isDirectory())\n2558\t        .catch(() =\u003e false);\n2559\t      if (sessionCwdExists) {\n2560\t        return {\n2561\t          cwd: sessionCwd,\n2562\t          source: \"task_session\" as const,\n2563\t          projectId: resolvedProjectId,\n2564\t          workspaceId: readNonEmptyString(previousSessionParams?.workspaceId),\n2565\t          repoUrl: readNonEmptyString(previousSessionParams?.repoUrl),\n2566\t          repoRef: readNonEmptyString(previousSessionParams?.repoRef),\n2567\t          workspaceHints,\n2568\t          warnings: [],\n2569\t        };\n2570\t      }\n2571\t    }\n2572\t\n2573\t    const cwd = resolveDefaultAgentWorkspaceDir(agent.id);\n2574\t    await fs.mkdir(cwd, { recursive: true });",
+        "tool_use_id": "toolu_012mexfMEy9x9VbnRfUgmDfW",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "9fcb7126-8a2a-4d53-9cbd-ff2f582a0382",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "9fcb7126-8a2a-4d53-9cbd-ff2f582a0382",
+  "timestamp": "2026-04-30T14:52:21.163Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "927f33eb-bc78-4c5c-902f-d3606abe375e",
+  "version": "2.1.123"
+}

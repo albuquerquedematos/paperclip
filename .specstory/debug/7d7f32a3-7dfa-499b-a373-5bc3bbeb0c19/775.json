@@ -1,0 +1,70 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01TGqXH9xbpWfYX2JkMx7LPw",
+        "input": {
+          "description": "Route migrations group 1: companies, agents, projects, goals",
+          "prompt": "You are migrating Express route handlers to the transport-agnostic `Handler` shape in the Paperclip monorepo at `/Users/migmac/Documents/GitHub/_ABM/paperclip` on branch `feat/cloudflare-deployment`.\n\n## Context\n\nA `Handler` type and `expressHandler` adapter were already created:\n- `server/src/http/types.ts` — defines `Handler`, `RequestCtx`, `ActorContext`, `RouteDefinition`\n- `server/src/http/express-adapter.ts` — `expressHandler(handler, deps)` bridges Handler → Express\n- `server/src/routes/health.ts` — already migrated as the reference implementation\n\n**Read `server/src/http/types.ts` and `server/src/http/express-adapter.ts` and `server/src/routes/health.ts` first** to understand the established pattern before touching anything.\n\n## Migration pattern\n\nEach route file currently exports a function like:\n```ts\nexport function companyRoutes(db: Db, opts: { storageService: StorageService, ... }) {\n  const router = Router();\n  router.get(\"/api/companies\", async (req, res) =\u003e {\n    const result = await someService(db, req.params.id);\n    res.json(result);\n  });\n  return router;\n}\n```\n\nMigrate each inner handler to be a `Handler`-typed function:\n```ts\nconst listCompanies: Handler = async (ctx) =\u003e {\n  const result = await someService(ctx.db, ctx.param(\"id\")!);\n  return Response.json(result);\n};\n```\n\nThen wire it back into the Express router via `expressHandler`:\n```ts\nrouter.get(\"/api/companies\", expressHandler(listCompanies, { db: deps.db, storage: deps.storage }));\n```\n\n**Key translation table**:\n- `req.params.xxx` → `ctx.param(\"xxx\")`\n- `req.query.xxx as string` → `ctx.query(\"xxx\")`\n- `req.body` → `await ctx.json()` (only call once per handler; destructure immediately)\n- `res.json(x)` → `return Response.json(x)`\n- `res.status(N).json(x)` → `return Response.json(x, { status: N })`\n- `res.status(N).end()` / `res.sendStatus(N)` → `return new Response(null, { status: N })`\n- `res.status(204).json({})` → `return new Response(null, { status: 204 })`\n- `req.actor` → `ctx.actor` (same shape, null if unauthenticated)\n- `req.get(\"x-header\")` → `ctx.headers.get(\"x-header\")`\n- `next(err)` → `throw err` (expressHandler catches and forwards to next)\n\n**For services/deps beyond db and storage** (like heartbeatService, pluginWorkerManager, etc.): the Handler closes over those from the outer factory function's parameters — it does NOT receive them through ctx. Example:\n```ts\nexport function agentRoutes(db: Db, opts: { heartbeatService: HeartbeatService, storageService: StorageService }) {\n  const startAgent: Handler = async (ctx) =\u003e {\n    const id = ctx.param(\"agentId\")!;\n    await opts.heartbeatService.start(id, ctx.db); // ctx.db === db (same instance via expressHandler)\n    return Response.json({ ok: true });\n  };\n  const router = Router();\n  router.post(\"/api/agents/:agentId/start\", expressHandler(startAgent, { db, storage: opts.storageService }));\n  return router;\n}\n```\n\n**CRITICAL: Do not change the external function signature** (what `app.ts` calls). Only change the internal handler bodies.\n\n## Your files to migrate\n\nMigrate these four route files:\n1. `server/src/routes/companies.ts`\n2. `server/src/routes/agents.ts`\n3. `server/src/routes/projects.ts`\n4. `server/src/routes/goals.ts`\n\nFor each file:\n1. Read the file completely\n2. Identify every `router.METHOD(path, async (req, res) =\u003e {...})` handler\n3. Extract each handler body into a named `const handlerName: Handler` before the router declaration\n4. Replace the router handler with `expressHandler(handlerName, { db, storage: opts.storageService })`\n5. Add `import { Handler } from \"../http/index.js\"` and `import { expressHandler } from \"../http/express-adapter.js\"` (check if these are already the right paths)\n\n**Do NOT change**: middleware calls, `router.use(...)`, error handler registrations, the function signature, or any logic. Only the handler body shape changes.\n\nReport file:line for every handler migrated.",
+          "run_in_background": true,
+          "subagent_type": "backend-architect"
+        },
+        "name": "Agent",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01MRqRykxg9y8HofCHMER2P5",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 1295
+      },
+      "cache_creation_input_tokens": 1295,
+      "cache_read_input_tokens": 113252,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 1295
+          },
+          "cache_creation_input_tokens": 1295,
+          "cache_read_input_tokens": 113252,
+          "input_tokens": 1,
+          "output_tokens": 9197,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 9197,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "2acb2740-5c99-488f-be9d-70727535d3b3",
+  "requestId": "req_011CaaACRac5nHSkqP8Rmzh2",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "timestamp": "2026-04-30T15:04:44.086Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "9c3251e4-2511-4806-a09d-426f616706e3",
+  "version": "2.1.123"
+}

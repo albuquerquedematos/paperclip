@@ -1,0 +1,70 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01WzSbxQQeQHSMDx7iNTn73E",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/AGENTS.md",
+          "new_string": "`doc/SPEC.md` is long-horizon product context.\n`doc/SPEC-implementation.md` is the concrete V1 build contract.\n`doc/CLOUDFLARE.md` is the design for the optional Cloudflare deployment target (additive, upstream-mergeable).\n\n## 3. Repo Map\n\n- `server/`: Express REST API and orchestration services\n- `ui/`: React + Vite board UI\n- `packages/db/`: Drizzle schema, migrations, DB clients\n- `packages/shared/`: shared types, constants, validators, API path constants\n- `packages/adapters/`: agent adapter implementations (Claude, Codex, Cursor, etc.)\n- `packages/adapter-utils/`: shared adapter utilities\n- `packages/plugins/`: plugin system packages\n- `packages/deploy-cloudflare/`: (planned) Cloudflare Workers/Pages/DO/R2 deployment target — see `doc/CLOUDFLARE.md`\n- `doc/`: operational and product docs",
+          "old_string": "`doc/SPEC.md` is long-horizon product context.\n`doc/SPEC-implementation.md` is the concrete V1 build contract.\n\n## 3. Repo Map\n\n- `server/`: Express REST API and orchestration services\n- `ui/`: React + Vite board UI\n- `packages/db/`: Drizzle schema, migrations, DB clients\n- `packages/shared/`: shared types, constants, validators, API path constants\n- `packages/adapters/`: agent adapter implementations (Claude, Codex, Cursor, etc.)\n- `packages/adapter-utils/`: shared adapter utilities\n- `packages/plugins/`: plugin system packages\n- `doc/`: operational and product docs",
+          "replace_all": false
+        },
+        "name": "Edit",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01F4KYg7xixLCYD5BiSJZ9RD",
+    "model": "claude-opus-4-7",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1341,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 1341,
+      "cache_read_input_tokens": 78387,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 1341,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 1341,
+          "cache_read_input_tokens": 78387,
+          "input_tokens": 1,
+          "output_tokens": 899,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 899,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "e4b7d74a-9908-4559-bda0-8f88365e74ea",
+  "requestId": "req_011Caa3FdUFFjn7p3sFSDAgi",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "timestamp": "2026-04-30T13:32:25.566Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "468239eb-eaea-4f09-876f-1447198f9c9e",
+  "version": "2.1.123"
+}

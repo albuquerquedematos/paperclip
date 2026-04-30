@@ -1,0 +1,26 @@
+{
+  "agentId": "adabf466a1a877701",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "795\t        backupDir: config.databaseBackupDir,\n796\t      },\n797\t      \"Automatic database backups enabled\",\n798\t    );\n799\t    const backupScheduler = createNodeScheduler();\n800\t    backupScheduler.every(\"database-backup\", backupIntervalMs, async () =\u003e {\n801\t      await runServerDatabaseBackup(\"scheduled\").catch(() =\u003e {\n802\t        // runServerDatabaseBackup already logs the failure with context.\n803\t      });\n804\t    });\n805\t  }\n806\t  \n807\t  // Wait for external adapters to finish loading before accepting requests.\n808\t  // Without this, adapter type validation (assertKnownAdapterType) would\n809\t  // reject valid external adapter types during the startup loading window.",
+        "tool_use_id": "toolu_01CJMGsTyuZcvX1CFuC49tRL",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "64ab22c8-eeec-4ac2-9464-299373b94848",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "64ab22c8-eeec-4ac2-9464-299373b94848",
+  "timestamp": "2026-04-30T14:50:46.963Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "e02f7f62-4adc-451f-b628-906624fc5270",
+  "version": "2.1.123"
+}

@@ -1,0 +1,27 @@
+{
+  "agentId": "ac82afa7422550819",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "820\t\n821\t    if (!issue.projectId) {\n822\t      const defaultGoal = await goalsSvc.getDefaultCompanyGoal(issue.companyId);\n823\t      return { project, goal: defaultGoal };\n824\t    }\n825\t\n826\t    return { project, goal: null };\n827\t  }\n828\t\n829\t  // Resolve issue identifiers (e.g. \"PAP-39\") to UUIDs for all /issues/:id routes\n830\t  router.param(\"id\", async (req, res, next, rawId) =\u003e {\n831\t    try {\n832\t      req.params.id = await normalizeIssueIdentifier(rawId);\n833\t      next();\n834\t    } catch (err) {\n835\t      next(err);\n836\t    }\n837\t  });\n838\t\n839\t  // Resolve issue identifiers (e.g. \"PAP-39\") to UUIDs for company-scoped attachment routes.",
+        "tool_use_id": "toolu_01Rz3B3pgvgY4Nq8ac2GLEvM",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "15ea61d2-bafe-46fb-8f31-d5d72414ee7c",
+  "promptId": "dc405341-3479-47dd-8d57-3077b7af430f",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "15ea61d2-bafe-46fb-8f31-d5d72414ee7c",
+  "timestamp": "2026-04-30T15:28:48.907Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "663db727-fe84-4713-bbfa-fe283e23bf98",
+  "version": "2.1.123"
+}

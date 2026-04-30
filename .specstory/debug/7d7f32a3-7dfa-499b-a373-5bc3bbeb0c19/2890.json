@@ -1,0 +1,27 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { and, asc, eq, isNull } from \"drizzle-orm\";\n2\timport type { Db } from \"@paperclipai/db\";\n3\timport { goals } from \"@paperclipai/db\";\n4\t\n5\ttype GoalReader = Pick\u003cDb, \"select\"\u003e;\n6\t\n7\texport async function getDefaultCompanyGoal(db: GoalReader, companyId: string) {\n8\t  const activeRootGoal = await db\n9\t    .select()\n10\t    .from(goals)\n11\t    .where(\n12\t      and(\n13\t        eq(goals.companyId, companyId),\n14\t        eq(goals.level, \"company\"),\n15\t        eq(goals.status, \"active\"),\n16\t        isNull(goals.parentId),\n17\t      ),\n18\t    )\n19\t    .orderBy(asc(goals.createdAt))\n20\t    .then((rows) =\u003e rows[0] ?? null);\n21\t  if (activeRootGoal) return activeRootGoal;\n22\t\n23\t  const anyRootGoal = await db\n24\t    .select()\n25\t    .from(goals)\n26\t    .where(\n27\t      and(\n28\t        eq(goals.companyId, companyId),\n29\t        eq(goals.level, \"company\"),\n30\t        isNull(goals.parentId),\n31\t      ),\n32\t    )\n33\t    .orderBy(asc(goals.createdAt))\n34\t    .then((rows) =\u003e rows[0] ?? null);\n35\t  if (anyRootGoal) return anyRootGoal;\n36\t\n37\t  return db\n38\t    .select()\n39\t    .from(goals)\n40\t    .where(and(eq(goals.companyId, companyId), eq(goals.level, \"company\")))\n41\t    .orderBy(asc(goals.createdAt))\n42\t    .then((rows) =\u003e rows[0] ?? null);\n43\t}\n44\t\n45\texport function goalService(db: Db) {\n46\t  return {\n47\t    list: (companyId: string) =\u003e db.select().from(goals).where(eq(goals.companyId, companyId)),\n48\t\n49\t    getById: (id: string) =\u003e\n50\t      db",
+        "tool_use_id": "toolu_013Qbp8SVBYwqKp97c4MZMh7",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "62448404-4206-4c73-b5da-cbc643d9b5b0",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "62448404-4206-4c73-b5da-cbc643d9b5b0",
+  "timestamp": "2026-04-30T16:35:43.160Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "526430e7-b0c9-4dd9-afaa-d6f05b9c47dd",
+  "version": "2.1.123"
+}

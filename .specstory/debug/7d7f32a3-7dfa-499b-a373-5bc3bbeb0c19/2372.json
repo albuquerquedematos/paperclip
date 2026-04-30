@@ -1,0 +1,27 @@
+{
+  "agentId": "a4e0b0593ae885eb5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1800\t        agentId: actor.agentId,\n1801\t        runId: actor.runId,\n1802\t        action: \"approval.created\",\n1803\t        entityType: \"approval\",\n1804\t        entityId: approval.id,\n1805\t        details: { type: approval.type, linkedAgentId: agent.id },\n1806\t      });\n1807\t    }\n1808\t\n1809\t    res.status(201).json({ agent, approval });\n1810\t  });\n1811\t\n1812\t  router.post(\"/companies/:companyId/agents\", validate(createAgentSchema), async (req, res) =\u003e {\n1813\t    const companyId = req.params.companyId as string;\n1814\t    await assertCanCreateAgentsForCompany(req, companyId);\n1815\t\n1816\t    const company = await db\n1817\t      .select()\n1818\t      .from(companies)\n1819\t      .where(eq(companies.id, companyId))",
+        "tool_use_id": "toolu_01APpDJAaZHsXRZQ23AxRhSz",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "f745f74d-e91a-4147-ad83-35e00a6a6d3f",
+  "promptId": "a7d059d2-a228-4b98-b9c8-2306fb529ce9",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "f745f74d-e91a-4147-ad83-35e00a6a6d3f",
+  "timestamp": "2026-04-30T16:10:51.517Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "cbedbaf1-0f25-4f84-828d-4cb846964ce8",
+  "version": "2.1.123"
+}

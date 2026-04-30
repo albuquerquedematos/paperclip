@@ -1,0 +1,71 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "attributionAgent": "backend-architect",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01QFXZyQCRwKXMGgu6DgF7uA",
+        "input": {
+          "command": "grep -n \"parseHeartbeatPolicy\\|heartbeatPolicy\\|heartbeat_policy\" /Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/services/heartbeat.ts | head -10",
+          "description": "Find heartbeat policy in heartbeat service"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01NzGQLXrv2DVMgD1kwyt9Wr",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 207
+      },
+      "cache_creation_input_tokens": 207,
+      "cache_read_input_tokens": 145044,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 207
+          },
+          "cache_creation_input_tokens": 207,
+          "cache_read_input_tokens": 145044,
+          "input_tokens": 1,
+          "output_tokens": 130,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 130,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "fdfe77be-6125-4798-8dd5-793c10a57950",
+  "requestId": "req_011CaaHWXcZggEiJsRzuEuPF",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "timestamp": "2026-04-30T16:39:15.926Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "76dcaad5-1b42-497e-af73-f266034ced51",
+  "version": "2.1.123"
+}

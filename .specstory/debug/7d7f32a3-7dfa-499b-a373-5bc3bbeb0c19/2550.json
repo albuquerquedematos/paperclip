@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "78\ttype WatchdogDecisionActor =\n79\t  | { type: \"board\"; userId?: string | null; runId?: string | null }\n80\t  | { type: \"agent\"; agentId?: string | null; runId?: string | null }\n81\t  | { type: \"none\" };\n82\t\n83\texport type RunOutputSilenceSummary = {\n84\t  lastOutputAt: Date | null;\n85\t  lastOutputSeq: number;\n86\t  lastOutputStream: \"stdout\" | \"stderr\" | null;\n87\t  silenceStartedAt: Date | null;\n88\t  silenceAgeMs: number | null;\n89\t  level: \"not_applicable\" | \"ok\" | \"suspicious\" | \"critical\" | \"snoozed\";",
+        "tool_use_id": "toolu_012aRpw5wX7ouikRzUNRR839",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "b775d2d8-6f03-4498-bfaa-043ac85f3b2a",
+  "promptId": "ba96a81e-2351-4b03-969f-bc172383cdd1",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "b775d2d8-6f03-4498-bfaa-043ac85f3b2a",
+  "timestamp": "2026-04-30T16:24:36.471Z",
+  "toolUseResult": {
+    "file": {
+      "content": "type WatchdogDecisionActor =\n  | { type: \"board\"; userId?: string | null; runId?: string | null }\n  | { type: \"agent\"; agentId?: string | null; runId?: string | null }\n  | { type: \"none\" };\n\nexport type RunOutputSilenceSummary = {\n  lastOutputAt: Date | null;\n  lastOutputSeq: number;\n  lastOutputStream: \"stdout\" | \"stderr\" | null;\n  silenceStartedAt: Date | null;\n  silenceAgeMs: number | null;\n  level: \"not_applicable\" | \"ok\" | \"suspicious\" | \"critical\" | \"snoozed\";",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/services/recovery/service.ts",
+      "numLines": 12,
+      "startLine": 78,
+      "totalLines": 2534
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "f14c9426-1d55-4dd4-b2e8-82a8b5ebc730",
+  "version": "2.1.123"
+}

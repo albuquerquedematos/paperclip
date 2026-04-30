@@ -1,0 +1,26 @@
+{
+  "agentId": "a6710083ef9195699",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport type { RunProcessResult } from \"./server-utils.js\";\n2\t\n3\texport interface CommandExecutorInput {\n4\t  runId: string;\n5\t  command: string;\n6\t  args: string[];\n7\t  cwd: string;\n8\t  env: Record\u003cstring, string\u003e;\n9\t  timeoutSec: number;\n10\t  graceSec: number;\n11\t  onLog: (stream: \"stdout\" | \"stderr\", chunk: string) =\u003e Promise\u003cvoid\u003e;\n12\t}\n13\t\n14\texport interface CommandExecutor {\n15\t  run(input: CommandExecutorInput): Promise\u003cRunProcessResult\u003e;\n16\t  cancel(runId: string): Promise\u003cvoid\u003e;\n17\t}\n18\t",
+        "tool_use_id": "toolu_016c88wL5Rnfgtem9HHyJXVL",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "8a0c734b-e456-4f58-809c-681474e223ff",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "8a0c734b-e456-4f58-809c-681474e223ff",
+  "timestamp": "2026-04-30T14:51:35.443Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "5e59596d-4335-4c57-a64b-e00e1128b868",
+  "version": "2.1.123"
+}

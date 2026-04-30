@@ -1,0 +1,27 @@
+{
+  "agentId": "a4ad4aa75ca105b41",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1800\t  // IMPORTANT: Static routes must come before parameterized routes.\n1801\t  // ---------------------------------------------------------------------------\n1802\t\n1803\t  router.get(\"/plugins\", expressHandler(listPlugins, adapterDeps));\n1804\t  router.get(\"/plugins/examples\", expressHandler(listPluginExamples, adapterDeps));\n1805\t  router.get(\"/plugins/ui-contributions\", expressHandler(listUiContributions, adapterDeps));\n1806\t  router.get(\"/plugins/tools\", expressHandler(listPluginTools, adapterDeps));\n1807\t  router.post(\"/plugins/tools/execute\", expressHandler(executePluginTool, adapterDeps));\n1808\t\n1809\t  router.post(\"/plugins/install\", (req, _res, next) =\u003e {\n1810\t    try { assertInstanceAdmin(req); next(); } catch (err) { next(err); }\n1811\t  }, async (req, _res, next) =\u003e {\n1812\t    // logPluginMutationActivity needs the full req.actor shape; run it here in\n1813\t    // the Express layer after installPlugin resolves.\n1814\t    next();\n1815\t  }, expressHandler(installPlugin, adapterDeps));\n1816\t\n1817\t  // Bridge routes — companyId-scoped auth runs in Express middleware before Handler\n1818\t  router.post(\"/plugins/:pluginId/bridge/data\", async (req, _res, next) =\u003e {\n1819\t    try {\n1820\t      assertBoardOrgAccess(req);\n1821\t      const body = req.body as { companyId?: unknown } | undefined;\n1822\t      if (body?.companyId !== undefined \u0026\u0026 body?.companyId !== null) {\n1823\t        assertPluginBridgeScope(req, body.companyId);\n1824\t      } else {\n1825\t        assertInstanceAdmin(req);\n1826\t      }\n1827\t      next();\n1828\t    } catch (err) { next(err); }\n1829\t  }, expressHandler(bridgeGetData, adapterDeps));\n1830\t\n1831\t  router.post(\"/plugins/:pluginId/bridge/action\", async (req, _res, next) =\u003e {\n1832\t    try {\n1833\t      assertBoardOrgAccess(req);\n1834\t      const body = req.body as { companyId?: unknown } | undefined;\n1835\t      if (body?.companyId !== undefined \u0026\u0026 body?.companyId !== null) {\n1836\t        assertPluginBridgeScope(req, body.companyId);\n1837\t      } else {\n1838\t        assertInstanceAdmin(req);\n1839\t      }\n1840\t      next();\n1841\t    } catch (err) { next(err); }\n1842\t  }, expressHandler(bridgePerformAction, adapterDeps));\n1843\t\n1844\t  router.post(\"/plugins/:pluginId/data/:key\", async (req, _res, next) =\u003e {\n1845\t    try {\n1846\t      assertBoardOrgAccess(req);\n1847\t      const body = req.body as { companyId?: unknown } | undefined;\n1848\t      if (body?.companyId !== undefined \u0026\u0026 body?.companyId !== null) {\n1849\t        assertPluginBridgeScope(req, body.companyId);\n1850\t      } else {\n1851\t        assertInstanceAdmin(req);\n1852\t      }\n1853\t      next();\n1854\t    } catch (err) { next(err); }\n1855\t  }, expressHandler(bridgeGetDataByKey, adapterDeps));\n1856\t\n1857\t  router.post(\"/plugins/:pluginId/actions/:key\", async (req, _res, next) =\u003e {\n1858\t    try {\n1859\t      assertBoardOrgAccess(req);",
+        "tool_use_id": "toolu_016iNCt4itzKiDJmLF5SV4dB",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "91b41971-dca8-4566-9bda-54dfc8ca8174",
+  "promptId": "e14e6903-86b2-440b-8601-db2551c5adc3",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "91b41971-dca8-4566-9bda-54dfc8ca8174",
+  "timestamp": "2026-04-30T15:22:36.375Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "4a176d70-669e-48bf-bcea-659040b5c115",
+  "version": "2.1.123"
+}

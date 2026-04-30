@@ -1,0 +1,35 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "65\texport const storageLocalDiskConfigSchema = z.object({\n66\t  baseDir: z.string().default(\"~/.paperclip/instances/default/data/storage\"),\n67\t});\n68\t\n69\texport const storageS3ConfigSchema = z.object({\n70\t  bucket: z.string().min(1).default(\"paperclip\"),\n71\t  region: z.string().min(1).default(\"us-east-1\"),\n72\t  endpoint: z.string().optional(),\n73\t  prefix: z.string().default(\"\"),\n74\t  forcePathStyle: z.boolean().default(false),\n75\t});\n76\t\n77\texport const storageConfigSchema = z.object({\n78\t  provider: z.enum(STORAGE_PROVIDERS).default(\"local_disk\"),\n79\t  localDisk: storageLocalDiskConfigSchema.default({\n80\t    baseDir: \"~/.paperclip/instances/default/data/storage\",\n81\t  }),\n82\t  s3: storageS3ConfigSchema.default({\n83\t    bucket: \"paperclip\",\n84\t    region: \"us-east-1\",\n85\t    prefix: \"\",\n86\t    forcePathStyle: false,\n87\t  }),\n88\t});\n89\t\n90\texport const secretsLocalEncryptedConfigSchema = z.object({\n91\t  keyFilePath: z.string().default(\"~/.paperclip/instances/default/secrets/master.key\"),\n92\t});\n93\t\n94\texport const secretsConfigSchema = z.object({",
+        "tool_use_id": "toolu_01BB2eAnpEbAJEYpbV7DKU9R",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "78a2c8f1-a5b5-4435-92dd-34fc9c94d232",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "78a2c8f1-a5b5-4435-92dd-34fc9c94d232",
+  "timestamp": "2026-04-30T14:48:41.451Z",
+  "toolUseResult": {
+    "file": {
+      "content": "export const storageLocalDiskConfigSchema = z.object({\n  baseDir: z.string().default(\"~/.paperclip/instances/default/data/storage\"),\n});\n\nexport const storageS3ConfigSchema = z.object({\n  bucket: z.string().min(1).default(\"paperclip\"),\n  region: z.string().min(1).default(\"us-east-1\"),\n  endpoint: z.string().optional(),\n  prefix: z.string().default(\"\"),\n  forcePathStyle: z.boolean().default(false),\n});\n\nexport const storageConfigSchema = z.object({\n  provider: z.enum(STORAGE_PROVIDERS).default(\"local_disk\"),\n  localDisk: storageLocalDiskConfigSchema.default({\n    baseDir: \"~/.paperclip/instances/default/data/storage\",\n  }),\n  s3: storageS3ConfigSchema.default({\n    bucket: \"paperclip\",\n    region: \"us-east-1\",\n    prefix: \"\",\n    forcePathStyle: false,\n  }),\n});\n\nexport const secretsLocalEncryptedConfigSchema = z.object({\n  keyFilePath: z.string().default(\"~/.paperclip/instances/default/secrets/master.key\"),\n});\n\nexport const secretsConfigSchema = z.object({",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/shared/src/config-schema.ts",
+      "numLines": 30,
+      "startLine": 65,
+      "totalLines": 200
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "bc83cbdd-9228-4663-9f54-fcc920a31e1c",
+  "version": "2.1.123"
+}

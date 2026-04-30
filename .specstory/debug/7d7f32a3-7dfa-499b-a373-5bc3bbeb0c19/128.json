@@ -1,0 +1,67 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01UkKn5PGfQY3RPvgCyuP4Ts",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/doc/DEPLOYMENT-MODES.md"
+        },
+        "name": "Read",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01BmY7nPEjBzBkrqz8wAsFqo",
+    "model": "claude-opus-4-7",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 4979,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 4979,
+      "cache_read_input_tokens": 49552,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 4979,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 4979,
+          "cache_read_input_tokens": 49552,
+          "input_tokens": 1,
+          "output_tokens": 1113,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 1113,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "340adbf1-430e-4512-9bed-cd0274f4916a",
+  "requestId": "req_011Caa2yDbrKuw8FLg1xZqT5",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "timestamp": "2026-04-30T13:28:49.396Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "480af865-1aa8-423b-afad-bf4fc8afc56f",
+  "version": "2.1.123"
+}

@@ -1,0 +1,28 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "9:import { isAllowedContentType, MAX_ATTACHMENT_BYTES } from \"../attachment-types.js\";\n114:  // POST /companies/:companyId/assets/images\n117:  router.post(\"/companies/:companyId/assets/images\", async (req, res) =\u003e {\n118:    const companyId = req.params.companyId as string;\n119:    assertCompanyAccess(req, companyId);\n169:      companyId,\n176:    const asset = await svc.create(companyId, {\n188:      companyId,\n204:      assetId: asset.id,\n205:      companyId: asset.companyId,\n221:  // POST /companies/:companyId/logo\n224:  router.post(\"/companies/:companyId/logo\", async (req, res) =\u003e {\n225:    const companyId = req.params.companyId as string;\n226:    assertCompanyAccess(req, companyId);\n271:      companyId,\n278:    const asset = await svc.create(companyId, {\n290:      companyId,\n307:      assetId: asset.id,\n308:      companyId: asset.companyId,\n324:  // GET /assets/:assetId/content — streaming response\n328:    const assetId = ctx.param(\"assetId\");\n329:    if (!assetId) return Response.json({ error: \"Missing assetId\" }, { status: 400 });\n330:    const asset = await svc.getById(assetId);\n338:    const object = await storage.getObject(asset.companyId, asset.objectKey);\n356:  router.get(\"/assets/:assetId/content\", expressHandler(getAssetContent, { db, storage }));",
+        "is_error": false,
+        "tool_use_id": "toolu_01Gy32KZ4iCarRGLEkdskYDG",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "fcf83605-777d-410c-8bd8-7fa45507ff5d",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "fcf83605-777d-410c-8bd8-7fa45507ff5d",
+  "timestamp": "2026-04-30T16:27:50.076Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "3109b095-396f-4aa9-b2c1-d8e77200c6f5",
+  "version": "2.1.123"
+}

@@ -1,0 +1,70 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "attributionAgent": "backend-architect",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01LLh1xNDhz8XBFU2hmuvC3j",
+        "input": {
+          "command": "grep -rn \"from 'node:fs\" /Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/ 2\u003e/dev/null\ngrep -rn 'from \"node:fs' /Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/ 2\u003e/dev/null\ngrep -rn \"from 'fs'\" /Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/ 2\u003e/dev/null\ngrep -rn \"from 'fs/promises'\" /Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/ 2\u003e/dev/null\ngrep -rn \"node:fs/promises\" /Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/ 2\u003e/dev/null",
+          "description": "Search for all fs import patterns in server/src/"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01CAbr8Vtc59re5Vooess9H7",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 1708
+      },
+      "cache_creation_input_tokens": 1708,
+      "cache_read_input_tokens": 7073,
+      "inference_geo": "",
+      "input_tokens": 3,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 1708
+          },
+          "cache_creation_input_tokens": 1708,
+          "cache_read_input_tokens": 7073,
+          "input_tokens": 3,
+          "output_tokens": 360,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 360,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "237b8407-85a0-44e9-b2de-ac13d114cab8",
+  "requestId": "req_011Caa9Jvdu4ZwUVJak6mvqY",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "timestamp": "2026-04-30T14:51:44.950Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "28dc823d-0881-4436-9ee6-3e5101eb2f38",
+  "version": "2.1.123"
+}

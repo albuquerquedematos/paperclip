@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "168\t  const candidates = [\n169\t    path.resolve(moduleDir, \"../../skills\"),         // published\n170\t    path.resolve(process.cwd(), \"skills\"),           // cwd (monorepo root)\n171\t    path.resolve(moduleDir, \"../../../skills\"),       // dev\n172\t  ];\n173\t  for (const candidate of candidates) {\n174\t    try {\n175\t      if (fs.statSync(candidate).isDirectory()) return candidate;\n176\t    } catch { /* skip */ }\n177\t  }\n178\t  return null;\n179\t}\n180\t\n181\t/** Parse YAML frontmatter from a SKILL.md file to extract the description. */\n182\tfunction parseSkillFrontmatter(markdown: string): { description: string } {\n183\t  const match = markdown.match(/^---\\n([\\s\\S]*?)\\n---/);\n184\t  if (!match) return { description: \"\" };\n185\t  const yaml = match[1];\n186\t  // Extract description — handles both single-line and multi-line YAML values\n187\t  const descMatch = yaml.match(",
+        "tool_use_id": "toolu_011xpBh5UsTEKdqFYCRcqE5B",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "8dbd67cc-671a-417b-b580-deb394f3f084",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "8dbd67cc-671a-417b-b580-deb394f3f084",
+  "timestamp": "2026-04-30T14:53:00.423Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "daa3a9a9-bea4-4f20-8738-82b2c8e62a18",
+  "version": "2.1.123"
+}

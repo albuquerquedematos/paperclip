@@ -1,0 +1,27 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "2360\t\n2361\t    const resumeRun = await db\n2362\t      .select({\n2363\t        id: heartbeatRuns.id,\n2364\t        contextSnapshot: heartbeatRuns.contextSnapshot,\n2365\t        sessionIdBefore: heartbeatRuns.sessionIdBefore,\n2366\t        sessionIdAfter: heartbeatRuns.sessionIdAfter,\n2367\t      })\n2368\t      .from(heartbeatRuns)\n2369\t      .where(\n2370\t        and(\n2371\t          eq(heartbeatRuns.id, resumeFromRunId),\n2372\t          eq(heartbeatRuns.companyId, agent.companyId),\n2373\t          eq(heartbeatRuns.agentId, agent.id),\n2374\t        ),\n2375\t      )\n2376\t      .then((rows) =\u003e rows[0] ?? null);\n2377\t    if (!resumeRun) return null;\n2378\t\n2379\t    const resumeContext = parseObject(resumeRun.contextSnapshot);\n2380\t    const resumeTaskKey = deriveTaskKey(resumeContext, null) ?? taskKey;\n2381\t    const resumeTaskSession = resumeTaskKey\n2382\t      ? await getTaskSession(agent.companyId, agent.id, agent.adapterType, resumeTaskKey)\n2383\t      : null;\n2384\t    const sessionCodec = getAdapterSessionCodec(agent.adapterType);\n2385\t    const sessionOverride = buildExplicitResumeSessionOverride({\n2386\t      resumeFromRunId,\n2387\t      resumeRunSessionIdBefore: resumeRun.sessionIdBefore,\n2388\t      resumeRunSessionIdAfter: resumeRun.sessionIdAfter,\n2389\t      taskSession: resumeTaskSession,\n2390\t      sessionCodec,\n2391\t    });\n2392\t    if (!sessionOverride) return null;\n2393\t\n2394\t    return {\n2395\t      resumeFromRunId,\n2396\t      taskKey: resumeTaskKey,\n2397\t      issueId: readNonEmptyString(resumeContext.issueId),\n2398\t      taskId: readNonEmptyString(resumeContext.taskId) ?? readNonEmptyString(resumeContext.issueId),\n2399\t      sessionDisplayId: sessionOverride.sessionDisplayId,\n2400\t      sessionParams: sessionOverride.sessionParams,\n2401\t    };\n2402\t  }\n2403\t\n2404\t  async function resolveWorkspaceForRun(\n2405\t    agent: typeof agents.$inferSelect,\n2406\t    context: Record\u003cstring, unknown\u003e,\n2407\t    previousSessionParams: Record\u003cstring, unknown\u003e | null,\n2408\t    opts?: { useProjectWorkspace?: boolean | null },\n2409\t  ): Promise\u003cResolvedWorkspaceForRun\u003e {",
+        "tool_use_id": "toolu_01LmQZJFFMbLkUSw8zvYwJPs",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "9884707c-9cce-4e89-ac33-b01482a3661a",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "9884707c-9cce-4e89-ac33-b01482a3661a",
+  "timestamp": "2026-04-30T16:28:25.280Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "d7020688-8ae3-4d4e-93e8-af7abf213b7a",
+  "version": "2.1.123"
+}

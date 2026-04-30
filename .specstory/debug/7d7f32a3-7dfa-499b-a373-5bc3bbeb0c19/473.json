@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1595\t\n1596\t    for (const skill of skills) {\n1597\t      if (!missingIds.has(skill.id)) continue;\n1598\t      await db\n1599\t        .delete(companySkills)\n1600\t        .where(eq(companySkills.id, skill.id));\n1601\t      await fs.rm(resolveRuntimeSkillMaterializedPath(companyId, skill), { recursive: true, force: true });\n1602\t    }\n1603\t  }\n1604\t\n1605\t  async function ensureSkillInventoryCurrent(companyId: string) {\n1606\t    const existingRefresh = skillInventoryRefreshPromises.get(companyId);\n1607\t    if (existingRefresh) {\n1608\t      await existingRefresh;\n1609\t      return;\n1610\t    }\n1611\t\n1612\t    const refreshPromise = (async () =\u003e {\n1613\t      const companyExists = await db\n1614\t        .select({ id: companies.id })\n1615\t        .from(companies)\n1616\t        .where(eq(companies.id, companyId))\n1617\t        .then((rows) =\u003e rows.length \u003e 0);\n1618\t      if (!companyExists) {\n1619\t        throw notFound(\"Company not found\");\n1620\t      }\n1621\t      await ensureBundledSkills(companyId);\n1622\t      await pruneMissingLocalPathSkills(companyId);\n1623\t    })();\n1624\t",
+        "tool_use_id": "toolu_012rB7WGTTGh7KuhZoPnot9G",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "c2788608-f2ef-42a0-b372-f6fd71530d96",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "c2788608-f2ef-42a0-b372-f6fd71530d96",
+  "timestamp": "2026-04-30T14:52:36.472Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "3b1a6aa8-56c4-422b-a4bc-310432b228b5",
+  "version": "2.1.123"
+}

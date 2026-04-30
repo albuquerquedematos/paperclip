@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "2535\t  router.post(\"/agents/:id/keys\", validate(createAgentKeySchema), expressHandler(createAgentKey, { db, storage: storageSentinel }));\n2536\t  router.delete(\"/agents/:id/keys/:keyId\", expressHandler(revokeAgentKey, { db, storage: storageSentinel }));\n2537\t\n2538\t  router.post(\"/agents/:id/wakeup\", validate(wakeAgentSchema), async (req, res) =\u003e {\n2539\t    const id = req.params.id as string;",
+        "tool_use_id": "toolu_01H7iT6naRkx8KZujYowMcgh",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "4e3881f2-ec29-4d40-910c-a979f623b77a",
+  "promptId": "ba96a81e-2351-4b03-969f-bc172383cdd1",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "4e3881f2-ec29-4d40-910c-a979f623b77a",
+  "timestamp": "2026-04-30T16:29:04.108Z",
+  "toolUseResult": {
+    "file": {
+      "content": "  router.post(\"/agents/:id/keys\", validate(createAgentKeySchema), expressHandler(createAgentKey, { db, storage: storageSentinel }));\n  router.delete(\"/agents/:id/keys/:keyId\", expressHandler(revokeAgentKey, { db, storage: storageSentinel }));\n\n  router.post(\"/agents/:id/wakeup\", validate(wakeAgentSchema), async (req, res) =\u003e {\n    const id = req.params.id as string;",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/agents.ts",
+      "numLines": 5,
+      "startLine": 2535,
+      "totalLines": 3022
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "7b4739d8-c2b3-455c-95d2-c41c950e52fe",
+  "version": "2.1.123"
+}

@@ -1,0 +1,27 @@
+{
+  "agentId": "ac82afa7422550819",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "493\t  }\n494\t\n495\t  async function runSingleFileUpload(req: Request, res: Response, fileSizeLimit: number) {\n496\t    const upload = multer({\n497\t      storage: multer.memoryStorage(),\n498\t      limits: { fileSize: fileSizeLimit, files: 1 },\n499\t    });\n500\t    await new Promise\u003cvoid\u003e((resolve, reject) =\u003e {\n501\t      upload.single(\"file\")(req, res, (err: unknown) =\u003e {\n502\t        if (err) reject(err);\n503\t        else resolve();\n504\t      });\n505\t    });\n506\t  }\n507\t\n508\t  async function assertCanManageIssueApprovalLinks(req: Request, res: Response, companyId: string) {\n509\t    assertCompanyAccess(req, companyId);\n510\t    if (req.actor.type === \"board\") return true;\n511\t    if (!req.actor.agentId) {\n512\t      res.status(403).json({ error: \"Agent authentication required\" });\n513\t      return false;\n514\t    }\n515\t    const actorAgent = await agentsSvc.getById(req.actor.agentId);\n516\t    if (!actorAgent || actorAgent.companyId !== companyId) {\n517\t      res.status(403).json({ error: \"Forbidden\" });\n518\t      return false;\n519\t    }\n520\t    if (actorAgent.role === \"ceo\" || Boolean(actorAgent.permissions?.canCreateAgents)) return true;\n521\t    res.status(403).json({ error: \"Missing permission to link approvals\" });\n522\t    return false;\n523\t  }\n524\t\n525\t  function actorCanAccessCompany(req: Request, companyId: string) {\n526\t    if (req.actor.type === \"none\") return false;\n527\t    if (req.actor.type === \"agent\") return req.actor.companyId === companyId;\n528\t    if (req.actor.source === \"local_implicit\" || req.actor.isInstanceAdmin) return true;\n529\t    return (req.actor.companyIds ?? []).includes(companyId);\n530\t  }\n531\t\n532\t  function canCreateAgentsLegacy(agent: { permissions: Record\u003cstring, unknown\u003e | null | undefined; role: string }) {\n533\t    if (agent.role === \"ceo\") return true;\n534\t    if (!agent.permissions || typeof agent.permissions !== \"object\") return false;\n535\t    return Boolean((agent.permissions as Record\u003cstring, unknown\u003e).canCreateAgents);\n536\t  }\n537\t\n538\t  async function assertCanAssignTasks(req: Request, companyId: string) {\n539\t    assertCompanyAccess(req, companyId);\n540\t    if (req.actor.type === \"board\") {\n541\t      if (req.actor.source === \"local_implicit\" || req.actor.isInstanceAdmin) return;\n542\t      const allowed = await access.canUser(companyId, req.actor.userId, \"tasks:assign\");\n543\t      if (!allowed) throw forbidden(\"Missing permission: tasks:assign\");\n544\t      return;\n545\t    }\n546\t    if (req.actor.type === \"agent\") {\n547\t      if (!req.actor.agentId) throw forbidden(\"Agent authentication required\");\n548\t      const allowedByGrant = await access.hasPermission(companyId, \"agent\", req.actor.agentId, \"tasks:assign\");\n549\t      if (allowedByGrant) return;\n550\t      const actorAgent = await agentsSvc.getById(req.actor.agentId);\n551\t      if (actorAgent \u0026\u0026 actorAgent.companyId === companyId \u0026\u0026 canCreateAgentsLegacy(actorAgent)) return;\n552\t      throw forbidden(\"Missing permission: tasks:assign\");\n553\t    }\n554\t    throw unauthorized();\n555\t  }\n556\t\n557\t  function requireAgentRunId(req: Request, res: Response) {\n558\t    if (req.actor.type !== \"agent\") return null;\n559\t    const runId = req.actor.runId?.trim();\n560\t    if (runId) return runId;\n561\t    res.status(401).json({ error: \"Agent run id required\" });\n562\t    return null;\n563\t  }\n564\t\n565\t  async function hasActiveCheckoutManagementOverride(\n566\t    actorAgentId: string,\n567\t    companyId: string,",
+        "tool_use_id": "toolu_01Ni35B9WJUGAgyoiaG3QugP",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "c9ade790-22d4-4c94-962e-f5f0307d9ed3",
+  "promptId": "dc405341-3479-47dd-8d57-3077b7af430f",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "c9ade790-22d4-4c94-962e-f5f0307d9ed3",
+  "timestamp": "2026-04-30T15:27:49.450Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "afc3153e-c51a-4929-99d8-5c6dab6f9a12",
+  "version": "2.1.123"
+}

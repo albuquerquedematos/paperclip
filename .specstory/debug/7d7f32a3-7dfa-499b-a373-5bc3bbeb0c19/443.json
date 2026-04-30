@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "2470\t            managedWorkspaceWarning = managedWorkspace.warning;\n2471\t          } catch (error) {\n2472\t            if (preferredWorkspace?.id === workspace.id) {\n2473\t              preferredWorkspaceWarning = error instanceof Error ? error.message : String(error);\n2474\t            }\n2475\t            continue;\n2476\t          }\n2477\t        }\n2478\t        hasConfiguredProjectCwd = true;\n2479\t        const projectCwdExists = await fs\n2480\t          .stat(projectCwd)\n2481\t          .then((stats) =\u003e stats.isDirectory())\n2482\t          .catch(() =\u003e false);\n2483\t        if (projectCwdExists) {\n2484\t          return {\n2485\t            cwd: projectCwd,\n2486\t            source: \"project_primary\" as const,\n2487\t            projectId: resolvedProjectId,\n2488\t            workspaceId: workspace.id,\n2489\t            repoUrl: workspace.repoUrl,\n2490\t            repoRef: workspace.repoRef,\n2491\t            workspaceHints,\n2492\t            warnings: [preferredWorkspaceWarning, managedWorkspaceWarning].filter(\n2493\t              (value): value is string =\u003e Boolean(value),\n2494\t            ),\n2495\t          };\n2496\t        }\n2497\t        if (preferredWorkspace?.id === workspace.id) {\n2498\t          preferredWorkspaceWarning =\n2499\t            `Selected project workspace path \"${projectCwd}\" is not available yet.`;",
+        "tool_use_id": "toolu_01MPD8iqTQoyDkYsk5Li8Tf4",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "0f3edc5a-cdcf-4bd6-ba75-661c239c0ace",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "0f3edc5a-cdcf-4bd6-ba75-661c239c0ace",
+  "timestamp": "2026-04-30T14:52:18.270Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "7b6430dd-5ccc-4542-9184-b73ed1244105",
+  "version": "2.1.123"
+}

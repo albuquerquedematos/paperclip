@@ -1,0 +1,28 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "12:import { and, asc, desc, eq, getTableColumns, gt, inArray, isNull, lte, notInArray, or, sql } from \"drizzle-orm\";\n311:        .filter(Boolean),\n338:    dueAt: new Date(now.getTime() + delayMs),\n391:    .filter((skillKey): skillKey is string =\u003e Boolean(skillKey));\n522:          Object.entries(serviceStates).filter(([, state]) =\u003e\n543:    const repoName = cleanedPath.split(\"/\").filter(Boolean).pop()?.replace(/\\.git$/i, \"\") ?? \"\";\n1370:  const ids = [...new Set(unresolvedBlockerIssueIds.filter(Boolean))];\n1732:      ? input.contextSnapshot.unresolvedBlockerIssueIds.filter((value): value is string =\u003e typeof value === \"string\" \u0026\u0026 value.length \u003e 0)\n2316:      .filter(Boolean)\n2498:            warnings: [preferredWorkspaceWarning, managedWorkspaceWarning].filter(\n3479:      transientRetryNotBefore \u0026\u0026 transientRetryNotBefore.getTime() \u003e baseSchedule.dueAt.getTime()\n3482:            dueAt: transientRetryNotBefore,\n3498:      scheduledRetryAt: schedule.dueAt.toISOString(),\n3518:            scheduledRetryAt: schedule.dueAt.toISOString(),\n3542:          scheduledRetryAt: schedule.dueAt,\n3578:      message: `Scheduled bounded retry ${schedule.attempt}/${schedule.maxAttempts} for ${schedule.dueAt.toISOString()}`,\n3584:        scheduledRetryAt: schedule.dueAt.toISOString(),\n3595:      dueAt: schedule.dueAt,\n3602:    const dueRuns = await db\n3608:          lte(heartbeatRuns.scheduledRetryAt, now),\n3616:    for (const dueRun of dueRuns) {\n3617:      const dueRunIssueId = readNonEmptyString(parseObject(dueRun.contextSnapshot).issueId);\n3618:      if (dueRunIssueId) {\n3627:          .where(and(eq(issues.id, dueRunIssueId), eq(issues.companyId, dueRun.companyId)))\n3630:        if (issue \u0026\u0026 (issue.assigneeAgentId !== dueRun.agentId || issue.status === \"cancelled\")) {\n3633:            ? \"Cancelled because the issue was cancelled before the scheduled retry became due\"\n3634:            : \"Cancelled because the issue was reassigned before the scheduled retry became due\";\n3646:                eq(heartbeatRuns.id, dueRun.id),\n3648:                lte(heartbeatRuns.scheduledRetryAt, now),\n3685:              ? \"Scheduled retry cancelled because issue was cancelled before it became due\"\n3686:              : \"Scheduled retry cancelled because issue ownership changed before it became due\",\n3709:            eq(heartbeatRuns.id, dueRun.id),\n3711:            lte(heartbeatRuns.scheduledRetryAt, now),\n3724:        message: \"Scheduled retry became due and was promoted to the queued run pool\",\n3785:        .filter((issueId): issueId is string =\u003e Boolean(issueId)),\n3928:            or(isNull(issues.executionRunId), eq(issues.executionRunId, claimed.id)),\n4295:          planCount: sql\u003cnumber\u003e`count(*) filter (where ${issueDocuments.key} = 'plan')::int`,\n4351:        count: sql\u003cnumber\u003e`count(*) filter (where ${heartbeatRunEvents.eventType} not in ('lifecycle', 'adapter.invoke', 'error'))::int`,\n4352:        latestAt: sql\u003cDate | null\u003e`max(${heartbeatRunEvents.createdAt}) filter (where ${heartbeatRunEvents.eventType} not in ('lifecycle', 'adapter.invoke', 'error'))`,\n4674:          .filter((issueId): issueId is string =\u003e Boolean(issueId)),",
+        "is_error": false,
+        "tool_use_id": "toolu_012gZGtGoKcy6SDFEDc9qcwQ",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "92a8e26c-d32f-43c5-95d8-fb50d67e62ee",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "92a8e26c-d32f-43c5-95d8-fb50d67e62ee",
+  "timestamp": "2026-04-30T16:24:39.312Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "fdcca9d9-0bc8-4be9-b954-40886a3f66ac",
+  "version": "2.1.123"
+}

@@ -1,0 +1,33 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "packages:\n  - packages/*\n  - packages/adapters/*\n  - packages/plugins/*\n  # Keep sandbox-provider plugins installable as standalone packages without\n  # forcing root pnpm-lock.yaml churn for their third-party deps.\n  - \"!packages/plugins/sandbox-providers/**\"\n  - packages/plugins/examples/*\n  # Keep this smoke fixture installable as a local plugin example without\n  # forcing PRs to commit pnpm-lock.yaml for a new workspace importer.\n  - \"!packages/plugins/examples/plugin-orchestration-smoke-example\"\n  - server\n  - ui\n  - cli",
+        "is_error": false,
+        "tool_use_id": "toolu_01S5MgyQAg6HqNGX93mbhGZw",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "6dde8af6-058a-498e-bbdf-b3fddff8d29a",
+  "promptId": "41a5cab3-78a5-4305-8404-9daa35591aac",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "6dde8af6-058a-498e-bbdf-b3fddff8d29a",
+  "timestamp": "2026-04-30T15:02:36.233Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "packages:\n  - packages/*\n  - packages/adapters/*\n  - packages/plugins/*\n  # Keep sandbox-provider plugins installable as standalone packages without\n  # forcing root pnpm-lock.yaml churn for their third-party deps.\n  - \"!packages/plugins/sandbox-providers/**\"\n  - packages/plugins/examples/*\n  # Keep this smoke fixture installable as a local plugin example without\n  # forcing PRs to commit pnpm-lock.yaml for a new workspace importer.\n  - \"!packages/plugins/examples/plugin-orchestration-smoke-example\"\n  - server\n  - ui\n  - cli"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "c474dcee-fc11-4813-9f0b-78246cad852f",
+  "version": "2.1.123"
+}

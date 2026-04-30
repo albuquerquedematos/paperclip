@@ -1,0 +1,26 @@
+{
+  "agentId": "ad82ff77af71f84d8",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { Router } from \"express\";\n2\timport { z } from \"zod\";\n3\timport type { Db } from \"@paperclipai/db\";\n4\timport { validate } from \"../middleware/validate.js\";\n5\timport { activityService, normalizeActivityLimit } from \"../services/activity.js\";\n6\timport { assertAuthenticated, assertBoard, assertCompanyAccess } from \"./authz.js\";\n7\timport { heartbeatService, issueService } from \"../services/index.js\";\n8\timport { sanitizeRecord } from \"../redaction.js\";\n9\t\n10\tconst createActivitySchema = z.object({\n11\t  actorType: z.enum([\"agent\", \"user\", \"system\", \"plugin\"]).optional().default(\"system\"),\n12\t  actorId: z.string().min(1),\n13\t  action: z.string().min(1),\n14\t  entityType: z.string().min(1),\n15\t  entityId: z.string().min(1),\n16\t  agentId: z.string().uuid().optional().nullable(),\n17\t  details: z.record(z.unknown()).optional().nullable(),\n18\t});\n19\t\n20\texport function activityRoutes(db: Db) {\n21\t  const router = Router();\n22\t  const svc = activityService(db);\n23\t  const heartbeat = heartbeatService(db);\n24\t  const issueSvc = issueService(db);\n25\t\n26\t  async function resolveIssueByRef(rawId: string) {\n27\t    if (/^[A-Z]+-\\d+$/i.test(rawId)) {\n28\t      return issueSvc.getByIdentifier(rawId);\n29\t    }\n30\t    return issueSvc.getById(rawId);\n31\t  }\n32\t\n33\t  router.get(\"/companies/:companyId/activity\", async (req, res) =\u003e {\n34\t    const companyId = req.params.companyId as string;\n35\t    assertCompanyAccess(req, companyId);\n36\t\n37\t    const filters = {\n38\t      companyId,\n39\t      agentId: req.query.agentId as string | undefined,\n40\t      entityType: req.query.entityType as string | undefined,\n41\t      entityId: req.query.entityId as string | undefined,\n42\t      limit: normalizeActivityLimit(Number(req.query.limit)),\n43\t    };\n44\t    const result = await svc.list(filters);\n45\t    res.json(result);\n46\t  });\n47\t\n48\t  router.post(\"/companies/:companyId/activity\", validate(createActivitySchema), async (req, res) =\u003e {\n49\t    assertBoard(req);\n50\t    const companyId = req.params.companyId as string;\n51\t    assertCompanyAccess(req, companyId);\n52\t    const event = await svc.create({\n53\t      companyId,\n54\t      ...req.body,\n55\t      details: req.body.details ? sanitizeRecord(req.body.details) : null,\n56\t    });\n57\t    res.status(201).json(event);\n58\t  });\n59\t\n60\t  router.get(\"/issues/:id/activity\", async (req, res) =\u003e {\n61\t    const rawId = req.params.id as string;\n62\t    const issue = await resolveIssueByRef(rawId);\n63\t    if (!issue) {\n64\t      res.status(404).json({ error: \"Issue not found\" });\n65\t      return;\n66\t    }\n67\t    assertCompanyAccess(req, issue.companyId);\n68\t    const result = await svc.forIssue(issue.id);\n69\t    res.json(result);\n70\t  });\n71\t\n72\t  router.get(\"/issues/:id/runs\", async (req, res) =\u003e {\n73\t    const rawId = req.params.id as string;\n74\t    const issue = await resolveIssueByRef(rawId);\n75\t    if (!issue) {\n76\t      res.status(404).json({ error: \"Issue not found\" });\n77\t      return;\n78\t    }\n79\t    assertCompanyAccess(req, issue.companyId);\n80\t    const result = await svc.runsForIssue(issue.companyId, issue.id);\n81\t    res.json(result);\n82\t  });\n83\t\n84\t  router.get(\"/heartbeat-runs/:runId/issues\", async (req, res) =\u003e {\n85\t    assertAuthenticated(req);\n86\t    const runId = req.params.runId as string;\n87\t    const run = await heartbeat.getRun(runId);\n88\t    if (!run) {\n89\t      res.json([]);\n90\t      return;\n91\t    }\n92\t    assertCompanyAccess(req, run.companyId);\n93\t    const result = await svc.issuesForRun(runId);\n94\t    res.json(result);\n95\t  });\n96\t\n97\t  return router;\n98\t}\n99\t",
+        "tool_use_id": "toolu_01QLDhpf8abimKB6rgTbzbHN",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "099ad9db-e513-434e-8e73-e0071baea2ff",
+  "promptId": "41a5cab3-78a5-4305-8404-9daa35591aac",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "099ad9db-e513-434e-8e73-e0071baea2ff",
+  "timestamp": "2026-04-30T15:05:00.125Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "a9a752b3-0496-440a-bf9e-e54875fb948c",
+  "version": "2.1.123"
+}

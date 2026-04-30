@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01J2MF6XuV3oqvm79RFiZMM9",
+        "input": {
+          "command": "tsc -p packages/deploy-cloudflare/tsconfig.json --noEmit 2\u003e\u00261 | grep \"deploy-cloudflare/src\" | head -20",
+          "description": "Check errors specifically in CF package source files"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_012axXQRfb1GdSbKZC2S6HAi",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 262
+      },
+      "cache_creation_input_tokens": 262,
+      "cache_read_input_tokens": 144313,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 262
+          },
+          "cache_creation_input_tokens": 262,
+          "cache_read_input_tokens": 144313,
+          "input_tokens": 1,
+          "output_tokens": 134,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 134,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "c62f1c39-413c-4c5d-8707-d8482f1bc89d",
+  "requestId": "req_011CaaHrh5eACijVoNTK1LE9",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "timestamp": "2026-04-30T16:43:51.020Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "5ffb4be6-6848-40a2-9a2b-ae6ee88b3063",
+  "version": "2.1.123"
+}

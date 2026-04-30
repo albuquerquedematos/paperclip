@@ -1,0 +1,28 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "265:export async function resolveExecutionRunAdapterConfig(input: {\n290:export function extractMentionedSkillIdsFromSources(\n303:export function applyRunScopedMentionedSkillKeys(\n323:export function computeBoundedTransientHeartbeatRetrySchedule(\n400:export function applyPersistedExecutionWorkspaceConfig(input: {\n437:export function mergeExecutionWorkspaceMetadataForPersistence(input: {\n457:export function stripWorkspaceRuntimeFromExecutionRunConfig(config: Record\u003cstring, unknown\u003e) {\n463:export function buildRealizedExecutionWorkspaceFromPersisted(input: {\n835:export function boundHeartbeatRunEventPayloadForStorage(payload: Record\u003cstring, unknown\u003e): Record\u003cstring, unknown\u003e {\n846:export function compactRunLogChunk(chunk: string, maxChars = MAX_PERSISTED_LOG_CHUNK_CHARS) {\n912:export function prioritizeProjectWorkspaceCandidatesForRun\u003cT extends ProjectWorkspaceCandidate\u003e(\n926:export function summarizeHeartbeatRunContextSnapshot(\n949:export function summarizeHeartbeatRunListResultJson(input: {\n1090:export function buildExplicitResumeSessionOverride(input: {\n1192:export function parseSessionCompactionPolicy(agent: typeof agents.$inferSelect): SessionCompactionPolicy {\n1196:export function resolveRuntimeSessionParamsForWorkspace(input: {\n1314:export function deriveTaskKeyWithHeartbeatFallback(\n1327:export function shouldResetTaskSessionForWake(\n1395:export function formatRuntimeWorkspaceWarningLog(warning: string) {\n1470:export function extractWakeCommentIds(",
+        "is_error": false,
+        "tool_use_id": "toolu_01TzPLSPRe8s6ZDpTKUqTC7G",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "ce9dacda-2611-456b-80aa-4f975645bdfb",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "ce9dacda-2611-456b-80aa-4f975645bdfb",
+  "timestamp": "2026-04-30T16:28:30.974Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "591ff22e-1aa5-4ac5-9a6f-38153ee1deee",
+  "version": "2.1.123"
+}

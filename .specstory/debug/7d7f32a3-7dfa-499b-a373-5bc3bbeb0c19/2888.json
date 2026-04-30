@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "src/routes/agents.ts(1709,56): error TS2339: Property 'adapterType' does not exist on type '{ adapterConfig: { [x: string]: unknown; }; runtimeConfig: Record\u003cstring, unknown\u003e; }'.\nsrc/routes/agents.ts(1720,33): error TS2339: Property 'metadata' does not exist on type '{ adapterConfig: { [x: string]: unknown; }; runtimeConfig: Record\u003cstring, unknown\u003e; }'.\nsrc/routes/agents.ts(1728,37): error TS2339: Property 'name' does not exist on type '{ adapterConfig: { [x: string]: unknown; }; runtimeConfig: Record\u003cstring, unknown\u003e; }'.\nsrc/routes/agents.ts(1729,37): error TS2339: Property 'role' does not exist on type '{ adapterConfig: { [x: string]: unknown; }; runtimeConfig: Record\u003cstring, unknown\u003e; }'.\nsrc/routes/agents.ts(1730,38): error TS2339: Property 'title' does not exist on type '{ adapterConfig: { [x: string]: unknown; }; runtimeConfig: Record\u003cstring, unknown\u003e; }'.\nsrc/routes/agents.ts(1731,37): error TS2339: Property 'icon' does not exist on type '{ adapterConfig: { [x: string]: unknown; }; runtimeConfig: Record\u003cstring, unknown\u003e; }'.\nsrc/routes/agents.ts(1732,42): error TS2339: Property 'reportsTo' does not exist on type '{ adapterConfig: { [x: string]: unknown; }; runtimeConfig: Record\u003cstring, unknown\u003e; }'.\nsrc/routes/agents.ts(1733,45): error TS2339: Property 'capabilities' does not exist on type '{ adapterConfig: { [x: string]: unknown; }; runtimeConfig: Record\u003cstring, unknown\u003e; }'.\nsrc/routes/agents.ts(1738,40): error TS2339: Property 'budgetMonthlyCents' does not exist on type '{ adapterConfig: { [x: string]: unknown; }; runtimeConfig: Record\u003cstring, unknown\u003e; }'.\nsrc/routes/agents.ts(1739,37): error TS2339: Property 'budgetMonthlyCents' does not exist on type '{ adapterConfig: { [x: string]: unknown; }; runtimeConfig: Record\u003cstring, unknown\u003e; }'.\nsrc/routes/agents.ts(1951,51): error TS2345: Argument of type 'Record\u003cstring, unknown\u003e' is not assignable to parameter of type '{ canCreateAgents: boolean; }'.\nsrc/routes/agents.ts(2450,9): error TS2322: Type '(ctx: RequestCtx) =\u003e Promise\u003cResponse | undefined\u003e' is not assignable to type 'Handler'.\nsrc/routes/agents.ts(2551,7): error TS2322: Type 'string' is not assignable to type '\"timer\" | \"assignment\" | \"on_demand\" | \"automation\" | undefined'.\nsrc/routes/agents.ts(2552,7): error TS2322: Type 'string' is not assignable to type '\"system\" | \"manual\" | \"ping\" | \"callback\" | undefined'.",
+        "is_error": false,
+        "tool_use_id": "toolu_01MvT6F5gAKt3gNvmbAmr4KW",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "bc514c14-7102-41a5-b039-79fc1d68a303",
+  "promptId": "ba96a81e-2351-4b03-969f-bc172383cdd1",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "bc514c14-7102-41a5-b039-79fc1d68a303",
+  "timestamp": "2026-04-30T16:35:41.160Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "src/routes/agents.ts(1709,56): error TS2339: Property 'adapterType' does not exist on type '{ adapterConfig: { [x: string]: unknown; }; runtimeConfig: Record\u003cstring, unknown\u003e; }'.\nsrc/routes/agents.ts(1720,33): error TS2339: Property 'metadata' does not exist on type '{ adapterConfig: { [x: string]: unknown; }; runtimeConfig: Record\u003cstring, unknown\u003e; }'.\nsrc/routes/agents.ts(1728,37): error TS2339: Property 'name' does not exist on type '{ adapterConfig: { [x: string]: unknown; }; runtimeConfig: Record\u003cstring, unknown\u003e; }'.\nsrc/routes/agents.ts(1729,37): error TS2339: Property 'role' does not exist on type '{ adapterConfig: { [x: string]: unknown; }; runtimeConfig: Record\u003cstring, unknown\u003e; }'.\nsrc/routes/agents.ts(1730,38): error TS2339: Property 'title' does not exist on type '{ adapterConfig: { [x: string]: unknown; }; runtimeConfig: Record\u003cstring, unknown\u003e; }'.\nsrc/routes/agents.ts(1731,37): error TS2339: Property 'icon' does not exist on type '{ adapterConfig: { [x: string]: unknown; }; runtimeConfig: Record\u003cstring, unknown\u003e; }'.\nsrc/routes/agents.ts(1732,42): error TS2339: Property 'reportsTo' does not exist on type '{ adapterConfig: { [x: string]: unknown; }; runtimeConfig: Record\u003cstring, unknown\u003e; }'.\nsrc/routes/agents.ts(1733,45): error TS2339: Property 'capabilities' does not exist on type '{ adapterConfig: { [x: string]: unknown; }; runtimeConfig: Record\u003cstring, unknown\u003e; }'.\nsrc/routes/agents.ts(1738,40): error TS2339: Property 'budgetMonthlyCents' does not exist on type '{ adapterConfig: { [x: string]: unknown; }; runtimeConfig: Record\u003cstring, unknown\u003e; }'.\nsrc/routes/agents.ts(1739,37): error TS2339: Property 'budgetMonthlyCents' does not exist on type '{ adapterConfig: { [x: string]: unknown; }; runtimeConfig: Record\u003cstring, unknown\u003e; }'.\nsrc/routes/agents.ts(1951,51): error TS2345: Argument of type 'Record\u003cstring, unknown\u003e' is not assignable to parameter of type '{ canCreateAgents: boolean; }'.\nsrc/routes/agents.ts(2450,9): error TS2322: Type '(ctx: RequestCtx) =\u003e Promise\u003cResponse | undefined\u003e' is not assignable to type 'Handler'.\nsrc/routes/agents.ts(2551,7): error TS2322: Type 'string' is not assignable to type '\"timer\" | \"assignment\" | \"on_demand\" | \"automation\" | undefined'.\nsrc/routes/agents.ts(2552,7): error TS2322: Type 'string' is not assignable to type '\"system\" | \"manual\" | \"ping\" | \"callback\" | undefined'."
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "c8eea509-8046-4866-af24-41dad76451f0",
+  "version": "2.1.123"
+}

@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "55\t * @param env - The Worker environment bindings injected by the CF runtime.\n56\t */\n57\texport function bootCloudflare(env: BootEnv): void {\n58\t  const bucketName = env.STORAGE_R2_BUCKET ?? \"paperclip-storage\";\n59\t  const prefix = env.STORAGE_R2_PREFIX ?? \"\";\n60\t\n61\t  registerStorageProvider(\"r2\", (_config) =\u003e {\n62\t    return new R2Provider(env.PAPERCLIP_STORAGE, { bucket: bucketName, prefix });\n63\t  });\n64\t}\n65\t",
+        "tool_use_id": "toolu_01M4h3hZGfqrxYThY1cTLjGo",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "9f316508-05f4-49bb-b2ee-d3b0c227fd49",
+  "promptId": "76fdb1bb-64b4-4188-b850-7eeac0540eca",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "9f316508-05f4-49bb-b2ee-d3b0c227fd49",
+  "timestamp": "2026-04-30T16:44:15.561Z",
+  "toolUseResult": {
+    "file": {
+      "content": " * @param env - The Worker environment bindings injected by the CF runtime.\n */\nexport function bootCloudflare(env: BootEnv): void {\n  const bucketName = env.STORAGE_R2_BUCKET ?? \"paperclip-storage\";\n  const prefix = env.STORAGE_R2_PREFIX ?? \"\";\n\n  registerStorageProvider(\"r2\", (_config) =\u003e {\n    return new R2Provider(env.PAPERCLIP_STORAGE, { bucket: bucketName, prefix });\n  });\n}\n",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/boot.ts",
+      "numLines": 11,
+      "startLine": 55,
+      "totalLines": 65
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "c9cb4ae7-0a29-4ab8-a8f1-cd0284933d88",
+  "version": "2.1.123"
+}

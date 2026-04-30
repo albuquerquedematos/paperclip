@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1540\t    editable: source.editable,\n1541\t    editableReason: source.editableReason,\n1542\t    sourceLabel: source.sourceLabel,\n1543\t    sourceBadge: source.sourceBadge,\n1544\t    sourcePath: source.sourcePath,\n1545\t  };\n1546\t}\n1547\t\n1548\texport function companySkillService(db: Db) {\n1549\t  const agents = agentService(db);\n1550\t  const projects = projectService(db);\n1551\t\n1552\t  async function ensureBundledSkills(companyId: string) {\n1553\t    for (const skillsRoot of resolveBundledSkillsRoot()) {\n1554\t      const stats = await fs.stat(skillsRoot).catch(() =\u003e null);\n1555\t      if (!stats?.isDirectory()) continue;\n1556\t      const bundledSkills = await readLocalSkillImports(companyId, skillsRoot)\n1557\t        .then((skills) =\u003e skills.map((skill) =\u003e ({\n1558\t          ...skill,\n1559\t          key: deriveCanonicalSkillKey(companyId, {\n1560\t            ...skill,\n1561\t            metadata: {\n1562\t              ...(skill.metadata ?? {}),\n1563\t              sourceKind: \"paperclip_bundled\",\n1564\t            },\n1565\t          }),\n1566\t          metadata: {\n1567\t            ...(skill.metadata ?? {}),\n1568\t            sourceKind: \"paperclip_bundled\",\n1569\t          },\n1570\t        })))\n1571\t        .catch(() =\u003e [] as ImportedSkill[]);\n1572\t      if (bundledSkills.length === 0) continue;\n1573\t      return upsertImportedSkills(companyId, bundledSkills);\n1574\t    }\n1575\t    return [];\n1576\t  }\n1577\t\n1578\t  async function pruneMissingLocalPathSkills(companyId: string) {\n1579\t    const rows = await db\n1580\t      .select({\n1581\t        id: companySkills.id,\n1582\t        key: companySkills.key,\n1583\t        slug: companySkills.slug,\n1584\t        sourceType: companySkills.sourceType,\n1585\t        sourceLocator: companySkills.sourceLocator,\n1586\t      })\n1587\t      .from(companySkills)\n1588\t      .where(eq(companySkills.companyId, companyId));\n1589\t    const skills = rows.map((row) =\u003e ({",
+        "tool_use_id": "toolu_01K7t9cKgxcvdEeYQBAU6ttC",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "62bd8f7c-b608-47b0-97f4-bfacacf6e5dd",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "62bd8f7c-b608-47b0-97f4-bfacacf6e5dd",
+  "timestamp": "2026-04-30T14:52:33.995Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "ab513811-976d-40a6-bd75-da2bba322756",
+  "version": "2.1.123"
+}

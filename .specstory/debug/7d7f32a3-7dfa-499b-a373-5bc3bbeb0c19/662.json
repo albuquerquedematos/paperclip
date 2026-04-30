@@ -1,0 +1,71 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "attributionAgent": "backend-architect",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01WHHzTvw64H927EhKrkNYZk",
+        "input": {
+          "command": "npx tsc --project server/tsconfig.json --noEmit 2\u003e\u00261 | grep -E \"routes/access|routes/adapters|routes/plugins|routes/plugin-ui-static|services/agent-instructions|services/default-agent-instructions|services/heartbeat|services/company-skills|services/feedback|services/run-log-store|services/workspace-operation-log|services/plugin-database|services/adapter-plugin-store|services/local-service-supervisor|services/execution-workspaces|services/plugin-runtime-sandbox|services/workspace-runtime|services/plugin-loader|services/plugin-dev-watcher|middleware/logger\"",
+          "description": "Check if any of the edited files have TypeScript errors",
+          "timeout": 60000
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01KHK2oxQ3cFZkLKPHM1UdhE",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 1510
+      },
+      "cache_creation_input_tokens": 1510,
+      "cache_read_input_tokens": 91348,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 1510
+          },
+          "cache_creation_input_tokens": 1510,
+          "cache_read_input_tokens": 91348,
+          "input_tokens": 1,
+          "output_tokens": 344,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 344,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "74e681ce-bed6-406a-bce4-836b48d1a472",
+  "requestId": "req_011Caa9oFDP1TJafVBmNsyZk",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "timestamp": "2026-04-30T14:58:12.945Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "fc073788-1c88-4910-9977-d6cbbb16e257",
+  "version": "2.1.123"
+}

@@ -1,0 +1,70 @@
+{
+  "agentId": "a6710083ef9195699",
+  "attributionAgent": "backend-architect",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_018xxq812hniTxiwDu5LaYVn",
+        "input": {
+          "content": "/**\n * boot.ts — Cloudflare deployment boot sequence.\n *\n * Registers all Cloudflare-specific service implementations into the shared\n * provider registries. Called once on first Worker request (or on every cold\n * start — all registrations are idempotent Map.set calls).\n *\n * This is the only file in `packages/deploy-cloudflare/` that touches the\n * server package's registry. Every other file in this package is self-contained.\n *\n * The import of `provider-registry` uses a workspace-relative path. Wrangler\n * (esbuild) resolves it through the workspace symlink at bundle time, so no\n * runtime module resolution occurs.\n *\n * NOTE: `server/src/storage/provider-registry.ts` must be free of Node-only\n * imports (it currently is — it only imports types). If that changes, this\n * import path will need to move to a standalone `@paperclipai/storage-core`\n * package (tracked as an optional follow-up to PR #2).\n */\n\nimport { registerStorageProvider } from \"../../../server/src/storage/provider-registry.js\";\nimport { R2Provider } from \"./storage/r2-provider.js\";\n\n/**\n * Environment bindings required at boot time.\n */\nexport interface BootEnv {\n  /** R2 bucket binding — declared as `PAPERCLIP_STORAGE` in wrangler.toml. */\n  PAPERCLIP_STORAGE: R2Bucket;\n  /**\n   * Logical bucket name stored on object metadata (informational).\n   * Defaults to `\"paperclip-storage\"` if absent.\n   */\n  STORAGE_R2_BUCKET?: string;\n  /**\n   * Optional key prefix applied to every stored object key.\n   * Useful when sharing a single R2 bucket across multiple environments\n   * (e.g. `\"staging/\"` vs `\"prod/\"`).\n   */\n  STORAGE_R2_PREFIX?: string;\n}\n\n/**\n * Registers the Cloudflare R2 storage provider with the shared provider\n * registry from `server/src/storage/provider-registry.ts`.\n *\n * After registration, calling `createStorageProviderFromConfig` with\n * `config.storageProvider === \"r2\"` returns an `R2Provider` backed by the\n * `PAPERCLIP_STORAGE` R2 bucket binding.\n *\n * The registry uses a plain `Map`; calling `bootCloudflare` multiple times\n * (e.g. on each warm-start invocation) is safe — subsequent calls overwrite\n * the previous factory with an equivalent one.\n *\n * @param env - The Worker environment bindings injected by the CF runtime.\n */\nexport function bootCloudflare(env: BootEnv): void {\n  const bucketName = env.STORAGE_R2_BUCKET ?? \"paperclip-storage\";\n  const prefix = env.STORAGE_R2_PREFIX ?? \"\";\n\n  registerStorageProvider(\"r2\", (_config) =\u003e {\n    return new R2Provider(env.PAPERCLIP_STORAGE, { bucket: bucketName, prefix });\n  });\n}\n",
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/boot.ts"
+        },
+        "name": "Write",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01XXcTZXYWCVoXvRE2ZNHXcn",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 819
+      },
+      "cache_creation_input_tokens": 819,
+      "cache_read_input_tokens": 76432,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 819
+          },
+          "cache_creation_input_tokens": 819,
+          "cache_read_input_tokens": 76432,
+          "input_tokens": 1,
+          "output_tokens": 912,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 912,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "f5c8fa9b-807a-4c43-8bed-78dec9748c9f",
+  "requestId": "req_011Caa9p8YZmhBq9gFvsEHSV",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "timestamp": "2026-04-30T14:58:28.212Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "54561025-7b4a-46da-b95c-d5a367af46c2",
+  "version": "2.1.123"
+}

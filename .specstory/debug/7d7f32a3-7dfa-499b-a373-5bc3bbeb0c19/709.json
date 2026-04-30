@@ -1,0 +1,26 @@
+{
+  "agentId": "a6710083ef9195699",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "70\t);\n71\t\n72\t// First-run setup gate — redirect to /setup until SETUP_COMPLETED is \"true\"\n73\tapp.use(\"*\", async (c, next) =\u003e {\n74\t  // Allow the setup routes and health check through unconditionally\n75\t  if (c.req.path === \"/api/health\" || c.req.path.startsWith(\"/setup\")) {\n76\t    return next();\n77\t  }\n78\t\n79\t  const setupCompleted = await c.env.PAPERCLIP_KV.get(\"SETUP_COMPLETED\");\n80\t  if (setupCompleted !== \"true\") {\n81\t    return c.redirect(\"/setup\");\n82\t  }\n83\t\n84\t  return next();\n85\t});\n86\t\n87\t// Delegate /setup/* to the setup sub-app.\n88\t// createSetupApp returns a Hono instance whose routes are relative to \"/\",\n89\t// so we strip the \"/setup\" prefix before forwarding.\n90\tapp.all(\"/setup/*\", async (c) =\u003e {\n91\t  const setupSub = createSetupApp(c.env);\n92\t  const url = new URL(c.req.url);\n93\t  // Strip leading \"/setup\" so routes inside the sub-app match against \"/\"\n94\t  url.pathname = url.pathname.replace(/^\\/setup/, \"\") || \"/\";\n95\t  const rewritten = new Request(url.toString(), c.req.raw);\n96\t  return setupSub.fetch(rewritten);\n97\t});\n98\t\n99\t// Exact \"/setup\" (no trailing slash) — forward as \"/\"\n100\tapp.all(\"/setup\", async (c) =\u003e {\n101\t  const setupSub = createSetupApp(c.env);\n102\t  const url = new URL(c.req.url);\n103\t  url.pathname = \"/\";\n104\t  const rewritten = new Request(url.toString(), c.req.raw);\n105\t  return setupSub.fetch(rewritten);\n106\t});\n107\t\n108\t// ---------------------------------------------------------------------------\n109\t// API routes\n110\t// TODO: mount migrated route modules here once the HTTP adapter\n111\t// migration (PR #6/#7) is complete. Pattern:\n112\t//\n113\t//   import { mountRoutes } from \"../http/hono-adapter.js\";\n114\t//   import { companyRoutes } from \"../../../server/src/routes/companies.js\";\n115\t//   mountRoutes(app, companyRoutes, { db, storage, resolveActor });\n116\t// ---------------------------------------------------------------------------\n117\t\n118\t// Placeholder API fallthrough for any unmounted routes\n119\tapp.all(\"/api/*\", (c) =\u003e c.json({ error: \"API route not yet mounted in CF Worker\" }, 501));\n120\t\n121\t// Catch-all for non-API requests — serve the Pages SPA (handled by Cloudflare Pages\n122\t// when the Worker is linked to a Pages project; this handler is only reached in\n123\t// local `wrangler dev` mode).\n124\tapp.all(\"*\", (c) =\u003e\n125\t  c.html(\n126\t    `\u003c!DOCTYPE html\u003e\n127\t\u003chtml\u003e\u003chead\u003e\u003cmeta charset=\"UTF-8\"\u003e\u003ctitle\u003ePaperclip\u003c/title\u003e\u003c/head\u003e\n128\t\u003cbody\u003e\n129\t  \u003cp\u003eLoading Paperclip UI... If this persists, the Pages build may not be deployed yet.\u003c/p\u003e\n130\t\u003c/body\u003e\u003c/html\u003e`,\n131\t  ),\n132\t);\n133\t\n134\t// ---------------------------------------------------------------------------\n135\t// Default export — Workers fetch handler\n136\t// ---------------------------------------------------------------------------\n137\t\n138\texport default {\n139\t  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise\u003cResponse\u003e {\n140\t    // Boot the Cloudflare implementations on first request\n141\t    // (idempotent — registerStorageProvider uses a Map, safe to call multiple times)\n142\t    bootCloudflare(env);\n143\t\n144\t    return app.fetch(request, env, ctx);\n145\t  },\n146\t\n147\t  // -------------------------------------------------------------------------\n148\t  // Queues consumer — processes plugin job dispatch messages\n149\t  // -------------------------------------------------------------------------",
+        "tool_use_id": "toolu_01NhZ2kmtdF6jU7nkGMgPjsY",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "15961d14-42a4-45db-88d5-1c480ea64361",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "15961d14-42a4-45db-88d5-1c480ea64361",
+  "timestamp": "2026-04-30T14:59:55.535Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "d94cd987-755d-4c9c-85b9-950f17a31788",
+  "version": "2.1.123"
+}

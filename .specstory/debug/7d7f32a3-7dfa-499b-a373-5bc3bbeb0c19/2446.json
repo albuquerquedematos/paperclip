@@ -1,0 +1,27 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { Router } from \"express\";\n2\timport type { Db } from \"@paperclipai/db\";\n3\timport {\n4\t  AGENT_ADAPTER_TYPES,\n5\t  createEnvironmentSchema,\n6\t  getEnvironmentCapabilities,\n7\t  probeEnvironmentConfigSchema,\n8\t  updateEnvironmentSchema,\n9\t} from \"@paperclipai/shared\";\n10\timport { forbidden } from \"../errors.js\";\n11\timport { validate } from \"../middleware/validate.js\";\n12\timport {\n13\t  accessService,\n14\t  agentService,\n15\t  issueService,\n16\t  logActivity,\n17\t  projectService,\n18\t} from \"../services/index.js\";\n19\timport {\n20\t  normalizeEnvironmentConfigForPersistence,\n21\t  normalizeEnvironmentConfigForProbe,\n22\t  parseEnvironmentDriverConfig,\n23\t  readSshEnvironmentPrivateKeySecretId,\n24\t  type ParsedEnvironmentConfig,\n25\t} from \"../services/environment-config.js\";\n26\timport { probeEnvironment } from \"../services/environment-probe.js\";\n27\timport { secretService } from \"../services/secrets.js\";\n28\timport { listReadyPluginEnvironmentDrivers } from \"../services/plugin-environment-driver.js\";\n29\timport { assertCompanyAccess, getActorInfo } from \"./authz.js\";\n30\timport type { PluginWorkerManager } from \"../services/plugin-worker-manager.js\";",
+        "tool_use_id": "toolu_016kfRVH6XHUpejbAthSJ4N9",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "5abe0cbc-2603-4226-b20d-27e5f85dbabd",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "5abe0cbc-2603-4226-b20d-27e5f85dbabd",
+  "timestamp": "2026-04-30T16:20:15.146Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "7a49d4e4-0bd2-42f0-9f2b-b8cea3a221c8",
+  "version": "2.1.123"
+}

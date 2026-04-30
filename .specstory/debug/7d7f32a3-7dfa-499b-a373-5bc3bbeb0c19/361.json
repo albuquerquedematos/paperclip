@@ -1,0 +1,52 @@
+{
+  "agentId": "a6710083ef9195699",
+  "attributionAgent": "backend-architect",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01YNafFFHYjTyNh2iDuL3XCm",
+        "input": {
+          "command": "grep -n \"RunProcessResult\" /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapter-utils/src/server-utils.ts | head -10",
+          "description": "Find RunProcessResult type definition"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01HiVX8tMsTGKZ2mob5k39Zi",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": null,
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 1810
+      },
+      "cache_creation_input_tokens": 1810,
+      "cache_read_input_tokens": 44860,
+      "inference_geo": "global",
+      "input_tokens": 1,
+      "output_tokens": 69,
+      "service_tier": "standard"
+    }
+  },
+  "parentUuid": "fcf9ea5f-6b22-47fa-b434-33777ce1c0e5",
+  "requestId": "req_011Caa9K14oGoNhvHY9wmdVY",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "timestamp": "2026-04-30T14:51:44.553Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "db4f7225-bd74-4952-b3c3-5edda0268da5",
+  "version": "2.1.123"
+}

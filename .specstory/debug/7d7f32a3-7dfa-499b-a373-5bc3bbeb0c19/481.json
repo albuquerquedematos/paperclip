@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "280\t  }\n281\t  chunks.push(sql.raw(statement.slice(cursor)));\n282\t  if (seen.size !== params.length) {\n283\t    throw new Error(\"Every ctx.db parameter must be referenced by a $n placeholder\");\n284\t  }\n285\t  return sql.join(chunks, sql.raw(\"\"));\n286\t}\n287\t\n288\tasync function listSqlMigrationFiles(migrationsDir: string): Promise\u003cstring[]\u003e {\n289\t  const entries = await readdir(migrationsDir, { withFileTypes: true });\n290\t  return entries\n291\t    .filter((entry) =\u003e entry.isFile() \u0026\u0026 entry.name.endsWith(\".sql\"))\n292\t    .map((entry) =\u003e entry.name)\n293\t    .sort((a, b) =\u003e a.localeCompare(b));\n294\t}\n295\t\n296\tfunction resolveMigrationsDir(packageRoot: string, migrationsDir: string): string {\n297\t  const resolvedRoot = path.resolve(packageRoot);\n298\t  const resolvedDir = path.resolve(resolvedRoot, migrationsDir);\n299\t  const relative = path.relative(resolvedRoot, resolvedDir);\n300\t  if (relative.startsWith(\"..\") || path.isAbsolute(relative)) {\n301\t    throw new Error(`Plugin migrationsDir escapes package root: ${migrationsDir}`);\n302\t  }\n303\t  return resolvedDir;\n304\t}\n305\t\n306\texport function pluginDatabaseService(db: Db) {\n307\t  async function getPluginRecord(pluginId: string) {\n308\t    const rows = await db.select().from(plugins).where(eq(plugins.id, pluginId)).limit(1);\n309\t    const plugin = rows[0];",
+        "tool_use_id": "toolu_01XhX6ZwaxgBPea8epnU4ASy",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "bcbb66d0-9c60-409f-b823-94bbd33c9ff5",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "bcbb66d0-9c60-409f-b823-94bbd33c9ff5",
+  "timestamp": "2026-04-30T14:52:43.240Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "03a33489-ada6-42dd-b3a8-d0907347fbd8",
+  "version": "2.1.123"
+}

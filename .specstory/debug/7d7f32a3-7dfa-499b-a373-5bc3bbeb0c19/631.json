@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "80\t  const allowedSpecifiers = options.allowedModuleSpecifiers ?? new Set\u003cstring\u003e();\n81\t  const entrypointPath = path.resolve(options.entrypointPath);\n82\t  const pluginRoot = path.dirname(entrypointPath);\n83\t\n84\t  const context = vm.createContext({\n85\t    ...DEFAULT_GLOBALS,\n86\t    ...options.allowedGlobals,\n87\t  });\n88\t\n89\t  const moduleCache = new Map\u003cstring, Record\u003cstring, unknown\u003e\u003e();\n90\t  const allowedModules = options.allowedModules ?? {};\n91\t\n92\t  const realPluginRoot = realpathSync(pluginRoot);\n93\t\n94\t  const loadModuleSync = (modulePath: string): Record\u003cstring, unknown\u003e =\u003e {\n95\t    const resolvedPath = resolveModulePathSync(path.resolve(modulePath));\n96\t    const realPath = realpathSync(resolvedPath);\n97\t\n98\t    if (!isWithinRoot(realPath, realPluginRoot)) {\n99\t      throw new PluginSandboxError(\n100\t        `Import '${modulePath}' escapes plugin root and is not allowed`,\n101\t      );\n102\t    }\n103\t\n104\t    const cached = moduleCache.get(realPath);\n105\t    if (cached) return cached;\n106\t\n107\t    const code = readModuleSourceSync(realPath);\n108\t\n109\t    if (looksLikeEsm(code)) {",
+        "tool_use_id": "toolu_01E6u9NbLcVG4va6qZ4gwViK",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "89b061ee-322e-43d4-a195-e63b266639bd",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "89b061ee-322e-43d4-a195-e63b266639bd",
+  "timestamp": "2026-04-30T14:57:08.399Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "feff04c1-0641-465d-80ca-45dda0899bf9",
+  "version": "2.1.123"
+}

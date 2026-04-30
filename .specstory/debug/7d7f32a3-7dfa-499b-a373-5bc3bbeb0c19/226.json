@@ -1,0 +1,52 @@
+{
+  "agentId": "adabf466a1a877701",
+  "attributionAgent": "backend-architect",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_019jG82Qf6aBfjRPVqP6QxD2",
+        "input": {
+          "command": "ls /Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/scheduler 2\u003e/dev/null || echo \"DOES NOT EXIST\"\nls /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapter-utils/src/executor.ts 2\u003e/dev/null || echo \"DOES NOT EXIST\"\nls /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapter-utils/src/local-executor.ts 2\u003e/dev/null || echo \"DOES NOT EXIST\"",
+          "description": "Check if target files/dirs already exist"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01K7snebVqQasZ9iC8JRQDo7",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": null,
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 3122
+      },
+      "cache_creation_input_tokens": 3122,
+      "cache_read_input_tokens": 37882,
+      "inference_geo": "global",
+      "input_tokens": 1,
+      "output_tokens": 4,
+      "service_tier": "standard"
+    }
+  },
+  "parentUuid": "35c38b1c-a2fa-4fcf-8f8f-b9bde139b275",
+  "requestId": "req_011Caa9AEg6rkXnshjA9gda1",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "timestamp": "2026-04-30T14:49:47.498Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "680e3a23-5f0d-4b63-af5e-8ac14c963dbb",
+  "version": "2.1.123"
+}

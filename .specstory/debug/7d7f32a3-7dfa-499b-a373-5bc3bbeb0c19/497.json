@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { execFile } from \"node:child_process\";\n2\timport { createHash } from \"node:crypto\";\n3\timport fs from \"node:fs/promises\";\n4\timport path from \"node:path\";\n5\timport { setTimeout as delay } from \"node:timers/promises\";\n6\timport { promisify } from \"node:util\";\n7\timport { resolvePaperclipInstanceRoot } from \"../home-paths.js\";\n8\t\n9\tconst execFileAsync = promisify(execFile);\n10\t\n11\texport interface LocalServiceRegistryRecord {\n12\t  version: 1;\n13\t  serviceKey: string;\n14\t  profileKind: string;\n15\t  serviceName: string;\n16\t  command: string;\n17\t  cwd: string;\n18\t  envFingerprint: string;\n19\t  port: number | null;\n20\t  url: string | null;\n21\t  pid: number;\n22\t  processGroupId: number | null;\n23\t  provider: \"local_process\";\n24\t  runtimeServiceId: string | null;\n25\t  reuseKey: string | null;\n26\t  startedAt: string;\n27\t  lastSeenAt: string;\n28\t  metadata: Record\u003cstring, unknown\u003e | null;\n29\t}\n30\t\n31\texport interface LocalServiceIdentityInput {\n32\t  profileKind: string;\n33\t  serviceName: string;\n34\t  cwd: string;\n35\t  command: string;\n36\t  envFingerprint: string;\n37\t  port: number | null;\n38\t  scope: Record\u003cstring, unknown\u003e | null;\n39\t}\n40\t\n41\tfunction stableStringify(value: unknown): string {\n42\t  if (Array.isArray(value)) {\n43\t    return `[${value.map((entry) =\u003e stableStringify(entry)).join(\",\")}]`;\n44\t  }\n45\t  if (value \u0026\u0026 typeof value === \"object\") {\n46\t    const rec = value as Record\u003cstring, unknown\u003e;\n47\t    return `{${Object.keys(rec).sort().map((key) =\u003e `${JSON.stringify(key)}:${stableStringify(rec[key])}`).join(\",\")}}`;\n48\t  }\n49\t  return JSON.stringify(value);\n50\t}\n51\t\n52\tfunction sanitizeServiceKeySegment(value: string, fallback: string): string {\n53\t  const normalized = value\n54\t    .trim()\n55\t    .toLowerCase()\n56\t    .replace(/[^a-z0-9._-]+/g, \"-\")\n57\t    .replace(/-+/g, \"-\")\n58\t    .replace(/^-+|-+$/g, \"\");\n59\t  return normalized || fallback;\n60\t}",
+        "tool_use_id": "toolu_01Vjz3YAiyPsHqa89Yxd9Vbq",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "246450b3-695e-4d39-9bb2-edd2d3ba75b6",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "246450b3-695e-4d39-9bb2-edd2d3ba75b6",
+  "timestamp": "2026-04-30T14:52:53.905Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "d9d46bac-bf78-4c23-aefc-cc520ef70613",
+  "version": "2.1.123"
+}

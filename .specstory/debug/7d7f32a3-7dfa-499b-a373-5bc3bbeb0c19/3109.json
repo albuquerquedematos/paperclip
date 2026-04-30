@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01DAtvHrbGcUBWf1wtQJh9Vq",
+        "input": {
+          "command": "cd /Users/migmac/Documents/GitHub/_ABM/paperclip \u0026\u0026 tsc -p packages/deploy-cloudflare/tsconfig.json --noEmit 2\u003e\u00261 | grep \"deploy-cloudflare/src\" | grep -v \"adapter-executor\\|runtime/task\\|runtime/agent\\|runtime/workflows\\|scheduler/scheduler\\|scheduler/cf-\\|mcp-sse\" | head -30",
+          "description": "TypeScript check filtering out known DO/Workflow files"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_018P3K1RJFrQ6tGB11JQN7B1",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 160
+      },
+      "cache_creation_input_tokens": 160,
+      "cache_read_input_tokens": 137765,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 160
+          },
+          "cache_creation_input_tokens": 160,
+          "cache_read_input_tokens": 137765,
+          "input_tokens": 1,
+          "output_tokens": 179,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 179,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "dcffe246-7577-4883-b02f-d44a297682bc",
+  "requestId": "req_011CaaHpEVRoQFY9jw4echsH",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "timestamp": "2026-04-30T16:43:16.435Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "78245abb-41d1-43bf-99ee-bbb9a9ef6a89",
+  "version": "2.1.123"
+}

@@ -1,0 +1,27 @@
+{
+  "agentId": "a8fd5512baf043009",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "27:import { assertBoard, assertCompanyAccess, assertInstanceAdmin, getActorInfo } from \"./authz.js\";\n28:import type { Handler } from \"../http/types.js\";\n29:import { expressHandler } from \"../http/express-adapter.js\";\n61:    assertCompanyAccess(req, target.companyId);\n65:    assertCompanyAccess(req, companyId);\n66:    if (req.actor.type === \"board\") return;\n67:    if (!req.actor.agentId) throw forbidden(\"Agent authentication required\");\n69:    const actorAgent = await agents.getById(req.actor.agentId);\n79:    assertCompanyAccess(req, companyId);\n80:    if (req.actor.type === \"board\") return;\n81:    if (!req.actor.agentId) throw forbidden(\"Agent authentication required\");\n83:    const actorAgent = await agents.getById(req.actor.agentId);\n99:  const listCompanies: Handler = async (ctx) =\u003e {\n101:    assertBoard(req);\n103:    if (req.actor.source === \"local_implicit\" || req.actor.isInstanceAdmin) {\n106:    const allowed = new Set(req.actor.companyIds ?? []);\n110:  const getCompanyStats: Handler = async (ctx) =\u003e {\n112:    assertBoard(req);\n113:    const allowed = req.actor.source === \"local_implicit\" || req.actor.isInstanceAdmin\n115:      : new Set(req.actor.companyIds ?? []);\n124:  const missingCompanyIdError: Handler = async (_ctx) =\u003e {\n131:  const getCompany: Handler = async (ctx) =\u003e {\n134:    assertCompanyAccess(req, companyId);\n136:    if (req.actor.type !== \"agent\") {\n137:      assertBoard(req);\n146:  const listFeedbackTraces: Handler = async (ctx) =\u003e {\n149:    assertCompanyAccess(req, companyId);\n150:    assertBoard(req);\n179:  const exportCompany: Handler = async (ctx) =\u003e {\n188:  const previewImport: Handler = async (ctx) =\u003e {\n190:    assertBoard(req);\n197:  const importBundle: Handler = async (ctx) =\u003e {\n199:    assertBoard(req);\n202:    const actor = getActorInfo(req);\n203:    const result = await portability.importBundle(body, req.actor.type === \"board\" ? req.actor.userId : null);\n223:  const previewExportByCompany: Handler = async (ctx) =\u003e {\n232:  const exportByCompany: Handler = async (ctx) =\u003e {\n241:  const previewImportByCompany: Handler = async (ctx) =\u003e {\n259:  const applyImportByCompany: Handler = async (ctx) =\u003e {\n270:    const actor = getActorInfo(req);",
+        "is_error": false,
+        "tool_use_id": "toolu_017jnk4LjkvR4aZZ8YSkB2aP",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "3e841ab5-9d36-405e-b094-773fc5b1bae0",
+  "promptId": "f8ab24c1-de42-4dc6-b59c-8c9364db9ca7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "3e841ab5-9d36-405e-b094-773fc5b1bae0",
+  "timestamp": "2026-04-30T15:10:55.811Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "32ef2e2f-b4e2-497c-ad2e-676e6edb8f08",
+  "version": "2.1.123"
+}

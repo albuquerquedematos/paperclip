@@ -1,0 +1,27 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { Router } from \"express\";\n2\timport type { Db } from \"@paperclipai/db\";\n3\timport {\n4\t  addApprovalCommentSchema,\n5\t  createApprovalSchema,\n6\t  requestApprovalRevisionSchema,\n7\t  resolveApprovalSchema,\n8\t  resubmitApprovalSchema,\n9\t} from \"@paperclipai/shared\";\n10\timport { validate } from \"../middleware/validate.js\";\n11\timport { logger } from \"../middleware/logger.js\";\n12\timport {\n13\t  approvalService,\n14\t  heartbeatService,\n15\t  issueApprovalService,\n16\t  logActivity,\n17\t  secretService,\n18\t} from \"../services/index.js\";\n19\timport { assertBoard, assertCompanyAccess, getActorInfo } from \"./authz.js\";\n20\timport { redactEventPayload } from \"../redaction.js\";\n21\timport type { PluginWorkerManager } from \"../services/plugin-worker-manager.js\";\n22\timport type { Handler, RequestCtx } from \"../http/types.js\";\n23\timport { expressHandler } from \"../http/express-adapter.js\";\n24\t\n25\tfunction redactApprovalPayload\u003cT extends { payload: Record\u003cstring, unknown\u003e }\u003e(approval: T): T {\n26\t  return {\n27\t    ...approval,\n28\t    payload: redactEventPayload(approval.payload) ?? {},\n29\t  };\n30\t}\n31\t\n32\texport function approvalRoutes(\n33\t  db: Db,\n34\t  options: { pluginWorkerManager?: PluginWorkerManager } = {},\n35\t) {\n36\t  const router = Router();\n37\t  const svc = approvalService(db);\n38\t  const heartbeat = heartbeatService(db, {\n39\t    pluginWorkerManager: options.pluginWorkerManager,\n40\t  });\n41\t  const issueApprovalsSvc = issueApprovalService(db);\n42\t  const secretsSvc = secretService(db);\n43\t  const strictSecretsMode = process.env.PAPERCLIP_SECRETS_STRICT_MODE === \"true\";\n44\t\n45\t  async function requireApprovalAccess(ctx: RequestCtx, id: string) {\n46\t    const approval = await svc.getById(id);\n47\t    if (!approval) {\n48\t      return null;\n49\t    }\n50\t    assertCompanyAccess(ctx, approval.companyId);",
+        "tool_use_id": "toolu_013YmgDAfdcyBF2ADPXdEbsR",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "a273e67e-ace4-4bd1-9941-3d10814b3c61",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "a273e67e-ace4-4bd1-9941-3d10814b3c61",
+  "timestamp": "2026-04-30T16:20:14.067Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "5fde866c-9aa4-4783-9492-d44ee3f3951b",
+  "version": "2.1.123"
+}

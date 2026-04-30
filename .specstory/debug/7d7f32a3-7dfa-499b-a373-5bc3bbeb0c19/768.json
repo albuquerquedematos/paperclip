@@ -1,0 +1,26 @@
+{
+  "agentId": "a0d0169af69218004",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\t/// \u003creference path=\"./types/express.d.ts\" /\u003e\n2\timport { existsSync, readFileSync, rmSync } from \"node:fs\";\n3\timport { createServer } from \"node:http\";\n4\timport { resolve } from \"node:path\";\n5\timport { createInterface } from \"node:readline/promises\";\n6\timport { stdin, stdout } from \"node:process\";\n7\timport { pathToFileURL } from \"node:url\";\n8\timport type { Request as ExpressRequest, RequestHandler } from \"express\";\n9\timport { and, eq } from \"drizzle-orm\";\n10\timport {\n11\t  createDb,\n12\t  ensurePostgresDatabase,\n13\t  formatEmbeddedPostgresError,\n14\t  getPostgresDataDirectory,\n15\t  inspectMigrations,\n16\t  applyPendingMigrations,\n17\t  createEmbeddedPostgresLogBuffer,\n18\t  reconcilePendingMigrationHistory,\n19\t  formatDatabaseBackupResult,\n20\t  runDatabaseBackup,\n21\t  authUsers,\n22\t  companies,\n23\t  companyMemberships,\n24\t  instanceUserRoles,\n25\t} from \"@paperclipai/db\";\n26\timport detectPort from \"detect-port\";\n27\timport { createApp } from \"./app.js\";\n28\timport { loadConfig } from \"./config.js\";\n29\timport { logger } from \"./middleware/logger.js\";\n30\timport { setupLiveEventsWebSocketServer } from \"./realtime/live-events-ws.js\";\n31\timport {\n32\t  feedbackService,\n33\t  heartbeatService,\n34\t  instanceSettingsService,\n35\t  reconcilePersistedRuntimeServicesOnStartup,\n36\t  routineService,\n37\t} from \"./services/index.js\";\n38\timport { createFeedbackTraceShareClientFromConfig } from \"./services/feedback-share-client.js\";\n39\timport { buildRuntimeApiCandidateUrls, choosePrimaryRuntimeApiUrl } from \"./runtime-api.js\";\n40\timport { createPluginWorkerManager } from \"./services/plugin-worker-manager.js\";\n41\timport { createStorageServiceFromConfig } from \"./storage/index.js\";\n42\timport { printStartupBanner } from \"./startup-banner.js\";\n43\timport { getBoardClaimWarningUrl, initializeBoardClaimChallenge } from \"./board-claim.js\";\n44\timport { maybePersistWorktreeRuntimePorts } from \"./worktree-config.js\";\n45\timport { initTelemetry, getTelemetryClient } from \"./telemetry.js\";\n46\timport { conflict } from \"./errors.js\";\n47\timport { createNodeScheduler } from \"./scheduler/index.js\";\n48\timport type {\n49\t  InstanceDatabaseBackupRunResult,\n50\t  InstanceDatabaseBackupTrigger,\n51\t} from \"./routes/instance-database-backups.js\";\n52\t\n53\ttype BetterAuthSessionUser = {\n54\t  id: string;\n55\t  email?: string | null;\n56\t  name?: string | null;\n57\t};\n58\t\n59\ttype BetterAuthSessionResult = {\n60\t  session: { id: string; userId: string } | null;\n61\t  user: BetterAuthSessionUser | null;\n62\t};\n63\t\n64\ttype EmbeddedPostgresInstance = {\n65\t  initialise(): Promise\u003cvoid\u003e;\n66\t  start(): Promise\u003cvoid\u003e;\n67\t  stop(): Promise\u003cvoid\u003e;\n68\t};\n69\t\n70\ttype EmbeddedPostgresCtor = new (opts: {\n71\t  databaseDir: string;\n72\t  user: string;\n73\t  password: string;\n74\t  port: number;\n75\t  persistent: boolean;\n76\t  initdbFlags?: string[];\n77\t  onLog?: (message: unknown) =\u003e void;\n78\t  onError?: (message: unknown) =\u003e void;\n79\t}) =\u003e EmbeddedPostgresInstance;\n80\t\n81\t\n82\texport interface StartedServer {\n83\t  server: ReturnType\u003ctypeof createServer\u003e;\n84\t  host: string;\n85\t  listenPort: number;\n86\t  apiUrl: string;\n87\t  databaseUrl: string;\n88\t}\n89\t\n90\texport async function startServer(): Promise\u003cStartedServer\u003e {\n91\t  let config = loadConfig();\n92\t  initTelemetry({ enabled: config.telemetryEnabled });\n93\t  if (process.env.PAPERCLIP_SECRETS_PROVIDER === undefined) {\n94\t    process.env.PAPERCLIP_SECRETS_PROVIDER = config.secretsProvider;\n95\t  }\n96\t  if (process.env.PAPERCLIP_SECRETS_STRICT_MODE === undefined) {\n97\t    process.env.PAPERCLIP_SECRETS_STRICT_MODE = config.secretsStrictMode ? \"true\" : \"false\";\n98\t  }\n99\t  if (process.env.PAPERCLIP_SECRETS_MASTER_KEY_FILE === undefined) {\n100\t    process.env.PAPERCLIP_SECRETS_MASTER_KEY_FILE = config.secretsMasterKeyFilePath;",
+        "tool_use_id": "toolu_01MDFLGenAUAjo2zboNxWepp",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "9edaa67a-6b11-4587-9e76-4a6e85cae4bc",
+  "promptId": "41a5cab3-78a5-4305-8404-9daa35591aac",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "9edaa67a-6b11-4587-9e76-4a6e85cae4bc",
+  "timestamp": "2026-04-30T15:04:33.792Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "53f70723-06c8-4ec2-8b5e-ff04a18680c1",
+  "version": "2.1.123"
+}

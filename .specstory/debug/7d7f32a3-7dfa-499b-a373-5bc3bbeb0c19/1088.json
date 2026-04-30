@@ -1,0 +1,26 @@
+{
+  "agentId": "acedaf1c4054eec72",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport express, { Router, type Request as ExpressRequest } from \"express\";\n2\timport path from \"node:path\";\n3\timport fs from \"node:fs\";\n4\timport { fileURLToPath } from \"node:url\";\n5\timport type { Db } from \"@paperclipai/db\";\n6\timport type { DeploymentExposure, DeploymentMode } from \"@paperclipai/shared\";\n7\timport type { StorageService } from \"./storage/types.js\";\n8\timport { httpLogger, errorHandler } from \"./middleware/index.js\";\n9\timport { actorMiddleware } from \"./middleware/auth.js\";\n10\timport { boardMutationGuard } from \"./middleware/board-mutation-guard.js\";\n11\timport { privateHostnameGuard, resolvePrivateHostnameAllowSet } from \"./middleware/private-hostname-guard.js\";\n12\timport { healthRoutes } from \"./routes/health.js\";\n13\timport { companyRoutes } from \"./routes/companies.js\";\n14\timport { companySkillRoutes } from \"./routes/company-skills.js\";\n15\timport { agentRoutes } from \"./routes/agents.js\";\n16\timport { projectRoutes } from \"./routes/projects.js\";\n17\timport { issueRoutes } from \"./routes/issues.js\";\n18\timport { issueTreeControlRoutes } from \"./routes/issue-tree-control.js\";\n19\timport { routineRoutes } from \"./routes/routines.js\";\n20\timport { environmentRoutes } from \"./routes/environments.js\";\n21\timport { executionWorkspaceRoutes } from \"./routes/execution-workspaces.js\";\n22\timport { goalRoutes } from \"./routes/goals.js\";\n23\timport { approvalRoutes } from \"./routes/approvals.js\";\n24\timport { secretRoutes } from \"./routes/secrets.js\";\n25\timport { costRoutes } from \"./routes/costs.js\";\n26\timport { activityRoutes } from \"./routes/activity.js\";\n27\timport { dashboardRoutes } from \"./routes/dashboard.js\";\n28\timport { userProfileRoutes } from \"./routes/user-profiles.js\";\n29\timport { sidebarBadgeRoutes } from \"./routes/sidebar-badges.js\";\n30\timport { sidebarPreferenceRoutes } from \"./routes/sidebar-preferences.js\";\n31\timport { inboxDismissalRoutes } from \"./routes/inbox-dismissals.js\";\n32\timport { instanceSettingsRoutes } from \"./routes/instance-settings.js\";\n33\timport {\n34\t  instanceDatabaseBackupRoutes,\n35\t  type InstanceDatabaseBackupService,\n36\t} from \"./routes/instance-database-backups.js\";\n37\timport { llmRoutes } from \"./routes/llms.js\";\n38\timport { authRoutes } from \"./routes/auth.js\";\n39\timport { assetRoutes } from \"./routes/assets.js\";\n40\timport { accessRoutes } from \"./routes/access.js\";\n41\timport { pluginRoutes } from \"./routes/plugins.js\";\n42\timport { adapterRoutes } from \"./routes/adapters.js\";\n43\timport { pluginUiStaticRoutes } from \"./routes/plugin-ui-static.js\";\n44\timport { applyUiBranding } from \"./ui-branding.js\";\n45\timport { logger } from \"./middleware/logger.js\";\n46\timport { DEFAULT_LOCAL_PLUGIN_DIR, pluginLoader } from \"./services/plugin-loader.js\";\n47\timport { createPluginWorkerManager, type PluginWorkerManager } from \"./services/plugin-worker-manager.js\";\n48\timport { createPluginJobScheduler } from \"./services/plugin-job-scheduler.js\";\n49\timport { pluginJobStore } from \"./services/plugin-job-store.js\";\n50\timport { createPluginToolDispatcher } from \"./services/plugin-tool-dispatcher.js\";\n51\timport { pluginLifecycleManager } from \"./services/plugin-lifecycle.js\";\n52\timport { createPluginJobCoordinator } from \"./services/plugin-job-coordinator.js\";\n53\timport { buildHostServices, flushPluginLogBuffer } from \"./services/plugin-host-services.js\";\n54\timport { createPluginEventBus } from \"./services/plugin-event-bus.js\";\n55\timport { setPluginEventBus } from \"./services/activity-log.js\";\n56\timport { createPluginDevWatcher } from \"./services/plugin-dev-watcher.js\";\n57\timport { createPluginHostServiceCleanup } from \"./services/plugin-host-service-cleanup.js\";\n58\timport { pluginRegistryService } from \"./services/plugin-registry.js\";\n59\timport { createHostClientHandlers } from \"@paperclipai/plugin-sdk\";\n60\timport type { BetterAuthSessionResult } from \"./auth/better-auth.js\";",
+        "tool_use_id": "toolu_0165v3ok9Sm6jpWQMo8Kbcoh",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "63a6c1da-ab6f-4088-8e10-5cb97b76e840",
+  "promptId": "41a5cab3-78a5-4305-8404-9daa35591aac",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "63a6c1da-ab6f-4088-8e10-5cb97b76e840",
+  "timestamp": "2026-04-30T15:06:17.448Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "99ded878-985c-40b4-bd72-82c548c84eb5",
+  "version": "2.1.123"
+}

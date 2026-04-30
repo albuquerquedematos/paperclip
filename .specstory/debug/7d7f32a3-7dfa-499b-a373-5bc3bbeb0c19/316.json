@@ -1,0 +1,70 @@
+{
+  "agentId": "ab8a7a43e45ac1ba4",
+  "attributionAgent": "backend-architect",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01E6sfAzJZ9rRpHC5hkTjfQW",
+        "input": {
+          "content": "import { timingSafeEqual } from \"node:crypto\";\nimport { Router } from \"express\";\nimport type { Db } from \"@paperclipai/db\";\nimport { and, count, eq, gt, inArray, isNull, sql } from \"drizzle-orm\";\nimport { heartbeatRuns, instanceUserRoles, invites } from \"@paperclipai/db\";\nimport type { DeploymentExposure, DeploymentMode } from \"@paperclipai/shared\";\nimport { readPersistedDevServerStatus, toDevServerHealthStatus } from \"../dev-server-status.js\";\nimport { logger } from \"../middleware/logger.js\";\nimport { instanceSettingsService } from \"../services/instance-settings.js\";\nimport { serverVersion } from \"../version.js\";\nimport { expressHandler } from \"../http/express-adapter.js\";\nimport type { Handler } from \"../http/types.js\";\nimport type { StorageService } from \"../storage/types.js\";\n\nfunction shouldExposeFullHealthDetails(\n  actorType: \"none\" | \"board\" | \"agent\" | null | undefined,\n  deploymentMode: DeploymentMode,\n) {\n  if (deploymentMode !== \"authenticated\") return true;\n  return actorType === \"board\" || actorType === \"agent\";\n}\n\nfunction hasDevServerStatusToken(providedToken: string | undefined) {\n  const expectedToken = process.env.PAPERCLIP_DEV_SERVER_STATUS_TOKEN?.trim();\n  const token = providedToken?.trim();\n  if (!expectedToken || !token) return false;\n\n  const expected = Buffer.from(expectedToken);\n  const provided = Buffer.from(token);\n  if (expected.length !== provided.length) return false;\n  return timingSafeEqual(expected, provided);\n}\n\n/**\n * Builds the health-check {@link Handler} closed over the optional db and\n * deployment options. Using a factory lets us avoid threading `db` through\n * the adapter deps when it is genuinely optional for this endpoint.\n */\nfunction buildHealthHandler(\n  db: Db | undefined,\n  opts: {\n    deploymentMode: DeploymentMode;\n    deploymentExposure: DeploymentExposure;\n    authReady: boolean;\n    companyDeletionEnabled: boolean;\n  },\n): Handler {\n  return async (ctx) =\u003e {\n    // ctx.actor is null when unauthenticated; map back to the legacy shape.\n    const actorType = ctx.actor?.type ?? null;\n    const exposeFullDetails = shouldExposeFullHealthDetails(actorType, opts.deploymentMode);\n    const exposeDevServerDetails =\n      exposeFullDetails ||\n      hasDevServerStatusToken(ctx.headers.get(\"x-paperclip-dev-server-status-token\") ?? undefined);\n\n    if (!db) {\n      return Response.json(\n        exposeFullDetails\n          ? { status: \"ok\", version: serverVersion }\n          : { status: \"ok\", deploymentMode: opts.deploymentMode },\n      );\n    }\n\n    try {\n      await db.execute(sql`SELECT 1`);\n    } catch (error) {\n      logger.warn({ err: error }, \"Health check database probe failed\");\n      return Response.json(\n        {\n          status: \"unhealthy\",\n          version: serverVersion,\n          error: \"database_unreachable\",\n        },\n        { status: 503 },\n      );\n    }\n\n    let bootstrapStatus: \"ready\" | \"bootstrap_pending\" = \"ready\";\n    let bootstrapInviteActive = false;\n    if (opts.deploymentMode === \"authenticated\") {\n      const roleCount = await db\n        .select({ count: count() })\n        .from(instanceUserRoles)\n        .where(sql`${instanceUserRoles.role} = 'instance_admin'`)\n        .then((rows) =\u003e Number(rows[0]?.count ?? 0));\n      bootstrapStatus = roleCount \u003e 0 ? \"ready\" : \"bootstrap_pending\";\n\n      if (bootstrapStatus === \"bootstrap_pending\") {\n        const now = new Date();\n        const inviteCount = await db\n          .select({ count: count() })\n          .from(invites)\n          .where(\n            and(\n              eq(invites.inviteType, \"bootstrap_ceo\"),\n              isNull(invites.revokedAt),\n              isNull(invites.acceptedAt),\n              gt(invites.expiresAt, now),\n            ),\n          )\n          .then((rows) =\u003e Number(rows[0]?.count ?? 0));\n        bootstrapInviteActive = inviteCount \u003e 0;\n      }\n    }\n\n    const persistedDevServerStatus = readPersistedDevServerStatus();\n    let devServer: ReturnType\u003ctypeof toDevServerHealthStatus\u003e | undefined;\n    if (\n      exposeDevServerDetails \u0026\u0026\n      persistedDevServerStatus \u0026\u0026\n      typeof (db as { select?: unknown }).select === \"function\"\n    ) {\n      const instanceSettings = instanceSettingsService(db);\n      const experimentalSettings = await instanceSettings.getExperimental();\n      const activeRunCount = await db\n        .select({ count: count() })\n        .from(heartbeatRuns)\n        .where(inArray(heartbeatRuns.status, [\"queued\", \"running\"]))\n        .then((rows) =\u003e Number(rows[0]?.count ?? 0));\n\n      devServer = toDevServerHealthStatus(persistedDevServerStatus, {\n        autoRestartEnabled: experimentalSettings.autoRestartDevServerWhenIdle ?? false,\n        activeRunCount,\n      });\n    }\n\n    if (!exposeFullDetails) {\n      return Response.json({\n        status: \"ok\",\n        deploymentMode: opts.deploymentMode,\n        bootstrapStatus,\n        bootstrapInviteActive,\n        ...(devServer ? { devServer } : {}),\n      });\n    }\n\n    return Response.json({\n      status: \"ok\",\n      version: serverVersion,\n      deploymentMode: opts.deploymentMode,\n      deploymentExposure: opts.deploymentExposure,\n      authReady: opts.authReady,\n      bootstrapStatus,\n      bootstrapInviteActive,\n      features: {\n        companyDeletionEnabled: opts.companyDeletionEnabled,\n      },\n      ...(devServer ? { devServer } : {}),\n    });\n  };\n}\n\n/**\n * Returns an Express Router for the health endpoint.\n *\n * The public signature is intentionally identical to the previous version so\n * that the existing mount in app.ts (`api.use(\"/health\", healthRoutes(...))`)\n * continues to work without any changes.\n */\nexport function healthRoutes(\n  db?: Db,\n  opts: {\n    deploymentMode: DeploymentMode;\n    deploymentExposure: DeploymentExposure;\n    authReady: boolean;\n    companyDeletionEnabled: boolean;\n  } = {\n    deploymentMode: \"local_trusted\",\n    deploymentExposure: \"private\",\n    authReady: true,\n    companyDeletionEnabled: true,\n  },\n) {\n  const handler = buildHealthHandler(db, opts);\n\n  // expressHandler requires a StorageService in deps, but the health endpoint\n  // never touches storage. We supply a sentinel that throws if accidentally\n  // called, keeping the type contract honest without introducing a real dep.\n  const storageSentinel = new Proxy({} as StorageService, {\n    get(_target, prop) {\n      throw new Error(`health handler unexpectedly accessed storage.${String(prop)}`);\n    },\n  });\n\n  // db is optional for health but expressHandler's AdapterDeps types it as Db.\n  // When db is undefined the handler returns early before touching ctx.db, so\n  // we supply a sentinel here too rather than widen the adapter's types.\n  const dbSentinel = new Proxy({} as Db, {\n    get(_target, prop) {\n      throw new Error(`health handler unexpectedly accessed db.${String(prop)}`);\n    },\n  });\n\n  const router = Router();\n  router.get(\n    \"/\",\n    expressHandler(handler, {\n      db: db ?? dbSentinel,\n      storage: storageSentinel,\n    }),\n  );\n  return router;\n}\n",
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/health.ts"
+        },
+        "name": "Write",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01MM1RWFXr7metw9zhikPu4d",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 185
+      },
+      "cache_creation_input_tokens": 185,
+      "cache_read_input_tokens": 27254,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 185
+          },
+          "cache_creation_input_tokens": 185,
+          "cache_read_input_tokens": 27254,
+          "input_tokens": 1,
+          "output_tokens": 2430,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 2430,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "936a4b24-4d5f-4644-a4dd-08d12e14fc44",
+  "requestId": "req_011Caa9F9iLWkr6idU4WoxDQ",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "timestamp": "2026-04-30T14:51:27.804Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "f05f9483-a2bd-4144-bb8a-a7749d86c5da",
+  "version": "2.1.123"
+}

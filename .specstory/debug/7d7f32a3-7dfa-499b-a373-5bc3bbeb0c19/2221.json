@@ -1,0 +1,27 @@
+{
+  "agentId": "ac82afa7422550819",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "825\t    return { project, goal: null };\n826\t  }\n827\t\n828\t  // Resolve issue identifiers (e.g. \"PAP-39\") to UUIDs for all /issues/:id routes\n829\t  router.param(\"id\", async (req, res, next, rawId) =\u003e {\n830\t    try {\n831\t      req.params.id = await normalizeIssueIdentifier(rawId);\n832\t      next();\n833\t    } catch (err) {\n834\t      next(err);\n835\t    }\n836\t  });\n837\t\n838\t  // Resolve issue identifiers (e.g. \"PAP-39\") to UUIDs for company-scoped attachment routes.\n839\t  router.param(\"issueId\", async (req, res, next, rawId) =\u003e {\n840\t    try {\n841\t      req.params.issueId = await normalizeIssueIdentifier(rawId);\n842\t      next();\n843\t    } catch (err) {\n844\t      next(err);\n845\t    }\n846\t  });\n847\t\n848\t  const deps = { db, storage };\n849\t\n850\t  // Common malformed path when companyId is empty in \"/api/companies/{companyId}/issues\".\n851\t  router.get(\"/issues\", (_req, res) =\u003e {\n852\t    res.status(400).json({\n853\t      error: \"Missing companyId in path. Use /api/companies/{companyId}/issues.\",\n854\t    });\n855\t  });\n856\t\n857\t  const listIssues: Handler = async (ctx) =\u003e {\n858\t    const companyId = ctx.param(\"companyId\")!;\n859\t    assertCompanyAccess(ctx, companyId);\n860\t    const assigneeUserFilterRaw = ctx.query(\"assigneeUserId\");\n861\t    const touchedByUserFilterRaw = ctx.query(\"touchedByUserId\");\n862\t    const inboxArchivedByUserFilterRaw = ctx.query(\"inboxArchivedByUserId\");\n863\t    const unreadForUserFilterRaw = ctx.query(\"unreadForUserId\");\n864\t    const assigneeUserId =",
+        "tool_use_id": "toolu_01KY6rPQK2pvDHPALdaeED85",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "878ae329-0d3e-41e4-a86c-7a36ab5bd1ca",
+  "promptId": "dc405341-3479-47dd-8d57-3077b7af430f",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "878ae329-0d3e-41e4-a86c-7a36ab5bd1ca",
+  "timestamp": "2026-04-30T15:45:26.488Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "4a1f2e11-41e7-47b8-ab7e-a03a19070131",
+  "version": "2.1.123"
+}

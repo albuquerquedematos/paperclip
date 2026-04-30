@@ -1,0 +1,26 @@
+{
+  "agentId": "ac82afa7422550819",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { Router } from \"express\";\n2\timport type { Db } from \"@paperclipai/db\";\n3\timport { dashboardService } from \"../services/dashboard.js\";\n4\timport { assertCompanyAccess } from \"./authz.js\";\n5\t\n6\texport function dashboardRoutes(db: Db) {\n7\t  const router = Router();\n8\t  const svc = dashboardService(db);\n9\t\n10\t  router.get(\"/companies/:companyId/dashboard\", async (req, res) =\u003e {\n11\t    const companyId = req.params.companyId as string;\n12\t    assertCompanyAccess(req, companyId);\n13\t    const summary = await svc.summary(companyId);\n14\t    res.json(summary);\n15\t  });\n16\t\n17\t  return router;\n18\t}\n19\t",
+        "tool_use_id": "toolu_01AVKG9UzDDkEnF8RP1BKKTv",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "c5933b24-dcda-4def-a914-90e12d60a7b7",
+  "promptId": "f8ab24c1-de42-4dc6-b59c-8c9364db9ca7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "c5933b24-dcda-4def-a914-90e12d60a7b7",
+  "timestamp": "2026-04-30T15:10:48.642Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "18573ede-5ce5-4024-913c-6720ce4ee51d",
+  "version": "2.1.123"
+}

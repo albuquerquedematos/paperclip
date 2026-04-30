@@ -1,0 +1,26 @@
+{
+  "agentId": "adabf466a1a877701",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\texport type {\n2\t  AdapterAgent,\n3\t  AdapterRuntime,\n4\t  UsageSummary,\n5\t  AdapterBillingType,\n6\t  AdapterRuntimeServiceReport,\n7\t  AdapterExecutionResult,\n8\t  AdapterInvocationMeta,\n9\t  AdapterExecutionContext,\n10\t  AdapterEnvironmentCheckLevel,\n11\t  AdapterEnvironmentCheck,\n12\t  AdapterEnvironmentTestStatus,\n13\t  AdapterEnvironmentTestResult,\n14\t  AdapterEnvironmentTestContext,\n15\t  AdapterSkillSyncMode,\n16\t  AdapterSkillState,\n17\t  AdapterSkillOrigin,\n18\t  AdapterSkillEntry,\n19\t  AdapterSkillSnapshot,\n20\t  AdapterSkillContext,\n21\t  AdapterSessionCodec,\n22\t  AdapterModel,\n23\t  HireApprovedPayload,\n24\t  HireApprovedHookResult,\n25\t  ConfigFieldOption,\n26\t  ConfigFieldSchema,\n27\t  AdapterConfigSchema,\n28\t  ServerAdapterModule,\n29\t  QuotaWindow,\n30\t  ProviderQuotaResult,\n31\t  TranscriptEntry,\n32\t  StdoutLineParser,\n33\t  CLIAdapterModule,\n34\t  CreateConfigValues,\n35\t} from \"./types.js\";\n36\texport type {\n37\t  SessionCompactionPolicy,\n38\t  NativeContextManagement,\n39\t  AdapterSessionManagement,\n40\t  ResolvedSessionCompactionPolicy,\n41\t} from \"./session-compaction.js\";\n42\texport {\n43\t  ADAPTER_SESSION_MANAGEMENT,\n44\t  LEGACY_SESSIONED_ADAPTER_TYPES,\n45\t  getAdapterSessionManagement,\n46\t  readSessionCompactionOverride,\n47\t  resolveSessionCompactionPolicy,\n48\t  hasSessionCompactionThresholds,\n49\t} from \"./session-compaction.js\";\n50\texport {\n51\t  REDACTED_HOME_PATH_USER,\n52\t  redactHomePathUserSegments,\n53\t  redactHomePathUserSegmentsInValue,\n54\t  redactTranscriptEntryPaths,\n55\t} from \"./log-redaction.js\";\n56\texport { inferOpenAiCompatibleBiller } from \"./billing.js\";\n57\t// Keep the root adapter-utils entry browser-safe because the UI imports it.\n58\t// The sandbox callback bridge stays available via its dedicated subpath export.\n59\texport type {\n60\t  SandboxCallbackBridgeRequest,\n61\t  SandboxCallbackBridgeResponse,\n62\t  SandboxCallbackBridgeAsset,\n63\t  SandboxCallbackBridgeDirectories,\n64\t  SandboxCallbackBridgeRouteRule,\n65\t  SandboxCallbackBridgeQueueClient,\n66\t  SandboxCallbackBridgeWorkerHandle,\n67\t  StartedSandboxCallbackBridgeServer,\n68\t} from \"./sandbox-callback-bridge.js\";\n69\t// CommandExecutor types are exported here for type-only consumers.\n70\t// Runtime implementations (createLocalCommandExecutor) are available via the\n71\t// dedicated server-side subpath: @paperclipai/adapter-utils/local-executor\n72\texport type { CommandExecutorInput, CommandExecutor } from \"./executor.js\";\n73\t",
+        "tool_use_id": "toolu_011m32WQNNwgA4mAqJc7LKSL",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "2a60cc83-1454-4948-84ee-ce79ab48de1b",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "2a60cc83-1454-4948-84ee-ce79ab48de1b",
+  "timestamp": "2026-04-30T14:51:41.476Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "fd02d37c-4a28-4e0f-8c06-5c8a64263862",
+  "version": "2.1.123"
+}

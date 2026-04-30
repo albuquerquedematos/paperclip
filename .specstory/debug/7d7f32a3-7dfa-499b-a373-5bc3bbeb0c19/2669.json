@@ -1,0 +1,27 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "47\texport function costRoutes(\n48\t  db: Db,\n49\t  options: { pluginWorkerManager?: PluginWorkerManager } = {},\n50\t) {\n51\t  const router = Router();\n52\t  const heartbeat = heartbeatService(db, {\n53\t    pluginWorkerManager: options.pluginWorkerManager,\n54\t  });\n55\t  const budgetHooks = {\n56\t    cancelWorkForScope: heartbeat.cancelBudgetScopeWork,",
+        "tool_use_id": "toolu_018BgVDwTrfDLo2Ter73Y666",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "4e27d483-0088-4257-b8f9-9557d6e6709e",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "4e27d483-0088-4257-b8f9-9557d6e6709e",
+  "timestamp": "2026-04-30T16:29:20.245Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "1074ad38-b694-44e9-9407-6ed55a6185dd",
+  "version": "2.1.123"
+}

@@ -1,0 +1,72 @@
+{
+  "agentId": "a6710083ef9195699",
+  "attributionAgent": "backend-architect",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01RkgsEMjt6MtFf1wct1LxLm",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/README.md",
+          "new_string": "\u003cbr/\u003e\n\n## Deploy to Cloudflare\n\n[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/YOUR_FORK/paperclip)\n\nClick the button above to deploy Paperclip to your own Cloudflare account in one click. Cloudflare provisions all resources (Workers, R2, KV, Durable Objects, Queues, Workflows). After ~2 minutes, visit `/setup` on your deployment to configure secrets and create your first admin account.\n\nSee [doc/CLOUDFLARE.md](doc/CLOUDFLARE.md) for the full architecture and [packages/deploy-cloudflare/deploy/post-deploy-setup.md](packages/deploy-cloudflare/deploy/post-deploy-setup.md) for step-by-step operator instructions.\n\n\u003cbr/\u003e\n\n## What is Paperclip?",
+          "old_string": "\u003cbr/\u003e\n\n## What is Paperclip?",
+          "replace_all": false
+        },
+        "name": "Edit",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01HYpoxyH6zpF14ajZSsGS8M",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 661
+      },
+      "cache_creation_input_tokens": 661,
+      "cache_read_input_tokens": 80485,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 661
+          },
+          "cache_creation_input_tokens": 661,
+          "cache_read_input_tokens": 80485,
+          "input_tokens": 1,
+          "output_tokens": 341,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 341,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "4c89e0ea-716d-423c-b45a-bbba535e3bcc",
+  "requestId": "req_011Caa9tD5HJhSVhfzujULd3",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "timestamp": "2026-04-30T14:59:17.038Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "feec1990-765a-431d-993e-593f6f9588e3",
+  "version": "2.1.123"
+}

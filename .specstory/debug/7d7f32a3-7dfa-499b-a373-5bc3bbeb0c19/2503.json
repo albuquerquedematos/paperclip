@@ -1,0 +1,27 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { Router, type Request, type Response as ExpressResponse, type NextFunction } from \"express\";\n2\timport type { Db } from \"@paperclipai/db\";\n3\timport {\n4\t  createProjectSchema,\n5\t  createProjectWorkspaceSchema,\n6\t  findWorkspaceCommandDefinition,\n7\t  isUuidLike,\n8\t  matchWorkspaceRuntimeServiceToCommand,\n9\t  updateProjectSchema,\n10\t  updateProjectWorkspaceSchema,\n11\t  workspaceRuntimeControlTargetSchema,\n12\t} from \"@paperclipai/shared\";\n13\timport type { WorkspaceRuntimeDesiredState, WorkspaceRuntimeServiceStateMap } from \"@paperclipai/shared\";\n14\timport { trackProjectCreated } from \"@paperclipai/shared/telemetry\";\n15\timport { validate } from \"../middleware/validate.js\";\n16\timport { projectService, logActivity, workspaceOperationService } from \"../services/index.js\";\n17\timport { conflict, forbidden } from \"../errors.js\";\n18\timport { assertCompanyAccess, getActorInfo } from \"./authz.js\";\n19\timport {\n20\t  buildWorkspaceRuntimeDesiredStatePatch,\n21\t  listConfiguredRuntimeServiceEntries,\n22\t  runWorkspaceJobForControl,\n23\t  startRuntimeServicesForWorkspaceControl,\n24\t  stopRuntimeServicesForProjectWorkspace,\n25\t} from \"../services/workspace-runtime.js\";\n26\timport {\n27\t  assertNoAgentHostWorkspaceCommandMutation,\n28\t  collectProjectExecutionWorkspaceCommandPaths,\n29\t  collectProjectWorkspaceCommandPaths,\n30\t} from \"./workspace-command-authz.js\";",
+        "tool_use_id": "toolu_01QPWaSoBYasLyNP7BpW9eQw",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "60c335f0-1be6-43d4-bdb0-e8b706ace5ae",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "60c335f0-1be6-43d4-bdb0-e8b706ace5ae",
+  "timestamp": "2026-04-30T16:24:13.007Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "1b444462-7750-455a-8220-5ebedb700092",
+  "version": "2.1.123"
+}

@@ -1,0 +1,35 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport type { Config } from \"../config.js\";\n2\timport type { StorageProvider } from \"./types.js\";\n3\timport { createLocalDiskStorageProvider } from \"./local-disk-provider.js\";\n4\timport { createS3StorageProvider } from \"./s3-provider.js\";\n5\t\n6\texport function createStorageProviderFromConfig(config: Config): StorageProvider {\n7\t  if (config.storageProvider === \"local_disk\") {\n8\t    return createLocalDiskStorageProvider(config.storageLocalDiskBaseDir);\n9\t  }\n10\t\n11\t  return createS3StorageProvider({\n12\t    bucket: config.storageS3Bucket,\n13\t    region: config.storageS3Region,\n14\t    endpoint: config.storageS3Endpoint,\n15\t    prefix: config.storageS3Prefix,\n16\t    forcePathStyle: config.storageS3ForcePathStyle,\n17\t  });\n18\t}\n19\t",
+        "tool_use_id": "toolu_01WkHUYvEC3RZUuQSaDEiJUT",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "e9210c6f-84f6-420a-bcfc-951ff77d6bfb",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "e9210c6f-84f6-420a-bcfc-951ff77d6bfb",
+  "timestamp": "2026-04-30T14:48:40.553Z",
+  "toolUseResult": {
+    "file": {
+      "content": "import type { Config } from \"../config.js\";\nimport type { StorageProvider } from \"./types.js\";\nimport { createLocalDiskStorageProvider } from \"./local-disk-provider.js\";\nimport { createS3StorageProvider } from \"./s3-provider.js\";\n\nexport function createStorageProviderFromConfig(config: Config): StorageProvider {\n  if (config.storageProvider === \"local_disk\") {\n    return createLocalDiskStorageProvider(config.storageLocalDiskBaseDir);\n  }\n\n  return createS3StorageProvider({\n    bucket: config.storageS3Bucket,\n    region: config.storageS3Region,\n    endpoint: config.storageS3Endpoint,\n    prefix: config.storageS3Prefix,\n    forcePathStyle: config.storageS3ForcePathStyle,\n  });\n}\n",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/storage/provider-registry.ts",
+      "numLines": 19,
+      "startLine": 1,
+      "totalLines": 19
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "f758e640-6ffb-42b7-9b02-dcb5e33c19dd",
+  "version": "2.1.123"
+}

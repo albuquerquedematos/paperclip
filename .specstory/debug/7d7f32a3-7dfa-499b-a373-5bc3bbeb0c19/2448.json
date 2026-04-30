@@ -1,0 +1,27 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { randomUUID } from \"node:crypto\";\n2\timport { Router, type Request, type Response } from \"express\";\n3\timport multer from \"multer\";\n4\timport type { Handler, RequestCtx } from \"../http/types.js\";\n5\timport { expressHandler } from \"../http/express-adapter.js\";\n6\timport { z } from \"zod\";\n7\timport type { Db } from \"@paperclipai/db\";\n8\timport { issueExecutionDecisions } from \"@paperclipai/db\";\n9\timport {\n10\t  addIssueCommentSchema,\n11\t  acceptIssueThreadInteractionSchema,\n12\t  createIssueAttachmentMetadataSchema,\n13\t  createIssueThreadInteractionSchema,\n14\t  createIssueWorkProductSchema,\n15\t  createIssueLabelSchema,\n16\t  checkoutIssueSchema,\n17\t  createChildIssueSchema,\n18\t  createIssueSchema,\n19\t  feedbackTargetTypeSchema,\n20\t  feedbackTraceStatusSchema,\n21\t  feedbackVoteValueSchema,\n22\t  upsertIssueFeedbackVoteSchema,\n23\t  linkIssueApprovalSchema,\n24\t  issueDocumentKeySchema,\n25\t  ISSUE_CONTINUATION_SUMMARY_DOCUMENT_KEY,\n26\t  rejectIssueThreadInteractionSchema,\n27\t  restoreIssueDocumentRevisionSchema,\n28\t  respondIssueThreadInteractionSchema,\n29\t  updateIssueWorkProductSchema,\n30\t  upsertIssueDocumentSchema,\n31\t  updateIssueSchema,\n32\t  getClosedIsolatedExecutionWorkspaceMessage,\n33\t  isClosedIsolatedExecutionWorkspace,\n34\t  type ExecutionWorkspace,\n35\t} from \"@paperclipai/shared\";\n36\timport { trackAgentTaskCompleted } from \"@paperclipai/shared/telemetry\";\n37\timport { getTelemetryClient } from \"../telemetry.js\";\n38\timport type { StorageService } from \"../storage/types.js\";\n39\timport { validate } from \"../middleware/validate.js\";\n40\timport * as serviceIndex from \"../services/index.js\";\n41\timport {\n42\t  accessService,\n43\t  agentService,\n44\t  companyService,\n45\t  executionWorkspaceService,\n46\t  goalService,\n47\t  heartbeatService,\n48\t  issueApprovalService,\n49\t  issueThreadInteractionService,\n50\t  ISSUE_LIST_DEFAULT_LIMIT,",
+        "tool_use_id": "toolu_01Y9WDHub2P8t1eBT7boCtx1",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "5ca127bf-ef39-4048-b514-eca6f1d997ef",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "5ca127bf-ef39-4048-b514-eca6f1d997ef",
+  "timestamp": "2026-04-30T16:20:18.068Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "eee1555b-02c6-443a-b623-4200eab15a20",
+  "version": "2.1.123"
+}

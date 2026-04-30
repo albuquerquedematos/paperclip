@@ -1,0 +1,26 @@
+{
+  "agentId": "a0d0169af69218004",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "80\t  storageS3Region: string;\n81\t  storageS3Endpoint: string | undefined;\n82\t  storageS3Prefix: string;\n83\t  storageS3ForcePathStyle: boolean;\n84\t  feedbackExportBackendUrl: string | undefined;\n85\t  feedbackExportBackendToken: string | undefined;\n86\t  heartbeatSchedulerEnabled: boolean;\n87\t  heartbeatSchedulerIntervalMs: number;\n88\t  companyDeletionEnabled: boolean;\n89\t  telemetryEnabled: boolean;\n90\t}\n91\t\n92\tfunction detectTailnetBindHost(): string | undefined {\n93\t  const explicit = process.env.PAPERCLIP_TAILNET_BIND_HOST?.trim();\n94\t  if (explicit) return explicit;\n95\t\n96\t  try {\n97\t    const stdout = execFileSync(\"tailscale\", [\"ip\", \"-4\"], {\n98\t      encoding: \"utf8\",\n99\t      stdio: [\"ignore\", \"pipe\", \"ignore\"],\n100\t      timeout: TAILSCALE_DETECT_TIMEOUT_MS,\n101\t    });\n102\t    return stdout\n103\t      .split(/\\r?\\n/)\n104\t      .map((line) =\u003e line.trim())\n105\t      .find(Boolean);\n106\t  } catch {\n107\t    return undefined;\n108\t  }\n109\t}\n110\t\n111\texport function loadConfig(): Config {\n112\t  const fileConfig = readConfigFile();\n113\t  const fileDatabaseMode =\n114\t    (fileConfig?.database.mode === \"postgres\" ? \"postgres\" : \"embedded-postgres\") as DatabaseMode;\n115\t\n116\t  const fileDbUrl =\n117\t    fileDatabaseMode === \"postgres\"\n118\t      ? fileConfig?.database.connectionString\n119\t      : undefined;\n120\t  const fileDatabaseBackup = fileConfig?.database.backup;\n121\t  const fileSecrets = fileConfig?.secrets;\n122\t  const fileStorage = fileConfig?.storage;\n123\t  const strictModeFromEnv = process.env.PAPERCLIP_SECRETS_STRICT_MODE;\n124\t  const secretsStrictMode =\n125\t    strictModeFromEnv !== undefined\n126\t      ? strictModeFromEnv === \"true\"\n127\t      : (fileSecrets?.strictMode ?? false);\n128\t\n129\t  const providerFromEnvRaw = process.env.PAPERCLIP_SECRETS_PROVIDER;\n130\t  const providerFromEnv =\n131\t    providerFromEnvRaw \u0026\u0026 SECRET_PROVIDERS.includes(providerFromEnvRaw as SecretProvider)\n132\t      ? (providerFromEnvRaw as SecretProvider)\n133\t      : null;\n134\t  const providerFromFile = fileSecrets?.provider;\n135\t  const secretsProvider: SecretProvider = providerFromEnv ?? providerFromFile ?? \"local_encrypted\";\n136\t\n137\t  const storageProviderFromEnvRaw = process.env.PAPERCLIP_STORAGE_PROVIDER;\n138\t  const storageProviderFromEnv =\n139\t    storageProviderFromEnvRaw \u0026\u0026 STORAGE_PROVIDERS.includes(storageProviderFromEnvRaw as StorageProvider)",
+        "tool_use_id": "toolu_01B6gG6RLmJqmqob3voUwM2D",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "81a6f9a9-231e-4825-9b57-7f713c8882af",
+  "promptId": "41a5cab3-78a5-4305-8404-9daa35591aac",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "81a6f9a9-231e-4825-9b57-7f713c8882af",
+  "timestamp": "2026-04-30T15:04:48.930Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "f3d9b569-c4a9-431b-9570-41ebaf5ea4d3",
+  "version": "2.1.123"
+}

@@ -1,0 +1,70 @@
+{
+  "agentId": "adabf466a1a877701",
+  "attributionAgent": "backend-architect",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01JdYUzY6Pmty4cJ55AFa33W",
+        "input": {
+          "content": "export interface ScheduledTask {\n  cancel(): void;\n}\n\nexport interface Scheduler {\n  every(name: string, intervalMs: number, fn: () =\u003e Promise\u003cvoid\u003e): ScheduledTask;\n}\n",
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/scheduler/types.ts"
+        },
+        "name": "Write",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01YMAzGow2kwSMTSB6d9oRhB",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 138
+      },
+      "cache_creation_input_tokens": 138,
+      "cache_read_input_tokens": 41799,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 138
+          },
+          "cache_creation_input_tokens": 138,
+          "cache_read_input_tokens": 41799,
+          "input_tokens": 1,
+          "output_tokens": 146,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 146,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "78d4fd65-cce4-4964-9fcf-d0825709209b",
+  "requestId": "req_011Caa9ApU6QHL1nWLkPTx7m",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "timestamp": "2026-04-30T14:49:53.744Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "dca520c0-049f-4878-ae17-8aa2be410bca",
+  "version": "2.1.123"
+}

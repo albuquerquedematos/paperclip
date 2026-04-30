@@ -1,0 +1,26 @@
+{
+  "agentId": "a6710083ef9195699",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\texport {\n2\t  createDb,\n3\t  createPostgresDb,\n4\t  getPostgresDataDirectory,\n5\t  ensurePostgresDatabase,\n6\t  inspectMigrations,\n7\t  applyPendingMigrations,\n8\t  reconcilePendingMigrationHistory,\n9\t  type MigrationState,\n10\t  type MigrationHistoryReconcileResult,\n11\t  migratePostgresIfEmpty,\n12\t  type MigrationBootstrapResult,\n13\t  type Db,\n14\t} from \"./client.js\";\n15\texport {\n16\t  getEmbeddedPostgresTestSupport,\n17\t  startEmbeddedPostgresTestDatabase,\n18\t  type EmbeddedPostgresTestDatabase,\n19\t  type EmbeddedPostgresTestSupport,\n20\t} from \"./test-embedded-postgres.js\";\n21\texport {\n22\t  runDatabaseBackup,\n23\t  runDatabaseRestore,\n24\t  formatDatabaseBackupResult,\n25\t  type BackupRetentionPolicy,\n26\t  type RunDatabaseBackupOptions,\n27\t  type RunDatabaseBackupResult,\n28\t  type RunDatabaseRestoreOptions,\n29\t} from \"./backup-lib.js\";\n30\texport {\n31\t  createEmbeddedPostgresLogBuffer,\n32\t  formatEmbeddedPostgresError,\n33\t} from \"./embedded-postgres-error.js\";\n34\texport { issueRelations } from \"./schema/issue_relations.js\";\n35\texport { issueReferenceMentions } from \"./schema/issue_reference_mentions.js\";\n36\texport * from \"./schema/index.js\";\n37\t",
+        "tool_use_id": "toolu_016JXB6qL1C2aMF4gsJSyFBq",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "bdd6287f-26fc-4c51-9b3e-424a32aa876a",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "bdd6287f-26fc-4c51-9b3e-424a32aa876a",
+  "timestamp": "2026-04-30T14:51:28.042Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "a7324c35-a4bd-4897-bf55-94b4891d0271",
+  "version": "2.1.123"
+}

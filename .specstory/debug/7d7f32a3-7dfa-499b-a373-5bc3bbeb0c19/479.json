@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1878\t  async function updateFile(companyId: string, skillId: string, relativePath: string, content: string): Promise\u003cCompanySkillFileDetail\u003e {\n1879\t    await ensureSkillInventoryCurrent(companyId);\n1880\t    const skill = await getById(companyId, skillId);\n1881\t    if (!skill) throw notFound(\"Skill not found\");\n1882\t\n1883\t    const source = deriveSkillSourceInfo(skill);\n1884\t    if (!source.editable || skill.sourceType !== \"local_path\") {\n1885\t      throw unprocessable(source.editableReason ?? \"This skill cannot be edited.\");\n1886\t    }\n1887\t\n1888\t    const normalizedPath = normalizePortablePath(relativePath);\n1889\t    const absolutePath = resolveLocalSkillFilePath(skill, normalizedPath);\n1890\t    if (!absolutePath) throw notFound(\"Skill file not found\");\n1891\t\n1892\t    await fs.mkdir(path.dirname(absolutePath), { recursive: true });\n1893\t    await fs.writeFile(absolutePath, content, \"utf8\");\n1894\t\n1895\t    if (normalizedPath === \"SKILL.md\") {\n1896\t      const parsed = parseFrontmatterMarkdown(content);\n1897\t      await db\n1898\t        .update(companySkills)\n1899\t        .set({\n1900\t          name: asString(parsed.frontmatter.name) ?? skill.name,\n1901\t          description: asString(parsed.frontmatter.description) ?? skill.description,\n1902\t          markdown: content,\n1903\t          updatedAt: new Date(),\n1904\t        })\n1905\t        .where(eq(companySkills.id, skill.id));\n1906\t    } else {\n1907\t      await db",
+        "tool_use_id": "toolu_01H23ieD3k5Es4bykpM4QHrb",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "d5dfb067-dfa2-42a7-9ec0-371d2268f085",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "d5dfb067-dfa2-42a7-9ec0-371d2268f085",
+  "timestamp": "2026-04-30T14:52:42.449Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "1e8c9fb9-532c-4bfd-8b27-2d7b403fcfa5",
+  "version": "2.1.123"
+}

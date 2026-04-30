@@ -1,0 +1,27 @@
+{
+  "agentId": "a28a63530ac1fc5de",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/db/src/schema/plugins.ts:4:  text,\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/db/src/schema/plugins.ts:7:  jsonb,\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/db/src/schema/plugins.ts:18: * `manifest_json` so the host can reconstruct capability and UI\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/db/src/schema/plugins.ts:27:    pluginKey: text(\"plugin_key\").notNull(),\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/db/src/schema/plugins.ts:28:    packageName: text(\"package_name\").notNull(),\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/db/src/schema/plugins.ts:29:    version: text(\"version\").notNull(),\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/db/src/schema/plugins.ts:31:    categories: jsonb(\"categories\").$type\u003cPluginCategory[]\u003e().notNull().default([]),\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/db/src/schema/plugins.ts:32:    manifestJson: jsonb(\"manifest_json\").$type\u003cPaperclipPluginManifestV1\u003e().notNull(),\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/db/src/schema/plugins.ts:33:    status: text(\"status\").$type\u003cPluginStatus\u003e().notNull().default(\"installed\"),\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/db/src/schema/plugins.ts:36:    packagePath: text(\"package_path\"),\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/db/src/schema/plugins.ts:37:    lastError: text(\"last_error\"),",
+        "is_error": false,
+        "tool_use_id": "toolu_01Jp3xTh6nAVF7MjMbj7Bu3R",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "79605561-6043-4f5e-a345-f0b8f2704446",
+  "promptId": "721340db-55e4-4f08-9c81-1d2e399ba682",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "79605561-6043-4f5e-a345-f0b8f2704446",
+  "timestamp": "2026-04-30T13:28:06.893Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "f62392d0-6f75-4058-a09a-0da5b1dce191",
+  "version": "2.1.123"
+}

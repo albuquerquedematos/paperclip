@@ -1,0 +1,70 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_015i6d1Xq3cpYJFkXGtSfA3M",
+        "input": {
+          "description": "CF sidecar client + company-skills + agent-instructions CF implementations",
+          "prompt": "You are implementing CF-specific service implementations in `packages/deploy-cloudflare/` for the Paperclip monorepo at `/Users/migmac/Documents/GitHub/_ABM/paperclip` on branch `feat/cloudflare-deployment`. Create entirely NEW files — do not modify any existing files.\n\n## 1. Sidecar Client (`packages/deploy-cloudflare/src/sidecar-client.ts`)\n\nIn Workers mode, operations that require filesystem access, child processes, or plugin loading are delegated to the \"sidecar\" — which is just the existing Paperclip Node server running alongside the Workers deployment. The Worker calls the sidecar over HTTP.\n\nRead `server/src/services/heartbeat.ts` (first 80 lines) to understand the heartbeat service shape. Read `server/src/services/company-skills.ts` (first 60 lines) to understand skills. Read `server/src/services/agent-instructions.ts` (first 60 lines).\n\nCreate a `SidecarClient` class:\n\n```ts\nexport interface SidecarConfig {\n  baseUrl: string;      // e.g. https://sidecar.internal\n  apiKey: string;       // shared secret for Worker → sidecar auth\n}\n\nexport class SidecarClient {\n  constructor(private config: SidecarConfig) {}\n\n  private async call\u003cT\u003e(path: string, method = \"GET\", body?: unknown): Promise\u003cT\u003e {\n    const resp = await fetch(`${this.config.baseUrl}${path}`, {\n      method,\n      headers: {\n        \"Content-Type\": \"application/json\",\n        Authorization: `Bearer ${this.config.apiKey}`,\n      },\n      body: body ? JSON.stringify(body) : undefined,\n    });\n    if (!resp.ok) {\n      const text = await resp.text();\n      throw new Error(`Sidecar error ${resp.status}: ${text}`);\n    }\n    return resp.json() as Promise\u003cT\u003e;\n  }\n\n  // Workspace provisioning\n  async provisionWorkspace(params: { agentId: string; companyId: string; runId: string }): Promise\u003c{ workspacePath: string; leaseId: string }\u003e {\n    return this.call(\"/sidecar/workspaces/provision\", \"POST\", params);\n  }\n\n  async releaseWorkspace(leaseId: string): Promise\u003cvoid\u003e {\n    await this.call(`/sidecar/workspaces/${leaseId}/release`, \"POST\");\n  }\n\n  // Plugin execution\n  async executePlugin(params: { pluginId: string; jobId: string; input: unknown }): Promise\u003cunknown\u003e {\n    return this.call(\"/sidecar/plugins/execute\", \"POST\", params);\n  }\n\n  // Skill bundle access\n  async getSkillBundle(companyId: string, skillId: string): Promise\u003c{ files: Record\u003cstring, string\u003e }\u003e {\n    return this.call(`/sidecar/skills/${companyId}/${skillId}/bundle`);\n  }\n\n  // Agent instructions\n  async getAgentInstructions(agentId: string, companyId: string): Promise\u003c{ content: string }\u003e {\n    return this.call(`/sidecar/agents/${agentId}/instructions?companyId=${companyId}`);\n  }\n\n  async updateAgentInstructions(agentId: string, companyId: string, content: string): Promise\u003cvoid\u003e {\n    await this.call(`/sidecar/agents/${agentId}/instructions`, \"PUT\", { companyId, content });\n  }\n}\n```\n\n## 2. R2-backed company skills metadata (`packages/deploy-cloudflare/src/services/cf-company-skills.ts`)\n\nRead `server/src/services/company-skills.ts` (first 100 lines) to understand what operations it performs — specifically: what does it return when you \"get a skill bundle\"? What are the key data types?\n\nThen create a CF implementation that:\n- Stores skill file content in R2 (key: `skills/${companyId}/${skillId}/${filename}`)\n- For skill metadata (name, description, version, etc.) — reads from D1/Postgres via `ctx.db`\n- For the actual file tree content — reads from R2\n- Delegates local-process operations (skill execution, live validation) to `SidecarClient`\n\nThe class should implement the key read operations that the Hono Worker needs:\n```ts\nexport class CfCompanySkillsService {\n  constructor(\n    private r2: R2Bucket,\n    private sidecar: SidecarClient,\n  ) {}\n\n  async getSkillBundle(companyId: string, skillId: string): Promise\u003c{ files: Record\u003cstring, string\u003e }\u003e {\n    // List R2 objects under prefix `skills/${companyId}/${skillId}/`\n    // Fetch each file content\n    // Return as { files: { [relativePath]: content } }\n    const list = await this.r2.list({ prefix: `skills/${companyId}/${skillId}/` });\n    const files: Record\u003cstring, string\u003e = {};\n    for (const obj of list.objects) {\n      const result = await this.r2.get(obj.key);\n      if (result) {\n        files[obj.key.replace(`skills/${companyId}/${skillId}/`, \"\")] = await result.text();\n      }\n    }\n    return { files };\n  }\n\n  async putSkillFile(companyId: string, skillId: string, path: string, content: string): Promise\u003cvoid\u003e {\n    await this.r2.put(`skills/${companyId}/${skillId}/${path}`, content, {\n      httpMetadata: { contentType: \"text/plain\" },\n    });\n  }\n\n  async deleteSkillBundle(companyId: string, skillId: string): Promise\u003cvoid\u003e {\n    const list = await this.r2.list({ prefix: `skills/${companyId}/${skillId}/` });\n    for (const obj of list.objects) {\n      await this.r2.delete(obj.key);\n    }\n  }\n}\n```\n\n## 3. R2-backed agent instructions (`packages/deploy-cloudflare/src/services/cf-agent-instructions.ts`)\n\nRead `server/src/services/agent-instructions.ts` (first 80 lines) to understand what it does. It manages per-agent instruction files in a directory tree. Create a CF implementation that stores them in R2:\n\n```ts\nexport class CfAgentInstructionsService {\n  constructor(private r2: R2Bucket) {}\n\n  async getInstructions(agentId: string, companyId: string, filename = \"AGENT.md\"): Promise\u003cstring | null\u003e {\n    const result = await this.r2.get(`instructions/${companyId}/${agentId}/${filename}`);\n    return result ? result.text() : null;\n  }\n\n  async putInstructions(agentId: string, companyId: string, content: string, filename = \"AGENT.md\"): Promise\u003cvoid\u003e {\n    await this.r2.put(`instructions/${companyId}/${agentId}/${filename}`, content, {\n      httpMetadata: { contentType: \"text/markdown\" },\n    });\n  }\n\n  async listInstructionFiles(agentId: string, companyId: string): Promise\u003cstring[]\u003e {\n    const list = await this.r2.list({ prefix: `instructions/${companyId}/${agentId}/` });\n    return list.objects.map(o =\u003e o.key.replace(`instructions/${companyId}/${agentId}/`, \"\"));\n  }\n\n  async deleteInstructions(agentId: string, companyId: string): Promise\u003cvoid\u003e {\n    const list = await this.r2.list({ prefix: `instructions/${companyId}/${agentId}/` });\n    for (const obj of list.objects) {\n      await this.r2.delete(obj.key);\n    }\n  }\n}\n```\n\n## 4. Update `packages/deploy-cloudflare/src/worker/api.ts`\n\nRead the current `api.ts` first. Then add:\n- Import `SidecarClient` and the CF service classes\n- Add `SIDECAR_URL` and `SIDECAR_API_KEY` to the `Env` interface\n- In the app setup, instantiate `SidecarClient`, `CfCompanySkillsService`, `CfAgentInstructionsService`\n- Add a comment showing how these would be passed to route handlers once routes are registered\n\n## Rules\n- Web APIs only in all new files — no Node imports.\n- Read files before editing.\n- Report every file created with path.",
+          "run_in_background": true,
+          "subagent_type": "backend-architect"
+        },
+        "name": "Agent",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01MRqRykxg9y8HofCHMER2P5",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 1295
+      },
+      "cache_creation_input_tokens": 1295,
+      "cache_read_input_tokens": 113252,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 1295
+          },
+          "cache_creation_input_tokens": 1295,
+          "cache_read_input_tokens": 113252,
+          "input_tokens": 1,
+          "output_tokens": 9197,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 9197,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "d6249a8f-5c79-4c53-815e-ac62223e916c",
+  "requestId": "req_011CaaACRac5nHSkqP8Rmzh2",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "timestamp": "2026-04-30T15:05:36.261Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "4db5c702-c71f-4742-bb38-b51b9c790b68",
+  "version": "2.1.123"
+}

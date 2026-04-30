@@ -1,0 +1,26 @@
+{
+  "agentId": "a3573a14f101d1112",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\t// TODO(cloudflare): heartbeat.ts uses node:fs/promises (mkdir, stat, readdir,\n2\t// rm) to manage agent workspace directories on the local host filesystem during\n3\t// the heartbeat tick. These calls provision git checkout directories and check\n4\t// whether working directories exist. For Workers compatibility workspace\n5\t// provisioning must be delegated to a separate sidecar process or an external\n6\t// sandbox API; the Worker itself cannot perform host filesystem operations.\n7\timport fs from \"node:fs/promises\";\n8\timport path from \"node:path\";\n9\timport { execFile as execFileCallback } from \"node:child_process\";\n10\timport { promisify } from \"node:util\";\n11\timport { randomUUID } from \"node:crypto\";\n12\timport { and, asc, desc, eq, getTableColumns, gt, inArray, isNull, lte, notInArray, or, sql } from \"drizzle-orm\";\n13\timport type { Db } from \"@paperclipai/db\";\n14\timport {\n15\t  AGENT_DEFAULT_MAX_CONCURRENT_RUNS,\n16\t  ISSUE_CONTINUATION_SUMMARY_DOCUMENT_KEY,\n17\t  isEnvironmentDriverSupportedForAdapter,\n18\t  type BillingType,\n19\t  type EnvironmentLeaseStatus,\n20\t  type ExecutionWorkspace,\n21\t  type ExecutionWorkspaceConfig,\n22\t  type RunLivenessState,\n23\t} from \"@paperclipai/shared\";\n24\timport {\n25\t  agents,\n26\t  agentRuntimeState,\n27\t  agentTaskSessions,\n28\t  agentWakeupRequests,\n29\t  activityLog,\n30\t  companySkills as companySkillsTable,\n31\t  documentRevisions,\n32\t  issueDocuments,\n33\t  heartbeatRunEvents,\n34\t  heartbeatRuns,\n35\t  issueComments,\n36\t  issueRelations,\n37\t  issues,\n38\t  issueWorkProducts,\n39\t  projects,\n40\t  projectWorkspaces,\n41\t  workspaceOperations,\n42\t} from \"@paperclipai/db\";\n43\timport { conflict, HttpError, notFound } from \"../errors.js\";\n44\timport { logger } from \"../middleware/logger.js\";\n45\timport { publishLiveEvent } from \"./live-events.js\";\n46\timport { getRunLogStore, type RunLogHandle } from \"./run-log-store.js\";\n47\timport { getServerAdapter, runningProcesses } from \"../adapters/index.js\";\n48\timport type { AdapterExecutionResult, AdapterInvocationMeta, AdapterSessionCodec, UsageSummary } from \"../adapters/index.js\";\n49\timport { createLocalAgentJwt } from \"../agent-auth-jwt.js\";\n50\timport { parseObject, asBoolean, asNumber, appendWithByteCap, MAX_EXCERPT_BYTES } from \"../adapters/utils.js\";\n51\timport { costService } from \"./costs.js\";\n52\timport { trackAgentFirstHeartbeat } from \"@paperclipai/shared/telemetry\";\n53\timport { getTelemetryClient } from \"../telemetry.js\";\n54\timport { companySkillService } from \"./company-skills.js\";\n55\timport { budgetService, type BudgetEnforcementScope } from \"./budgets.js\";\n56\timport { secretService } from \"./secrets.js\";\n57\timport { resolveDefaultAgentWorkspaceDir, resolveManagedProjectWorkspaceDir } from \"../home-paths.js\";\n58\timport {\n59\t  buildHeartbeatRunIssueComment,\n60\t  HEARTBEAT_RUN_RESULT_OUTPUT_MAX_CHARS,\n61\t  HEARTBEAT_RUN_RESULT_SUMMARY_MAX_CHARS,\n62\t  HEARTBEAT_RUN_SAFE_RESULT_JSON_MAX_BYTES,\n63\t  mergeHeartbeatRunResultJson,\n64\t} from \"./heartbeat-run-summary.js\";\n65\timport {\n66\t  buildHeartbeatRunStopMetadata,\n67\t  mergeHeartbeatRunStopMetadata,\n68\t} from \"./heartbeat-stop-metadata.js\";\n69\timport {\n70\t  classifyRunLiveness,\n71\t  type RunLivenessClassificationInput,\n72\t} from \"./run-liveness.js\";\n73\timport { logActivity, publishPluginDomainEvent, type LogActivityInput } from \"./activity-log.js\";\n74\timport {\n75\t  buildWorkspaceReadyComment,\n76\t  cleanupExecutionWorkspaceArtifacts,\n77\t  ensureRuntimeServicesForRun,\n78\t  persistAdapterManagedRuntimeServices,\n79\t  realizeExecutionWorkspace,\n80\t  releaseRuntimeServicesForRun,",
+        "tool_use_id": "toolu_016iwSyFVjdMsTuLBH9U25ga",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "6f9a601f-6cdc-4d6e-aa91-eae3cb36484e",
+  "promptId": "41a5cab3-78a5-4305-8404-9daa35591aac",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "6f9a601f-6cdc-4d6e-aa91-eae3cb36484e",
+  "timestamp": "2026-04-30T15:05:39.941Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "b39ebbbe-0fe1-475a-9658-f6c4fb64c836",
+  "version": "2.1.123"
+}

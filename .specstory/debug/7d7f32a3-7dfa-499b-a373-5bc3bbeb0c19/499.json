@@ -1,0 +1,27 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "112:    const raw = JSON.parse(await fs.readFile(filePath, \"utf8\")) as unknown;\n139:  await fs.mkdir(getRuntimeServicesDir(), { recursive: true });\n140:  await fs.writeFile(\n148:  await fs.rm(getRuntimeServiceRegistryPath(serviceKey), { force: true });\n160:    const entries = await fs.readdir(getRuntimeServicesDir(), { withFileTypes: true });\n225:  if (process.platform === \"win32\") return false;\n236:  if (process.platform === \"win32\") return true;\n297:  const targetProcessGroup = process.platform !== \"win32\" \u0026\u0026 record.processGroupId \u0026\u0026 record.processGroupId \u003e 0;\n335:  if (!Number.isInteger(port) || port \u003c= 0 || process.platform === \"win32\") return null;",
+        "is_error": false,
+        "tool_use_id": "toolu_0117a4jazAucxdutokdeunZA",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "02099661-9992-435a-8ec0-d4096f6c26c0",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "02099661-9992-435a-8ec0-d4096f6c26c0",
+  "timestamp": "2026-04-30T14:52:56.973Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "b32b9780-691a-436f-b09e-1c1d523cdeb4",
+  "version": "2.1.123"
+}

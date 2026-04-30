@@ -1,0 +1,29 @@
+{
+  "attachment": {
+    "content": {
+      "file": {
+        "content": "import type { Db } from \"@paperclipai/db\";\nimport type { StorageService } from \"../storage/types.js\";\n\nexport interface ActorMembership {\n  companyId: string;\n  membershipRole: string;\n  status: string;\n}\n\nexport type ActorSource =\n  | \"local_implicit\"\n  | \"session\"\n  | \"board_key\"\n  | \"agent_jwt\"\n  | \"agent_key\"\n  | \"none\";\n\nexport interface BoardActor {\n  type: \"board\";\n  source: ActorSource;\n  userId: string;\n  userName: string | null;\n  userEmail: string | null;\n  isInstanceAdmin: boolean;\n  companyIds?: string[];\n  memberships?: ActorMembership[];\n  keyId?: string;\n  runId?: string;\n}\n\nexport interface AgentActor {\n  type: \"agent\";\n  source: ActorSource;\n  agentId: string;\n  companyId: string;\n  keyId?: string;\n  runId?: string;\n}\n\n/** Full actor — mirrors the shape set by actorMiddleware. null when unauthenticated (\"none\"). */\nexport type ActorContext = BoardActor | AgentActor;\n\n/** Minimal normalized request passed to every handler. */\nexport interface RequestCtx {\n  method: string;\n  url: URL;\n  headers: Headers;\n  json\u003cT = unknown\u003e(): Promise\u003cT\u003e;\n  text(): Promise\u003cstring\u003e;\n  /** Path param: e.g. ctx.param(\"companyId\") */\n  param(name: string): string | undefined;\n  /** Query param */\n  query(name: string): string | undefined;\n  actor: ActorContext | null;\n  db: Db;\n  storage: StorageService;\n}\n\nexport type Handler = (ctx: RequestCtx) =\u003e Promise\u003cResponse\u003e;\n\nexport interface RouteDefinition {\n  method: \"GET\" | \"POST\" | \"PUT\" | \"PATCH\" | \"DELETE\";\n  /** Express-style path, e.g. /api/companies/:companyId */\n  path: string;\n  handler: Handler;\n}\n",
+        "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/http/types.ts",
+        "numLines": 67,
+        "startLine": 1,
+        "totalLines": 67
+      },
+      "type": "text"
+    },
+    "displayPath": "server/src/http/types.ts",
+    "filename": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/http/types.ts",
+    "type": "file"
+  },
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "parentUuid": "4dd88ca5-3584-4cbb-af96-6a8e6a3020c3",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "timestamp": "2026-04-30T15:21:24.501Z",
+  "type": "attachment",
+  "userType": "external",
+  "uuid": "81ad52cd-215f-44f2-9238-32b7b20a0cde",
+  "version": "2.1.123"
+}

@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "590\t  const sessionRoot = path.join(opencodeRoot, \"storage\", \"session\");\n591\t  const diffRoot = path.join(opencodeRoot, \"storage\", \"session_diff\");\n592\t  const messageRoot = path.join(opencodeRoot, \"storage\", \"message\");\n593\t  const partRoot = path.join(opencodeRoot, \"storage\", \"part\");\n594\t  const todoRoot = path.join(opencodeRoot, \"storage\", \"todo\");\n595\t  const projectRoot = path.join(opencodeRoot, \"storage\", \"project\");\n596\t  const sessionFile = await findMatchingFile(\n597\t    sessionRoot,\n598\t    (_absolutePath, name) =\u003e name === `${input.sessionId}.json`,\n599\t    6,\n600\t  );\n601\t  const diffFile = path.join(diffRoot, `${input.sessionId}.json`);\n602\t\n603\t  const sessionRaw = sessionFile ? await readFile(sessionFile, \"utf8\").catch(() =\u003e null) : null;\n604\t  const sessionText =\n605\t    sessionRaw == null\n606\t      ? null\n607\t      : sanitizeFeedbackText(sessionRaw, input.state, \"bundle.rawAdapterTrace.opencode.session\", MAX_TRACE_FILE_CHARS);\n608\t  if (sessionText) {\n609\t    files.push(makeBundleFile({",
+        "tool_use_id": "toolu_017Ja4Gbb3tPmwoyzsg94xfN",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "8d9acc97-1aa5-4ecf-b9e0-0983bb180aab",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "8d9acc97-1aa5-4ecf-b9e0-0983bb180aab",
+  "timestamp": "2026-04-30T14:52:24.464Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "54d35df0-33a1-4482-99a2-ded382661226",
+  "version": "2.1.123"
+}

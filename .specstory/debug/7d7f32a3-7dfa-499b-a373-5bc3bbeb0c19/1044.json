@@ -1,0 +1,26 @@
+{
+  "agentId": "a63f4a588ad785603",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "2400\t   *\n2401\t   * Response: PluginDashboardData\n2402\t   * Errors: 404 if plugin not found\n2403\t   */\n2404\t  router.get(\"/plugins/:pluginId/dashboard\", async (req, res) =\u003e {\n2405\t    assertBoardOrgAccess(req);\n2406\t    const { pluginId } = req.params;\n2407\t\n2408\t    const plugin = await resolvePlugin(registry, pluginId);\n2409\t    if (!plugin) {\n2410\t      res.status(404).json({ error: \"Plugin not found\" });\n2411\t      return;\n2412\t    }\n2413\t\n2414\t    // --- Worker diagnostics ---\n2415\t    let worker: {\n2416\t      status: string;\n2417\t      pid: number | null;\n2418\t      uptime: number | null;\n2419\t      consecutiveCrashes: number;\n2420\t      totalCrashes: number;\n2421\t      pendingRequests: number;\n2422\t      lastCrashAt: number | null;\n2423\t      nextRestartAt: number | null;\n2424\t    } | null = null;\n2425\t\n2426\t    // Try bridgeDeps first (primary source for worker manager), fallback to webhookDeps\n2427\t    const wm = bridgeDeps?.workerManager ?? webhookDeps?.workerManager ?? null;\n2428\t    if (wm) {\n2429\t      const handle = wm.getWorker(plugin.id);\n2430\t      if (handle) {\n2431\t        const diag = handle.diagnostics();\n2432\t        worker = {\n2433\t          status: diag.status,\n2434\t          pid: diag.pid,\n2435\t          uptime: diag.uptime,\n2436\t          consecutiveCrashes: diag.consecutiveCrashes,\n2437\t          totalCrashes: diag.totalCrashes,\n2438\t          pendingRequests: diag.pendingRequests,\n2439\t          lastCrashAt: diag.lastCrashAt,\n2440\t          nextRestartAt: diag.nextRestartAt,\n2441\t        };\n2442\t      }\n2443\t    }\n2444\t\n2445\t    // --- Recent job runs (last 10, newest first) ---\n2446\t    let recentJobRuns: Array\u003c{\n2447\t      id: string;\n2448\t      jobId: string;\n2449\t      jobKey?: string;\n2450\t      trigger: string;\n2451\t      status: string;\n2452\t      durationMs: number | null;\n2453\t      error: string | null;\n2454\t      startedAt: string | null;\n2455\t      finishedAt: string | null;\n2456\t      createdAt: string;\n2457\t    }\u003e = [];\n2458\t\n2459\t    if (jobDeps) {\n2460\t      try {\n2461\t        const runs = await jobDeps.jobStore.listRunsByPlugin(plugin.id, undefined, 10);\n2462\t        // Also fetch job definitions so we can include jobKey\n2463\t        const jobs = await jobDeps.jobStore.listJobs(plugin.id);\n2464\t        const jobKeyMap = new Map(jobs.map((j) =\u003e [j.id, j.jobKey]));\n2465\t\n2466\t        recentJobRuns = runs\n2467\t          .sort((a, b) =\u003e new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())\n2468\t          .map((r) =\u003e ({\n2469\t            id: r.id,\n2470\t            jobId: r.jobId,\n2471\t            jobKey: jobKeyMap.get(r.jobId) ?? undefined,\n2472\t            trigger: r.trigger,\n2473\t            status: r.status,\n2474\t            durationMs: r.durationMs,\n2475\t            error: r.error,\n2476\t            startedAt: r.startedAt ? new Date(r.startedAt).toISOString() : null,\n2477\t            finishedAt: r.finishedAt ? new Date(r.finishedAt).toISOString() : null,\n2478\t            createdAt: new Date(r.createdAt).toISOString(),\n2479\t          }));\n2480\t      } catch {\n2481\t        // Job data unavailable — leave empty\n2482\t      }\n2483\t    }\n2484\t\n2485\t    // --- Recent webhook deliveries (last 10, newest first) ---\n2486\t    let recentWebhookDeliveries: Array\u003c{\n2487\t      id: string;\n2488\t      webhookKey: string;\n2489\t      status: string;\n2490\t      durationMs: number | null;\n2491\t      error: string | null;\n2492\t      startedAt: string | null;\n2493\t      finishedAt: string | null;\n2494\t      createdAt: string;\n2495\t    }\u003e = [];\n2496\t\n2497\t    try {\n2498\t      const deliveries = await db\n2499\t        .select({",
+        "tool_use_id": "toolu_01AkPEgDtNDprbKWe91yjLHr",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "b9018507-b4b2-4d01-b6f9-fcfd9f348f20",
+  "promptId": "41a5cab3-78a5-4305-8404-9daa35591aac",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "b9018507-b4b2-4d01-b6f9-fcfd9f348f20",
+  "timestamp": "2026-04-30T15:05:53.608Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "76eded81-ac7c-42a7-9b31-b83b4af564d9",
+  "version": "2.1.123"
+}

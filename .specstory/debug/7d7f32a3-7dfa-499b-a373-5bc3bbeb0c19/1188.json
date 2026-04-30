@@ -1,0 +1,26 @@
+{
+  "agentId": "a0d0169af69218004",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { z } from \"zod\";\n2\timport {\n3\t  AUTH_BASE_URL_MODES,\n4\t  BIND_MODES,\n5\t  DEPLOYMENT_EXPOSURES,\n6\t  DEPLOYMENT_MODES,\n7\t  DEPLOYMENT_PLATFORMS,\n8\t  SECRET_PROVIDERS,\n9\t  STORAGE_PROVIDERS,\n10\t} from \"./constants.js\";\n11\timport { validateConfiguredBindMode } from \"./network-bind.js\";\n12\t\n13\texport const configMetaSchema = z.object({\n14\t  version: z.literal(1),\n15\t  updatedAt: z.string(),\n16\t  source: z.enum([\"onboard\", \"configure\", \"doctor\"]),\n17\t});\n18\t\n19\texport const llmConfigSchema = z.object({\n20\t  provider: z.enum([\"claude\", \"openai\"]),\n21\t  apiKey: z.string().optional(),\n22\t});\n23\t\n24\texport const databaseBackupConfigSchema = z.object({\n25\t  enabled: z.boolean().default(true),\n26\t  intervalMinutes: z.number().int().min(1).max(7 * 24 * 60).default(60),\n27\t  retentionDays: z.number().int().min(1).max(3650).default(7),\n28\t  dir: z.string().default(\"~/.paperclip/instances/default/data/backups\"),\n29\t});\n30\t\n31\texport const databaseConfigSchema = z.object({\n32\t  mode: z.enum([\"embedded-postgres\", \"postgres\"]).default(\"embedded-postgres\"),\n33\t  connectionString: z.string().optional(),\n34\t  embeddedPostgresDataDir: z.string().default(\"~/.paperclip/instances/default/db\"),\n35\t  embeddedPostgresPort: z.number().int().min(1).max(65535).default(54329),\n36\t  backup: databaseBackupConfigSchema.default({\n37\t    enabled: true,\n38\t    intervalMinutes: 60,\n39\t    retentionDays: 7,\n40\t    dir: \"~/.paperclip/instances/default/data/backups\",\n41\t  }),\n42\t});\n43\t\n44\texport const loggingConfigSchema = z.object({\n45\t  mode: z.enum([\"file\", \"cloud\"]),\n46\t  logDir: z.string().default(\"~/.paperclip/instances/default/logs\"),\n47\t});\n48\t\n49\texport const serverConfigSchema = z.object({\n50\t  deploymentMode: z.enum(DEPLOYMENT_MODES).default(\"local_trusted\"),\n51\t  deploymentPlatform: z.enum(DEPLOYMENT_PLATFORMS).default(\"node\"),\n52\t  exposure: z.enum(DEPLOYMENT_EXPOSURES).default(\"private\"),\n53\t  bind: z.enum(BIND_MODES).optional(),\n54\t  customBindHost: z.string().optional(),\n55\t  host: z.string().default(\"127.0.0.1\"),\n56\t  port: z.number().int().min(1).max(65535).default(3100),\n57\t  allowedHostnames: z.array(z.string().min(1)).default([]),\n58\t  serveUi: z.boolean().default(true),\n59\t});\n60\t",
+        "tool_use_id": "toolu_01FaenZ9mnxJMTxvmZSvAbS6",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "406026ab-e15c-43f1-90bf-a96219dfe388",
+  "promptId": "f8ab24c1-de42-4dc6-b59c-8c9364db9ca7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "406026ab-e15c-43f1-90bf-a96219dfe388",
+  "timestamp": "2026-04-30T15:08:25.369Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "e834fd1a-ee6a-4e56-9bc4-a4ccaa13f35e",
+  "version": "2.1.123"
+}

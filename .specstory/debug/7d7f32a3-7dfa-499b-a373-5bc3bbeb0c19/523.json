@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "100\t\n101\t/**\n102\t * Read `version` from the adapter's package.json on disk.\n103\t * This is the source of truth for what is actually installed (npm or local path).\n104\t */\n105\tfunction readAdapterPackageVersionFromDisk(record: AdapterPluginRecord): string | undefined {\n106\t  try {\n107\t    const pkgDir = resolveAdapterPackageDir(record);\n108\t    const raw = fs.readFileSync(path.join(pkgDir, \"package.json\"), \"utf-8\");\n109\t    const v = JSON.parse(raw).version;\n110\t    return typeof v === \"string\" \u0026\u0026 v.trim().length \u003e 0 ? v.trim() : undefined;\n111\t  } catch {\n112\t    return undefined;\n113\t  }\n114\t}\n115\t\n116\tfunction buildAdapterCapabilities(adapter: ServerAdapterModule): AdapterCapabilities {\n117\t  return {\n118\t    supportsInstructionsBundle: adapter.supportsInstructionsBundle ?? false,\n119\t    supportsSkills: Boolean(adapter.listSkills || adapter.syncSkills),",
+        "tool_use_id": "toolu_01L3kQv2QJ3NodTbET7QT9gY",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "61abe6b1-8164-480e-9ad3-4e90d2297b15",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "61abe6b1-8164-480e-9ad3-4e90d2297b15",
+  "timestamp": "2026-04-30T14:53:37.469Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "ce556a3b-ec47-451a-b526-ead6c46279d6",
+  "version": "2.1.123"
+}

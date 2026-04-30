@@ -1,0 +1,28 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "diff --git a/packages/deploy-cloudflare/src/cron/heartbeat-sweep.ts b/packages/deploy-cloudflare/src/cron/heartbeat-sweep.ts\nindex da93647f..78bea9c7 100644\n--- a/packages/deploy-cloudflare/src/cron/heartbeat-sweep.ts\n+++ b/packages/deploy-cloudflare/src/cron/heartbeat-sweep.ts\n@@ -23,20 +23,25 @@ import type { Db } from \"@paperclipai/db\";\n import { agents, heartbeatRuns } from \"@paperclipai/db\";\n import type { Env } from \"../worker/api.js\";\n \n-/** Minimal heartbeat policy shape read from agent.heartbeatPolicy JSON. */\n+/** Minimal heartbeat policy shape read from agent.runtimeConfig.heartbeat JSON. */\n interface HeartbeatPolicy {\n   enabled: boolean;\n   intervalSec: number;\n }\n \n-function parseHeartbeatPolicy(agent: { heartbeatPolicy?: unknown }): HeartbeatPolicy {\n-  const policy = agent.heartbeatPolicy;\n-  if (!policy || typeof policy !== \"object\") {\n+function parseHeartbeatPolicy(agent: { runtimeConfig?: unknown }): HeartbeatPolicy {\n+  const runtimeConfig = agent.runtimeConfig;\n+  if (!runtimeConfig || typeof runtimeConfig !== \"object\") {\n     return { enabled: false, intervalSec: 0 };\n   }\n-  const p = policy as Record\u003cstring, unknown\u003e;\n-  const enabled = Boolean(p[\"enabled\"]);\n-  const intervalSec = typeof p[\"intervalSec\"] === \"number\" ? p[\"intervalSec\"] : 0;\n+  const rc = runtimeConfig as Record\u003cstring, unknown\u003e;\n+  const heartbeat = rc[\"heartbeat\"];\n+  if (!heartbeat || typeof heartbeat !== \"object\") {\n+    return { enabled: false, intervalSec: 0 };\n+  }\n+  const h = heartbeat as Record\u003cstring, unknown\u003e;\n+  const enabled = Boolean(h[\"enabled\"]);\n+  const intervalSec = typeof h[\"intervalSec\"] === \"number\" ? h[\"intervalSec\"] : 0;\n   return { enabled, intervalSec };\n }\n \n@@ -60,7 +65,7 @@ export async function runHeartbeatSweep(env: Env, db: Db): Promise\u003cvoid\u003e {\n       id: agents.id,\n       companyId: agents.companyId,\n       status: agents.status,\n-      heartbeatPolicy: agents.heartbeatPolicy,\n+      runtimeConfig: agents.runtimeConfig,\n       lastHeartbeatAt: agents.lastHeartbeatAt,\n       createdAt: agents.createdAt,\n     })\n@@ -75,26 +80,26 @@ export async function runHeartbeatSweep(env: Env, db: Db): Promise\u003cvoid\u003e {\n   }\u003e = [];\n \n   for (const agent of allAgents) {\n-    const policy = parseHeartbeatPolicy(agent as { heartbeatPolicy?: unknown });\n+    const policy = parseHeartbeatPolicy(agent);\n     if (!policy.enabled || policy.intervalSec \u003c= 0) continue;\n \n     const baseline = new Date(agent.lastHeartbeatAt ?? agent.createdAt).getTime();\n     const elapsedMs = now.getTime() - baseline;\n     if (elapsedMs \u003c policy.intervalSec * 1000) continue;\n \n-    // Check if there is already a queued run for this agent to avoid double-\n-    // dispatching. We look for any run in \"queued\" status.\n+    // Check if there is already a queued or running run for this agent to avoid\n+    // double-dispatching.\n+    const { and, inArray } = await import(\"drizzle-orm\");\n     const existingQueued = await db\n       .select({ id: heartbeatRuns.id })\n       .from(heartbeatRuns)\n-      .where(eq(heartbeatRuns.agentId, agent.id))\n-      .then((rows) =\u003e\n-        rows.some(\n-          (r) =\u003e\n-            (r as unknown as { status?: string }).status === \"queued\" ||\n-            (r as unknown as { status?: string }).status === \"running\",\n+      .where(\n+        and(\n+          eq(heartbeatRuns.agentId, agent.id),\n+          inArray(heartbeatRuns.status, [\"queued\", \"running\"]),\n         ),\n-      );\n+      )\n+      .then((rows) =\u003e rows.length \u003e 0);\n \n     if (existingQueued) continue;\n \ndiff --git a/packages/deploy-cloudflare/src/worker/api.ts b/packages/deploy-cloudflare/src/worker/api.ts\nindex b26bb39b..3e74577b 100644\n--- a/packages/deploy-cloudflare/src/worker/api.ts\n+++ b/packages/deploy-cloudflare/src/worker/api.ts\n@@ -18,10 +18,15 @@\n  *   - accessRoutes        -- reads bundled SKILL.md files from disk\n  *   - instanceDatabaseBackupRoutes -- pg_dump\n  *\n- * Architecture note: Hono route registration happens once at module load time.\n- * Per-request dependencies (db, storage, actor) are resolved inside each route\n- * handler by reading the Env binding from the Hono context. This avoids the\n- * anti-pattern of re-registering routes on every request.\n+ * Architecture note on per-request DB injection:\n+ *   Route handlers (Handler functions) capture a `db` and `storage` reference\n+ *   from the service factories at the time the Express Router is built. Because\n+ *   the real `db` comes from Hyperdrive (a per-request binding), we rebuild the\n+ *   Express Routers on the FIRST request of each cold start and cache the",
+        "is_error": false,
+        "tool_use_id": "toolu_01Wh2paL8fDEQQLjBpcMQ87r",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "b9f17b6d-0912-4e14-ada2-2cd7cc56e758",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "b9f17b6d-0912-4e14-ada2-2cd7cc56e758",
+  "timestamp": "2026-04-30T16:40:22.829Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "497f6cc7-1996-428d-9e6b-254a885a6cec",
+  "version": "2.1.123"
+}

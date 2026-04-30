@@ -1,0 +1,35 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "19\t\n20\t`doc/SPEC.md` is long-horizon product context.\n21\t`doc/SPEC-implementation.md` is the concrete V1 build contract.\n22\t\n23\t## 3. Repo Map\n24\t\n25\t- `server/`: Express REST API and orchestration services\n26\t- `ui/`: React + Vite board UI\n27\t- `packages/db/`: Drizzle schema, migrations, DB clients\n28\t- `packages/shared/`: shared types, constants, validators, API path constants\n29\t- `packages/adapters/`: agent adapter implementations (Claude, Codex, Cursor, etc.)\n30\t- `packages/adapter-utils/`: shared adapter utilities\n31\t- `packages/plugins/`: plugin system packages\n32\t- `doc/`: operational and product docs\n33\t\n34\t## 4. Dev Setup (Auto DB)\n35\t\n36\tUse embedded PGlite in dev by leaving `DATABASE_URL` unset.\n37\t\n38\t```sh\n39\tpnpm install\n40\tpnpm dev\n41\t```\n42\t\n43\tThis starts:",
+        "tool_use_id": "toolu_013cqLrjkunGgXHpJakuGk9k",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "34c36f47-33d3-45cf-928b-3cb978b940ef",
+  "promptId": "721340db-55e4-4f08-9c81-1d2e399ba682",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "34c36f47-33d3-45cf-928b-3cb978b940ef",
+  "timestamp": "2026-04-30T13:32:13.944Z",
+  "toolUseResult": {
+    "file": {
+      "content": "\n`doc/SPEC.md` is long-horizon product context.\n`doc/SPEC-implementation.md` is the concrete V1 build contract.\n\n## 3. Repo Map\n\n- `server/`: Express REST API and orchestration services\n- `ui/`: React + Vite board UI\n- `packages/db/`: Drizzle schema, migrations, DB clients\n- `packages/shared/`: shared types, constants, validators, API path constants\n- `packages/adapters/`: agent adapter implementations (Claude, Codex, Cursor, etc.)\n- `packages/adapter-utils/`: shared adapter utilities\n- `packages/plugins/`: plugin system packages\n- `doc/`: operational and product docs\n\n## 4. Dev Setup (Auto DB)\n\nUse embedded PGlite in dev by leaving `DATABASE_URL` unset.\n\n```sh\npnpm install\npnpm dev\n```\n\nThis starts:",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/AGENTS.md",
+      "numLines": 25,
+      "startLine": 19,
+      "totalLines": 219
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "c6260388-328a-44ee-90d3-e03878d9c498",
+  "version": "2.1.123"
+}

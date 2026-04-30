@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "960\t    if (!rootStat?.isDirectory()) continue;\n961\t\n962\t    const entries = await fs.readdir(absoluteRoot, { withFileTypes: true }).catch(() =\u003e []);\n963\t    for (const entry of entries) {\n964\t      if (!entry.isDirectory()) continue;\n965\t      const absoluteSkillDir = path.resolve(absoluteRoot, entry.name);\n966\t      if (!(await statPath(path.join(absoluteSkillDir, \"SKILL.md\")))?.isFile()) continue;\n967\t      discovered.set(absoluteSkillDir, \"full\");\n968\t    }\n969\t  }\n970\t\n971\t  return Array.from(discovered.entries())\n972\t    .map(([skillDir, inventoryMode]) =\u003e ({ skillDir, inventoryMode }))\n973\t    .sort((left, right) =\u003e left.skillDir.localeCompare(right.skillDir));\n974\t}\n975\t\n976\tasync function readLocalSkillImports(companyId: string, sourcePath: string): Promise\u003cImportedSkill[]\u003e {\n977\t  const resolvedPath = path.resolve(sourcePath);\n978\t  const stat = await fs.stat(resolvedPath).catch(() =\u003e null);\n979\t  if (!stat) {\n980\t    throw unprocessable(`Skill source path does not exist: ${sourcePath}`);\n981\t  }\n982\t\n983\t  if (stat.isFile()) {\n984\t    const markdown = await fs.readFile(resolvedPath, \"utf8\");\n985\t    const parsed = parseFrontmatterMarkdown(markdown);\n986\t    const slug = deriveImportedSkillSlug(parsed.frontmatter, path.basename(path.dirname(resolvedPath)));\n987\t    const parsedMetadata = isPlainRecord(parsed.frontmatter.metadata) ? parsed.frontmatter.metadata : null;\n988\t    const skillKey = readCanonicalSkillKey(parsed.frontmatter, parsedMetadata);\n989\t    const metadata = {",
+        "tool_use_id": "toolu_016rmwsG821u8kWEqzG6oPs3",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "c85e7179-514a-489d-9527-ea728ef77c40",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "c85e7179-514a-489d-9527-ea728ef77c40",
+  "timestamp": "2026-04-30T14:52:33.405Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "e01b2702-a7ee-4461-8d22-471d49b3c4b1",
+  "version": "2.1.123"
+}

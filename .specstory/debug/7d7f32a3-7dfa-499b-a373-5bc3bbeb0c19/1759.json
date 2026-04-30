@@ -1,0 +1,27 @@
+{
+  "agentId": "a8fd5512baf043009",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "      ? findWorkspaceCommandDefinition(runtimeConfig, target.workspaceCommandId ?? null)\n      : null;\n    if (target.workspaceCommandId \u0026\u0026 !workspaceCommand) {\n      return Response.json({ error: \"Workspace command not found for this project workspace\" }, { status: 404 });\n    }\n    if (target.runtimeServiceId \u0026\u0026 !(workspace.runtimeServices ?? []).some((service) =\u003e service.id === target.runtimeServiceId)) {\n      return Response.json({ error: \"Runtime service not found for this project workspace\" }, { status: 404 });\n    }\n    const matchedRuntimeService =\n      workspaceCommand?.kind === \"service\" \u0026\u0026 !target.runtimeServiceId\n        ? matchWorkspaceRuntimeServiceToCommand(workspaceCommand, workspace.runtimeServices ?? [])",
+        "is_error": false,
+        "tool_use_id": "toolu_01MxTfp5hpcR5ZWCuvviziZf",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "93b6eb83-d443-4327-b537-535567f5a821",
+  "promptId": "e14e6903-86b2-440b-8601-db2551c5adc3",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "93b6eb83-d443-4327-b537-535567f5a821",
+  "timestamp": "2026-04-30T15:18:44.322Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "d6133508-1e2a-40fe-97ff-05515fcbab60",
+  "version": "2.1.123"
+}

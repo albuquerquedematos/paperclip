@@ -1,0 +1,70 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_013seQ2GzTENXBbP85abZ4eD",
+        "input": {
+          "description": "Clean up group 3 route workarounds post-ActorContext fix",
+          "prompt": "You are doing a targeted cleanup pass in the Paperclip monorepo at `/Users/migmac/Documents/GitHub/_ABM/paperclip` on branch `feat/cloudflare-deployment`.\n\nA previous migration pass converted 8 route files to the `Handler` shape, but it ran before `ActorContext` was fixed. The handlers contain workarounds that are now wrong. You need to read each file and clean them up.\n\n## What changed since the migration ran\n\n`server/src/http/types.ts` now has a full discriminated union:\n```ts\ninterface BoardActor {\n  type: \"board\"; source: ActorSource; userId: string; userName: string | null;\n  userEmail: string | null; isInstanceAdmin: boolean; companyIds?: string[];\n  memberships?: ActorMembership[]; keyId?: string; runId?: string;\n}\ninterface AgentActor {\n  type: \"agent\"; source: ActorSource; agentId: string; companyId: string;\n  keyId?: string; runId?: string;\n}\ntype ActorContext = BoardActor | AgentActor;\n```\n\n`server/src/routes/authz.ts` now accepts `AuthzReq` (structural interface), so `assertBoard(ctx)`, `assertCompanyAccess(ctx, companyId)`, `assertInstanceAdmin(ctx)`, `getActorInfo(ctx)` all work with `RequestCtx`.\n\n## Files to clean up\n\nRead each file, then fix these specific issues:\n\n### Pattern 1: Inline partial auth check → use authz function\nBefore (workaround):\n```ts\nif (ctx.actor?.type === \"agent\" \u0026\u0026 ctx.actor.companyId !== companyId) {\n  return new Response(\"Forbidden\", { status: 403 });\n}\n// TODO(cloudflare): ...\n```\nAfter:\n```ts\nassertCompanyAccess(ctx, companyId);\n```\n(import `assertCompanyAccess` from `\"./authz.js\"`)\n\n### Pattern 2: `runId: null` hardcoded → use actor runId\nBefore: `runId: null, // TODO(cloudflare): thread runId`\nAfter: `runId: ctx.actor?.runId ?? null`\n\n### Pattern 3: Auth source hardcoded → use actor source  \nBefore: `\"paperclip:session:\" + userId`\nAfter: `\"paperclip:\" + (ctx.actor?.type === \"board\" ? ctx.actor.source : \"session\") + \":\" + userId`\n\n### Pattern 4: Instance admin checks with TODO → use actor fields\nBefore: `if (ctx.actor?.type !== \"board\") throw forbidden(...)` with TODO about isInstanceAdmin\nAfter: `assertInstanceAdmin(ctx)` (which now works because AuthzReq is structural)\n\n### Pattern 5: `companyIds` / `memberships` with TODO → use actor fields\nBefore: workaround that skips the check or uses `// TODO(cloudflare):`\nAfter: use `assertBoardOrgAccess(ctx)` or read `ctx.actor?.type === \"board\" ? ctx.actor.companyIds : undefined`\n\n## Files to check\n\n1. `server/src/routes/auth.ts`\n2. `server/src/routes/user-profiles.ts`\n3. `server/src/routes/sidebar-badges.ts`\n4. `server/src/routes/sidebar-preferences.ts`\n5. `server/src/routes/inbox-dismissals.ts`\n6. `server/src/routes/instance-settings.ts`\n7. `server/src/routes/routines.ts`\n8. `server/src/routes/llms.ts`\n\nFor each file: read it, find all `TODO(cloudflare)` comments related to actor fields, and fix them using the now-available `ActorContext` fields and authz functions. Only fix actor-related TODOs. Leave `TODO(cloudflare)` comments that are about R2, rawBody, or process/filesystem concerns — those are genuinely unresolvable here.\n\nRead every file before editing it. Report each fix as file:line: what it was → what it became.",
+          "run_in_background": true,
+          "subagent_type": "backend-architect"
+        },
+        "name": "Agent",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01B4o7Yk9qbjX2Dp1Thtk13m",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 1986
+      },
+      "cache_creation_input_tokens": 1986,
+      "cache_read_input_tokens": 156611,
+      "inference_geo": "",
+      "input_tokens": 3,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 1986
+          },
+          "cache_creation_input_tokens": 1986,
+          "cache_read_input_tokens": 156611,
+          "input_tokens": 3,
+          "output_tokens": 2677,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 2677,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "600b55ad-2227-4813-9c53-11a4a1451c48",
+  "requestId": "req_011CaaAuhB7YTZMRbDHvgZxk",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "timestamp": "2026-04-30T15:13:23.294Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "8d9415b4-e4ce-44c4-9910-b1e17a7d92c4",
+  "version": "2.1.123"
+}

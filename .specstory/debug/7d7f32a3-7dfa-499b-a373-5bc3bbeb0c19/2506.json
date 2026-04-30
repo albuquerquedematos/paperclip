@@ -1,0 +1,27 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { Router } from \"express\";\n2\timport type { Db } from \"@paperclipai/db\";\n3\timport { createGoalSchema, updateGoalSchema } from \"@paperclipai/shared\";\n4\timport { trackGoalCreated } from \"@paperclipai/shared/telemetry\";\n5\timport { validate } from \"../middleware/validate.js\";\n6\timport { goalService, logActivity } from \"../services/index.js\";\n7\timport { assertCompanyAccess, getActorInfo } from \"./authz.js\";\n8\timport { getTelemetryClient } from \"../telemetry.js\";\n9\timport type { Handler } from \"../http/types.js\";\n10\timport { expressHandler } from \"../http/express-adapter.js\";\n11\t\n12\texport function goalRoutes(db: Db) {\n13\t  const router = Router();\n14\t  const svc = goalService(db);\n15\t\n16\t  const listGoals: Handler = async (ctx) =\u003e {\n17\t    const companyId = ctx.param(\"companyId\")!;\n18\t    assertCompanyAccess(ctx, companyId);\n19\t    const result = await svc.list(companyId);\n20\t    return Response.json(result);\n21\t  };\n22\t\n23\t  const getGoal: Handler = async (ctx) =\u003e {\n24\t    const id = ctx.param(\"id\")!;\n25\t    const goal = await svc.getById(id);\n26\t    if (!goal) {\n27\t      return Response.json({ error: \"Goal not found\" }, { status: 404 });\n28\t    }\n29\t    assertCompanyAccess(ctx, goal.companyId);\n30\t    return Response.json(goal);",
+        "tool_use_id": "toolu_01B9YiqiLci8yvsBceRxhVQF",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "d8de22ae-ecee-4007-b3d9-73f1f3f8caf9",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "d8de22ae-ecee-4007-b3d9-73f1f3f8caf9",
+  "timestamp": "2026-04-30T16:24:13.386Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "a7f8864c-8057-4dd9-993f-9431a278ee00",
+  "version": "2.1.123"
+}

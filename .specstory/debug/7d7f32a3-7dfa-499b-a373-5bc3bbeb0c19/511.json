@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "128\t  const proto = forwardedProto?.split(\",\")[0]?.trim() || req.protocol || \"http\";\n129\t  const host =\n130\t    req.header(\"x-forwarded-host\")?.split(\",\")[0]?.trim() || req.header(\"host\");\n131\t  if (!host) return \"\";\n132\t  return `${proto}://${host}`;\n133\t}\n134\t\n135\tfunction buildCliAuthApprovalPath(challengeId: string, token: string) {\n136\t  return `/cli-auth/${challengeId}?token=${encodeURIComponent(token)}`;\n137\t}\n138\t\n139\tfunction readSkillMarkdown(skillName: string): string | null {\n140\t  const normalized = skillName.trim().toLowerCase();\n141\t  if (\n142\t    normalized !== \"paperclip\" \u0026\u0026\n143\t    normalized !== \"paperclip-create-agent\" \u0026\u0026\n144\t    normalized !== \"paperclip-create-plugin\" \u0026\u0026\n145\t    normalized !== \"paperclip-converting-plans-to-tasks\" \u0026\u0026\n146\t    normalized !== \"para-memory-files\"\n147\t  )\n148\t    return null;\n149\t  const moduleDir = path.dirname(fileURLToPath(import.meta.url));\n150\t  const candidates = [\n151\t    path.resolve(moduleDir, \"../../skills\", normalized, \"SKILL.md\"), // published: dist/routes/ -\u003e \u003cpkg\u003e/skills/\n152\t    path.resolve(process.cwd(), \"skills\", normalized, \"SKILL.md\"), // cwd (e.g. monorepo root)\n153\t    path.resolve(moduleDir, \"../../../skills\", normalized, \"SKILL.md\") // dev: src/routes/ -\u003e repo root/skills/\n154\t  ];\n155\t  for (const skillPath of candidates) {\n156\t    try {\n157\t      return fs.readFileSync(skillPath, \"utf8\");",
+        "tool_use_id": "toolu_01JPpaPsnhRsaXiyUMSdrhWa",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "cd6c9eb8-6f91-4003-b35c-248a80f05dba",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "cd6c9eb8-6f91-4003-b35c-248a80f05dba",
+  "timestamp": "2026-04-30T14:53:14.653Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "ba8727af-7c5f-4436-94db-c236458f3cba",
+  "version": "2.1.123"
+}

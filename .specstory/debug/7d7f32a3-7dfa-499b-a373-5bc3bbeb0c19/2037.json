@@ -1,0 +1,27 @@
+{
+  "agentId": "ac82afa7422550819",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1548\t      details: { userId: req.actor.userId },\n1549\t    });\n1550\t    res.json(removed ?? { ok: true });\n1551\t  });\n1552\t\n1553\t  router.get(\"/issues/:id/approvals\", async (req, res) =\u003e {\n1554\t    const id = req.params.id as string;\n1555\t    const issue = await svc.getById(id);\n1556\t    if (!issue) {\n1557\t      res.status(404).json({ error: \"Issue not found\" });\n1558\t      return;\n1559\t    }\n1560\t    assertCompanyAccess(req, issue.companyId);\n1561\t    const approvals = await issueApprovalsSvc.listApprovalsForIssue(id);\n1562\t    res.json(approvals);\n1563\t  });\n1564\t\n1565\t  router.post(\"/issues/:id/approvals\", validate(linkIssueApprovalSchema), async (req, res) =\u003e {\n1566\t    const id = req.params.id as string;\n1567\t    const issue = await svc.getById(id);\n1568\t    if (!issue) {\n1569\t      res.status(404).json({ error: \"Issue not found\" });\n1570\t      return;\n1571\t    }\n1572\t    assertCompanyAccess(req, issue.companyId);\n1573\t    if (!(await assertAgentIssueMutationAllowed(req, res, issue))) return;\n1574\t    if (!(await assertCanManageIssueApprovalLinks(req, res, issue.companyId))) return;\n1575\t\n1576\t    const actor = getActorInfo(req);\n1577\t    await issueApprovalsSvc.link(id, req.body.approvalId, {\n1578\t      agentId: actor.agentId,\n1579\t      userId: actor.actorType === \"user\" ? actor.actorId : null,\n1580\t    });\n1581\t\n1582\t    await logActivity(db, {\n1583\t      companyId: issue.companyId,\n1584\t      actorType: actor.actorType,\n1585\t      actorId: actor.actorId,\n1586\t      agentId: actor.agentId,\n1587\t      runId: actor.runId,\n1588\t      action: \"issue.approval_linked\",\n1589\t      entityType: \"issue\",\n1590\t      entityId: issue.id,\n1591\t      details: { approvalId: req.body.approvalId },\n1592\t    });\n1593\t\n1594\t    const approvals = await issueApprovalsSvc.listApprovalsForIssue(id);\n1595\t    res.status(201).json(approvals);\n1596\t  });\n1597\t\n1598\t  router.delete(\"/issues/:id/approvals/:approvalId\", async (req, res) =\u003e {\n1599\t    const id = req.params.id as string;\n1600\t    const approvalId = req.params.approvalId as string;\n1601\t    const issue = await svc.getById(id);\n1602\t    if (!issue) {\n1603\t      res.status(404).json({ error: \"Issue not found\" });\n1604\t      return;\n1605\t    }\n1606\t    assertCompanyAccess(req, issue.companyId);\n1607\t    if (!(await assertAgentIssueMutationAllowed(req, res, issue))) return;\n1608\t    if (!(await assertCanManageIssueApprovalLinks(req, res, issue.companyId))) return;\n1609\t\n1610\t    await issueApprovalsSvc.unlink(id, approvalId);\n1611\t\n1612\t    const actor = getActorInfo(req);\n1613\t    await logActivity(db, {\n1614\t      companyId: issue.companyId,\n1615\t      actorType: actor.actorType,\n1616\t      actorId: actor.actorId,\n1617\t      agentId: actor.agentId,\n1618\t      runId: actor.runId,\n1619\t      action: \"issue.approval_unlinked\",\n1620\t      entityType: \"issue\",\n1621\t      entityId: issue.id,\n1622\t      details: { approvalId },\n1623\t    });\n1624\t\n1625\t    res.json({ ok: true });\n1626\t  });\n1627\t",
+        "tool_use_id": "toolu_01Vo2RfUmE2At1TJEX3jAuVb",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "8a25adc3-7f4b-4e06-9b62-ab8bf5f5167b",
+  "promptId": "dc405341-3479-47dd-8d57-3077b7af430f",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "8a25adc3-7f4b-4e06-9b62-ab8bf5f5167b",
+  "timestamp": "2026-04-30T15:32:47.774Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "d2f14433-ee69-4d08-911a-ce611524ca56",
+  "version": "2.1.123"
+}

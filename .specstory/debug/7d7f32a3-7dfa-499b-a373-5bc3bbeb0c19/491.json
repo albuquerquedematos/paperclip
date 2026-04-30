@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "100\t  fs.writeFileSync(adapterPluginsStorePath, JSON.stringify(records, null, 2), \"utf-8\");\n101\t  storeCache = { path: adapterPluginsStorePath, records };\n102\t}\n103\t\n104\tfunction readSettings(): AdapterSettings {\n105\t  const { adapterSettingsPath } = adapterPluginPaths();\n106\t  if (settingsCache?.path === adapterSettingsPath) return settingsCache.settings;\n107\t  try {\n108\t    const raw = fs.readFileSync(adapterSettingsPath, \"utf-8\");\n109\t    const parsed = JSON.parse(raw);\n110\t    settingsCache = {\n111\t      path: adapterSettingsPath,\n112\t      settings: parsed \u0026\u0026 Array.isArray(parsed.disabledTypes)\n113\t        ? (parsed as AdapterSettings)\n114\t        : { disabledTypes: [] },\n115\t    };\n116\t  } catch {\n117\t    settingsCache = { path: adapterSettingsPath, settings: { disabledTypes: [] } };\n118\t  }\n119\t  return settingsCache.settings;\n120\t}\n121\t\n122\tfunction writeSettings(settings: AdapterSettings): void {\n123\t  ensureDirs();\n124\t  const { adapterSettingsPath } = adapterPluginPaths();\n125\t  fs.writeFileSync(adapterSettingsPath, JSON.stringify(settings, null, 2), \"utf-8\");\n126\t  settingsCache = { path: adapterSettingsPath, settings };\n127\t}\n128\t\n129\t// ---------------------------------------------------------------------------\n130\t// Public API\n131\t// ---------------------------------------------------------------------------\n132\t\n133\texport function listAdapterPlugins(): AdapterPluginRecord[] {\n134\t  return readStore();\n135\t}\n136\t\n137\texport function addAdapterPlugin(record: AdapterPluginRecord): void {\n138\t  const store = [...readStore()];\n139\t  const idx = store.findIndex((r) =\u003e r.type === record.type);",
+        "tool_use_id": "toolu_019cT14ocjZq8v2zaHv1Lo1E",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "9de0f739-5ffe-4bf0-ad4f-6acedd0355d2",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "9de0f739-5ffe-4bf0-ad4f-6acedd0355d2",
+  "timestamp": "2026-04-30T14:52:49.484Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "78503f2b-1d40-45af-8db9-f57d088a273a",
+  "version": "2.1.123"
+}

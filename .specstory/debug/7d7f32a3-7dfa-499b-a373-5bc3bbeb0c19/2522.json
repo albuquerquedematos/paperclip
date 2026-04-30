@@ -1,0 +1,27 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { Router } from \"express\";\n2\timport type { Db } from \"@paperclipai/db\";\n3\timport {\n4\t  issueGraphLivenessAutoRecoveryRequestSchema,\n5\t  patchInstanceExperimentalSettingsSchema,\n6\t  patchInstanceGeneralSettingsSchema,\n7\t} from \"@paperclipai/shared\";\n8\timport { assertBoardOrgAccess, assertInstanceAdmin } from \"./authz.js\";\n9\timport { heartbeatService, instanceSettingsService, logActivity } from \"../services/index.js\";\n10\timport { expressHandler } from \"../http/express-adapter.js\";\n11\timport type { Handler } from \"../http/types.js\";\n12\timport type { StorageService } from \"../storage/types.js\";\n13\t\n14\tfunction buildHandlers(db: Db) {\n15\t  const svc = instanceSettingsService(db);\n16\t  const heartbeat = heartbeatService(db);\n17\t\n18\t  // server/src/routes/instance-settings.ts:28\n19\t  const getGeneralSettings: Handler = async (ctx) =\u003e {\n20\t    assertBoardOrgAccess(ctx);",
+        "tool_use_id": "toolu_01QD6HKEzFGHCQKYgT5RAiVd",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "dc643965-e351-4bb6-85dc-abcf5a0a8409",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "dc643965-e351-4bb6-85dc-abcf5a0a8409",
+  "timestamp": "2026-04-30T16:24:19.317Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "820cf619-cb7f-4b69-bc5d-7eaf7bec7df8",
+  "version": "2.1.123"
+}

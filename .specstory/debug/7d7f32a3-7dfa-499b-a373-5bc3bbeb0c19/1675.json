@@ -1,0 +1,26 @@
+{
+  "agentId": "a63f4a588ad785603",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "670\t    });\n671\t  };\n672\t\n673\t  // ---------------------------------------------------------------------------\n674\t  // Wire handlers via expressHandler\n675\t  //\n676\t  // Note: instance-admin routes keep an Express assertInstanceAdmin() middleware\n677\t  // inline so the richer req.actor.isInstanceAdmin check is honoured.\n678\t  // ---------------------------------------------------------------------------\n679\t\n680\t  router.get(\"/adapters\", expressHandler(listAdapters, adapterDeps));\n681\t\n682\t  router.post(\"/adapters/install\", (req, _res, next) =\u003e {\n683\t    try { assertInstanceAdmin(req); next(); } catch (err) { next(err); }\n684\t  }, expressHandler(installAdapter, adapterDeps));\n685\t\n686\t  router.patch(\"/adapters/:type\", (req, _res, next) =\u003e {\n687\t    try { assertInstanceAdmin(req); next(); } catch (err) { next(err); }\n688\t  }, expressHandler(patchAdapter, adapterDeps));\n689\t\n690\t  router.patch(\"/adapters/:type/override\", (req, _res, next) =\u003e {\n691\t    try { assertInstanceAdmin(req); next(); } catch (err) { next(err); }\n692\t  }, expressHandler(patchAdapterOverride, adapterDeps));\n693\t\n694\t  router.delete(\"/adapters/:type\", (req, _res, next) =\u003e {\n695\t    try { assertInstanceAdmin(req); next(); } catch (err) { next(err); }\n696\t  }, expressHandler(deleteAdapter, adapterDeps));\n697\t\n698\t  router.post(\"/adapters/:type/reload\", (req, _res, next) =\u003e {\n699\t    try { assertInstanceAdmin(req); next(); } catch (err) { next(err); }",
+        "tool_use_id": "toolu_01HhkGM3a1yU23VXF1hopssb",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "560b0ee5-bc95-4d85-9b61-02e460770d89",
+  "promptId": "f70e47c2-d340-4417-9b6f-d01ec6a1d002",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "560b0ee5-bc95-4d85-9b61-02e460770d89",
+  "timestamp": "2026-04-30T15:17:26.849Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "df57173f-1305-46a2-86a2-b4d5326d3646",
+  "version": "2.1.123"
+}

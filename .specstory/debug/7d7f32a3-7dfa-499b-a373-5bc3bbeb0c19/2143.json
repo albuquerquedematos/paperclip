@@ -1,0 +1,27 @@
+{
+  "agentId": "aa8a93567f69d0116",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1438\t      req.actor.companyId,\n1439\t      rows.map((issue) =\u003e issue.id),\n1440\t    );\n1441\t\n1442\t    res.json(\n1443\t      rows.map((issue) =\u003e ({\n1444\t        id: issue.id,\n1445\t        identifier: issue.identifier,\n1446\t        title: issue.title,\n1447\t        status: issue.status,\n1448\t        priority: issue.priority,\n1449\t        projectId: issue.projectId,\n1450\t        goalId: issue.goalId,\n1451\t        parentId: issue.parentId,\n1452\t        updatedAt: issue.updatedAt,\n1453\t        activeRun: issue.activeRun,\n1454\t        dependencyReady: dependencyReadiness.get(issue.id)?.isDependencyReady ?? true,\n1455\t        unresolvedBlockerCount: dependencyReadiness.get(issue.id)?.unresolvedBlockerCount ?? 0,\n1456\t        unresolvedBlockerIssueIds: dependencyReadiness.get(issue.id)?.unresolvedBlockerIssueIds ?? [],\n1457\t      })),\n1458\t    );\n1459\t  });\n1460\t\n1461\t  router.get(\"/agents/me/inbox/mine\", async (req, res) =\u003e {\n1462\t    if (req.actor.type !== \"agent\" || !req.actor.agentId || !req.actor.companyId) {\n1463\t      res.status(401).json({ error: \"Agent authentication required\" });\n1464\t      return;\n1465\t    }\n1466\t\n1467\t    const query = agentMineInboxQuerySchema.parse(req.query);\n1468\t    const issuesSvc = issueService(db);\n1469\t    const rows = await issuesSvc.list(req.actor.companyId, {\n1470\t      touchedByUserId: query.userId,\n1471\t      inboxArchivedByUserId: query.userId,\n1472\t      status: query.status,\n1473\t      limit: ISSUE_LIST_DEFAULT_LIMIT,\n1474\t    });\n1475\t\n1476\t    res.json(rows);\n1477\t  });\n1478\t\n1479\t  router.get(\"/agents/:id\", async (req, res) =\u003e {\n1480\t    const id = req.params.id as string;\n1481\t    const agent = await svc.getById(id);\n1482\t    if (!agent) {\n1483\t      res.status(404).json({ error: \"Agent not found\" });\n1484\t      return;\n1485\t    }\n1486\t    assertCompanyAccess(req, agent.companyId);\n1487\t    const isSelf = req.actor.type === \"agent\" \u0026\u0026 req.actor.agentId === id;\n1488\t    const canReadSensitiveDetail = isSelf\n1489\t      ? true\n1490\t      : await actorCanReadConfigurationsForCompany(req, agent.companyId);\n1491\t    if (!canReadSensitiveDetail) {\n1492\t      res.json(await buildAgentDetail(agent, { restricted: true }));\n1493\t      return;\n1494\t    }\n1495\t    res.json(await buildAgentDetail(agent));\n1496\t  });\n1497\t\n1498\t  router.get(\"/agents/:id/configuration\", async (req, res) =\u003e {\n1499\t    const id = req.params.id as string;\n1500\t    const agent = await svc.getById(id);\n1501\t    if (!agent) {\n1502\t      res.status(404).json({ error: \"Agent not found\" });\n1503\t      return;\n1504\t    }\n1505\t    await assertCanReadConfigurations(req, agent.companyId);\n1506\t    res.json(redactAgentConfiguration(agent));\n1507\t  });",
+        "tool_use_id": "toolu_01PPFoV7eah6GVN7CsujppJ8",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "03e55ec9-be74-4acd-a352-d548d194114f",
+  "promptId": "dc405341-3479-47dd-8d57-3077b7af430f",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "03e55ec9-be74-4acd-a352-d548d194114f",
+  "timestamp": "2026-04-30T15:44:26.427Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "1b6187dd-a62b-4434-a677-b1cce89b15b4",
+  "version": "2.1.123"
+}

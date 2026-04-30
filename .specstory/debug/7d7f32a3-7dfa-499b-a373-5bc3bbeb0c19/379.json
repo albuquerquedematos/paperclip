@@ -1,0 +1,27 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/plugin-ui-static.ts:118:    if (fs.existsSync(resolvedPackagePath)) {\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/plugin-ui-static.ts:122:        \u0026\u0026 fs.existsSync(uiDirFromPackagePath)\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/plugin-ui-static.ts:142:  if (!fs.existsSync(packageRoot)) {\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/plugin-ui-static.ts:147:    if (fs.existsSync(directPath)) {\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/plugin-ui-static.ts:158:  if (!fs.existsSync(uiDir)) {\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/plugin-ui-static.ts:166: * Compute an ETag from file stat (size + mtime).\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/plugins.ts:21:import { existsSync } from \"node:fs\";\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/plugins.ts:181:    if (!existsSync(absoluteLocalPath)) return [];\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/adapters.ts:18:import { readFile } from \"node:fs/promises\";\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/adapters.ts:108:    const raw = fs.readFileSync(path.join(pkgDir, \"package.json\"), \"utf-8\");\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/adapters.ts:272:          const pkgRaw = await pkgContent.readFile(pkgJsonPath, \"utf-8\");\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/adapters.ts:284:          const pkgRaw = await readFile(path.join(moduleLocalPath, \"package.json\"), \"utf-8\");\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/access.ts:157:      return fs.readFileSync(skillPath, \"utf8\");\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/access.ts:218:      for (const entry of fs.readdirSync(paperclipSkillsDir, { withFileTypes: true })) {\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/access.ts:227:    const entries = fs.readdirSync(claudeSkillsDir, { withFileTypes: true });\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/access.ts:234:        const md = fs.readFileSync(skillMdPath, \"utf8\");\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/middleware/logger.ts:20:fs.mkdirSync(logDir, { recursive: true });\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/middleware/logger.ts:42:      options: { ...sharedOpts, colorize: false, destination: logFile, mkdir: true },",
+        "is_error": false,
+        "tool_use_id": "toolu_019vDFCyBwB5mtpkNWqcC3Ar",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "45cdabb2-f326-4d54-b756-1455c5ff85f4",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "45cdabb2-f326-4d54-b756-1455c5ff85f4",
+  "timestamp": "2026-04-30T14:51:51.119Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "abe6e147-6035-439c-b880-7ed5a3d78630",
+  "version": "2.1.123"
+}

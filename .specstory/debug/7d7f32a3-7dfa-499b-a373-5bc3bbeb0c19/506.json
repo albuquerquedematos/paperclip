@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "2144\t  async function materializeRuntimeSkillFiles(companyId: string, skill: CompanySkill) {\n2145\t    const runtimeRoot = path.resolve(resolveManagedSkillsRoot(companyId), \"__runtime__\");\n2146\t    const skillDir = path.resolve(runtimeRoot, buildSkillRuntimeName(skill.key, skill.slug));\n2147\t    await fs.rm(skillDir, { recursive: true, force: true });\n2148\t    await fs.mkdir(skillDir, { recursive: true });\n2149\t\n2150\t    for (const entry of skill.fileInventory) {\n2151\t      const detail = await readFile(companyId, skill.id, entry.path).catch(() =\u003e null);\n2152\t      if (!detail) continue;\n2153\t      const targetPath = path.resolve(skillDir, entry.path);\n2154\t      await fs.mkdir(path.dirname(targetPath), { recursive: true });\n2155\t      await fs.writeFile(targetPath, detail.content, \"utf8\");\n2156\t    }\n2157\t\n2158\t    return skillDir;\n2159\t  }\n2160\t\n2161\t  function resolveRuntimeSkillMaterializedPath(companyId: string, skill: Pick\u003cCompanySkill, \"key\" | \"slug\"\u003e) {\n2162\t    const runtimeRoot = path.resolve(resolveManagedSkillsRoot(companyId), \"__runtime__\");\n2163\t    return path.resolve(runtimeRoot, buildSkillRuntimeName(skill.key, skill.slug));\n2164\t  }\n2165\t\n2166\t  async function listRuntimeSkillEntries(\n2167\t    companyId: string,\n2168\t    options: RuntimeSkillEntryOptions = {},\n2169\t  ): Promise\u003cPaperclipSkillEntry[]\u003e {\n2170\t    const skills = await listFull(companyId);\n2171\t\n2172\t    const out: PaperclipSkillEntry[] = [];\n2173\t    for (const skill of skills) {\n2174\t      const sourceKind = asString(getSkillMeta(skill).sourceKind);\n2175\t      let source = normalizeSkillDirectory(skill);\n2176\t      if (!source) {\n2177\t        source = options.materializeMissing === false\n2178\t          ? resolveRuntimeSkillMaterializedPath(companyId, skill)\n2179\t          : await materializeRuntimeSkillFiles(companyId, skill).catch(() =\u003e null);\n2180\t      }\n2181\t      if (!source) continue;\n2182\t\n2183\t      const required = sourceKind === \"paperclip_bundled\";\n2184\t      out.push({\n2185\t        key: skill.key,\n2186\t        runtimeName: buildSkillRuntimeName(skill.key, skill.slug),\n2187\t        source,\n2188\t        required,\n2189\t        requiredReason: required\n2190\t          ? \"Bundled Paperclip skills are always available for local adapters.\"\n2191\t          : null,\n2192\t      });\n2193\t    }",
+        "tool_use_id": "toolu_01ARu5QYNZb6uHGmtrDXh56U",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "7a6c77d1-0105-412f-892b-8baaf0bedd4f",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "7a6c77d1-0105-412f-892b-8baaf0bedd4f",
+  "timestamp": "2026-04-30T14:53:03.939Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "92760359-80c3-4485-824f-5049ed155572",
+  "version": "2.1.123"
+}

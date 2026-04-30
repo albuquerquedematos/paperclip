@@ -1,0 +1,26 @@
+{
+  "agentId": "a8fd5512baf043009",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "87\t    if (resolved.ambiguous) {\n88\t      throw conflict(\"Project shortname is ambiguous in this company. Use the project ID.\");\n89\t    }\n90\t    return resolved.project?.id ?? rawId;\n91\t  }\n92\t\n93\t  router.param(\"id\", async (req, _res, next, rawId) =\u003e {\n94\t    try {\n95\t      // The Express req is a superset of RequestCtx; cast it for the helper.\n96\t      req.params.id = await normalizeProjectReference(req as unknown as RequestCtx, rawId);\n97\t      next();\n98\t    } catch (err) {\n99\t      next(err);\n100\t    }\n101\t  });",
+        "tool_use_id": "toolu_01DXffZAVYVEmFJPk6x4VPzn",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "b5c507e2-62f0-450a-acc2-e94fa5951192",
+  "promptId": "f70e47c2-d340-4417-9b6f-d01ec6a1d002",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "b5c507e2-62f0-450a-acc2-e94fa5951192",
+  "timestamp": "2026-04-30T15:18:04.383Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "a846e866-b6e1-4178-a85d-cebca84f821f",
+  "version": "2.1.123"
+}

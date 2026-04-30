@@ -1,0 +1,27 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport type { RequestHandler } from \"express\";\n2\timport type { Db } from \"@paperclipai/db\";\n3\timport type { StorageService } from \"../storage/types.js\";\n4\timport type { ActorContext, ActorMembership, Handler, RequestCtx } from \"./types.js\";\n5\t\n6\texport interface AdapterDeps {\n7\t  db: Db;\n8\t  storage: StorageService;\n9\t}\n10\t\n11\t/** Express RequestHandler tagged with the original transport-agnostic Handler. */\n12\texport type TaggedHandler = RequestHandler \u0026 { __handler: Handler };\n13\t\n14\t/**\n15\t * Wraps a transport-agnostic {@link Handler} as an Express {@link RequestHandler}.\n16\t *\n17\t * Bridging notes:\n18\t * - `req.body` is already parsed by express.json(); json() returns it directly\n19\t *   so the raw body is never re-parsed.\n20\t * - Path params come from `req.params`, query params from `req.query`.\n21\t * - `req.actor.type === \"none\"` is normalised to `null` so handlers can do a\n22\t *   simple null-check rather than inspecting the string.\n23\t * - The Web API `Response` returned by the handler is forwarded to Express `res`\n24\t *   by copying status, headers, and body.\n25\t * - The returned wrapper is tagged with `__handler` pointing to the original\n26\t *   `Handler` so Cloudflare Workers can extract it via the express-router-bridge.\n27\t */\n28\texport function expressHandler(handler: Handler, deps: AdapterDeps): TaggedHandler {\n29\t  const wrapper = async (req: Parameters\u003cRequestHandler\u003e[0], res: Parameters\u003cRequestHandler\u003e[1], next: Parameters\u003cRequestHandler\u003e[2]) =\u003e {\n30\t    try {\n31\t      // Build the base URL from the incoming request. Express provides\n32\t      // req.hostname and req.originalUrl which together give us a fully-formed\n33\t      // URL object without needing the raw Host header gymnastics.\n34\t      const protocol = (req as { protocol?: string }).protocol ?? \"http\";\n35\t      const baseUrl = `${protocol}://${req.hostname}`;",
+        "tool_use_id": "toolu_01BTnXNhfxnA5Yo9xks9Nmpr",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "b2703a55-b21a-4c02-a54b-21d631fe4ee4",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "b2703a55-b21a-4c02-a54b-21d631fe4ee4",
+  "timestamp": "2026-04-30T16:32:49.481Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "5a80923c-e863-4b1d-9654-89731eb3f34e",
+  "version": "2.1.123"
+}

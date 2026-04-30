@@ -1,0 +1,27 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { Router } from \"express\";\n2\timport type { Db } from \"@paperclipai/db\";\n3\timport {\n4\t  createIssueTreeHoldSchema,\n5\t  previewIssueTreeControlSchema,\n6\t  releaseIssueTreeHoldSchema,\n7\t} from \"@paperclipai/shared\";\n8\timport { validate } from \"../middleware/validate.js\";\n9\timport { heartbeatService, issueService, issueTreeControlService, logActivity } from \"../services/index.js\";\n10\timport { assertBoard, assertCompanyAccess, getActorInfo } from \"./authz.js\";\n11\timport type { Handler } from \"../http/types.js\";\n12\timport { expressHandler } from \"../http/express-adapter.js\";\n13\t\n14\tconst TREE_RUN_CANCELLATION_RESPONSE_WAIT_MS = 1_000;\n15\t\n16\tfunction errorToMessage(error: unknown) {\n17\t  return error instanceof Error ? error.message : String(error);\n18\t}\n19\t\n20\tasync function waitForRunCancellationTasks(tasks: Promise\u003cvoid\u003e[]) {",
+        "tool_use_id": "toolu_01Y24EQ78TVLxEsVyJbotVLN",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "721eec12-4ddf-47ed-b5d2-ae40c676881b",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "721eec12-4ddf-47ed-b5d2-ae40c676881b",
+  "timestamp": "2026-04-30T16:24:24.670Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "0d3252d8-fbc3-4a38-b9e5-2829e5e3addf",
+  "version": "2.1.123"
+}

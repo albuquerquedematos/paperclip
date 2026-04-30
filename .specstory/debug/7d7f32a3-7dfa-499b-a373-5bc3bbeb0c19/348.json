@@ -1,0 +1,26 @@
+{
+  "agentId": "adabf466a1a877701",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\t// Re-export everything from the shared adapter-utils/server-utils package.\n2\t// This file is kept as a convenience shim so existing in-tree\n3\t// imports (process/, http/, heartbeat.ts) don't need rewriting.\n4\timport type { ChildProcess } from \"node:child_process\";\n5\timport { logger } from \"../middleware/logger.js\";\n6\timport * as serverUtils from \"@paperclipai/adapter-utils/server-utils\";\n7\texport type { RunProcessResult } from \"@paperclipai/adapter-utils/server-utils\";\n8\timport type { CommandExecutor } from \"@paperclipai/adapter-utils/executor\";\n9\t\n10\ttype BuildInvocationEnvForLogsOptions = {\n11\t  runtimeEnv?: NodeJS.ProcessEnv | Record\u003cstring, string\u003e;\n12\t  includeRuntimeKeys?: string[];\n13\t  resolvedCommand?: string | null;\n14\t  resolvedCommandEnvKey?: string;\n15\t};\n16\t\n17\texport const runningProcesses: Map\u003cstring, { child: ChildProcess; graceSec: number; processGroupId: number | null }\u003e =\n18\t  serverUtils.runningProcesses;\n19\texport const MAX_CAPTURE_BYTES = serverUtils.MAX_CAPTURE_BYTES;\n20\texport const MAX_EXCERPT_BYTES = serverUtils.MAX_EXCERPT_BYTES;\n21\texport const parseObject = serverUtils.parseObject;\n22\texport const asString = serverUtils.asString;\n23\texport const asNumber = serverUtils.asNumber;\n24\texport const asBoolean = serverUtils.asBoolean;\n25\texport const asStringArray = serverUtils.asStringArray;\n26\texport const parseJson = serverUtils.parseJson;\n27\texport const appendWithCap = serverUtils.appendWithCap;\n28\texport const appendWithByteCap = serverUtils.appendWithByteCap;\n29\texport const resolvePathValue = serverUtils.resolvePathValue;\n30\texport const renderTemplate = serverUtils.renderTemplate;\n31\texport const redactEnvForLogs = serverUtils.redactEnvForLogs;\n32\texport const buildPaperclipEnv = serverUtils.buildPaperclipEnv;\n33\texport const defaultPathForPlatform = serverUtils.defaultPathForPlatform;\n34\texport const ensurePathInEnv = serverUtils.ensurePathInEnv;\n35\texport const ensureAbsoluteDirectory = serverUtils.ensureAbsoluteDirectory;\n36\texport const ensureCommandResolvable = serverUtils.ensureCommandResolvable;\n37\texport const resolveCommandForLogs = serverUtils.resolveCommandForLogs;\n38\t\n39\texport function buildInvocationEnvForLogs(\n40\t  env: Record\u003cstring, string\u003e,\n41\t  options: BuildInvocationEnvForLogsOptions = {},\n42\t): Record\u003cstring, string\u003e {\n43\t  const maybeBuildInvocationEnvForLogs = (\n44\t    serverUtils as typeof serverUtils \u0026 {\n45\t      buildInvocationEnvForLogs?: (\n46\t        env: Record\u003cstring, string\u003e,\n47\t        options?: BuildInvocationEnvForLogsOptions,\n48\t      ) =\u003e Record\u003cstring, string\u003e;\n49\t    }\n50\t  ).buildInvocationEnvForLogs;\n51\t\n52\t  if (typeof maybeBuildInvocationEnvForLogs === \"function\") {\n53\t    return maybeBuildInvocationEnvForLogs(env, options);\n54\t  }\n55\t\n56\t  const merged: Record\u003cstring, string\u003e = { ...env };\n57\t  const runtimeEnv = options.runtimeEnv ?? {};\n58\t\n59\t  for (const key of options.includeRuntimeKeys ?? []) {\n60\t    if (key in merged) continue;\n61\t    const value = runtimeEnv[key];\n62\t    if (typeof value !== \"string\" || value.length === 0) continue;\n63\t    merged[key] = value;\n64\t  }\n65\t\n66\t  const resolvedCommand = options.resolvedCommand?.trim();\n67\t  if (resolvedCommand) {\n68\t    merged[options.resolvedCommandEnvKey ?? \"PAPERCLIP_RESOLVED_COMMAND\"] = resolvedCommand;\n69\t  }\n70\t\n71\t  return redactEnvForLogs(merged);\n72\t}\n73\t\n74\t// Re-export runChildProcess with the server's pino logger wired in.\n75\timport type { RunProcessResult } from \"@paperclipai/adapter-utils/server-utils\";\n76\tconst _runChildProcess = serverUtils.runChildProcess;\n77\t\n78\texport async function runChildProcess(\n79\t  runId: string,\n80\t  command: string,\n81\t  args: string[],\n82\t  opts: {\n83\t    cwd: string;\n84\t    env: Record\u003cstring, string\u003e;\n85\t    timeoutSec: number;\n86\t    graceSec: number;\n87\t    onLog: (stream: \"stdout\" | \"stderr\", chunk: string) =\u003e Promise\u003cvoid\u003e;\n88\t    executor?: CommandExecutor;\n89\t  },\n90\t): Promise\u003cRunProcessResult\u003e {\n91\t  if (opts.executor) {\n92\t    return opts.executor.run({ runId, command, args, ...opts });\n93\t  }\n94\t  return _runChildProcess(runId, command, args, {\n95\t    ...opts,\n96\t    onLogError: (err, id, msg) =\u003e logger.warn({ err, runId: id }, msg),\n97\t  });\n98\t}\n99\t",
+        "tool_use_id": "toolu_011d8Q21gWMNXgYnQU9mhMoP",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "b6ea5a9a-416b-4772-a830-1ebcd95e8bdf",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "b6ea5a9a-416b-4772-a830-1ebcd95e8bdf",
+  "timestamp": "2026-04-30T14:51:41.013Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "1fd4d86a-5cc9-4a8a-96ff-8b9588ca2bd5",
+  "version": "2.1.123"
+}

@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "250\t    }\n251\t\n252\t    try {\n253\t      let installedVersion: string | undefined;\n254\t      let moduleLocalPath: string | undefined;\n255\t\n256\t      if (!isLocalPath) {\n257\t        // npm install into the managed directory\n258\t        const pluginsDir = getAdapterPluginsDir();\n259\t        const spec = explicitVersion ? `${canonicalName}@${explicitVersion}` : canonicalName;\n260\t\n261\t        logger.info({ spec, pluginsDir }, \"Installing adapter package via npm\");\n262\t\n263\t        await execFileAsync(\"npm\", [\"install\", \"--no-save\", spec], {\n264\t          cwd: pluginsDir,\n265\t          timeout: 120_000,\n266\t        });\n267\t\n268\t        // Read installed version from package.json\n269\t        try {\n270\t          const pkgJsonPath = path.join(pluginsDir, \"node_modules\", canonicalName, \"package.json\");\n271\t          const pkgContent = await import(\"node:fs/promises\");\n272\t          const pkgRaw = await pkgContent.readFile(pkgJsonPath, \"utf-8\");\n273\t          const pkg = JSON.parse(pkgRaw);\n274\t          const v = pkg.version;\n275\t          installedVersion =\n276\t            typeof v === \"string\" \u0026\u0026 v.trim().length \u003e 0 ? v.trim() : explicitVersion;\n277\t        } catch {\n278\t          installedVersion = explicitVersion;\n279\t        }\n280\t      } else {\n281\t        // Local path — normalize (e.g., Windows → WSL) and use the resolved path\n282\t        moduleLocalPath = path.resolve(await normalizeLocalPath(packageName));\n283\t        try {\n284\t          const pkgRaw = await readFile(path.join(moduleLocalPath, \"package.json\"), \"utf-8\");\n285\t          const v = JSON.parse(pkgRaw).version;\n286\t          if (typeof v === \"string\" \u0026\u0026 v.trim().length \u003e 0) {\n287\t            installedVersion = v.trim();\n288\t          }\n289\t        } catch {\n290\t          // leave installedVersion undefined if package.json is missing\n291\t        }\n292\t      }\n293\t\n294\t      // Load and register the adapter (use canonicalName for path resolution)\n295\t      const adapterModule = await loadExternalAdapterPackage(canonicalName, moduleLocalPath);\n296\t\n297\t      // Check if this type conflicts with a built-in adapter\n298\t      if (BUILTIN_ADAPTER_TYPES.has(adapterModule.type)) {\n299\t        res.status(409).json({\n300\t          error: `Adapter type \"${adapterModule.type}\" is a built-in adapter and cannot be overwritten.`,\n301\t        });\n302\t        return;\n303\t      }\n304\t\n305\t      // Check if already registered (indicates a reinstall/update)\n306\t      const existing = findServerAdapter(adapterModule.type);\n307\t      const isReinstall = existing !== null;\n308\t      if (existing) {\n309\t        unregisterServerAdapter(adapterModule.type);\n310\t        logger.info({ type: adapterModule.type }, \"Unregistered existing adapter for replacement\");\n311\t      }\n312\t\n313\t      // Register the new adapter\n314\t      registerWithSessionManagement(adapterModule);\n315\t\n316\t      // Persist the record (use canonicalName without version suffix)\n317\t      const record: AdapterPluginRecord = {\n318\t        packageName: canonicalName,\n319\t        localPath: moduleLocalPath,\n320\t        version: installedVersion ?? explicitVersion,\n321\t        type: adapterModule.type,\n322\t        installedAt: new Date().toISOString(),\n323\t      };\n324\t      addAdapterPlugin(record);\n325\t\n326\t      logger.info(\n327\t        { type: adapterModule.type, packageName: canonicalName },\n328\t        \"External adapter installed and registered\",\n329\t      );",
+        "tool_use_id": "toolu_01GaZ9QQydZ9HLhXYRmLykB8",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "bf38adb7-8a98-4ca7-8503-4763e8d73378",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "bf38adb7-8a98-4ca7-8503-4763e8d73378",
+  "timestamp": "2026-04-30T14:52:05.535Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "e64f181f-71d3-49f7-8eb5-c6d6aabc2be4",
+  "version": "2.1.123"
+}

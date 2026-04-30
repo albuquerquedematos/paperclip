@@ -1,0 +1,27 @@
+{
+  "agentId": "aa8a93567f69d0116",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1414\t  };\n1415\t\n1416\t  router.get(\"/companies/:companyId/agents\", expressHandler(listCompanyAgents, { db, storage: storageSentinel }));\n1417\t  router.get(\"/instance/scheduler-heartbeats\", expressHandler(listSchedulerHeartbeats, { db, storage: storageSentinel }));\n1418\t  router.get(\"/companies/:companyId/org\", expressHandler(getCompanyOrg, { db, storage: storageSentinel }));\n1419\t  router.get(\"/companies/:companyId/org.svg\", expressHandler(getCompanyOrgSvg, { db, storage: storageSentinel }));\n1420\t  router.get(\"/companies/:companyId/org.png\", expressHandler(getCompanyOrgPng, { db, storage: storageSentinel }));\n1421\t  router.get(\"/companies/:companyId/agent-configurations\", expressHandler(listAgentConfigurations, { db, storage: storageSentinel }));\n1422\t  router.get(\"/agents/me\", expressHandler(getAgentMe, { db, storage: storageSentinel }));\n1423\t\n1424\t  router.get(\"/agents/me/inbox-lite\", async (req, res) =\u003e {\n1425\t    if (req.actor.type !== \"agent\" || !req.actor.agentId || !req.actor.companyId) {\n1426\t      res.status(401).json({ error: \"Agent authentication required\" });\n1427\t      return;\n1428\t    }\n1429\t\n1430\t    const issuesSvc = issueService(db);\n1431\t    const rows = await issuesSvc.list(req.actor.companyId, {\n1432\t      assigneeAgentId: req.actor.agentId,\n1433\t      status: \"todo,in_progress,blocked\",\n1434\t      includeRoutineExecutions: true,\n1435\t      limit: ISSUE_LIST_DEFAULT_LIMIT,\n1436\t    });\n1437\t    const dependencyReadiness = await issuesSvc.listDependencyReadiness(\n1438\t      req.actor.companyId,",
+        "tool_use_id": "toolu_016bvhPcfqzMYfeBNikGUZVy",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "123d985b-503a-4e12-b9f5-7dc51faa807c",
+  "promptId": "dc405341-3479-47dd-8d57-3077b7af430f",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "123d985b-503a-4e12-b9f5-7dc51faa807c",
+  "timestamp": "2026-04-30T15:44:29.510Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "39cbc371-e7c5-4ac7-9195-da227cd4563d",
+  "version": "2.1.123"
+}

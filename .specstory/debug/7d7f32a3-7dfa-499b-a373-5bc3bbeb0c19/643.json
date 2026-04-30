@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\t/**\n2\t * PluginDevWatcher — watches local-path plugin directories for file changes\n3\t * and triggers worker restarts so plugin authors get a fast rebuild-and-reload\n4\t * cycle without manually restarting the server.\n5\t *\n6\t * Only plugins installed from a local path (i.e. those with a non-null\n7\t * `packagePath` in the DB) are watched. File changes in the plugin's package\n8\t * directory trigger a debounced worker restart via the lifecycle manager.\n9\t *\n10\t * Uses chokidar rather than raw fs.watch so we get a production-grade watcher\n11\t * backend across platforms and avoid exhausting file descriptors as quickly in\n12\t * large dev workspaces.\n13\t *\n14\t * @see PLUGIN_SPEC.md §27.2 — Local Development Workflow\n15\t */\n16\timport chokidar, { type FSWatcher } from \"chokidar\";\n17\timport { existsSync, readFileSync, readdirSync, statSync } from \"node:fs\";\n18\timport path from \"node:path\";\n19\timport { logger } from \"../middleware/logger.js\";\n20\timport type { PluginLifecycleManager } from \"./plugin-lifecycle.js\";\n21\t\n22\tconst log = logger.child({ service: \"plugin-dev-watcher\" });\n23\t\n24\t/** Debounce interval for file changes (ms). */\n25\tconst DEBOUNCE_MS = 500;",
+        "tool_use_id": "toolu_01CQiEpv3UcZBJC24kSnAsbq",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "76cdfd96-67b4-4514-a12d-b594f18207c4",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "76cdfd96-67b4-4514-a12d-b594f18207c4",
+  "timestamp": "2026-04-30T14:57:25.918Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "f11e7667-e114-4974-a94c-58a2fff530c4",
+  "version": "2.1.123"
+}

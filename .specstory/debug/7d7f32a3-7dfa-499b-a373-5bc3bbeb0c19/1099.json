@@ -1,0 +1,26 @@
+{
+  "agentId": "ad82ff77af71f84d8",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport type { Request } from \"express\";\n2\timport { forbidden, unauthorized } from \"../errors.js\";\n3\t\n4\texport function assertAuthenticated(req: Request) {\n5\t  if (req.actor.type === \"none\") {\n6\t    throw unauthorized();\n7\t  }\n8\t}\n9\t\n10\texport function assertBoard(req: Request) {\n11\t  if (req.actor.type !== \"board\") {\n12\t    throw forbidden(\"Board access required\");\n13\t  }\n14\t}\n15\t\n16\texport function hasBoardOrgAccess(req: Request) {\n17\t  if (req.actor.type !== \"board\") {\n18\t    return false;\n19\t  }\n20\t  if (req.actor.source === \"local_implicit\" || req.actor.isInstanceAdmin) {\n21\t    return true;\n22\t  }\n23\t  return Array.isArray(req.actor.companyIds) \u0026\u0026 req.actor.companyIds.length \u003e 0;\n24\t}\n25\t\n26\texport function assertBoardOrgAccess(req: Request) {\n27\t  assertBoard(req);\n28\t  if (hasBoardOrgAccess(req)) {\n29\t    return;\n30\t  }\n31\t  throw forbidden(\"Company membership or instance admin access required\");\n32\t}\n33\t\n34\texport function assertInstanceAdmin(req: Request) {\n35\t  assertBoard(req);\n36\t  if (req.actor.source === \"local_implicit\" || req.actor.isInstanceAdmin) {\n37\t    return;\n38\t  }\n39\t  throw forbidden(\"Instance admin access required\");\n40\t}\n41\t\n42\texport function assertCompanyAccess(req: Request, companyId: string) {\n43\t  assertAuthenticated(req);\n44\t  if (req.actor.type === \"agent\" \u0026\u0026 req.actor.companyId !== companyId) {\n45\t    throw forbidden(\"Agent key cannot access another company\");\n46\t  }\n47\t  if (req.actor.type === \"board\" \u0026\u0026 req.actor.source !== \"local_implicit\") {\n48\t    const allowedCompanies = req.actor.companyIds ?? [];\n49\t    if (!allowedCompanies.includes(companyId)) {\n50\t      throw forbidden(\"User does not have access to this company\");\n51\t    }\n52\t    const method = typeof req.method === \"string\" ? req.method.toUpperCase() : \"GET\";\n53\t    const isSafeMethod = [\"GET\", \"HEAD\", \"OPTIONS\"].includes(method);\n54\t    if (!isSafeMethod \u0026\u0026 !req.actor.isInstanceAdmin \u0026\u0026 Array.isArray(req.actor.memberships)) {\n55\t      const membership = req.actor.memberships.find((item) =\u003e item.companyId === companyId);\n56\t      if (!membership || membership.status !== \"active\") {\n57\t        throw forbidden(\"User does not have active company access\");\n58\t      }\n59\t      if (membership.membershipRole === \"viewer\") {\n60\t        throw forbidden(\"Viewer access is read-only\");\n61\t      }\n62\t    }\n63\t  }\n64\t}\n65\t\n66\texport function getActorInfo(req: Request) {\n67\t  assertAuthenticated(req);\n68\t  if (req.actor.type === \"agent\") {\n69\t    return {\n70\t      actorType: \"agent\" as const,\n71\t      actorId: req.actor.agentId ?? \"unknown-agent\",\n72\t      agentId: req.actor.agentId ?? null,\n73\t      runId: req.actor.runId ?? null,\n74\t    };\n75\t  }\n76\t\n77\t  return {\n78\t    actorType: \"user\" as const,\n79\t    actorId: req.actor.userId ?? \"board\",\n80\t    agentId: null,\n81\t    runId: req.actor.runId ?? null,\n82\t  };\n83\t}\n84\t",
+        "tool_use_id": "toolu_01Qwj5zJJrxoF9kGwJVEbQp8",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "6839a1a5-5307-4f92-b9f1-cc5ae15e6df9",
+  "promptId": "41a5cab3-78a5-4305-8404-9daa35591aac",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "6839a1a5-5307-4f92-b9f1-cc5ae15e6df9",
+  "timestamp": "2026-04-30T15:06:20.722Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "c03ab62a-13af-4720-8f37-7bab644938cf",
+  "version": "2.1.123"
+}

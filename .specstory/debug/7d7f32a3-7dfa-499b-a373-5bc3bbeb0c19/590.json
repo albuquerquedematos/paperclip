@@ -1,0 +1,71 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "attributionAgent": "backend-architect",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01DvG6eYgbxwu4HYBHNs6EC7",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/services/local-service-supervisor.ts",
+          "limit": 10,
+          "offset": 1
+        },
+        "name": "Read",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_015PFziM3DqFdRRajptZamBy",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 634
+      },
+      "cache_creation_input_tokens": 634,
+      "cache_read_input_tokens": 77880,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 634
+          },
+          "cache_creation_input_tokens": 634,
+          "cache_read_input_tokens": 77880,
+          "input_tokens": 1,
+          "output_tokens": 130,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 130,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "55be5461-b6a9-4288-a122-731d09b0e595",
+  "requestId": "req_011Caa9drNCQ3H28517Zdieu",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "timestamp": "2026-04-30T14:56:00.211Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "656ebf1a-d028-4085-aadc-0aa9dc889c76",
+  "version": "2.1.123"
+}

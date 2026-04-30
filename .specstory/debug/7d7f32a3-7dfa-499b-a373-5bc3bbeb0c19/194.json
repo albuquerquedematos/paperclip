@@ -1,0 +1,49 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/db/src/index.ts has been updated successfully.",
+        "tool_use_id": "toolu_01KijbgiGs6DoyJEZgLpu7sZ",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "9d2bb19b-10c9-4a09-b18e-87859e0dee1d",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "9d2bb19b-10c9-4a09-b18e-87859e0dee1d",
+  "timestamp": "2026-04-30T14:48:36.573Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/db/src/index.ts",
+    "newString": "export {\n  createDb,\n  createPostgresDb,\n  getPostgresDataDirectory,",
+    "oldString": "export {\n  createDb,\n  getPostgresDataDirectory,",
+    "originalFile": "export {\n  createDb,\n  getPostgresDataDirectory,\n  ensurePostgresDatabase,\n  inspectMigrations,\n  applyPendingMigrations,\n  reconcilePendingMigrationHistory,\n  type MigrationState,\n  type MigrationHistoryReconcileResult,\n  migratePostgresIfEmpty,\n  type MigrationBootstrapResult,\n  type Db,\n} from \"./client.js\";\nexport {\n  getEmbeddedPostgresTestSupport,\n  startEmbeddedPostgresTestDatabase,\n  type EmbeddedPostgresTestDatabase,\n  type EmbeddedPostgresTestSupport,\n} from \"./test-embedded-postgres.js\";\nexport {\n  runDatabaseBackup,\n  runDatabaseRestore,\n  formatDatabaseBackupResult,\n  type BackupRetentionPolicy,\n  type RunDatabaseBackupOptions,\n  type RunDatabaseBackupResult,\n  type RunDatabaseRestoreOptions,\n} from \"./backup-lib.js\";\nexport {\n  createEmbeddedPostgresLogBuffer,\n  formatEmbeddedPostgresError,\n} from \"./embedded-postgres-error.js\";\nexport { issueRelations } from \"./schema/issue_relations.js\";\nexport { issueReferenceMentions } from \"./schema/issue_reference_mentions.js\";\nexport * from \"./schema/index.js\";\n",
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          " export {",
+          "   createDb,",
+          "+  createPostgresDb,",
+          "   getPostgresDataDirectory,",
+          "   ensurePostgresDatabase,",
+          "   inspectMigrations,"
+        ],
+        "newLines": 6,
+        "newStart": 1,
+        "oldLines": 5,
+        "oldStart": 1
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "3c6b63ad-cfaf-45d0-8553-ee9be0620034",
+  "version": "2.1.123"
+}

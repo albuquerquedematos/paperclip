@@ -1,0 +1,70 @@
+{
+  "agentId": "adabf466a1a877701",
+  "attributionAgent": "backend-architect",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_015Fd2YbcT3UAFhvVxQnmN5J",
+        "input": {
+          "content": "import { runChildProcess, runningProcesses } from \"./server-utils.js\";\nimport type { CommandExecutor, CommandExecutorInput } from \"./executor.js\";\nimport type { RunProcessResult } from \"./server-utils.js\";\n\nexport function createLocalCommandExecutor(): CommandExecutor {\n  return {\n    async run(input: CommandExecutorInput): Promise\u003cRunProcessResult\u003e {\n      return runChildProcess(input.runId, input.command, input.args, {\n        cwd: input.cwd,\n        env: input.env,\n        timeoutSec: input.timeoutSec,\n        graceSec: input.graceSec,\n        onLog: input.onLog,\n      });\n    },\n\n    async cancel(runId: string): Promise\u003cvoid\u003e {\n      runningProcesses.delete(runId);\n    },\n  };\n}\n",
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapter-utils/src/local-executor.ts"
+        },
+        "name": "Write",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01Vogbc1Vge8hQs6d558nYBC",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 305
+      },
+      "cache_creation_input_tokens": 305,
+      "cache_read_input_tokens": 46442,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 305
+          },
+          "cache_creation_input_tokens": 305,
+          "cache_read_input_tokens": 46442,
+          "input_tokens": 1,
+          "output_tokens": 306,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 306,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "2818f49d-023c-420a-8f63-633639260ad9",
+  "requestId": "req_011Caa9FNK86T2iG18zpD3WA",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "timestamp": "2026-04-30T14:50:57.135Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "325f068d-dea5-48d8-ba69-85c8ff55ebe6",
+  "version": "2.1.123"
+}

@@ -1,0 +1,26 @@
+{
+  "agentId": "a0d0169af69218004",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "140\t  const storageProviderFromEnvRaw = process.env.PAPERCLIP_STORAGE_PROVIDER;\n141\t  const storageProviderFromEnv =\n142\t    storageProviderFromEnvRaw \u0026\u0026 STORAGE_PROVIDERS.includes(storageProviderFromEnvRaw as StorageProvider)\n143\t      ? (storageProviderFromEnvRaw as StorageProvider)\n144\t      : null;\n145\t  const storageProvider: StorageProvider = storageProviderFromEnv ?? fileStorage?.provider ?? \"local_disk\";\n146\t  const storageLocalDiskBaseDir = resolveHomeAwarePath(\n147\t    process.env.PAPERCLIP_STORAGE_LOCAL_DIR ??\n148\t      fileStorage?.localDisk?.baseDir ??\n149\t      resolveDefaultStorageDir(),\n150\t  );\n151\t  const storageS3Bucket = process.env.PAPERCLIP_STORAGE_S3_BUCKET ?? fileStorage?.s3?.bucket ?? \"paperclip\";\n152\t  const storageS3Region = process.env.PAPERCLIP_STORAGE_S3_REGION ?? fileStorage?.s3?.region ?? \"us-east-1\";\n153\t  const storageS3Endpoint = process.env.PAPERCLIP_STORAGE_S3_ENDPOINT ?? fileStorage?.s3?.endpoint ?? undefined;\n154\t  const storageS3Prefix = process.env.PAPERCLIP_STORAGE_S3_PREFIX ?? fileStorage?.s3?.prefix ?? \"\";\n155\t  const storageS3ForcePathStyle =\n156\t    process.env.PAPERCLIP_STORAGE_S3_FORCE_PATH_STYLE !== undefined\n157\t      ? process.env.PAPERCLIP_STORAGE_S3_FORCE_PATH_STYLE === \"true\"\n158\t      : (fileStorage?.s3?.forcePathStyle ?? false);\n159\t  const feedbackExportBackendUrl =\n160\t    process.env.PAPERCLIP_FEEDBACK_EXPORT_BACKEND_URL?.trim() ||\n161\t    process.env.PAPERCLIP_TELEMETRY_BACKEND_URL?.trim() ||\n162\t    undefined;\n163\t  const feedbackExportBackendToken =\n164\t    process.env.PAPERCLIP_FEEDBACK_EXPORT_BACKEND_TOKEN?.trim() ||\n165\t    process.env.PAPERCLIP_TELEMETRY_BACKEND_TOKEN?.trim() ||\n166\t    undefined;\n167\t\n168\t  const deploymentModeFromEnvRaw = process.env.PAPERCLIP_DEPLOYMENT_MODE;\n169\t  const deploymentModeFromEnv =\n170\t    deploymentModeFromEnvRaw \u0026\u0026 DEPLOYMENT_MODES.includes(deploymentModeFromEnvRaw as DeploymentMode)\n171\t      ? (deploymentModeFromEnvRaw as DeploymentMode)\n172\t      : null;\n173\t  const deploymentMode: DeploymentMode = deploymentModeFromEnv ?? fileConfig?.server.deploymentMode ?? \"local_trusted\";\n174\t  const deploymentExposureFromEnvRaw = process.env.PAPERCLIP_DEPLOYMENT_EXPOSURE;\n175\t  const deploymentExposureFromEnv =\n176\t    deploymentExposureFromEnvRaw \u0026\u0026\n177\t    DEPLOYMENT_EXPOSURES.includes(deploymentExposureFromEnvRaw as DeploymentExposure)\n178\t      ? (deploymentExposureFromEnvRaw as DeploymentExposure)\n179\t      : null;\n180\t  const deploymentExposure: DeploymentExposure =\n181\t    deploymentMode === \"local_trusted\"\n182\t      ? \"private\"\n183\t      : (deploymentExposureFromEnv ?? fileConfig?.server.exposure ?? \"private\");\n184\t  const bindFromEnvRaw = process.env.PAPERCLIP_BIND;\n185\t  const bindFromEnv =\n186\t    bindFromEnvRaw \u0026\u0026 BIND_MODES.includes(bindFromEnvRaw as BindMode)\n187\t      ? (bindFromEnvRaw as BindMode)\n188\t      : null;\n189\t  const configuredHost = process.env.HOST ?? fileConfig?.server.host ?? \"127.0.0.1\";\n190\t  const tailnetBindHost = detectTailnetBindHost();\n191\t  const bind =\n192\t    bindFromEnv ??\n193\t    fileConfig?.server.bind ??\n194\t    inferBindModeFromHost(configuredHost, { tailnetBindHost });\n195\t  const customBindHost = process.env.PAPERCLIP_BIND_HOST ?? fileConfig?.server.customBindHost;\n196\t  const authBaseUrlModeFromEnvRaw = process.env.PAPERCLIP_AUTH_BASE_URL_MODE;\n197\t  const authBaseUrlModeFromEnv =\n198\t    authBaseUrlModeFromEnvRaw \u0026\u0026\n199\t    AUTH_BASE_URL_MODES.includes(authBaseUrlModeFromEnvRaw as AuthBaseUrlMode)",
+        "tool_use_id": "toolu_0182uSC7WvzqdC1QiqZTaeQh",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "86732297-f9b9-4270-a680-124f176409fa",
+  "promptId": "f8ab24c1-de42-4dc6-b59c-8c9364db9ca7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "86732297-f9b9-4270-a680-124f176409fa",
+  "timestamp": "2026-04-30T15:08:03.970Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "de93fd29-0dbd-4b4c-a94b-56aa8f6ee262",
+  "version": "2.1.123"
+}

@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01S2vEW91Zo1UVgTsbMzmY5v",
+        "input": {
+          "command": "npx tsc -p packages/deploy-cloudflare/tsconfig.json --noEmit 2\u003e\u00261 | head -100",
+          "description": "Run TypeScript check on CF package"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01X41JSnm1Xkwq5WNwritB76",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 17228
+      },
+      "cache_creation_input_tokens": 17228,
+      "cache_read_input_tokens": 12673,
+      "inference_geo": "",
+      "input_tokens": 3,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 17228
+          },
+          "cache_creation_input_tokens": 17228,
+          "cache_read_input_tokens": 12673,
+          "input_tokens": 3,
+          "output_tokens": 184,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 184,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "9c6a7478-5ddb-45a3-a801-ba5d4c3e0bc4",
+  "requestId": "req_011CaaJFensGmPRBuzM82GEs",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "timestamp": "2026-04-30T16:49:01.872Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "19dbc5e3-e056-470c-983d-d08e45754a65",
+  "version": "2.1.123"
+}

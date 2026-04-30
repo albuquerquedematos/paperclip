@@ -1,0 +1,27 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "148\t    ...ext(projectRoutes(db), \"/api\"),\n149\t    ...ext(issueRoutes(db, storage, {}), \"/api\"),\n150\t    ...ext(issueTreeControlRoutes(db), \"/api\"),\n151\t    ...ext(routineRoutes(db, {}), \"/api\"),\n152\t    ...ext(environmentRoutes(db, {}), \"/api\"),\n153\t    ...ext(executionWorkspaceRoutes(db), \"/api\"),\n154\t    ...ext(goalRoutes(db), \"/api\"),\n155\t    ...ext(approvalRoutes(db, {}), \"/api\"),\n156\t    ...ext(secretRoutes(db), \"/api\"),\n157\t    ...ext(costRoutes(db, {}), \"/api\"),\n158\t    ...ext(activityRoutes(db), \"/api\"),\n159\t    ...ext(dashboardRoutes(db), \"/api\"),\n160\t    ...ext(userProfileRoutes(db), \"/api\"),\n161\t    ...ext(sidebarBadgeRoutes(db), \"/api\"),\n162\t    ...ext(sidebarPreferenceRoutes(db), \"/api\"),\n163\t    ...ext(inboxDismissalRoutes(db), \"/api\"),\n164\t    ...ext(instanceSettingsRoutes(db), \"/api\"),\n165\t    ...ext(llmRoutes(db), \"/api\"),\n166\t    ...ext(authRoutes(db), \"/api\"),\n167\t  ];\n168\t\n169\t  return { routes, db, storage, hyperdriveConnStr: env.HYPERDRIVE.connectionString };\n170\t}\n171\t\n172\tfunction getRouteCache(env: Env): RouteCache {\n173\t  if (!routeCache || routeCache.hyperdriveConnStr !== env.HYPERDRIVE.connectionString) {\n174\t    routeCache = buildRouteCache(env);\n175\t    console.log(`[CF Worker] Built route cache: ${routeCache.routes.length} routes`);\n176\t  }\n177\t  return routeCache;\n178\t}\n179\t\n180\t// ---------------------------------------------------------------------------\n181\t// Request handler helper\n182\t// ---------------------------------------------------------------------------\n183\t\n184\tasync function handleApiRequest(\n185\t  c: Context\u003c{ Bindings: Env }\u003e,\n186\t  route: RouteDefinition,\n187\t  db: Db,\n188\t  storage: StorageService,\n189\t): Promise\u003cResponse\u003e {\n190\t  const env = c.env;\n191\t  const deploymentMode = env.DEPLOYMENT_MODE === \"local_trusted\"\n192\t    ? \"local_trusted\" as const\n193\t    : \"authenticated\" as const;\n194\t\n195\t  const actor = await resolveActorFromRequest(c.req.raw, db, { deploymentMode });\n196\t\n197\t  const ctx: import(\"../../../server/src/http/types.js\").RequestCtx = {",
+        "tool_use_id": "toolu_01Es4C9x6FwEbUor6aFbhH3R",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "2eee4ac5-a1ac-4e57-be62-668f67d3f73a",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "2eee4ac5-a1ac-4e57-be62-668f67d3f73a",
+  "timestamp": "2026-04-30T16:37:34.307Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "2403debf-a621-4a8e-a5af-fad8ff1a1d9f",
+  "version": "2.1.123"
+}

@@ -1,0 +1,26 @@
+{
+  "agentId": "a6710083ef9195699",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { createHash } from \"node:crypto\";\n2\timport { drizzle as drizzlePg } from \"drizzle-orm/postgres-js\";\n3\timport { migrate as migratePg } from \"drizzle-orm/postgres-js/migrator\";\n4\timport { readFile, readdir } from \"node:fs/promises\";\n5\timport { fileURLToPath } from \"node:url\";\n6\timport postgres from \"postgres\";\n7\timport * as schema from \"./schema/index.js\";\n8\t\n9\tconst MIGRATIONS_FOLDER = fileURLToPath(new URL(\"./migrations\", import.meta.url));\n10\tconst DRIZZLE_MIGRATIONS_TABLE = \"__drizzle_migrations\";\n11\tconst MIGRATIONS_JOURNAL_JSON = fileURLToPath(new URL(\"./migrations/meta/_journal.json\", import.meta.url));\n12\t\n13\tfunction createUtilitySql(url: string) {\n14\t  return postgres(url, { max: 1, onnotice: () =\u003e {} });\n15\t}\n16\t\n17\tfunction isSafeIdentifier(value: string): boolean {\n18\t  return /^[A-Za-z_][A-Za-z0-9_]*$/.test(value);\n19\t}\n20\t\n21\tfunction quoteIdentifier(value: string): string {\n22\t  if (!isSafeIdentifier(value)) throw new Error(`Unsafe SQL identifier: ${value}`);\n23\t  return `\"${value.replaceAll(\"\\\"\", \"\\\"\\\"\")}\"`;\n24\t}\n25\t\n26\tfunction quoteLiteral(value: string): string {\n27\t  return `'${value.replaceAll(\"'\", \"''\")}'`;\n28\t}\n29\t\n30\tfunction splitMigrationStatements(content: string): string[] {\n31\t  return content\n32\t    .split(\"--\u003e statement-breakpoint\")\n33\t    .map((statement) =\u003e statement.trim())\n34\t    .filter((statement) =\u003e statement.length \u003e 0);\n35\t}\n36\t\n37\texport type MigrationState =\n38\t  | { status: \"upToDate\"; tableCount: number; availableMigrations: string[]; appliedMigrations: string[] }\n39\t  | {\n40\t      status: \"needsMigrations\";\n41\t      tableCount: number;\n42\t      availableMigrations: string[];\n43\t      appliedMigrations: string[];\n44\t      pendingMigrations: string[];\n45\t      reason: \"no-migration-journal-empty-db\" | \"no-migration-journal-non-empty-db\" | \"pending-migrations\";\n46\t    };\n47\t\n48\texport function createPostgresDb(url: string) {\n49\t  const sql = postgres(url);\n50\t  return drizzlePg(sql, { schema });\n51\t}\n52\t\n53\t/** @deprecated Use createPostgresDb */\n54\texport const createDb = createPostgresDb;\n55\t",
+        "tool_use_id": "toolu_01HKryZEqfFWwS7RpuMMVaA1",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "2e8c7089-9635-4cd3-be0d-7d8807fb37cd",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "2e8c7089-9635-4cd3-be0d-7d8807fb37cd",
+  "timestamp": "2026-04-30T14:51:27.419Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "e763d96e-c571-4b51-8d3a-2b7ee097856a",
+  "version": "2.1.123"
+}

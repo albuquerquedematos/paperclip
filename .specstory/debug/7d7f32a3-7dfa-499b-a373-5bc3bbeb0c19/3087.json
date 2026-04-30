@@ -1,0 +1,52 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/tsconfig.json has been updated successfully.",
+        "tool_use_id": "toolu_01GAsEUoVeSVXx9SePSwdGP2",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "202a3620-1757-4625-b8ec-cd2ea32ff46d",
+  "promptId": "76fdb1bb-64b4-4188-b850-7eeac0540eca",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "202a3620-1757-4625-b8ec-cd2ea32ff46d",
+  "timestamp": "2026-04-30T16:42:34.333Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/tsconfig.json",
+    "newString": "    \"types\": [\"@cloudflare/workers-types\", \"node\"],",
+    "oldString": "    \"types\": [\"@cloudflare/workers-types\"],",
+    "originalFile": "{\n  \"extends\": \"../../tsconfig.base.json\",\n  \"compilerOptions\": {\n    \"types\": [\"@cloudflare/workers-types\"],\n    \"lib\": [\"ES2022\"],\n    \"target\": \"ES2022\",\n    \"module\": \"ES2022\",\n    \"moduleResolution\": \"bundler\",\n    \"rootDir\": \"./src\",\n    \"outDir\": \"./dist\",\n    \"noEmit\": true\n  },\n  \"include\": [\"src/**/*.ts\"]\n}\n",
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          " {",
+          "   \"extends\": \"../../tsconfig.base.json\",",
+          "   \"compilerOptions\": {",
+          "-    \"types\": [\"@cloudflare/workers-types\"],",
+          "+    \"types\": [\"@cloudflare/workers-types\", \"node\"],",
+          "     \"lib\": [\"ES2022\"],",
+          "     \"target\": \"ES2022\",",
+          "     \"module\": \"ES2022\","
+        ],
+        "newLines": 7,
+        "newStart": 1,
+        "oldLines": 7,
+        "oldStart": 1
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "6439c051-cebb-4a33-8955-9aa8d9916dd1",
+  "version": "2.1.123"
+}

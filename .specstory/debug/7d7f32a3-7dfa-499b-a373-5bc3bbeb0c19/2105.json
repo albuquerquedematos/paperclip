@@ -1,0 +1,27 @@
+{
+  "agentId": "aa8a93567f69d0116",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "856\t  }\n857\t\n858\t  async function assertCanManageInstructionsPath(req: Request, targetAgent: { id: string; companyId: string }) {\n859\t    assertCompanyAccess(req, targetAgent.companyId);\n860\t    if (req.actor.type !== \"board\") {\n861\t      throw forbidden(\n862\t        \"Only board-authenticated callers can manage instructions path or bundle configuration\",\n863\t      );\n864\t    }\n865\t    await assertBoardCanManageAgentsForCompany(req, targetAgent.companyId);\n866\t  }\n867\t\n868\t  function assertNoAgentInstructionsConfigMutation(\n869\t    req: Request,\n870\t    adapterConfig: Record\u003cstring, unknown\u003e | null | undefined,\n871\t  ) {\n872\t    if (req.actor.type !== \"agent\" || !adapterConfig) return;\n873\t    const changedSensitiveKeys = KNOWN_INSTRUCTIONS_BUNDLE_KEYS.filter((key) =\u003e adapterConfig[key] !== undefined);\n874\t    if (changedSensitiveKeys.length === 0) return;\n875\t    throw forbidden(\n876\t      `Agent-authenticated callers cannot modify instructions path or bundle configuration (${changedSensitiveKeys.join(\", \")})`,\n877\t    );\n878\t  }\n879\t\n880\t  function summarizeAgentUpdateDetails(patch: Record\u003cstring, unknown\u003e) {",
+        "tool_use_id": "toolu_015uxYfbLkixFTj7wEP9YhxJ",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "fc71571b-97e7-4662-b0ac-f95b7f7f8621",
+  "promptId": "dc405341-3479-47dd-8d57-3077b7af430f",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "fc71571b-97e7-4662-b0ac-f95b7f7f8621",
+  "timestamp": "2026-04-30T15:42:15.777Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "77b52b45-daba-4d56-ac15-e896b2e31954",
+  "version": "2.1.123"
+}

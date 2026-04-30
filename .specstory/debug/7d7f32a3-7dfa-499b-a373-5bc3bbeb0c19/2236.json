@@ -1,0 +1,27 @@
+{
+  "agentId": "ac82afa7422550819",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "3660\t      agentId: actor.agentId,\n3661\t      runId: actor.runId,\n3662\t      action: \"issue.attachment_removed\",\n3663\t      entityType: \"issue\",\n3664\t      entityId: removed.issueId,\n3665\t      details: {\n3666\t        attachmentId: removed.id,\n3667\t      },\n3668\t    });\n3669\t\n3670\t    return Response.json({ ok: true });\n3671\t  };\n3672\t\n3673\t  router.delete(\"/attachments/:attachmentId\", expressHandler(deleteAttachment, deps));\n3674\t\n3675\t  return router;\n3676\t}",
+        "tool_use_id": "toolu_0134QoPHnLHvYJEoH1uSF5nE",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "bde3d7be-78f8-475e-8393-8741f82a0bdd",
+  "promptId": "dc405341-3479-47dd-8d57-3077b7af430f",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "bde3d7be-78f8-475e-8393-8741f82a0bdd",
+  "timestamp": "2026-04-30T15:45:34.490Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "653322fa-2435-4136-9bea-007960baa923",
+  "version": "2.1.123"
+}

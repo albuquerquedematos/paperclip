@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "265\t        const pluginsDir = getAdapterPluginsDir();\n266\t        const spec = explicitVersion ? `${canonicalName}@${explicitVersion}` : canonicalName;\n267\t\n268\t        logger.info({ spec, pluginsDir }, \"Installing adapter package via npm\");\n269\t\n270\t        await execFileAsync(\"npm\", [\"install\", \"--no-save\", spec], {\n271\t          cwd: pluginsDir,\n272\t          timeout: 120_000,\n273\t        });\n274\t\n275\t        // Read installed version from package.json\n276\t        try {\n277\t          const pkgJsonPath = path.join(pluginsDir, \"node_modules\", canonicalName, \"package.json\");\n278\t          const pkgContent = await import(\"node:fs/promises\");\n279\t          const pkgRaw = await pkgContent.readFile(pkgJsonPath, \"utf-8\");\n280\t          const pkg = JSON.parse(pkgRaw);\n281\t          const v = pkg.version;\n282\t          installedVersion =\n283\t            typeof v === \"string\" \u0026\u0026 v.trim().length \u003e 0 ? v.trim() : explicitVersion;\n284\t        } catch {\n285\t          installedVersion = explicitVersion;\n286\t        }\n287\t      } else {\n288\t        // Local path — normalize (e.g., Windows → WSL) and use the resolved path\n289\t        moduleLocalPath = path.resolve(await normalizeLocalPath(packageName));\n290\t        try {\n291\t          const pkgRaw = await readFile(path.join(moduleLocalPath, \"package.json\"), \"utf-8\");\n292\t          const v = JSON.parse(pkgRaw).version;\n293\t          if (typeof v === \"string\" \u0026\u0026 v.trim().length \u003e 0) {\n294\t            installedVersion = v.trim();",
+        "tool_use_id": "toolu_01L6oJnSrSffobazxNBh9hja",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "1818a776-1e71-41bf-9b3e-e0f5331d809b",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "1818a776-1e71-41bf-9b3e-e0f5331d809b",
+  "timestamp": "2026-04-30T14:53:51.431Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "d75fa417-5da4-4aeb-b7e5-c598fe0fe8e5",
+  "version": "2.1.123"
+}

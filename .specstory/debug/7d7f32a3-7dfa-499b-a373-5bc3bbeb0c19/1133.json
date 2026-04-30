@@ -1,0 +1,26 @@
+{
+  "agentId": "a3573a14f101d1112",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\t/**\n2\t * Main Cloudflare Worker entry point for the Paperclip API.\n3\t *\n4\t * This file:\n5\t *   1. Creates a Hono app and mounts route definitions.\n6\t *   2. Implements the first-run setup gate (redirects to /setup until KV flag is set).\n7\t *   3. Handles Cloudflare Queues message batches (plugin job fanout).\n8\t *   4. Handles Cloudflare Cron Triggers (heartbeat sweep, budget checks, DB backup).\n9\t *   5. Re-exports all Durable Object and Workflow classes so Wrangler can\n10\t *      register them — they must be named exports from the Worker's main module.\n11\t */\n12\t\n13\timport { Hono } from \"hono\";\n14\timport { createSetupApp } from \"./setup.js\";\n15\timport { bootCloudflare } from \"../boot.js\";\n16\timport { SidecarClient } from \"../sidecar-client.js\";\n17\timport { CfCompanySkillsService } from \"../services/cf-company-skills.js\";\n18\timport { CfAgentInstructionsService } from \"../services/cf-agent-instructions.js\";\n19\t\n20\t// createHyperdriveDb is imported here to make it available for use when the\n21\t// HTTP adapter migration lands (PR #6/#7). Remove the comment and use it in\n22\t// the fetch handler once route modules are mounted.\n23\t// import { createHyperdriveDb } from \"../db/hyperdrive.js\";\n24\t\n25\t// ---------------------------------------------------------------------------\n26\t// Env — Cloudflare bindings injected at runtime\n27\t// ---------------------------------------------------------------------------\n28\t\n29\texport interface Env {\n30\t  // Databases\n31\t  HYPERDRIVE: { connectionString: string };\n32\t\n33\t  // Object storage\n34\t  PAPERCLIP_STORAGE: R2Bucket;\n35\t\n36\t  // KV — setup flags, hot config, session cache\n37\t  PAPERCLIP_KV: KVNamespace;\n38\t\n39\t  // Durable Object namespaces\n40\t  TASK_DO: DurableObjectNamespace;\n41\t  AGENT_RUN_DO: DurableObjectNamespace;\n42\t  SCHEDULER_DO: DurableObjectNamespace;\n43\t\n44\t  // Queues\n45\t  PAPERCLIP_QUEUE: Queue;\n46\t\n47\t  // Workflows\n48\t  HEARTBEAT_WORKFLOW: Workflow;\n49\t  PLUGIN_DISPATCH_WORKFLOW: Workflow;\n50\t\n51\t  // Vars (set in wrangler.toml [vars])\n52\t  DEPLOYMENT_PLATFORM: string;\n53\t  DEPLOYMENT_MODE: string;\n54\t  DEPLOYMENT_EXPOSURE: string;\n55\t\n56\t  // Secrets (set via `wrangler secret put`)\n57\t  // MASTER_ENCRYPTION_KEY: string  — encrypts all other secrets stored in DB\n58\t  // SANDBOX_BRIDGE_URL: string\n59\t  // SANDBOX_BRIDGE_API_KEY: string\n60\t\n61\t  // Sidecar — the Node server running alongside the Workers deployment.\n62\t  // Workers delegate filesystem, child-process, and plugin-loading operations\n63\t  // to this process over HTTP (see SidecarClient).\n64\t  SIDECAR_URL: string;\n65\t  SIDECAR_API_KEY: string;\n66\t}\n67\t\n68\t// ---------------------------------------------------------------------------\n69\t// Hono app\n70\t// ---------------------------------------------------------------------------\n71\t\n72\tconst app = new Hono\u003c{ Bindings: Env }\u003e();\n73\t\n74\t// Health check — always reachable, no auth, no setup gate\n75\tapp.get(\"/api/health\", (c) =\u003e\n76\t  c.json({\n77\t    status: \"ok\",\n78\t    platform: c.env.DEPLOYMENT_PLATFORM ?? \"cloudflare\",\n79\t    mode: c.env.DEPLOYMENT_MODE ?? \"authenticated\",\n80\t    ts: new Date().toISOString(),\n81\t  }),\n82\t);\n83\t\n84\t// First-run setup gate — redirect to /setup until SETUP_COMPLETED is \"true\"\n85\tapp.use(\"*\", async (c, next) =\u003e {\n86\t  // Allow the setup routes and health check through unconditionally\n87\t  if (c.req.path === \"/api/health\" || c.req.path.startsWith(\"/setup\")) {\n88\t    return next();\n89\t  }\n90\t",
+        "tool_use_id": "toolu_015zgFx46GKAoLm9FdHPC93j",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "805633c2-da48-4df9-a739-73352273d5f2",
+  "promptId": "41a5cab3-78a5-4305-8404-9daa35591aac",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "805633c2-da48-4df9-a739-73352273d5f2",
+  "timestamp": "2026-04-30T15:07:38.302Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "ad0ead94-f606-4d61-9fbd-28ceff9ff20f",
+  "version": "2.1.123"
+}

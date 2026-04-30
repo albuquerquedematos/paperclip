@@ -1,0 +1,27 @@
+{
+  "agentId": "ab8a7a43e45ac1ba4",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "src/http/express-adapter.ts(1,37): error TS2307: Cannot find module 'express' or its corresponding type declarations.\nsrc/http/express-adapter.ts(2,25): error TS2307: Cannot find module '@paperclipai/db' or its corresponding type declarations.\nsrc/http/express-adapter.ts(24,17): error TS7006: Parameter 'req' implicitly has an 'any' type.\nsrc/http/express-adapter.ts(24,22): error TS7006: Parameter 'res' implicitly has an 'any' type.\nsrc/http/express-adapter.ts(24,27): error TS7006: Parameter 'next' implicitly has an 'any' type.\nsrc/http/express-adapter.ts(53,29): error TS2345: Argument of type '{} | null' is not assignable to parameter of type 'string'.\nsrc/http/types.ts(1,25): error TS2307: Cannot find module '@paperclipai/db' or its corresponding type declarations.\nsrc/routes/health.ts(1,33): error TS2307: Cannot find module 'node:crypto' or its corresponding type declarations.\nsrc/routes/health.ts(2,24): error TS2307: Cannot find module 'express' or its corresponding type declarations.\nsrc/routes/health.ts(3,25): error TS2307: Cannot find module '@paperclipai/db' or its corresponding type declarations.\nsrc/routes/health.ts(4,58): error TS2307: Cannot find module 'drizzle-orm' or its corresponding type declarations.\nsrc/routes/health.ts(5,59): error TS2307: Cannot find module '@paperclipai/db' or its corresponding type declarations.\nsrc/routes/health.ts(6,57): error TS2307: Cannot find module '@paperclipai/shared' or its corresponding type declarations.\nsrc/routes/health.ts(24,25): error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.\nsrc/routes/health.ts(28,20): error TS2580: Cannot find name 'Buffer'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.\nsrc/routes/health.ts(29,20): error TS2580: Cannot find name 'Buffer'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.\nsrc/routes/health.ts(85,16): error TS7006: Parameter 'rows' implicitly has an 'any' type.\nsrc/routes/health.ts(101,18): error TS7006: Parameter 'rows' implicitly has an 'any' type.\nsrc/routes/health.ts(119,16): error TS7006: Parameter 'rows' implicitly has an 'any' type.",
+        "is_error": false,
+        "tool_use_id": "toolu_019tUHk4mQrYRmkZ79uxeVfa",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "f1af9636-1c38-4edc-a60d-04fcc7846292",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "f1af9636-1c38-4edc-a60d-04fcc7846292",
+  "timestamp": "2026-04-30T14:51:42.229Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "9bac75ed-6db8-4615-9e60-a65f73f406d2",
+  "version": "2.1.123"
+}

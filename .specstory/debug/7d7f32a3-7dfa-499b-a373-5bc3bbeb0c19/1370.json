@@ -1,0 +1,71 @@
+{
+  "agentId": "a8fd5512baf043009",
+  "attributionAgent": "general-purpose",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01Uh7Pcrgs3VSCvQcjNASTK2",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/execution-workspaces.ts",
+          "limit": 300,
+          "offset": 200
+        },
+        "name": "Read",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01UjCbgEMtZKDXNxnvuVBU6o",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 2985
+      },
+      "cache_creation_input_tokens": 2985,
+      "cache_read_input_tokens": 48227,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 2985
+          },
+          "cache_creation_input_tokens": 2985,
+          "cache_read_input_tokens": 48227,
+          "input_tokens": 1,
+          "output_tokens": 117,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 117,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "20e8eadb-f145-48e8-85a9-5c812bfa9351",
+  "requestId": "req_011CaaAp9eQgbjov5sXR56Xj",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "timestamp": "2026-04-30T15:11:26.777Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "bb539383-8774-493e-ad7a-7c1b01ac1aae",
+  "version": "2.1.123"
+}

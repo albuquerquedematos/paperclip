@@ -1,0 +1,27 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "180\t// ---------------------------------------------------------------------------\n181\t// Request handler helper\n182\t// ---------------------------------------------------------------------------\n183\t\n184\tasync function handleApiRequest(\n185\t  c: Context\u003c{ Bindings: Env }\u003e,\n186\t  route: RouteDefinition,\n187\t  db: Db,\n188\t  storage: StorageService,\n189\t): Promise\u003cResponse\u003e {\n190\t  const env = c.env;\n191\t  const deploymentMode = env.DEPLOYMENT_MODE === \"local_trusted\"\n192\t    ? \"local_trusted\" as const\n193\t    : \"authenticated\" as const;\n194\t\n195\t  const actor = await resolveActorFromRequest(c.req.raw, db, { deploymentMode });\n196\t\n197\t  const ctx: import(\"../../../server/src/http/types.js\").RequestCtx = {\n198\t    method: c.req.method,\n199\t    url: new URL(c.req.url),\n200\t    headers: new Headers(c.req.raw.headers),\n201\t    json\u003cT\u003e(): Promise\u003cT\u003e { return c.req.json\u003cT\u003e(); },\n202\t    text(): Promise\u003cstring\u003e { return c.req.text(); },\n203\t    param(name: string): string | undefined { return c.req.param(name); },\n204\t    query(name: string): string | undefined { return c.req.query(name); },\n205\t    actor,\n206\t    db,\n207\t    storage,\n208\t  };\n209\t\n210\t  try {\n211\t    return await route.handler(ctx);\n212\t  } catch (err) {\n213\t    if (err instanceof HttpError) {\n214\t      return Response.json(\n215\t        { error: err.message, ...(err.details !== undefined ? { details: err.details } : {}) },\n216\t        { status: err.status },\n217\t      );\n218\t    }\n219\t    console.error(\n220\t      `[CF Worker] Unhandled error in ${route.method} ${route.path}: ${\n221\t        err instanceof Error ? err.stack ?? err.message : String(err)\n222\t      }`,\n223\t    );\n224\t    return Response.json({ error: \"Internal Server Error\" }, { status: 500 });\n225\t  }\n226\t}\n227\t\n228\t// ---------------------------------------------------------------------------\n229\t// Hono app\n230\t// ---------------------------------------------------------------------------\n231\t\n232\tconst app = new Hono\u003c{ Bindings: Env }\u003e();\n233\t\n234\t// Health check -- always reachable\n235\tapp.get(\"/api/health\", (c) =\u003e\n236\t  c.json({\n237\t    status: \"ok\",\n238\t    platform: c.env.DEPLOYMENT_PLATFORM ?? \"cloudflare\",\n239\t    mode: c.env.DEPLOYMENT_MODE ?? \"authenticated\",\n240\t    ts: new Date().toISOString(),\n241\t  }),\n242\t);\n243\t\n244\t// First-run setup gate\n245\tapp.use(\"*\", async (c, next) =\u003e {\n246\t  if (c.req.path === \"/api/health\" || c.req.path.startsWith(\"/setup\")) {\n247\t    return next();\n248\t  }\n249\t  const setupCompleted = await c.env.PAPERCLIP_KV.get(\"SETUP_COMPLETED\");\n250\t  if (setupCompleted !== \"true\") {\n251\t    return c.redirect(\"/setup\");\n252\t  }\n253\t  return next();\n254\t});\n255\t\n256\t// Setup sub-app\n257\tapp.all(\"/setup/*\", async (c) =\u003e {\n258\t  const setupSub = createSetupApp(c.env);\n259\t  const url = new URL(c.req.url);",
+        "tool_use_id": "toolu_01GM2kyZEEAyd6cr9CKL8QBp",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "724b3976-545e-4d2a-baa4-57bc5b09b185",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "724b3976-545e-4d2a-baa4-57bc5b09b185",
+  "timestamp": "2026-04-30T16:37:37.537Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "b45f9225-4220-4d47-959f-899c6ec5af5c",
+  "version": "2.1.123"
+}

@@ -1,0 +1,52 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/storage/cf-storage-service.ts has been updated successfully.",
+        "tool_use_id": "toolu_01SYbznJmAZtCSXQS79Hgh3w",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "9b46346f-639c-47c5-950d-7da3f2880007",
+  "promptId": "76fdb1bb-64b4-4188-b850-7eeac0540eca",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "9b46346f-639c-47c5-950d-7da3f2880007",
+  "timestamp": "2026-04-30T16:53:31.065Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/storage/cf-storage-service.ts",
+    "newString": "async function sha256Hex(data: Uint8Array): Promise\u003cstring\u003e {\n  const buf = await crypto.subtle.digest(\"SHA-256\", data as BufferSource);",
+    "oldString": "async function sha256Hex(data: Uint8Array): Promise\u003cstring\u003e {\n  const buf = await crypto.subtle.digest(\"SHA-256\", data);",
+    "originalFile": "/**\n * cf-storage-service.ts — Cloudflare Workers-safe StorageService implementation.\n *\n * Wraps the R2Provider to satisfy the `StorageService` interface from\n * `server/src/storage/types.ts` without importing any Node-only modules.\n *\n * Differences from the Node `createStorageService`:\n * - `putFile` uses the Web Crypto API for SHA-256 hashing instead of\n *   `node:crypto`, and string manipulation instead of `node:path`.\n * - `body` accepts `Uint8Array | ArrayBuffer` (as R2 expects) rather than\n *   `Buffer`. Route handlers that pass a `Buffer` still work because `Buffer`\n *   is a subclass of `Uint8Array` in Node, and Workers polyfill it the same way.\n */\n\nimport { R2Provider } from \"./r2-provider.js\";\n\n// ---------------------------------------------------------------------------\n// Helpers (Workers-safe replacements for node:path / node:crypto)\n// ---------------------------------------------------------------------------\n\nconst MAX_SEGMENT_LENGTH = 120;\n\nfunction sanitizeSegment(value: string): string {\n  const cleaned = value\n    .trim()\n    .replace(/[^a-zA-Z0-9._-]+/g, \"_\")\n    .replace(/_{2,}/g, \"_\")\n    .replace(/^_+|_+$/g, \"\");\n  if (!cleaned) return \"file\";\n  return cleaned.slice(0, MAX_SEGMENT_LENGTH);\n}\n\nfunction normalizeNamespace(namespace: string): string {\n  const parts = namespace\n    .split(\"/\")\n    .map((entry) =\u003e entry.trim())\n    .filter((entry) =\u003e entry.length \u003e 0)\n    .map((entry) =\u003e sanitizeSegment(entry));\n  return parts.length === 0 ? \"misc\" : parts.join(\"/\");\n}\n\n/**\n * Pure string replacement for `path.basename` + `path.extname`.\n * Returns `{ stem, ext }` where ext includes the leading dot (if any).\n */\nfunction splitFilename(filename: string | null): { stem: string; ext: string } {\n  if (!filename) return { stem: \"file\", ext: \"\" };\n  // Strip directory separators\n  const base = filename.replace(/^.*[\\\\/]/, \"\").trim();\n  if (!base) return { stem: \"file\", ext: \"\" };\n  const dotIdx = base.lastIndexOf(\".\");\n  if (dotIdx \u003c= 0) {\n    return { stem: sanitizeSegment(base), ext: \"\" };\n  }\n  const stemRaw = base.slice(0, dotIdx);\n  const extRaw = base.slice(dotIdx); // e.g. \".png\"\n  const ext = extRaw\n    .toLowerCase()\n    .replace(/[^a-z0-9.]/g, \"\")\n    .slice(0, 16);\n  return { stem: sanitizeSegment(stemRaw), ext };\n}\n\nasync function sha256Hex(data: Uint8Array): Promise\u003cstring\u003e {\n  const buf = await crypto.subtle.digest(\"SHA-256\", data);\n  return Array.from(new Uint8Array(buf))\n    .map((b) =\u003e b.toString(16).padStart(2, \"0\"))\n    .join(\"\");\n}\n\nfunction buildObjectKey(companyId: string, namespace: string, originalFilename: string | null): string {\n  const ns = normalizeNamespace(namespace);\n  const now = new Date();\n  const year = String(now.getUTCFullYear());\n  const month = String(now.getUTCMonth() + 1).padStart(2, \"0\");\n  const day = String(now.getUTCDate()).padStart(2, \"0\");\n  const { stem, ext } = splitFilename(originalFilename);\n  const suffix = crypto.randomUUID();\n  const filename = `${suffix}-${stem}${ext}`;\n  return `${companyId}/${ns}/${year}/${month}/${day}/${filename}`;\n}\n\nfunction ensureCompanyPrefix(companyId: string, objectKey: string): void {\n  if (!objectKey.startsWith(`${companyId}/`)) {\n    throw Object.assign(new Error(\"Object does not belong to company\"), { status: 403 });\n  }\n  if (objectKey.includes(\"..\")) {\n    throw Object.assign(new Error(\"Invalid object key\"), { status: 400 });\n  }\n}\n\n// ---------------------------------------------------------------------------\n// Public factory\n// ---------------------------------------------------------------------------\n\n/**\n * Structural shape of the StorageService (matches `server/src/storage/types.ts`)\n * without importing Node-typed interfaces.\n */\nexport interface CfStorageService {\n  provider: string;\n  putFile(input: {\n    companyId: string;\n    namespace: string;\n    originalFilename: string | null;\n    contentType: string;\n    body: Uint8Array | ArrayBuffer;\n  }): Promise\u003c{\n    provider: string;\n    objectKey: string;\n    contentType: string;\n    byteSize: number;\n    sha256: string;\n    originalFilename: string | null;\n  }\u003e;\n  getObject(companyId: string, objectKey: string): Promise\u003cunknown\u003e;\n  headObject(companyId: string, objectKey: string): Promise\u003cunknown\u003e;\n  deleteObject(companyId: string, objectKey: string): Promise\u003cvoid\u003e;\n}\n\n/**\n * Create a Workers-safe StorageService backed by an R2Provider.\n */\nexport function createCfStorageService(provider: R2Provider): CfStorageService {\n  return {\n    provider: provider.id,\n\n    async putFile(input) {\n      const body =\n        input.body instanceof Uint8Array ? input.body : new Uint8Array(input.body);\n      if (body.byteLength === 0) {\n        throw Object.assign(new Error(\"File is empty\"), { status: 422 });\n      }\n      const objectKey = buildObjectKey(\n        input.companyId,\n        input.namespace,\n        input.originalFilename,\n      );\n      const contentType = input.contentType.trim().toLowerCase();\n      await provider.putObject({\n        objectKey,\n        body,\n        contentType,\n        contentLength: body.byteLength,\n      });\n      const sha256 = await sha256Hex(body);\n      return {\n        provider: provider.id,\n        objectKey,\n        contentType,\n        byteSize: body.byteLength,\n        sha256,\n        originalFilename: input.originalFilename,\n      };\n    },\n\n    async getObject(companyId: string, objectKey: string) {\n      ensureCompanyPrefix(companyId, objectKey);\n      return provider.getObject({ objectKey });\n    },\n\n    async headObject(companyId: string, objectKey: string) {\n      ensureCompanyPrefix(companyId, objectKey);\n      return provider.headObject({ objectKey });\n    },\n\n    async deleteObject(companyId: string, objectKey: string) {\n      ensureCompanyPrefix(companyId, objectKey);\n      await provider.deleteObject({ objectKey });\n    },\n  };\n}\n",
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          " }",
+          " ",
+          " async function sha256Hex(data: Uint8Array): Promise\u003cstring\u003e {",
+          "-  const buf = await crypto.subtle.digest(\"SHA-256\", data);",
+          "+  const buf = await crypto.subtle.digest(\"SHA-256\", data as BufferSource);",
+          "   return Array.from(new Uint8Array(buf))",
+          "     .map((b) =\u003e b.toString(16).padStart(2, \"0\"))",
+          "     .join(\"\");"
+        ],
+        "newLines": 7,
+        "newStart": 62,
+        "oldLines": 7,
+        "oldStart": 62
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "bd5ed499-0a12-4165-8b8f-48524d00e4c8",
+  "version": "2.1.123"
+}

@@ -1,0 +1,26 @@
+{
+  "agentId": "acedaf1c4054eec72",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "60\timport type { BetterAuthSessionResult } from \"./auth/better-auth.js\";\n61\timport { createCachedViteHtmlRenderer } from \"./vite-html-renderer.js\";\n62\t\n63\ttype UiMode = \"none\" | \"static\" | \"vite-dev\";\n64\tconst FEEDBACK_EXPORT_FLUSH_INTERVAL_MS = 5_000;\n65\tconst VITE_DEV_ASSET_PREFIXES = [\n66\t  \"/@fs/\",\n67\t  \"/@id/\",\n68\t  \"/@react-refresh\",\n69\t  \"/@vite/\",\n70\t  \"/assets/\",\n71\t  \"/node_modules/\",\n72\t  \"/src/\",\n73\t];\n74\tconst VITE_DEV_STATIC_PATHS = new Set([\n75\t  \"/apple-touch-icon.png\",\n76\t  \"/favicon-16x16.png\",\n77\t  \"/favicon-32x32.png\",\n78\t  \"/favicon.ico\",\n79\t  \"/favicon.svg\",\n80\t  \"/site.webmanifest\",\n81\t  \"/sw.js\",\n82\t]);\n83\t\n84\texport function resolveViteHmrPort(serverPort: number): number {\n85\t  if (serverPort \u003c= 55_535) {\n86\t    return serverPort + 10_000;\n87\t  }\n88\t  return Math.max(1_024, serverPort - 10_000);\n89\t}\n90\t\n91\texport function shouldServeViteDevHtml(req: ExpressRequest): boolean {\n92\t  const pathname = req.path;\n93\t  if (VITE_DEV_STATIC_PATHS.has(pathname)) return false;\n94\t  if (VITE_DEV_ASSET_PREFIXES.some((prefix) =\u003e pathname.startsWith(prefix))) return false;\n95\t  return req.accepts([\"html\"]) === \"html\";\n96\t}\n97\t\n98\texport function shouldEnablePrivateHostnameGuard(opts: {\n99\t  deploymentMode: DeploymentMode;\n100\t  deploymentExposure: DeploymentExposure;\n101\t}): boolean {\n102\t  return (\n103\t    opts.deploymentExposure === \"private\" \u0026\u0026\n104\t    (opts.deploymentMode === \"local_trusted\" || opts.deploymentMode === \"authenticated\")\n105\t  );\n106\t}\n107\t\n108\texport async function createApp(\n109\t  db: Db,\n110\t  opts: {\n111\t    uiMode: UiMode;\n112\t    serverPort: number;\n113\t    storageService: StorageService;\n114\t    feedbackExportService?: {\n115\t      flushPendingFeedbackTraces(input?: {\n116\t        companyId?: string;\n117\t        traceId?: string;\n118\t        limit?: number;\n119\t        now?: Date;\n120\t      }): Promise\u003cunknown\u003e;\n121\t    };\n122\t    databaseBackupService?: InstanceDatabaseBackupService;\n123\t    deploymentMode: DeploymentMode;\n124\t    deploymentExposure: DeploymentExposure;\n125\t    allowedHostnames: string[];\n126\t    bindHost: string;\n127\t    authReady: boolean;\n128\t    companyDeletionEnabled: boolean;\n129\t    instanceId?: string;\n130\t    hostVersion?: string;\n131\t    localPluginDir?: string;\n132\t    pluginMigrationDb?: Db;\n133\t    pluginWorkerManager?: PluginWorkerManager;\n134\t    betterAuthHandler?: express.RequestHandler;\n135\t    resolveSession?: (req: ExpressRequest) =\u003e Promise\u003cBetterAuthSessionResult | null\u003e;\n136\t  },\n137\t) {\n138\t  const app = express();\n139\t\n140\t  app.use(express.json({\n141\t    // Company import/export payloads can inline full portable packages.\n142\t    limit: \"10mb\",\n143\t    verify: (req, _res, buf) =\u003e {\n144\t      (req as unknown as { rawBody: Buffer }).rawBody = buf;\n145\t    },\n146\t  }));\n147\t  app.use(httpLogger);\n148\t  const privateHostnameGateEnabled = shouldEnablePrivateHostnameGuard({\n149\t    deploymentMode: opts.deploymentMode,\n150\t    deploymentExposure: opts.deploymentExposure,\n151\t  });\n152\t  const privateHostnameAllowSet = resolvePrivateHostnameAllowSet({\n153\t    allowedHostnames: opts.allowedHostnames,\n154\t    bindHost: opts.bindHost,\n155\t  });\n156\t  app.use(\n157\t    privateHostnameGuard({\n158\t      enabled: privateHostnameGateEnabled,\n159\t      allowedHostnames: opts.allowedHostnames,\n160\t      bindHost: opts.bindHost,\n161\t    }),\n162\t  );\n163\t  app.use(\n164\t    actorMiddleware(db, {\n165\t      deploymentMode: opts.deploymentMode,\n166\t      resolveSession: opts.resolveSession,\n167\t    }),\n168\t  );\n169\t  app.use(\"/api/auth\", authRoutes(db));\n170\t  if (opts.betterAuthHandler) {\n171\t    app.all(\"/api/auth/{*authPath}\", opts.betterAuthHandler);\n172\t  }\n173\t  app.use(llmRoutes(db));\n174\t\n175\t  const hostServicesDisposers = new Map\u003cstring, () =\u003e void\u003e();\n176\t  const workerManager = opts.pluginWorkerManager ?? createPluginWorkerManager();\n177\t\n178\t  // Mount API routes\n179\t  const api = Router();",
+        "tool_use_id": "toolu_01Brm88uzBYj8p4YRm4AnXfy",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "0cac45cb-bd97-433e-96c4-60e0233e48b0",
+  "promptId": "41a5cab3-78a5-4305-8404-9daa35591aac",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "0cac45cb-bd97-433e-96c4-60e0233e48b0",
+  "timestamp": "2026-04-30T15:06:20.264Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "b82d64bb-33bb-4609-8044-d7a922962a92",
+  "version": "2.1.123"
+}

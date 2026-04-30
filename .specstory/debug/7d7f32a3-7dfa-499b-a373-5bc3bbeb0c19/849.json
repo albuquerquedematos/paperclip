@@ -1,0 +1,26 @@
+{
+  "agentId": "acedaf1c4054eec72",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport type { Db } from \"@paperclipai/db\";\n2\timport type { StorageService } from \"../storage/types.js\";\n3\t\n4\t/** Normalized actor from auth middleware — only set when authenticated (not \"none\"). */\n5\texport interface ActorContext {\n6\t  type: \"board\" | \"agent\";\n7\t  userId?: string;\n8\t  agentId?: string;\n9\t  companyId?: string;\n10\t}\n11\t\n12\t/** Minimal normalized request passed to every handler. */\n13\texport interface RequestCtx {\n14\t  method: string;\n15\t  url: URL;\n16\t  headers: Headers;\n17\t  json\u003cT = unknown\u003e(): Promise\u003cT\u003e;\n18\t  text(): Promise\u003cstring\u003e;\n19\t  /** Path param: e.g. ctx.param(\"companyId\") */\n20\t  param(name: string): string | undefined;\n21\t  /** Query param */\n22\t  query(name: string): string | undefined;\n23\t  actor: ActorContext | null;\n24\t  db: Db;\n25\t  storage: StorageService;\n26\t}\n27\t\n28\texport type Handler = (ctx: RequestCtx) =\u003e Promise\u003cResponse\u003e;\n29\t\n30\texport interface RouteDefinition {\n31\t  method: \"GET\" | \"POST\" | \"PUT\" | \"PATCH\" | \"DELETE\";\n32\t  /** Express-style path, e.g. /api/companies/:companyId */\n33\t  path: string;\n34\t  handler: Handler;\n35\t}\n36\t",
+        "tool_use_id": "toolu_018n8eJrSsKk1QJbSaJSnqty",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "6e1017a3-3d01-4a31-9724-acfbe70b1a53",
+  "promptId": "41a5cab3-78a5-4305-8404-9daa35591aac",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "6e1017a3-3d01-4a31-9724-acfbe70b1a53",
+  "timestamp": "2026-04-30T15:05:02.483Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "f94af86e-4991-4e79-ad49-d8b51c5cac7d",
+  "version": "2.1.123"
+}

@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "1809:    res.status(201).json({ agent, approval });\n1822:      res.status(404).json({ error: \"Company not found\" });\n1925:    res.status(201).json(agent);\n1932:      res.status(404).json({ error: \"Agent not found\" });\n1940:        res.status(403).json({ error: \"Forbidden\" });\n1944:        res.status(403).json({ error: \"Only CEO can manage permissions\" });\n1953:      res.status(404).json({ error: \"Agent not found\" });\n1985:    res.json(await buildAgentDetail(agent));\n1996:      res.status(404).json({ error: \"Agent not found\" });\n2007:      res.status(422).json({\n2039:      res.status(404).json({ error: \"Agent not found\" });\n2062:    res.json({\n2074:      res.status(404).json({ error: \"Agent not found\" });\n2078:    res.json(await instructions.getBundle(existing));\n2085:      res.status(404).json({ error: \"Agent not found\" });\n2126:    res.json(bundle);\n2133:      res.status(404).json({ error: \"Agent not found\" });\n2140:      res.status(422).json({ error: \"Query parameter 'path' is required\" });\n2144:    res.json(await instructions.readFile(existing, relativePath));\n2151:      res.status(404).json({ error: \"Agent not found\" });",
+        "is_error": false,
+        "tool_use_id": "toolu_01NohArgzx1ceeTAM7DfCm3k",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "806847bd-e5cd-494b-b527-9d2b5de74c3b",
+  "promptId": "a7d059d2-a228-4b98-b9c8-2306fb529ce9",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "806847bd-e5cd-494b-b527-9d2b5de74c3b",
+  "timestamp": "2026-04-30T16:05:08.020Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "1809:    res.status(201).json({ agent, approval });\n1822:      res.status(404).json({ error: \"Company not found\" });\n1925:    res.status(201).json(agent);\n1932:      res.status(404).json({ error: \"Agent not found\" });\n1940:        res.status(403).json({ error: \"Forbidden\" });\n1944:        res.status(403).json({ error: \"Only CEO can manage permissions\" });\n1953:      res.status(404).json({ error: \"Agent not found\" });\n1985:    res.json(await buildAgentDetail(agent));\n1996:      res.status(404).json({ error: \"Agent not found\" });\n2007:      res.status(422).json({\n2039:      res.status(404).json({ error: \"Agent not found\" });\n2062:    res.json({\n2074:      res.status(404).json({ error: \"Agent not found\" });\n2078:    res.json(await instructions.getBundle(existing));\n2085:      res.status(404).json({ error: \"Agent not found\" });\n2126:    res.json(bundle);\n2133:      res.status(404).json({ error: \"Agent not found\" });\n2140:      res.status(422).json({ error: \"Query parameter 'path' is required\" });\n2144:    res.json(await instructions.readFile(existing, relativePath));\n2151:      res.status(404).json({ error: \"Agent not found\" });"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "857eb050-9e45-43b1-bae2-74baa5b1af8b",
+  "version": "2.1.123"
+}

@@ -1,0 +1,27 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\texport class HttpError extends Error {\n2\t  status: number;\n3\t  details?: unknown;\n4\t\n5\t  constructor(status: number, message: string, details?: unknown) {\n6\t    super(message);\n7\t    this.status = status;\n8\t    this.details = details;\n9\t  }\n10\t}\n11\t\n12\texport function badRequest(message: string, details?: unknown) {\n13\t  return new HttpError(400, message, details);\n14\t}\n15\t\n16\texport function unauthorized(message = \"Unauthorized\") {\n17\t  return new HttpError(401, message);\n18\t}\n19\t\n20\texport function forbidden(message = \"Forbidden\") {\n21\t  return new HttpError(403, message);\n22\t}\n23\t\n24\texport function notFound(message = \"Not found\") {\n25\t  return new HttpError(404, message);\n26\t}\n27\t\n28\texport function conflict(message: string, details?: unknown) {\n29\t  return new HttpError(409, message, details);\n30\t}\n31\t\n32\texport function unprocessable(message: string, details?: unknown) {\n33\t  return new HttpError(422, message, details);\n34\t}\n35\t",
+        "tool_use_id": "toolu_01WDyzKBwr9qwmS7EnMAdsK1",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "a1293ca7-2daf-479b-b8bd-b9a6f82c9aa1",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "a1293ca7-2daf-479b-b8bd-b9a6f82c9aa1",
+  "timestamp": "2026-04-30T16:20:27.607Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "ec953a56-cff8-4da5-abdf-8e040219e7ea",
+  "version": "2.1.123"
+}

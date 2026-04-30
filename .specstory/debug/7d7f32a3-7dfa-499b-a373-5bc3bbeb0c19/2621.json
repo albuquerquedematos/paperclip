@@ -1,0 +1,71 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "attributionAgent": "backend-architect",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01TohaQDGosJQZPKx1GKUKDi",
+        "input": {
+          "content": "/**\n * cf-uploads.ts — R2-native file upload endpoints for the Cloudflare Worker.\n *\n * These replace the multer-based multipart upload routes from\n * `server/src/routes/assets.ts` and `server/src/routes/issues.ts` which\n * depend on Node.js streams and the `multer` middleware.\n *\n * Instead, we stream the raw request body directly to R2 using the Web Streams\n * API (`c.req.raw.body`), which is natively supported in the Workers runtime.\n *\n * Auth: the actor is read from the Hono context variable set by the per-request\n * `resolveActor` middleware in `api.ts`.\n */\n\nimport type { Hono } from \"hono\";\nimport type { Db } from \"@paperclipai/db\";\nimport { assets, issues } from \"@paperclipai/db\";\nimport { eq } from \"drizzle-orm\";\nimport { forbidden, notFound, badRequest } from \"../../../../server/src/errors.js\";\nimport type { Env } from \"../worker/api.js\";\nimport type { ActorContext } from \"../../../../server/src/http/types.js\";\n\n// ---------------------------------------------------------------------------\n// Helpers\n// ---------------------------------------------------------------------------\n\nfunction assertCompanyAccess(actor: ActorContext | null, companyId: string): void {\n  if (!actor) throw forbidden(\"Authentication required\");\n  if (actor.type === \"board\") {\n    if (actor.isInstanceAdmin) return;\n    if (actor.companyIds?.includes(companyId)) return;\n    throw forbidden(\"No access to this company\");\n  }\n  if (actor.type === \"agent\") {\n    if (actor.companyId === companyId) return;\n    throw forbidden(\"No access to this company\");\n  }\n  throw forbidden(\"No access to this company\");\n}\n\nfunction getActorFromCtx(actorRaw: unknown): ActorContext | null {\n  if (!actorRaw || typeof actorRaw !== \"object\") return null;\n  const a = actorRaw as Record\u003cstring, unknown\u003e;\n  if (a[\"type\"] !== \"board\" \u0026\u0026 a[\"type\"] !== \"agent\") return null;\n  return actorRaw as ActorContext;\n}\n\n// ---------------------------------------------------------------------------\n// Route mount\n// ---------------------------------------------------------------------------\n\n/**\n * Mount R2-native upload endpoints on the Hono app.\n *\n * Endpoints:\n *   PUT  /api/assets/:assetId/upload\n *        Streams the request body to R2 under `assets/{companyId}/{assetId}`.\n *        Looks up the asset record to derive companyId and validates access.\n *\n *   POST /api/issues/:issueId/attachments/upload\n *        Streams the request body to R2 under\n *        `issues/{companyId}/{issueId}/attachments/{filename}`.\n *        `filename` is taken from the `X-Filename` header or falls back to\n *        `attachment`.\n */\nexport function mountUploadRoutes(\n  app: Hono\u003c{ Bindings: Env }\u003e,\n  db: Db,\n): void {\n  // PUT /api/assets/:assetId/upload\n  app.put(\"/api/assets/:assetId/upload\", async (c) =\u003e {\n    try {\n      const assetId = c.req.param(\"assetId\");\n      if (!assetId) return c.json({ error: \"Missing assetId\" }, 400);\n\n      const actor = getActorFromCtx(c.get(\"actor\" as never));\n\n      const assetRow = await db\n        .select()\n        .from(assets)\n        .where(eq(assets.id, assetId))\n        .then((rows) =\u003e rows[0] ?? null);\n\n      if (!assetRow) throw notFound(\"Asset not found\");\n\n      assertCompanyAccess(actor, assetRow.companyId);\n\n      const body = c.req.raw.body;\n      if (!body) throw badRequest(\"Empty request body\");\n\n      const key = `assets/${assetRow.companyId}/${assetId}`;\n      const contentType =\n        c.req.header(\"content-type\") ?? \"application/octet-stream\";\n\n      await c.env.PAPERCLIP_STORAGE.put(key, body, {\n        httpMetadata: { contentType },\n      });\n\n      return c.json({ ok: true, key });\n    } catch (err) {\n      if (err instanceof Error \u0026\u0026 \"status\" in err) {\n        const he = err as { status: number; message: string };\n        return c.json({ error: he.message }, he.status as 400 | 403 | 404);\n      }\n      console.error(\"[cf-uploads] PUT /api/assets/:assetId/upload\", err);\n      return c.json({ error: \"Internal Server Error\" }, 500);\n    }\n  });\n\n  // POST /api/issues/:issueId/attachments/upload\n  app.post(\"/api/issues/:issueId/attachments/upload\", async (c) =\u003e {\n    try {\n      const issueId = c.req.param(\"issueId\");\n      if (!issueId) return c.json({ error: \"Missing issueId\" }, 400);\n\n      const actor = getActorFromCtx(c.get(\"actor\" as never));\n\n      const issueRow = await db\n        .select({ id: issues.id, companyId: issues.companyId })\n        .from(issues)\n        .where(eq(issues.id, issueId))\n        .then((rows) =\u003e rows[0] ?? null);\n\n      if (!issueRow) throw notFound(\"Issue not found\");\n\n      assertCompanyAccess(actor, issueRow.companyId);\n\n      const body = c.req.raw.body;\n      if (!body) throw badRequest(\"Empty request body\");\n\n      const filename =\n        c.req.header(\"x-filename\")?.replace(/[^a-zA-Z0-9._-]/g, \"_\") ?? \"attachment\";\n      const contentType =\n        c.req.header(\"content-type\") ?? \"application/octet-stream\";\n\n      const key = `issues/${issueRow.companyId}/${issueId}/attachments/${filename}`;\n\n      await c.env.PAPERCLIP_STORAGE.put(key, body, {\n        httpMetadata: { contentType },\n      });\n\n      return c.json({ ok: true, key, filename });\n    } catch (err) {\n      if (err instanceof Error \u0026\u0026 \"status\" in err) {\n        const he = err as { status: number; message: string };\n        return c.json({ error: he.message }, he.status as 400 | 403 | 404);\n      }\n      console.error(\"[cf-uploads] POST /api/issues/:issueId/attachments/upload\", err);\n      return c.json({ error: \"Internal Server Error\" }, 500);\n    }\n  });\n}\n",
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/routes/cf-uploads.ts"
+        },
+        "name": "Write",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_015Wq4Sn3HqUPiKpGu8ifQK8",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 564
+      },
+      "cache_creation_input_tokens": 564,
+      "cache_read_input_tokens": 69122,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 564
+          },
+          "cache_creation_input_tokens": 564,
+          "cache_read_input_tokens": 69122,
+          "input_tokens": 1,
+          "output_tokens": 1816,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 1816,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "3109b095-396f-4aa9-b2c1-d8e77200c6f5",
+  "requestId": "req_011CaaGeBJJ8YhbcqYCsSBYx",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "timestamp": "2026-04-30T16:28:13.972Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "388bb3d6-1942-4ad9-bf05-8950af4c8866",
+  "version": "2.1.123"
+}

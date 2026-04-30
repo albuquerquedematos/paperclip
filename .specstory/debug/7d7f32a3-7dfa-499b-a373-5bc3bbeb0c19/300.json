@@ -1,0 +1,27 @@
+{
+  "agentId": "adabf466a1a877701",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "  \"exports\": {\n    \".\": \"./src/index.ts\",\n    \"./*\": \"./src/*.ts\"\n  },\n  \"publishConfig\": {\n    \"access\": \"public\",\n    \"exports\": {\n      \".\": {\n        \"types\": \"./dist/index.d.ts\",\n        \"import\": \"./dist/index.js\"\n      },\n      \"./*\": {\n        \"types\": \"./dist/*.d.ts\",\n        \"import\": \"./dist/*.js\"\n      }\n    },\n    \"main\": \"./dist/index.js\",\n    \"types\": \"./dist/index.d.ts\"\n  },\n  \"files\": [\n    \"dist\"\n  ],\n  \"scripts\": {\n    \"build\": \"tsc\",\n    \"clean\": \"rm -rf dist\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"^24.6.0\",\n    \"typescript\": \"^5.7.3\"\n  }\n}",
+        "is_error": false,
+        "tool_use_id": "toolu_01VtcCpUdeupmvGngEYiEpWM",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "d6913179-6a02-408b-a5df-67e09d19d02f",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "d6913179-6a02-408b-a5df-67e09d19d02f",
+  "timestamp": "2026-04-30T14:51:03.184Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "d5b8daf6-ba4f-4e75-8c9b-547151509e9d",
+  "version": "2.1.123"
+}

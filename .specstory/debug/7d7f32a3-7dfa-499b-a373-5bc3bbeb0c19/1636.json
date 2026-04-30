@@ -1,0 +1,27 @@
+{
+  "agentId": "a63f4a588ad785603",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "34:import { expressHandler } from \"../http/express-adapter.js\";\n76:  const listExecutionWorkspaces: Handler = async (ctx) =\u003e {\n93:  const getExecutionWorkspace: Handler = async (ctx) =\u003e {\n104:  const getExecutionWorkspaceCloseReadiness: Handler = async (ctx) =\u003e {\n119:  const listWorkspaceOperations: Handler = async (ctx) =\u003e {\n131:  const handleRuntimeCommand: Handler = async (ctx) =\u003e {\n146:    // The handler is wired via expressHandler so the Express req is available in\n149:    // we must keep it on the Express path — the expressHandler bridge is the\n469:  const updateExecutionWorkspace: Handler = async (ctx) =\u003e {\n652:  // Wire handlers via expressHandler\n657:  router.get(\"/companies/:companyId/execution-workspaces\", expressHandler(listExecutionWorkspaces, adapterDeps));\n658:  router.get(\"/execution-workspaces/:id\", expressHandler(getExecutionWorkspace, adapterDeps));\n659:  router.get(\"/execution-workspaces/:id/close-readiness\", expressHandler(getExecutionWorkspaceCloseReadiness, adapterDeps));\n660:  router.get(\"/execution-workspaces/:id/workspace-operations\", expressHandler(listWorkspaceOperations, adapterDeps));\n680:    expressHandler(handleRuntimeCommand, adapterDeps),\n697:    expressHandler(handleRuntimeCommand, adapterDeps),\n703:    expressHandler(updateExecutionWorkspace, adapterDeps),",
+        "is_error": false,
+        "tool_use_id": "toolu_01E3VGbRtqJCKkVzFAcRca9T",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "f87499a6-db8e-413d-89a7-e22c4cccad67",
+  "promptId": "f70e47c2-d340-4417-9b6f-d01ec6a1d002",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "f87499a6-db8e-413d-89a7-e22c4cccad67",
+  "timestamp": "2026-04-30T15:17:08.511Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "acede4c2-306b-498a-8f61-6320faeb1b74",
+  "version": "2.1.123"
+}

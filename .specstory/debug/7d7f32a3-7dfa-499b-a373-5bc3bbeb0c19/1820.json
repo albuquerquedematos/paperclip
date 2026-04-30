@@ -1,0 +1,26 @@
+{
+  "agentId": "a8fd5512baf043009",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { forbidden } from \"../errors.js\";\n2\timport type { AuthzReq } from \"./authz.js\";\n3\t\n4\tfunction isRecord(value: unknown): value is Record\u003cstring, unknown\u003e {\n5\t  return typeof value === \"object\" \u0026\u0026 value !== null \u0026\u0026 !Array.isArray(value);\n6\t}\n7\t\n8\tfunction hasOwn(value: Record\u003cstring, unknown\u003e, key: string) {\n9\t  return Object.prototype.hasOwnProperty.call(value, key);\n10\t}",
+        "tool_use_id": "toolu_01R4ajRBaEiHjqHZYS3DLR7t",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "61d423df-7a72-4189-a970-67e3bc9efc39",
+  "promptId": "e14e6903-86b2-440b-8601-db2551c5adc3",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "61d423df-7a72-4189-a970-67e3bc9efc39",
+  "timestamp": "2026-04-30T15:19:46.969Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "62466629-d0cf-4538-a42f-67a0ebb8c898",
+  "version": "2.1.123"
+}

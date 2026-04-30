@@ -1,0 +1,87 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/storage/provider-registry.ts has been updated successfully.",
+        "tool_use_id": "toolu_019gAAnKmqEhQVLxYbWSP8YM",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "8723cdf5-8a62-41d8-b4fb-13407cc3a837",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "8723cdf5-8a62-41d8-b4fb-13407cc3a837",
+  "timestamp": "2026-04-30T14:48:50.844Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/storage/provider-registry.ts",
+    "newString": "import type { Config } from \"../config.js\";\nimport type { StorageProvider as StorageProviderImpl } from \"./types.js\";\nimport type { StorageProvider as StorageProviderId } from \"@paperclipai/shared\";\nimport { createLocalDiskStorageProvider } from \"./local-disk-provider.js\";\nimport { createS3StorageProvider } from \"./s3-provider.js\";\n\ntype StorageProviderFactory = (config: Config) =\u003e StorageProviderImpl;\nconst externalProviders = new Map\u003cStorageProviderId, StorageProviderFactory\u003e();\n\nexport function registerStorageProvider(id: StorageProviderId, factory: StorageProviderFactory): void {\n  externalProviders.set(id, factory);\n}\n\nexport function createStorageProviderFromConfig(config: Config): StorageProviderImpl {\n  if (config.storageProvider === \"local_disk\") {\n    return createLocalDiskStorageProvider(config.storageLocalDiskBaseDir);\n  }\n\n  if (config.storageProvider === \"s3\") {\n    return createS3StorageProvider({\n      bucket: config.storageS3Bucket,\n      region: config.storageS3Region,\n      endpoint: config.storageS3Endpoint,\n      prefix: config.storageS3Prefix,\n      forcePathStyle: config.storageS3ForcePathStyle,\n    });\n  }\n\n  const external = externalProviders.get(config.storageProvider);\n  if (external) {\n    return external(config);\n  }\n\n  throw new Error(`Unknown storage provider: ${config.storageProvider}`);\n}",
+    "oldString": "import type { Config } from \"../config.js\";\nimport type { StorageProvider } from \"./types.js\";\nimport { createLocalDiskStorageProvider } from \"./local-disk-provider.js\";\nimport { createS3StorageProvider } from \"./s3-provider.js\";\n\nexport function createStorageProviderFromConfig(config: Config): StorageProvider {\n  if (config.storageProvider === \"local_disk\") {\n    return createLocalDiskStorageProvider(config.storageLocalDiskBaseDir);\n  }\n\n  return createS3StorageProvider({\n    bucket: config.storageS3Bucket,\n    region: config.storageS3Region,\n    endpoint: config.storageS3Endpoint,\n    prefix: config.storageS3Prefix,\n    forcePathStyle: config.storageS3ForcePathStyle,\n  });\n}",
+    "originalFile": "import type { Config } from \"../config.js\";\nimport type { StorageProvider } from \"./types.js\";\nimport { createLocalDiskStorageProvider } from \"./local-disk-provider.js\";\nimport { createS3StorageProvider } from \"./s3-provider.js\";\n\nexport function createStorageProviderFromConfig(config: Config): StorageProvider {\n  if (config.storageProvider === \"local_disk\") {\n    return createLocalDiskStorageProvider(config.storageLocalDiskBaseDir);\n  }\n\n  return createS3StorageProvider({\n    bucket: config.storageS3Bucket,\n    region: config.storageS3Region,\n    endpoint: config.storageS3Endpoint,\n    prefix: config.storageS3Prefix,\n    forcePathStyle: config.storageS3ForcePathStyle,\n  });\n}\n",
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          " import type { Config } from \"../config.js\";",
+          "-import type { StorageProvider } from \"./types.js\";",
+          "+import type { StorageProvider as StorageProviderImpl } from \"./types.js\";",
+          "+import type { StorageProvider as StorageProviderId } from \"@paperclipai/shared\";",
+          " import { createLocalDiskStorageProvider } from \"./local-disk-provider.js\";",
+          " import { createS3StorageProvider } from \"./s3-provider.js\";",
+          " ",
+          "-export function createStorageProviderFromConfig(config: Config): StorageProvider {",
+          "+type StorageProviderFactory = (config: Config) =\u003e StorageProviderImpl;",
+          "+const externalProviders = new Map\u003cStorageProviderId, StorageProviderFactory\u003e();",
+          "+",
+          "+export function registerStorageProvider(id: StorageProviderId, factory: StorageProviderFactory): void {",
+          "+  externalProviders.set(id, factory);",
+          "+}",
+          "+",
+          "+export function createStorageProviderFromConfig(config: Config): StorageProviderImpl {",
+          "   if (config.storageProvider === \"local_disk\") {",
+          "     return createLocalDiskStorageProvider(config.storageLocalDiskBaseDir);",
+          "   }",
+          " ",
+          "-  return createS3StorageProvider({",
+          "-    bucket: config.storageS3Bucket,",
+          "-    region: config.storageS3Region,",
+          "-    endpoint: config.storageS3Endpoint,",
+          "-    prefix: config.storageS3Prefix,",
+          "-    forcePathStyle: config.storageS3ForcePathStyle,",
+          "-  });",
+          "+  if (config.storageProvider === \"s3\") {",
+          "+    return createS3StorageProvider({",
+          "+      bucket: config.storageS3Bucket,",
+          "+      region: config.storageS3Region,",
+          "+      endpoint: config.storageS3Endpoint,",
+          "+      prefix: config.storageS3Prefix,",
+          "+      forcePathStyle: config.storageS3ForcePathStyle,",
+          "+    });",
+          "+  }",
+          "+",
+          "+  const external = externalProviders.get(config.storageProvider);",
+          "+  if (external) {",
+          "+    return external(config);",
+          "+  }",
+          "+",
+          "+  throw new Error(`Unknown storage provider: ${config.storageProvider}`);",
+          " }"
+        ],
+        "newLines": 35,
+        "newStart": 1,
+        "oldLines": 18,
+        "oldStart": 1
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "c674a478-dc2b-45c0-b678-31e0f1a615cc",
+  "version": "2.1.123"
+}

@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "2544\t      }\n2545\t    } else {\n2546\t      await assertBoardCanManageAgentsForCompany(ctx, agent.companyId);\n2547\t    }\n2548\t\n2549\t    const body = await ctx.json\u003cRecord\u003cstring, unknown\u003e\u003e();\n2550\t    const run = await heartbeat.wakeup(id, {\n2551\t      source: body.source as string,\n2552\t      triggerDetail: (body.triggerDetail as string) ?? \"manual\",\n2553\t      reason: (body.reason as string | null) ?? null,\n2554\t      payload: (body.payload as Record\u003cstring, unknown\u003e | null) ?? null,\n2555\t      idempotencyKey: (body.idempotencyKey as string | null) ?? null,\n2556\t      requestedByActorType: ctx.actor?.type === \"agent\" ? \"agent\" : \"user\",\n2557\t      requestedByActorId: ctx.actor?.type === \"agent\" ? ctx.actor.agentId ?? null : (ctx.actor?.userId ?? null),\n2558\t      contextSnapshot: {\n2559\t        triggeredBy: ctx.actor?.type ?? \"none\",\n2560\t        actorId: ctx.actor?.type === \"agent\" ? ctx.actor.agentId : ctx.actor?.userId,\n2561\t        forceFreshSession: body.forceFreshSession === true,\n2562\t      },\n2563\t    });",
+        "tool_use_id": "toolu_01WxqMajj7Uc9LzitjYxcEP8",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "61e7c977-f2a6-4a1d-8a47-d9166b87a548",
+  "promptId": "ba96a81e-2351-4b03-969f-bc172383cdd1",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "61e7c977-f2a6-4a1d-8a47-d9166b87a548",
+  "timestamp": "2026-04-30T16:35:49.733Z",
+  "toolUseResult": {
+    "file": {
+      "content": "      }\n    } else {\n      await assertBoardCanManageAgentsForCompany(ctx, agent.companyId);\n    }\n\n    const body = await ctx.json\u003cRecord\u003cstring, unknown\u003e\u003e();\n    const run = await heartbeat.wakeup(id, {\n      source: body.source as string,\n      triggerDetail: (body.triggerDetail as string) ?? \"manual\",\n      reason: (body.reason as string | null) ?? null,\n      payload: (body.payload as Record\u003cstring, unknown\u003e | null) ?? null,\n      idempotencyKey: (body.idempotencyKey as string | null) ?? null,\n      requestedByActorType: ctx.actor?.type === \"agent\" ? \"agent\" : \"user\",\n      requestedByActorId: ctx.actor?.type === \"agent\" ? ctx.actor.agentId ?? null : (ctx.actor?.userId ?? null),\n      contextSnapshot: {\n        triggeredBy: ctx.actor?.type ?? \"none\",\n        actorId: ctx.actor?.type === \"agent\" ? ctx.actor.agentId : ctx.actor?.userId,\n        forceFreshSession: body.forceFreshSession === true,\n      },\n    });",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/agents.ts",
+      "numLines": 20,
+      "startLine": 2544,
+      "totalLines": 2972
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "099db591-c823-4ba5-a1a2-01753dae97a7",
+  "version": "2.1.123"
+}

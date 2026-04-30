@@ -1,0 +1,26 @@
+{
+  "agentId": "a28a63530ac1fc5de",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport type { Request, RequestHandler } from \"express\";\n2\timport type { IncomingHttpHeaders } from \"node:http\";\n3\timport { betterAuth } from \"better-auth\";\n4\timport { drizzleAdapter } from \"better-auth/adapters/drizzle\";\n5\timport { toNodeHandler } from \"better-auth/node\";\n6\timport type { Db } from \"@paperclipai/db\";\n7\timport {\n8\t  authAccounts,\n9\t  authSessions,\n10\t  authUsers,\n11\t  authVerifications,\n12\t} from \"@paperclipai/db\";\n13\timport type { Config } from \"../config.js\";\n14\timport { resolvePaperclipInstanceId } from \"../home-paths.js\";\n15\t\n16\texport type BetterAuthSessionUser = {\n17\t  id: string;\n18\t  email?: string | null;\n19\t  name?: string | null;\n20\t};\n21\t\n22\texport type BetterAuthSessionResult = {\n23\t  session: { id: string; userId: string } | null;\n24\t  user: BetterAuthSessionUser | null;\n25\t};\n26\t\n27\ttype BetterAuthInstance = ReturnType\u003ctypeof betterAuth\u003e;\n28\t\n29\tconst AUTH_COOKIE_PREFIX_FALLBACK = \"default\";\n30\tconst AUTH_COOKIE_PREFIX_INVALID_SEGMENTS_RE = /[^a-zA-Z0-9_-]+/g;\n31\t\n32\texport function deriveAuthCookiePrefix(instanceId = resolvePaperclipInstanceId()): string {\n33\t  const scopedInstanceId = instanceId\n34\t    .trim()\n35\t    .replace(AUTH_COOKIE_PREFIX_INVALID_SEGMENTS_RE, \"-\")\n36\t    .replace(/^-+|-+$/g, \"\") || AUTH_COOKIE_PREFIX_FALLBACK;\n37\t  return `paperclip-${scopedInstanceId}`;\n38\t}\n39\t\n40\texport function buildBetterAuthAdvancedOptions(input: { disableSecureCookies: boolean }) {\n41\t  return {\n42\t    cookiePrefix: deriveAuthCookiePrefix(),\n43\t    ...(input.disableSecureCookies ? { useSecureCookies: false } : {}),\n44\t  };\n45\t}\n46\t\n47\tfunction headersFromNodeHeaders(rawHeaders: IncomingHttpHeaders): Headers {\n48\t  const headers = new Headers();\n49\t  for (const [key, raw] of Object.entries(rawHeaders)) {\n50\t    if (!raw) continue;\n51\t    if (Array.isArray(raw)) {\n52\t      for (const value of raw) headers.append(key, value);\n53\t      continue;\n54\t    }\n55\t    headers.set(key, raw);\n56\t  }\n57\t  return headers;\n58\t}\n59\t\n60\tfunction headersFromExpressRequest(req: Request): Headers {\n61\t  return headersFromNodeHeaders(req.headers);\n62\t}\n63\t\n64\texport function deriveAuthTrustedOrigins(config: Config, opts?: { listenPort?: number }): string[] {\n65\t  const baseUrl = config.authBaseUrlMode === \"explicit\" ? config.authPublicBaseUrl : undefined;\n66\t  const trustedOrigins = new Set\u003cstring\u003e();\n67\t\n68\t  if (baseUrl) {\n69\t    try {\n70\t      trustedOrigins.add(new URL(baseUrl).origin);\n71\t    } catch {\n72\t      // Better Auth will surface invalid base URL separately.\n73\t    }\n74\t  }\n75\t  if (config.deploymentMode === \"authenticated\") {\n76\t    const port = opts?.listenPort ?? config.port;\n77\t    const needsPortVariants = port !== 80 \u0026\u0026 port !== 443;\n78\t    for (const hostname of config.allowedHostnames) {\n79\t      const trimmed = hostname.trim().toLowerCase();\n80\t      if (!trimmed) continue;\n81\t      trustedOrigins.add(`https://${trimmed}`);\n82\t      trustedOrigins.add(`http://${trimmed}`);\n83\t      if (needsPortVariants) {\n84\t        trustedOrigins.add(`https://${trimmed}:${port}`);\n85\t        trustedOrigins.add(`http://${trimmed}:${port}`);\n86\t      }\n87\t    }\n88\t  }\n89\t\n90\t  return Array.from(trustedOrigins);\n91\t}\n92\t\n93\texport function createBetterAuthInstance(db: Db, config: Config, trustedOrigins: string[]): BetterAuthInstance {\n94\t  const baseUrl = config.authBaseUrlMode === \"explicit\" ? config.authPublicBaseUrl : undefined;\n95\t  const secret = process.env.BETTER_AUTH_SECRET ?? process.env.PAPERCLIP_AGENT_JWT_SECRET;\n96\t  if (!secret) {\n97\t    throw new Error(\n98\t      \"BETTER_AUTH_SECRET (or PAPERCLIP_AGENT_JWT_SECRET) must be set. \" +\n99\t      \"For local development, set BETTER_AUTH_SECRET=paperclip-dev-secret in your .env file.\",\n100\t    );\n\n\u003csystem-reminder\u003e\nWhenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.\n\u003c/system-reminder\u003e\n",
+        "tool_use_id": "toolu_01Nmt9Y6heMS2Sui3ZAvwvyY",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "5b231181-65f4-461e-9895-de62565f0cdc",
+  "promptId": "721340db-55e4-4f08-9c81-1d2e399ba682",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "5b231181-65f4-461e-9895-de62565f0cdc",
+  "timestamp": "2026-04-30T13:27:40.018Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "a974c7aa-3211-428b-aa65-3de9e381edbc",
+  "version": "2.1.123"
+}

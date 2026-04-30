@@ -1,0 +1,26 @@
+{
+  "agentId": "ab8a7a43e45ac1ba4",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport type { StorageProvider as StorageProviderId } from \"@paperclipai/shared\";\n2\timport type { Readable } from \"node:stream\";\n3\t\n4\texport interface PutObjectInput {\n5\t  objectKey: string;\n6\t  body: Buffer;\n7\t  contentType: string;\n8\t  contentLength: number;\n9\t}\n10\t\n11\texport interface GetObjectInput {\n12\t  objectKey: string;\n13\t}\n14\t\n15\texport interface GetObjectResult {\n16\t  stream: Readable;\n17\t  contentType?: string;\n18\t  contentLength?: number;\n19\t  etag?: string;\n20\t  lastModified?: Date;\n21\t}\n22\t\n23\texport interface HeadObjectResult {\n24\t  exists: boolean;\n25\t  contentType?: string;\n26\t  contentLength?: number;\n27\t  etag?: string;\n28\t  lastModified?: Date;\n29\t}\n30\t\n31\texport interface StorageProvider {\n32\t  id: StorageProviderId;\n33\t  putObject(input: PutObjectInput): Promise\u003cvoid\u003e;\n34\t  getObject(input: GetObjectInput): Promise\u003cGetObjectResult\u003e;\n35\t  headObject(input: GetObjectInput): Promise\u003cHeadObjectResult\u003e;\n36\t  deleteObject(input: GetObjectInput): Promise\u003cvoid\u003e;\n37\t}\n38\t\n39\texport interface PutFileInput {\n40\t  companyId: string;\n41\t  namespace: string;\n42\t  originalFilename: string | null;\n43\t  contentType: string;\n44\t  body: Buffer;\n45\t}\n46\t\n47\texport interface PutFileResult {\n48\t  provider: StorageProviderId;\n49\t  objectKey: string;\n50\t  contentType: string;\n51\t  byteSize: number;\n52\t  sha256: string;\n53\t  originalFilename: string | null;\n54\t}\n55\t\n56\texport interface StorageService {\n57\t  provider: StorageProviderId;\n58\t  putFile(input: PutFileInput): Promise\u003cPutFileResult\u003e;\n59\t  getObject(companyId: string, objectKey: string): Promise\u003cGetObjectResult\u003e;\n60\t  headObject(companyId: string, objectKey: string): Promise\u003cHeadObjectResult\u003e;\n61\t  deleteObject(companyId: string, objectKey: string): Promise\u003cvoid\u003e;\n62\t}\n63\t",
+        "tool_use_id": "toolu_01BCDbDNsxgxHTiHdZF3YWTv",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "5308d868-0e39-4ea9-8499-dea31189b51a",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "5308d868-0e39-4ea9-8499-dea31189b51a",
+  "timestamp": "2026-04-30T14:50:00.517Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "8928da94-2be0-4aea-ba36-7c813d3318ce",
+  "version": "2.1.123"
+}

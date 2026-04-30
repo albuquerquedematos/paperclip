@@ -1,0 +1,61 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "text": "Let me check the current status of the remaining background agents.",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01LZrx3u9dvpTXA27PBhAqRc",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 1582
+      },
+      "cache_creation_input_tokens": 1582,
+      "cache_read_input_tokens": 32063,
+      "inference_geo": "",
+      "input_tokens": 3,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 1582
+          },
+          "cache_creation_input_tokens": 1582,
+          "cache_read_input_tokens": 32063,
+          "input_tokens": 3,
+          "output_tokens": 1199,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 1199,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "e4bcc650-40bb-4f56-969a-51ecce13d027",
+  "requestId": "req_011CaaBadSibA8xwzoAJNwvt",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "timestamp": "2026-04-30T15:21:44.041Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "0a28583e-e12e-482a-a350-5bbc66810c56",
+  "version": "2.1.123"
+}

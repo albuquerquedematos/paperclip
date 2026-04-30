@@ -1,0 +1,52 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "attributionAgent": "backend-architect",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_019vDFCyBwB5mtpkNWqcC3Ar",
+        "input": {
+          "command": "grep -n \"readFile\\|writeFile\\|mkdir\\|readdir\\|unlink\\|stat\\b\\|createReadStream\\|writeFileSync\\|readFileSync\\|existsSync\\|readdirSync\" /Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/adapters.ts /Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/access.ts /Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/plugins.ts /Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/plugin-ui-static.ts /Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/middleware/logger.ts 2\u003e/dev/null",
+          "description": "Find fs usage in route and middleware files"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01NBnLdX7LMAYS8ejHECpBhP",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": null,
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 11062
+      },
+      "cache_creation_input_tokens": 11062,
+      "cache_read_input_tokens": 8781,
+      "inference_geo": "global",
+      "input_tokens": 1,
+      "output_tokens": 1,
+      "service_tier": "standard"
+    }
+  },
+  "parentUuid": "9745a0ea-6aaf-4a5a-ab13-103f436f96bb",
+  "requestId": "req_011Caa9KDoWo9RZgiTAgpGEB",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "timestamp": "2026-04-30T14:51:50.955Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "45cdabb2-f326-4d54-b756-1455c5ff85f4",
+  "version": "2.1.123"
+}

@@ -1,0 +1,27 @@
+{
+  "agentId": "aa8a93567f69d0116",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1090\t    validate(testAdapterEnvironmentSchema),\n1091\t    async (req, res) =\u003e {\n1092\t      const companyId = req.params.companyId as string;\n1093\t      const type = assertKnownAdapterType(req.params.type as string);\n1094\t      await assertCanReadConfigurations(req, companyId);\n1095\t\n1096\t      const adapter = requireServerAdapter(type);\n1097\t\n1098\t      const inputAdapterConfig =\n1099\t        (req.body?.adapterConfig ?? {}) as Record\u003cstring, unknown\u003e;\n1100\t      const requestedEnvironmentId =\n1101\t        typeof req.body?.environmentId === \"string\" \u0026\u0026 req.body.environmentId.trim().length \u003e 0\n1102\t          ? (req.body.environmentId as string)\n1103\t          : null;\n1104\t      const normalizedAdapterConfig = await secretsSvc.normalizeAdapterConfigForPersistence(\n1105\t        companyId,\n1106\t        inputAdapterConfig,\n1107\t        { strictMode: strictSecretsMode },\n1108\t      );\n1109\t      const { config: runtimeAdapterConfig } = await secretsSvc.resolveAdapterConfigForRuntime(\n1110\t        companyId,\n1111\t        normalizedAdapterConfig,\n1112\t      );\n1113\t\n1114\t      const { executionTarget, environmentName, fallbackChecks } =\n1115\t        await resolveAdapterTestExecutionContext({\n1116\t          companyId,\n1117\t          adapterType: type,\n1118\t          environmentId: requestedEnvironmentId,\n1119\t        });\n1120\t\n1121\t      const result = await adapter.testEnvironment({\n1122\t        companyId,\n1123\t        adapterType: type,\n1124\t        config: runtimeAdapterConfig,\n1125\t        executionTarget,\n1126\t        environmentName,\n1127\t      });\n1128\t\n1129\t      if (fallbackChecks.length \u003e 0) {\n1130\t        const checks = [...fallbackChecks, ...result.checks];\n1131\t        const status: typeof result.status = checks.some((c) =\u003e c.level === \"error\")\n1132\t          ? \"fail\"\n1133\t          : checks.some((c) =\u003e c.level === \"warn\")\n1134\t            ? \"warn\"\n1135\t            : result.status;\n1136\t        res.json({ ...result, checks, status });\n1137\t        return;\n1138\t      }\n1139\t\n1140\t      res.json(result);\n1141\t    },\n1142\t  );\n1143\t\n1144\t  router.get(\"/agents/:id/skills\", async (req, res) =\u003e {\n1145\t    const id = req.params.id as string;\n1146\t    const agent = await svc.getById(id);\n1147\t    if (!agent) {\n1148\t      res.status(404).json({ error: \"Agent not found\" });\n1149\t      return;",
+        "tool_use_id": "toolu_01T4geWdwebFBqwm2v2m5fqs",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "1149115d-7485-4055-b991-eafc86ae1b47",
+  "promptId": "dc405341-3479-47dd-8d57-3077b7af430f",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "1149115d-7485-4055-b991-eafc86ae1b47",
+  "timestamp": "2026-04-30T15:42:45.398Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "53e0000f-0637-46ff-96f5-91ade3f6b03f",
+  "version": "2.1.123"
+}

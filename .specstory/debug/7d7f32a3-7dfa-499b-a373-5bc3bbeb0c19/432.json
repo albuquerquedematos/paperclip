@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport fs from \"node:fs/promises\";\n2\timport path from \"node:path\";\n3\timport { execFile as execFileCallback } from \"node:child_process\";\n4\timport { promisify } from \"node:util\";\n5\timport { randomUUID } from \"node:crypto\";\n6\timport { and, asc, desc, eq, getTableColumns, gt, inArray, isNull, lte, notInArray, or, sql } from \"drizzle-orm\";\n7\timport type { Db } from \"@paperclipai/db\";\n8\timport {\n9\t  AGENT_DEFAULT_MAX_CONCURRENT_RUNS,\n10\t  ISSUE_CONTINUATION_SUMMARY_DOCUMENT_KEY,\n11\t  isEnvironmentDriverSupportedForAdapter,\n12\t  type BillingType,\n13\t  type EnvironmentLeaseStatus,\n14\t  type ExecutionWorkspace,\n15\t  type ExecutionWorkspaceConfig,\n16\t  type RunLivenessState,\n17\t} from \"@paperclipai/shared\";\n18\timport {\n19\t  agents,\n20\t  agentRuntimeState,\n21\t  agentTaskSessions,\n22\t  agentWakeupRequests,\n23\t  activityLog,\n24\t  companySkills as companySkillsTable,\n25\t  documentRevisions,\n26\t  issueDocuments,\n27\t  heartbeatRunEvents,\n28\t  heartbeatRuns,\n29\t  issueComments,\n30\t  issueRelations,",
+        "tool_use_id": "toolu_01Nz7Xrt75V2ZPvWrWY6zFnn",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "1d4b23d6-a732-4990-bb35-f82c0e738244",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "1d4b23d6-a732-4990-bb35-f82c0e738244",
+  "timestamp": "2026-04-30T14:52:15.002Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "ac36352f-1eb5-4063-9d3c-078715223b30",
+  "version": "2.1.123"
+}

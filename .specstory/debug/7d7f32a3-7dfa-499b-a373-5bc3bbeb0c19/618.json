@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { createHash } from \"node:crypto\";\n2\timport { promises as fs } from \"node:fs\";\n3\timport { execFile } from \"node:child_process\";\n4\timport path from \"node:path\";\n5\timport { promisify } from \"node:util\";\n6\timport type { Db } from \"@paperclipai/db\";\n7\timport type {\n8\t  CompanyPortabilityAgentManifestEntry,\n9\t  CompanyPortabilityCollisionStrategy,\n10\t  CompanyPortabilityEnvInput,\n11\t  CompanyPortabilityExport,\n12\t  CompanyPortabilityFileEntry,\n13\t  CompanyPortabilityExportPreviewResult,\n14\t  CompanyPortabilityExportResult,\n15\t  CompanyPortabilityImport,",
+        "tool_use_id": "toolu_01N2Adp9A6TjFjncosZhomAN",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "8b9b30ad-df6b-4d35-b26c-997244677479",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "8b9b30ad-df6b-4d35-b26c-997244677479",
+  "timestamp": "2026-04-30T14:56:50.592Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "b96e0864-1097-41f4-a0fa-ab8a5ce2a461",
+  "version": "2.1.123"
+}

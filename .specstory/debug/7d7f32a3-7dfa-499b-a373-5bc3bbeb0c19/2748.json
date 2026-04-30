@@ -1,0 +1,27 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\t/**\n2\t * heartbeat-sweep.ts — Cloudflare Cron Trigger handler for the heartbeat sweep.\n3\t *\n4\t * Fired every 5 minutes by the `*/5 * * * *` cron trigger in wrangler.toml.\n5\t *\n6\t * Design: instead of running the full Node-based `heartbeatService.tickTimers()`\n7\t * (which depends on `node:fs`, `node:child_process`, and other Worker-incompatible\n8\t * APIs to provision workspace directories), we perform only the scheduling query:\n9\t *\n10\t * 1. Select all active agents that have a heartbeat policy enabled and whose\n11\t *    last heartbeat is older than `policy.intervalSec` seconds.\n12\t * 2. For each due agent, enqueue a `heartbeat_dispatch` message to the\n13\t *    `PAPERCLIP_QUEUE` which the queue consumer handles by starting a\n14\t *    `HeartbeatWorkflow` Durable Object instance.\n15\t *\n16\t * The actual heartbeat execution (adapter invocation, workspace provisioning)\n17\t * happens inside the HeartbeatWorkflow, which can delegate Node-only operations\n18\t * to the sidecar process via HTTP.\n19\t */\n20\t",
+        "tool_use_id": "toolu_01VP1WXTLrWDishbqeZqG8Xv",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "c64970d2-0736-4ee4-aa09-d7ddab371594",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "c64970d2-0736-4ee4-aa09-d7ddab371594",
+  "timestamp": "2026-04-30T16:31:55.073Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "999b2bf9-7956-43e8-a646-8f12b923c6aa",
+  "version": "2.1.123"
+}

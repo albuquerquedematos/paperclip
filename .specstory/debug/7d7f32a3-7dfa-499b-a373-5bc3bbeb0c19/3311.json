@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport type { Db } from \"@paperclipai/db\";\n2\timport type { StorageService } from \"../storage/types.js\";\n3\t\n4\texport interface ActorMembership {\n5\t  companyId: string;\n6\t  membershipRole: string;\n7\t  status: string;\n8\t}\n9\t\n10\texport type ActorSource =\n11\t  | \"local_implicit\"\n12\t  | \"session\"\n13\t  | \"board_key\"\n14\t  | \"agent_jwt\"\n15\t  | \"agent_key\"\n16\t  | \"none\";\n17\t\n18\texport interface BoardActor {\n19\t  type: \"board\";\n20\t  source: ActorSource;",
+        "tool_use_id": "toolu_01Wva7CfozuCaU95kGd8M8Rv",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "b55c4c99-e073-433e-b1a4-c05c8e6f07ae",
+  "promptId": "76fdb1bb-64b4-4188-b850-7eeac0540eca",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "b55c4c99-e073-433e-b1a4-c05c8e6f07ae",
+  "timestamp": "2026-04-30T16:53:04.582Z",
+  "toolUseResult": {
+    "file": {
+      "content": "import type { Db } from \"@paperclipai/db\";\nimport type { StorageService } from \"../storage/types.js\";\n\nexport interface ActorMembership {\n  companyId: string;\n  membershipRole: string;\n  status: string;\n}\n\nexport type ActorSource =\n  | \"local_implicit\"\n  | \"session\"\n  | \"board_key\"\n  | \"agent_jwt\"\n  | \"agent_key\"\n  | \"none\";\n\nexport interface BoardActor {\n  type: \"board\";\n  source: ActorSource;",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/http/types.ts",
+      "numLines": 20,
+      "startLine": 1,
+      "totalLines": 67
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "5e430574-64d9-48e4-83e1-312f1d20f0c1",
+  "version": "2.1.123"
+}

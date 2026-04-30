@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "1\t{\n2\t  \"name\": \"@paperclipai/deploy-cloudflare\",\n3\t  \"version\": \"0.1.0\",\n4\t  \"private\": true,\n5\t  \"type\": \"module\",\n6\t  \"main\": \"./src/boot.ts\",\n7\t  \"dependencies\": {\n8\t    \"@paperclipai/db\": \"workspace:*\",\n9\t    \"@paperclipai/shared\": \"workspace:*\",\n10\t    \"drizzle-orm\": \"^0.45.2\",\n11\t    \"hono\": \"^4.0.0\",\n12\t    \"postgres\": \"^3.4.5\"\n13\t  },\n14\t  \"devDependencies\": {\n15\t    \"@cloudflare/workers-types\": \"^4.0.0\",\n16\t    \"@types/express\": \"^5.0.0\",\n17\t    \"@types/node\": \"^25.6.0\",\n18\t    \"express\": \"^5.1.0\",\n19\t    \"typescript\": \"^5.0.0\",\n20\t    \"wrangler\": \"^3.0.0\"\n21\t  }\n22\t}\n23\t",
+        "tool_use_id": "toolu_01DnbT84d4W6mmuvhdozTRmJ",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "2de0fa4a-c994-4eb1-ab5b-2d32f618672a",
+  "promptId": "76fdb1bb-64b4-4188-b850-7eeac0540eca",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "2de0fa4a-c994-4eb1-ab5b-2d32f618672a",
+  "timestamp": "2026-04-30T16:52:22.798Z",
+  "toolUseResult": {
+    "file": {
+      "content": "{\n  \"name\": \"@paperclipai/deploy-cloudflare\",\n  \"version\": \"0.1.0\",\n  \"private\": true,\n  \"type\": \"module\",\n  \"main\": \"./src/boot.ts\",\n  \"dependencies\": {\n    \"@paperclipai/db\": \"workspace:*\",\n    \"@paperclipai/shared\": \"workspace:*\",\n    \"drizzle-orm\": \"^0.45.2\",\n    \"hono\": \"^4.0.0\",\n    \"postgres\": \"^3.4.5\"\n  },\n  \"devDependencies\": {\n    \"@cloudflare/workers-types\": \"^4.0.0\",\n    \"@types/express\": \"^5.0.0\",\n    \"@types/node\": \"^25.6.0\",\n    \"express\": \"^5.1.0\",\n    \"typescript\": \"^5.0.0\",\n    \"wrangler\": \"^3.0.0\"\n  }\n}\n",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/package.json",
+      "numLines": 23,
+      "startLine": 1,
+      "totalLines": 23
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "44754abe-033b-45f5-af75-58dfd5eaae80",
+  "version": "2.1.123"
+}

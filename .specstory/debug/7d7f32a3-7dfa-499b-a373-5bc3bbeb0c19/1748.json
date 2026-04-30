@@ -1,0 +1,26 @@
+{
+  "agentId": "a8fd5512baf043009",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "289\t    const workspaceId = ctx.param(\"workspaceId\")!;\n290\t    const existing = await svc.getById(id);\n291\t    if (!existing) {\n292\t      return Response.json({ error: \"Project not found\" }, { status: 404 });\n293\t    }\n294\t    assertCompanyAccess(ctx, existing.companyId);\n295\t    const body = await ctx.json();\n296\t    assertNoAgentHostWorkspaceCommandMutation(\n297\t      ctx,\n298\t      collectProjectWorkspaceCommandPaths(body),\n299\t    );\n300\t    const workspaceExists = (await svc.listWorkspaces(id)).some((workspace) =\u003e workspace.id === workspaceId);\n301\t    if (!workspaceExists) {\n302\t      return Response.json({ error: \"Project workspace not found\" }, { status: 404 });\n303\t    }\n304\t    const workspace = await svc.updateWorkspace(id, workspaceId, body);\n305\t    if (!workspace) {\n306\t      return Response.json({ error: \"Invalid project workspace payload\" }, { status: 422 });\n307\t    }\n308\t",
+        "tool_use_id": "toolu_01K9bFnebmatLhYG63PYfdu7",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "86ceec46-0710-488b-b0f3-fd4310dbb1c0",
+  "promptId": "f70e47c2-d340-4417-9b6f-d01ec6a1d002",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "86ceec46-0710-488b-b0f3-fd4310dbb1c0",
+  "timestamp": "2026-04-30T15:18:29.266Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "d85703be-b997-41d9-a61c-1a16833cd9b1",
+  "version": "2.1.123"
+}

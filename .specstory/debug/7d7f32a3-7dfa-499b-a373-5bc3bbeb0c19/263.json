@@ -1,0 +1,26 @@
+{
+  "agentId": "adabf466a1a877701",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "30\timport { setupLiveEventsWebSocketServer } from \"./realtime/live-events-ws.js\";\n31\timport {\n32\t  feedbackService,\n33\t  heartbeatService,\n34\t  instanceSettingsService,\n35\t  reconcilePersistedRuntimeServicesOnStartup,\n36\t  routineService,\n37\t} from \"./services/index.js\";\n38\timport { createFeedbackTraceShareClientFromConfig } from \"./services/feedback-share-client.js\";\n39\timport { buildRuntimeApiCandidateUrls, choosePrimaryRuntimeApiUrl } from \"./runtime-api.js\";\n40\timport { createPluginWorkerManager } from \"./services/plugin-worker-manager.js\";\n41\timport { createStorageServiceFromConfig } from \"./storage/index.js\";\n42\timport { printStartupBanner } from \"./startup-banner.js\";\n43\timport { getBoardClaimWarningUrl, initializeBoardClaimChallenge } from \"./board-claim.js\";\n44\timport { maybePersistWorktreeRuntimePorts } from \"./worktree-config.js\";\n45\timport { initTelemetry, getTelemetryClient } from \"./telemetry.js\";\n46\timport { conflict } from \"./errors.js\";\n47\timport type {\n48\t  InstanceDatabaseBackupRunResult,\n49\t  InstanceDatabaseBackupTrigger,\n50\t} from \"./routes/instance-database-backups.js\";\n51\t\n52\ttype BetterAuthSessionUser = {\n53\t  id: string;\n54\t  email?: string | null;\n55\t  name?: string | null;\n56\t};\n57\t\n58\ttype BetterAuthSessionResult = {\n59\t  session: { id: string; userId: string } | null;\n60\t  user: BetterAuthSessionUser | null;\n61\t};\n62\t\n63\ttype EmbeddedPostgresInstance = {\n64\t  initialise(): Promise\u003cvoid\u003e;\n65\t  start(): Promise\u003cvoid\u003e;\n66\t  stop(): Promise\u003cvoid\u003e;\n67\t};\n68\t\n69\ttype EmbeddedPostgresCtor = new (opts: {",
+        "tool_use_id": "toolu_01AfnDTzXXwUcQ35h3VeVXsZ",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "55246a9e-a0e0-460c-b4cc-901b26b1a20f",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "55246a9e-a0e0-460c-b4cc-901b26b1a20f",
+  "timestamp": "2026-04-30T14:50:08.382Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "3820e1d7-6296-46d5-bbe7-7a0810075406",
+  "version": "2.1.123"
+}

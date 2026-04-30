@@ -1,0 +1,27 @@
+{
+  "agentId": "aa8a93567f69d0116",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "587\t  }\n588\t\n589\t  async function resolveCompanyIdForAgentReference(req: Request): Promise\u003cstring | null\u003e {\n590\t    const companyIdQuery = req.query.companyId;\n591\t    const requestedCompanyId =\n592\t      typeof companyIdQuery === \"string\" \u0026\u0026 companyIdQuery.trim().length \u003e 0\n593\t        ? companyIdQuery.trim()\n594\t        : null;\n595\t    if (requestedCompanyId) {\n596\t      assertCompanyAccess(req, requestedCompanyId);\n597\t      return requestedCompanyId;\n598\t    }\n599\t    if (req.actor.type === \"agent\" \u0026\u0026 req.actor.companyId) {\n600\t      return req.actor.companyId;\n601\t    }\n602\t    return null;\n603\t  }\n604\t\n605\t  async function normalizeAgentReference(req: Request, rawId: string): Promise\u003cstring\u003e {\n606\t    const raw = rawId.trim();\n607\t    if (isUuidLike(raw)) return raw;\n608\t\n609\t    const companyId = await resolveCompanyIdForAgentReference(req);\n610\t    if (!companyId) {\n611\t      throw unprocessable(\"Agent shortname lookup requires companyId query parameter\");\n612\t    }\n613\t\n614\t    const resolved = await svc.resolveByReference(companyId, raw);\n615\t    if (resolved.ambiguous) {\n616\t      throw conflict(\"Agent shortname is ambiguous in this company. Use the agent ID.\");\n617\t    }\n618\t    if (!resolved.agent) {\n619\t      throw notFound(\"Agent not found\");\n620\t    }\n621\t    return resolved.agent.id;\n622\t  }\n623\t\n624\t  function parseSourceIssueIds(input: {\n625\t    sourceIssueId?: string | null;\n626\t    sourceIssueIds?: string[];",
+        "tool_use_id": "toolu_01LxH9chEVqoNHnwT9xwjPPh",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "b09b4420-2029-4365-af53-d9ed674e92c7",
+  "promptId": "dc405341-3479-47dd-8d57-3077b7af430f",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "b09b4420-2029-4365-af53-d9ed674e92c7",
+  "timestamp": "2026-04-30T15:41:16.849Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "df19160f-a227-465f-bbee-6afeeb56c4e5",
+  "version": "2.1.123"
+}

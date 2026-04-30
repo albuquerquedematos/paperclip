@@ -1,0 +1,19 @@
+{
+  "agentId": "a63f4a588ad785603",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": "You are migrating Express route handlers to the transport-agnostic `Handler` shape in the Paperclip monorepo at `/Users/migmac/Documents/GitHub/_ABM/paperclip` on branch `feat/cloudflare-deployment`.\n\n## Context — read these first\n\n- `server/src/http/types.ts` — `Handler`, `RequestCtx`\n- `server/src/http/express-adapter.ts` — `expressHandler(handler, deps)`\n- `server/src/routes/health.ts` — migrated reference\n\n**Translation table**:\n- `req.params.xxx` → `ctx.param(\"xxx\")`\n- `req.query.xxx` → `ctx.query(\"xxx\")`\n- `req.body` → `await ctx.json()` (once per handler)\n- `res.json(x)` → `return Response.json(x)`\n- `res.status(N).json(x)` → `return Response.json(x, { status: N })`\n- `res.status(N).end()` → `return new Response(null, { status: N })`\n- `res.status(N).send(text)` → `return new Response(text, { status: N })`\n- `req.actor` → `ctx.actor`\n- `req.get(\"header\")` → `ctx.headers.get(\"header\")`\n- `next(err)` → `throw err`\n- Extra deps: close over from factory params\n- File upload handlers (`multer` etc.): add `// TODO(cloudflare): file upload requires R2 multipart` comment, keep existing Express code\n\n**CRITICAL**: External function signatures must not change.\n\n## Files to migrate\n\n1. `server/src/routes/environments.ts`\n2. `server/src/routes/execution-workspaces.ts`\n3. `server/src/routes/secrets.ts`\n4. `server/src/routes/assets.ts`\n5. `server/src/routes/adapters.ts`\n6. `server/src/routes/plugins.ts`\n\nThese files may have file-streaming responses (`res.setHeader(...); readable.pipe(res)`). For those cases:\n```ts\n// In Worker Handler:\nconst result = await storageService.getObject(companyId, objectKey);\nreturn new Response(result.stream as unknown as ReadableStream, {\n  headers: { \"Content-Type\": result.contentType ?? \"application/octet-stream\" },\n});\n```\n\nFor `plugin-ui-static.ts` and routes that serve static files from disk: add `// TODO(cloudflare): serve from R2 or Worker static assets` and keep the existing Express code path.\n\nFor each: read completely → extract handlers as `const name: Handler` → wire via `expressHandler` → add imports.\n\nReport every migrated handler with file:line.",
+    "role": "user"
+  },
+  "parentUuid": null,
+  "promptId": "41a5cab3-78a5-4305-8404-9daa35591aac",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "timestamp": "2026-04-30T15:05:08.014Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "a0758618-590c-442d-992a-14252f54b8f7",
+  "version": "2.1.123"
+}

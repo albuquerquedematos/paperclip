@@ -1,0 +1,26 @@
+{
+  "agentId": "a6710083ef9195699",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\t{\n2\t  \"name\": \"@paperclipai/db\",\n3\t  \"version\": \"0.3.1\",\n4\t  \"license\": \"MIT\",\n5\t  \"homepage\": \"https://github.com/paperclipai/paperclip\",\n6\t  \"bugs\": {\n7\t    \"url\": \"https://github.com/paperclipai/paperclip/issues\"\n8\t  },\n9\t  \"repository\": {\n10\t    \"type\": \"git\",\n11\t    \"url\": \"https://github.com/paperclipai/paperclip\",\n12\t    \"directory\": \"packages/db\"\n13\t  },\n14\t  \"type\": \"module\",\n15\t  \"exports\": {\n16\t    \".\": \"./src/index.ts\",\n17\t    \"./*\": \"./src/*.ts\"\n18\t  },\n19\t  \"publishConfig\": {\n20\t    \"access\": \"public\",\n21\t    \"exports\": {\n22\t      \".\": {\n23\t        \"types\": \"./dist/index.d.ts\",\n24\t        \"import\": \"./dist/index.js\"\n25\t      },\n26\t      \"./*\": {\n27\t        \"types\": \"./dist/*.d.ts\",\n28\t        \"import\": \"./dist/*.js\"\n29\t      }\n30\t    },\n31\t    \"main\": \"./dist/index.js\",\n32\t    \"types\": \"./dist/index.d.ts\"\n33\t  },\n34\t  \"files\": [\n35\t    \"dist\"\n36\t  ],\n37\t  \"scripts\": {\n38\t    \"check:migrations\": \"tsx src/check-migration-numbering.ts\",\n39\t    \"build\": \"pnpm run check:migrations \u0026\u0026 tsc \u0026\u0026 cp -r src/migrations dist/migrations\",\n40\t    \"clean\": \"rm -rf dist\",\n41\t    \"typecheck\": \"pnpm run check:migrations \u0026\u0026 tsc --noEmit\",\n42\t    \"generate\": \"pnpm run check:migrations \u0026\u0026 tsc -p tsconfig.json \u0026\u0026 drizzle-kit generate\",\n43\t    \"migrate\": \"pnpm run check:migrations \u0026\u0026 tsx src/migrate.ts\",\n44\t    \"seed\": \"tsx src/seed.ts\"\n45\t  },\n46\t  \"dependencies\": {\n47\t    \"@paperclipai/shared\": \"workspace:*\",\n48\t    \"drizzle-orm\": \"^0.38.4\",\n49\t    \"embedded-postgres\": \"^18.1.0-beta.16\",\n50\t    \"postgres\": \"^3.4.5\"\n51\t  },\n52\t  \"devDependencies\": {\n53\t    \"@types/node\": \"^24.6.0\",\n54\t    \"drizzle-kit\": \"^0.31.9\",\n55\t    \"tsx\": \"^4.19.2\",\n56\t    \"typescript\": \"^5.7.3\",\n57\t    \"vitest\": \"^3.0.5\"\n58\t  }\n59\t}\n60\t",
+        "tool_use_id": "toolu_01NiwP1ARWXhRgzxDnqcxiFR",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "8b610f05-ee86-4fa9-a441-7d1ecf349de9",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "8b610f05-ee86-4fa9-a441-7d1ecf349de9",
+  "timestamp": "2026-04-30T14:59:38.377Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "e0cff3e6-7767-4f42-b9bf-54c87e496cf6",
+  "version": "2.1.123"
+}

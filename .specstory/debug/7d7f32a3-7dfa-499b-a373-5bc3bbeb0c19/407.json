@@ -1,0 +1,26 @@
+{
+  "agentId": "adabf466a1a877701",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { runChildProcess, runningProcesses } from \"./server-utils.js\";\n2\timport type { CommandExecutor, CommandExecutorInput } from \"./executor.js\";\n3\timport type { RunProcessResult } from \"./server-utils.js\";\n4\t\n5\texport function createLocalCommandExecutor(): CommandExecutor {\n6\t  return {\n7\t    async run(input: CommandExecutorInput): Promise\u003cRunProcessResult\u003e {\n8\t      return runChildProcess(input.runId, input.command, input.args, {\n9\t        cwd: input.cwd,\n10\t        env: input.env,\n11\t        timeoutSec: input.timeoutSec,\n12\t        graceSec: input.graceSec,\n13\t        onLog: input.onLog,\n14\t      });\n15\t    },\n16\t\n17\t    async cancel(runId: string): Promise\u003cvoid\u003e {\n18\t      runningProcesses.delete(runId);\n19\t    },\n20\t  };\n21\t}\n22\t",
+        "tool_use_id": "toolu_01Swh6SNmL9TDWAcHXbbCDZn",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "1d24a08b-6851-49a6-9e12-ad8e6859ac8b",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "1d24a08b-6851-49a6-9e12-ad8e6859ac8b",
+  "timestamp": "2026-04-30T14:52:02.668Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "a98b5174-f23f-4eff-8036-3f5a5d456037",
+  "version": "2.1.123"
+}

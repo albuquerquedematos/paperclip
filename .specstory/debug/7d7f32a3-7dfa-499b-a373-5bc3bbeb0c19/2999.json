@@ -1,0 +1,27 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "3751\t  function parseHeartbeatPolicy(agent: typeof agents.$inferSelect) {\n3752\t    const runtimeConfig = parseObject(agent.runtimeConfig);\n3753\t    const heartbeat = parseObject(runtimeConfig.heartbeat);\n3754\t\n3755\t    return {\n3756\t      enabled: asBoolean(heartbeat.enabled, false),\n3757\t      intervalSec: Math.max(0, asNumber(heartbeat.intervalSec, 0)),\n3758\t      wakeOnDemand: asBoolean(heartbeat.wakeOnDemand ?? heartbeat.wakeOnAssignment ?? heartbeat.wakeOnOnDemand ?? heartbeat.wakeOnAutomation, true),\n3759\t      maxConcurrentRuns: normalizeMaxConcurrentRuns(heartbeat.maxConcurrentRuns),\n3760\t    };\n3761\t  }\n3762\t\n3763\t  function issueRunPriorityRank(priority: string | null | undefined) {\n3764\t    switch (priority) {\n3765\t      case \"critical\":\n3766\t        return 0;\n3767\t      case \"high\":\n3768\t        return 1;\n3769\t      case \"medium\":\n3770\t        return 2;",
+        "tool_use_id": "toolu_01KVdPNnbksgas28GRJEaMNC",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "e582e096-80af-415c-b5ba-b035e12fa679",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "e582e096-80af-415c-b5ba-b035e12fa679",
+  "timestamp": "2026-04-30T16:39:18.659Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "a9fc2461-f4e4-471e-8ddd-af583152e0ce",
+  "version": "2.1.123"
+}

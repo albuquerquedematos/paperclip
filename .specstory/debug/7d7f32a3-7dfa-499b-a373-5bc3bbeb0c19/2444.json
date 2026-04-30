@@ -1,0 +1,27 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { Router } from \"express\";\n2\timport type { Db } from \"@paperclipai/db\";\n3\timport {\n4\t  createCostEventSchema,\n5\t  createFinanceEventSchema,\n6\t  resolveBudgetIncidentSchema,\n7\t  updateBudgetSchema,\n8\t  upsertBudgetPolicySchema,\n9\t} from \"@paperclipai/shared\";\n10\timport { validate } from \"../middleware/validate.js\";\n11\timport {\n12\t  budgetService,\n13\t  costService,\n14\t  financeService,\n15\t  companyService,\n16\t  agentService,\n17\t  heartbeatService,\n18\t  logActivity,\n19\t} from \"../services/index.js\";\n20\timport { assertBoard, assertCompanyAccess, getActorInfo } from \"./authz.js\";\n21\timport { fetchAllQuotaWindows } from \"../services/quota-windows.js\";\n22\timport { badRequest } from \"../errors.js\";\n23\timport type { PluginWorkerManager } from \"../services/plugin-worker-manager.js\";\n24\timport type { Handler } from \"../http/types.js\";\n25\timport { expressHandler } from \"../http/express-adapter.js\";\n26\t\n27\texport function parseCostDateRange(query: Record\u003cstring, unknown\u003e) {\n28\t  const fromRaw = query.from as string | undefined;\n29\t  const toRaw = query.to as string | undefined;\n30\t  const from = fromRaw ? new Date(fromRaw) : undefined;",
+        "tool_use_id": "toolu_01Jwi7XofmQGVD5LKprWq4Hq",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "7b8f4c9d-f322-43f4-9aec-93657a089105",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "7b8f4c9d-f322-43f4-9aec-93657a089105",
+  "timestamp": "2026-04-30T16:20:14.525Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "b161f585-86c3-44ab-89f5-1c3768a984df",
+  "version": "2.1.123"
+}

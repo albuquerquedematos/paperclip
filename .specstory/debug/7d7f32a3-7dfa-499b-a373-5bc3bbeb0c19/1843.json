@@ -1,0 +1,26 @@
+{
+  "agentId": "a4ad4aa75ca105b41",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "44\timport { loadExternalAdapterPackage, getUiParserSource, getOrExtractUiParserSource, reloadExternalAdapter } from \"../adapters/plugin-loader.js\";\n45\timport { logger } from \"../middleware/logger.js\";\n46\timport { assertBoardOrgAccess, assertInstanceAdmin } from \"./authz.js\";\n47\timport { BUILTIN_ADAPTER_TYPES } from \"../adapters/builtin-adapter-types.js\";\n48\timport { forbidden } from \"../errors.js\";\n49\timport { expressHandler } from \"../http/express-adapter.js\";\n50\timport type { Handler } from \"../http/types.js\";\n51\timport type { StorageService } from \"../storage/types.js\";\n52\t\n53\tconst execFileAsync = promisify(execFile);",
+        "tool_use_id": "toolu_01NFDWRX8PnvidNfaYgYykRW",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "93ce5dd8-02a1-4034-bae8-4a5fe6925f55",
+  "promptId": "e14e6903-86b2-440b-8601-db2551c5adc3",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "93ce5dd8-02a1-4034-bae8-4a5fe6925f55",
+  "timestamp": "2026-04-30T15:20:27.487Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "01639f37-52de-4380-a8eb-7fcb53d10350",
+  "version": "2.1.123"
+}

@@ -1,0 +1,72 @@
+{
+  "agentId": "ac82afa7422550819",
+  "attributionAgent": "backend-architect",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01Rz3B3pgvgY4Nq8ac2GLEvM",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/issues.ts",
+          "limit": 20,
+          "offset": 820
+        },
+        "name": "Read",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_011Hx2yxZDFaLi8rNwbiLaBJ",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 2894
+      },
+      "cache_creation_input_tokens": 2894,
+      "cache_read_input_tokens": 119702,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 2894
+          },
+          "cache_creation_input_tokens": 2894,
+          "cache_read_input_tokens": 119702,
+          "input_tokens": 1,
+          "output_tokens": 142,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 142,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "b3e9d155-87b4-4520-a33d-86a600549ee6",
+  "requestId": "req_011CaaC8scu5Dnr23SonVqiy",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "timestamp": "2026-04-30T15:28:48.757Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "15ea61d2-bafe-46fb-8f31-d5d72414ee7c",
+  "version": "2.1.123"
+}

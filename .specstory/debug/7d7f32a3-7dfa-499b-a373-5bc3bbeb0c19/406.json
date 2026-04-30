@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport {\n2\t  createHash,\n3\t  generateKeyPairSync,\n4\t  randomBytes,\n5\t  timingSafeEqual\n6\t} from \"node:crypto\";\n7\timport { lookup as dnsLookup } from \"node:dns/promises\";\n8\timport fs from \"node:fs\";\n9\timport type { IncomingMessage, RequestOptions as HttpRequestOptions } from \"node:http\";\n10\timport { request as httpRequest } from \"node:http\";\n11\timport { request as httpsRequest } from \"node:https\";\n12\timport { isIP } from \"node:net\";\n13\timport path from \"node:path\";\n14\timport { fileURLToPath } from \"node:url\";\n15\timport { Router } from \"express\";\n16\timport type { Request } from \"express\";\n17\timport { and, desc, eq, gt, inArray, isNotNull, isNull, lte, ne, sql } from \"drizzle-orm\";\n18\timport type { Db } from \"@paperclipai/db\";\n19\timport {\n20\t  assets,\n21\t  agentApiKeys,\n22\t  authUsers,\n23\t  companies,\n24\t  companyLogos,\n25\t  companyMemberships,\n26\t  instanceUserRoles,\n27\t  invites,\n28\t  joinRequests,\n29\t  principalPermissionGrants,\n30\t} from \"@paperclipai/db\";\n31\timport {\n32\t  acceptInviteSchema,\n33\t  createCliAuthChallengeSchema,\n34\t  claimJoinRequestApiKeySchema,\n35\t  createCompanyInviteSchema,\n36\t  createOpenClawInvitePromptSchema,\n37\t  listCompanyInvitesQuerySchema,\n38\t  listJoinRequestsQuerySchema,\n39\t  resolveCliAuthChallengeSchema,\n40\t  searchAdminUsersQuerySchema,\n41\t  updateCompanyMemberWithPermissionsSchema,\n42\t  updateCompanyMemberSchema,\n43\t  archiveCompanyMemberSchema,\n44\t  updateMemberPermissionsSchema,\n45\t  updateUserCompanyAccessSchema,\n46\t  PERMISSION_KEYS\n47\t} from \"@paperclipai/shared\";\n48\timport type { DeploymentExposure, DeploymentMode, HumanCompanyMembershipRole, PermissionKey } from \"@paperclipai/shared\";\n49\timport {\n50\t  forbidden,",
+        "tool_use_id": "toolu_01NPoQNxhP94V71BWFRK171q",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "afc6b944-cbbb-4595-85bb-326739fb593a",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "afc6b944-cbbb-4595-85bb-326739fb593a",
+  "timestamp": "2026-04-30T14:52:02.498Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "51e108fa-da12-4a7d-a94a-396ef472f7c1",
+  "version": "2.1.123"
+}

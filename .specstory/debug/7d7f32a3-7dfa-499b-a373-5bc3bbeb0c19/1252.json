@@ -1,0 +1,26 @@
+{
+  "agentId": "ac82afa7422550819",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { forbidden, unauthorized } from \"../errors.js\";\n2\timport type { ActorMembership } from \"../http/types.js\";\n3\t\n4\t/**\n5\t * Minimal structural interface satisfied by both Express Request (post-actorMiddleware)\n6\t * and RequestCtx, allowing authz helpers to work in both Express handlers and\n7\t * transport-agnostic Handler functions.\n8\t */\n9\texport interface AuthzReq {\n10\t  actor:\n11\t    | {\n12\t        type: string;\n13\t        source?: string;\n14\t        isInstanceAdmin?: boolean;\n15\t        companyIds?: string[];\n16\t        memberships?: Array\u003c{ companyId: string; membershipRole?: string | null; status?: string }\u003e;\n17\t        userId?: string;\n18\t        agentId?: string;\n19\t        companyId?: string;\n20\t        runId?: string;\n21\t      }\n22\t    | null\n23\t    | undefined;\n24\t  method: string;\n25\t}\n26\t\n27\tfunction isAuthenticated(req: AuthzReq): boolean {\n28\t  return !!req.actor \u0026\u0026 req.actor.type !== \"none\";\n29\t}\n30\t\n31\texport function assertAuthenticated(req: AuthzReq): void {\n32\t  if (!isAuthenticated(req)) throw unauthorized();\n33\t}\n34\t\n35\texport function assertBoard(req: AuthzReq): void {\n36\t  if (!req.actor || req.actor.type !== \"board\") throw forbidden(\"Board access required\");\n37\t}\n38\t\n39\texport function hasBoardOrgAccess(req: AuthzReq): boolean {\n40\t  if (!req.actor || req.actor.type !== \"board\") return false;\n41\t  if (req.actor.source === \"local_implicit\" || req.actor.isInstanceAdmin) return true;\n42\t  return Array.isArray(req.actor.companyIds) \u0026\u0026 req.actor.companyIds.length \u003e 0;\n43\t}\n44\t\n45\texport function assertBoardOrgAccess(req: AuthzReq): void {\n46\t  assertBoard(req);\n47\t  if (hasBoardOrgAccess(req)) return;\n48\t  throw forbidden(\"Company membership or instance admin access required\");\n49\t}\n50\t\n51\texport function assertInstanceAdmin(req: AuthzReq): void {\n52\t  assertBoard(req);\n53\t  if (req.actor?.source === \"local_implicit\" || req.actor?.isInstanceAdmin) return;\n54\t  throw forbidden(\"Instance admin access required\");\n55\t}\n56\t\n57\texport function assertCompanyAccess(req: AuthzReq, companyId: string): void {\n58\t  assertAuthenticated(req);\n59\t  if (!req.actor) return;\n60\t\n61\t  if (req.actor.type === \"agent\" \u0026\u0026 req.actor.companyId !== companyId) {\n62\t    throw forbidden(\"Agent key cannot access another company\");\n63\t  }\n64\t\n65\t  if (req.actor.type === \"board\" \u0026\u0026 req.actor.source !== \"local_implicit\") {\n66\t    const allowedCompanies = req.actor.companyIds ?? [];\n67\t    if (!allowedCompanies.includes(companyId)) {\n68\t      throw forbidden(\"User does not have access to this company\");\n69\t    }\n70\t    const method = typeof req.method === \"string\" ? req.method.toUpperCase() : \"GET\";\n71\t    const isSafeMethod = [\"GET\", \"HEAD\", \"OPTIONS\"].includes(method);\n72\t    if (!isSafeMethod \u0026\u0026 !req.actor.isInstanceAdmin \u0026\u0026 Array.isArray(req.actor.memberships)) {\n73\t      const membership = req.actor.memberships.find((item) =\u003e item.companyId === companyId);\n74\t      if (!membership || membership.status !== \"active\") {\n75\t        throw forbidden(\"User does not have active company access\");\n76\t      }\n77\t      if ((membership as ActorMembership).membershipRole === \"viewer\") {\n78\t        throw forbidden(\"Viewer access is read-only\");\n79\t      }\n80\t    }\n81\t  }\n82\t}\n83\t\n84\texport function getActorInfo(req: AuthzReq) {\n85\t  assertAuthenticated(req);\n86\t  if (!req.actor) throw unauthorized();\n87\t\n88\t  if (req.actor.type === \"agent\") {\n89\t    return {\n90\t      actorType: \"agent\" as const,\n91\t      actorId: req.actor.agentId ?? \"unknown-agent\",\n92\t      agentId: req.actor.agentId ?? null,\n93\t      runId: req.actor.runId ?? null,\n94\t    };\n95\t  }\n96\t\n97\t  return {\n98\t    actorType: \"user\" as const,\n99\t    actorId: req.actor.userId ?? \"board\",\n100\t    agentId: null,\n101\t    runId: req.actor.runId ?? null,\n102\t  };\n103\t}\n104\t",
+        "tool_use_id": "toolu_014Z1S6Vq9t33MrTsmLurYwe",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "ff15efee-a530-48ee-bf90-f3394f173d93",
+  "promptId": "f8ab24c1-de42-4dc6-b59c-8c9364db9ca7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "ff15efee-a530-48ee-bf90-f3394f173d93",
+  "timestamp": "2026-04-30T15:10:30.099Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "0bb3cf9a-91d5-4dfc-b7b2-4cf45e8b7914",
+  "version": "2.1.123"
+}

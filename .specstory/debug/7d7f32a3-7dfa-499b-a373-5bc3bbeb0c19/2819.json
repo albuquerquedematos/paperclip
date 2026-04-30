@@ -1,0 +1,27 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "200\t  if (claims) {\n201\t    const agentRecord = await db\n202\t      .select()\n203\t      .from(agents)\n204\t      .where(eq(agents.id, claims.sub))\n205\t      .then((rows) =\u003e rows[0] ?? null);\n206\t\n207\t    if (\n208\t      agentRecord \u0026\u0026\n209\t      agentRecord.companyId === claims.company_id \u0026\u0026\n210\t      agentRecord.status !== \"terminated\" \u0026\u0026\n211\t      agentRecord.status !== \"pending_approval\"\n212\t    ) {\n213\t      return {\n214\t        type: \"agent\",\n215\t        source: \"agent_jwt\",\n216\t        agentId: claims.sub,\n217\t        companyId: claims.company_id,\n218\t        runId: runIdHeader ?? claims.run_id ?? undefined,\n219\t      };\n220\t    }\n221\t  }\n222\t\n223\t  // Unrecognised or invalid token.\n224\t  return null;\n225\t}\n226\t",
+        "tool_use_id": "toolu_01V8Qbcd1sba76n4xQwLPhRZ",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "372cc185-e161-4cf7-a08a-eeb51529a411",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "372cc185-e161-4cf7-a08a-eeb51529a411",
+  "timestamp": "2026-04-30T16:33:35.246Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "d446af54-efbb-46c1-8724-63878721e4e2",
+  "version": "2.1.123"
+}

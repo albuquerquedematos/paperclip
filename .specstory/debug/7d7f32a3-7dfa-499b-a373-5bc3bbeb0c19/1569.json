@@ -1,0 +1,27 @@
+{
+  "agentId": "a8fd5512baf043009",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "server/src/routes/companies.ts(1,24): error TS2307: Cannot find module 'express' or its corresponding type declarations.\nserver/src/routes/companies.ts(2,25): error TS2307: Cannot find module '@paperclipai/db' or its corresponding type declarations.\nserver/src/routes/companies.ts(14,8): error TS2307: Cannot find module '@paperclipai/shared' or its corresponding type declarations.\nserver/src/routes/companies.ts(102,62): error TS2339: Property 'isInstanceAdmin' does not exist on type 'ActorContext'.\nserver/src/routes/companies.ts(105,40): error TS2339: Property 'companyIds' does not exist on type 'ActorContext'.\nserver/src/routes/companies.ts(106,73): error TS2339: Property 'id' does not exist on type '{ logoAssetId: string | null; } \u0026 { logoUrl: string | null; }'.\nserver/src/routes/companies.ts(111,74): error TS2339: Property 'isInstanceAdmin' does not exist on type 'ActorContext'.\nserver/src/routes/companies.ts(113,28): error TS2339: Property 'companyIds' does not exist on type 'ActorContext'.\nserver/src/routes/companies.ts(286,64): error TS2339: Property 'isInstanceAdmin' does not exist on type 'ActorContext'.\nserver/src/routes/companies.ts(291,65): error TS2339: Property 'userId' does not exist on type 'ActorContext'.\nserver/src/routes/companies.ts(295,26): error TS2339: Property 'userId' does not exist on type 'ActorContext'.\nserver/src/routes/companies.ts(310,19): error TS2339: Property 'userId' does not exist on type 'ActorContext'.\nserver/src/routes/companies.ts(391,7): error TS2322: Type 'unknown' is not assignable to type 'Record\u003cstring, unknown\u003e | null | undefined'.\nserver/src/routes/companies.ts(407,27): error TS2339: Property 'userId' does not exist on type 'ActorContext'.\nserver/src/routes/goals.ts(1,24): error TS2307: Cannot find module 'express' or its corresponding type declarations.\nserver/src/routes/goals.ts(2,25): error TS2307: Cannot find module '@paperclipai/db' or its corresponding type declarations.\nserver/src/routes/goals.ts(3,52): error TS2307: Cannot find module '@paperclipai/shared' or its corresponding type declarations.\nserver/src/routes/goals.ts(4,34): error TS2307: Cannot find module '@paperclipai/shared/telemetry' or its corresponding type declarations.\nserver/src/routes/goals.ts(37,46): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'Omit\u003cany, \"companyId\"\u003e'.\nserver/src/routes/goals.ts(78,7): error TS2322: Type 'unknown' is not assignable to type 'Record\u003cstring, unknown\u003e | null | undefined'.\nserver/src/routes/projects.ts(1,24): error TS2307: Cannot find module 'express' or its corresponding type declarations.\nserver/src/routes/projects.ts(2,25): error TS2307: Cannot find module '@paperclipai/db' or its corresponding type declarations.\nserver/src/routes/projects.ts(12,8): error TS2307: Cannot find module '@paperclipai/shared' or its corresponding type declarations.\nserver/src/routes/projects.ts(13,84): error TS2307: Cannot find module '@paperclipai/shared' or its corresponding type declarations.\nserver/src/routes/projects.ts(14,37): error TS2307: Cannot find module '@paperclipai/shared/telemetry' or its corresponding type declarations.\nserver/src/routes/projects.ts(48,29): error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.\nserver/src/routes/projects.ts(93,29): error TS7006: Parameter 'req' implicitly has an 'any' type.\nserver/src/routes/projects.ts(93,34): error TS7006: Parameter '_res' implicitly has an 'any' type.\nserver/src/routes/projects.ts(93,40): error TS7006: Parameter 'next' implicitly has an 'any' type.\nserver/src/routes/projects.ts(93,46): error TS7006: Parameter 'rawId' implicitly has an 'any' type.",
+        "is_error": false,
+        "tool_use_id": "toolu_01GNWAJRxqy4BQd5jJZ8UZ65",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "c28e2893-d093-4a5b-9a98-fd657bba7f14",
+  "promptId": "f70e47c2-d340-4417-9b6f-d01ec6a1d002",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "c28e2893-d093-4a5b-9a98-fd657bba7f14",
+  "timestamp": "2026-04-30T15:15:52.760Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "3dfe9df8-3e0d-471c-b7e7-8aa311cdb871",
+  "version": "2.1.123"
+}

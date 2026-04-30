@@ -1,0 +1,73 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/shared/src/config-schema.ts has been updated successfully.",
+        "tool_use_id": "toolu_01BHLnoLDfcPruHH9fWd6WJp",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "9e361b8a-62b9-4fd6-8d08-908f8a6bc14d",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "9e361b8a-62b9-4fd6-8d08-908f8a6bc14d",
+  "timestamp": "2026-04-30T14:48:58.214Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/shared/src/config-schema.ts",
+    "newString": "export const storageR2ConfigSchema = z.object({\n  bucket: z.string().min(1).default(\"paperclip\"),\n  prefix: z.string().default(\"\"),\n  accountId: z.string().optional(),\n});\n\nexport const storageConfigSchema = z.object({\n  provider: z.enum(STORAGE_PROVIDERS).default(\"local_disk\"),\n  localDisk: storageLocalDiskConfigSchema.default({\n    baseDir: \"~/.paperclip/instances/default/data/storage\",\n  }),\n  s3: storageS3ConfigSchema.default({\n    bucket: \"paperclip\",\n    region: \"us-east-1\",\n    prefix: \"\",\n    forcePathStyle: false,\n  }),\n  r2: storageR2ConfigSchema.default({\n    bucket: \"paperclip\",\n    prefix: \"\",\n  }),\n});",
+    "oldString": "export const storageConfigSchema = z.object({\n  provider: z.enum(STORAGE_PROVIDERS).default(\"local_disk\"),\n  localDisk: storageLocalDiskConfigSchema.default({\n    baseDir: \"~/.paperclip/instances/default/data/storage\",\n  }),\n  s3: storageS3ConfigSchema.default({\n    bucket: \"paperclip\",\n    region: \"us-east-1\",\n    prefix: \"\",\n    forcePathStyle: false,\n  }),\n});",
+    "originalFile": "import { z } from \"zod\";\nimport {\n  AUTH_BASE_URL_MODES,\n  BIND_MODES,\n  DEPLOYMENT_EXPOSURES,\n  DEPLOYMENT_MODES,\n  SECRET_PROVIDERS,\n  STORAGE_PROVIDERS,\n} from \"./constants.js\";\nimport { validateConfiguredBindMode } from \"./network-bind.js\";\n\nexport const configMetaSchema = z.object({\n  version: z.literal(1),\n  updatedAt: z.string(),\n  source: z.enum([\"onboard\", \"configure\", \"doctor\"]),\n});\n\nexport const llmConfigSchema = z.object({\n  provider: z.enum([\"claude\", \"openai\"]),\n  apiKey: z.string().optional(),\n});\n\nexport const databaseBackupConfigSchema = z.object({\n  enabled: z.boolean().default(true),\n  intervalMinutes: z.number().int().min(1).max(7 * 24 * 60).default(60),\n  retentionDays: z.number().int().min(1).max(3650).default(7),\n  dir: z.string().default(\"~/.paperclip/instances/default/data/backups\"),\n});\n\nexport const databaseConfigSchema = z.object({\n  mode: z.enum([\"embedded-postgres\", \"postgres\"]).default(\"embedded-postgres\"),\n  connectionString: z.string().optional(),\n  embeddedPostgresDataDir: z.string().default(\"~/.paperclip/instances/default/db\"),\n  embeddedPostgresPort: z.number().int().min(1).max(65535).default(54329),\n  backup: databaseBackupConfigSchema.default({\n    enabled: true,\n    intervalMinutes: 60,\n    retentionDays: 7,\n    dir: \"~/.paperclip/instances/default/data/backups\",\n  }),\n});\n\nexport const loggingConfigSchema = z.object({\n  mode: z.enum([\"file\", \"cloud\"]),\n  logDir: z.string().default(\"~/.paperclip/instances/default/logs\"),\n});\n\nexport const serverConfigSchema = z.object({\n  deploymentMode: z.enum(DEPLOYMENT_MODES).default(\"local_trusted\"),\n  exposure: z.enum(DEPLOYMENT_EXPOSURES).default(\"private\"),\n  bind: z.enum(BIND_MODES).optional(),\n  customBindHost: z.string().optional(),\n  host: z.string().default(\"127.0.0.1\"),\n  port: z.number().int().min(1).max(65535).default(3100),\n  allowedHostnames: z.array(z.string().min(1)).default([]),\n  serveUi: z.boolean().default(true),\n});\n\nexport const authConfigSchema = z.object({\n  baseUrlMode: z.enum(AUTH_BASE_URL_MODES).default(\"auto\"),\n  publicBaseUrl: z.string().url().optional(),\n  disableSignUp: z.boolean().default(false),\n});\n\nexport const storageLocalDiskConfigSchema = z.object({\n  baseDir: z.string().default(\"~/.paperclip/instances/default/data/storage\"),\n});\n\nexport const storageS3ConfigSchema = z.object({\n  bucket: z.string().min(1).default(\"paperclip\"),\n  region: z.string().min(1).default(\"us-east-1\"),\n  endpoint: z.string().optional(),\n  prefix: z.string().default(\"\"),\n  forcePathStyle: z.boolean().default(false),\n});\n\nexport const storageConfigSchema = z.object({\n  provider: z.enum(STORAGE_PROVIDERS).default(\"local_disk\"),\n  localDisk: storageLocalDiskConfigSchema.default({\n    baseDir: \"~/.paperclip/instances/default/data/storage\",\n  }),\n  s3: storageS3ConfigSchema.default({\n    bucket: \"paperclip\",\n    region: \"us-east-1\",\n    prefix: \"\",\n    forcePathStyle: false,\n  }),\n});\n\nexport const secretsLocalEncryptedConfigSchema = z.object({\n  keyFilePath: z.string().default(\"~/.paperclip/instances/default/secrets/master.key\"),\n});\n\nexport const secretsConfigSchema = z.object({\n  provider: z.enum(SECRET_PROVIDERS).default(\"local_encrypted\"),\n  strictMode: z.boolean().default(false),\n  localEncrypted: secretsLocalEncryptedConfigSchema.default({\n    keyFilePath: \"~/.paperclip/instances/default/secrets/master.key\",\n  }),\n});\n\nexport const telemetryConfigSchema = z.object({\n  enabled: z.boolean().default(true),\n}).default({});\n\nexport const paperclipConfigSchema = z\n  .object({\n    $meta: configMetaSchema,\n    llm: llmConfigSchema.optional(),\n    database: databaseConfigSchema,\n    logging: loggingConfigSchema,\n    server: serverConfigSchema,\n    telemetry: telemetryConfigSchema,\n    auth: authConfigSchema.default({\n      baseUrlMode: \"auto\",\n      disableSignUp: false,\n    }),\n    storage: storageConfigSchema.default({\n      provider: \"local_disk\",\n      localDisk: {\n        baseDir: \"~/.paperclip/instances/default/data/storage\",\n      },\n      s3: {\n        bucket: \"paperclip\",\n        region: \"us-east-1\",\n        prefix: \"\",\n        forcePathStyle: false,\n      },\n    }),\n    secrets: secretsConfigSchema.default({\n      provider: \"local_encrypted\",\n      strictMode: false,\n      localEncrypted: {\n        keyFilePath: \"~/.paperclip/instances/default/secrets/master.key\",\n      },\n    }),\n  })\n  .superRefine((value, ctx) =\u003e {\n    if (value.server.deploymentMode === \"local_trusted\" \u0026\u0026 value.server.exposure !== \"private\") {\n      ctx.addIssue({\n        code: z.ZodIssueCode.custom,\n        message: \"server.exposure must be private when deploymentMode is local_trusted\",\n        path: [\"server\", \"exposure\"],\n      });\n    }\n\n    for (const message of validateConfiguredBindMode({\n      deploymentMode: value.server.deploymentMode,\n      deploymentExposure: value.server.exposure,\n      bind: value.server.bind,\n      host: value.server.host,\n      customBindHost: value.server.customBindHost,\n    })) {\n      ctx.addIssue({\n        code: z.ZodIssueCode.custom,\n        message,\n        path: message.includes(\"customBindHost\") ? [\"server\", \"customBindHost\"] : [\"server\", \"bind\"],\n      });\n    }\n\n    if (value.auth.baseUrlMode === \"explicit\" \u0026\u0026 !value.auth.publicBaseUrl) {\n      ctx.addIssue({\n        code: z.ZodIssueCode.custom,\n        message: \"auth.publicBaseUrl is required when auth.baseUrlMode is explicit\",\n        path: [\"auth\", \"publicBaseUrl\"],\n      });\n    }\n\n    if (value.server.exposure === \"public\" \u0026\u0026 value.auth.baseUrlMode !== \"explicit\") {\n      ctx.addIssue({\n        code: z.ZodIssueCode.custom,\n        message: \"auth.baseUrlMode must be explicit when deploymentMode=authenticated and exposure=public\",\n        path: [\"auth\", \"baseUrlMode\"],\n      });\n    }\n\n    if (value.server.exposure === \"public\" \u0026\u0026 !value.auth.publicBaseUrl) {\n      ctx.addIssue({\n        code: z.ZodIssueCode.custom,\n        message: \"auth.publicBaseUrl is required when deploymentMode=authenticated and exposure=public\",\n        path: [\"auth\", \"publicBaseUrl\"],\n      });\n    }\n  });\n\nexport type PaperclipConfig = z.infer\u003ctypeof paperclipConfigSchema\u003e;\nexport type LlmConfig = z.infer\u003ctypeof llmConfigSchema\u003e;\nexport type DatabaseConfig = z.infer\u003ctypeof databaseConfigSchema\u003e;\nexport type LoggingConfig = z.infer\u003ctypeof loggingConfigSchema\u003e;\nexport type ServerConfig = z.infer\u003ctypeof serverConfigSchema\u003e;\nexport type StorageConfig = z.infer\u003ctypeof storageConfigSchema\u003e;\nexport type StorageLocalDiskConfig = z.infer\u003ctypeof storageLocalDiskConfigSchema\u003e;\nexport type StorageS3Config = z.infer\u003ctypeof storageS3ConfigSchema\u003e;\nexport type SecretsConfig = z.infer\u003ctypeof secretsConfigSchema\u003e;\nexport type SecretsLocalEncryptedConfig = z.infer\u003ctypeof secretsLocalEncryptedConfigSchema\u003e;\nexport type AuthConfig = z.infer\u003ctypeof authConfigSchema\u003e;\nexport type TelemetryConfig = z.infer\u003ctypeof telemetryConfigSchema\u003e;\nexport type ConfigMeta = z.infer\u003ctypeof configMetaSchema\u003e;\nexport type DatabaseBackupConfig = z.infer\u003ctypeof databaseBackupConfigSchema\u003e;\n",
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          "   forcePathStyle: z.boolean().default(false),",
+          " });",
+          " ",
+          "+export const storageR2ConfigSchema = z.object({",
+          "+  bucket: z.string().min(1).default(\"paperclip\"),",
+          "+  prefix: z.string().default(\"\"),",
+          "+  accountId: z.string().optional(),",
+          "+});",
+          "+",
+          " export const storageConfigSchema = z.object({",
+          "   provider: z.enum(STORAGE_PROVIDERS).default(\"local_disk\"),",
+          "   localDisk: storageLocalDiskConfigSchema.default({"
+        ],
+        "newLines": 12,
+        "newStart": 74,
+        "oldLines": 6,
+        "oldStart": 74
+      },
+      {
+        "lines": [
+          "     prefix: \"\",",
+          "     forcePathStyle: false,",
+          "   }),",
+          "+  r2: storageR2ConfigSchema.default({",
+          "+    bucket: \"paperclip\",",
+          "+    prefix: \"\",",
+          "+  }),",
+          " });",
+          " ",
+          " export const secretsLocalEncryptedConfigSchema = z.object({"
+        ],
+        "newLines": 10,
+        "newStart": 91,
+        "oldLines": 6,
+        "oldStart": 85
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "373ad67a-b4f3-4b41-9b4d-605b8c2f5198",
+  "version": "2.1.123"
+}

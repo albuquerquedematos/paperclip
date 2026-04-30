@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "5250\t      cwd: executionWorkspace.cwd,\n5251\t      source: executionWorkspace.source,\n5252\t      mode: effectiveExecutionWorkspaceMode,\n5253\t      strategy: executionWorkspace.strategy,\n5254\t      projectId: executionWorkspace.projectId,\n5255\t      workspaceId: executionWorkspace.workspaceId,\n5256\t      repoUrl: executionWorkspace.repoUrl,\n5257\t      repoRef: executionWorkspace.repoRef,\n5258\t      branchName: executionWorkspace.branchName,\n5259\t      worktreePath: executionWorkspace.worktreePath,\n5260\t      realization: workspaceRealization,\n5261\t      agentHome: await (async () =\u003e {\n5262\t        const home = resolveDefaultAgentWorkspaceDir(agent.id);\n5263\t        await fs.mkdir(home, { recursive: true });\n5264\t        return home;\n5265\t      })(),\n5266\t    };\n5267\t    context.paperclipWorkspaces = resolvedWorkspace.workspaceHints;\n5268\t    const runtimeServiceIntents = (() =\u003e {\n5269\t      const runtimeConfig = parseObject(resolvedConfig.workspaceRuntime);",
+        "tool_use_id": "toolu_012RDvPXAsYiE8vxgpxn7vDX",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "25c74023-3f77-4076-a3a9-dbc09663ce1c",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "25c74023-3f77-4076-a3a9-dbc09663ce1c",
+  "timestamp": "2026-04-30T14:52:21.779Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "7119d901-3b71-4be4-9430-bdc3f1a6faa2",
+  "version": "2.1.123"
+}

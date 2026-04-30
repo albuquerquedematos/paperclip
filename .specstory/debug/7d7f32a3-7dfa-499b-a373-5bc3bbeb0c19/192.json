@@ -1,0 +1,58 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/db/src/client.ts has been updated successfully.",
+        "tool_use_id": "toolu_01Q1uCLmp9VWmwkaefVqS1dV",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "5165eba9-40ae-4975-9c90-23b77e45b7e2",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "5165eba9-40ae-4975-9c90-23b77e45b7e2",
+  "timestamp": "2026-04-30T14:48:30.510Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/db/src/client.ts",
+    "newString": "export function createPostgresDb(url: string) {\n  const sql = postgres(url);\n  return drizzlePg(sql, { schema });\n}\n\n/** @deprecated Use createPostgresDb */\nexport const createDb = createPostgresDb;",
+    "oldString": "export function createDb(url: string) {\n  const sql = postgres(url);\n  return drizzlePg(sql, { schema });\n}",
+    "originalFile": null,
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          "       reason: \"no-migration-journal-empty-db\" | \"no-migration-journal-non-empty-db\" | \"pending-migrations\";",
+          "     };",
+          " ",
+          "-export function createDb(url: string) {",
+          "+export function createPostgresDb(url: string) {",
+          "   const sql = postgres(url);",
+          "   return drizzlePg(sql, { schema });",
+          " }",
+          " ",
+          "+/** @deprecated Use createPostgresDb */",
+          "+export const createDb = createPostgresDb;",
+          "+",
+          " export async function getPostgresDataDirectory(url: string): Promise\u003cstring | null\u003e {",
+          "   const sql = createUtilitySql(url);",
+          "   try {"
+        ],
+        "newLines": 14,
+        "newStart": 45,
+        "oldLines": 11,
+        "oldStart": 45
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "ac727b7a-0096-4088-9b17-271339ca3e18",
+  "version": "2.1.123"
+}

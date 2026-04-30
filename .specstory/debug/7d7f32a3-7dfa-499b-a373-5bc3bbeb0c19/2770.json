@@ -1,0 +1,28 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "error TS2688: Cannot find type definition file for '@cloudflare/workers-types'.\n  The file is in the program because:\n    Entry point of type library '@cloudflare/workers-types' specified in compilerOptions\nerror TS6059: File '/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/adapter-executor/container.ts' is not under 'rootDir' '/Users/migmac/Documents/GitHub/_ABM/paperclip/src'. 'rootDir' is expected to contain all source files.\n  The file is in the program because:\n    Matched by include pattern 'src/**/*.ts' in 'packages/deploy-cloudflare/tsconfig.json'\nerror TS6059: File '/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/scheduler/cf-scheduler.ts' is not under 'rootDir' '/Users/migmac/Documents/GitHub/_ABM/paperclip/src'. 'rootDir' is expected to contain all source files.\n  The file is in the program because:\n    Matched by include pattern 'src/**/*.ts' in 'packages/deploy-cloudflare/tsconfig.json'\nerror TS6059: File '/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/storage/r2-run-log-store.ts' is not under 'rootDir' '/Users/migmac/Documents/GitHub/_ABM/paperclip/src'. 'rootDir' is expected to contain all source files.\n  The file is in the program because:\n    Matched by include pattern 'src/**/*.ts' in 'packages/deploy-cloudflare/tsconfig.json'\nerror TS6059: File '/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/storage/r2-workspace-op-log-store.ts' is not under 'rootDir' '/Users/migmac/Documents/GitHub/_ABM/paperclip/src'. 'rootDir' is expected to contain all source files.\n  The file is in the program because:\n    Matched by include pattern 'src/**/*.ts' in 'packages/deploy-cloudflare/tsconfig.json'\nerror TS6059: File '/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/mcp-sse.ts' is not under 'rootDir' '/Users/migmac/Documents/GitHub/_ABM/paperclip/src'. 'rootDir' is expected to contain all source files.\n  The file is in the program because:\n    Matched by include pattern 'src/**/*.ts' in 'packages/deploy-cloudflare/tsconfig.json'\npackages/deploy-cloudflare/tsconfig.json(7,25): error TS5095: Option 'bundler' can only be used when 'module' is set to 'preserve' or to 'es2015' or later.\npackages/deploy-cloudflare/tsconfig.json(7,25): error TS5109: Option 'moduleResolution' must be set to 'NodeNext' (or left unspecified) when option 'module' is set to 'NodeNext'.",
+        "is_error": false,
+        "tool_use_id": "toolu_01Q2WE4qtKdKU4EayZBQbPvo",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "d203e13b-df49-425f-b2e3-75f8974018d7",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "d203e13b-df49-425f-b2e3-75f8974018d7",
+  "timestamp": "2026-04-30T16:32:30.101Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "995e642c-eef0-4a4b-a8fa-02dbd10c0722",
+  "version": "2.1.123"
+}

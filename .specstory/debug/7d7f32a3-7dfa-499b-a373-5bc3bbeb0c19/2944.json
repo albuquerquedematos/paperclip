@@ -1,0 +1,27 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "270\t  return setupSub.fetch(rewritten);\n271\t});\n272\t\n273\t// ---------------------------------------------------------------------------\n274\t// Main API catch-all -- routes through cached route definitions\n275\t//\n276\t// We use a single wildcard handler for /api/* rather than registering one\n277\t// Hono route per server route definition. This avoids blowing Hono's internal\n278\t// route trie limit and is simpler to reason about.\n279\t//\n280\t// Routing is done manually: iterate the route definitions, match method and\n281\t// path pattern, and delegate to the handler.\n282\t// ---------------------------------------------------------------------------\n283\t\n284\t// Simple Express-path to RegExp converter that handles `:param` segments.\n285\tfunction pathToRegex(path: string): { re: RegExp; paramNames: string[] } {\n286\t  const paramNames: string[] = [];\n287\t  const pattern = path\n288\t    .replace(/[$()*+.?[\\\\\\]^{|}]/g, \"\\\\$\u0026\") // escape regex metacharacters except :\n289\t    .replace(/:([a-zA-Z_][a-zA-Z0-9_]*)/g, (_match, name: string) =\u003e {\n290\t      paramNames.push(name);\n291\t      return \"([^/]+)\";\n292\t    });\n293\t  return { re: new RegExp(`^${pattern}$`), paramNames };\n294\t}\n295\t\n296\t// Pre-compile path matchers for each route at app startup.\n297\t// These are recomputed whenever the route cache is rebuilt.\n298\tlet compiledRoutes: Array\u003c{\n299\t  route: RouteDefinition;\n300\t  re: RegExp;\n301\t  paramNames: string[];\n302\t}\u003e | null = null;\n303\t\n304\tfunction getCompiledRoutes(env: Env) {\n305\t  const cache = getRouteCache(env);\n306\t  if (!compiledRoutes) {\n307\t    compiledRoutes = cache.routes.map((route) =\u003e ({\n308\t      route,\n309\t      ...pathToRegex(route.path),\n310\t    }));\n311\t  }\n312\t  return { compiled: compiledRoutes, db: cache.db, storage: cache.storage };\n313\t}\n314\t\n315\t// R2-native upload endpoints (registered before the catch-all)\n316\tapp.put(\"/api/assets/:assetId/upload\", async (c) =\u003e {\n317\t  const { assets } = await import(\"@paperclipai/db\");\n318\t  const { eq } = await import(\"drizzle-orm\");\n319\t  const { forbidden, notFound, badRequest } = await import(\"../../../server/src/errors.js\");\n320\t\n321\t  const env = c.env;\n322\t  const { db } = getRouteCache(env);\n323\t  const deploymentMode = env.DEPLOYMENT_MODE === \"local_trusted\" ? \"local_trusted\" as const : \"authenticated\" as const;\n324\t  const actor = await resolveActorFromRequest(c.req.raw, db, { deploymentMode });\n325\t\n326\t  try {\n327\t    const assetId = c.req.param(\"assetId\");\n328\t    if (!assetId) return c.json({ error: \"Missing assetId\" }, 400);\n329\t    const assetRow = await db.select().from(assets).where(eq(assets.id, assetId)).then((rows) =\u003e rows[0] ?? null);",
+        "tool_use_id": "toolu_01GKJn9EJyMG6xQf1MQ1jSDJ",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "9fc0f4a3-f325-4310-81b0-f0469d41fd85",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "9fc0f4a3-f325-4310-81b0-f0469d41fd85",
+  "timestamp": "2026-04-30T16:37:40.094Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "cdae017b-84a7-45ce-9663-7822a78fc963",
+  "version": "2.1.123"
+}

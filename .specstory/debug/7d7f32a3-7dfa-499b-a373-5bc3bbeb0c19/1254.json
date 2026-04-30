@@ -1,0 +1,19 @@
+{
+  "agentId": "a8fd5512baf043009",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": "Send to agent aa8a93567f69d0116: The ActorContext blocker has been resolved. `server/src/http/types.ts` now has `BoardActor | AgentActor` as the full actor union, and `server/src/routes/authz.ts` now accepts `AuthzReq` (structural interface satisfied by both Express.Request and RequestCtx). Inside Handler functions, call `assertBoard(ctx)`, `assertCompanyAccess(ctx, id)`, `getActorInfo(ctx)` directly. Actor field access: `ctx.actor?.type === \"board\"`, `ctx.actor?.type === \"agent\" ? ctx.actor.agentId : undefined`, etc. Please proceed with migrating your assigned route files.",
+    "role": "user"
+  },
+  "parentUuid": null,
+  "promptId": "f8ab24c1-de42-4dc6-b59c-8c9364db9ca7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "timestamp": "2026-04-30T15:10:30.373Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "6e484b49-8479-422f-a934-84792927f9fb",
+  "version": "2.1.123"
+}

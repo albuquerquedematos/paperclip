@@ -1,0 +1,70 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01B5GmM8cQzH9kB9Qk8TJfGX",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/agents.ts",
+          "limit": 200,
+          "offset": 2800
+        },
+        "name": "Read",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_019wnPAGSaJvNy3NgjR3Vd55",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 3198
+      },
+      "cache_creation_input_tokens": 3198,
+      "cache_read_input_tokens": 159642,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 3198
+          },
+          "cache_creation_input_tokens": 3198,
+          "cache_read_input_tokens": 159642,
+          "input_tokens": 1,
+          "output_tokens": 138,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 138,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "8acc3baa-dd1e-4b35-aca9-9ac1f4f27fd8",
+  "requestId": "req_011CaaGtKwM35QFBfdEjyEnq",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "timestamp": "2026-04-30T16:31:06.117Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "37405337-fb02-44d4-ac2a-67167c6ccb5b",
+  "version": "2.1.123"
+}

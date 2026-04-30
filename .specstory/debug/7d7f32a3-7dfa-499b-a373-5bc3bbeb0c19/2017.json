@@ -1,0 +1,27 @@
+{
+  "agentId": "ac82afa7422550819",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "996\t  router.get(\"/issues/:id/heartbeat-context\", async (req, res) =\u003e {\n997\t    const id = req.params.id as string;\n998\t    const issue = await svc.getById(id);\n999\t    if (!issue) {\n1000\t      res.status(404).json({ error: \"Issue not found\" });\n1001\t      return;\n1002\t    }\n1003\t    assertCompanyAccess(req, issue.companyId);\n1004\t\n1005\t    const wakeCommentId =\n1006\t      typeof req.query.wakeCommentId === \"string\" \u0026\u0026 req.query.wakeCommentId.trim().length \u003e 0\n1007\t        ? req.query.wakeCommentId.trim()\n1008\t        : null;\n1009\t\n1010\t    const currentExecutionWorkspacePromise = issue.executionWorkspaceId\n1011\t      ? executionWorkspacesSvc.getById(issue.executionWorkspaceId)\n1012\t      : Promise.resolve(null);\n1013\t    const [\n1014\t      { project, goal },\n1015\t      ancestors,\n1016\t      commentCursor,\n1017\t      wakeComment,\n1018\t      relations,\n1019\t      blockerAttention,\n1020\t      productivityReview,\n1021\t      attachments,\n1022\t      continuationSummary,\n1023\t      currentExecutionWorkspace,\n1024\t    ] =\n1025\t      await Promise.all([\n1026\t        resolveIssueProjectAndGoal(issue),\n1027\t        svc.getAncestors(issue.id),\n1028\t        svc.getCommentCursor(issue.id),\n1029\t        wakeCommentId ? svc.getComment(wakeCommentId) : null,\n1030\t        svc.getRelationSummaries(issue.id),\n1031\t        svc.listBlockerAttention(issue.companyId, [issue]).then((map) =\u003e map.get(issue.id) ?? null),\n1032\t        svc.listProductivityReviews(issue.companyId, [issue.id]).then((map) =\u003e map.get(issue.id) ?? null),\n1033\t        svc.listAttachments(issue.id),\n1034\t        documentsSvc.getIssueDocumentByKey(issue.id, ISSUE_CONTINUATION_SUMMARY_DOCUMENT_KEY),\n1035\t        currentExecutionWorkspacePromise,\n1036\t      ]);\n1037\t\n1038\t    res.json({\n1039\t      issue: {\n1040\t        id: issue.id,\n1041\t        identifier: issue.identifier,\n1042\t        title: issue.title,\n1043\t        description: issue.description,\n1044\t        status: issue.status,\n1045\t        ...(blockerAttention ? { blockerAttention } : {}),\n1046\t        productivityReview,\n1047\t        priority: issue.priority,\n1048\t        projectId: issue.projectId,\n1049\t        goalId: goal?.id ?? issue.goalId,\n1050\t        parentId: issue.parentId,\n1051\t        blockedBy: relations.blockedBy,\n1052\t        blocks: relations.blocks,\n1053\t        assigneeAgentId: issue.assigneeAgentId,\n1054\t        assigneeUserId: issue.assigneeUserId,\n1055\t        originKind: issue.originKind,\n1056\t        originId: issue.originId,\n1057\t        updatedAt: issue.updatedAt,\n1058\t      },\n1059\t      ancestors: ancestors.map((ancestor) =\u003e ({\n1060\t        id: ancestor.id,\n1061\t        identifier: ancestor.identifier,\n1062\t        title: ancestor.title,\n1063\t        status: ancestor.status,\n1064\t        priority: ancestor.priority,\n1065\t      })),\n1066\t      project: project\n1067\t        ? {\n1068\t            id: project.id,\n1069\t            name: project.name,\n1070\t            status: project.status,\n1071\t            targetDate: project.targetDate,\n1072\t          }\n1073\t        : null,\n1074\t      goal: goal\n1075\t        ? {\n1076\t            id: goal.id,\n1077\t            title: goal.title,\n1078\t            status: goal.status,\n1079\t            level: goal.level,\n1080\t            parentId: goal.parentId,\n1081\t          }\n1082\t        : null,\n1083\t      commentCursor,\n1084\t      wakeComment:\n1085\t        wakeComment \u0026\u0026 wakeComment.issueId === issue.id\n1086\t          ? wakeComment\n1087\t          : null,\n1088\t      attachments: attachments.map((a) =\u003e ({\n1089\t        id: a.id,\n1090\t        filename: a.originalFilename,\n1091\t        contentType: a.contentType,\n1092\t        byteSize: a.byteSize,\n1093\t        contentPath: withContentPath(a).contentPath,\n1094\t        createdAt: a.createdAt,\n1095\t      })),\n1096\t      continuationSummary: continuationSummary\n1097\t        ? {\n1098\t            key: continuationSummary.key,\n1099\t            title: continuationSummary.title,\n1100\t            body: continuationSummary.body,\n1101\t            latestRevisionId: continuationSummary.latestRevisionId,\n1102\t            latestRevisionNumber: continuationSummary.latestRevisionNumber,\n1103\t            updatedAt: continuationSummary.updatedAt,\n1104\t          }\n1105\t        : null,\n1106\t      currentExecutionWorkspace,\n1107\t    });\n1108\t  });\n1109\t\n1110\t  router.get(\"/issues/:id\", async (req, res) =\u003e {",
+        "tool_use_id": "toolu_01SaHvc9Uy31Q6vwwNVYQj7M",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "281754a8-b146-4eb4-9a8d-1ec83dff5e26",
+  "promptId": "dc405341-3479-47dd-8d57-3077b7af430f",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "281754a8-b146-4eb4-9a8d-1ec83dff5e26",
+  "timestamp": "2026-04-30T15:29:50.731Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "fb75dbd8-a8b9-45ec-8baa-d3c925c5d82d",
+  "version": "2.1.123"
+}

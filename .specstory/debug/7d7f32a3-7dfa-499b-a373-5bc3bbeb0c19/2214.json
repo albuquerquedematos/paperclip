@@ -1,0 +1,28 @@
+{
+  "agentId": "ac82afa7422550819",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "831:      req.params.id = await normalizeIssueIdentifier(rawId);\n841:      req.params.issueId = await normalizeIssueIdentifier(rawId);\n852:    res.status(400).json({\n3511:    const companyId = req.params.companyId as string;\n3512:    const issueId = req.params.issueId as string;\n3516:      res.status(404).json({ error: \"Issue not found\" });\n3520:      res.status(422).json({ error: \"Issue does not belong to company\" });\n3524:    await assertAgentIssueMutationAllowed({ actor: req.actor ?? null } as unknown as RequestCtx, issue);\n3534:          res.status(422).json({ error: `Attachment exceeds ${attachmentMaxBytes} bytes` });\n3537:        res.status(400).json({ error: err.message });\n3545:      res.status(400).json({ error: \"Missing file field 'file'\" });\n3550:      res.status(422).json({ error: \"Attachment is empty\" });\n3554:    const parsedMeta = createIssueAttachmentMetadataSchema.safeParse(req.body ?? {});\n3556:      res.status(400).json({ error: \"Invalid attachment metadata\", details: parsedMeta.error.issues });\n3599:    res.status(201).json(withContentPath(attachment));\n3604:    const attachmentId = req.params.attachmentId as string;\n3607:      res.status(404).json({ error: \"Attachment not found\" });",
+        "is_error": false,
+        "tool_use_id": "toolu_01Gr4MFGFVr7o1xccDCwNH1e",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "47cff81e-939e-420b-a637-57ec6634dfaf",
+  "promptId": "dc405341-3479-47dd-8d57-3077b7af430f",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "47cff81e-939e-420b-a637-57ec6634dfaf",
+  "timestamp": "2026-04-30T15:45:23.807Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "505376d8-754b-4d78-8bb3-c9f125cada73",
+  "version": "2.1.123"
+}

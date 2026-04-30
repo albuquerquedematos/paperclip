@@ -1,0 +1,27 @@
+{
+  "agentId": "a63f4a588ad785603",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "33:import { expressHandler } from \"../http/express-adapter.js\";\n191:  const listEnvironments: Handler = async (ctx) =\u003e {\n206:  const getEnvironmentCapabilitiesHandler: Handler = async (ctx) =\u003e {\n237:  const createEnvironment: Handler = async (ctx) =\u003e {\n277:  const getEnvironment: Handler = async (ctx) =\u003e {\n292:  const listEnvironmentLeases: Handler = async (ctx) =\u003e {\n310:  const getEnvironmentLease: Handler = async (ctx) =\u003e {\n325:  const updateEnvironment: Handler = async (ctx) =\u003e {\n385:  const deleteEnvironment: Handler = async (ctx) =\u003e {\n425:  const probeEnvironmentHandler: Handler = async (ctx) =\u003e {\n455:  const probeEnvironmentConfig: Handler = async (ctx) =\u003e {\n506:  // Wire handlers via expressHandler\n511:  router.get(\"/companies/:companyId/environments\", expressHandler(listEnvironments, adapterDeps));\n512:  router.get(\"/companies/:companyId/environments/capabilities\", expressHandler(getEnvironmentCapabilitiesHandler, adapterDeps));\n513:  router.post(\"/companies/:companyId/environments\", validate(createEnvironmentSchema), expressHandler(createEnvironment, adapterDeps));\n514:  router.get(\"/environments/:id\", expressHandler(getEnvironment, adapterDeps));\n515:  router.get(\"/environments/:id/leases\", expressHandler(listEnvironmentLeases, adapterDeps));\n516:  router.get(\"/environment-leases/:leaseId\", expressHandler(getEnvironmentLease, adapterDeps));\n517:  router.patch(\"/environments/:id\", validate(updateEnvironmentSchema), expressHandler(updateEnvironment, adapterDeps));\n518:  router.delete(\"/environments/:id\", expressHandler(deleteEnvironment, adapterDeps));\n519:  router.post(\"/environments/:id/probe\", expressHandler(probeEnvironmentHandler, adapterDeps));\n523:    expressHandler(probeEnvironmentConfig, adapterDeps),",
+        "is_error": false,
+        "tool_use_id": "toolu_01MYbnVg9Nk2YvBHCYRaEn5t",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "26a31eb6-ce9c-4508-b50d-4f73114d5fac",
+  "promptId": "f70e47c2-d340-4417-9b6f-d01ec6a1d002",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "26a31eb6-ce9c-4508-b50d-4f73114d5fac",
+  "timestamp": "2026-04-30T15:17:07.745Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "734befd1-c0c5-4782-acd0-d2dc819a7ec5",
+  "version": "2.1.123"
+}

@@ -1,0 +1,27 @@
+{
+  "agentId": "acedaf1c4054eec72",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "19:import { routineRoutes } from \"./routes/routines.js\";\n28:import { userProfileRoutes } from \"./routes/user-profiles.js\";\n29:import { sidebarBadgeRoutes } from \"./routes/sidebar-badges.js\";\n30:import { sidebarPreferenceRoutes } from \"./routes/sidebar-preferences.js\";\n31:import { inboxDismissalRoutes } from \"./routes/inbox-dismissals.js\";\n32:import { instanceSettingsRoutes } from \"./routes/instance-settings.js\";\n37:import { llmRoutes } from \"./routes/llms.js\";\n38:import { authRoutes } from \"./routes/auth.js\";\n169:  app.use(\"/api/auth\", authRoutes(db));\n173:  app.use(llmRoutes(db));\n200:  api.use(routineRoutes(db, { pluginWorkerManager: workerManager }));\n209:  api.use(userProfileRoutes(db));\n210:  api.use(sidebarBadgeRoutes(db));\n211:  api.use(sidebarPreferenceRoutes(db));\n212:  api.use(inboxDismissalRoutes(db));\n213:  api.use(instanceSettingsRoutes(db));",
+        "is_error": false,
+        "tool_use_id": "toolu_01T4zaYxzAqCuPe1y3QcpKVV",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "7877d5b9-4a73-4ac4-aad9-49dab3df0336",
+  "promptId": "41a5cab3-78a5-4305-8404-9daa35591aac",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "7877d5b9-4a73-4ac4-aad9-49dab3df0336",
+  "timestamp": "2026-04-30T15:06:13.044Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "ad10416a-be08-41d4-9f5b-5f87be088a46",
+  "version": "2.1.123"
+}

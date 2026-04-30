@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "2672\t    const runs = await heartbeat.list(companyId, agentId, limit);\n2673\t    return Response.json(runs);\n2674\t  };\n2675\t\n2676\t  router.get(\"/companies/:companyId/heartbeat-runs\", expressHandler(listHeartbeatRuns, { db, storage: storageSentinel }));\n2677\t\n2678\t  router.get(\"/companies/:companyId/live-runs\", async (req, res) =\u003e {\n2679\t    const companyId = req.params.companyId as string;\n2680\t    assertCompanyAccess(req, companyId);\n2681\t",
+        "tool_use_id": "toolu_01XBWpQTydT1S9N65fMp7drE",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "471ed014-218f-4bdf-aa20-177805013191",
+  "promptId": "ba96a81e-2351-4b03-969f-bc172383cdd1",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "471ed014-218f-4bdf-aa20-177805013191",
+  "timestamp": "2026-04-30T16:30:26.823Z",
+  "toolUseResult": {
+    "file": {
+      "content": "    const runs = await heartbeat.list(companyId, agentId, limit);\n    return Response.json(runs);\n  };\n\n  router.get(\"/companies/:companyId/heartbeat-runs\", expressHandler(listHeartbeatRuns, { db, storage: storageSentinel }));\n\n  router.get(\"/companies/:companyId/live-runs\", async (req, res) =\u003e {\n    const companyId = req.params.companyId as string;\n    assertCompanyAccess(req, companyId);\n",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/agents.ts",
+      "numLines": 10,
+      "startLine": 2672,
+      "totalLines": 3013
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "6b6195f1-7a45-4d82-8b05-f144893cac73",
+  "version": "2.1.123"
+}

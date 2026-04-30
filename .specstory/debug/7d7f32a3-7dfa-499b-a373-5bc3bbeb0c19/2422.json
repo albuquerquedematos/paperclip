@@ -1,0 +1,27 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport type { Db } from \"@paperclipai/db\";\n2\timport type { StorageService } from \"../storage/types.js\";\n3\t\n4\texport interface ActorMembership {\n5\t  companyId: string;\n6\t  membershipRole: string;\n7\t  status: string;\n8\t}\n9\t\n10\texport type ActorSource =\n11\t  | \"local_implicit\"\n12\t  | \"session\"\n13\t  | \"board_key\"\n14\t  | \"agent_jwt\"\n15\t  | \"agent_key\"\n16\t  | \"none\";\n17\t\n18\texport interface BoardActor {\n19\t  type: \"board\";\n20\t  source: ActorSource;\n21\t  userId: string;\n22\t  userName: string | null;\n23\t  userEmail: string | null;\n24\t  isInstanceAdmin: boolean;\n25\t  companyIds?: string[];\n26\t  memberships?: ActorMembership[];\n27\t  keyId?: string;\n28\t  runId?: string;\n29\t}\n30\t\n31\texport interface AgentActor {\n32\t  type: \"agent\";\n33\t  source: ActorSource;\n34\t  agentId: string;\n35\t  companyId: string;\n36\t  keyId?: string;\n37\t  runId?: string;\n38\t}\n39\t\n40\t/** Full actor — mirrors the shape set by actorMiddleware. null when unauthenticated (\"none\"). */\n41\texport type ActorContext = BoardActor | AgentActor;\n42\t\n43\t/** Minimal normalized request passed to every handler. */\n44\texport interface RequestCtx {\n45\t  method: string;\n46\t  url: URL;\n47\t  headers: Headers;\n48\t  json\u003cT = unknown\u003e(): Promise\u003cT\u003e;\n49\t  text(): Promise\u003cstring\u003e;\n50\t  /** Path param: e.g. ctx.param(\"companyId\") */\n51\t  param(name: string): string | undefined;\n52\t  /** Query param */\n53\t  query(name: string): string | undefined;\n54\t  actor: ActorContext | null;\n55\t  db: Db;\n56\t  storage: StorageService;\n57\t}\n58\t\n59\texport type Handler = (ctx: RequestCtx) =\u003e Promise\u003cResponse\u003e;\n60\t\n61\texport interface RouteDefinition {\n62\t  method: \"GET\" | \"POST\" | \"PUT\" | \"PATCH\" | \"DELETE\";\n63\t  /** Express-style path, e.g. /api/companies/:companyId */\n64\t  path: string;\n65\t  handler: Handler;\n66\t}\n67\t",
+        "tool_use_id": "toolu_01YHSCxf6iBTjfbKYecCqFDT",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "c4df73bd-3183-445c-95a2-58768a2605f9",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "c4df73bd-3183-445c-95a2-58768a2605f9",
+  "timestamp": "2026-04-30T16:19:56.045Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "737761c4-4647-432f-b04f-98454721240c",
+  "version": "2.1.123"
+}

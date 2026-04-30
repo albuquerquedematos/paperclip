@@ -1,0 +1,52 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/tsconfig.json has been updated successfully.",
+        "tool_use_id": "toolu_01HFrQACWg4wWRNGVEj5aWwj",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "61e91d77-b0dd-4aed-b6be-b34a6b5bd272",
+  "promptId": "76fdb1bb-64b4-4188-b850-7eeac0540eca",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "61e91d77-b0dd-4aed-b6be-b34a6b5bd272",
+  "timestamp": "2026-04-30T16:43:27.221Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/tsconfig.json",
+    "newString": "    \"module\": \"ES2022\",\n    \"moduleResolution\": \"bundler\",\n    \"noEmit\": true",
+    "oldString": "    \"module\": \"ES2022\",\n    \"moduleResolution\": \"bundler\",\n    \"rootDir\": \"./src\",\n    \"outDir\": \"./dist\",\n    \"noEmit\": true",
+    "originalFile": "{\n  \"extends\": \"../../tsconfig.base.json\",\n  \"compilerOptions\": {\n    \"types\": [\"@cloudflare/workers-types\", \"node\"],\n    \"lib\": [\"ES2022\"],\n    \"target\": \"ES2022\",\n    \"module\": \"ES2022\",\n    \"moduleResolution\": \"bundler\",\n    \"rootDir\": \"./src\",\n    \"outDir\": \"./dist\",\n    \"noEmit\": true\n  },\n  \"include\": [\"src/**/*.ts\"]\n}\n",
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          "     \"target\": \"ES2022\",",
+          "     \"module\": \"ES2022\",",
+          "     \"moduleResolution\": \"bundler\",",
+          "-    \"rootDir\": \"./src\",",
+          "-    \"outDir\": \"./dist\",",
+          "     \"noEmit\": true",
+          "   },",
+          "   \"include\": [\"src/**/*.ts\"]"
+        ],
+        "newLines": 6,
+        "newStart": 6,
+        "oldLines": 8,
+        "oldStart": 6
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "b427c840-2534-419d-b1d7-481bfe6aa133",
+  "version": "2.1.123"
+}

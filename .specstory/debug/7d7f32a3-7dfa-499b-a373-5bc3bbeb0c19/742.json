@@ -1,0 +1,47 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/pnpm-workspace.yaml has been updated successfully.",
+        "tool_use_id": "toolu_013iUfUbSYfFKZvCUPKFaK4Z",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "f98a6950-282f-4524-a862-25bf81c2bba5",
+  "promptId": "41a5cab3-78a5-4305-8404-9daa35591aac",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "f98a6950-282f-4524-a862-25bf81c2bba5",
+  "timestamp": "2026-04-30T15:02:58.892Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/pnpm-workspace.yaml",
+    "newString": "  - server\n  - ui\n  - cli\n  - packages/deploy-cloudflare",
+    "oldString": "  - server\n  - ui\n  - cli",
+    "originalFile": "packages:\n  - packages/*\n  - packages/adapters/*\n  - packages/plugins/*\n  # Keep sandbox-provider plugins installable as standalone packages without\n  # forcing root pnpm-lock.yaml churn for their third-party deps.\n  - \"!packages/plugins/sandbox-providers/**\"\n  - packages/plugins/examples/*\n  # Keep this smoke fixture installable as a local plugin example without\n  # forcing PRs to commit pnpm-lock.yaml for a new workspace importer.\n  - \"!packages/plugins/examples/plugin-orchestration-smoke-example\"\n  - server\n  - ui\n  - cli\n",
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          "   - server",
+          "   - ui",
+          "   - cli",
+          "+  - packages/deploy-cloudflare"
+        ],
+        "newLines": 4,
+        "newStart": 12,
+        "oldLines": 3,
+        "oldStart": 12
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "7191fbdc-c267-4793-906b-ce1ca2f5d9e2",
+  "version": "2.1.123"
+}

@@ -1,0 +1,26 @@
+{
+  "agentId": "a6710083ef9195699",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\t/**\n2\t * Main Cloudflare Worker entry point for the Paperclip API.\n3\t *\n4\t * This file:\n5\t *   1. Creates a Hono app and mounts route definitions.\n6\t *   2. Implements the first-run setup gate (redirects to /setup until KV flag is set).\n7\t *   3. Handles Cloudflare Queues message batches (plugin job fanout).\n8\t *   4. Handles Cloudflare Cron Triggers (heartbeat sweep, budget checks, DB backup).\n9\t *   5. Re-exports all Durable Object and Workflow classes so Wrangler can\n10\t *      register them — they must be named exports from the Worker's main module.\n11\t */\n12\t\n13\timport { Hono } from \"hono\";\n14\timport { createHyperdriveDb } from \"../db/hyperdrive.js\";\n15\timport { R2Provider } from \"../storage/r2-provider.js\";\n16\timport { createSetupApp } from \"./setup.js\";\n17\timport { bootCloudflare } from \"../boot.js\";\n18\t\n19\t// ---------------------------------------------------------------------------\n20\t// Env — Cloudflare bindings injected at runtime\n21\t// ---------------------------------------------------------------------------\n22\t\n23\texport interface Env {\n24\t  // Databases\n25\t  HYPERDRIVE: { connectionString: string };\n26\t\n27\t  // Object storage\n28\t  PAPERCLIP_STORAGE: R2Bucket;\n29\t\n30\t  // KV — setup flags, hot config, session cache\n31\t  PAPERCLIP_KV: KVNamespace;\n32\t\n33\t  // Durable Object namespaces\n34\t  TASK_DO: DurableObjectNamespace;\n35\t  AGENT_RUN_DO: DurableObjectNamespace;\n36\t  SCHEDULER_DO: DurableObjectNamespace;\n37\t\n38\t  // Queues\n39\t  PAPERCLIP_QUEUE: Queue;\n40\t\n41\t  // Workflows\n42\t  HEARTBEAT_WORKFLOW: Workflow;\n43\t  PLUGIN_DISPATCH_WORKFLOW: Workflow;\n44\t\n45\t  // Vars (set in wrangler.toml [vars])\n46\t  DEPLOYMENT_PLATFORM: string;\n47\t  DEPLOYMENT_MODE: string;\n48\t  DEPLOYMENT_EXPOSURE: string;\n49\t\n50\t  // Secrets (set via `wrangler secret put`)\n51\t  // MASTER_ENCRYPTION_KEY: string  — encrypts all other secrets stored in DB\n52\t  // SANDBOX_BRIDGE_URL: string\n53\t  // SANDBOX_BRIDGE_API_KEY: string\n54\t}\n55\t\n56\t// ---------------------------------------------------------------------------\n57\t// Hono app\n58\t// ---------------------------------------------------------------------------\n59\t\n60\tconst app = new Hono\u003c{ Bindings: Env }\u003e();\n61\t\n62\t// Health check — always reachable, no auth, no setup gate\n63\tapp.get(\"/api/health\", (c) =\u003e\n64\t  c.json({\n65\t    status: \"ok\",\n66\t    platform: c.env.DEPLOYMENT_PLATFORM ?? \"cloudflare\",\n67\t    mode: c.env.DEPLOYMENT_MODE ?? \"authenticated\",\n68\t    ts: new Date().toISOString(),\n69\t  }),\n70\t);",
+        "tool_use_id": "toolu_013b9pno8kTX8gEcKG5yqEC1",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "a7e6a6b9-364a-475b-b930-bde45f03c448",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "a7e6a6b9-364a-475b-b930-bde45f03c448",
+  "timestamp": "2026-04-30T14:59:52.920Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "68a1d593-450d-454b-9be0-1d095128a1ff",
+  "version": "2.1.123"
+}

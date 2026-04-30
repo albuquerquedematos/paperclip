@@ -1,0 +1,26 @@
+{
+  "agentId": "a0d0169af69218004",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "200\t  const authPublicBaseUrlRaw =\n201\t    process.env.PAPERCLIP_AUTH_PUBLIC_BASE_URL ??\n202\t    process.env.BETTER_AUTH_URL ??\n203\t    process.env.BETTER_AUTH_BASE_URL ??\n204\t    publicUrlFromEnv ??\n205\t    fileConfig?.auth?.publicBaseUrl;\n206\t  const authPublicBaseUrl = authPublicBaseUrlRaw?.trim() || undefined;\n207\t  const authBaseUrlMode: AuthBaseUrlMode =\n208\t    authBaseUrlModeFromEnv ??\n209\t    fileConfig?.auth?.baseUrlMode ??\n210\t    (authPublicBaseUrl ? \"explicit\" : \"auto\");\n211\t  const disableSignUpFromEnv = process.env.PAPERCLIP_AUTH_DISABLE_SIGN_UP;\n212\t  const authDisableSignUp: boolean =\n213\t    disableSignUpFromEnv !== undefined\n214\t      ? disableSignUpFromEnv === \"true\"\n215\t      : (fileConfig?.auth?.disableSignUp ?? false);\n216\t  const allowedHostnamesFromEnvRaw = process.env.PAPERCLIP_ALLOWED_HOSTNAMES;\n217\t  const allowedHostnamesFromEnv = allowedHostnamesFromEnvRaw\n218\t    ? allowedHostnamesFromEnvRaw\n219\t      .split(\",\")\n220\t      .map((value) =\u003e value.trim().toLowerCase())\n221\t      .filter((value) =\u003e value.length \u003e 0)\n222\t    : null;\n223\t  const publicUrlHostname = authPublicBaseUrl\n224\t    ? (() =\u003e {\n225\t      try {\n226\t        return new URL(authPublicBaseUrl).hostname.trim().toLowerCase();\n227\t      } catch {\n228\t        return null;\n229\t      }\n230\t    })()\n231\t    : null;\n232\t  const allowedHostnames = Array.from(\n233\t    new Set(\n234\t      [\n235\t        ...(allowedHostnamesFromEnv ?? fileConfig?.server.allowedHostnames ?? []),\n236\t        ...(publicUrlHostname ? [publicUrlHostname] : []),\n237\t      ]\n238\t        .map((value) =\u003e value.trim().toLowerCase())\n239\t        .filter(Boolean),\n240\t    ),\n241\t  );\n242\t  const companyDeletionEnvRaw = process.env.PAPERCLIP_ENABLE_COMPANY_DELETION;\n243\t  const companyDeletionEnabled =\n244\t    companyDeletionEnvRaw !== undefined\n245\t      ? companyDeletionEnvRaw === \"true\"\n246\t      : deploymentMode === \"local_trusted\";\n247\t  const databaseBackupEnabled =\n248\t    process.env.PAPERCLIP_DB_BACKUP_ENABLED !== undefined\n249\t      ? process.env.PAPERCLIP_DB_BACKUP_ENABLED === \"true\"\n250\t      : (fileDatabaseBackup?.enabled ?? true);\n251\t  const databaseBackupIntervalMinutes = Math.max(\n252\t    1,\n253\t    Number(process.env.PAPERCLIP_DB_BACKUP_INTERVAL_MINUTES) ||\n254\t      fileDatabaseBackup?.intervalMinutes ||\n255\t      60,\n256\t  );\n257\t  const databaseBackupRetentionDays = Math.max(\n258\t    1,\n259\t    Number(process.env.PAPERCLIP_DB_BACKUP_RETENTION_DAYS) ||\n260\t      fileDatabaseBackup?.retentionDays ||\n261\t      7,\n262\t  );\n263\t  const databaseBackupDir = resolveHomeAwarePath(\n264\t    process.env.PAPERCLIP_DB_BACKUP_DIR ??\n265\t      fileDatabaseBackup?.dir ??\n266\t      resolveDefaultBackupDir(),\n267\t  );\n268\t  const bindValidationErrors = validateConfiguredBindMode({\n269\t    deploymentMode,\n270\t    deploymentExposure,\n271\t    bind,\n272\t    host: configuredHost,\n273\t    customBindHost,\n274\t  });\n275\t  if (bindValidationErrors.length \u003e 0) {\n276\t    throw new Error(bindValidationErrors[0]);\n277\t  }\n278\t  const resolvedBind = resolveRuntimeBind({\n279\t    bind,\n280\t    host: configuredHost,\n281\t    customBindHost,\n282\t    tailnetBindHost,\n283\t  });\n284\t  if (resolvedBind.errors.length \u003e 0) {\n285\t    throw new Error(resolvedBind.errors[0]);\n286\t  }\n287\t\n288\t  return {\n289\t    deploymentMode,\n290\t    deploymentExposure,\n291\t    bind: resolvedBind.bind,\n292\t    customBindHost: resolvedBind.customBindHost,\n293\t    host: resolvedBind.host,\n294\t    port: Number(process.env.PORT) || fileConfig?.server.port || 3100,\n295\t    allowedHostnames,\n296\t    authBaseUrlMode,\n297\t    authPublicBaseUrl,\n298\t    authDisableSignUp,\n299\t    databaseMode: fileDatabaseMode,",
+        "tool_use_id": "toolu_01Ujvc2h2tp1juVUG3Qzh4pn",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "56f13521-cb9a-42da-9f45-92dd3e433e85",
+  "promptId": "41a5cab3-78a5-4305-8404-9daa35591aac",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "56f13521-cb9a-42da-9f45-92dd3e433e85",
+  "timestamp": "2026-04-30T15:05:09.319Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "8a356af7-479f-4e7d-9941-ce39d708c805",
+  "version": "2.1.123"
+}

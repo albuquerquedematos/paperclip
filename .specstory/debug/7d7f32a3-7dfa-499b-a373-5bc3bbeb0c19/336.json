@@ -1,0 +1,26 @@
+{
+  "agentId": "a6710083ef9195699",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport type { Db } from \"@paperclipai/db\";\n2\timport type { StorageService } from \"../storage/types.js\";\n3\t\n4\t/** Normalized actor from auth middleware — only set when authenticated (not \"none\"). */\n5\texport interface ActorContext {\n6\t  type: \"board\" | \"agent\";\n7\t  userId?: string;\n8\t  agentId?: string;\n9\t  companyId?: string;\n10\t}\n11\t\n12\t/** Minimal normalized request passed to every handler. */\n13\texport interface RequestCtx {\n14\t  method: string;\n15\t  url: URL;\n16\t  headers: Headers;\n17\t  json\u003cT = unknown\u003e(): Promise\u003cT\u003e;\n18\t  text(): Promise\u003cstring\u003e;\n19\t  /** Path param: e.g. ctx.param(\"companyId\") */\n20\t  param(name: string): string | undefined;\n21\t  /** Query param */\n22\t  query(name: string): string | undefined;\n23\t  actor: ActorContext | null;\n24\t  db: Db;\n25\t  storage: StorageService;\n26\t}\n27\t\n28\texport type Handler = (ctx: RequestCtx) =\u003e Promise\u003cResponse\u003e;\n29\t\n30\texport interface RouteDefinition {\n31\t  method: \"GET\" | \"POST\" | \"PUT\" | \"PATCH\" | \"DELETE\";\n32\t  /** Express-style path, e.g. /api/companies/:companyId */\n33\t  path: string;\n34\t  handler: Handler;\n35\t}\n36\t",
+        "tool_use_id": "toolu_015PmW5nUJ6ovmNANGthRwdy",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "1b23b538-60f1-4f74-8909-32bcdec11d84",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "1b23b538-60f1-4f74-8909-32bcdec11d84",
+  "timestamp": "2026-04-30T14:51:35.955Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "6b132945-c84e-490f-b62f-554c87f3d1c3",
+  "version": "2.1.123"
+}

@@ -1,0 +1,51 @@
+{
+  "agentId": "a28a63530ac1fc5de",
+  "attributionAgent": "Explore",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01HsgWnCkJwMko7XXmcW365y",
+        "input": {
+          "command": "grep -r \"spawn\\|child_process\\|worker_threads\" /Users/migmac/Documents/GitHub/_ABM/paperclip/server/src --include=\"*.ts\" -l | head -10"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01T35g9G2BYKyc67ft9bBSDb",
+    "model": "claude-haiku-4-5-20251001",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": null,
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 12665
+      },
+      "cache_creation_input_tokens": 12665,
+      "cache_read_input_tokens": 62224,
+      "inference_geo": "not_available",
+      "input_tokens": 4,
+      "output_tokens": 1,
+      "service_tier": "standard"
+    }
+  },
+  "parentUuid": "f6dd7af4-144c-4250-a2f7-050f14372c76",
+  "requestId": "req_011Caa2t2m6iXJ4HUTXcvgad",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "timestamp": "2026-04-30T13:27:28.324Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "a78537aa-45be-40bd-83e2-e23f320b2bc0",
+  "version": "2.1.123"
+}

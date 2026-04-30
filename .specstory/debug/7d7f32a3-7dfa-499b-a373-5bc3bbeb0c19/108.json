@@ -1,0 +1,26 @@
+{
+  "agentId": "a28a63530ac1fc5de",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport fs from \"node:fs/promises\";\n2\timport path from \"node:path\";\n3\timport { execFile as execFileCallback } from \"node:child_process\";\n4\timport { promisify } from \"node:util\";\n5\timport { randomUUID } from \"node:crypto\";\n6\timport { and, asc, desc, eq, getTableColumns, gt, inArray, isNull, lte, notInArray, or, sql } from \"drizzle-orm\";\n7\timport type { Db } from \"@paperclipai/db\";\n8\timport {\n9\t  AGENT_DEFAULT_MAX_CONCURRENT_RUNS,\n10\t  ISSUE_CONTINUATION_SUMMARY_DOCUMENT_KEY,\n11\t  isEnvironmentDriverSupportedForAdapter,\n12\t  type BillingType,\n13\t  type EnvironmentLeaseStatus,\n14\t  type ExecutionWorkspace,\n15\t  type ExecutionWorkspaceConfig,\n16\t  type RunLivenessState,\n17\t} from \"@paperclipai/shared\";\n18\timport {\n19\t  agents,\n20\t  agentRuntimeState,\n21\t  agentTaskSessions,\n22\t  agentWakeupRequests,\n23\t  activityLog,\n24\t  companySkills as companySkillsTable,\n25\t  documentRevisions,\n26\t  issueDocuments,\n27\t  heartbeatRunEvents,\n28\t  heartbeatRuns,\n29\t  issueComments,\n30\t  issueRelations,\n31\t  issues,\n32\t  issueWorkProducts,\n33\t  projects,\n34\t  projectWorkspaces,\n35\t  workspaceOperations,\n36\t} from \"@paperclipai/db\";\n37\timport { conflict, HttpError, notFound } from \"../errors.js\";\n38\timport { logger } from \"../middleware/logger.js\";\n39\timport { publishLiveEvent } from \"./live-events.js\";\n40\timport { getRunLogStore, type RunLogHandle } from \"./run-log-store.js\";\n41\timport { getServerAdapter, runningProcesses } from \"../adapters/index.js\";\n42\timport type { AdapterExecutionResult, AdapterInvocationMeta, AdapterSessionCodec, UsageSummary } from \"../adapters/index.js\";\n43\timport { createLocalAgentJwt } from \"../agent-auth-jwt.js\";\n44\timport { parseObject, asBoolean, asNumber, appendWithByteCap, MAX_EXCERPT_BYTES } from \"../adapters/utils.js\";\n45\timport { costService } from \"./costs.js\";\n46\timport { trackAgentFirstHeartbeat } from \"@paperclipai/shared/telemetry\";\n47\timport { getTelemetryClient } from \"../telemetry.js\";\n48\timport { companySkillService } from \"./company-skills.js\";\n49\timport { budgetService, type BudgetEnforcementScope } from \"./budgets.js\";\n50\timport { secretService } from \"./secrets.js\";\n51\timport { resolveDefaultAgentWorkspaceDir, resolveManagedProjectWorkspaceDir } from \"../home-paths.js\";\n52\timport {\n53\t  buildHeartbeatRunIssueComment,\n54\t  HEARTBEAT_RUN_RESULT_OUTPUT_MAX_CHARS,\n55\t  HEARTBEAT_RUN_RESULT_SUMMARY_MAX_CHARS,\n56\t  HEARTBEAT_RUN_SAFE_RESULT_JSON_MAX_BYTES,\n57\t  mergeHeartbeatRunResultJson,\n58\t} from \"./heartbeat-run-summary.js\";\n59\timport {\n60\t  buildHeartbeatRunStopMetadata,\n61\t  mergeHeartbeatRunStopMetadata,\n62\t} from \"./heartbeat-stop-metadata.js\";\n63\timport {\n64\t  classifyRunLiveness,\n65\t  type RunLivenessClassificationInput,\n66\t} from \"./run-liveness.js\";\n67\timport { logActivity, publishPluginDomainEvent, type LogActivityInput } from \"./activity-log.js\";\n68\timport {\n69\t  buildWorkspaceReadyComment,\n70\t  cleanupExecutionWorkspaceArtifacts,\n71\t  ensureRuntimeServicesForRun,\n72\t  persistAdapterManagedRuntimeServices,\n73\t  realizeExecutionWorkspace,\n74\t  releaseRuntimeServicesForRun,\n75\t  type ExecutionWorkspaceInput,\n76\t  type RealizedExecutionWorkspace,\n77\t  sanitizeRuntimeServiceBaseEnv,\n78\t} from \"./workspace-runtime.js\";\n79\timport { issueService } from \"./issues.js\";\n80\timport { parseIssueExecutionState } from \"./issue-execution-policy.js\";\n\n\u003csystem-reminder\u003e\nWhenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.\n\u003c/system-reminder\u003e\n",
+        "tool_use_id": "toolu_01WxUQunNh1VRvtkomNwkg3c",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "3881aa36-3ff0-4aac-898a-1d401506df94",
+  "promptId": "721340db-55e4-4f08-9c81-1d2e399ba682",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "3881aa36-3ff0-4aac-898a-1d401506df94",
+  "timestamp": "2026-04-30T13:27:56.275Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "1344f577-24d4-4505-a27e-30b39543364b",
+  "version": "2.1.123"
+}

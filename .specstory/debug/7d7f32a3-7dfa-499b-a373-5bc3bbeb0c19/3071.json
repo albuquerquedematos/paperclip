@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "1\t{\n2\t  \"extends\": \"../../tsconfig.base.json\",\n3\t  \"compilerOptions\": {\n4\t    \"types\": [\"@cloudflare/workers-types\"],\n5\t    \"lib\": [\"ES2022\"],\n6\t    \"target\": \"ES2022\",\n7\t    \"moduleResolution\": \"bundler\",\n8\t    \"noEmit\": true\n9\t  },\n10\t  \"include\": [\"src/**/*.ts\"]\n11\t}\n12\t",
+        "tool_use_id": "toolu_01RXXfqse1VuhEf2RE7oKeVo",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "012089d5-b49e-4204-bba2-51e364a6eedf",
+  "promptId": "76fdb1bb-64b4-4188-b850-7eeac0540eca",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "012089d5-b49e-4204-bba2-51e364a6eedf",
+  "timestamp": "2026-04-30T16:41:19.608Z",
+  "toolUseResult": {
+    "file": {
+      "content": "{\n  \"extends\": \"../../tsconfig.base.json\",\n  \"compilerOptions\": {\n    \"types\": [\"@cloudflare/workers-types\"],\n    \"lib\": [\"ES2022\"],\n    \"target\": \"ES2022\",\n    \"moduleResolution\": \"bundler\",\n    \"noEmit\": true\n  },\n  \"include\": [\"src/**/*.ts\"]\n}\n",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/tsconfig.json",
+      "numLines": 12,
+      "startLine": 1,
+      "totalLines": 12
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "4ea84578-9703-40d2-a7b7-c15b29349563",
+  "version": "2.1.123"
+}

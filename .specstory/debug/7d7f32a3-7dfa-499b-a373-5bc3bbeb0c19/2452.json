@@ -1,0 +1,27 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { Router } from \"express\";\n2\timport type { Db } from \"@paperclipai/db\";\n3\timport {\n4\t  DEFAULT_FEEDBACK_DATA_SHARING_TERMS_VERSION,\n5\t  companyPortabilityExportSchema,\n6\t  companyPortabilityImportSchema,\n7\t  companyPortabilityPreviewSchema,\n8\t  createCompanySchema,\n9\t  feedbackTargetTypeSchema,\n10\t  feedbackTraceStatusSchema,\n11\t  feedbackVoteValueSchema,\n12\t  updateCompanyBrandingSchema,\n13\t  updateCompanySchema,\n14\t} from \"@paperclipai/shared\";\n15\timport { badRequest, forbidden } from \"../errors.js\";\n16\timport { validate } from \"../middleware/validate.js\";\n17\timport {\n18\t  accessService,\n19\t  agentService,\n20\t  budgetService,\n21\t  companyPortabilityService,\n22\t  companyService,\n23\t  feedbackService,\n24\t  logActivity,\n25\t} from \"../services/index.js\";\n26\timport type { StorageService } from \"../storage/types.js\";\n27\timport { assertBoard, assertCompanyAccess, assertInstanceAdmin, getActorInfo } from \"./authz.js\";\n28\timport type { BoardActor, Handler, RequestCtx } from \"../http/types.js\";\n29\timport { expressHandler } from \"../http/express-adapter.js\";\n30\t\n31\texport function companyRoutes(db: Db, storage?: StorageService) {\n32\t  const router = Router();\n33\t  const svc = companyService(db);\n34\t  const agents = agentService(db);\n35\t  const portability = companyPortabilityService(db, storage);\n36\t  const access = accessService(db);\n37\t  const budgets = budgetService(db);\n38\t  const feedback = feedbackService(db);\n39\t\n40\t  function parseBooleanQuery(value: unknown) {",
+        "tool_use_id": "toolu_01XZeFZpXCqCD6m5aLkJeYaB",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "c0a15af6-4d5b-4b2c-965c-5f12d53bf7aa",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "c0a15af6-4d5b-4b2c-965c-5f12d53bf7aa",
+  "timestamp": "2026-04-30T16:20:21.459Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "1789c3ca-33fb-4c6d-8ec2-6f30e0ce8724",
+  "version": "2.1.123"
+}

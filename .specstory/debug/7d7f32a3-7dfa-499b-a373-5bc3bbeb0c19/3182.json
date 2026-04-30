@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01AK8S2FNNCC1xLtErsj2vdQ",
+        "input": {
+          "command": "tsc -p packages/deploy-cloudflare/tsconfig.json --noEmit 2\u003e\u00261 | grep \"deploy-cloudflare/src\" | head -25",
+          "description": "Re-check CF source errors after adding express types"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_011n4uBCeBtPNWWi82W7XMoB",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 608
+      },
+      "cache_creation_input_tokens": 608,
+      "cache_read_input_tokens": 164638,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 608
+          },
+          "cache_creation_input_tokens": 608,
+          "cache_read_input_tokens": 164638,
+          "input_tokens": 1,
+          "output_tokens": 117,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 117,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "b581ed77-9c6d-498b-a271-5e37236816ee",
+  "requestId": "req_011CaaJ6nQGEfgBVqYPxj2XW",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "timestamp": "2026-04-30T16:47:00.830Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "8d68a937-4130-4556-873f-9fcb10fc814b",
+  "version": "2.1.123"
+}

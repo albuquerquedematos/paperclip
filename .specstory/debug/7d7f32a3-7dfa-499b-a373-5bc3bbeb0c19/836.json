@@ -1,0 +1,19 @@
+{
+  "agentId": "acedaf1c4054eec72",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": "You are migrating Express route handlers to the transport-agnostic `Handler` shape in the Paperclip monorepo at `/Users/migmac/Documents/GitHub/_ABM/paperclip` on branch `feat/cloudflare-deployment`.\n\n## Context — read these first\n\n- `server/src/http/types.ts` — `Handler`, `RequestCtx`\n- `server/src/http/express-adapter.ts` — `expressHandler(handler, deps)`\n- `server/src/routes/health.ts` — migrated reference\n\n**Translation table**:\n- `req.params.xxx` → `ctx.param(\"xxx\")`\n- `req.query.xxx` → `ctx.query(\"xxx\")`\n- `req.body` → `await ctx.json()` (once per handler)\n- `res.json(x)` → `return Response.json(x)`\n- `res.status(N).json(x)` → `return Response.json(x, { status: N })`\n- `res.status(N).end()` → `return new Response(null, { status: N })`\n- `req.actor` → `ctx.actor`\n- `req.get(\"header\")` → `ctx.headers.get(\"header\")`\n- `next(err)` → `throw err`\n- Extra deps: close over from factory params\n\n**CRITICAL**: External function signatures must not change. Only handler bodies.\n\n## Files to migrate\n\n1. `server/src/routes/auth.ts`\n2. `server/src/routes/user-profiles.ts`\n3. `server/src/routes/sidebar-badges.ts`\n4. `server/src/routes/sidebar-preferences.ts`\n5. `server/src/routes/inbox-dismissals.ts`\n6. `server/src/routes/instance-settings.ts`\n7. `server/src/routes/routines.ts`\n8. `server/src/routes/llms.ts`\n\nNote: `auth.ts` may have special handling (BetterAuth integration, redirects). For any `res.redirect()` calls, use `return Response.redirect(url, 302)`. For raw response streaming or complex auth flows, add a `// TODO(cloudflare): verify auth flow in Workers` comment and do your best.\n\nFor each: read completely → extract handlers as `const name: Handler` → wire via `expressHandler` → add imports.\n\nReport every migrated handler with file:line.",
+    "role": "user"
+  },
+  "parentUuid": null,
+  "promptId": "41a5cab3-78a5-4305-8404-9daa35591aac",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "timestamp": "2026-04-30T15:04:59.402Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "ab396dd2-5adc-4a02-a232-0efbb64cec02",
+  "version": "2.1.123"
+}

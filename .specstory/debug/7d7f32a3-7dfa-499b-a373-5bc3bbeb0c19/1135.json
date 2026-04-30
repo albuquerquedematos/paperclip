@@ -1,0 +1,26 @@
+{
+  "agentId": "a3573a14f101d1112",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "140\t\u003cbody\u003e\n141\t  \u003cp\u003eLoading Paperclip UI... If this persists, the Pages build may not be deployed yet.\u003c/p\u003e\n142\t\u003c/body\u003e\u003c/html\u003e`,\n143\t  ),\n144\t);\n145\t\n146\t// ---------------------------------------------------------------------------\n147\t// Default export — Workers fetch handler\n148\t// ---------------------------------------------------------------------------\n149\t\n150\texport default {\n151\t  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise\u003cResponse\u003e {\n152\t    // Boot the Cloudflare implementations on first request\n153\t    // (idempotent — registerStorageProvider uses a Map, safe to call multiple times)\n154\t    bootCloudflare(env);\n155\t\n156\t    // ---------------------------------------------------------------------------\n157\t    // CF service layer — instantiated per-request (Workers are stateless).\n158\t    //\n159\t    // SidecarClient delegates Node-only operations (filesystem, child processes,\n160\t    // plugin loading) to the Paperclip Node server running alongside this Worker.\n161\t    //\n162\t    // CfCompanySkillsService stores skill file content in R2 under the key\n163\t    // pattern `skills/{companyId}/{skillId}/{relativePath}` and falls back to\n164\t    // the sidecar for local_path / catalog source types.\n165\t    //\n166\t    // CfAgentInstructionsService stores per-agent Markdown instruction files in\n167\t    // R2 under `instructions/{companyId}/{agentId}/{filename}`.\n168\t    //\n169\t    // TODO(PR #6/#7): pass these instances into the Hono context (via app.use)\n170\t    // or directly into route handler factories once route modules are mounted:\n171\t    //\n172\t    //   app.use(\"*\", async (c, next) =\u003e {\n173\t    //     c.set(\"sidecar\", sidecar);\n174\t    //     c.set(\"skills\", skillsService);\n175\t    //     c.set(\"instructions\", instructionsService);\n176\t    //     return next();\n177\t    //   });\n178\t    // ---------------------------------------------------------------------------\n179\t    const sidecar = new SidecarClient({\n180\t      baseUrl: env.SIDECAR_URL,\n181\t      apiKey: env.SIDECAR_API_KEY,\n182\t    });\n183\t    const skillsService = new CfCompanySkillsService(env.PAPERCLIP_STORAGE, sidecar);\n184\t    const instructionsService = new CfAgentInstructionsService(env.PAPERCLIP_STORAGE);\n185\t\n186\t    // Suppress unused-variable warnings until routes are mounted.\n187\t    void skillsService;\n188\t    void instructionsService;\n189\t\n190\t    return app.fetch(request, env, ctx);\n191\t  },\n192\t\n193\t  // -------------------------------------------------------------------------\n194\t  // Queues consumer — processes plugin job dispatch messages\n195\t  // -------------------------------------------------------------------------\n196\t  async queue(batch: MessageBatch\u003cunknown\u003e, env: Env): Promise\u003cvoid\u003e {\n197\t    for (const message of batch.messages) {\n198\t      const body = message.body as Record\u003cstring, unknown\u003e;\n199\t      const type = body?.type as string | undefined;\n200\t\n201\t      if (type === \"plugin_job_dispatch\") {\n202\t        const pluginJobId = body.pluginJobId as string;\n203\t        const pluginSlug = body.pluginSlug as string;\n204\t        const companyId = body.companyId as string;\n205\t        const executorMode = (body.executorMode as \"sandbox_bridge\" | \"container\") ?? \"sandbox_bridge\";\n206\t\n207\t        try {\n208\t          await env.PLUGIN_DISPATCH_WORKFLOW.create({\n209\t            // Use the job ID as the Workflow instance ID for deduplication",
+        "tool_use_id": "toolu_01NGupawUJ5q1SHJLSdEk6FS",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "1b90d659-3c58-4e3b-9a5a-9ca7e0c2b187",
+  "promptId": "41a5cab3-78a5-4305-8404-9daa35591aac",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "1b90d659-3c58-4e3b-9a5a-9ca7e0c2b187",
+  "timestamp": "2026-04-30T15:07:41.340Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "541c7cc9-be50-4ef0-a97f-17e9d39fa4b9",
+  "version": "2.1.123"
+}

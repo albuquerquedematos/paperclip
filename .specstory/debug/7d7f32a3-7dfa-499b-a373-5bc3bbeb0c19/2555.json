@@ -1,0 +1,27 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\t{\n2\t  \"extends\": \"../../tsconfig.base.json\",\n3\t  \"compilerOptions\": {\n4\t    \"types\": [\"@cloudflare/workers-types\"],\n5\t    \"lib\": [\"ES2022\"],\n6\t    \"target\": \"ES2022\",\n7\t    \"moduleResolution\": \"bundler\",\n8\t    \"noEmit\": true\n9\t  },\n10\t  \"include\": [\"src/**/*.ts\"]\n11\t}\n12\t",
+        "tool_use_id": "toolu_018q1Amzz5ohS7Wa4ZZRneeZ",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "8501f29d-f752-4444-a684-98709757604f",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "8501f29d-f752-4444-a684-98709757604f",
+  "timestamp": "2026-04-30T16:24:39.494Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "7209a7c8-ca2d-4231-8ec0-e5a8bd593bdf",
+  "version": "2.1.123"
+}

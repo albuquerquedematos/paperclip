@@ -1,0 +1,26 @@
+{
+  "agentId": "a0d0169af69218004",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "825\t        const url = `http://${openHost}:${listenPort}`;\n826\t        void import(\"open\")\n827\t          .then((mod) =\u003e mod.default(url))\n828\t          .then(() =\u003e {\n829\t            logger.info(`Opened browser at ${url}`);\n830\t          })\n831\t          .catch((err) =\u003e {\n832\t            logger.warn({ err, url }, \"Failed to open browser on startup\");\n833\t          });\n834\t      }\n835\t        printStartupBanner({\n836\t          bind: config.bind,\n837\t          host: config.host,\n838\t          deploymentMode: config.deploymentMode,\n839\t        deploymentExposure: config.deploymentExposure,\n840\t        authReady,\n841\t        requestedPort: requestedListenPort,\n842\t        listenPort,\n843\t        uiMode,\n844\t        db: startupDbInfo,\n845\t        migrationSummary,\n846\t        heartbeatSchedulerEnabled: config.heartbeatSchedulerEnabled,\n847\t        heartbeatSchedulerIntervalMs: config.heartbeatSchedulerIntervalMs,\n848\t        databaseBackupEnabled: config.databaseBackupEnabled,\n849\t        databaseBackupIntervalMinutes: config.databaseBackupIntervalMinutes,\n850\t        databaseBackupRetentionDays: config.databaseBackupRetentionDays,\n851\t        databaseBackupDir: config.databaseBackupDir,\n852\t      });\n853\t\n854\t      const boardClaimUrl = getBoardClaimWarningUrl(config.host, listenPort);\n855\t      if (boardClaimUrl) {\n856\t        const red = \"\\x1b[41m\\x1b[30m\";\n857\t        const yellow = \"\\x1b[33m\";\n858\t        const reset = \"\\x1b[0m\";\n859\t        console.log(\n860\t          [\n861\t            `${red}  BOARD CLAIM REQUIRED  ${reset}`,\n862\t            `${yellow}This instance was previously local_trusted and still has local-board as the only admin.${reset}`,\n863\t            `${yellow}Sign in with a real user and open this one-time URL to claim ownership:${reset}`,\n864\t            `${yellow}${boardClaimUrl}${reset}`,\n865\t            `${yellow}If you are connecting over Tailscale, replace the host in this URL with your Tailscale IP/MagicDNS name.${reset}`,\n866\t          ].join(\"\\n\"),\n867\t        );\n868\t      }\n869\t\n870\t      resolveListen();\n871\t    });\n872\t  });\n873\t  \n874\t  {\n875\t    const shutdown = async (signal: \"SIGINT\" | \"SIGTERM\") =\u003e {\n876\t      const telemetryClient = getTelemetryClient();\n877\t      if (telemetryClient) {\n878\t        telemetryClient.stop();\n879\t        await telemetryClient.flush();\n880\t      }\n881\t\n882\t      if (embeddedPostgres \u0026\u0026 embeddedPostgresStartedByThisProcess) {\n883\t        logger.info({ signal }, \"Stopping embedded PostgreSQL\");\n884\t        try {",
+        "tool_use_id": "toolu_015MQr3tqqNKWxNDWEbeFDE6",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "2a4f9251-3861-4c6f-8ca7-6c517cd737a7",
+  "promptId": "41a5cab3-78a5-4305-8404-9daa35591aac",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "2a4f9251-3861-4c6f-8ca7-6c517cd737a7",
+  "timestamp": "2026-04-30T15:05:05.988Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "af3950c1-d653-4708-811f-6db2690d3ebe",
+  "version": "2.1.123"
+}

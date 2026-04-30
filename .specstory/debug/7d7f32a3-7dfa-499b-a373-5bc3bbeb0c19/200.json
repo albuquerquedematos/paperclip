@@ -1,0 +1,70 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_019gAAnKmqEhQVLxYbWSP8YM",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/storage/provider-registry.ts",
+          "new_string": "import type { Config } from \"../config.js\";\nimport type { StorageProvider as StorageProviderImpl } from \"./types.js\";\nimport type { StorageProvider as StorageProviderId } from \"@paperclipai/shared\";\nimport { createLocalDiskStorageProvider } from \"./local-disk-provider.js\";\nimport { createS3StorageProvider } from \"./s3-provider.js\";\n\ntype StorageProviderFactory = (config: Config) =\u003e StorageProviderImpl;\nconst externalProviders = new Map\u003cStorageProviderId, StorageProviderFactory\u003e();\n\nexport function registerStorageProvider(id: StorageProviderId, factory: StorageProviderFactory): void {\n  externalProviders.set(id, factory);\n}\n\nexport function createStorageProviderFromConfig(config: Config): StorageProviderImpl {\n  if (config.storageProvider === \"local_disk\") {\n    return createLocalDiskStorageProvider(config.storageLocalDiskBaseDir);\n  }\n\n  if (config.storageProvider === \"s3\") {\n    return createS3StorageProvider({\n      bucket: config.storageS3Bucket,\n      region: config.storageS3Region,\n      endpoint: config.storageS3Endpoint,\n      prefix: config.storageS3Prefix,\n      forcePathStyle: config.storageS3ForcePathStyle,\n    });\n  }\n\n  const external = externalProviders.get(config.storageProvider);\n  if (external) {\n    return external(config);\n  }\n\n  throw new Error(`Unknown storage provider: ${config.storageProvider}`);\n}",
+          "old_string": "import type { Config } from \"../config.js\";\nimport type { StorageProvider } from \"./types.js\";\nimport { createLocalDiskStorageProvider } from \"./local-disk-provider.js\";\nimport { createS3StorageProvider } from \"./s3-provider.js\";\n\nexport function createStorageProviderFromConfig(config: Config): StorageProvider {\n  if (config.storageProvider === \"local_disk\") {\n    return createLocalDiskStorageProvider(config.storageLocalDiskBaseDir);\n  }\n\n  return createS3StorageProvider({\n    bucket: config.storageS3Bucket,\n    region: config.storageS3Region,\n    endpoint: config.storageS3Endpoint,\n    prefix: config.storageS3Prefix,\n    forcePathStyle: config.storageS3ForcePathStyle,\n  });\n}",
+          "replace_all": false
+        },
+        "name": "Edit",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01XXawkrssMAahd3X8kyDRJ8",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 903
+      },
+      "cache_creation_input_tokens": 903,
+      "cache_read_input_tokens": 86766,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 903
+          },
+          "cache_creation_input_tokens": 903,
+          "cache_read_input_tokens": 86766,
+          "input_tokens": 1,
+          "output_tokens": 735,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 735,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "bc83cbdd-9228-4663-9f54-fcc920a31e1c",
+  "requestId": "req_011Caa95gTzgy7CvkqyQdnKM",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "timestamp": "2026-04-30T14:48:49.741Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "8723cdf5-8a62-41d8-b4fb-13407cc3a837",
+  "version": "2.1.123"
+}

@@ -1,0 +1,27 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "106\texport function agentRoutes(\n107\t  db: Db,\n108\t  options: { pluginWorkerManager?: PluginWorkerManager } = {},\n109\t) {\n110\t  // Legacy hardcoded maps — used as fallback when adapter module does not\n111\t  // declare capability flags explicitly.\n112\t  const DEFAULT_INSTRUCTIONS_PATH_KEYS: Record\u003cstring, string\u003e = {\n113\t    claude_local: \"instructionsFilePath\",\n114\t    codex_local: \"instructionsFilePath\",\n115\t    droid_local: \"instructionsFilePath\",",
+        "tool_use_id": "toolu_013R8UCZQMsyAxPfsc3UGL2C",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "2caa4a2f-f2c5-4936-8e0c-cbd77613af61",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "2caa4a2f-f2c5-4936-8e0c-cbd77613af61",
+  "timestamp": "2026-04-30T16:29:18.999Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "e90b9602-5547-4a11-8689-3bd73d991119",
+  "version": "2.1.123"
+}

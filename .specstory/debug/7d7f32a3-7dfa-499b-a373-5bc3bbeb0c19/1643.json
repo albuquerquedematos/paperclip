@@ -1,0 +1,27 @@
+{
+  "agentId": "a63f4a588ad785603",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "11:import { expressHandler } from \"../http/express-adapter.js\";\n115:  // TODO(cloudflare): file upload requires R2 multipart\n222:  // TODO(cloudflare): file upload requires R2 multipart\n327:  const getAssetContent: Handler = async (ctx) =\u003e {\n356:  router.get(\"/assets/:assetId/content\", expressHandler(getAssetContent, { db, storage }));",
+        "is_error": false,
+        "tool_use_id": "toolu_012g3MqMNVS3CKqcWZYUUWgZ",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "0e7587f8-242c-484c-acf8-f49d2ea0f2e6",
+  "promptId": "f70e47c2-d340-4417-9b6f-d01ec6a1d002",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "0e7587f8-242c-484c-acf8-f49d2ea0f2e6",
+  "timestamp": "2026-04-30T15:17:12.685Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "df16ee5e-c8b3-4458-beda-651ac048fd25",
+  "version": "2.1.123"
+}

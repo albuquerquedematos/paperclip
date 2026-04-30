@@ -1,0 +1,26 @@
+{
+  "agentId": "aa8a93567f69d0116",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "2945\t    const liveRuns = await db\n2946\t      .select({\n2947\t        id: heartbeatRuns.id,\n2948\t        status: heartbeatRuns.status,\n2949\t        invocationSource: heartbeatRuns.invocationSource,\n2950\t        triggerDetail: heartbeatRuns.triggerDetail,\n2951\t        startedAt: heartbeatRuns.startedAt,\n2952\t        finishedAt: heartbeatRuns.finishedAt,\n2953\t        createdAt: heartbeatRuns.createdAt,\n2954\t        agentId: heartbeatRuns.agentId,\n2955\t        agentName: agentsTable.name,\n2956\t        adapterType: agentsTable.adapterType,\n2957\t        logBytes: heartbeatRuns.logBytes,\n2958\t        livenessState: heartbeatRuns.livenessState,\n2959\t        livenessReason: heartbeatRuns.livenessReason,\n2960\t        continuationAttempt: heartbeatRuns.continuationAttempt,\n2961\t        lastUsefulActionAt: heartbeatRuns.lastUsefulActionAt,\n2962\t        nextAction: heartbeatRuns.nextAction,\n2963\t        lastOutputAt: heartbeatRuns.lastOutputAt,\n2964\t        lastOutputSeq: heartbeatRuns.lastOutputSeq,\n2965\t        lastOutputStream: heartbeatRuns.lastOutputStream,\n2966\t        lastOutputBytes: heartbeatRuns.lastOutputBytes,\n2967\t        processStartedAt: heartbeatRuns.processStartedAt,\n2968\t      })\n2969\t      .from(heartbeatRuns)\n2970\t      .innerJoin(agentsTable, eq(heartbeatRuns.agentId, agentsTable.id))\n2971\t      .where(\n2972\t        and(\n2973\t          eq(heartbeatRuns.companyId, issue.companyId),\n2974\t          inArray(heartbeatRuns.status, [\"queued\", \"running\"]),\n2975\t          sql`${heartbeatRuns.contextSnapshot} -\u003e\u003e 'issueId' = ${issue.id}`,\n2976\t        ),\n2977\t      )\n2978\t      .orderBy(desc(heartbeatRuns.createdAt));\n2979\t\n2980\t    res.json(await Promise.all(liveRuns.map(async (run) =\u003e ({\n2981\t      ...run,\n2982\t      outputSilence: await heartbeat.buildRunOutputSilence({ ...run, companyId: issue.companyId }),\n2983\t    }))));\n2984\t  });\n2985\t\n2986\t  router.get(\"/issues/:issueId/active-run\", async (req, res) =\u003e {\n2987\t    const rawId = req.params.issueId as string;\n2988\t    const issueSvc = issueService(db);\n2989\t    const isIdentifier = /^[A-Z]+-\\d+$/i.test(rawId);\n2990\t    const issue = isIdentifier ? await issueSvc.getByIdentifier(rawId) : await issueSvc.getById(rawId);\n2991\t    if (!issue) {\n2992\t      res.status(404).json({ error: \"Issue not found\" });\n2993\t      return;\n2994\t    }\n2995\t    assertCompanyAccess(req, issue.companyId);\n2996\t\n2997\t    let run = issue.executionRunId ? await heartbeat.getRunIssueSummary(issue.executionRunId) : null;\n2998\t    if (\n2999\t      run \u0026\u0026\n3000\t      (\n3001\t        (run.status !== \"queued\" \u0026\u0026 run.status !== \"running\") ||\n3002\t        run.issueId !== issue.id\n3003\t      )\n3004\t    ) {\n3005\t      run = null;\n3006\t    }\n3007\t\n3008\t    if (!run \u0026\u0026 issue.assigneeAgentId \u0026\u0026 issue.status === \"in_progress\") {\n3009\t      const candidateRun = await heartbeat.getActiveRunIssueSummaryForAgent(issue.assigneeAgentId);\n3010\t      const candidateIssueId = asNonEmptyString(candidateRun?.issueId);\n3011\t      if (candidateRun \u0026\u0026 candidateIssueId === issue.id) {\n3012\t        run = candidateRun;\n3013\t      }\n3014\t    }\n3015\t    if (!run) {\n3016\t      res.json(null);\n3017\t      return;\n3018\t    }\n3019\t\n3020\t    const agent = await svc.getById(run.agentId);\n3021\t    if (!agent) {\n3022\t      res.json(null);\n3023\t      return;\n3024\t    }\n3025\t\n3026\t    res.json({\n3027\t      ...run,\n3028\t      agentId: agent.id,\n3029\t      agentName: agent.name,\n3030\t      adapterType: agent.adapterType,\n3031\t      outputSilence: await heartbeat.buildRunOutputSilence({ ...run, companyId: issue.companyId }),\n3032\t    });\n3033\t  });\n3034\t\n3035\t  return router;\n3036\t}\n3037\t",
+        "tool_use_id": "toolu_0171wGVg3A6EZvCkYmPWwB5Z",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "3d8092f9-6d92-4558-aabe-8eec09aaf6ab",
+  "promptId": "41a5cab3-78a5-4305-8404-9daa35591aac",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "3d8092f9-6d92-4558-aabe-8eec09aaf6ab",
+  "timestamp": "2026-04-30T15:05:34.676Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "0276e744-b799-4226-a200-72783d8fce24",
+  "version": "2.1.123"
+}

@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { execFile } from \"node:child_process\";\n2\timport fs from \"node:fs/promises\";\n3\timport path from \"node:path\";\n4\timport { promisify } from \"node:util\";\n5\timport { and, desc, eq, inArray } from \"drizzle-orm\";\n6\timport type { Db } from \"@paperclipai/db\";\n7\timport { executionWorkspaces, issues, projects, projectWorkspaces, workspaceRuntimeServices } from \"@paperclipai/db\";\n8\timport type {\n9\t  ExecutionWorkspace,\n10\t  ExecutionWorkspaceSummary,\n11\t  ExecutionWorkspaceCloseAction,\n12\t  ExecutionWorkspaceCloseGitReadiness,\n13\t  ExecutionWorkspaceCloseReadiness,\n14\t  ExecutionWorkspaceConfig,\n15\t  WorkspaceRuntimeDesiredState,\n16\t  WorkspaceRuntimeService,\n17\t} from \"@paperclipai/shared\";\n18\timport { parseProjectExecutionWorkspacePolicy } from \"./execution-workspace-policy.js\";\n19\timport {\n20\t  listCurrentRuntimeServicesForExecutionWorkspaces,\n21\t  listCurrentRuntimeServicesForProjectWorkspaces,\n22\t} from \"./workspace-runtime-read-model.js\";\n23\t\n24\ttype ExecutionWorkspaceRow = typeof executionWorkspaces.$inferSelect;\n25\ttype WorkspaceRuntimeServiceRow = typeof workspaceRuntimeServices.$inferSelect;\n26\tconst execFileAsync = promisify(execFile);\n27\tconst TERMINAL_ISSUE_STATUSES = new Set([\"done\", \"cancelled\"]);\n28\t\n29\tfunction isRecord(value: unknown): value is Record\u003cstring, unknown\u003e {\n30\t  return typeof value === \"object\" \u0026\u0026 value !== null \u0026\u0026 !Array.isArray(value);\n31\t}\n32\t\n33\tfunction readNullableString(value: unknown): string | null {\n34\t  if (typeof value !== \"string\") return null;\n35\t  const trimmed = value.trim();\n36\t  return trimmed.length \u003e 0 ? trimmed : null;\n37\t}\n38\t\n39\tfunction cloneRecord(value: unknown): Record\u003cstring, unknown\u003e | null {\n40\t  if (!isRecord(value)) return null;\n41\t  return { ...value };\n42\t}\n43\t\n44\tfunction readDesiredState(value: unknown): WorkspaceRuntimeDesiredState | null {\n45\t  return value === \"running\" || value === \"stopped\" || value === \"manual\" ? value : null;\n46\t}\n47\t\n48\tfunction readServiceStates(value: unknown): ExecutionWorkspaceConfig[\"serviceStates\"] {\n49\t  if (!isRecord(value)) return null;\n50\t  const entries = Object.entries(value).filter(([, state]) =\u003e",
+        "tool_use_id": "toolu_01Ltx9MPurVH9GZyCwxsL9YW",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "ab642561-dd54-44ce-b4b0-caf9bb2f866e",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "ab642561-dd54-44ce-b4b0-caf9bb2f866e",
+  "timestamp": "2026-04-30T14:52:50.034Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "da8cca48-91ef-40fd-a5ca-52d44adfc505",
+  "version": "2.1.123"
+}

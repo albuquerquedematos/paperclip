@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "55\t// ---------------------------------------------------------------------------\n56\t// In-memory caches (invalidated on write)\n57\t// ---------------------------------------------------------------------------\n58\t\n59\tlet storeCache: { path: string; records: AdapterPluginRecord[] } | null = null;\n60\tlet settingsCache: { path: string; settings: AdapterSettings } | null = null;\n61\t\n62\t// ---------------------------------------------------------------------------\n63\t// Store functions\n64\t// ---------------------------------------------------------------------------\n65\t\n66\tfunction ensureDirs(): string {\n67\t  const { adapterPluginsDir } = adapterPluginPaths();\n68\t  fs.mkdirSync(adapterPluginsDir, { recursive: true });\n69\t  const pkgJsonPath = path.join(adapterPluginsDir, \"package.json\");\n70\t  if (!fs.existsSync(pkgJsonPath)) {\n71\t    fs.writeFileSync(pkgJsonPath, JSON.stringify({\n72\t      name: \"paperclip-adapter-plugins\",\n73\t      version: \"0.0.0\",\n74\t      private: true,\n75\t      description: \"Managed directory for Paperclip external adapter plugins. Do not edit manually.\",\n76\t    }, null, 2) + \"\\n\");\n77\t  }\n78\t  return adapterPluginsDir;\n79\t}\n80\t\n81\tfunction readStore(): AdapterPluginRecord[] {\n82\t  const { adapterPluginsStorePath } = adapterPluginPaths();\n83\t  if (storeCache?.path === adapterPluginsStorePath) return storeCache.records;\n84\t  try {\n85\t    const raw = fs.readFileSync(adapterPluginsStorePath, \"utf-8\");\n86\t    const parsed = JSON.parse(raw);\n87\t    storeCache = {\n88\t      path: adapterPluginsStorePath,\n89\t      records: Array.isArray(parsed) ? (parsed as AdapterPluginRecord[]) : [],\n90\t    };\n91\t  } catch {\n92\t    storeCache = { path: adapterPluginsStorePath, records: [] };\n93\t  }\n94\t  return storeCache.records;\n95\t}\n96\t\n97\tfunction writeStore(records: AdapterPluginRecord[]): void {\n98\t  ensureDirs();\n99\t  const { adapterPluginsStorePath } = adapterPluginPaths();\n100\t  fs.writeFileSync(adapterPluginsStorePath, JSON.stringify(records, null, 2), \"utf-8\");\n101\t  storeCache = { path: adapterPluginsStorePath, records };\n102\t}\n103\t\n104\tfunction readSettings(): AdapterSettings {",
+        "tool_use_id": "toolu_011gbSKHLNMfE7qqZFfh2h14",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "00f74c90-a3d4-461b-89d0-971349d78cee",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "00f74c90-a3d4-461b-89d0-971349d78cee",
+  "timestamp": "2026-04-30T14:52:46.718Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "960e2273-62eb-40ea-bd83-515b62f3875b",
+  "version": "2.1.123"
+}

@@ -1,0 +1,33 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "[feat/cloudflare-deployment 359b8809] feat: add Cloudflare deployment target (foundational seams + deploy-cloudflare package)\n 61 files changed, 3602 insertions(+), 47 deletions(-)\n create mode 100644 doc/CLOUDFLARE.md\n create mode 100644 packages/adapter-utils/src/executor.ts\n create mode 100644 packages/adapter-utils/src/local-executor.ts\n create mode 100644 packages/deploy-cloudflare/deploy/deploy-button.md\n create mode 100644 packages/deploy-cloudflare/deploy/post-deploy-setup.md\n create mode 100644 packages/deploy-cloudflare/package.json\n create mode 100644 packages/deploy-cloudflare/src/adapter-executor/container.ts\n create mode 100644 packages/deploy-cloudflare/src/adapter-executor/sandbox-bridge.ts\n create mode 100644 packages/deploy-cloudflare/src/boot.ts\n create mode 100644 packages/deploy-cloudflare/src/db/hyperdrive.ts\n create mode 100644 packages/deploy-cloudflare/src/http/hono-adapter.ts\n create mode 100644 packages/deploy-cloudflare/src/runtime/agent-run-do.ts\n create mode 100644 packages/deploy-cloudflare/src/runtime/task-do.ts\n create mode 100644 packages/deploy-cloudflare/src/runtime/workflows/heartbeat.ts\n create mode 100644 packages/deploy-cloudflare/src/runtime/workflows/plugin-dispatch.ts\n create mode 100644 packages/deploy-cloudflare/src/scheduler/cf-scheduler.ts\n create mode 100644 packages/deploy-cloudflare/src/scheduler/scheduler-do.ts\n create mode 100644 packages/deploy-cloudflare/src/storage/r2-provider.ts\n create mode 100644 packages/deploy-cloudflare/src/worker/api.ts\n create mode 100644 packages/deploy-cloudflare/src/worker/mcp-sse.ts\n create mode 100644 packages/deploy-cloudflare/src/worker/setup.ts\n create mode 100644 packages/deploy-cloudflare/tsconfig.json\n create mode 100644 packages/deploy-cloudflare/wrangler.toml\n create mode 100644 server/src/http/express-adapter.ts\n create mode 100644 server/src/http/index.ts\n create mode 100644 server/src/http/types.ts\n create mode 100644 server/src/scheduler/index.ts\n create mode 100644 server/src/scheduler/node-scheduler.ts\n create mode 100644 server/src/scheduler/types.ts",
+        "is_error": false,
+        "tool_use_id": "toolu_01B8f1dhFXfgPNATpH3bKwgY",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "ed9cb75e-dddc-4041-8d7a-730062ee5297",
+  "promptId": "41a5cab3-78a5-4305-8404-9daa35591aac",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "ed9cb75e-dddc-4041-8d7a-730062ee5297",
+  "timestamp": "2026-04-30T15:03:19.810Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "[feat/cloudflare-deployment 359b8809] feat: add Cloudflare deployment target (foundational seams + deploy-cloudflare package)\n 61 files changed, 3602 insertions(+), 47 deletions(-)\n create mode 100644 doc/CLOUDFLARE.md\n create mode 100644 packages/adapter-utils/src/executor.ts\n create mode 100644 packages/adapter-utils/src/local-executor.ts\n create mode 100644 packages/deploy-cloudflare/deploy/deploy-button.md\n create mode 100644 packages/deploy-cloudflare/deploy/post-deploy-setup.md\n create mode 100644 packages/deploy-cloudflare/package.json\n create mode 100644 packages/deploy-cloudflare/src/adapter-executor/container.ts\n create mode 100644 packages/deploy-cloudflare/src/adapter-executor/sandbox-bridge.ts\n create mode 100644 packages/deploy-cloudflare/src/boot.ts\n create mode 100644 packages/deploy-cloudflare/src/db/hyperdrive.ts\n create mode 100644 packages/deploy-cloudflare/src/http/hono-adapter.ts\n create mode 100644 packages/deploy-cloudflare/src/runtime/agent-run-do.ts\n create mode 100644 packages/deploy-cloudflare/src/runtime/task-do.ts\n create mode 100644 packages/deploy-cloudflare/src/runtime/workflows/heartbeat.ts\n create mode 100644 packages/deploy-cloudflare/src/runtime/workflows/plugin-dispatch.ts\n create mode 100644 packages/deploy-cloudflare/src/scheduler/cf-scheduler.ts\n create mode 100644 packages/deploy-cloudflare/src/scheduler/scheduler-do.ts\n create mode 100644 packages/deploy-cloudflare/src/storage/r2-provider.ts\n create mode 100644 packages/deploy-cloudflare/src/worker/api.ts\n create mode 100644 packages/deploy-cloudflare/src/worker/mcp-sse.ts\n create mode 100644 packages/deploy-cloudflare/src/worker/setup.ts\n create mode 100644 packages/deploy-cloudflare/tsconfig.json\n create mode 100644 packages/deploy-cloudflare/wrangler.toml\n create mode 100644 server/src/http/express-adapter.ts\n create mode 100644 server/src/http/index.ts\n create mode 100644 server/src/http/types.ts\n create mode 100644 server/src/scheduler/index.ts\n create mode 100644 server/src/scheduler/node-scheduler.ts\n create mode 100644 server/src/scheduler/types.ts"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "86961abc-4102-47e2-a140-7393c98677ac",
+  "version": "2.1.123"
+}

@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "175\t  },\n176\t];\n177\t\n178\tfunction listBundledPluginExamples(): AvailablePluginExample[] {\n179\t  return BUNDLED_PLUGIN_EXAMPLES.flatMap((plugin) =\u003e {\n180\t    const absoluteLocalPath = path.resolve(REPO_ROOT, plugin.localPath);\n181\t    if (!existsSync(absoluteLocalPath)) return [];\n182\t    return [{ ...plugin, localPath: absoluteLocalPath }];\n183\t  });\n184\t}\n185\t\n186\t/**\n187\t * Resolve a plugin by either database ID or plugin key.\n188\t *\n189\t * Lookup order:\n190\t * - UUID-like IDs: getById first, then getByKey.\n191\t * - Scoped package keys (e.g. \"@scope/name\"): getByKey only, never getById.\n192\t * - Other non-UUID IDs: try getById first (test/memory registries may allow this),\n193\t *   then fallback to getByKey. Any UUID parse error from getById is ignored.\n194\t *",
+        "tool_use_id": "toolu_01CFoKQDBn2Tt4eC74v1vFKB",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "0d6587fe-62f6-491a-bcde-c9f17f1d953d",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "0d6587fe-62f6-491a-bcde-c9f17f1d953d",
+  "timestamp": "2026-04-30T14:54:04.162Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "b1f34f25-526f-4284-a47b-f45101d594a4",
+  "version": "2.1.123"
+}

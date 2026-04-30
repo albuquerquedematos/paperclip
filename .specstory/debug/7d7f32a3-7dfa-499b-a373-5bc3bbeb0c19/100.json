@@ -1,0 +1,26 @@
+{
+  "agentId": "a28a63530ac1fc5de",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport path from \"path\";\n2\timport { defineConfig } from \"vite\";\n3\timport react from \"@vitejs/plugin-react\";\n4\timport tailwindcss from \"@tailwindcss/vite\";\n5\timport { createUiDevWatchOptions } from \"./src/lib/vite-watch\";\n6\t\n7\texport default defineConfig(({ mode }) =\u003e ({\n8\t  plugins: [react(), tailwindcss()],\n9\t  build: {\n10\t    minify: \"esbuild\",\n11\t  },\n12\t  esbuild:\n13\t    mode === \"production\"\n14\t      ? {\n15\t          drop: [\"console\", \"debugger\"],\n16\t          legalComments: \"none\",\n17\t        }\n18\t      : undefined,\n19\t  resolve: {\n20\t    alias: {\n21\t      \"@\": path.resolve(__dirname, \"./src\"),\n22\t      lexical: path.resolve(__dirname, \"./node_modules/lexical/Lexical.mjs\"),\n23\t    },\n24\t  },\n25\t  server: {\n26\t    port: 5173,\n27\t    watch: createUiDevWatchOptions(process.cwd()),\n28\t    proxy: {\n29\t      \"/api\": {\n30\t        target: \"http://localhost:3100\",\n31\t        ws: true,\n32\t      },\n33\t    },\n34\t  },\n35\t}));\n36\t\n\n\u003csystem-reminder\u003e\nWhenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.\n\u003c/system-reminder\u003e\n",
+        "tool_use_id": "toolu_018RU1MnW6XrikfoKj74D8Q7",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "29609fc2-a220-4589-bd9a-48098e7f0a73",
+  "promptId": "721340db-55e4-4f08-9c81-1d2e399ba682",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "29609fc2-a220-4589-bd9a-48098e7f0a73",
+  "timestamp": "2026-04-30T13:27:48.031Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "20bddf6f-8651-49b3-8fab-f602502aec4b",
+  "version": "2.1.123"
+}

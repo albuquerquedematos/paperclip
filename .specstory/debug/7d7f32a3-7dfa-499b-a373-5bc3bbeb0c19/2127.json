@@ -1,0 +1,27 @@
+{
+  "agentId": "aa8a93567f69d0116",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1278\t  );\n1279\t\n1280\t  router.get(\"/companies/:companyId/agents\", async (req, res) =\u003e {\n1281\t    const companyId = req.params.companyId as string;\n1282\t    assertCompanyAccess(req, companyId);\n1283\t    const unsupportedQueryParams = Object.keys(req.query).sort();\n1284\t    if (unsupportedQueryParams.length \u003e 0) {\n1285\t      res.status(400).json({\n1286\t        error: `Unsupported query parameter${unsupportedQueryParams.length === 1 ? \"\" : \"s\"}: ${unsupportedQueryParams.join(\", \")}`,\n1287\t      });\n1288\t      return;\n1289\t    }\n1290\t    const result = await svc.list(companyId);\n1291\t    const canReadConfigs = await actorCanReadConfigurationsForCompany(req, companyId);\n1292\t    if (canReadConfigs) {\n1293\t      res.json(result);\n1294\t      return;\n1295\t    }",
+        "tool_use_id": "toolu_01PbTRJVGsLgxvddscM1bN2W",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "d55cddbd-914c-4448-9b7a-8c3656d36652",
+  "promptId": "dc405341-3479-47dd-8d57-3077b7af430f",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "d55cddbd-914c-4448-9b7a-8c3656d36652",
+  "timestamp": "2026-04-30T15:43:39.310Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "09b76d92-68d9-4a57-a5d6-97c23aac5d55",
+  "version": "2.1.123"
+}

@@ -1,0 +1,28 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "161:const EXECUTION_PATH_HEARTBEAT_RUN_STATUSES = [\"queued\", \"running\", \"scheduled_retry\"] as const;\n162:const CANCELLABLE_HEARTBEAT_RUN_STATUSES = [\"queued\", \"running\", \"scheduled_retry\"] as const;\n2185:    const { agentId, runId, sessionId, rawUsage } = input;\n2194:    const previousRun = await getLatestRunForSession(agentId, sessionId, { excludeRunId: runId });\n3154:          status: \"queued\",\n3162:      const queuedRun = await tx\n3169:          status: \"queued\",\n3183:          runId: queuedRun.id,\n3191:          executionRunId: queuedRun.id,\n3201:          issueCommentStatus: \"retry_queued\",\n3207:      return queuedRun;\n3214:      type: \"heartbeat.run.queued\",\n3261:      return { outcome: \"not_applicable\" as const, queuedRun: null };\n3271:      return { outcome: \"satisfied\" as const, queuedRun: null };\n3283:        message: \"Run ended without an issue comment after one retry; no further comment wake will be queued\",\n3285:      return { outcome: \"retry_exhausted\" as const, queuedRun: null };\n3296:      return { outcome: \"not_applicable\" as const, queuedRun: null };\n3311:      return { outcome: \"not_applicable\" as const, queuedRun: null };\n3314:    const queuedRun = await enqueueMissingIssueCommentRetry(run, agent, issueId);\n3315:    if (queuedRun) {\n3320:        message: \"Run ended without an issue comment; queued one follow-up wake to require a comment\",\n3322:      return { outcome: \"retry_queued\" as const, queuedRun };\n3329:    return { outcome: \"retry_exhausted\" as const, queuedRun: null };\n3348:    const queued = await db.transaction(async (tx) =\u003e {\n3361:          status: \"queued\",\n3376:          status: \"queued\",\n3411:      companyId: queued.companyId,\n3412:      type: \"heartbeat.run.queued\",\n3414:        runId: queued.id,\n3415:        agentId: queued.agentId,",
+        "is_error": false,
+        "tool_use_id": "toolu_01XyUz67hLpeeQf6aChuYiVk",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "d0531ab1-555d-4029-91e8-8534a64fe87b",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "d0531ab1-555d-4029-91e8-8534a64fe87b",
+  "timestamp": "2026-04-30T16:24:44.991Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "f06b9e61-7ff5-4ace-82e0-97865a5b14b9",
+  "version": "2.1.123"
+}

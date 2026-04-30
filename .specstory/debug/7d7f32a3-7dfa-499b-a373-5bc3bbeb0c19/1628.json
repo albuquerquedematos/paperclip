@@ -1,0 +1,26 @@
+{
+  "agentId": "a8fd5512baf043009",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "32\t\n33\t  const createGoal: Handler = async (ctx) =\u003e {\n34\t    const companyId = ctx.param(\"companyId\")!;\n35\t    assertCompanyAccess(ctx, companyId);\n36\t    const body = await ctx.json();\n37\t    const goal = await svc.create(companyId, body);\n38\t    const actor = getActorInfo(ctx);\n39\t    await logActivity(db, {\n40\t      companyId,\n41\t      actorType: actor.actorType,\n42\t      actorId: actor.actorId,\n43\t      agentId: actor.agentId,\n44\t      action: \"goal.created\",\n45\t      entityType: \"goal\",\n46\t      entityId: goal.id,\n47\t      details: { title: goal.title },\n48\t    });\n49\t    const telemetryClient = getTelemetryClient();\n50\t    if (telemetryClient) {\n51\t      trackGoalCreated(telemetryClient, { goalLevel: goal.level });\n52\t    }\n53\t    return Response.json(goal, { status: 201 });\n54\t  };\n55\t\n56\t  const updateGoal: Handler = async (ctx) =\u003e {",
+        "tool_use_id": "toolu_01MzKNZhmScXPvMye8Z617YS",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "596a7f24-1d1c-45d6-938c-2d96546b10c8",
+  "promptId": "f70e47c2-d340-4417-9b6f-d01ec6a1d002",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "596a7f24-1d1c-45d6-938c-2d96546b10c8",
+  "timestamp": "2026-04-30T15:17:02.137Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "987e57b7-736d-410c-aea9-2882c1e77021",
+  "version": "2.1.123"
+}

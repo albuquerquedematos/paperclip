@@ -1,0 +1,35 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "1\texport {};\n2\t\n3\tdeclare global {\n4\t  namespace Express {\n5\t    interface Request {\n6\t      actor: {\n7\t        type: \"board\" | \"agent\" | \"none\";\n8\t        userId?: string;\n9\t        userName?: string | null;\n10\t        userEmail?: string | null;\n11\t        agentId?: string;\n12\t        companyId?: string;\n13\t        companyIds?: string[];\n14\t        memberships?: Array\u003c{\n15\t          companyId: string;\n16\t          membershipRole?: string | null;\n17\t          status?: string;\n18\t        }\u003e;\n19\t        isInstanceAdmin?: boolean;\n20\t        keyId?: string;\n21\t        runId?: string;\n22\t        source?: \"local_implicit\" | \"session\" | \"board_key\" | \"agent_key\" | \"agent_jwt\" | \"none\";\n23\t      };\n24\t    }\n25\t  }\n26\t}\n27\t",
+        "tool_use_id": "toolu_01VVENryS4QWuKzo8VBZ6Z4s",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "e9fbce5e-78bc-4e1c-9c8a-b92ad445b708",
+  "promptId": "f8ab24c1-de42-4dc6-b59c-8c9364db9ca7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "e9fbce5e-78bc-4e1c-9c8a-b92ad445b708",
+  "timestamp": "2026-04-30T15:09:38.083Z",
+  "toolUseResult": {
+    "file": {
+      "content": "export {};\n\ndeclare global {\n  namespace Express {\n    interface Request {\n      actor: {\n        type: \"board\" | \"agent\" | \"none\";\n        userId?: string;\n        userName?: string | null;\n        userEmail?: string | null;\n        agentId?: string;\n        companyId?: string;\n        companyIds?: string[];\n        memberships?: Array\u003c{\n          companyId: string;\n          membershipRole?: string | null;\n          status?: string;\n        }\u003e;\n        isInstanceAdmin?: boolean;\n        keyId?: string;\n        runId?: string;\n        source?: \"local_implicit\" | \"session\" | \"board_key\" | \"agent_key\" | \"agent_jwt\" | \"none\";\n      };\n    }\n  }\n}\n",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/types/express.d.ts",
+      "numLines": 27,
+      "startLine": 1,
+      "totalLines": 27
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "885446f1-4402-46e9-b7f8-ff69f7f01f0e",
+  "version": "2.1.123"
+}

@@ -1,0 +1,35 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "1\texport {\n2\t  createDb,\n3\t  getPostgresDataDirectory,\n4\t  ensurePostgresDatabase,\n5\t  inspectMigrations,\n6\t  applyPendingMigrations,\n7\t  reconcilePendingMigrationHistory,\n8\t  type MigrationState,\n9\t  type MigrationHistoryReconcileResult,\n10\t  migratePostgresIfEmpty,\n11\t  type MigrationBootstrapResult,\n12\t  type Db,\n13\t} from \"./client.js\";\n14\texport {\n15\t  getEmbeddedPostgresTestSupport,\n16\t  startEmbeddedPostgresTestDatabase,\n17\t  type EmbeddedPostgresTestDatabase,\n18\t  type EmbeddedPostgresTestSupport,\n19\t} from \"./test-embedded-postgres.js\";\n20\texport {\n21\t  runDatabaseBackup,\n22\t  runDatabaseRestore,\n23\t  formatDatabaseBackupResult,\n24\t  type BackupRetentionPolicy,\n25\t  type RunDatabaseBackupOptions,\n26\t  type RunDatabaseBackupResult,\n27\t  type RunDatabaseRestoreOptions,\n28\t} from \"./backup-lib.js\";\n29\texport {\n30\t  createEmbeddedPostgresLogBuffer,\n31\t  formatEmbeddedPostgresError,\n32\t} from \"./embedded-postgres-error.js\";\n33\texport { issueRelations } from \"./schema/issue_relations.js\";\n34\texport { issueReferenceMentions } from \"./schema/issue_reference_mentions.js\";\n35\texport * from \"./schema/index.js\";\n36\t",
+        "tool_use_id": "toolu_01W7RAWpEddrnkFyccWCRghc",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "8723367c-ecc4-49b6-b19a-45e21efb669a",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "8723367c-ecc4-49b6-b19a-45e21efb669a",
+  "timestamp": "2026-04-30T14:47:36.568Z",
+  "toolUseResult": {
+    "file": {
+      "content": "export {\n  createDb,\n  getPostgresDataDirectory,\n  ensurePostgresDatabase,\n  inspectMigrations,\n  applyPendingMigrations,\n  reconcilePendingMigrationHistory,\n  type MigrationState,\n  type MigrationHistoryReconcileResult,\n  migratePostgresIfEmpty,\n  type MigrationBootstrapResult,\n  type Db,\n} from \"./client.js\";\nexport {\n  getEmbeddedPostgresTestSupport,\n  startEmbeddedPostgresTestDatabase,\n  type EmbeddedPostgresTestDatabase,\n  type EmbeddedPostgresTestSupport,\n} from \"./test-embedded-postgres.js\";\nexport {\n  runDatabaseBackup,\n  runDatabaseRestore,\n  formatDatabaseBackupResult,\n  type BackupRetentionPolicy,\n  type RunDatabaseBackupOptions,\n  type RunDatabaseBackupResult,\n  type RunDatabaseRestoreOptions,\n} from \"./backup-lib.js\";\nexport {\n  createEmbeddedPostgresLogBuffer,\n  formatEmbeddedPostgresError,\n} from \"./embedded-postgres-error.js\";\nexport { issueRelations } from \"./schema/issue_relations.js\";\nexport { issueReferenceMentions } from \"./schema/issue_reference_mentions.js\";\nexport * from \"./schema/index.js\";\n",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/db/src/index.ts",
+      "numLines": 36,
+      "startLine": 1,
+      "totalLines": 36
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "8b143bf7-9a8d-4681-a4f3-5e02bf1ef422",
+  "version": "2.1.123"
+}

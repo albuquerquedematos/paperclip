@@ -1,0 +1,26 @@
+{
+  "agentId": "a0d0169af69218004",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "300\t    databaseUrl: process.env.DATABASE_URL ?? fileDbUrl,\n301\t    databaseMigrationUrl: process.env.DATABASE_MIGRATION_URL,\n302\t    embeddedPostgresDataDir: resolveHomeAwarePath(\n303\t      fileConfig?.database.embeddedPostgresDataDir ?? resolveDefaultEmbeddedPostgresDir(),\n304\t    ),\n305\t    embeddedPostgresPort: fileConfig?.database.embeddedPostgresPort ?? 54329,\n306\t    databaseBackupEnabled,\n307\t    databaseBackupIntervalMinutes,\n308\t    databaseBackupRetentionDays,\n309\t    databaseBackupDir,\n310\t    serveUi:\n311\t      process.env.SERVE_UI !== undefined\n312\t        ? process.env.SERVE_UI === \"true\"\n313\t        : fileConfig?.server.serveUi ?? true,\n314\t    uiDevMiddleware: process.env.PAPERCLIP_UI_DEV_MIDDLEWARE === \"true\",\n315\t    secretsProvider,\n316\t    secretsStrictMode,\n317\t    secretsMasterKeyFilePath:\n318\t      resolveHomeAwarePath(\n319\t        process.env.PAPERCLIP_SECRETS_MASTER_KEY_FILE ??\n320\t          fileSecrets?.localEncrypted.keyFilePath ??\n321\t          resolveDefaultSecretsKeyFilePath(),\n322\t      ),\n323\t    storageProvider,\n324\t    storageLocalDiskBaseDir,\n325\t    storageS3Bucket,\n326\t    storageS3Region,\n327\t    storageS3Endpoint,\n328\t    storageS3Prefix,\n329\t    storageS3ForcePathStyle,\n330\t    feedbackExportBackendUrl,\n331\t    feedbackExportBackendToken,\n332\t    heartbeatSchedulerEnabled: process.env.HEARTBEAT_SCHEDULER_ENABLED !== \"false\",\n333\t    heartbeatSchedulerIntervalMs: Math.max(10000, Number(process.env.HEARTBEAT_SCHEDULER_INTERVAL_MS) || 30000),\n334\t    companyDeletionEnabled,\n335\t    telemetryEnabled: fileConfig?.telemetry?.enabled ?? true,\n336\t  };\n337\t}\n338\t",
+        "tool_use_id": "toolu_01SdMtBZMBrrSPxVJ218xCBg",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "92b81e70-2676-40e1-8e4a-ad895d5f5098",
+  "promptId": "41a5cab3-78a5-4305-8404-9daa35591aac",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "92b81e70-2676-40e1-8e4a-ad895d5f5098",
+  "timestamp": "2026-04-30T15:05:11.963Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "2d4da2e3-387b-4738-8bde-a8688ccd0308",
+  "version": "2.1.123"
+}

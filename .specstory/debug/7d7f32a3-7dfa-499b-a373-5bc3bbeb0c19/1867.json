@@ -1,0 +1,26 @@
+{
+  "agentId": "a4ad4aa75ca105b41",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "655\t      headers: { \"Content-Type\": \"application/javascript\" },\n656\t    });\n657\t  };\n658\t\n659\t  // ---------------------------------------------------------------------------\n660\t  // Wire handlers via expressHandler\n661\t  //\n662\t  // Note: instance-admin routes keep an Express assertInstanceAdmin() middleware\n663\t  // inline so the richer req.actor.isInstanceAdmin check is honoured.\n664\t  // ---------------------------------------------------------------------------\n665\t\n666\t  router.get(\"/adapters\", expressHandler(listAdapters, adapterDeps));\n667\t\n668\t  router.post(\"/adapters/install\", (req, _res, next) =\u003e {\n669\t    try { assertInstanceAdmin(req); next(); } catch (err) { next(err); }\n670\t  }, expressHandler(installAdapter, adapterDeps));\n671\t\n672\t  router.patch(\"/adapters/:type\", (req, _res, next) =\u003e {\n673\t    try { assertInstanceAdmin(req); next(); } catch (err) { next(err); }\n674\t  }, expressHandler(patchAdapter, adapterDeps));\n675\t\n676\t  router.patch(\"/adapters/:type/override\", (req, _res, next) =\u003e {\n677\t    try { assertInstanceAdmin(req); next(); } catch (err) { next(err); }\n678\t  }, expressHandler(patchAdapterOverride, adapterDeps));\n679\t\n680\t  router.delete(\"/adapters/:type\", (req, _res, next) =\u003e {\n681\t    try { assertInstanceAdmin(req); next(); } catch (err) { next(err); }\n682\t  }, expressHandler(deleteAdapter, adapterDeps));\n683\t\n684\t  router.post(\"/adapters/:type/reload\", (req, _res, next) =\u003e {\n685\t    try { assertInstanceAdmin(req); next(); } catch (err) { next(err); }\n686\t  }, expressHandler(reloadAdapter, adapterDeps));\n687\t\n688\t  router.post(\"/adapters/:type/reinstall\", (req, _res, next) =\u003e {\n689\t    try { assertInstanceAdmin(req); next(); } catch (err) { next(err); }\n690\t  }, expressHandler(reinstallAdapter, adapterDeps));\n691\t\n692\t  router.get(\"/adapters/:type/config-schema\", expressHandler(getAdapterConfigSchema, adapterDeps));\n693\t  router.get(\"/adapters/:type/ui-parser.js\", expressHandler(getAdapterUiParser, adapterDeps));\n694\t\n695\t  return router;\n696\t}\n697\t",
+        "tool_use_id": "toolu_014p1oYJ4LwkPfXXpHsYywDe",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "a6ab2205-c57f-45af-92dc-cae7d0529f06",
+  "promptId": "e14e6903-86b2-440b-8601-db2551c5adc3",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "a6ab2205-c57f-45af-92dc-cae7d0529f06",
+  "timestamp": "2026-04-30T15:21:16.019Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "6b48682a-b11d-4c19-b251-f7dbae42c2df",
+  "version": "2.1.123"
+}

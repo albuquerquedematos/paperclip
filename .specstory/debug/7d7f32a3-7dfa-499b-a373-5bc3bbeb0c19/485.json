@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "400\t  return {\n401\t    ensureNamespace,\n402\t\n403\t    async applyMigrations(pluginId: string, manifest: PaperclipPluginManifestV1, packageRoot: string) {\n404\t      if (!manifest.database) return null;\n405\t      const namespace = await ensureNamespace(pluginId, manifest);\n406\t      if (!namespace) return null;\n407\t\n408\t      const migrationDir = resolveMigrationsDir(packageRoot, manifest.database.migrationsDir);\n409\t      const migrationFiles = await listSqlMigrationFiles(migrationDir);\n410\t      const coreReadTables = manifest.database.coreReadTables ?? [];\n411\t      const lockKey = Number.parseInt(createHash(\"sha256\").update(pluginId).digest(\"hex\").slice(0, 12), 16);\n412\t\n413\t      await db.transaction(async (tx) =\u003e {\n414\t        await tx.execute(sql`SELECT pg_advisory_xact_lock(${lockKey})`);\n415\t        for (const migrationKey of migrationFiles) {\n416\t          const content = await readFile(path.join(migrationDir, migrationKey), \"utf8\");\n417\t          const checksum = createHash(\"sha256\").update(content).digest(\"hex\");\n418\t          const existingRows = await tx\n419\t            .select()\n420\t            .from(pluginMigrations)\n421\t            .where(and(eq(pluginMigrations.pluginId, pluginId), eq(pluginMigrations.migrationKey, migrationKey)))\n422\t            .limit(1);\n423\t          const existing = existingRows[0] as PluginMigrationRecord | undefined;\n424\t          if (existing?.status === \"applied\") {\n425\t            if (existing.checksum !== checksum) {\n426\t              throw new Error(`Plugin migration checksum mismatch for ${migrationKey}`);\n427\t            }\n428\t            continue;\n429\t          }",
+        "tool_use_id": "toolu_019G2q2QaDzKfLXVXtbxpaBM",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "2c723753-b09e-4d4a-92cb-2c6c2dcb63bb",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "2c723753-b09e-4d4a-92cb-2c6c2dcb63bb",
+  "timestamp": "2026-04-30T14:52:46.074Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "bfedbc56-ba9b-43ff-a2b7-97744b1396d3",
+  "version": "2.1.123"
+}

@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport fs from \"node:fs/promises\";\n2\timport path from \"node:path\";\n3\timport { notFound, unprocessable } from \"../errors.js\";\n4\timport { resolveHomeAwarePath, resolvePaperclipInstanceRoot } from \"../home-paths.js\";\n5\t\n6\tconst ENTRY_FILE_DEFAULT = \"AGENTS.md\";\n7\tconst MODE_KEY = \"instructionsBundleMode\";\n8\tconst ROOT_KEY = \"instructionsRootPath\";\n9\tconst ENTRY_KEY = \"instructionsEntryFile\";\n10\tconst FILE_KEY = \"instructionsFilePath\";\n11\tconst PROMPT_KEY = \"promptTemplate\";\n12\t/** @deprecated Use the managed instructions bundle system instead. */\n13\tconst BOOTSTRAP_PROMPT_KEY = \"bootstrapPromptTemplate\";\n14\tconst LEGACY_PROMPT_TEMPLATE_PATH = \"promptTemplate.legacy.md\";\n15\tconst IGNORED_INSTRUCTIONS_FILE_NAMES = new Set([\".DS_Store\", \"Thumbs.db\", \"Desktop.ini\"]);\n16\tconst IGNORED_INSTRUCTIONS_DIRECTORY_NAMES = new Set([\n17\t  \".git\",\n18\t  \".nox\",\n19\t  \".pytest_cache\",\n20\t  \".ruff_cache\",\n21\t  \".tox\",\n22\t  \".venv\",\n23\t  \"__pycache__\",\n24\t  \"node_modules\",\n25\t  \"venv\",\n26\t]);\n27\t\n28\ttype BundleMode = \"managed\" | \"external\";\n29\t\n30\ttype AgentLike = {\n31\t  id: string;\n32\t  companyId: string;\n33\t  name: string;\n34\t  adapterConfig: unknown;\n35\t};\n36\t\n37\ttype AgentInstructionsFileSummary = {\n38\t  path: string;\n39\t  size: number;\n40\t  language: string;\n41\t  markdown: boolean;\n42\t  isEntryFile: boolean;\n43\t  editable: boolean;\n44\t  deprecated: boolean;\n45\t  virtual: boolean;\n46\t};\n47\t\n48\ttype AgentInstructionsFileDetail = AgentInstructionsFileSummary \u0026 {\n49\t  content: string;\n50\t  editable: boolean;",
+        "tool_use_id": "toolu_01GvS8uL6GXGrxhzd97n7rcP",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "10e39967-7153-4df4-abe3-2b8e69e6953f",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "10e39967-7153-4df4-abe3-2b8e69e6953f",
+  "timestamp": "2026-04-30T14:52:14.592Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "6815e33c-f4e1-4c81-8906-3b29454ed69a",
+  "version": "2.1.123"
+}

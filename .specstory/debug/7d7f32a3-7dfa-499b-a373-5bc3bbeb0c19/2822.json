@@ -1,0 +1,28 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "packages/deploy-cloudflare/src/http/express-router-bridge.ts: node:internal/modules/esm/resolve:1151\n    if (inputTypeFlag) { throw new ERR_INPUT_TYPE_NOT_ALLOWED(); }\n                               ^\n\nError [ERR_INPUT_TYPE_NOT_ALLOWED]: --input-type can only be\npackages/deploy-cloudflare/src/auth/resolve-actor.ts: node:internal/modules/esm/resolve:1151\n    if (inputTypeFlag) { throw new ERR_INPUT_TYPE_NOT_ALLOWED(); }\n                               ^\n\nError [ERR_INPUT_TYPE_NOT_ALLOWED]: --input-type can only be\npackages/deploy-cloudflare/src/cron/heartbeat-sweep.ts: node:internal/modules/esm/resolve:1151\n    if (inputTypeFlag) { throw new ERR_INPUT_TYPE_NOT_ALLOWED(); }\n                               ^\n\nError [ERR_INPUT_TYPE_NOT_ALLOWED]: --input-type can only be\npackages/deploy-cloudflare/src/worker/api.ts: node:internal/modules/esm/resolve:1151\n    if (inputTypeFlag) { throw new ERR_INPUT_TYPE_NOT_ALLOWED(); }\n                               ^\n\nError [ERR_INPUT_TYPE_NOT_ALLOWED]: --input-type can only be\nserver/src/http/express-adapter.ts: node:internal/modules/esm/resolve:1151\n    if (inputTypeFlag) { throw new ERR_INPUT_TYPE_NOT_ALLOWED(); }\n                               ^\n\nError [ERR_INPUT_TYPE_NOT_ALLOWED]: --input-type can only be",
+        "is_error": false,
+        "tool_use_id": "toolu_017vFE6kjBYg2k4UvUuRBoRc",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "e4d67315-87a0-4057-9bce-f7cb9c0c4407",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "e4d67315-87a0-4057-9bce-f7cb9c0c4407",
+  "timestamp": "2026-04-30T16:33:42.068Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "a48632fe-2d7c-4684-a65d-56a4d4e7b157",
+  "version": "2.1.123"
+}

@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { spawn, type ChildProcess } from \"node:child_process\";\n2\timport { existsSync, lstatSync, readdirSync, readFileSync, realpathSync } from \"node:fs\";\n3\timport fs from \"node:fs/promises\";\n4\timport net from \"node:net\";\n5\timport { createHash, randomUUID } from \"node:crypto\";\n6\timport path from \"node:path\";\n7\timport { setTimeout as delay } from \"node:timers/promises\";\n8\timport type { AdapterRuntimeServiceReport } from \"@paperclipai/adapter-utils\";\n9\timport type { Db } from \"@paperclipai/db\";\n10\timport { executionWorkspaces, projectWorkspaces, workspaceRuntimeServices } from \"@paperclipai/db\";\n11\timport {\n12\t  listWorkspaceServiceCommandDefinitions,\n13\t  type WorkspaceRuntimeDesiredState,\n14\t  type WorkspaceRuntimeServiceStateMap,\n15\t} from \"@paperclipai/shared\";",
+        "tool_use_id": "toolu_01NjYvdu1NX17ZmwrpfYmwUC",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "5925d5e1-e28a-4630-b984-b9f8be680086",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "5925d5e1-e28a-4630-b984-b9f8be680086",
+  "timestamp": "2026-04-30T14:57:23.151Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "1bc0bd20-a42b-431c-a7fa-cae8a8509153",
+  "version": "2.1.123"
+}

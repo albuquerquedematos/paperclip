@@ -1,0 +1,26 @@
+{
+  "agentId": "a28a63530ac1fc5de",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { McpServer } from \"@modelcontextprotocol/sdk/server/mcp.js\";\n2\timport { StdioServerTransport } from \"@modelcontextprotocol/sdk/server/stdio.js\";\n3\timport { PaperclipApiClient } from \"./client.js\";\n4\timport { readConfigFromEnv, type PaperclipMcpConfig } from \"./config.js\";\n5\timport { createToolDefinitions } from \"./tools.js\";\n6\t\n7\texport function createPaperclipMcpServer(config: PaperclipMcpConfig = readConfigFromEnv()) {\n8\t  const server = new McpServer({\n9\t    name: \"paperclip\",\n10\t    version: \"0.1.0\",\n11\t  });\n12\t\n13\t  const client = new PaperclipApiClient(config);\n14\t  const tools = createToolDefinitions(client);\n15\t  for (const tool of tools) {\n16\t    server.tool(tool.name, tool.description, tool.schema.shape, tool.execute);\n17\t  }\n18\t\n19\t  return {\n20\t    server,\n21\t    tools,\n22\t    client,\n23\t  };\n24\t}\n25\t\n26\texport async function runServer(config: PaperclipMcpConfig = readConfigFromEnv()) {\n27\t  const { server } = createPaperclipMcpServer(config);\n28\t  const transport = new StdioServerTransport();\n29\t  await server.connect(transport);\n30\t}\n31\t\n\n\u003csystem-reminder\u003e\nWhenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.\n\u003c/system-reminder\u003e\n",
+        "tool_use_id": "toolu_01EXfH6V4UGoP4PSEj9GDYFS",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "01580d3f-401f-4285-bf42-f8067a45d898",
+  "promptId": "721340db-55e4-4f08-9c81-1d2e399ba682",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "01580d3f-401f-4285-bf42-f8067a45d898",
+  "timestamp": "2026-04-30T13:27:46.310Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "8d66584b-09db-47b7-8e48-b9d36abced31",
+  "version": "2.1.123"
+}

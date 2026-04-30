@@ -1,0 +1,60 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "text": "The sidecar agent is done. Now let me read the full actor shape from the middleware so I can extend `ActorContext` properly — this unblocks all route agents.",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01VvWGkKHuwgTYcvkZB8Qn9P",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 3203
+      },
+      "cache_creation_input_tokens": 3203,
+      "cache_read_input_tokens": 137070,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 3203
+          },
+          "cache_creation_input_tokens": 3203,
+          "cache_read_input_tokens": 137070,
+          "input_tokens": 1,
+          "output_tokens": 424,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 424,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "30de7d7d-2b25-40e7-ab30-02152fd0099e",
+  "requestId": "req_011CaaAZf8HD6ru1uNSgjaAu",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "timestamp": "2026-04-30T15:08:14.854Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "8b3d44b8-0b6e-4608-bdda-e74cb13ff210",
+  "version": "2.1.123"
+}

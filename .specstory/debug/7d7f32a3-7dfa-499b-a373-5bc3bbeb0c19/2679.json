@@ -1,0 +1,27 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport type { StorageProvider as StorageProviderId } from \"@paperclipai/shared\";\n2\t\n3\t/**\n4\t * Local copies of the StorageProvider interface types from\n5\t * `server/src/storage/types.ts`. We duplicate only the shapes needed here\n6\t * because importing Node-typed server modules into a Worker bundle would pull\n7\t * in `node:stream` and other Node-only dependencies.\n8\t *\n9\t * Keep these in sync with `server/src/storage/types.ts`.\n10\t */\n11\texport interface PutObjectInput {\n12\t  objectKey: string;\n13\t  body: Uint8Array | ArrayBuffer;\n14\t  contentType: string;\n15\t  contentLength: number;\n16\t}\n17\t\n18\texport interface GetObjectInput {\n19\t  objectKey: string;\n20\t}\n21\t\n22\texport interface GetObjectResult {\n23\t  /** ReadableStream — Workers environment returns Web Streams, not Node Readable. */\n24\t  stream: ReadableStream;\n25\t  contentType?: string;\n26\t  contentLength?: number;\n27\t  etag?: string;\n28\t  lastModified?: Date;\n29\t}\n30\t",
+        "tool_use_id": "toolu_01RYfbWefEefDc68ovk1FjAb",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "8e88e183-ad98-492a-83fd-2dc6e6c7c16e",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "8e88e183-ad98-492a-83fd-2dc6e6c7c16e",
+  "timestamp": "2026-04-30T16:29:29.385Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "223a2868-10e3-432d-b6da-8e6c792272f5",
+  "version": "2.1.123"
+}

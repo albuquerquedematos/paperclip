@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "18\t\n19\tconst logDir = resolveServerLogDir();\n20\tfs.mkdirSync(logDir, { recursive: true });\n21\t\n22\tconst logFile = path.join(logDir, \"server.log\");\n23\t\n24\tconst sharedOpts = {\n25\t  translateTime: \"SYS:HH:MM:ss\",\n26\t  ignore: \"pid,hostname\",\n27\t  singleLine: true,\n28\t};\n29\t\n30\texport const logger = pino({\n31\t  level: \"debug\",\n32\t  redact: [\"req.headers.authorization\"],\n33\t}, pino.transport({\n34\t  targets: [\n35\t    {\n36\t      target: \"pino-pretty\",\n37\t      options: { ...sharedOpts, ignore: \"pid,hostname,req,res,responseTime\", colorize: true, destination: 1 },\n38\t      level: \"info\",\n39\t    },",
+        "tool_use_id": "toolu_018dwwGniorxRTkC7GVbSJkf",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "329d72ff-edd1-4ef9-b36e-7fa4623d9d05",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "329d72ff-edd1-4ef9-b36e-7fa4623d9d05",
+  "timestamp": "2026-04-30T14:56:27.424Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "0a7482e9-ed2a-4075-a150-ea269bf86070",
+  "version": "2.1.123"
+}

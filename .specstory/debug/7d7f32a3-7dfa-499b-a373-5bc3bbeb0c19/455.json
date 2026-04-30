@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "245\t\n246\tfunction appendNote(notes: string[], note: string) {\n247\t  if (note.trim().length === 0 || notes.includes(note)) return;\n248\t  notes.push(note);\n249\t}\n250\t\n251\tasync function readTextFileIfPresent(\n252\t  filePath: string | null,\n253\t  state: ReturnType\u003ctypeof createFeedbackRedactionState\u003e,\n254\t  fieldPath: string,\n255\t) {\n256\t  if (!filePath) return null;\n257\t  const raw = await readFile(filePath, \"utf8\").catch(() =\u003e null);\n258\t  if (raw == null) return null;\n259\t  return sanitizeFeedbackText(raw, state, fieldPath, MAX_TRACE_FILE_CHARS);\n260\t}\n261\t\n262\tasync function listChildFiles(dirPath: string) {\n263\t  const entries = await readdir(dirPath, { withFileTypes: true }).catch(() =\u003e []);\n264\t  return entries\n265\t    .filter((entry) =\u003e entry.isFile())\n266\t    .map((entry) =\u003e path.join(dirPath, entry.name))\n267\t    .sort((left, right) =\u003e left.localeCompare(right));\n268\t}\n269\t\n270\tasync function listNestedFiles(dirPath: string, maxDepth = 4): Promise\u003cstring[]\u003e {\n271\t  async function walk(currentPath: string, depth: number): Promise\u003cstring[]\u003e {\n272\t    const entries = await readdir(currentPath, { withFileTypes: true }).catch(() =\u003e []);\n273\t    const files = entries\n274\t      .filter((entry) =\u003e entry.isFile())",
+        "tool_use_id": "toolu_01FuvkbtTFkKWPhWhj94giXy",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "eb95c2c1-4905-44c8-9ff5-78a79165c8e8",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "eb95c2c1-4905-44c8-9ff5-78a79165c8e8",
+  "timestamp": "2026-04-30T14:52:23.973Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "67dd12cc-ee45-443b-ba31-097d408128d0",
+  "version": "2.1.123"
+}

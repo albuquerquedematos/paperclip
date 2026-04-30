@@ -1,0 +1,26 @@
+{
+  "agentId": "a0d0169af69218004",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "7\texport const DEPLOYMENT_MODES = [\"local_trusted\", \"authenticated\"] as const;\n8\texport type DeploymentMode = (typeof DEPLOYMENT_MODES)[number];\n9\t\n10\texport const DEPLOYMENT_PLATFORMS = [\"node\", \"cloudflare\"] as const;\n11\texport type DeploymentPlatform = (typeof DEPLOYMENT_PLATFORMS)[number];\n12\t",
+        "tool_use_id": "toolu_01G7E22ej9Uv448HvtRYWuWy",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "052f3a2a-01ee-4788-a96b-74745df612dd",
+  "promptId": "f8ab24c1-de42-4dc6-b59c-8c9364db9ca7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "052f3a2a-01ee-4788-a96b-74745df612dd",
+  "timestamp": "2026-04-30T15:08:24.466Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "a7c98a34-7bb8-4e62-96bb-830a47d7fc0a",
+  "version": "2.1.123"
+}

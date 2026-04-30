@@ -1,0 +1,26 @@
+{
+  "agentId": "ac82afa7422550819",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { unprocessable } from \"../errors.js\";\n2\t\n3\texport async function assertEnvironmentSelectionForCompany(\n4\t  environmentsSvc: {\n5\t    getById(environmentId: string): Promise\u003c{\n6\t      id: string;\n7\t      companyId: string;\n8\t      driver: string;\n9\t      status?: string | null;\n10\t      config: Record\u003cstring, unknown\u003e | null;\n11\t    } | null\u003e;\n12\t  },\n13\t  companyId: string,\n14\t  environmentId: string | null | undefined,\n15\t  options?: {\n16\t    allowedDrivers?: string[];\n17\t    allowedSandboxProviders?: string[];\n18\t  },\n19\t) {\n20\t  if (environmentId === undefined || environmentId === null) return;\n21\t  const environment = await environmentsSvc.getById(environmentId);\n22\t  if (!environment || environment.companyId !== companyId) {\n23\t    throw unprocessable(\"Environment not found.\");\n24\t  }\n25\t  if (environment.status === \"archived\") {\n26\t    throw unprocessable(\"Environment is archived.\");\n27\t  }\n28\t  if (options?.allowedDrivers \u0026\u0026 !options.allowedDrivers.includes(environment.driver)) {\n29\t    throw unprocessable(\n30\t      `Environment driver \"${environment.driver}\" is not allowed here. Allowed drivers: ${options.allowedDrivers.join(\", \")}`,\n31\t    );\n32\t  }\n33\t  if (environment.driver === \"sandbox\") {\n34\t    const config = environment.config \u0026\u0026 typeof environment.config === \"object\"\n35\t      ? environment.config as Record\u003cstring, unknown\u003e\n36\t      : {};\n37\t    const provider = typeof config.provider === \"string\" ? config.provider : \"\";\n38\t    if (provider === \"fake\") {\n39\t      throw unprocessable(\n40\t        `Environment sandbox provider \"${provider}\" is not allowed here. The built-in fake provider is probe-only and cannot execute runs.`,\n41\t      );\n42\t    }\n43\t    if (\n44\t      options?.allowedSandboxProviders\n45\t      \u0026\u0026 options.allowedSandboxProviders.length \u003e 0\n46\t      \u0026\u0026 !options.allowedSandboxProviders.includes(provider)\n47\t    ) {\n48\t      throw unprocessable(\n49\t        `Environment sandbox provider \"${provider || \"unknown\"}\" is not allowed here. Allowed providers: ${options.allowedSandboxProviders.join(\", \")}`,\n50\t      );\n51\t    }\n52\t  }\n53\t}\n54\t",
+        "tool_use_id": "toolu_01AmC6Vn1drGEzfuGsgTgEri",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "ec8a445b-a143-4d57-991c-145db88643c8",
+  "promptId": "f8ab24c1-de42-4dc6-b59c-8c9364db9ca7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "ec8a445b-a143-4d57-991c-145db88643c8",
+  "timestamp": "2026-04-30T15:11:37.247Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "7b2af295-f67f-4885-b57e-875c11e75ac8",
+  "version": "2.1.123"
+}

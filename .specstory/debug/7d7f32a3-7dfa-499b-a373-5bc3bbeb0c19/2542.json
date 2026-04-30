@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "1095\t  async function recordWatchdogDecision(input: {\n1096\t    runId: string;\n1097\t    actor: WatchdogDecisionActor;\n1098\t    decision: \"snooze\" | \"continue\" | \"dismissed_false_positive\";\n1099\t    evaluationIssueId?: string | null;\n1100\t    reason?: string | null;\n1101\t    snoozedUntil?: Date | null;\n1102\t    createdByRunId?: string | null;\n1103\t    now?: Date;\n1104\t  }) {\n1105\t    const [run] = await db\n1106\t      .select()\n1107\t      .from(heartbeatRuns)\n1108\t      .where(eq(heartbeatRuns.id, input.runId))\n1109\t      .limit(1);\n1110\t    if (!run) throw notFound(\"Heartbeat run not found\");\n1111\t\n1112\t    let evaluationIssue: {\n1113\t      id: string;\n1114\t      assigneeAgentId: string | null;",
+        "tool_use_id": "toolu_0163e95f1kzq4vUdVbD7Fhek",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "a12907bf-a67c-4994-8990-78d3e1c48650",
+  "promptId": "ba96a81e-2351-4b03-969f-bc172383cdd1",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "a12907bf-a67c-4994-8990-78d3e1c48650",
+  "timestamp": "2026-04-30T16:24:30.407Z",
+  "toolUseResult": {
+    "file": {
+      "content": "  async function recordWatchdogDecision(input: {\n    runId: string;\n    actor: WatchdogDecisionActor;\n    decision: \"snooze\" | \"continue\" | \"dismissed_false_positive\";\n    evaluationIssueId?: string | null;\n    reason?: string | null;\n    snoozedUntil?: Date | null;\n    createdByRunId?: string | null;\n    now?: Date;\n  }) {\n    const [run] = await db\n      .select()\n      .from(heartbeatRuns)\n      .where(eq(heartbeatRuns.id, input.runId))\n      .limit(1);\n    if (!run) throw notFound(\"Heartbeat run not found\");\n\n    let evaluationIssue: {\n      id: string;\n      assigneeAgentId: string | null;",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/services/recovery/service.ts",
+      "numLines": 20,
+      "startLine": 1095,
+      "totalLines": 2534
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "c1e897b8-bcce-4fc5-8ce0-7da317989363",
+  "version": "2.1.123"
+}

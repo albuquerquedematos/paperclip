@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "{\n  \"name\": \"@paperclipai/deploy-cloudflare\",\n  \"version\": \"0.1.0\",\n  \"private\": true,\n  \"type\": \"module\",\n  \"main\": \"./src/boot.ts\",\n  \"dependencies\": {\n    \"hono\": \"^4.0.0\",\n    \"@paperclipai/shared\": \"workspace:*\",\n    \"@paperclipai/db\": \"workspace:*\"\n  },\n  \"devDependencies\": {\n    \"@cloudflare/workers-types\": \"^4.0.0\",\n    \"typescript\": \"^5.0.0\",\n    \"wrangler\": \"^3.0.0\"\n  }\n}",
+        "is_error": false,
+        "tool_use_id": "toolu_01VwAugCKatYfcmVMoN2PZzX",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "cafbd51d-5f4f-4883-9761-4097503848db",
+  "promptId": "76fdb1bb-64b4-4188-b850-7eeac0540eca",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "cafbd51d-5f4f-4883-9761-4097503848db",
+  "timestamp": "2026-04-30T16:41:20.277Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "{\n  \"name\": \"@paperclipai/deploy-cloudflare\",\n  \"version\": \"0.1.0\",\n  \"private\": true,\n  \"type\": \"module\",\n  \"main\": \"./src/boot.ts\",\n  \"dependencies\": {\n    \"hono\": \"^4.0.0\",\n    \"@paperclipai/shared\": \"workspace:*\",\n    \"@paperclipai/db\": \"workspace:*\"\n  },\n  \"devDependencies\": {\n    \"@cloudflare/workers-types\": \"^4.0.0\",\n    \"typescript\": \"^5.0.0\",\n    \"wrangler\": \"^3.0.0\"\n  }\n}"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "e285aa70-0a0d-42d0-8109-f94b06d9c8c2",
+  "version": "2.1.123"
+}

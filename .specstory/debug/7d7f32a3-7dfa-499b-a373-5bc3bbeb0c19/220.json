@@ -1,0 +1,26 @@
+{
+  "agentId": "adabf466a1a877701",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "784\t  }\n785\t  \n786\t  if (config.databaseBackupEnabled) {\n787\t    const backupIntervalMs = config.databaseBackupIntervalMinutes * 60 * 1000;\n788\t\n789\t    logger.info(\n790\t      {\n791\t        intervalMinutes: config.databaseBackupIntervalMinutes,\n792\t        retentionSource: \"instance-settings-db\",\n793\t        backupDir: config.databaseBackupDir,\n794\t      },\n795\t      \"Automatic database backups enabled\",\n796\t    );\n797\t    setInterval(() =\u003e {\n798\t      void runServerDatabaseBackup(\"scheduled\").catch(() =\u003e {\n799\t        // runServerDatabaseBackup already logs the failure with context.\n800\t      });\n801\t    }, backupIntervalMs);\n802\t  }\n803\t  \n804\t  // Wait for external adapters to finish loading before accepting requests.\n805\t  // Without this, adapter type validation (assertKnownAdapterType) would\n806\t  // reject valid external adapter types during the startup loading window.\n807\t  const { waitForExternalAdapters } = await import(\"./adapters/registry.js\");\n808\t  await waitForExternalAdapters();\n809\t\n810\t  await new Promise\u003cvoid\u003e((resolveListen, rejectListen) =\u003e {\n811\t    const onError = (err: Error) =\u003e {\n812\t      server.off(\"error\", onError);\n813\t      rejectListen(err);\n814\t    };\n815\t\n816\t    server.once(\"error\", onError);\n817\t    server.listen(listenPort, config.host, () =\u003e {\n818\t      server.off(\"error\", onError);\n819\t      logger.info(`Server listening on ${config.host}:${listenPort}`);\n820\t      if (process.env.PAPERCLIP_OPEN_ON_LISTEN === \"true\") {\n821\t        const openHost = config.host === \"0.0.0.0\" || config.host === \"::\" ? \"127.0.0.1\" : config.host;\n822\t        const url = `http://${openHost}:${listenPort}`;\n823\t        void import(\"open\")\n824\t          .then((mod) =\u003e mod.default(url))\n825\t          .then(() =\u003e {\n826\t            logger.info(`Opened browser at ${url}`);\n827\t          })\n828\t          .catch((err) =\u003e {\n829\t            logger.warn({ err, url }, \"Failed to open browser on startup\");\n830\t          });\n831\t      }\n832\t        printStartupBanner({\n833\t          bind: config.bind,",
+        "tool_use_id": "toolu_01QhuDJbmdCw6KnDenaBB2vR",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "3c44c71d-f2e0-4a76-8e90-d6544c1393e3",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "3c44c71d-f2e0-4a76-8e90-d6544c1393e3",
+  "timestamp": "2026-04-30T14:49:42.543Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "e0282687-13a0-48a8-a297-67d32f4f8d3c",
+  "version": "2.1.123"
+}

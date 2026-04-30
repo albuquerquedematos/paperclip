@@ -1,0 +1,28 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "356:    .where(and(eq(issues.id, input.issueId), eq(issues.companyId, input.companyId)))\n606:  companyId: heartbeatRuns.companyId,\n607:  agentId: heartbeatRuns.agentId,\n734:  companyId: heartbeatRuns.companyId,\n747:  agentId: heartbeatRuns.agentId,\n1075:    .where(and(eq(issues.id, contextIssueId), eq(issues.companyId, companyId)))\n1630:          .where(and(eq(issues.id, issueId), eq(issues.companyId, input.companyId)))\n2065:      .where(eq(agents.id, agentId))\n2080:      .where(eq(heartbeatRuns.id, runId))\n2088:      .where(eq(heartbeatRuns.id, runId))\n2110:      .where(and(eq(issues.id, issueId), eq(issues.companyId, companyId)))\n2118:      .where(eq(agentRuntimeState.agentId, agentId))\n2148:      eq(heartbeatRuns.agentId, agentId),\n2173:      .where(and(eq(heartbeatRuns.agentId, agentId), eq(heartbeatRuns.sessionIdAfter, sessionId)))\n2239:      .where(and(eq(heartbeatRuns.agentId, agent.id), eq(heartbeatRuns.sessionIdAfter, sessionId)))\n2372:          eq(heartbeatRuns.companyId, agent.companyId),\n2373:          eq(heartbeatRuns.agentId, agent.id),\n2420:          .where(and(eq(issues.id, issueId), eq(issues.companyId, agent.companyId)))\n2711:      .where(eq(heartbeatRuns.id, runId))\n2833:        .where(and(eq(issues.id, issueId), eq(issues.companyId, run.companyId)))\n2842:        .where(eq(agents.id, run.agentId))\n2997:      .where(eq(heartbeatRunEvents.runId, runId));\n3014:      .where(eq(heartbeatRuns.id, runId))\n3027:      .where(and(eq(heartbeatRuns.id, runId), eq(heartbeatRuns.status, \"running\"), eq(heartbeatRuns.errorCode, DETACHED_PROCESS_ERROR_CODE)))\n3048:      .where(eq(heartbeatRuns.id, runId))",
+        "is_error": false,
+        "tool_use_id": "toolu_01HdgUptSohWY91QiietJxG4",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "6dd01c7e-44cb-46b1-9a5a-efcc1c7ee54a",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "6dd01c7e-44cb-46b1-9a5a-efcc1c7ee54a",
+  "timestamp": "2026-04-30T16:24:48.801Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "65d6e2f3-a522-4ade-bcb6-fb08e03228fe",
+  "version": "2.1.123"
+}

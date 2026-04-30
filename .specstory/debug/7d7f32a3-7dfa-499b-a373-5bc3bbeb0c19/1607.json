@@ -1,0 +1,26 @@
+{
+  "agentId": "a8fd5512baf043009",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "320\t    const companyId = ctx.param(\"companyId\")!;\n321\t    assertCompanyAccess(ctx, companyId);\n322\t\n323\t    const actor = getActorInfo(ctx);\n324\t    const existingCompany = await svc.getById(companyId);\n325\t    if (!existingCompany) {\n326\t      return Response.json({ error: \"Company not found\" }, { status: 404 });\n327\t    }\n328\t    let body: Record\u003cstring, unknown\u003e;\n329\t\n330\t    if (ctx.actor?.type === \"agent\") {\n331\t      // Only CEO agents may update company branding fields\n332\t      const agentSvc = agentService(db);\n333\t      const actorAgent = ctx.actor.agentId ? await agentSvc.getById(ctx.actor.agentId) : null;\n334\t      if (!actorAgent || actorAgent.role !== \"ceo\") {\n335\t        throw forbidden(\"Only CEO agents or board users may update company settings\");\n336\t      }\n337\t      if (actorAgent.companyId !== companyId) {\n338\t        throw forbidden(\"Agent key cannot access another company\");\n339\t      }\n340\t      body = updateCompanyBrandingSchema.parse(await ctx.json());\n341\t    } else {\n342\t      assertBoard(ctx);\n343\t      body = updateCompanySchema.parse(await ctx.json());\n344\t\n345\t      if (body.feedbackDataSharingEnabled === true \u0026\u0026 !existingCompany.feedbackDataSharingEnabled) {\n346\t        body = {\n347\t          ...body,\n348\t          feedbackDataSharingConsentAt: new Date(),\n349\t          feedbackDataSharingConsentByUserId: ctx.actor?.userId ?? \"local-board\",\n350\t          feedbackDataSharingTermsVersion:\n351\t            typeof body.feedbackDataSharingTermsVersion === \"string\" \u0026\u0026 body.feedbackDataSharingTermsVersion.length \u003e 0\n352\t              ? body.feedbackDataSharingTermsVersion\n353\t              : DEFAULT_FEEDBACK_DATA_SHARING_TERMS_VERSION,\n354\t        };\n355\t      }\n356\t    }\n357\t\n358\t    const company = await svc.update(companyId, body);\n359\t    if (!company) {\n360\t      return Response.json({ error: \"Company not found\" }, { status: 404 });\n361\t    }\n362\t    await logActivity(db, {\n363\t      companyId,\n364\t      actorType: actor.actorType,\n365\t      actorId: actor.actorId,\n366\t      agentId: actor.agentId,\n367\t      runId: actor.runId,\n368\t      action: \"company.updated\",\n369\t      entityType: \"company\",\n370\t      entityId: companyId,\n371\t      details: body,\n372\t    });\n373\t    return Response.json(company);\n374\t  };\n375\t\n376\t  const updateCompanyBranding: Handler = async (ctx) =\u003e {\n377\t    const companyId = ctx.param(\"companyId\")!;\n378\t    await assertCanUpdateBranding(ctx, companyId);\n379\t    const body = await ctx.json();\n380\t    const company = await svc.update(companyId, body);\n381\t    if (!company) {\n382\t      return Response.json({ error: \"Company not found\" }, { status: 404 });\n383\t    }\n384\t    const actor = getActorInfo(ctx);\n385\t    await logActivity(db, {\n386\t      companyId,\n387\t      actorType: actor.actorType,\n388\t      actorId: actor.actorId,\n389\t      agentId: actor.agentId,",
+        "tool_use_id": "toolu_01L9sEi2GpdtoxFad73PWzDk",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "70d99dbe-e214-46da-995d-6be1c2a2625e",
+  "promptId": "f70e47c2-d340-4417-9b6f-d01ec6a1d002",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "70d99dbe-e214-46da-995d-6be1c2a2625e",
+  "timestamp": "2026-04-30T15:16:41.833Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "b9310748-7986-4395-9177-8e0c7fe5395d",
+  "version": "2.1.123"
+}

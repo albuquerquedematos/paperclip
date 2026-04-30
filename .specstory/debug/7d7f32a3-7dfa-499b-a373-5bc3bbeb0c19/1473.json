@@ -1,0 +1,69 @@
+{
+  "agentId": "a6a8d0fab5901b092",
+  "attributionAgent": "backend-architect",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01NNtc2sQRF1egtQ63XHyYG8",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/llms.ts"
+        },
+        "name": "Read",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01QR7NYEeEpeJLujxcizsua9",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 5770
+      },
+      "cache_creation_input_tokens": 5770,
+      "cache_read_input_tokens": 7879,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 5770
+          },
+          "cache_creation_input_tokens": 5770,
+          "cache_read_input_tokens": 7879,
+          "input_tokens": 1,
+          "output_tokens": 540,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 540,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "c3a8fedd-27c8-49fb-be9f-20251bb4a091",
+  "requestId": "req_011CaaAyB1WbxwBwdhhtGxmb",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "timestamp": "2026-04-30T15:13:33.479Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "e3d21f5e-dbe9-423d-ac0a-afcccc9277a3",
+  "version": "2.1.123"
+}

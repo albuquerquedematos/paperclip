@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { Router, type Request, type Response, type NextFunction } from \"express\";\n2\timport type { Handler, RequestCtx } from \"../http/types.js\";\n3\timport { expressHandler } from \"../http/express-adapter.js\";\n4\timport { generateKeyPairSync, randomUUID } from \"node:crypto\";\n5\timport path from \"node:path\";\n6\timport type { Db } from \"@paperclipai/db\";\n7\timport { agents as agentsTable, companies, heartbeatRuns, issues as issuesTable } from \"@paperclipai/db\";\n8\timport { and, desc, eq, inArray, not, sql } from \"drizzle-orm\";\n9\timport {\n10\t  agentSkillSyncSchema,\n11\t  agentMineInboxQuerySchema,\n12\t  AGENT_DEFAULT_MAX_CONCURRENT_RUNS,\n13\t  createAgentKeySchema,\n14\t  createAgentHireSchema,\n15\t  createAgentSchema,\n16\t  deriveAgentUrlKey,\n17\t  isUuidLike,\n18\t  resetAgentSessionSchema,\n19\t  testAdapterEnvironmentSchema,\n20\t  type AgentSkillSnapshot,\n21\t  type InstanceSchedulerHeartbeatAgent,\n22\t  upsertAgentInstructionsFileSchema,\n23\t  updateAgentInstructionsBundleSchema,\n24\t  updateAgentPermissionsSchema,\n25\t  updateAgentInstructionsPathSchema,\n26\t  wakeAgentSchema,\n27\t  updateAgentSchema,\n28\t  supportedEnvironmentDriversForAdapter,\n29\t} from \"@paperclipai/shared\";\n30\timport {\n31\t  readPaperclipSkillSyncPreference,\n32\t  writePaperclipSkillSyncPreference,\n33\t} from \"@paperclipai/adapter-utils/server-utils\";\n34\timport { trackAgentCreated } from \"@paperclipai/shared/telemetry\";\n35\timport { validate } from \"../middleware/validate.js\";\n36\timport {\n37\t  agentService,\n38\t  agentInstructionsService,\n39\t  accessService,\n40\t  approvalService,",
+        "tool_use_id": "toolu_01AwVqozNgu4g2zHjHsTiCUV",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "7ee05a91-aa06-4821-8efc-915487b40f11",
+  "promptId": "ba96a81e-2351-4b03-969f-bc172383cdd1",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "7ee05a91-aa06-4821-8efc-915487b40f11",
+  "timestamp": "2026-04-30T16:34:40.746Z",
+  "toolUseResult": {
+    "file": {
+      "content": "import { Router, type Request, type Response, type NextFunction } from \"express\";\nimport type { Handler, RequestCtx } from \"../http/types.js\";\nimport { expressHandler } from \"../http/express-adapter.js\";\nimport { generateKeyPairSync, randomUUID } from \"node:crypto\";\nimport path from \"node:path\";\nimport type { Db } from \"@paperclipai/db\";\nimport { agents as agentsTable, companies, heartbeatRuns, issues as issuesTable } from \"@paperclipai/db\";\nimport { and, desc, eq, inArray, not, sql } from \"drizzle-orm\";\nimport {\n  agentSkillSyncSchema,\n  agentMineInboxQuerySchema,\n  AGENT_DEFAULT_MAX_CONCURRENT_RUNS,\n  createAgentKeySchema,\n  createAgentHireSchema,\n  createAgentSchema,\n  deriveAgentUrlKey,\n  isUuidLike,\n  resetAgentSessionSchema,\n  testAdapterEnvironmentSchema,\n  type AgentSkillSnapshot,\n  type InstanceSchedulerHeartbeatAgent,\n  upsertAgentInstructionsFileSchema,\n  updateAgentInstructionsBundleSchema,\n  updateAgentPermissionsSchema,\n  updateAgentInstructionsPathSchema,\n  wakeAgentSchema,\n  updateAgentSchema,\n  supportedEnvironmentDriversForAdapter,\n} from \"@paperclipai/shared\";\nimport {\n  readPaperclipSkillSyncPreference,\n  writePaperclipSkillSyncPreference,\n} from \"@paperclipai/adapter-utils/server-utils\";\nimport { trackAgentCreated } from \"@paperclipai/shared/telemetry\";\nimport { validate } from \"../middleware/validate.js\";\nimport {\n  agentService,\n  agentInstructionsService,\n  accessService,\n  approvalService,",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/agents.ts",
+      "numLines": 40,
+      "startLine": 1,
+      "totalLines": 2975
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "f3e64b82-f1f4-4cef-a398-c7a30b00ea60",
+  "version": "2.1.123"
+}

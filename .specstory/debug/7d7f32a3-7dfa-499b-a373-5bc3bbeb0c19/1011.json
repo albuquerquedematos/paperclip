@@ -1,0 +1,26 @@
+{
+  "agentId": "a3573a14f101d1112",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\t// TODO(cloudflare): agent-instructions.ts manages a per-agent directory tree\n2\t// of Markdown instruction files entirely through node:fs/promises (readdir,\n3\t// stat, readFile, writeFile, mkdir, rm). All of these operations touch the\n4\t// local host filesystem at request time. For Workers compatibility this entire\n5\t// service must be ported to a storage abstraction backed by R2 (or D1 for\n6\t// small files), with directory listing replaced by a database-tracked file\n7\t// inventory and path-based operations replaced by object-key operations.\n8\timport fs from \"node:fs/promises\";\n9\timport path from \"node:path\";\n10\timport { notFound, unprocessable } from \"../errors.js\";\n11\timport { resolveHomeAwarePath, resolvePaperclipInstanceRoot } from \"../home-paths.js\";\n12\t\n13\tconst ENTRY_FILE_DEFAULT = \"AGENTS.md\";\n14\tconst MODE_KEY = \"instructionsBundleMode\";\n15\tconst ROOT_KEY = \"instructionsRootPath\";\n16\tconst ENTRY_KEY = \"instructionsEntryFile\";\n17\tconst FILE_KEY = \"instructionsFilePath\";\n18\tconst PROMPT_KEY = \"promptTemplate\";\n19\t/** @deprecated Use the managed instructions bundle system instead. */\n20\tconst BOOTSTRAP_PROMPT_KEY = \"bootstrapPromptTemplate\";\n21\tconst LEGACY_PROMPT_TEMPLATE_PATH = \"promptTemplate.legacy.md\";\n22\tconst IGNORED_INSTRUCTIONS_FILE_NAMES = new Set([\".DS_Store\", \"Thumbs.db\", \"Desktop.ini\"]);\n23\tconst IGNORED_INSTRUCTIONS_DIRECTORY_NAMES = new Set([\n24\t  \".git\",\n25\t  \".nox\",\n26\t  \".pytest_cache\",\n27\t  \".ruff_cache\",\n28\t  \".tox\",\n29\t  \".venv\",\n30\t  \"__pycache__\",\n31\t  \"node_modules\",\n32\t  \"venv\",\n33\t]);\n34\t\n35\ttype BundleMode = \"managed\" | \"external\";\n36\t\n37\ttype AgentLike = {\n38\t  id: string;\n39\t  companyId: string;\n40\t  name: string;\n41\t  adapterConfig: unknown;\n42\t};\n43\t\n44\ttype AgentInstructionsFileSummary = {\n45\t  path: string;\n46\t  size: number;\n47\t  language: string;\n48\t  markdown: boolean;\n49\t  isEntryFile: boolean;\n50\t  editable: boolean;\n51\t  deprecated: boolean;\n52\t  virtual: boolean;\n53\t};\n54\t\n55\ttype AgentInstructionsFileDetail = AgentInstructionsFileSummary \u0026 {\n56\t  content: string;\n57\t  editable: boolean;\n58\t};\n59\t\n60\ttype AgentInstructionsBundle = {\n61\t  agentId: string;\n62\t  companyId: string;\n63\t  mode: BundleMode | null;\n64\t  rootPath: string | null;\n65\t  managedRootPath: string;\n66\t  entryFile: string;\n67\t  resolvedEntryPath: string | null;\n68\t  editable: boolean;\n69\t  warnings: string[];\n70\t  legacyPromptTemplateActive: boolean;\n71\t  legacyBootstrapPromptTemplateActive: boolean;\n72\t  files: AgentInstructionsFileSummary[];\n73\t};\n74\t\n75\ttype BundleState = {\n76\t  config: Record\u003cstring, unknown\u003e;\n77\t  mode: BundleMode | null;\n78\t  rootPath: string | null;\n79\t  entryFile: string;\n80\t  resolvedEntryPath: string | null;",
+        "tool_use_id": "toolu_013hheC9WbifMxsvRcJyuBFC",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "370460ca-069a-4993-a6d5-4b122ac81531",
+  "promptId": "41a5cab3-78a5-4305-8404-9daa35591aac",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "370460ca-069a-4993-a6d5-4b122ac81531",
+  "timestamp": "2026-04-30T15:05:41.122Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "4a1a3e19-41d2-483c-854a-7fd8a97954e4",
+  "version": "2.1.123"
+}

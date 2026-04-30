@@ -1,0 +1,27 @@
+{
+  "agentId": "a28a63530ac1fc5de",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "92:  if (process.env.PAPERCLIP_SECRETS_PROVIDER === undefined) {\n93:    process.env.PAPERCLIP_SECRETS_PROVIDER = config.secretsProvider;\n95:  if (process.env.PAPERCLIP_SECRETS_STRICT_MODE === undefined) {\n96:    process.env.PAPERCLIP_SECRETS_STRICT_MODE = config.secretsStrictMode ? \"true\" : \"false\";\n98:  if (process.env.PAPERCLIP_SECRETS_MASTER_KEY_FILE === undefined) {\n99:    process.env.PAPERCLIP_SECRETS_MASTER_KEY_FILE = config.secretsMasterKeyFilePath;\n116:    if (process.env.PAPERCLIP_MIGRATION_AUTO_APPLY === \"true\") return true;\n117:    if (process.env.PAPERCLIP_MIGRATION_PROMPT === \"never\") return false;\n298:    const verboseEmbeddedPostgresLogs = process.env.PAPERCLIP_EMBEDDED_POSTGRES_VERBOSE === \"true\";\n498:    const envTrustedOrigins = (process.env.BETTER_AUTH_TRUSTED_ORIGINS ?? \"\")",
+        "is_error": false,
+        "tool_use_id": "toolu_01S2eYKL15TXxcFrfkbSoD1B",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "a24761ca-63c8-47ef-8408-9d31008b57a8",
+  "promptId": "721340db-55e4-4f08-9c81-1d2e399ba682",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "a24761ca-63c8-47ef-8408-9d31008b57a8",
+  "timestamp": "2026-04-30T13:27:58.653Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "9416b879-4048-400e-8c60-e688f65e607f",
+  "version": "2.1.123"
+}

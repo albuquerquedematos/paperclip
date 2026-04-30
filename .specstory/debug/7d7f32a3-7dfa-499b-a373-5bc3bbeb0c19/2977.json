@@ -1,0 +1,27 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "455\t        const pluginSlug = body.pluginSlug as string;\n456\t        const companyId = body.companyId as string;\n457\t        const executorMode = (body.executorMode as \"sandbox_bridge\" | \"container\") ?? \"sandbox_bridge\";\n458\t\n459\t        try {\n460\t          await env.PLUGIN_DISPATCH_WORKFLOW.create({\n461\t            id: `plugin-job-${pluginJobId}`,\n462\t            params: { pluginJobId, pluginSlug, companyId, executorMode },\n463\t          });\n464\t          message.ack();\n465\t        } catch (err) {\n466\t          console.error(\n467\t            `[Queue] Failed to start PluginDispatchWorkflow for job ${pluginJobId}: ${\n468\t              err instanceof Error ? err.message : String(err)\n469\t            }`,\n470\t          );\n471\t          message.retry();\n472\t        }\n473\t        continue;\n474\t      }\n475\t\n476\t      if (type === \"heartbeat_dispatch\") {\n477\t        const agentId = body.agentId as string;\n478\t        const companyId = body.companyId as string;\n479\t        const runId = body.runId as string;\n480\t        const taskId = body.taskId as string | undefined;\n481\t\n482\t        try {\n483\t          await env.HEARTBEAT_WORKFLOW.create({\n484\t            id: `heartbeat-${runId}`,\n485\t            params: { agentId, companyId, runId, taskId },\n486\t          });\n487\t          message.ack();\n488\t        } catch (err) {\n489\t          console.error(\n490\t            `[Queue] Failed to start HeartbeatWorkflow for run ${runId}: ${\n491\t              err instanceof Error ? err.message : String(err)\n492\t            }`,\n493\t          );\n494\t          message.retry();\n495\t        }\n496\t        continue;\n497\t      }\n498\t\n499\t      console.warn(`[Queue] Unknown message type: ${type}`);\n500\t      message.ack();\n501\t    }\n502\t  },\n503\t\n504\t  // -------------------------------------------------------------------------\n505\t  // Cron Triggers\n506\t  // -------------------------------------------------------------------------\n507\t  async scheduled(event: ScheduledEvent, env: Env, _ctx: ExecutionContext): Promise\u003cvoid\u003e {\n508\t    const cron = event.cron;\n509\t    console.log(`[Cron] Firing cron: ${cron}`);\n510\t\n511\t    if (cron === \"*/5 * * * *\") {\n512\t      const db = createHyperdriveDb(env.HYPERDRIVE);\n513\t      await runHeartbeatSweep(env, db);\n514\t    } else if (cron === \"0 * * * *\") {\n515\t      console.log(\"[Cron] Budget check -- not yet implemented\");\n516\t    } else if (cron === \"0 3 * * *\") {\n517\t      console.log(\"[Cron] DB backup -- not yet implemented\");\n518\t    }\n519\t  },\n520\t};\n521\t\n522\t// ---------------------------------------------------------------------------\n523\t// Named Durable Object + Workflow exports\n524\t// ---------------------------------------------------------------------------",
+        "tool_use_id": "toolu_019TDbKSP3BD8SyNz39ppjWZ",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "c29c4d50-2408-44b6-aad0-62d63db20f21",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "c29c4d50-2408-44b6-aad0-62d63db20f21",
+  "timestamp": "2026-04-30T16:38:44.681Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "6934bd2c-30fe-4c11-83bd-1c0a038b0d43",
+  "version": "2.1.123"
+}

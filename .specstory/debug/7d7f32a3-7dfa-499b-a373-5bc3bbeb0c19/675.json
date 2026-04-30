@@ -1,0 +1,70 @@
+{
+  "agentId": "a6710083ef9195699",
+  "attributionAgent": "backend-architect",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01WMEY3qShQtqvmGecNwQaxu",
+        "input": {
+          "content": "# Post-Deploy Setup Guide\n\nThis guide walks you through everything you need to do after Cloudflare provisions\nyour Paperclip instance. The process takes about 5–10 minutes.\n\n---\n\n## Step 1 — Deploy to Cloudflare\n\nClick the \"Deploy to Cloudflare\" button in the README (or run the commands manually):\n\n```bash\n# From the repo root\ncd packages/deploy-cloudflare\nwrangler deploy\n```\n\nCloudflare will provision:\n- The main `paperclip-api` Worker\n- The R2 bucket `paperclip-storage`\n- The KV namespace (you will see the generated ID in the output)\n- The Durable Object classes (`TaskDO`, `AgentRunDO`, `SchedulerDO`)\n- The Workflow classes (`HeartbeatWorkflow`, `PluginDispatchWorkflow`)\n- The Queue `paperclip-jobs`\n\n**Wait for provisioning to complete** — it usually takes under 2 minutes.\n\n---\n\n## Step 2 — Fill in the generated IDs in `wrangler.toml`\n\nAfter the first deploy, Cloudflare prints the KV namespace ID. Open\n`packages/deploy-cloudflare/wrangler.toml` and replace the\n`FILL_IN_AFTER_DEPLOY` placeholders:\n\n```toml\n[[kv_namespaces]]\nbinding = \"PAPERCLIP_KV\"\nid = \"\u003cpaste-kv-namespace-id-here\u003e\"\n```\n\nRe-deploy after saving:\n\n```bash\nwrangler deploy\n```\n\n---\n\n## Step 3 — Connect a Postgres database via Hyperdrive\n\nPaperclip Phase 1 uses [Neon Postgres](https://neon.tech) (free tier is sufficient\nfor small deployments) through Cloudflare Hyperdrive for low-latency queries.\n\n### 3a. Create a Neon database\n\n1. Sign up at \u003chttps://neon.tech\u003e (free).\n2. Create a new project. Note the **connection string** — it looks like:\n   ```\n   postgres://neondb_owner:\u003cpassword\u003e@\u003chost\u003e.neon.tech/neondb?sslmode=require\n   ```\n\n### 3b. Create a Hyperdrive configuration\n\n```bash\nwrangler hyperdrive create paperclip-hyperdrive \\\n  --connection-string=\"postgres://neondb_owner:\u003cpassword\u003e@\u003chost\u003e.neon.tech/neondb?sslmode=require\"\n```\n\nThe command prints a Hyperdrive ID. Paste it into `wrangler.toml`:\n\n```toml\n[[hyperdrive]]\nbinding = \"HYPERDRIVE\"\nid = \"\u003cpaste-hyperdrive-id-here\u003e\"\n```\n\nRe-deploy:\n\n```bash\nwrangler deploy\n```\n\n### 3c. Apply database migrations\n\nRun migrations against Neon directly (Hyperdrive is only for Workers — your\nlocal machine can connect to Neon's direct connection string):\n\n```bash\n# From the repo root\nDATABASE_URL=\"postgres://neondb_owner:\u003cpassword\u003e@\u003chost\u003e.neon.tech/neondb?sslmode=require\" \\\n  node -e \"import('@paperclipai/db').then(m =\u003e m.applyPendingMigrations(process.env.DATABASE_URL))\"\n```\n\n---\n\n## Step 4 — Run first-run setup\n\nOpen your deployed Worker URL in a browser. If setup is not yet complete you\nwill be redirected automatically to `/setup`:\n\n```\nhttps://paperclip-api.\u003cyour-account\u003e.workers.dev/setup\n```\n\nFill in the form:\n\n| Field | Where to get it |\n|---|---|\n| **Email address** | Your admin email — you will use this to sign in |\n| **Password** | Choose a strong password (min. 12 characters) |\n| **Anthropic API key** | \u003chttps://console.anthropic.com/settings/keys\u003e |\n| **OpenAI API key** | \u003chttps://platform.openai.com/api-keys\u003e (optional) |\n| **Neon connection string** | From Step 3a above (optional — can skip if using Hyperdrive) |\n| **Sandbox bridge URL** | URL of your running E2B/SSH sandbox bridge (optional) |\n| **Sandbox bridge API key** | API key for the bridge (optional) |\n\nClick **Complete setup**. You will be redirected to the dashboard.\n\n---\n\n## Step 5 — Access the UI\n\nAfter setup completes, open:\n\n```\nhttps://paperclip-api.\u003cyour-account\u003e.workers.dev\n```\n\nOr, if you have deployed the Pages project (linked to the Worker):\n\n```\nhttps://\u003cyour-pages-project\u003e.pages.dev\n```\n\nSign in with the email and password you configured in Step 4.\n\n---\n\n## Step 6 — Connect plugin execution (optional)\n\nPaperclip agents run plugins in a sandboxed environment. On Cloudflare, the\nrecommended approach is the **sandbox bridge** — an existing feature that\nroutes plugin execution to an E2B sandbox or an SSH-accessible machine.\n\n### Option A: E2B sandbox bridge\n\n1. Get an E2B API key at \u003chttps://e2b.dev\u003e.\n2. Deploy the sandbox bridge server (see `packages/adapter-utils/README.md`).\n3. In the setup form (or via the Settings page), enter the bridge URL and key.\n\n### Option B: Cloudflare Container (experimental)\n\nCloudflare Containers (beta) can run the plugin sandbox directly on CF\ninfrastructure. This removes the external bridge dependency but requires\nbuilding and publishing a container image.\n\nSee `packages/deploy-cloudflare/src/adapter-executor/container.ts` for the\nexecutor implementation and the wrangler.toml comment for the binding\nconfiguration.\n\n---\n\n## Updating secrets later\n\n### Via the Paperclip Settings page\n\nAfter setup, navigate to **Settings → Instance** in the dashboard to update\nLLM keys and bridge credentials without redeployment.\n\n### Via the Wrangler CLI\n\nFor Worker-level secrets (e.g. the master encryption key):\n\n```bash\nwrangler secret put MASTER_ENCRYPTION_KEY\nwrangler secret put SANDBOX_BRIDGE_API_KEY\n```\n\nSecrets are available on the next Worker invocation — no redeployment needed.\n\n### Via the Cloudflare dashboard\n\nNavigate to **Workers \u0026 Pages → paperclip-api → Settings → Variables** in the\nCloudflare dashboard. Click **Edit variables** to add or update secrets.\n\n---\n\n## Troubleshooting\n\n| Symptom | Fix |\n|---|---|\n| Redirected to `/setup` on every request | `SETUP_COMPLETED` is missing from KV. Complete the setup form, or run `wrangler kv:key put --binding=PAPERCLIP_KV SETUP_COMPLETED true`. |\n| `502` errors on API routes | Check Worker logs in the Cloudflare dashboard (Workers \u0026 Pages → paperclip-api → Logs). |\n| DB connection errors | Verify the Hyperdrive ID in `wrangler.toml` matches the output of `wrangler hyperdrive list`. |\n| \"API route not yet mounted\" errors | The HTTP adapter migration (PRs #6–#7) is not yet complete. Follow upstream releases for progress. |\n| Setup form shows \"Failed to save configuration\" | The KV namespace ID in `wrangler.toml` may be wrong. Check it against `wrangler kv:namespace list`. |\n",
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/deploy/post-deploy-setup.md"
+        },
+        "name": "Write",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01HUc6Wgspw3UeBggqPGLRUV",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 961
+      },
+      "cache_creation_input_tokens": 961,
+      "cache_read_input_tokens": 77251,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 961
+          },
+          "cache_creation_input_tokens": 961,
+          "cache_read_input_tokens": 77251,
+          "input_tokens": 1,
+          "output_tokens": 1894,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 1894,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "bed13dc5-2e5f-4b75-acfd-7a795e221c2b",
+  "requestId": "req_011Caa9q5RpDNzcmqjiiJxoe",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "timestamp": "2026-04-30T14:59:02.046Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "0e00e284-e88e-445c-8563-aa12e10a7fd2",
+  "version": "2.1.123"
+}

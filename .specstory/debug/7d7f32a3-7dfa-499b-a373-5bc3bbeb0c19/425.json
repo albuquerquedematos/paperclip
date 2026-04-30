@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport path from \"node:path\";\n2\timport fs from \"node:fs\";\n3\timport pino from \"pino\";\n4\timport { pinoHttp } from \"pino-http\";\n5\timport { readConfigFile } from \"../config-file.js\";\n6\timport { resolveDefaultLogsDir, resolveHomeAwarePath } from \"../home-paths.js\";\n7\timport { shouldSilenceHttpSuccessLog } from \"./http-log-policy.js\";\n8\t\n9\tfunction resolveServerLogDir(): string {\n10\t  const envOverride = process.env.PAPERCLIP_LOG_DIR?.trim();\n11\t  if (envOverride) return resolveHomeAwarePath(envOverride);\n12\t\n13\t  const fileLogDir = readConfigFile()?.logging.logDir?.trim();\n14\t  if (fileLogDir) return resolveHomeAwarePath(fileLogDir);\n15\t\n16\t  return resolveDefaultLogsDir();\n17\t}\n18\t\n19\tconst logDir = resolveServerLogDir();\n20\tfs.mkdirSync(logDir, { recursive: true });\n21\t\n22\tconst logFile = path.join(logDir, \"server.log\");\n23\t\n24\tconst sharedOpts = {\n25\t  translateTime: \"SYS:HH:MM:ss\",\n26\t  ignore: \"pid,hostname\",\n27\t  singleLine: true,\n28\t};\n29\t\n30\texport const logger = pino({\n31\t  level: \"debug\",\n32\t  redact: [\"req.headers.authorization\"],\n33\t}, pino.transport({\n34\t  targets: [\n35\t    {\n36\t      target: \"pino-pretty\",\n37\t      options: { ...sharedOpts, ignore: \"pid,hostname,req,res,responseTime\", colorize: true, destination: 1 },\n38\t      level: \"info\",\n39\t    },\n40\t    {\n41\t      target: \"pino-pretty\",\n42\t      options: { ...sharedOpts, colorize: false, destination: logFile, mkdir: true },\n43\t      level: \"debug\",\n44\t    },\n45\t  ],\n46\t}));\n47\t\n48\texport const httpLogger = pinoHttp({\n49\t  logger,\n50\t  customLogLevel(_req, res, err) {\n51\t    if (shouldSilenceHttpSuccessLog(_req.method, _req.url, res.statusCode)) {\n52\t      return \"silent\";\n53\t    }\n54\t    if (err || res.statusCode \u003e= 500) return \"error\";\n55\t    if (res.statusCode \u003e= 400) return \"warn\";\n56\t    return \"info\";\n57\t  },\n58\t  customSuccessMessage(req, res) {\n59\t    return `${req.method} ${req.url} ${res.statusCode}`;\n60\t  },\n61\t  customErrorMessage(req, res, err) {\n62\t    const ctx = (res as any).__errorContext;\n63\t    const errMsg = ctx?.error?.message || err?.message || (res as any).err?.message || \"unknown error\";\n64\t    return `${req.method} ${req.url} ${res.statusCode} — ${errMsg}`;\n65\t  },\n66\t  customProps(req, res) {\n67\t    if (res.statusCode \u003e= 400) {\n68\t      const ctx = (res as any).__errorContext;\n69\t      if (ctx) {\n70\t        return {\n71\t          errorContext: ctx.error,\n72\t          reqBody: ctx.reqBody,\n73\t          reqParams: ctx.reqParams,\n74\t          reqQuery: ctx.reqQuery,\n75\t        };\n76\t      }\n77\t      const props: Record\u003cstring, unknown\u003e = {};\n78\t      const { body, params, query } = req as any;\n79\t      if (body \u0026\u0026 typeof body === \"object\" \u0026\u0026 Object.keys(body).length \u003e 0) {\n80\t        props.reqBody = body;\n81\t      }\n82\t      if (params \u0026\u0026 typeof params === \"object\" \u0026\u0026 Object.keys(params).length \u003e 0) {\n83\t        props.reqParams = params;\n84\t      }\n85\t      if (query \u0026\u0026 typeof query === \"object\" \u0026\u0026 Object.keys(query).length \u003e 0) {\n86\t        props.reqQuery = query;\n87\t      }\n88\t      if ((req as any).route?.path) {\n89\t        props.routePath = (req as any).route.path;\n90\t      }\n91\t      return props;\n92\t    }\n93\t    return {};\n94\t  },\n95\t});\n96\t",
+        "tool_use_id": "toolu_01FpXRjYAX2dEfDwJFoCLdFv",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "435679fe-3864-4f3e-8541-fbe92dff71ce",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "435679fe-3864-4f3e-8541-fbe92dff71ce",
+  "timestamp": "2026-04-30T14:52:11.954Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "00446f48-7f9b-4ad4-b320-f351b3290d76",
+  "version": "2.1.123"
+}

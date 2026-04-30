@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "packages/db/src/backup-lib.ts(8,22): error TS2307: Cannot find module 'postgres' or its corresponding type declarations.\npackages/db/src/backup-lib.ts(562,54): error TS7031: Binding element 'schema_name' implicitly has an 'any' type.\npackages/db/src/backup-lib.ts(562,67): error TS7031: Binding element 'tablename' implicitly has an 'any' type.\npackages/db/src/backup-lib.ts(576,36): error TS7006: Parameter 'l' implicitly has an 'any' type.\npackages/db/src/backup-lib.ts(606,8): error TS7006: Parameter 'seq' implicitly has an 'any' type.\npackages/db/src/backup-lib.ts(713,42): error TS7006: Parameter 'c' implicitly has an 'any' type.\npackages/db/src/backup-lib.ts(724,46): error TS7006: Parameter 'seq' implicitly has an 'any' type.\npackages/db/src/backup-lib.ts(772,8): error TS7006: Parameter 'fk' implicitly has an 'any' type.\npackages/db/src/backup-lib.ts(779,48): error TS7006: Parameter 'c' implicitly has an 'any' type.\npackages/db/src/backup-lib.ts(780,48): error TS7006: Parameter 'c' implicitly has an 'any' type.\npackages/db/src/backup-lib.ts(810,50): error TS7006: Parameter 'entry' implicitly has an 'any' type.\npackages/db/src/backup-lib.ts(815,42): error TS7006: Parameter 'c' implicitly has an 'any' type.\npackages/db/src/backup-lib.ts(836,40): error TS7006: Parameter 'entry' implicitly has an 'any' type.\npackages/db/src/backup-lib.ts(859,34): error TS7006: Parameter 'c' implicitly has an 'any' type.\npackages/db/src/client.ts(2,38): error TS2307: Cannot find module 'drizzle-orm/postgres-js' or its corresponding type declarations.\npackages/db/src/client.ts(3,38): error TS2307: Cannot find module 'drizzle-orm/postgres-js/migrator' or its corresponding type declarations.\npackages/db/src/client.ts(6,22): error TS2307: Cannot find module 'postgres' or its corresponding type declarations.\npackages/db/src/client.ts(9,41): error TS2345: Argument of type 'URL' is not assignable to parameter of type 'string | URL'.\n  Type 'URL' is not assignable to type 'import(\"node:url\").URL'.\n    The types returned by 'searchParams.entries()' are incompatible between these types.",
+        "is_error": false,
+        "tool_use_id": "toolu_01LSjGRBWVKaJpfRBd6maZoo",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "e1441b65-1e76-4cc0-9a3e-16e8180b6c96",
+  "promptId": "76fdb1bb-64b4-4188-b850-7eeac0540eca",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "e1441b65-1e76-4cc0-9a3e-16e8180b6c96",
+  "timestamp": "2026-04-30T16:44:50.633Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "packages/db/src/backup-lib.ts(8,22): error TS2307: Cannot find module 'postgres' or its corresponding type declarations.\npackages/db/src/backup-lib.ts(562,54): error TS7031: Binding element 'schema_name' implicitly has an 'any' type.\npackages/db/src/backup-lib.ts(562,67): error TS7031: Binding element 'tablename' implicitly has an 'any' type.\npackages/db/src/backup-lib.ts(576,36): error TS7006: Parameter 'l' implicitly has an 'any' type.\npackages/db/src/backup-lib.ts(606,8): error TS7006: Parameter 'seq' implicitly has an 'any' type.\npackages/db/src/backup-lib.ts(713,42): error TS7006: Parameter 'c' implicitly has an 'any' type.\npackages/db/src/backup-lib.ts(724,46): error TS7006: Parameter 'seq' implicitly has an 'any' type.\npackages/db/src/backup-lib.ts(772,8): error TS7006: Parameter 'fk' implicitly has an 'any' type.\npackages/db/src/backup-lib.ts(779,48): error TS7006: Parameter 'c' implicitly has an 'any' type.\npackages/db/src/backup-lib.ts(780,48): error TS7006: Parameter 'c' implicitly has an 'any' type.\npackages/db/src/backup-lib.ts(810,50): error TS7006: Parameter 'entry' implicitly has an 'any' type.\npackages/db/src/backup-lib.ts(815,42): error TS7006: Parameter 'c' implicitly has an 'any' type.\npackages/db/src/backup-lib.ts(836,40): error TS7006: Parameter 'entry' implicitly has an 'any' type.\npackages/db/src/backup-lib.ts(859,34): error TS7006: Parameter 'c' implicitly has an 'any' type.\npackages/db/src/client.ts(2,38): error TS2307: Cannot find module 'drizzle-orm/postgres-js' or its corresponding type declarations.\npackages/db/src/client.ts(3,38): error TS2307: Cannot find module 'drizzle-orm/postgres-js/migrator' or its corresponding type declarations.\npackages/db/src/client.ts(6,22): error TS2307: Cannot find module 'postgres' or its corresponding type declarations.\npackages/db/src/client.ts(9,41): error TS2345: Argument of type 'URL' is not assignable to parameter of type 'string | URL'.\n  Type 'URL' is not assignable to type 'import(\"node:url\").URL'.\n    The types returned by 'searchParams.entries()' are incompatible between these types."
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "0b9d78ca-2296-4ba6-8077-de6e4927bd56",
+  "version": "2.1.123"
+}

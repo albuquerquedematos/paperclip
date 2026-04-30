@@ -1,0 +1,27 @@
+{
+  "agentId": "a8fd5512baf043009",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "server/src/routes/companies.ts(1,24): error TS2307: Cannot find module 'express' or its corresponding type declarations.\nserver/src/routes/companies.ts(2,25): error TS2307: Cannot find module '@paperclipai/db' or its corresponding type declarations.\nserver/src/routes/companies.ts(14,8): error TS2307: Cannot find module '@paperclipai/shared' or its corresponding type declarations.\nserver/src/routes/companies.ts(107,73): error TS2339: Property 'id' does not exist on type '{ logoAssetId: string | null; } \u0026 { logoUrl: string | null; }'.\nserver/src/routes/companies.ts(395,7): error TS2322: Type 'unknown' is not assignable to type 'Record\u003cstring, unknown\u003e | null | undefined'.\nserver/src/routes/goals.ts(1,24): error TS2307: Cannot find module 'express' or its corresponding type declarations.\nserver/src/routes/goals.ts(2,25): error TS2307: Cannot find module '@paperclipai/db' or its corresponding type declarations.\nserver/src/routes/goals.ts(3,52): error TS2307: Cannot find module '@paperclipai/shared' or its corresponding type declarations.\nserver/src/routes/goals.ts(4,34): error TS2307: Cannot find module '@paperclipai/shared/telemetry' or its corresponding type declarations.\nserver/src/routes/goals.ts(37,46): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'Omit\u003cany, \"companyId\"\u003e'.\nserver/src/routes/goals.ts(78,7): error TS2322: Type 'unknown' is not assignable to type 'Record\u003cstring, unknown\u003e | null | undefined'.\nserver/src/routes/projects.ts(1,24): error TS2307: Cannot find module 'express' or its corresponding type declarations.\nserver/src/routes/projects.ts(2,25): error TS2307: Cannot find module '@paperclipai/db' or its corresponding type declarations.\nserver/src/routes/projects.ts(12,8): error TS2307: Cannot find module '@paperclipai/shared' or its corresponding type declarations.\nserver/src/routes/projects.ts(13,84): error TS2307: Cannot find module '@paperclipai/shared' or its corresponding type declarations.\nserver/src/routes/projects.ts(14,37): error TS2307: Cannot find module '@paperclipai/shared/telemetry' or its corresponding type declarations.\nserver/src/routes/projects.ts(48,29): error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.\nserver/src/routes/projects.ts(93,29): error TS7006: Parameter 'req' implicitly has an 'any' type.\nserver/src/routes/projects.ts(93,34): error TS7006: Parameter '_res' implicitly has an 'any' type.\nserver/src/routes/projects.ts(93,40): error TS7006: Parameter 'next' implicitly has an 'any' type.\nserver/src/routes/projects.ts(93,46): error TS7006: Parameter 'rawId' implicitly has an 'any' type.\nserver/src/routes/projects.ts(261,53): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'CreateWorkspaceInput'.\nserver/src/routes/projects.ts(303,66): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'Partial\u003cCreateWorkspaceInput\u003e'.\nserver/src/routes/projects.ts(373,77): error TS7006: Parameter 'service' implicitly has an 'any' type.\nserver/src/routes/projects.ts(518,55): error TS7006: Parameter 'service' implicitly has an 'any' type.\nserver/src/routes/workspace-runtime-service-authz.ts(1,50): error TS2307: Cannot find module 'drizzle-orm' or its corresponding type declarations.\nserver/src/routes/workspace-runtime-service-authz.ts(2,25): error TS2307: Cannot find module '@paperclipai/db' or its corresponding type declarations.\nserver/src/routes/workspace-runtime-service-authz.ts(3,32): error TS2307: Cannot find module '@paperclipai/db' or its corresponding type declarations.\nserver/src/routes/workspace-runtime-service-authz.ts(70,12): error TS7006: Parameter 'rows' implicitly has an 'any' type.\nserver/src/routes/workspace-runtime-service-authz.ts(103,12): error TS7006: Parameter 'rows' implicitly has an 'any' type.",
+        "is_error": false,
+        "tool_use_id": "toolu_01ACzu6txHPwup2zJfgwWpYk",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "e1b17906-1a21-4d68-ab89-70eea2cf5dd5",
+  "promptId": "f70e47c2-d340-4417-9b6f-d01ec6a1d002",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "e1b17906-1a21-4d68-ab89-70eea2cf5dd5",
+  "timestamp": "2026-04-30T15:17:25.442Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "ec7c8aef-84da-4729-88f6-6df2697cf59d",
+  "version": "2.1.123"
+}

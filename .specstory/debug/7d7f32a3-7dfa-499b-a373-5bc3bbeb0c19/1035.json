@@ -1,0 +1,54 @@
+{
+  "agentId": "a0d0169af69218004",
+  "attributionAgent": "backend-architect",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01Hgt1BVZG7WEzt9WhBrXuDH",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/shared/src/index.ts",
+          "new_string": "  type DeploymentMode,\n  type DeploymentPlatform,\n  type DeploymentExposure,",
+          "old_string": "  type DeploymentMode,\n  type DeploymentExposure,",
+          "replace_all": false
+        },
+        "name": "Edit",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01KLFDi3Car1nW53vTGodiSo",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": null,
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 258
+      },
+      "cache_creation_input_tokens": 258,
+      "cache_read_input_tokens": 60882,
+      "inference_geo": "global",
+      "input_tokens": 1,
+      "output_tokens": 63,
+      "service_tier": "standard"
+    }
+  },
+  "parentUuid": "babe0ee3-08aa-433b-8d69-234d3b2501ab",
+  "requestId": "req_011CaaAPGaBUAVn9e7eaLwY9",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "timestamp": "2026-04-30T15:05:49.974Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "e9268f68-5a50-455a-b1f5-eb909094a9e6",
+  "version": "2.1.123"
+}

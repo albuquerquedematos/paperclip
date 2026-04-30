@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1770\t    return {\n1771\t      supported: true,\n1772\t      reason: null,\n1773\t      trackingRef,\n1774\t      currentRef: skill.sourceRef ?? null,\n1775\t      latestRef,\n1776\t      hasUpdate: latestRef !== (skill.sourceRef ?? null),\n1777\t    };\n1778\t  }\n1779\t\n1780\t  async function readFile(companyId: string, skillId: string, relativePath: string): Promise\u003cCompanySkillFileDetail | null\u003e {\n1781\t    await ensureSkillInventoryCurrent(companyId);\n1782\t    const skill = await getById(companyId, skillId);\n1783\t    if (!skill) return null;\n1784\t\n1785\t    const normalizedPath = normalizePortablePath(relativePath || \"SKILL.md\");\n1786\t    const fileEntry = skill.fileInventory.find((entry) =\u003e entry.path === normalizedPath);\n1787\t    if (!fileEntry) {\n1788\t      throw notFound(\"Skill file not found\");\n1789\t    }\n1790\t\n1791\t    const source = deriveSkillSourceInfo(skill);\n1792\t    let content = \"\";\n1793\t\n1794\t    if (skill.sourceType === \"local_path\" || skill.sourceType === \"catalog\") {\n1795\t      const absolutePath = resolveLocalSkillFilePath(skill, normalizedPath);\n1796\t      if (absolutePath) {\n1797\t        content = await fs.readFile(absolutePath, \"utf8\");\n1798\t      } else if (normalizedPath === \"SKILL.md\") {\n1799\t        content = skill.markdown;\n1800\t      } else {\n1801\t        throw notFound(\"Skill file not found\");\n1802\t      }\n1803\t    } else if (skill.sourceType === \"github\" || skill.sourceType === \"skills_sh\") {\n1804\t      const metadata = getSkillMeta(skill);\n1805\t      const owner = asString(metadata.owner);\n1806\t      const repo = asString(metadata.repo);\n1807\t      const hostname = asString(metadata.hostname) || \"github.com\";\n1808\t      const ref = skill.sourceRef ?? asString(metadata.ref) ?? \"main\";\n1809\t      const repoSkillDir = normalizeGitHubSkillDirectory(asString(metadata.repoSkillDir), skill.slug);",
+        "tool_use_id": "toolu_01FoQ5BZJi8DxMaFMXuZz8Xb",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "fa701359-39df-464c-ae57-232085e1528d",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "fa701359-39df-464c-ae57-232085e1528d",
+  "timestamp": "2026-04-30T14:52:37.177Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "2a24f9e3-9139-4820-9f37-3939892a430b",
+  "version": "2.1.123"
+}

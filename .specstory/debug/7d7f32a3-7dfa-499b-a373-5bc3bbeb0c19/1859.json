@@ -1,0 +1,72 @@
+{
+  "agentId": "a4ad4aa75ca105b41",
+  "attributionAgent": "backend-architect",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01CiqpjVpEw2psWigfpyqM66",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/adapters.ts",
+          "new_string": "  const reloadAdapter: Handler = async (ctx) =\u003e {\n    assertInstanceAdmin(ctx);\n    const type = ctx.param(\"type\");\n    if (!type) return Response.json({ error: \"Adapter type is required.\" }, { status: 400 });",
+          "old_string": "  const reloadAdapter: Handler = async (ctx) =\u003e {\n    const type = ctx.param(\"type\");\n    if (!type) return Response.json({ error: \"Adapter type is required.\" }, { status: 400 });",
+          "replace_all": false
+        },
+        "name": "Edit",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_016TyRD81ApeCDa6oCU9PDSs",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 259
+      },
+      "cache_creation_input_tokens": 259,
+      "cache_read_input_tokens": 80045,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 259
+          },
+          "cache_creation_input_tokens": 259,
+          "cache_read_input_tokens": 80045,
+          "input_tokens": 1,
+          "output_tokens": 249,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 249,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "1705afcf-2b0c-4d13-bd6f-3e2b98ab34f6",
+  "requestId": "req_011CaaBYb7m5ZJKjiaM1M8Vu",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "timestamp": "2026-04-30T15:21:03.736Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "277eec9f-7399-464f-af0f-f018a9ae9f01",
+  "version": "2.1.123"
+}

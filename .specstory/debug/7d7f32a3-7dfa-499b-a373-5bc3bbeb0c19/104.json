@@ -1,0 +1,27 @@
+{
+  "agentId": "a28a63530ac1fc5de",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/index.ts:33:  heartbeatService,\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/index.ts:672:  if (config.heartbeatSchedulerEnabled) {\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/index.ts:673:    const heartbeat = heartbeatService(db as any, { pluginWorkerManager });\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/index.ts:678:    void heartbeat\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/index.ts:680:      .then(() =\u003e heartbeat.promoteDueScheduledRetries())\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/index.ts:682:        await heartbeat.resumeQueuedRuns();\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/index.ts:683:        const reconciled = await heartbeat.reconcileStrandedAssignedIssues();\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/index.ts:693:            \"startup heartbeat recovery changed assigned issue state\",\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/index.ts:698:        const reconciled = await heartbeat.reconcileIssueGraphLiveness();\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/index.ts:704:        const scanned = await heartbeat.scanSilentActiveRuns();\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/index.ts:706:          logger.warn({ ...scanned }, \"startup active-run output watchdog created review work\");\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/index.ts:710:        const reviewed = await heartbeat.reconcileProductivityReviews();\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/index.ts:716:        logger.error({ err }, \"startup heartbeat recovery failed\");\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/index.ts:719:      void heartbeat\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/index.ts:723:            logger.info({ ...result }, \"heartbeat timer tick enqueued runs\");\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/index.ts:727:          logger.error({ err }, \"heartbeat timer tick failed\");\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/index.ts:743:      void heartbeat\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/index.ts:745:        .then(() =\u003e heartbeat.promoteDueScheduledRetries())\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/index.ts:747:          await heartbeat.resumeQueuedRuns();\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/index.ts:748:          const reconciled = await heartbeat.reconcileStrandedAssignedIssues();",
+        "is_error": false,
+        "tool_use_id": "toolu_017aVJKbtAiFfJvh69dCvhi1",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "d7790688-9dd7-44bf-ac1d-ce9e7dbef49f",
+  "promptId": "721340db-55e4-4f08-9c81-1d2e399ba682",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "d7790688-9dd7-44bf-ac1d-ce9e7dbef49f",
+  "timestamp": "2026-04-30T13:27:52.394Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "59310c36-7d86-4705-bdcd-071f73b7d9ae",
+  "version": "2.1.123"
+}

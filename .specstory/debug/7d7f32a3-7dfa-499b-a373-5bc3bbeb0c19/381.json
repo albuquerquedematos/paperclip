@@ -1,0 +1,26 @@
+{
+  "agentId": "ab8a7a43e45ac1ba4",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "44\t\n45\t      // Build the Web-API-compatible Headers object from Express's incoming\n46\t      // headers map. Express lowercases all header names, so this is safe.\n47\t      const headers = new Headers();\n48\t      for (const [name, value] of Object.entries(req.headers)) {\n49\t        if (value === undefined) continue;\n50\t        if (Array.isArray(value)) {\n51\t          for (const v of value) headers.append(name, v);\n52\t        } else {\n53\t          headers.set(name, value);\n54\t        }\n55\t      }",
+        "tool_use_id": "toolu_01JJYY34Hn16iBQt4KYfkmse",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "e9721e27-3c4a-4213-876f-4fb8dcd738eb",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "e9721e27-3c4a-4213-876f-4fb8dcd738eb",
+  "timestamp": "2026-04-30T14:51:51.411Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "1ed6d775-5b5d-41bf-b9c7-2b38b8c2a32b",
+  "version": "2.1.123"
+}

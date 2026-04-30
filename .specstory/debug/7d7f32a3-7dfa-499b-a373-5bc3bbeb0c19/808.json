@@ -1,0 +1,26 @@
+{
+  "agentId": "a0d0169af69218004",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "200\t      return rawUrl;\n201\t    }\n202\t  }\n203\t  \n204\t  const LOCAL_BOARD_USER_ID = \"local-board\";\n205\t  const LOCAL_BOARD_USER_EMAIL = \"local@paperclip.local\";\n206\t  const LOCAL_BOARD_USER_NAME = \"Board\";\n207\t  \n208\t  async function ensureLocalTrustedBoardPrincipal(db: any): Promise\u003cvoid\u003e {\n209\t    const now = new Date();\n210\t    const existingUser = await db\n211\t      .select({ id: authUsers.id })\n212\t      .from(authUsers)\n213\t      .where(eq(authUsers.id, LOCAL_BOARD_USER_ID))\n214\t      .then((rows: Array\u003c{ id: string }\u003e) =\u003e rows[0] ?? null);\n215\t  \n216\t    if (!existingUser) {\n217\t      await db.insert(authUsers).values({\n218\t        id: LOCAL_BOARD_USER_ID,\n219\t        name: LOCAL_BOARD_USER_NAME,\n220\t        email: LOCAL_BOARD_USER_EMAIL,\n221\t        emailVerified: true,\n222\t        image: null,\n223\t        createdAt: now,\n224\t        updatedAt: now,\n225\t      });\n226\t    }\n227\t  \n228\t    const role = await db\n229\t      .select({ id: instanceUserRoles.id })\n230\t      .from(instanceUserRoles)\n231\t      .where(and(eq(instanceUserRoles.userId, LOCAL_BOARD_USER_ID), eq(instanceUserRoles.role, \"instance_admin\")))\n232\t      .then((rows: Array\u003c{ id: string }\u003e) =\u003e rows[0] ?? null);\n233\t    if (!role) {\n234\t      await db.insert(instanceUserRoles).values({\n235\t        userId: LOCAL_BOARD_USER_ID,\n236\t        role: \"instance_admin\",\n237\t      });\n238\t    }\n239\t  \n240\t    const companyRows = await db.select({ id: companies.id }).from(companies);\n241\t    for (const company of companyRows) {\n242\t      const membership = await db\n243\t        .select({ id: companyMemberships.id })\n244\t        .from(companyMemberships)\n245\t        .where(\n246\t          and(\n247\t            eq(companyMemberships.companyId, company.id),\n248\t            eq(companyMemberships.principalType, \"user\"),\n249\t            eq(companyMemberships.principalId, LOCAL_BOARD_USER_ID),\n250\t          ),\n251\t        )\n252\t        .then((rows: Array\u003c{ id: string }\u003e) =\u003e rows[0] ?? null);\n253\t      if (membership) continue;\n254\t      await db.insert(companyMemberships).values({\n255\t        companyId: company.id,\n256\t        principalType: \"user\",\n257\t        principalId: LOCAL_BOARD_USER_ID,\n258\t        status: \"active\",\n259\t        membershipRole: \"owner\",",
+        "tool_use_id": "toolu_01V8PKK42aKB2rSwVBPFjUjR",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "a6708e4e-59b2-494f-8d2d-d21d8c45cf58",
+  "promptId": "41a5cab3-78a5-4305-8404-9daa35591aac",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "a6708e4e-59b2-494f-8d2d-d21d8c45cf58",
+  "timestamp": "2026-04-30T15:04:53.315Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "a91a06b4-081d-4068-8f36-b2c33fb19e3c",
+  "version": "2.1.123"
+}

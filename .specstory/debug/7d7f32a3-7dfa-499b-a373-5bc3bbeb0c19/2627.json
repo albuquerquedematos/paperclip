@@ -1,0 +1,28 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "356:    .where(and(eq(issues.id, input.issueId), eq(issues.companyId, input.companyId)))\n1075:    .where(and(eq(issues.id, contextIssueId), eq(issues.companyId, companyId)))\n1630:          .where(and(eq(issues.id, issueId), eq(issues.companyId, input.companyId)))\n2065:      .where(eq(agents.id, agentId))\n2079:      .from(heartbeatRuns)\n2080:      .where(eq(heartbeatRuns.id, runId))\n2087:      .from(heartbeatRuns)\n2088:      .where(eq(heartbeatRuns.id, runId))\n2110:      .where(and(eq(issues.id, issueId), eq(issues.companyId, companyId)))\n2118:      .where(eq(agentRuntimeState.agentId, agentId))\n2159:      .from(heartbeatRuns)\n2172:      .from(heartbeatRuns)\n2173:      .where(and(eq(heartbeatRuns.agentId, agentId), eq(heartbeatRuns.sessionIdAfter, sessionId)))\n2238:      .from(heartbeatRuns)\n2239:      .where(and(eq(heartbeatRuns.agentId, agent.id), eq(heartbeatRuns.sessionIdAfter, sessionId)))\n2368:      .from(heartbeatRuns)\n2420:          .where(and(eq(issues.id, issueId), eq(issues.companyId, agent.companyId)))\n2711:      .where(eq(heartbeatRuns.id, runId))\n2833:        .where(and(eq(issues.id, issueId), eq(issues.companyId, run.companyId)))\n2842:        .where(eq(agents.id, run.agentId))",
+        "is_error": false,
+        "tool_use_id": "toolu_01CNKaPefJPSf4N9LqnP9gXF",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "042713fe-25d3-45ca-8346-b9467775ec34",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "042713fe-25d3-45ca-8346-b9467775ec34",
+  "timestamp": "2026-04-30T16:28:22.047Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "5200df71-d751-460b-b4dc-a2869e13de26",
+  "version": "2.1.123"
+}

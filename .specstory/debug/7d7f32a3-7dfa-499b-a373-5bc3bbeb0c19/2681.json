@@ -1,0 +1,28 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/storage/index.ts:2:import { createStorageProviderFromConfig } from \"./provider-registry.js\";\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/storage/index.ts:3:import { createStorageService } from \"./service.js\";\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/storage/index.ts:4:import type { StorageService } from \"./types.js\";\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/storage/index.ts:6:let cachedStorageService: StorageService | null = null;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/storage/index.ts:21:export function createStorageServiceFromConfig(config: Config): StorageService {\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/storage/index.ts:22:  return createStorageService(createStorageProviderFromConfig(config));\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/storage/index.ts:25:export function getStorageService(): StorageService {\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/storage/index.ts:28:  if (!cachedStorageService || cachedSignature !== signature) {\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/storage/index.ts:29:    cachedStorageService = createStorageServiceFromConfig(config);\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/storage/index.ts:32:  return cachedStorageService;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/storage/index.ts:35:export type { StorageService, PutFileResult } from \"./types.js\";\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/storage/provider-registry.ts:14:export function createStorageProviderFromConfig(config: Config): StorageProviderImpl {\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/storage/types.ts:56:export interface StorageService {\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/storage/service.ts:3:import type { StorageService, StorageProvider, PutFileInput, PutFileResult } from \"./types.js\";\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/storage/service.ts:90:export function createStorageService(provider: StorageProvider): StorageService {",
+        "is_error": false,
+        "tool_use_id": "toolu_01HJBeHXTqQhz9pFy9VafKRn",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "5342204c-d441-4657-95df-1771bc4e4aa0",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "5342204c-d441-4657-95df-1771bc4e4aa0",
+  "timestamp": "2026-04-30T16:29:32.099Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "a7a4679c-f211-40f3-ab9f-fb03e3221599",
+  "version": "2.1.123"
+}

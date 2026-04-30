@@ -1,0 +1,35 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { loadConfig, type Config } from \"../config.js\";\n2\timport { createStorageProviderFromConfig } from \"./provider-registry.js\";\n3\timport { createStorageService } from \"./service.js\";\n4\timport type { StorageService } from \"./types.js\";\n5\t\n6\tlet cachedStorageService: StorageService | null = null;\n7\tlet cachedSignature: string | null = null;\n8\t\n9\tfunction signatureForConfig(config: Config): string {\n10\t  return JSON.stringify({\n11\t    provider: config.storageProvider,\n12\t    localDisk: config.storageLocalDiskBaseDir,\n13\t    s3Bucket: config.storageS3Bucket,\n14\t    s3Region: config.storageS3Region,\n15\t    s3Endpoint: config.storageS3Endpoint,\n16\t    s3Prefix: config.storageS3Prefix,\n17\t    s3ForcePathStyle: config.storageS3ForcePathStyle,\n18\t  });\n19\t}\n20\t\n21\texport function createStorageServiceFromConfig(config: Config): StorageService {\n22\t  return createStorageService(createStorageProviderFromConfig(config));\n23\t}\n24\t\n25\texport function getStorageService(): StorageService {\n26\t  const config = loadConfig();\n27\t  const signature = signatureForConfig(config);\n28\t  if (!cachedStorageService || cachedSignature !== signature) {\n29\t    cachedStorageService = createStorageServiceFromConfig(config);\n30\t    cachedSignature = signature;\n31\t  }\n32\t  return cachedStorageService;\n33\t}\n34\t\n35\texport type { StorageService, PutFileResult } from \"./types.js\";\n36\t",
+        "tool_use_id": "toolu_018ZTfKsbaUioXnVKxaCnnJw",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "3cbb299e-99ea-435f-a93d-cd56409078b0",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "3cbb299e-99ea-435f-a93d-cd56409078b0",
+  "timestamp": "2026-04-30T14:47:29.511Z",
+  "toolUseResult": {
+    "file": {
+      "content": "import { loadConfig, type Config } from \"../config.js\";\nimport { createStorageProviderFromConfig } from \"./provider-registry.js\";\nimport { createStorageService } from \"./service.js\";\nimport type { StorageService } from \"./types.js\";\n\nlet cachedStorageService: StorageService | null = null;\nlet cachedSignature: string | null = null;\n\nfunction signatureForConfig(config: Config): string {\n  return JSON.stringify({\n    provider: config.storageProvider,\n    localDisk: config.storageLocalDiskBaseDir,\n    s3Bucket: config.storageS3Bucket,\n    s3Region: config.storageS3Region,\n    s3Endpoint: config.storageS3Endpoint,\n    s3Prefix: config.storageS3Prefix,\n    s3ForcePathStyle: config.storageS3ForcePathStyle,\n  });\n}\n\nexport function createStorageServiceFromConfig(config: Config): StorageService {\n  return createStorageService(createStorageProviderFromConfig(config));\n}\n\nexport function getStorageService(): StorageService {\n  const config = loadConfig();\n  const signature = signatureForConfig(config);\n  if (!cachedStorageService || cachedSignature !== signature) {\n    cachedStorageService = createStorageServiceFromConfig(config);\n    cachedSignature = signature;\n  }\n  return cachedStorageService;\n}\n\nexport type { StorageService, PutFileResult } from \"./types.js\";\n",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/storage/index.ts",
+      "numLines": 36,
+      "startLine": 1,
+      "totalLines": 36
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "1fb515a2-11b6-4a65-b135-8ca4f006884d",
+  "version": "2.1.123"
+}

@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "44:import { HttpError } from \"../../../../server/src/errors.js\";\n45:import type { RouteDefinition } from \"../../../../server/src/http/types.js\";\n46:import type { StorageService } from \"../../../../server/src/storage/types.js\";\n50:import { companyRoutes } from \"../../../../server/src/routes/companies.js\";\n51:import { agentRoutes } from \"../../../../server/src/routes/agents.js\";\n52:import { assetRoutes } from \"../../../../server/src/routes/assets.js\";\n53:import { projectRoutes } from \"../../../../server/src/routes/projects.js\";\n54:import { issueRoutes } from \"../../../../server/src/routes/issues.js\";\n55:import { issueTreeControlRoutes } from \"../../../../server/src/routes/issue-tree-control.js\";\n56:import { routineRoutes } from \"../../../../server/src/routes/routines.js\";\n57:import { environmentRoutes } from \"../../../../server/src/routes/environments.js\";\n58:import { executionWorkspaceRoutes } from \"../../../../server/src/routes/execution-workspaces.js\";\n59:import { goalRoutes } from \"../../../../server/src/routes/goals.js\";\n60:import { approvalRoutes } from \"../../../../server/src/routes/approvals.js\";\n61:import { secretRoutes } from \"../../../../server/src/routes/secrets.js\";\n62:import { costRoutes } from \"../../../../server/src/routes/costs.js\";\n63:import { activityRoutes } from \"../../../../server/src/routes/activity.js\";\n64:import { dashboardRoutes } from \"../../../../server/src/routes/dashboard.js\";\n65:import { userProfileRoutes } from \"../../../../server/src/routes/user-profiles.js\";\n66:import { sidebarBadgeRoutes } from \"../../../../server/src/routes/sidebar-badges.js\";\n67:import { sidebarPreferenceRoutes } from \"../../../../server/src/routes/sidebar-preferences.js\";\n68:import { inboxDismissalRoutes } from \"../../../../server/src/routes/inbox-dismissals.js\";\n69:import { instanceSettingsRoutes } from \"../../../../server/src/routes/instance-settings.js\";\n70:import { llmRoutes } from \"../../../../server/src/routes/llms.js\";\n71:import { authRoutes } from \"../../../../server/src/routes/auth.js\";\n268:  const { forbidden, notFound, badRequest } = await import(\"../../../../server/src/errors.js\");\n304:  const { forbidden, notFound, badRequest } = await import(\"../../../../server/src/errors.js\");\n367:    const ctx: import(\"../../../../server/src/http/types.js\").RequestCtx = {",
+        "is_error": false,
+        "tool_use_id": "toolu_01K1zALnrKosEWHDnRkT63kz",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "2b39ed0d-4ca2-40d5-99f7-fbdeee1f1e98",
+  "promptId": "76fdb1bb-64b4-4188-b850-7eeac0540eca",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "2b39ed0d-4ca2-40d5-99f7-fbdeee1f1e98",
+  "timestamp": "2026-04-30T16:49:45.421Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "44:import { HttpError } from \"../../../../server/src/errors.js\";\n45:import type { RouteDefinition } from \"../../../../server/src/http/types.js\";\n46:import type { StorageService } from \"../../../../server/src/storage/types.js\";\n50:import { companyRoutes } from \"../../../../server/src/routes/companies.js\";\n51:import { agentRoutes } from \"../../../../server/src/routes/agents.js\";\n52:import { assetRoutes } from \"../../../../server/src/routes/assets.js\";\n53:import { projectRoutes } from \"../../../../server/src/routes/projects.js\";\n54:import { issueRoutes } from \"../../../../server/src/routes/issues.js\";\n55:import { issueTreeControlRoutes } from \"../../../../server/src/routes/issue-tree-control.js\";\n56:import { routineRoutes } from \"../../../../server/src/routes/routines.js\";\n57:import { environmentRoutes } from \"../../../../server/src/routes/environments.js\";\n58:import { executionWorkspaceRoutes } from \"../../../../server/src/routes/execution-workspaces.js\";\n59:import { goalRoutes } from \"../../../../server/src/routes/goals.js\";\n60:import { approvalRoutes } from \"../../../../server/src/routes/approvals.js\";\n61:import { secretRoutes } from \"../../../../server/src/routes/secrets.js\";\n62:import { costRoutes } from \"../../../../server/src/routes/costs.js\";\n63:import { activityRoutes } from \"../../../../server/src/routes/activity.js\";\n64:import { dashboardRoutes } from \"../../../../server/src/routes/dashboard.js\";\n65:import { userProfileRoutes } from \"../../../../server/src/routes/user-profiles.js\";\n66:import { sidebarBadgeRoutes } from \"../../../../server/src/routes/sidebar-badges.js\";\n67:import { sidebarPreferenceRoutes } from \"../../../../server/src/routes/sidebar-preferences.js\";\n68:import { inboxDismissalRoutes } from \"../../../../server/src/routes/inbox-dismissals.js\";\n69:import { instanceSettingsRoutes } from \"../../../../server/src/routes/instance-settings.js\";\n70:import { llmRoutes } from \"../../../../server/src/routes/llms.js\";\n71:import { authRoutes } from \"../../../../server/src/routes/auth.js\";\n268:  const { forbidden, notFound, badRequest } = await import(\"../../../../server/src/errors.js\");\n304:  const { forbidden, notFound, badRequest } = await import(\"../../../../server/src/errors.js\");\n367:    const ctx: import(\"../../../../server/src/http/types.js\").RequestCtx = {"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "0db867a3-1c42-4201-9960-27999f10ef99",
+  "version": "2.1.123"
+}

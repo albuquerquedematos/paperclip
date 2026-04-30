@@ -1,0 +1,26 @@
+{
+  "agentId": "acedaf1c4054eec72",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { Router } from \"express\";\n2\timport { z } from \"zod\";\n3\timport type { Db } from \"@paperclipai/db\";\n4\timport { forbidden, unauthorized } from \"../errors.js\";\n5\timport { assertCompanyAccess, getActorInfo } from \"./authz.js\";\n6\timport { inboxDismissalService, logActivity } from \"../services/index.js\";\n7\timport { expressHandler } from \"../http/express-adapter.js\";\n8\timport type { Handler, RequestCtx } from \"../http/types.js\";\n9\timport type { StorageService } from \"../storage/types.js\";\n10\t\n11\tconst inboxDismissalSchema = z.object({\n12\t  itemKey: z.string().trim().min(1).regex(/^(approval|join|run):.+$/, \"Unsupported inbox item key\"),\n13\t});\n14\t\n15\t/** Minimal company access check using fields available on ActorContext. */",
+        "tool_use_id": "toolu_01P51EALDeAbRLab1cfDJjms",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "381f5e6b-8125-4f67-8ef2-a91a1bf93a3d",
+  "promptId": "f8ab24c1-de42-4dc6-b59c-8c9364db9ca7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "381f5e6b-8125-4f67-8ef2-a91a1bf93a3d",
+  "timestamp": "2026-04-30T15:11:43.835Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "3e936457-8913-4066-8345-fb2e5c2b4109",
+  "version": "2.1.123"
+}

@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "2260\t      if (\n2261\t        requestedAdapterConfig\n2262\t        \u0026\u0026 replaceAdapterConfig\n2263\t        \u0026\u0026 KNOWN_INSTRUCTIONS_BUNDLE_KEYS.some((key) =\u003e\n2264\t          existingAdapterConfig[key] !== undefined \u0026\u0026 requestedAdapterConfig[key] === undefined,\n2265\t        )\n2266\t      ) {\n2267\t        await assertCanManageInstructionsPath(req, existing);\n2268\t      }\n2269\t      let rawEffectiveAdapterConfig = requestedAdapterConfig ?? existingAdapterConfig;\n2270\t      if (requestedAdapterConfig \u0026\u0026 !changingAdapterType \u0026\u0026 !replaceAdapterConfig) {\n2271\t        rawEffectiveAdapterConfig = { ...existingAdapterConfig, ...requestedAdapterConfig };\n2272\t      }\n2273\t      if (changingAdapterType) {\n2274\t        // Preserve adapter-agnostic keys (env, cwd, etc.) from the existing config",
+        "tool_use_id": "toolu_01PdzdV1XgncJKXJTsJu39qa",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "299d862c-5db9-4779-b0a8-1919f35d9e21",
+  "promptId": "ba96a81e-2351-4b03-969f-bc172383cdd1",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "299d862c-5db9-4779-b0a8-1919f35d9e21",
+  "timestamp": "2026-04-30T16:34:51.196Z",
+  "toolUseResult": {
+    "file": {
+      "content": "      if (\n        requestedAdapterConfig\n        \u0026\u0026 replaceAdapterConfig\n        \u0026\u0026 KNOWN_INSTRUCTIONS_BUNDLE_KEYS.some((key) =\u003e\n          existingAdapterConfig[key] !== undefined \u0026\u0026 requestedAdapterConfig[key] === undefined,\n        )\n      ) {\n        await assertCanManageInstructionsPath(req, existing);\n      }\n      let rawEffectiveAdapterConfig = requestedAdapterConfig ?? existingAdapterConfig;\n      if (requestedAdapterConfig \u0026\u0026 !changingAdapterType \u0026\u0026 !replaceAdapterConfig) {\n        rawEffectiveAdapterConfig = { ...existingAdapterConfig, ...requestedAdapterConfig };\n      }\n      if (changingAdapterType) {\n        // Preserve adapter-agnostic keys (env, cwd, etc.) from the existing config",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/agents.ts",
+      "numLines": 15,
+      "startLine": 2260,
+      "totalLines": 2975
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "813c6d9c-aeb4-4b66-849b-0307de31e315",
+  "version": "2.1.123"
+}

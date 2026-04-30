@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_015sGrShsxXBHTCuRqfrYAFN",
+        "input": {
+          "description": "PR #6+7 HTTP transport-agnostic Handler shape",
+          "prompt": "You are implementing PR #6+7 from a Cloudflare deployment plan for the Paperclip monorepo at `/Users/migmac/Documents/GitHub/_ABM/paperclip`. The goal is to introduce a transport-agnostic HTTP handler shape so route handlers can run under both Express (Node) and Hono (Cloudflare Workers).\n\n## Context\n\n- `server/src/app.ts:108` — `createApp(db, opts)` returns an Express app\n- There are 20+ route files in `server/src/routes/` each exporting an Express Router\n- `server/src/middleware/auth.ts` — sets up actor context on `req`\n- Workers cannot run Express, but Hono can run on both Node and Workers\n\n## What to implement\n\n### 1. Transport-agnostic handler type — `server/src/http/types.ts`\n\n```ts\nimport type { Db } from \"@paperclipai/db\";\nimport type { StorageService } from \"../storage/types.js\";\n\n/** Normalized actor from auth middleware */\nexport interface ActorContext {\n  type: \"board\" | \"agent\";\n  userId?: string;\n  agentId?: string;\n  companyId?: string;\n}\n\n/** Minimal normalized request passed to every handler */\nexport interface RequestCtx {\n  method: string;\n  url: URL;\n  headers: Headers;\n  json\u003cT = unknown\u003e(): Promise\u003cT\u003e;\n  text(): Promise\u003cstring\u003e;\n  /** Path param: e.g. ctx.param(\"companyId\") */\n  param(name: string): string | undefined;\n  /** Query param */\n  query(name: string): string | undefined;\n  actor: ActorContext | null;\n  db: Db;\n  storage: StorageService;\n}\n\nexport type Handler = (ctx: RequestCtx) =\u003e Promise\u003cResponse\u003e;\n\nexport interface RouteDefinition {\n  method: \"GET\" | \"POST\" | \"PUT\" | \"PATCH\" | \"DELETE\";\n  path: string;  // Express-style: /api/companies/:companyId\n  handler: Handler;\n}\n```\n\n### 2. Express adapter — `server/src/http/express-adapter.ts`\n\nWrite a function `expressHandler(handler: Handler, deps: { db: Db; storage: StorageService }): express.RequestHandler` that:\n- Builds a `RequestCtx` from the Express `req`\n- Populates `actor` from `req.actor` (look at how actorMiddleware sets it — read `server/src/middleware/auth.ts`)\n- Calls `handler(ctx)`\n- Sends the `Response` back via Express `res`\n- Handles errors (500 on throw)\n\nYou'll need to bridge Node's `req.body` (already parsed by `express.json()`) into the `json()` method, and `req.params` / `req.query` into `param()` / `query()`.\n\n### 3. Migrate the health route as a reference implementation\n\nRead `server/src/routes/health.ts`. Convert its handlers to use the `Handler` type, then re-export an Express router from `healthRoutes` that wraps them via `expressHandler`. The existing `app.ts` import and usage of `healthRoutes` must not change.\n\nPattern:\n```ts\n// server/src/routes/health.ts\nimport { expressHandler } from \"../http/express-adapter.js\";\nimport type { Handler } from \"../http/types.js\";\nimport { Router } from \"express\";\n\nconst getHealth: Handler = async (ctx) =\u003e {\n  return Response.json({ status: \"ok\" });\n};\n\nexport function healthRoutes(deps) {\n  const router = Router();\n  router.get(\"/api/health\", expressHandler(getHealth, deps));\n  return router;\n}\n```\n\n### 4. Export from `server/src/http/index.ts`\n\nExport `Handler`, `RequestCtx`, `ActorContext`, `RouteDefinition`, `expressHandler`.\n\n## Rules\n\n- Read every file before editing it.\n- Do not change how `app.ts` imports or uses `healthRoutes` — it must still work.\n- Do not remove or change any existing behaviour — only add the new abstraction layer.\n- Keep types strict — no `any` unless the existing code uses it.\n- Read `server/src/middleware/auth.ts` to understand how actor is attached to Express req.\n\nReport what you created and what you edited, with file:line references for every key change. This is the pattern all future route migrations will follow.",
+          "subagent_type": "backend-architect"
+        },
+        "name": "Agent",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01A4tV4cma7cuaq1fKKX5z91",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 295
+      },
+      "cache_creation_input_tokens": 295,
+      "cache_read_input_tokens": 89371,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 295
+          },
+          "cache_creation_input_tokens": 295,
+          "cache_read_input_tokens": 89371,
+          "input_tokens": 1,
+          "output_tokens": 9533,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 9533,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "d27af4b5-d6ca-4461-9754-b44b24903ba7",
+  "requestId": "req_011Caa97H7MzcnxFvFPWghyo",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "timestamp": "2026-04-30T14:49:49.456Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "a25266fa-bc19-4a71-83d7-1b8c551a6a09",
+  "version": "2.1.123"
+}

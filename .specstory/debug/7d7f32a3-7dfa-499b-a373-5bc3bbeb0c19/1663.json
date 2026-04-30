@@ -1,0 +1,26 @@
+{
+  "agentId": "a6a8d0fab5901b092",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { Router } from \"express\";\n2\timport { z } from \"zod\";\n3\timport type { Db } from \"@paperclipai/db\";\n4\timport { assertBoard, assertCompanyAccess } from \"./authz.js\";\n5\timport { inboxDismissalService, logActivity } from \"../services/index.js\";\n6\timport { expressHandler } from \"../http/express-adapter.js\";\n7\timport type { Handler } from \"../http/types.js\";\n8\timport type { StorageService } from \"../storage/types.js\";\n9\t\n10\tconst inboxDismissalSchema = z.object({\n11\t  itemKey: z.string().trim().min(1).regex(/^(approval|join|run):.+$/, \"Unsupported inbox item key\"),\n12\t});\n13\t\n14\tfunction buildHandlers(db: Db) {\n15\t  const svc = inboxDismissalService(db);\n16\t\n17\t  // server/src/routes/inbox-dismissals.ts:16\n18\t  const getInboxDismissals: Handler = async (ctx) =\u003e {\n19\t    const companyId = ctx.param(\"companyId\") ?? \"\";\n20\t    assertCompanyAccess(ctx, companyId);\n21\t    assertBoard(ctx);\n22\t    const dismissals = await svc.list(companyId, (ctx.actor as { userId: string }).userId);\n23\t    return Response.json(dismissals);\n24\t  };\n25\t\n26\t  // server/src/routes/inbox-dismissals.ts:31\n27\t  const postInboxDismissal: Handler = async (ctx) =\u003e {\n28\t    const companyId = ctx.param(\"companyId\") ?? \"\";\n29\t    assertCompanyAccess(ctx, companyId);\n30\t    assertBoard(ctx);\n31\t    const boardActor = ctx.actor as { type: \"board\"; userId: string; runId?: string };\n32\t\n33\t    const body = await ctx.json();\n34\t    const parsed = inboxDismissalSchema.parse(body);\n35\t\n36\t    const dismissal = await svc.dismiss(companyId, boardActor.userId, parsed.itemKey, new Date());\n37\t\n38\t    await logActivity(db, {\n39\t      companyId,\n40\t      actorType: \"user\",\n41\t      actorId: boardActor.userId,\n42\t      agentId: null,\n43\t      runId: ctx.actor?.runId ?? null,\n44\t      action: \"inbox.dismissed\",\n45\t      entityType: \"company\",\n46\t      entityId: companyId,\n47\t      details: {\n48\t        userId: boardActor.userId,\n49\t        itemKey: dismissal.itemKey,\n50\t        dismissedAt: dismissal.dismissedAt,\n51\t      },\n52\t    });\n53\t\n54\t    return Response.json(dismissal, { status: 201 });\n55\t  };\n56\t\n57\t  return { getInboxDismissals, postInboxDismissal };\n58\t}\n59\t\n60\texport function inboxDismissalRoutes(db: Db) {\n61\t  const router = Router();\n62\t  const { getInboxDismissals, postInboxDismissal } = buildHandlers(db);\n63\t\n64\t  const storageSentinel = new Proxy({} as StorageService, {\n65\t    get(_target, prop) {\n66\t      throw new Error(`inboxDismissal handler unexpectedly accessed storage.${String(prop)}`);\n67\t    },\n68\t  });\n69\t  const deps = { db, storage: storageSentinel };\n70\t\n71\t  router.get(\"/companies/:companyId/inbox-dismissals\", expressHandler(getInboxDismissals, deps));\n72\t  router.post(\"/companies/:companyId/inbox-dismissals\", expressHandler(postInboxDismissal, deps));\n73\t\n74\t  return router;\n75\t}\n76\t",
+        "tool_use_id": "toolu_01RTyQgcuumzNZJr1th3WvAX",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "b42922d8-9aca-4082-b272-935fc3953e05",
+  "promptId": "f70e47c2-d340-4417-9b6f-d01ec6a1d002",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "b42922d8-9aca-4082-b272-935fc3953e05",
+  "timestamp": "2026-04-30T15:17:20.151Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "63708505-1373-4674-9318-0866f95c9300",
+  "version": "2.1.123"
+}

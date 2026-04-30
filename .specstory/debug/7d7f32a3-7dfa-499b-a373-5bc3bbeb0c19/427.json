@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport fs from \"node:fs/promises\";\n2\t\n3\tconst DEFAULT_AGENT_BUNDLE_FILES = {\n4\t  default: [\"AGENTS.md\"],\n5\t  ceo: [\"AGENTS.md\", \"HEARTBEAT.md\", \"SOUL.md\", \"TOOLS.md\"],\n6\t} as const;\n7\t\n8\ttype DefaultAgentBundleRole = keyof typeof DEFAULT_AGENT_BUNDLE_FILES;\n9\t\n10\tfunction resolveDefaultAgentBundleUrl(role: DefaultAgentBundleRole, fileName: string) {\n11\t  return new URL(`../onboarding-assets/${role}/${fileName}`, import.meta.url);\n12\t}\n13\t\n14\texport async function loadDefaultAgentInstructionsBundle(role: DefaultAgentBundleRole): Promise\u003cRecord\u003cstring, string\u003e\u003e {\n15\t  const fileNames = DEFAULT_AGENT_BUNDLE_FILES[role];\n16\t  const entries = await Promise.all(\n17\t    fileNames.map(async (fileName) =\u003e {\n18\t      const content = await fs.readFile(resolveDefaultAgentBundleUrl(role, fileName), \"utf8\");\n19\t      return [fileName, content] as const;\n20\t    }),\n21\t  );\n22\t  return Object.fromEntries(entries);\n23\t}\n24\t\n25\texport function resolveDefaultAgentInstructionsBundleRole(role: string): DefaultAgentBundleRole {\n26\t  return role === \"ceo\" ? \"ceo\" : \"default\";\n27\t}\n28\t",
+        "tool_use_id": "toolu_01KR9jsqt85wUdHFbKkTWhbX",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "2929fe21-6bf2-4b88-b9b9-7f3e58feda75",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "2929fe21-6bf2-4b88-b9b9-7f3e58feda75",
+  "timestamp": "2026-04-30T14:52:12.150Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "b3d39bcf-7d44-4de5-9a0b-971f18a62c17",
+  "version": "2.1.123"
+}

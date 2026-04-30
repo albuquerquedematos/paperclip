@@ -1,0 +1,29 @@
+{
+  "attachment": {
+    "content": {
+      "file": {
+        "content": "import { forbidden, unauthorized } from \"../errors.js\";\nimport type { ActorMembership } from \"../http/types.js\";\n\n/**\n * Minimal structural interface satisfied by both Express Request (post-actorMiddleware)\n * and RequestCtx, allowing authz helpers to work in both Express handlers and\n * transport-agnostic Handler functions.\n */\nexport interface AuthzReq {\n  actor:\n    | {\n        type: string;\n        source?: string;\n        isInstanceAdmin?: boolean;\n        companyIds?: string[];\n        memberships?: Array\u003c{ companyId: string; membershipRole?: string | null; status?: string }\u003e;\n        userId?: string;\n        agentId?: string;\n        companyId?: string;\n        runId?: string;\n      }\n    | null\n    | undefined;\n  method: string;\n}\n\nfunction isAuthenticated(req: AuthzReq): boolean {\n  return !!req.actor \u0026\u0026 req.actor.type !== \"none\";\n}\n\nexport function assertAuthenticated(req: AuthzReq): void {\n  if (!isAuthenticated(req)) throw unauthorized();\n}\n\nexport function assertBoard(req: AuthzReq): void {\n  if (!req.actor || req.actor.type !== \"board\") throw forbidden(\"Board access required\");\n}\n\nexport function hasBoardOrgAccess(req: AuthzReq): boolean {\n  if (!req.actor || req.actor.type !== \"board\") return false;\n  if (req.actor.source === \"local_implicit\" || req.actor.isInstanceAdmin) return true;\n  return Array.isArray(req.actor.companyIds) \u0026\u0026 req.actor.companyIds.length \u003e 0;\n}\n\nexport function assertBoardOrgAccess(req: AuthzReq): void {\n  assertBoard(req);\n  if (hasBoardOrgAccess(req)) return;\n  throw forbidden(\"Company membership or instance admin access required\");\n}\n\nexport function assertInstanceAdmin(req: AuthzReq): void {\n  assertBoard(req);\n  if (req.actor?.source === \"local_implicit\" || req.actor?.isInstanceAdmin) return;\n  throw forbidden(\"Instance admin access required\");\n}\n\nexport function assertCompanyAccess(req: AuthzReq, companyId: string): void {\n  assertAuthenticated(req);\n  if (!req.actor) return;\n\n  if (req.actor.type === \"agent\" \u0026\u0026 req.actor.companyId !== companyId) {\n    throw forbidden(\"Agent key cannot access another company\");\n  }\n\n  if (req.actor.type === \"board\" \u0026\u0026 req.actor.source !== \"local_implicit\") {\n    const allowedCompanies = req.actor.companyIds ?? [];\n    if (!allowedCompanies.includes(companyId)) {\n      throw forbidden(\"User does not have access to this company\");\n    }\n    const method = typeof req.method === \"string\" ? req.method.toUpperCase() : \"GET\";\n    const isSafeMethod = [\"GET\", \"HEAD\", \"OPTIONS\"].includes(method);\n    if (!isSafeMethod \u0026\u0026 !req.actor.isInstanceAdmin \u0026\u0026 Array.isArray(req.actor.memberships)) {\n      const membership = req.actor.memberships.find((item) =\u003e item.companyId === companyId);\n      if (!membership || membership.status !== \"active\") {\n        throw forbidden(\"User does not have active company access\");\n      }\n      if ((membership as ActorMembership).membershipRole === \"viewer\") {\n        throw forbidden(\"Viewer access is read-only\");\n      }\n    }\n  }\n}\n\nexport function getActorInfo(req: AuthzReq) {\n  assertAuthenticated(req);\n  if (!req.actor) throw unauthorized();\n\n  if (req.actor.type === \"agent\") {\n    return {\n      actorType: \"agent\" as const,\n      actorId: req.actor.agentId ?? \"unknown-agent\",\n      agentId: req.actor.agentId ?? null,\n      runId: req.actor.runId ?? null,\n    };\n  }\n\n  return {\n    actorType: \"user\" as const,\n    actorId: req.actor.userId ?? \"board\",\n    agentId: null,\n    runId: req.actor.runId ?? null,\n  };\n}\n",
+        "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/authz.ts",
+        "numLines": 104,
+        "startLine": 1,
+        "totalLines": 104
+      },
+      "type": "text"
+    },
+    "displayPath": "server/src/routes/authz.ts",
+    "filename": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/authz.ts",
+    "type": "file"
+  },
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "parentUuid": "6eebf09c-dc79-4709-b6cd-125a34ba3cb9",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "timestamp": "2026-04-30T15:21:24.501Z",
+  "type": "attachment",
+  "userType": "external",
+  "uuid": "6a87269e-b9dc-4ef0-9b1e-2b3cb30e223f",
+  "version": "2.1.123"
+}

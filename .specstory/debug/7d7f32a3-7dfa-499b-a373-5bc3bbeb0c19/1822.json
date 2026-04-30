@@ -1,0 +1,26 @@
+{
+  "agentId": "a8fd5512baf043009",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { and, eq, inArray, isNull, ne, or } from \"drizzle-orm\";\n2\timport type { Db } from \"@paperclipai/db\";\n3\timport { agents, issues } from \"@paperclipai/db\";\n4\timport { forbidden } from \"../errors.js\";\n5\timport { assertCompanyAccess, type AuthzReq } from \"./authz.js\";\n6\t\n7\tconst WORKSPACE_RUNTIME_ELIGIBLE_ISSUE_STATUSES: string[] = [\n8\t  \"backlog\",\n9\t  \"todo\",\n10\t  \"in_progress\",\n11\t  \"in_review\",\n12\t  \"blocked\",\n13\t];\n14\t\n15\tasync function listReportingSubtreeAgentIds(db: Db, companyId: string, actorAgentId: string) {",
+        "tool_use_id": "toolu_016fZeMx5HzUqkKfQU9HivVw",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "2a0289c1-1bbf-433e-95c1-669d5e6f11a4",
+  "promptId": "e14e6903-86b2-440b-8601-db2551c5adc3",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "2a0289c1-1bbf-433e-95c1-669d5e6f11a4",
+  "timestamp": "2026-04-30T15:19:47.693Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "5d97cf7c-6a35-4439-900a-8f45f17e4622",
+  "version": "2.1.123"
+}

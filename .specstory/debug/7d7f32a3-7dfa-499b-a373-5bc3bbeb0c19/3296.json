@@ -1,0 +1,52 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/package.json has been updated successfully.",
+        "tool_use_id": "toolu_015jLzy3GLKDXE8iR65MpZsx",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "739824d6-d6b7-4a2d-8eef-3ff4044a7420",
+  "promptId": "76fdb1bb-64b4-4188-b850-7eeac0540eca",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "739824d6-d6b7-4a2d-8eef-3ff4044a7420",
+  "timestamp": "2026-04-30T16:52:26.525Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/package.json",
+    "newString": "    \"drizzle-orm\": \"^0.38.4\",",
+    "oldString": "    \"drizzle-orm\": \"^0.45.2\",",
+    "originalFile": "{\n  \"name\": \"@paperclipai/deploy-cloudflare\",\n  \"version\": \"0.1.0\",\n  \"private\": true,\n  \"type\": \"module\",\n  \"main\": \"./src/boot.ts\",\n  \"dependencies\": {\n    \"@paperclipai/db\": \"workspace:*\",\n    \"@paperclipai/shared\": \"workspace:*\",\n    \"drizzle-orm\": \"^0.45.2\",\n    \"hono\": \"^4.0.0\",\n    \"postgres\": \"^3.4.5\"\n  },\n  \"devDependencies\": {\n    \"@cloudflare/workers-types\": \"^4.0.0\",\n    \"@types/express\": \"^5.0.0\",\n    \"@types/node\": \"^25.6.0\",\n    \"express\": \"^5.1.0\",\n    \"typescript\": \"^5.0.0\",\n    \"wrangler\": \"^3.0.0\"\n  }\n}\n",
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          "   \"dependencies\": {",
+          "     \"@paperclipai/db\": \"workspace:*\",",
+          "     \"@paperclipai/shared\": \"workspace:*\",",
+          "-    \"drizzle-orm\": \"^0.45.2\",",
+          "+    \"drizzle-orm\": \"^0.38.4\",",
+          "     \"hono\": \"^4.0.0\",",
+          "     \"postgres\": \"^3.4.5\"",
+          "   },"
+        ],
+        "newLines": 7,
+        "newStart": 7,
+        "oldLines": 7,
+        "oldStart": 7
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "25d2db17-22e6-4717-853c-c815195f3439",
+  "version": "2.1.123"
+}

@@ -1,0 +1,53 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "attributionAgent": "backend-architect",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_016dVN3Bt6H113ughteLXmgZ",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/services/heartbeat.ts",
+          "limit": 60
+        },
+        "name": "Read",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01EALk1mM61Mq9Kdz64KDfPA",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": null,
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 4977
+      },
+      "cache_creation_input_tokens": 4977,
+      "cache_read_input_tokens": 39713,
+      "inference_geo": "global",
+      "input_tokens": 1,
+      "output_tokens": 42,
+      "service_tier": "standard"
+    }
+  },
+  "parentUuid": "ec953a56-cff8-4da5-abdf-8e040219e7ea",
+  "requestId": "req_011CaaG5ZU88NTxrmPW5fYBB",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "timestamp": "2026-04-30T16:20:30.108Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "3df38a0b-4201-480b-bc67-24eb9ed7aa6c",
+  "version": "2.1.123"
+}

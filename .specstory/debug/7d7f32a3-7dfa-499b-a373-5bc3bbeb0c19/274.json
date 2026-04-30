@@ -1,0 +1,70 @@
+{
+  "agentId": "ab8a7a43e45ac1ba4",
+  "attributionAgent": "backend-architect",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01Pcx5nQLz6mQpTBimNTdZYs",
+        "input": {
+          "content": "import type { Db } from \"@paperclipai/db\";\nimport type { StorageService } from \"../storage/types.js\";\n\n/** Normalized actor from auth middleware — only set when authenticated (not \"none\"). */\nexport interface ActorContext {\n  type: \"board\" | \"agent\";\n  userId?: string;\n  agentId?: string;\n  companyId?: string;\n}\n\n/** Minimal normalized request passed to every handler. */\nexport interface RequestCtx {\n  method: string;\n  url: URL;\n  headers: Headers;\n  json\u003cT = unknown\u003e(): Promise\u003cT\u003e;\n  text(): Promise\u003cstring\u003e;\n  /** Path param: e.g. ctx.param(\"companyId\") */\n  param(name: string): string | undefined;\n  /** Query param */\n  query(name: string): string | undefined;\n  actor: ActorContext | null;\n  db: Db;\n  storage: StorageService;\n}\n\nexport type Handler = (ctx: RequestCtx) =\u003e Promise\u003cResponse\u003e;\n\nexport interface RouteDefinition {\n  method: \"GET\" | \"POST\" | \"PUT\" | \"PATCH\" | \"DELETE\";\n  /** Express-style path, e.g. /api/companies/:companyId */\n  path: string;\n  handler: Handler;\n}\n",
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/http/types.ts"
+        },
+        "name": "Write",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01MoPeyhbkhQ5fTwNmFYtHkZ",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 304
+      },
+      "cache_creation_input_tokens": 304,
+      "cache_read_input_tokens": 25145,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 304
+          },
+          "cache_creation_input_tokens": 304,
+          "cache_read_input_tokens": 25145,
+          "input_tokens": 1,
+          "output_tokens": 406,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 406,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "e38dd773-41e2-4682-aa6e-b7bffd7fef9f",
+  "requestId": "req_011Caa9CgMk77w3cLpPsEUxd",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "timestamp": "2026-04-30T14:50:23.859Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "136947a7-23f2-4c5c-9943-7e6c251cff0a",
+  "version": "2.1.123"
+}

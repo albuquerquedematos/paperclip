@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "119:  router.get(\"/companies/:companyId/goals\", expressHandler(listGoals, { db, storage: storageSentinel }));\n120:  router.get(\"/goals/:id\", expressHandler(getGoal, { db, storage: storageSentinel }));\n121:  router.post(\"/companies/:companyId/goals\", validate(createGoalSchema), expressHandler(createGoal, { db, storage: storageSentinel }));\n122:  router.patch(\"/goals/:id\", validate(updateGoalSchema), expressHandler(updateGoal, { db, storage: storageSentinel }));\n123:  router.delete(\"/goals/:id\", expressHandler(deleteGoal, { db, storage: storageSentinel }));",
+        "is_error": false,
+        "tool_use_id": "toolu_01XjmUfJEBuGmGfyQALH2WKG",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "dc435829-5551-4c1d-962c-2f3e768c3e3f",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "dc435829-5551-4c1d-962c-2f3e768c3e3f",
+  "timestamp": "2026-04-30T16:05:27.649Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "119:  router.get(\"/companies/:companyId/goals\", expressHandler(listGoals, { db, storage: storageSentinel }));\n120:  router.get(\"/goals/:id\", expressHandler(getGoal, { db, storage: storageSentinel }));\n121:  router.post(\"/companies/:companyId/goals\", validate(createGoalSchema), expressHandler(createGoal, { db, storage: storageSentinel }));\n122:  router.patch(\"/goals/:id\", validate(updateGoalSchema), expressHandler(updateGoal, { db, storage: storageSentinel }));\n123:  router.delete(\"/goals/:id\", expressHandler(deleteGoal, { db, storage: storageSentinel }));"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "fcabfb28-aed1-41a6-937f-d488c1969d5e",
+  "version": "2.1.123"
+}

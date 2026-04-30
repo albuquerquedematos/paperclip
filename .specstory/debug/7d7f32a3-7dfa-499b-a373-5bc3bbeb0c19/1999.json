@@ -1,0 +1,27 @@
+{
+  "agentId": "ac82afa7422550819",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "770\t\n771\t    if (activeRunStartedAtMs === null || commentCreatedAtMs === null) return false;\n772\t    if (params.comment.authorAgentId \u0026\u0026 params.comment.authorAgentId === params.activeRun.agentId) return false;\n773\t    return commentCreatedAtMs \u003e= activeRunStartedAtMs;\n774\t  }\n775\t  async function getClosedIssueExecutionWorkspace(issue: { executionWorkspaceId?: string | null }) {\n776\t    if (!issue.executionWorkspaceId) return null;\n777\t    const workspace = await executionWorkspacesSvc.getById(issue.executionWorkspaceId);\n778\t    if (!workspace || !isClosedIsolatedExecutionWorkspace(workspace)) return null;\n779\t    return workspace;\n780\t  }\n781\t\n782\t  function respondClosedIssueExecutionWorkspace(\n783\t    res: Response,\n784\t    workspace: Pick\u003cExecutionWorkspace, \"closedAt\" | \"id\" | \"mode\" | \"name\" | \"status\"\u003e,\n785\t  ) {\n786\t    res.status(409).json({\n787\t      error: getClosedIsolatedExecutionWorkspaceMessage(workspace),\n788\t      executionWorkspace: workspace,\n789\t    });\n790\t  }\n791\t\n792\t  async function normalizeIssueIdentifier(rawId: string): Promise\u003cstring\u003e {\n793\t    if (/^[A-Z]+-\\d+$/i.test(rawId)) {\n794\t      const issue = await svc.getByIdentifier(rawId);\n795\t      if (issue) {\n796\t        return issue.id;\n797\t      }\n798\t    }\n799\t    return rawId;\n800\t  }\n801\t\n802\t  async function resolveIssueProjectAndGoal(issue: {\n803\t    companyId: string;\n804\t    projectId: string | null;\n805\t    goalId: string | null;\n806\t  }) {\n807\t    const projectPromise = issue.projectId ? projectsSvc.getById(issue.projectId) : Promise.resolve(null);\n808\t    const directGoalPromise = issue.goalId ? goalsSvc.getById(issue.goalId) : Promise.resolve(null);\n809\t    const [project, directGoal] = await Promise.all([projectPromise, directGoalPromise]);\n810\t\n811\t    if (directGoal) {\n812\t      return { project, goal: directGoal };\n813\t    }\n814\t\n815\t    const projectGoalId = project?.goalId ?? project?.goalIds[0] ?? null;\n816\t    if (projectGoalId) {\n817\t      const projectGoal = await goalsSvc.getById(projectGoalId);\n818\t      return { project, goal: projectGoal };\n819\t    }",
+        "tool_use_id": "toolu_01YCSdEegsJhzQv5SYmApqQC",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "520ca50b-849e-47f1-b253-be4b8fd40759",
+  "promptId": "dc405341-3479-47dd-8d57-3077b7af430f",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "520ca50b-849e-47f1-b253-be4b8fd40759",
+  "timestamp": "2026-04-30T15:28:51.341Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "4286cedd-6ded-41e6-a94e-6bdd35c3dfba",
+  "version": "2.1.123"
+}

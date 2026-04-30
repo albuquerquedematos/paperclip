@@ -1,0 +1,27 @@
+{
+  "agentId": "a0d0169af69218004",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/config.ts:13:  DEPLOYMENT_PLATFORMS,\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/config.ts:20:  type DeploymentPlatform,\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/config.ts:56:  deploymentPlatform: DeploymentPlatform;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/config.ts:174:  const deploymentPlatformFromEnvRaw = process.env.PAPERCLIP_DEPLOYMENT_PLATFORM;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/config.ts:175:  const deploymentPlatformFromEnv =\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/config.ts:176:    deploymentPlatformFromEnvRaw \u0026\u0026\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/config.ts:177:    DEPLOYMENT_PLATFORMS.includes(deploymentPlatformFromEnvRaw as DeploymentPlatform)\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/config.ts:178:      ? (deploymentPlatformFromEnvRaw as DeploymentPlatform)\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/config.ts:180:  const deploymentPlatform: DeploymentPlatform =\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/config.ts:181:    deploymentPlatformFromEnv ?? fileConfig?.server.deploymentPlatform ?? \"node\";\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/config.ts:301:    deploymentPlatform,\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/shared/src/config-schema.ts:7:  DEPLOYMENT_PLATFORMS,\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/shared/src/config-schema.ts:51:  deploymentPlatform: z.enum(DEPLOYMENT_PLATFORMS).default(\"node\"),\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/shared/src/constants.ts:10:export const DEPLOYMENT_PLATFORMS = [\"node\", \"cloudflare\"] as const;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/shared/src/constants.ts:11:export type DeploymentPlatform = (typeof DEPLOYMENT_PLATFORMS)[number];\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/shared/src/index.ts:7:  DEPLOYMENT_PLATFORMS,\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/shared/src/index.ts:115:  type DeploymentPlatform,\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/index.ts:535:  // When deploymentPlatform is \"cloudflare\" the R2-backed run-log store,\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/index.ts:541:  if (config.deploymentPlatform === \"cloudflare\") {\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/index.ts:543:      { deploymentPlatform: config.deploymentPlatform },",
+        "is_error": false,
+        "tool_use_id": "toolu_012Pox6b5Mngf43q12GhLSTq",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "2aa5c1f1-174d-49ff-8f00-13089e9ca1a0",
+  "promptId": "f8ab24c1-de42-4dc6-b59c-8c9364db9ca7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "2aa5c1f1-174d-49ff-8f00-13089e9ca1a0",
+  "timestamp": "2026-04-30T15:08:20.960Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "090b34ee-90a5-4ded-a82d-b89eeb9da2c5",
+  "version": "2.1.123"
+}

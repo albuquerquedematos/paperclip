@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1830\t      markdown: isMarkdownPath(normalizedPath),\n1831\t      editable: source.editable,\n1832\t    };\n1833\t  }\n1834\t\n1835\t  async function createLocalSkill(companyId: string, input: CompanySkillCreateRequest): Promise\u003cCompanySkill\u003e {\n1836\t    const slug = normalizeSkillSlug(input.slug ?? input.name) ?? \"skill\";\n1837\t    const managedRoot = resolveManagedSkillsRoot(companyId);\n1838\t    const skillDir = path.resolve(managedRoot, slug);\n1839\t    const skillFilePath = path.resolve(skillDir, \"SKILL.md\");\n1840\t\n1841\t    await fs.mkdir(skillDir, { recursive: true });\n1842\t\n1843\t    const markdown = (input.markdown?.trim().length\n1844\t      ? input.markdown\n1845\t      : [\n1846\t        \"---\",\n1847\t        `name: ${input.name}`,\n1848\t        ...(input.description?.trim() ? [`description: ${input.description.trim()}`] : []),\n1849\t        \"---\",\n1850\t        \"\",\n1851\t        `# ${input.name}`,\n1852\t        \"\",\n1853\t        input.description?.trim() ? input.description.trim() : \"Describe what this skill does.\",\n1854\t        \"\",\n1855\t      ].join(\"\\n\"));\n1856\t\n1857\t    await fs.writeFile(skillFilePath, markdown, \"utf8\");\n1858\t\n1859\t    const parsed = parseFrontmatterMarkdown(markdown);\n1860\t    const imported = await upsertImportedSkills(companyId, [{\n1861\t      key: `company/${companyId}/${slug}`,\n1862\t      slug,\n1863\t      name: asString(parsed.frontmatter.name) ?? input.name,\n1864\t      description: asString(parsed.frontmatter.description) ?? input.description?.trim() ?? null,\n1865\t      markdown,\n1866\t      sourceType: \"local_path\",\n1867\t      sourceLocator: skillDir,\n1868\t      sourceRef: null,\n1869\t      trustLevel: \"markdown_only\",\n1870\t      compatibility: \"compatible\",\n1871\t      fileInventory: [{ path: \"SKILL.md\", kind: \"skill\" }],\n1872\t      metadata: { sourceKind: \"managed_local\" },\n1873\t    }]);\n1874\t\n1875\t    return imported[0]!;\n1876\t  }\n1877\t\n1878\t  async function updateFile(companyId: string, skillId: string, relativePath: string, content: string): Promise\u003cCompanySkillFileDetail\u003e {\n1879\t    await ensureSkillInventoryCurrent(companyId);",
+        "tool_use_id": "toolu_018Vxh9LVPL7gmpyEPJ3ohgD",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "93a43699-9951-4309-917b-47864cba10e7",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "93a43699-9951-4309-917b-47864cba10e7",
+  "timestamp": "2026-04-30T14:52:39.585Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "c4faba51-ea6d-4164-b66f-50fe9ea1200f",
+  "version": "2.1.123"
+}

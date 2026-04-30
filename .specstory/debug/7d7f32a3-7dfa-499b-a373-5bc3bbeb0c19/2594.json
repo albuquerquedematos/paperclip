@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "2348\t      entityId: agent.id,\n2349\t      details: summarizeAgentUpdateDetails(patchData),\n2350\t    });\n2351\t\n2352\t    res.json(agent);\n2353\t  });\n2354\t\n2355\t  router.post(\"/agents/:id/pause\", async (req, res) =\u003e {\n2356\t    assertBoard(req);\n2357\t    const id = req.params.id as string;",
+        "tool_use_id": "toolu_01MKYsbMTNi8V7dtjowhAz9v",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "8a477d3b-5a28-467d-9570-a713206d42d6",
+  "promptId": "ba96a81e-2351-4b03-969f-bc172383cdd1",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "8a477d3b-5a28-467d-9570-a713206d42d6",
+  "timestamp": "2026-04-30T16:27:34.498Z",
+  "toolUseResult": {
+    "file": {
+      "content": "      entityId: agent.id,\n      details: summarizeAgentUpdateDetails(patchData),\n    });\n\n    res.json(agent);\n  });\n\n  router.post(\"/agents/:id/pause\", async (req, res) =\u003e {\n    assertBoard(req);\n    const id = req.params.id as string;",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/agents.ts",
+      "numLines": 10,
+      "startLine": 2348,
+      "totalLines": 3041
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "a1307524-a4de-457f-b07c-7685d6389a28",
+  "version": "2.1.123"
+}

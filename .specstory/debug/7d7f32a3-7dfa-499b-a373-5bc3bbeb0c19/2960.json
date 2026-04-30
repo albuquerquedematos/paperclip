@@ -1,0 +1,73 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "attributionAgent": "backend-architect",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01HoexmDYbDrgDDHUneaQjZg",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/api.ts",
+          "new_string": "import { Hono } from \"hono\";\nimport { createSetupApp } from \"./setup.js\";\nimport { bootCloudflare } from \"../boot.js\";\nimport { SidecarClient } from \"../sidecar-client.js\";\nimport { CfCompanySkillsService } from \"../services/cf-company-skills.js\";\nimport { CfAgentInstructionsService } from \"../services/cf-agent-instructions.js\";\nimport { createHyperdriveDb } from \"../db/hyperdrive.js\";\nimport { R2Provider } from \"../storage/r2-provider.js\";\nimport { createCfStorageService } from \"../storage/cf-storage-service.js\";\nimport { extractRoutesFromRouter } from \"../http/express-router-bridge.js\";\nimport { resolveActorFromRequest } from \"../auth/resolve-actor.js\";\nimport { runHeartbeatSweep } from \"../cron/heartbeat-sweep.js\";\nimport { HttpError } from \"../../../server/src/errors.js\";\nimport type { RouteDefinition } from \"../../../server/src/http/types.js\";\nimport type { StorageService } from \"../../../server/src/storage/types.js\";\nimport type { Db } from \"@paperclipai/db\";",
+          "old_string": "import { Hono } from \"hono\";\nimport type { Context } from \"hono\";\nimport { createSetupApp } from \"./setup.js\";\nimport { bootCloudflare } from \"../boot.js\";\nimport { SidecarClient } from \"../sidecar-client.js\";\nimport { CfCompanySkillsService } from \"../services/cf-company-skills.js\";\nimport { CfAgentInstructionsService } from \"../services/cf-agent-instructions.js\";\nimport { createHyperdriveDb } from \"../db/hyperdrive.js\";\nimport { R2Provider } from \"../storage/r2-provider.js\";\nimport { createCfStorageService } from \"../storage/cf-storage-service.js\";\nimport { extractRoutesFromRouter } from \"../http/express-router-bridge.js\";\nimport { mountRoutes } from \"../http/hono-adapter.js\";\nimport { resolveActorFromRequest } from \"../auth/resolve-actor.js\";\nimport { runHeartbeatSweep } from \"../cron/heartbeat-sweep.js\";\nimport { HttpError } from \"../../../server/src/errors.js\";\nimport type { RouteDefinition } from \"../../../server/src/http/types.js\";\nimport type { StorageService } from \"../../../server/src/storage/types.js\";\nimport type { Db } from \"@paperclipai/db\";",
+          "replace_all": false
+        },
+        "name": "Edit",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01DXWztivFWzEErrqEsYUTbC",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 611
+      },
+      "cache_creation_input_tokens": 611,
+      "cache_read_input_tokens": 132208,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 611
+          },
+          "cache_creation_input_tokens": 611,
+          "cache_read_input_tokens": 132208,
+          "input_tokens": 1,
+          "output_tokens": 827,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 827,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "e0ccdf5e-22d0-4015-96d8-814884e07d86",
+  "requestId": "req_011CaaHRwQAWfA117XWuTygL",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "timestamp": "2026-04-30T16:38:20.653Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "efc514c4-acbb-423d-9f53-afd85f3f76bf",
+  "version": "2.1.123"
+}

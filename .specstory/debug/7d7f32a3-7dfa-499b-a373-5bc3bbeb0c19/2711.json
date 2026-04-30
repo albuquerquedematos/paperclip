@@ -1,0 +1,71 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01DgZN9UHutNnaFoGGoXmSCR",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/agents.ts",
+          "new_string": "  const wakeupAgent: Handler = async (ctx) =\u003e {\n    const id = ctx.param(\"id\")!;\n    const agent = await svc.getById(id);\n    if (!agent) return Response.json({ error: \"Agent not found\" }, { status: 404 });\n    assertCompanyAccess(ctx, agent.companyId);\n\n    if (ctx.actor?.type === \"agent\") {\n      if (ctx.actor.agentId !== id) {\n        return Response.json({ error: \"Agent can only invoke itself\" }, { status: 403 });\n      }\n    } else {\n      await assertBoardCanManageAgentsForCompany(ctx, agent.companyId);\n    }\n\n    const body = await ctx.json\u003cRecord\u003cstring, unknown\u003e\u003e();\n    const run = await heartbeat.wakeup(id, {\n      source: body.source as string,\n      triggerDetail: (body.triggerDetail as string) ?? \"manual\",\n      reason: (body.reason as string | null) ?? null,\n      payload: (body.payload as Record\u003cstring, unknown\u003e | null) ?? null,\n      idempotencyKey: (body.idempotencyKey as string | null) ?? null,\n      requestedByActorType: ctx.actor?.type === \"agent\" ? \"agent\" : \"user\",\n      requestedByActorId: ctx.actor?.type === \"agent\" ? ctx.actor.agentId ?? null : (ctx.actor?.userId ?? null),\n      contextSnapshot: {\n        triggeredBy: ctx.actor?.type ?? \"none\",\n        actorId: ctx.actor?.type === \"agent\" ? ctx.actor.agentId : ctx.actor?.userId,\n        forceFreshSession: body.forceFreshSession === true,\n      },\n    });\n\n    if (!run) {\n      return Response.json(await buildSkippedWakeupResponse(agent, (body.payload as Record\u003cstring, unknown\u003e | null) ?? null), { status: 202 });\n    }\n\n    const actor = getActorInfo(ctx);\n    await logActivity(db, {\n      companyId: agent.companyId,\n      actorType: actor.actorType,\n      actorId: actor.actorId,\n      agentId: actor.agentId,\n      runId: actor.runId,\n      action: \"heartbeat.invoked\",\n      entityType: \"heartbeat_run\",\n      entityId: run.id,\n      details: { agentId: id },\n    });\n\n    return Response.json(run, { status: 202 });\n  };\n\n  const invokeHeartbeat: Handler = async (ctx) =\u003e {\n    const id = ctx.param(\"id\")!;\n    const agent = await svc.getById(id);\n    if (!agent) return Response.json({ error: \"Agent not found\" }, { status: 404 });\n    assertCompanyAccess(ctx, agent.companyId);\n\n    if (ctx.actor?.type === \"agent\") {\n      if (ctx.actor.agentId !== id) {\n        return Response.json({ error: \"Agent can only invoke itself\" }, { status: 403 });\n      }\n    } else {\n      await assertBoardCanManageAgentsForCompany(ctx, agent.companyId);\n    }\n\n    const run = await heartbeat.invoke(\n      id,\n      \"on_demand\",\n      {\n        triggeredBy: ctx.actor?.type ?? \"none\",\n        actorId: ctx.actor?.type === \"agent\" ? ctx.actor.agentId : ctx.actor?.userId,\n      },\n      \"manual\",\n      {\n        actorType: ctx.actor?.type === \"agent\" ? \"agent\" : \"user\",\n        actorId: ctx.actor?.type === \"agent\" ? ctx.actor.agentId ?? null : (ctx.actor?.userId ?? null),\n      },\n    );\n\n    if (!run) return Response.json({ status: \"skipped\" }, { status: 202 });\n\n    const actor = getActorInfo(ctx);\n    await logActivity(db, {\n      companyId: agent.companyId,\n      actorType: actor.actorType,\n      actorId: actor.actorId,\n      agentId: actor.agentId,\n      runId: actor.runId,\n      action: \"heartbeat.invoked\",\n      entityType: \"heartbeat_run\",\n      entityId: run.id,\n      details: { agentId: id },\n    });\n\n    return Response.json(run, { status: 202 });\n  };\n\n  const claudeLogin: Handler = async (ctx) =\u003e {\n    assertBoard(ctx);\n    const id = ctx.param(\"id\")!;\n    const agent = await svc.getById(id);\n    if (!agent) return Response.json({ error: \"Agent not found\" }, { status: 404 });\n    await assertBoardCanManageAgentsForCompany(ctx, agent.companyId);\n    assertCompanyAccess(ctx, agent.companyId);\n    if (agent.adapterType !== \"claude_local\") {\n      return Response.json({ error: \"Login is only supported for claude_local agents\" }, { status: 400 });\n    }\n\n    const config = asRecord(agent.adapterConfig) ?? {};\n    const { config: runtimeConfig } = await secretsSvc.resolveAdapterConfigForRuntime(agent.companyId, config);\n    const result = await runClaudeLogin({\n      runId: `claude-login-${randomUUID()}`,\n      agent: {\n        id: agent.id,\n        companyId: agent.companyId,\n        name: agent.name,\n        adapterType: agent.adapterType,\n        adapterConfig: agent.adapterConfig,\n      },\n      config: runtimeConfig,\n    });\n\n    return Response.json(result);\n  };\n\n  router.post(\"/agents/:id/wakeup\", validate(wakeAgentSchema), expressHandler(wakeupAgent, { db, storage: storageSentinel }));\n  router.post(\"/agents/:id/heartbeat/invoke\", expressHandler(invokeHeartbeat, { db, storage: storageSentinel }));\n  router.post(\"/agents/:id/claude-login\", expressHandler(claudeLogin, { db, storage: storageSentinel }));\n\n  const listHeartbeatRuns: Handler = async (ctx) =\u003e {\n    const companyId = ctx.param(\"companyId\")!;\n    assertCompanyAccess(ctx, companyId);\n    const agentId = ctx.query(\"agentId\");\n    const limitParam = ctx.query(\"limit\");\n    const limit = limitParam ? Math.max(1, Math.min(1000, parseInt(limitParam, 10) || 200)) : undefined;\n    const runs = await heartbeat.list(companyId, agentId, limit);\n    return Response.json(runs);\n  };\n\n  router.get(\"/companies/:companyId/heartbeat-runs\", expressHandler(listHeartbeatRuns, { db, storage: storageSentinel }));",
+          "old_string": "  router.post(\"/agents/:id/wakeup\", validate(wakeAgentSchema), async (req, res) =\u003e {\n    const id = req.params.id as string;\n    const agent = await svc.getById(id);\n    if (!agent) {\n      res.status(404).json({ error: \"Agent not found\" });\n      return;\n    }\n    assertCompanyAccess(req, agent.companyId);\n\n    if (req.actor.type === \"agent\") {\n      if (req.actor.agentId !== id) {\n        res.status(403).json({ error: \"Agent can only invoke itself\" });\n        return;\n      }\n    } else {\n      await assertBoardCanManageAgentsForCompany(req, agent.companyId);\n    }\n\n    const run = await heartbeat.wakeup(id, {\n      source: req.body.source,\n      triggerDetail: req.body.triggerDetail ?? \"manual\",\n      reason: req.body.reason ?? null,\n      payload: req.body.payload ?? null,\n      idempotencyKey: req.body.idempotencyKey ?? null,\n      requestedByActorType: req.actor.type === \"agent\" ? \"agent\" : \"user\",\n      requestedByActorId: req.actor.type === \"agent\" ? req.actor.agentId ?? null : req.actor.userId ?? null,\n      contextSnapshot: {\n        triggeredBy: req.actor.type,\n        actorId: req.actor.type === \"agent\" ? req.actor.agentId : req.actor.userId,\n        forceFreshSession: req.body.forceFreshSession === true,\n      },\n    });\n\n    if (!run) {\n      res.status(202).json(await buildSkippedWakeupResponse(agent, req.body.payload ?? null));\n      return;\n    }\n\n    const actor = getActorInfo(req);\n    await logActivity(db, {\n      companyId: agent.companyId,\n      actorType: actor.actorType,\n      actorId: actor.actorId,\n      agentId: actor.agentId,\n      runId: actor.runId,\n      action: \"heartbeat.invoked\",\n      entityType: \"heartbeat_run\",\n      entityId: run.id,\n      details: { agentId: id },\n    });\n\n    res.status(202).json(run);\n  });\n\n  router.post(\"/agents/:id/heartbeat/invoke\", async (req, res) =\u003e {\n    const id = req.params.id as string;\n    const agent = await svc.getById(id);\n    if (!agent) {\n      res.status(404).json({ error: \"Agent not found\" });\n      return;\n    }\n    assertCompanyAccess(req, agent.companyId);\n\n    if (req.actor.type === \"agent\") {\n      if (req.actor.agentId !== id) {\n        res.status(403).json({ error: \"Agent can only invoke itself\" });\n        return;\n      }\n    } else {\n      await assertBoardCanManageAgentsForCompany(req, agent.companyId);\n    }\n\n    const run = await heartbeat.invoke(\n      id,\n      \"on_demand\",\n      {\n        triggeredBy: req.actor.type,\n        actorId: req.actor.type === \"agent\" ? req.actor.agentId : req.actor.userId,\n      },\n      \"manual\",\n      {\n        actorType: req.actor.type === \"agent\" ? \"agent\" : \"user\",\n        actorId: req.actor.type === \"agent\" ? req.actor.agentId ?? null : req.actor.userId ?? null,\n      },\n    );\n\n    if (!run) {\n      res.status(202).json({ status: \"skipped\" });\n      return;\n    }\n\n    const actor = getActorInfo(req);\n    await logActivity(db, {\n      companyId: agent.companyId,\n      actorType: actor.actorType,\n      actorId: actor.actorId,\n      agentId: actor.agentId,\n      runId: actor.runId,\n      action: \"heartbeat.invoked\",\n      entityType: \"heartbeat_run\",\n      entityId: run.id,\n      details: { agentId: id },\n    });\n\n    res.status(202).json(run);\n  });\n\n  router.post(\"/agents/:id/claude-login\", async (req, res) =\u003e {\n    assertBoard(req);\n    const id = req.params.id as string;\n    const agent = await svc.getById(id);\n    if (!agent) {\n      res.status(404).json({ error: \"Agent not found\" });\n      return;\n    }\n    await assertBoardCanManageAgentsForCompany(req, agent.companyId);\n    assertCompanyAccess(req, agent.companyId);\n    if (agent.adapterType !== \"claude_local\") {\n      res.status(400).json({ error: \"Login is only supported for claude_local agents\" });\n      return;\n    }\n\n    const config = asRecord(agent.adapterConfig) ?? {};\n    const { config: runtimeConfig } = await secretsSvc.resolveAdapterConfigForRuntime(agent.companyId, config);\n    const result = await runClaudeLogin({\n      runId: `claude-login-${randomUUID()}`,\n      agent: {\n        id: agent.id,\n        companyId: agent.companyId,\n        name: agent.name,\n        adapterType: agent.adapterType,\n        adapterConfig: agent.adapterConfig,\n      },\n      config: runtimeConfig,\n    });\n\n    res.json(result);\n  });\n\n  router.get(\"/companies/:companyId/heartbeat-runs\", async (req, res) =\u003e {\n    const companyId = req.params.companyId as string;\n    assertCompanyAccess(req, companyId);\n    const agentId = req.query.agentId as string | undefined;\n    const limitParam = req.query.limit as string | undefined;\n    const limit = limitParam ? Math.max(1, Math.min(1000, parseInt(limitParam, 10) || 200)) : undefined;\n    const runs = await heartbeat.list(companyId, agentId, limit);\n    res.json(runs);\n  });",
+          "replace_all": false
+        },
+        "name": "Edit",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_0172sK2y2Ry9p2sLgTEM4EQT",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 2861
+      },
+      "cache_creation_input_tokens": 2861,
+      "cache_read_input_tokens": 150172,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 2861
+          },
+          "cache_creation_input_tokens": 2861,
+          "cache_read_input_tokens": 150172,
+          "input_tokens": 1,
+          "output_tokens": 3527,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 3527,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "7c3e199c-f742-4a13-a0d2-56d0f14af72a",
+  "requestId": "req_011CaaGnSb2ThXeBmYh45EHX",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "timestamp": "2026-04-30T16:30:20.431Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "3f80b703-c4c2-4e52-8919-f22647160e55",
+  "version": "2.1.123"
+}

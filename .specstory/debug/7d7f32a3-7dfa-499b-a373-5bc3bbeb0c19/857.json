@@ -1,0 +1,27 @@
+{
+  "agentId": "a0d0169af69218004",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "42:import { printStartupBanner } from \"./startup-banner.js\";\n448:  if (config.deploymentMode === \"local_trusted\" \u0026\u0026 !isLoopbackHost(config.host)) {\n455:  if (config.deploymentMode === \"local_trusted\" \u0026\u0026 config.deploymentExposure !== \"private\") {\n459:  if (config.deploymentMode === \"authenticated\") {\n479:  let authReady = config.deploymentMode === \"local_trusted\";\n487:  if (config.deploymentMode === \"local_trusted\") {\n490:  if (config.deploymentMode === \"authenticated\") {\n520:    await initializeBoardClaimChallenge(db as any, { deploymentMode: config.deploymentMode });\n611:    deploymentMode: config.deploymentMode,\n656:    deploymentMode: config.deploymentMode,\n673:  if (config.heartbeatSchedulerEnabled) {\n835:        printStartupBanner({\n838:          deploymentMode: config.deploymentMode,\n846:        heartbeatSchedulerEnabled: config.heartbeatSchedulerEnabled,",
+        "is_error": false,
+        "tool_use_id": "toolu_012UqFpX7oDn2VuErDPr9xqj",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "7db03643-d73b-4c4e-be45-83b1d2ae090d",
+  "promptId": "41a5cab3-78a5-4305-8404-9daa35591aac",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "7db03643-d73b-4c4e-be45-83b1d2ae090d",
+  "timestamp": "2026-04-30T15:05:03.432Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "42bb4cf5-fc18-4ee7-a7fc-a43ef5c5545f",
+  "version": "2.1.123"
+}

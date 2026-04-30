@@ -1,0 +1,69 @@
+{
+  "agentId": "a28a63530ac1fc5de",
+  "attributionAgent": "Explore",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01N8Pz6pKj1USRYMvpY78EGb",
+        "input": {
+          "command": "find /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/db -type f -name \"*.ts\" | head -20"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01K8NKrmp8EWLXWbaZ3saKj4",
+    "model": "claude-haiku-4-5-20251001",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 1816
+      },
+      "cache_creation_input_tokens": 1816,
+      "cache_read_input_tokens": 44772,
+      "inference_geo": "",
+      "input_tokens": 5,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 1816
+          },
+          "cache_creation_input_tokens": 1816,
+          "cache_read_input_tokens": 44772,
+          "input_tokens": 5,
+          "output_tokens": 100,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 100,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "9535615d-59db-42f7-be73-8c0a15df484b",
+  "requestId": "req_011Caa2rHHupMbxYCRocuvfJ",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "timestamp": "2026-04-30T13:27:01.337Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "ce762533-4f08-415a-ac6e-39c4bbece8ba",
+  "version": "2.1.123"
+}

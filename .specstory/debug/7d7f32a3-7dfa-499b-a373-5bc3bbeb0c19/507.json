@@ -1,0 +1,70 @@
+{
+  "agentId": "a6710083ef9195699",
+  "attributionAgent": "backend-architect",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01LcVUavS1HM9Y4FZbpzV8c2",
+        "input": {
+          "content": "/**\n * SchedulerDO — Cloudflare Durable Object that owns all cron-style job alarms.\n *\n * Each registered job stores its `name`, `intervalMs`, and `lastFiredAt` in DO\n * persistent storage. A single alarm fires whenever the nearest scheduled job\n * is due, executes that job by posting to the job's registered handler URL,\n * and reschedules the alarm for the next earliest-due job.\n *\n * This replaces the in-process `setInterval` loops in\n * `server/src/index.ts` and `server/src/services/heartbeat.ts`.\n *\n * Usage: get a stub via `env.SCHEDULER_DO.idFromName(\"global\")` — the \"global\"\n * scheduler is a singleton per deployment. The CF scheduler adapter\n * (`cf-scheduler.ts`) wraps this DO.\n */\n\ninterface JobRecord {\n  name: string;\n  intervalMs: number;\n  handlerUrl: string;\n  lastFiredAt: number;\n  createdAt: number;\n}\n\n/** Shape of the body sent to the job's handler URL when a job fires. */\ninterface JobFiredPayload {\n  name: string;\n  firedAt: string;\n}\n\nexport class SchedulerDO implements DurableObject {\n  private readonly state: DurableObjectState;\n\n  constructor(state: DurableObjectState, _env: unknown) {\n    this.state = state;\n  }\n\n  // ---------------------------------------------------------------------------\n  // Fetch — internal HTTP API for the cf-scheduler adapter\n  // ---------------------------------------------------------------------------\n\n  async fetch(request: Request): Promise\u003cResponse\u003e {\n    const url = new URL(request.url);\n\n    switch (`${request.method} ${url.pathname}`) {\n      case \"POST /register\":\n        return this.handleRegister(request);\n      case \"POST /cancel\":\n        return this.handleCancel(request);\n      case \"POST /fire\":\n        return this.handleFire(request);\n      case \"GET /status\":\n        return this.handleStatus();\n      default:\n        return new Response(\"Not Found\", { status: 404 });\n    }\n  }\n\n  // ---------------------------------------------------------------------------\n  // Alarm — fires all jobs whose interval has elapsed, then reschedules\n  // ---------------------------------------------------------------------------\n\n  async alarm(): Promise\u003cvoid\u003e {\n    const jobs = await this.loadJobs();\n    const now = Date.now();\n\n    const fired: string[] = [];\n    for (const job of jobs.values()) {\n      const nextFireAt = job.lastFiredAt + job.intervalMs;\n      if (now \u003e= nextFireAt) {\n        await this.fireJob(job, now);\n        job.lastFiredAt = now;\n        fired.push(job.name);\n      }\n    }\n\n    // Persist updated lastFiredAt timestamps\n    if (fired.length \u003e 0) {\n      await this.persistJobs(jobs);\n    }\n\n    // Schedule the next alarm for the earliest upcoming job\n    await this.scheduleNextAlarm(jobs);\n  }\n\n  // ---------------------------------------------------------------------------\n  // Route handlers\n  // ---------------------------------------------------------------------------\n\n  private async handleRegister(request: Request): Promise\u003cResponse\u003e {\n    const body = await request.json\u003c{ name: string; intervalMs: number; handlerUrl: string }\u003e();\n    if (!body.name || !body.intervalMs || !body.handlerUrl) {\n      return Response.json({ error: \"name, intervalMs, and handlerUrl are required\" }, { status: 400 });\n    }\n\n    const jobs = await this.loadJobs();\n    const existing = jobs.get(body.name);\n    const now = Date.now();\n\n    const record: JobRecord = {\n      name: body.name,\n      intervalMs: body.intervalMs,\n      handlerUrl: body.handlerUrl,\n      lastFiredAt: existing?.lastFiredAt ?? now,\n      createdAt: existing?.createdAt ?? now,\n    };\n    jobs.set(body.name, record);\n\n    await this.persistJobs(jobs);\n    await this.scheduleNextAlarm(jobs);\n\n    return Response.json({ ok: true, name: body.name, intervalMs: body.intervalMs });\n  }\n\n  private async handleCancel(request: Request): Promise\u003cResponse\u003e {\n    const body = await request.json\u003c{ name: string }\u003e();\n    if (!body.name) {\n      return Response.json({ error: \"name is required\" }, { status: 400 });\n    }\n\n    const jobs = await this.loadJobs();\n    const existed = jobs.delete(body.name);\n    await this.persistJobs(jobs);\n    await this.scheduleNextAlarm(jobs);\n\n    return Response.json({ ok: true, existed });\n  }\n\n  /**\n   * Immediately fires a named job — useful for testing and manual triggers.\n   */\n  private async handleFire(request: Request): Promise\u003cResponse\u003e {\n    const body = await request.json\u003c{ name: string }\u003e();\n    if (!body.name) {\n      return Response.json({ error: \"name is required\" }, { status: 400 });\n    }\n\n    const jobs = await this.loadJobs();\n    const job = jobs.get(body.name);\n    if (!job) {\n      return Response.json({ error: `Unknown job: ${body.name}` }, { status: 404 });\n    }\n\n    const now = Date.now();\n    await this.fireJob(job, now);\n    job.lastFiredAt = now;\n    await this.persistJobs(jobs);\n\n    return Response.json({ ok: true, name: body.name, firedAt: new Date(now).toISOString() });\n  }\n\n  private async handleStatus(): Promise\u003cResponse\u003e {\n    const jobs = await this.loadJobs();\n    const now = Date.now();\n\n    const entries = [...jobs.values()].map((job) =\u003e ({\n      name: job.name,\n      intervalMs: job.intervalMs,\n      handlerUrl: job.handlerUrl,\n      lastFiredAt: new Date(job.lastFiredAt).toISOString(),\n      nextFireAt: new Date(job.lastFiredAt + job.intervalMs).toISOString(),\n      overdueMs: Math.max(0, now - (job.lastFiredAt + job.intervalMs)),\n    }));\n\n    return Response.json({ jobs: entries });\n  }\n\n  // ---------------------------------------------------------------------------\n  // Internal helpers\n  // ---------------------------------------------------------------------------\n\n  private async loadJobs(): Promise\u003cMap\u003cstring, JobRecord\u003e\u003e {\n    const stored = await this.state.storage.get\u003cRecord\u003cstring, JobRecord\u003e\u003e(\"jobs\");\n    return new Map(Object.entries(stored ?? {}));\n  }\n\n  private async persistJobs(jobs: Map\u003cstring, JobRecord\u003e): Promise\u003cvoid\u003e {\n    const obj: Record\u003cstring, JobRecord\u003e = {};\n    for (const [name, record] of jobs) {\n      obj[name] = record;\n    }\n    await this.state.storage.put(\"jobs\", obj);\n  }\n\n  /**\n   * Fires a job by POST-ing to its registered `handlerUrl`.\n   *\n   * If the job URL is unreachable or returns a non-2xx status, the error is\n   * logged but does NOT throw — a transient failure should not prevent other\n   * jobs from firing or the alarm from rescheduling.\n   */\n  private async fireJob(job: JobRecord, now: number): Promise\u003cvoid\u003e {\n    const payload: JobFiredPayload = { name: job.name, firedAt: new Date(now).toISOString() };\n    try {\n      const response = await fetch(job.handlerUrl, {\n        method: \"POST\",\n        headers: { \"Content-Type\": \"application/json\", \"X-Paperclip-Scheduler\": \"1\" },\n        body: JSON.stringify(payload),\n      });\n      if (!response.ok) {\n        console.warn(\n          `[SchedulerDO] Job \"${job.name}\" handler returned HTTP ${response.status}: ${job.handlerUrl}`,\n        );\n      }\n    } catch (err) {\n      console.error(\n        `[SchedulerDO] Job \"${job.name}\" handler threw: ${err instanceof Error ? err.message : String(err)}`,\n      );\n    }\n  }\n\n  /**\n   * Sets (or clears) the DO alarm to fire at the time of the earliest pending job.\n   */\n  private async scheduleNextAlarm(jobs: Map\u003cstring, JobRecord\u003e): Promise\u003cvoid\u003e {\n    if (jobs.size === 0) {\n      await this.state.storage.deleteAlarm();\n      return;\n    }\n\n    const now = Date.now();\n    let earliest = Number.POSITIVE_INFINITY;\n    for (const job of jobs.values()) {\n      const nextFireAt = job.lastFiredAt + job.intervalMs;\n      // If the job is already overdue, fire ASAP (500 ms from now to avoid\n      // a tight loop if the handler is failing).\n      const effectiveNextFireAt = nextFireAt \u003c now ? now + 500 : nextFireAt;\n      if (effectiveNextFireAt \u003c earliest) {\n        earliest = effectiveNextFireAt;\n      }\n    }\n\n    await this.state.storage.setAlarm(earliest);\n  }\n}\n",
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/scheduler/scheduler-do.ts"
+        },
+        "name": "Write",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01NjVggx6HSiAZ2XXqRuXfEQ",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 1336
+      },
+      "cache_creation_input_tokens": 1336,
+      "cache_read_input_tokens": 50352,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 1336
+          },
+          "cache_creation_input_tokens": 1336,
+          "cache_read_input_tokens": 50352,
+          "input_tokens": 1,
+          "output_tokens": 2380,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 2380,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "041ac04e-321b-4113-8ba3-acd8a77a879b",
+  "requestId": "req_011Caa9PkfFwWrXnmxWxjwnV",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "timestamp": "2026-04-30T14:53:13.228Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "2796289a-d121-4863-a9f2-3bdea3cf7b01",
+  "version": "2.1.123"
+}

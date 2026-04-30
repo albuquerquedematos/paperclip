@@ -1,0 +1,26 @@
+{
+  "agentId": "a63f4a588ad785603",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\t/**\n2\t * @fileoverview Adapter management REST API routes\n3\t *\n4\t * This module provides Express routes for managing external adapter plugins:\n5\t * - Listing all registered adapters (built-in + external)\n6\t * - Installing external adapters from npm packages or local paths\n7\t * - Unregistering external adapters\n8\t *\n9\t * Read-only routes require board org access. Mutating adapter management\n10\t * routes require instance-admin access because they can install, reload, or\n11\t * toggle server-side adapter code for the whole Paperclip instance.\n12\t *\n13\t * @module server/routes/adapters\n14\t */\n15\t\n16\timport { execFile } from \"node:child_process\";\n17\timport fs from \"node:fs\";\n18\timport { readFile } from \"node:fs/promises\";\n19\timport path from \"node:path\";\n20\timport { promisify } from \"node:util\";\n21\timport { Router } from \"express\";\n22\timport {\n23\t  listServerAdapters,\n24\t  findServerAdapter,\n25\t  findActiveServerAdapter,\n26\t  listEnabledServerAdapters,\n27\t  registerServerAdapter,\n28\t  resolveExternalAdapterRegistration,\n29\t  unregisterServerAdapter,\n30\t  isOverridePaused,\n31\t  setOverridePaused,\n32\t} from \"../adapters/registry.js\";\n33\timport {\n34\t  listAdapterPlugins,\n35\t  addAdapterPlugin,\n36\t  removeAdapterPlugin,\n37\t  getAdapterPluginByType,\n38\t  getAdapterPluginsDir,\n39\t  getDisabledAdapterTypes,\n40\t  setAdapterDisabled,\n41\t} from \"../services/adapter-plugin-store.js\";\n42\timport type { AdapterPluginRecord } from \"../services/adapter-plugin-store.js\";\n43\timport type { ServerAdapterModule, AdapterConfigSchema } from \"../adapters/types.js\";\n44\timport { loadExternalAdapterPackage, getUiParserSource, getOrExtractUiParserSource, reloadExternalAdapter } from \"../adapters/plugin-loader.js\";\n45\timport { logger } from \"../middleware/logger.js\";\n46\timport { assertBoardOrgAccess, assertInstanceAdmin } from \"./authz.js\";\n47\timport { BUILTIN_ADAPTER_TYPES } from \"../adapters/builtin-adapter-types.js\";\n48\timport { forbidden } from \"../errors.js\";\n49\timport { expressHandler } from \"../http/express-adapter.js\";\n50\timport type { Handler } from \"../http/types.js\";\n51\timport type { StorageService } from \"../storage/types.js\";\n52\t\n53\tconst execFileAsync = promisify(execFile);\n54\t\n55\t// ---------------------------------------------------------------------------",
+        "tool_use_id": "toolu_01XJGHx4XPQsmEqhDWXGrpcS",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "1fb61394-403e-4865-b105-68e146de84f5",
+  "promptId": "f70e47c2-d340-4417-9b6f-d01ec6a1d002",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "1fb61394-403e-4865-b105-68e146de84f5",
+  "timestamp": "2026-04-30T15:17:19.862Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "b525ff66-ca23-40e2-894a-6ad816a334b1",
+  "version": "2.1.123"
+}

@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "2230\t      if (!adapterConfig) {\n2231\t        res.status(422).json({ error: \"adapterConfig must be an object\" });\n2232\t        return;\n2233\t      }\n2234\t      assertNoAgentInstructionsConfigMutation(req, adapterConfig);\n2235\t      assertNoAgentHostWorkspaceCommandMutation(\n2236\t        req,\n2237\t        collectAgentAdapterWorkspaceCommandPaths(adapterConfig),\n2238\t      );\n2239\t      const changingInstructionsConfig = Object.keys(adapterConfig).some((key) =\u003e\n2240\t        KNOWN_INSTRUCTIONS_BUNDLE_KEYS.includes(key as (typeof KNOWN_INSTRUCTIONS_BUNDLE_KEYS)[number]),\n2241\t      );\n2242\t      if (changingInstructionsConfig) {\n2243\t        await assertCanManageInstructionsPath(req, existing);\n2244\t      }",
+        "tool_use_id": "toolu_013MgyBmJZLnQLgpqk3RH5Hg",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "fd14318b-db32-446b-b546-8ee441130409",
+  "promptId": "ba96a81e-2351-4b03-969f-bc172383cdd1",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "fd14318b-db32-446b-b546-8ee441130409",
+  "timestamp": "2026-04-30T16:27:46.532Z",
+  "toolUseResult": {
+    "file": {
+      "content": "      if (!adapterConfig) {\n        res.status(422).json({ error: \"adapterConfig must be an object\" });\n        return;\n      }\n      assertNoAgentInstructionsConfigMutation(req, adapterConfig);\n      assertNoAgentHostWorkspaceCommandMutation(\n        req,\n        collectAgentAdapterWorkspaceCommandPaths(adapterConfig),\n      );\n      const changingInstructionsConfig = Object.keys(adapterConfig).some((key) =\u003e\n        KNOWN_INSTRUCTIONS_BUNDLE_KEYS.includes(key as (typeof KNOWN_INSTRUCTIONS_BUNDLE_KEYS)[number]),\n      );\n      if (changingInstructionsConfig) {\n        await assertCanManageInstructionsPath(req, existing);\n      }",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/agents.ts",
+      "numLines": 15,
+      "startLine": 2230,
+      "totalLines": 3038
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "3304ea72-3800-422e-8c08-2a4cd1fc92a9",
+  "version": "2.1.123"
+}

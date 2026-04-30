@@ -1,0 +1,35 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { spawn, type ChildProcess } from \"node:child_process\";\n2\timport { constants as fsConstants, promises as fs, type Dirent } from \"node:fs\";\n3\timport path from \"node:path\";\n4\timport { buildSshSpawnTarget, type SshRemoteExecutionSpec } from \"./ssh.js\";\n5\timport type {\n6\t  AdapterSkillEntry,\n7\t  AdapterSkillSnapshot,\n8\t} from \"./types.js\";\n9\t\n10\texport interface RunProcessResult {\n11\t  exitCode: number | null;\n12\t  signal: string | null;\n13\t  timedOut: boolean;\n14\t  stdout: string;\n15\t  stderr: string;\n16\t  pid: number | null;\n17\t  startedAt: string | null;\n18\t}\n19\t\n20\texport interface TerminalResultCleanupOptions {\n21\t  hasTerminalResult: (output: { stdout: string; stderr: string }) =\u003e boolean;\n22\t  graceMs?: number;\n23\t}\n24\t\n25\tinterface RunningProcess {\n26\t  child: ChildProcess;\n27\t  graceSec: number;\n28\t  processGroupId: number | null;\n29\t}\n30\t\n31\tinterface SpawnTarget {\n32\t  command: string;\n33\t  args: string[];\n34\t  cwd?: string;\n35\t  cleanup?: () =\u003e Promise\u003cvoid\u003e;\n36\t}\n37\t\n38\ttype RemoteExecutionSpec = SshRemoteExecutionSpec;\n39\t\n40\ttype ChildProcessWithEvents = ChildProcess \u0026 {\n41\t  on(event: \"error\", listener: (err: Error) =\u003e void): ChildProcess;\n42\t  on(\n43\t    event: \"exit\",\n44\t    listener: (code: number | null, signal: NodeJS.Signals | null) =\u003e void,\n45\t  ): ChildProcess;\n46\t  on(\n47\t    event: \"close\",\n48\t    listener: (code: number | null, signal: NodeJS.Signals | null) =\u003e void,\n49\t  ): ChildProcess;\n50\t};\n51\t\n52\tfunction resolveProcessGroupId(child: ChildProcess) {\n53\t  if (process.platform === \"win32\") return null;\n54\t  return typeof child.pid === \"number\" \u0026\u0026 child.pid \u003e 0 ? child.pid : null;\n55\t}\n56\t\n57\tfunction signalRunningProcess(\n58\t  running: Pick\u003cRunningProcess, \"child\" | \"processGroupId\"\u003e,\n59\t  signal: NodeJS.Signals,\n60\t) {\n61\t  if (process.platform !== \"win32\" \u0026\u0026 running.processGroupId \u0026\u0026 running.processGroupId \u003e 0) {\n62\t    try {\n63\t      process.kill(-running.processGroupId, signal);\n64\t      return;\n65\t    } catch {\n66\t      // Fall back to the direct child signal if group signaling fails.\n67\t    }\n68\t  }\n69\t  if (!running.child.killed) {\n70\t    running.child.kill(signal);\n71\t  }\n72\t}\n73\t\n74\texport const runningProcesses = new Map\u003cstring, RunningProcess\u003e();\n75\texport const MAX_CAPTURE_BYTES = 4 * 1024 * 1024;\n76\texport const MAX_EXCERPT_BYTES = 32 * 1024;\n77\tconst TERMINAL_RESULT_SCAN_OVERLAP_CHARS = 64 * 1024;\n78\tconst SENSITIVE_ENV_KEY = /(key|token|secret|password|passwd|authorization|cookie)/i;\n79\tconst PAPERCLIP_SKILL_ROOT_RELATIVE_CANDIDATES = [\n80\t  \"../../skills\",",
+        "tool_use_id": "toolu_011EHf7vnK95CTpDcCX36Qck",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "49fe9168-6264-46ed-9ffc-d6246eb20f6d",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "49fe9168-6264-46ed-9ffc-d6246eb20f6d",
+  "timestamp": "2026-04-30T14:47:37.050Z",
+  "toolUseResult": {
+    "file": {
+      "content": "import { spawn, type ChildProcess } from \"node:child_process\";\nimport { constants as fsConstants, promises as fs, type Dirent } from \"node:fs\";\nimport path from \"node:path\";\nimport { buildSshSpawnTarget, type SshRemoteExecutionSpec } from \"./ssh.js\";\nimport type {\n  AdapterSkillEntry,\n  AdapterSkillSnapshot,\n} from \"./types.js\";\n\nexport interface RunProcessResult {\n  exitCode: number | null;\n  signal: string | null;\n  timedOut: boolean;\n  stdout: string;\n  stderr: string;\n  pid: number | null;\n  startedAt: string | null;\n}\n\nexport interface TerminalResultCleanupOptions {\n  hasTerminalResult: (output: { stdout: string; stderr: string }) =\u003e boolean;\n  graceMs?: number;\n}\n\ninterface RunningProcess {\n  child: ChildProcess;\n  graceSec: number;\n  processGroupId: number | null;\n}\n\ninterface SpawnTarget {\n  command: string;\n  args: string[];\n  cwd?: string;\n  cleanup?: () =\u003e Promise\u003cvoid\u003e;\n}\n\ntype RemoteExecutionSpec = SshRemoteExecutionSpec;\n\ntype ChildProcessWithEvents = ChildProcess \u0026 {\n  on(event: \"error\", listener: (err: Error) =\u003e void): ChildProcess;\n  on(\n    event: \"exit\",\n    listener: (code: number | null, signal: NodeJS.Signals | null) =\u003e void,\n  ): ChildProcess;\n  on(\n    event: \"close\",\n    listener: (code: number | null, signal: NodeJS.Signals | null) =\u003e void,\n  ): ChildProcess;\n};\n\nfunction resolveProcessGroupId(child: ChildProcess) {\n  if (process.platform === \"win32\") return null;\n  return typeof child.pid === \"number\" \u0026\u0026 child.pid \u003e 0 ? child.pid : null;\n}\n\nfunction signalRunningProcess(\n  running: Pick\u003cRunningProcess, \"child\" | \"processGroupId\"\u003e,\n  signal: NodeJS.Signals,\n) {\n  if (process.platform !== \"win32\" \u0026\u0026 running.processGroupId \u0026\u0026 running.processGroupId \u003e 0) {\n    try {\n      process.kill(-running.processGroupId, signal);\n      return;\n    } catch {\n      // Fall back to the direct child signal if group signaling fails.\n    }\n  }\n  if (!running.child.killed) {\n    running.child.kill(signal);\n  }\n}\n\nexport const runningProcesses = new Map\u003cstring, RunningProcess\u003e();\nexport const MAX_CAPTURE_BYTES = 4 * 1024 * 1024;\nexport const MAX_EXCERPT_BYTES = 32 * 1024;\nconst TERMINAL_RESULT_SCAN_OVERLAP_CHARS = 64 * 1024;\nconst SENSITIVE_ENV_KEY = /(key|token|secret|password|passwd|authorization|cookie)/i;\nconst PAPERCLIP_SKILL_ROOT_RELATIVE_CANDIDATES = [\n  \"../../skills\",",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapter-utils/src/server-utils.ts",
+      "numLines": 80,
+      "startLine": 1,
+      "totalLines": 1670
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "8a6ac213-6500-426c-838b-99d0220beb8e",
+  "version": "2.1.123"
+}

@@ -1,0 +1,27 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/services/plugin-runtime-sandbox.ts:1:import { existsSync, readFileSync, realpathSync } from \"node:fs\";\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/services/plugin-runtime-sandbox.ts:92:  const realPluginRoot = realpathSync(pluginRoot);\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/services/plugin-runtime-sandbox.ts:96:    const realPath = realpathSync(resolvedPath);\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/services/plugin-runtime-sandbox.ts:181:    if (existsSync(fullPath)) {\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/services/plugin-runtime-sandbox.ts:200:    return readFileSync(modulePath, \"utf8\");\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/services/company-portability.ts:3236:        const fileDetail = await companySkills.readFile(companyId, skill.id, inventoryEntry.path).catch(() =\u003e null);",
+        "is_error": false,
+        "tool_use_id": "toolu_01YHwfSsyyodvnVgs662JJY8",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "e03d3053-9945-451e-9472-089a78ce3b39",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "e03d3053-9945-451e-9472-089a78ce3b39",
+  "timestamp": "2026-04-30T14:56:47.077Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "01995f21-3637-404e-8691-5303c26bc4bc",
+  "version": "2.1.123"
+}

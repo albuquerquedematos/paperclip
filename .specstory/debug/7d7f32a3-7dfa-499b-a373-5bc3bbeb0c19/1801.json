@@ -1,0 +1,26 @@
+{
+  "agentId": "a8fd5512baf043009",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "100\t    assertBoard(ctx);\n101\t    const boardActor = ctx.actor as BoardActor;\n102\t    const result = await svc.list();\n103\t    if (boardActor.source === \"local_implicit\" || boardActor.isInstanceAdmin) {\n104\t      return Response.json(result);\n105\t    }\n106\t    const allowed = new Set(boardActor.companyIds ?? []);\n107\t    return Response.json(result.filter((company) =\u003e allowed.has(company.id)));\n108\t  };\n109\t\n110\t  const getCompanyStats: Handler = async (ctx) =\u003e {\n111\t    assertBoard(ctx);\n112\t    const boardActor = ctx.actor as BoardActor;\n113\t    const allowed = boardActor.source === \"local_implicit\" || boardActor.isInstanceAdmin\n114\t      ? null",
+        "tool_use_id": "toolu_01KXTkdN3qyphHPRAjKG1ZgC",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "8602dc2c-5500-4020-9955-8603dd052564",
+  "promptId": "e14e6903-86b2-440b-8601-db2551c5adc3",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "8602dc2c-5500-4020-9955-8603dd052564",
+  "timestamp": "2026-04-30T15:19:20.725Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "5d8c95ce-e7bf-42ab-8be9-5c2c79f76c4c",
+  "version": "2.1.123"
+}

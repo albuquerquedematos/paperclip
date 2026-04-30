@@ -1,0 +1,26 @@
+{
+  "agentId": "acedaf1c4054eec72",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "55\t        await db\n56\t          .select({\n57\t            id: joinRequests.id,\n58\t            requestType: joinRequests.requestType,\n59\t            status: joinRequests.status,\n60\t            requestingUserId: joinRequests.requestingUserId,\n61\t            requestEmailSnapshot: joinRequests.requestEmailSnapshot,\n62\t            updatedAt: joinRequests.updatedAt,\n63\t            createdAt: joinRequests.createdAt,\n64\t          })\n65\t          .from(joinRequests)\n66\t          .where(and(eq(joinRequests.companyId, companyId), eq(joinRequests.status, \"pending_approval\")))\n67\t      ).map(({ id, updatedAt, createdAt }) =\u003e ({\n68\t        id,\n69\t        updatedAt,\n70\t        createdAt,\n71\t      }))\n72\t      : [];\n73\t\n74\t    const dismissedAtByKey =",
+        "tool_use_id": "toolu_01JtEyMwvTu7JjuVGijHZySS",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "729c4a1d-4847-4eb5-92d0-7b943fdc3809",
+  "promptId": "f8ab24c1-de42-4dc6-b59c-8c9364db9ca7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "729c4a1d-4847-4eb5-92d0-7b943fdc3809",
+  "timestamp": "2026-04-30T15:11:20.975Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "666f2824-01b7-4111-bc7e-52ed10a1d69a",
+  "version": "2.1.123"
+}

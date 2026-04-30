@@ -1,0 +1,27 @@
+{
+  "agentId": "a1f94624ad00f9fad",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { Router, type Request, type Response, type NextFunction } from \"express\";\n2\timport type { Handler, RequestCtx } from \"../http/types.js\";\n3\timport { expressHandler } from \"../http/express-adapter.js\";\n4\timport { generateKeyPairSync, randomUUID } from \"node:crypto\";\n5\timport path from \"node:path\";\n6\timport type { Db } from \"@paperclipai/db\";\n7\timport { agents as agentsTable, companies, heartbeatRuns, issues as issuesTable } from \"@paperclipai/db\";\n8\timport { and, desc, eq, inArray, not, sql } from \"drizzle-orm\";\n9\timport {\n10\t  agentSkillSyncSchema,\n11\t  agentMineInboxQuerySchema,\n12\t  AGENT_DEFAULT_MAX_CONCURRENT_RUNS,\n13\t  createAgentKeySchema,\n14\t  createAgentHireSchema,\n15\t  createAgentSchema,\n16\t  deriveAgentUrlKey,\n17\t  isUuidLike,\n18\t  resetAgentSessionSchema,\n19\t  testAdapterEnvironmentSchema,\n20\t  type AgentSkillSnapshot,\n21\t  type InstanceSchedulerHeartbeatAgent,\n22\t  upsertAgentInstructionsFileSchema,\n23\t  updateAgentInstructionsBundleSchema,\n24\t  updateAgentPermissionsSchema,\n25\t  updateAgentInstructionsPathSchema,\n26\t  wakeAgentSchema,\n27\t  updateAgentSchema,\n28\t  supportedEnvironmentDriversForAdapter,\n29\t} from \"@paperclipai/shared\";\n30\timport {\n31\t  readPaperclipSkillSyncPreference,\n32\t  writePaperclipSkillSyncPreference,\n33\t} from \"@paperclipai/adapter-utils/server-utils\";\n34\timport { trackAgentCreated } from \"@paperclipai/shared/telemetry\";\n35\timport { validate } from \"../middleware/validate.js\";\n36\timport {\n37\t  agentService,\n38\t  agentInstructionsService,\n39\t  accessService,\n40\t  approvalService,\n41\t  companySkillService,\n42\t  budgetService,\n43\t  heartbeatService,\n44\t  ISSUE_LIST_DEFAULT_LIMIT,\n45\t  issueApprovalService,\n46\t  issueService,\n47\t  logActivity,\n48\t  syncInstructionsBundleConfigFromFilePath,\n49\t  workspaceOperationService,\n50\t} from \"../services/index.js\";",
+        "tool_use_id": "toolu_01FDqeN5Z22FJeZ3BkJr76ms",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "bee75291-5399-427d-8ce5-abcfb6f9d97d",
+  "promptId": "1f968b8b-df10-4c53-841f-c4625b08ad3a",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "bee75291-5399-427d-8ce5-abcfb6f9d97d",
+  "timestamp": "2026-04-30T16:20:13.244Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "80c9c126-66bf-4e01-adc1-db2c25634c93",
+  "version": "2.1.123"
+}

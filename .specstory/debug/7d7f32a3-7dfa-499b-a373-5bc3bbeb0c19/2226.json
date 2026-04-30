@@ -1,0 +1,27 @@
+{
+  "agentId": "aa8a93567f69d0116",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1633\t  router.post(\"/agents/:id/runtime-state/reset-session\", validate(resetAgentSessionSchema), expressHandler(resetAgentRuntimeSession, { db, storage: storageSentinel }));\n1634\t\n1635\t  router.post(\"/companies/:companyId/agent-hires\", validate(createAgentHireSchema), async (req, res) =\u003e {\n1636\t    const companyId = req.params.companyId as string;\n1637\t    await assertCanCreateAgentsForCompany(req, companyId);\n1638\t    const sourceIssueIds = parseSourceIssueIds(req.body);\n1639\t    const {\n1640\t      desiredSkills: requestedDesiredSkills,",
+        "tool_use_id": "toolu_01Gf8hX7DfxCrLHLM2ACiNCK",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "8c407b55-32f3-499e-8f04-f8025b93b60a",
+  "promptId": "dc405341-3479-47dd-8d57-3077b7af430f",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "8c407b55-32f3-499e-8f04-f8025b93b60a",
+  "timestamp": "2026-04-30T15:45:28.633Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "8dfe490a-1a1d-4a7e-b1ec-d34a0d12e5ed",
+  "version": "2.1.123"
+}

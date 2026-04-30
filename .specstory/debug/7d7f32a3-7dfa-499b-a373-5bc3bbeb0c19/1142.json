@@ -1,0 +1,26 @@
+{
+  "agentId": "a0d0169af69218004",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "52\texport interface Config {\n53\t  deploymentMode: DeploymentMode;\n54\t  deploymentExposure: DeploymentExposure;\n55\t  bind: BindMode;\n56\t  customBindHost: string | undefined;\n57\t  host: string;\n58\t  port: number;\n59\t  allowedHostnames: string[];\n60\t  authBaseUrlMode: AuthBaseUrlMode;\n61\t  authPublicBaseUrl: string | undefined;\n62\t  authDisableSignUp: boolean;\n63\t  databaseMode: DatabaseMode;\n64\t  databaseUrl: string | undefined;\n65\t  databaseMigrationUrl: string | undefined;\n66\t  embeddedPostgresDataDir: string;\n67\t  embeddedPostgresPort: number;\n68\t  databaseBackupEnabled: boolean;\n69\t  databaseBackupIntervalMinutes: number;\n70\t  databaseBackupRetentionDays: number;\n71\t  databaseBackupDir: string;\n72\t  serveUi: boolean;\n73\t  uiDevMiddleware: boolean;\n74\t  secretsProvider: SecretProvider;\n75\t  secretsStrictMode: boolean;\n76\t  secretsMasterKeyFilePath: string;\n77\t  storageProvider: StorageProvider;\n78\t  storageLocalDiskBaseDir: string;\n79\t  storageS3Bucket: string;\n80\t  storageS3Region: string;\n81\t  storageS3Endpoint: string | undefined;\n82\t  storageS3Prefix: string;\n83\t  storageS3ForcePathStyle: boolean;\n84\t  feedbackExportBackendUrl: string | undefined;\n85\t  feedbackExportBackendToken: string | undefined;\n86\t  heartbeatSchedulerEnabled: boolean;\n87\t  heartbeatSchedulerIntervalMs: number;\n88\t  companyDeletionEnabled: boolean;\n89\t  telemetryEnabled: boolean;\n90\t}\n91\t",
+        "tool_use_id": "toolu_017n6i74ARceo39Gac3xHWBZ",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "745719ef-0df0-4e8c-91b3-1b8dbbbc7467",
+  "promptId": "41a5cab3-78a5-4305-8404-9daa35591aac",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "745719ef-0df0-4e8c-91b3-1b8dbbbc7467",
+  "timestamp": "2026-04-30T15:07:48.717Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "97fd8c17-02b1-4d89-8c50-826fc9bd8f84",
+  "version": "2.1.123"
+}

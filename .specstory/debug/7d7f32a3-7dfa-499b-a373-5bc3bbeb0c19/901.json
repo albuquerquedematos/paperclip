@@ -1,0 +1,26 @@
+{
+  "agentId": "acedaf1c4054eec72",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { Router, type Request } from \"express\";\n2\timport type { Db } from \"@paperclipai/db\";\n3\timport { AGENT_ICON_NAMES } from \"@paperclipai/shared\";\n4\timport { forbidden } from \"../errors.js\";\n5\timport { listServerAdapters } from \"../adapters/index.js\";\n6\timport { agentService } from \"../services/agents.js\";\n7\t\n8\tfunction hasCreatePermission(agent: { role: string; permissions: Record\u003cstring, unknown\u003e | null | undefined }) {\n9\t  if (!agent.permissions || typeof agent.permissions !== \"object\") return false;\n10\t  return Boolean((agent.permissions as Record\u003cstring, unknown\u003e).canCreateAgents);\n11\t}\n12\t\n13\texport function llmRoutes(db: Db) {\n14\t  const router = Router();\n15\t  const agentsSvc = agentService(db);\n16\t\n17\t  async function assertCanRead(req: Request) {\n18\t    if (req.actor.type === \"board\") return;\n19\t    if (req.actor.type !== \"agent\" || !req.actor.agentId) {\n20\t      throw forbidden(\"Board or permitted agent authentication required\");\n21\t    }\n22\t    const actorAgent = await agentsSvc.getById(req.actor.agentId);\n23\t    if (!actorAgent || !hasCreatePermission(actorAgent)) {\n24\t      throw forbidden(\"Missing permission to read agent configuration reflection\");\n25\t    }\n26\t  }\n27\t\n28\t  router.get(\"/llms/agent-configuration.txt\", async (req, res) =\u003e {\n29\t    await assertCanRead(req);\n30\t    const adapters = listServerAdapters().sort((a, b) =\u003e a.type.localeCompare(b.type));\n31\t    const lines = [\n32\t      \"# Paperclip Agent Configuration Index\",\n33\t      \"\",\n34\t      \"Installed adapters:\",\n35\t      ...adapters.map((adapter) =\u003e `- ${adapter.type}: /llms/agent-configuration/${adapter.type}.txt`),\n36\t      \"\",\n37\t      \"Related API endpoints:\",\n38\t      \"- GET /api/companies/:companyId/agent-configurations\",\n39\t      \"- GET /api/agents/:id/configuration\",\n40\t      \"- POST /api/companies/:companyId/agent-hires\",\n41\t      \"\",\n42\t      \"Agent identity references:\",\n43\t      \"- GET /llms/agent-icons.txt\",\n44\t      \"\",\n45\t      \"Notes:\",\n46\t      \"- Sensitive values are redacted in configuration read APIs.\",\n47\t      \"- New hires may be created in pending_approval state depending on company settings.\",\n48\t      \"- Use the paperclip-create-agent skill for end-to-end hiring: adapter reflection, config comparison, instruction source selection, icon choice, desiredSkills, sourceIssueId/sourceIssueIds, and approval follow-up.\",\n49\t      \"- Timer heartbeats are opt-in for new hires. Leave runtimeConfig.heartbeat.enabled false unless the role truly needs scheduled work or the user explicitly asked for it.\",\n50\t      \"\",\n51\t    ];\n52\t    res.type(\"text/plain\").send(lines.join(\"\\n\"));\n53\t  });\n54\t\n55\t  router.get(\"/llms/agent-icons.txt\", async (req, res) =\u003e {\n56\t    await assertCanRead(req);\n57\t    const lines = [\n58\t      \"# Paperclip Agent Icon Names\",\n59\t      \"\",\n60\t      \"Set the `icon` field on hire/create payloads to one of:\",\n61\t      ...AGENT_ICON_NAMES.map((name) =\u003e `- ${name}`),\n62\t      \"\",\n63\t      \"Example:\",\n64\t      '{ \"name\": \"SearchOps\", \"role\": \"researcher\", \"icon\": \"search\" }',\n65\t      \"\",\n66\t    ];\n67\t    res.type(\"text/plain\").send(lines.join(\"\\n\"));\n68\t  });\n69\t\n70\t  router.get(\"/llms/agent-configuration/:adapterType.txt\", async (req, res) =\u003e {\n71\t    await assertCanRead(req);\n72\t    const adapterType = req.params.adapterType as string;\n73\t    const adapter = listServerAdapters().find((entry) =\u003e entry.type === adapterType);\n74\t    if (!adapter) {\n75\t      res.status(404).type(\"text/plain\").send(`Unknown adapter type: ${adapterType}`);\n76\t      return;\n77\t    }\n78\t    res\n79\t      .type(\"text/plain\")\n80\t      .send(\n81\t        adapter.agentConfigurationDoc ??\n82\t          `# ${adapterType} agent configuration\\n\\nNo adapter-specific documentation registered.`,\n83\t      );\n84\t  });\n85\t\n86\t  return router;\n87\t}\n88\t",
+        "tool_use_id": "toolu_01M4GabYAYo7T9H31DkBEgcB",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "609bf84a-6910-4f38-a70c-d560e3ce5835",
+  "promptId": "41a5cab3-78a5-4305-8404-9daa35591aac",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "609bf84a-6910-4f38-a70c-d560e3ce5835",
+  "timestamp": "2026-04-30T15:05:12.153Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "b587faab-1984-4a40-8e88-1eb150994d9c",
+  "version": "2.1.123"
+}

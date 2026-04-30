@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "55\t    : null;\n56\t}\n57\t\n58\tasync function pathExists(value: string | null | undefined) {\n59\t  if (!value) return false;\n60\t  try {\n61\t    await fs.access(value);\n62\t    return true;\n63\t  } catch {\n64\t    return false;\n65\t  }\n66\t}\n67\t\n68\tasync function runGit(args: string[], cwd: string) {\n69\t  return await execFileAsync(\"git\", [\"-C\", cwd, ...args], { cwd });\n70\t}\n71\t\n72\tasync function inspectGitCloseReadiness(workspace: ExecutionWorkspace): Promise\u003c{\n73\t  git: ExecutionWorkspaceCloseGitReadiness | null;\n74\t  warnings: string[];",
+        "tool_use_id": "toolu_01JRtvxB7x7Pn3GHpz2mLXsk",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "46cdc31f-7c11-4077-9875-bdd0d4695875",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "46cdc31f-7c11-4077-9875-bdd0d4695875",
+  "timestamp": "2026-04-30T14:53:15.279Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "56baec0c-4096-4be3-a66f-771fb41123ef",
+  "version": "2.1.123"
+}

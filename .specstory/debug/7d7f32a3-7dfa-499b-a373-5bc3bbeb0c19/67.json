@@ -1,0 +1,26 @@
+{
+  "agentId": "a28a63530ac1fc5de",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { z } from \"zod\";\n2\timport {\n3\t  AUTH_BASE_URL_MODES,\n4\t  BIND_MODES,\n5\t  DEPLOYMENT_EXPOSURES,\n6\t  DEPLOYMENT_MODES,\n7\t  SECRET_PROVIDERS,\n8\t  STORAGE_PROVIDERS,\n9\t} from \"./constants.js\";\n10\timport { validateConfiguredBindMode } from \"./network-bind.js\";\n11\t\n12\texport const configMetaSchema = z.object({\n13\t  version: z.literal(1),\n14\t  updatedAt: z.string(),\n15\t  source: z.enum([\"onboard\", \"configure\", \"doctor\"]),\n16\t});\n17\t\n18\texport const llmConfigSchema = z.object({\n19\t  provider: z.enum([\"claude\", \"openai\"]),\n20\t  apiKey: z.string().optional(),\n21\t});\n22\t\n23\texport const databaseBackupConfigSchema = z.object({\n24\t  enabled: z.boolean().default(true),\n25\t  intervalMinutes: z.number().int().min(1).max(7 * 24 * 60).default(60),\n26\t  retentionDays: z.number().int().min(1).max(3650).default(7),\n27\t  dir: z.string().default(\"~/.paperclip/instances/default/data/backups\"),\n28\t});\n29\t\n30\texport const databaseConfigSchema = z.object({\n31\t  mode: z.enum([\"embedded-postgres\", \"postgres\"]).default(\"embedded-postgres\"),\n32\t  connectionString: z.string().optional(),\n33\t  embeddedPostgresDataDir: z.string().default(\"~/.paperclip/instances/default/db\"),\n34\t  embeddedPostgresPort: z.number().int().min(1).max(65535).default(54329),\n35\t  backup: databaseBackupConfigSchema.default({\n36\t    enabled: true,\n37\t    intervalMinutes: 60,\n38\t    retentionDays: 7,\n39\t    dir: \"~/.paperclip/instances/default/data/backups\",\n40\t  }),\n41\t});\n42\t\n43\texport const loggingConfigSchema = z.object({\n44\t  mode: z.enum([\"file\", \"cloud\"]),\n45\t  logDir: z.string().default(\"~/.paperclip/instances/default/logs\"),\n46\t});\n47\t\n48\texport const serverConfigSchema = z.object({\n49\t  deploymentMode: z.enum(DEPLOYMENT_MODES).default(\"local_trusted\"),\n50\t  exposure: z.enum(DEPLOYMENT_EXPOSURES).default(\"private\"),\n51\t  bind: z.enum(BIND_MODES).optional(),\n52\t  customBindHost: z.string().optional(),\n53\t  host: z.string().default(\"127.0.0.1\"),\n54\t  port: z.number().int().min(1).max(65535).default(3100),\n55\t  allowedHostnames: z.array(z.string().min(1)).default([]),\n56\t  serveUi: z.boolean().default(true),\n57\t});\n58\t\n59\texport const authConfigSchema = z.object({\n60\t  baseUrlMode: z.enum(AUTH_BASE_URL_MODES).default(\"auto\"),\n61\t  publicBaseUrl: z.string().url().optional(),\n62\t  disableSignUp: z.boolean().default(false),\n63\t});\n64\t\n65\texport const storageLocalDiskConfigSchema = z.object({\n66\t  baseDir: z.string().default(\"~/.paperclip/instances/default/data/storage\"),\n67\t});\n68\t\n69\texport const storageS3ConfigSchema = z.object({\n70\t  bucket: z.string().min(1).default(\"paperclip\"),\n71\t  region: z.string().min(1).default(\"us-east-1\"),\n72\t  endpoint: z.string().optional(),\n73\t  prefix: z.string().default(\"\"),\n74\t  forcePathStyle: z.boolean().default(false),\n75\t});\n76\t\n77\texport const storageConfigSchema = z.object({\n78\t  provider: z.enum(STORAGE_PROVIDERS).default(\"local_disk\"),\n79\t  localDisk: storageLocalDiskConfigSchema.default({\n80\t    baseDir: \"~/.paperclip/instances/default/data/storage\",\n81\t  }),\n82\t  s3: storageS3ConfigSchema.default({\n83\t    bucket: \"paperclip\",\n84\t    region: \"us-east-1\",\n85\t    prefix: \"\",\n86\t    forcePathStyle: false,\n87\t  }),\n88\t});\n89\t\n90\texport const secretsLocalEncryptedConfigSchema = z.object({\n91\t  keyFilePath: z.string().default(\"~/.paperclip/instances/default/secrets/master.key\"),\n92\t});\n93\t\n94\texport const secretsConfigSchema = z.object({\n95\t  provider: z.enum(SECRET_PROVIDERS).default(\"local_encrypted\"),\n96\t  strictMode: z.boolean().default(false),\n97\t  localEncrypted: secretsLocalEncryptedConfigSchema.default({\n98\t    keyFilePath: \"~/.paperclip/instances/default/secrets/master.key\",\n99\t  }),\n100\t});\n\n\u003csystem-reminder\u003e\nWhenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.\n\u003c/system-reminder\u003e\n",
+        "tool_use_id": "toolu_01MciUa7qaZAvQFToka3KBvV",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "26f1861e-b80c-434a-8094-d217f997b37f",
+  "promptId": "721340db-55e4-4f08-9c81-1d2e399ba682",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "26f1861e-b80c-434a-8094-d217f997b37f",
+  "timestamp": "2026-04-30T13:27:09.944Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "e9a00388-e408-493a-b31a-bd50649df6e3",
+  "version": "2.1.123"
+}

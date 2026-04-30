@@ -1,0 +1,54 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/agents.ts has been updated successfully.",
+        "tool_use_id": "toolu_012JsLXUepeqy3qn4gF9KHsm",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "f533f32c-386e-4214-b551-482fbbf66ad5",
+  "promptId": "ba96a81e-2351-4b03-969f-bc172383cdd1",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "sourceToolAssistantUUID": "f533f32c-386e-4214-b551-482fbbf66ad5",
+  "timestamp": "2026-04-30T16:36:07.345Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/agents.ts",
+    "newString": "      source: body.source as \"timer\" | \"assignment\" | \"on_demand\" | \"automation\",\n      triggerDetail: ((body.triggerDetail as string | undefined) ?? \"manual\") as \"system\" | \"manual\" | \"ping\" | \"callback\",",
+    "oldString": "      source: body.source as string,\n      triggerDetail: (body.triggerDetail as string) ?? \"manual\",",
+    "originalFile": null,
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          " ",
+          "     const body = await ctx.json\u003cRecord\u003cstring, unknown\u003e\u003e();",
+          "     const run = await heartbeat.wakeup(id, {",
+          "-      source: body.source as string,",
+          "-      triggerDetail: (body.triggerDetail as string) ?? \"manual\",",
+          "+      source: body.source as \"timer\" | \"assignment\" | \"on_demand\" | \"automation\",",
+          "+      triggerDetail: ((body.triggerDetail as string | undefined) ?? \"manual\") as \"system\" | \"manual\" | \"ping\" | \"callback\",",
+          "       reason: (body.reason as string | null) ?? null,",
+          "       payload: (body.payload as Record\u003cstring, unknown\u003e | null) ?? null,",
+          "       idempotencyKey: (body.idempotencyKey as string | null) ?? null,"
+        ],
+        "newLines": 8,
+        "newStart": 2548,
+        "oldLines": 8,
+        "oldStart": 2548
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "ca2f3c76-a7a8-4071-9a97-b09d8a3825ce",
+  "version": "2.1.123"
+}

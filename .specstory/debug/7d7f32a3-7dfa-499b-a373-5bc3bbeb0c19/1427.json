@@ -1,0 +1,26 @@
+{
+  "agentId": "acedaf1c4054eec72",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { Router } from \"express\";\n2\timport type { Db } from \"@paperclipai/db\";\n3\timport {\n4\t  issueGraphLivenessAutoRecoveryRequestSchema,\n5\t  patchInstanceExperimentalSettingsSchema,\n6\t  patchInstanceGeneralSettingsSchema,\n7\t} from \"@paperclipai/shared\";\n8\timport { forbidden, unauthorized } from \"../errors.js\";\n9\timport { heartbeatService, instanceSettingsService, logActivity } from \"../services/index.js\";\n10\timport { expressHandler } from \"../http/express-adapter.js\";\n11\timport type { Handler, RequestCtx } from \"../http/types.js\";\n12\timport type { StorageService } from \"../storage/types.js\";\n13\t\n14\t/**\n15\t * Equivalent of assertBoardOrgAccess for RequestCtx.",
+        "tool_use_id": "toolu_018jKWQeHm4f61aiD66Z6Bmp",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "b9a72270-af51-4d9d-bc04-a89ca73a33a2",
+  "promptId": "f8ab24c1-de42-4dc6-b59c-8c9364db9ca7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "b9a72270-af51-4d9d-bc04-a89ca73a33a2",
+  "timestamp": "2026-04-30T15:12:04.995Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "8297ecc6-4887-4def-a086-228ca256f8a9",
+  "version": "2.1.123"
+}

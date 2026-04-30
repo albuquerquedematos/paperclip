@@ -1,0 +1,26 @@
+{
+  "agentId": "a3560a89918161ae5",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\t/**\n2\t * JSON-file-backed store for external adapter registrations.\n3\t *\n4\t * Stores metadata about externally installed adapter packages at\n5\t * ~/.paperclip/adapter-plugins.json. This is the source of truth for which\n6\t * external adapters should be loaded at startup.\n7\t *\n8\t * Both the plugin store and the settings store are cached in memory after\n9\t * the first read. Writes invalidate the cache so the next read picks up\n10\t * the new state without a redundant disk round-trip.\n11\t *\n12\t * @module server/services/adapter-plugin-store\n13\t */\n14\t\n15\timport fs from \"node:fs\";\n16\timport path from \"node:path\";\n17\timport { resolvePaperclipHomeDir } from \"../home-paths.js\";\n18\t\n19\t// ---------------------------------------------------------------------------\n20\t// Types",
+        "tool_use_id": "toolu_01QciAsrcjSQAb5r9pA3rK7p",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "a4bdf157-606a-4b6d-8b65-e9611f762a40",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "a4bdf157-606a-4b6d-8b65-e9611f762a40",
+  "timestamp": "2026-04-30T14:55:50.161Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "860381cc-7a5d-470d-bd82-fd74793a894c",
+  "version": "2.1.123"
+}

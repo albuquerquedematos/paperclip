@@ -1,0 +1,33 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/middleware/auth.ts:21:export function actorMiddleware(db: Db, opts: ActorMiddlewareOptions): RequestHandler {\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/storage/provider-registry.ts:7:type StorageProviderFactory = (config: Config) =\u003e StorageProviderImpl;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/__tests__/plugin-routes-authz.test.ts:58:    req.actor = actor as typeof req.actor;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/__tests__/agent-cross-tenant-authz-routes.test.ts:134:    if (req.actor.type === \"agent\" \u0026\u0026 req.actor.companyId !== expectedCompanyId) {\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/__tests__/agent-cross-tenant-authz-routes.test.ts:137:    if (req.actor.type === \"board\" \u0026\u0026 req.actor.source !== \"local_implicit\") {\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/__tests__/environment-routes.test.ts:111:    (req as any).actor = currentActor;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/__tests__/plugin-scoped-api-routes.test.ts:78:    req.actor = input.actor as typeof req.actor;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/__tests__/instance-database-backups-routes.test.ts:15:    req.actor = actor as typeof req.actor;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/projects.ts:74:    if (req.actor.type === \"agent\" \u0026\u0026 req.actor.companyId) {\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/projects.ts:157:    const actor = getActorInfo(req);\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/projects.ts:211:    const actor = getActorInfo(req);\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/projects.ts:262:    const actor = getActorInfo(req);\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/projects.ts:309:      const actor = getActorInfo(req);\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/projects.ts:418:    const actor = getActorInfo(req);\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/projects.ts:621:    const actor = getActorInfo(req);\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/projects.ts:653:    const actor = getActorInfo(req);\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/llms.ts:19:    if (req.actor.type !== \"agent\" || !req.actor.agentId) {\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/http/types.ts:54:  actor: ActorContext | null;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/authz.ts:44:  if (req.actor.type === \"agent\" \u0026\u0026 req.actor.companyId !== companyId) {\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/authz.ts:47:  if (req.actor.type === \"board\" \u0026\u0026 req.actor.source !== \"local_implicit\") {",
+        "is_error": false,
+        "tool_use_id": "toolu_01XL96tmJivokrBW19Dk1jD5",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "99c370e1-4e23-4ef6-bd9f-05cc3005402a",
+  "promptId": "f8ab24c1-de42-4dc6-b59c-8c9364db9ca7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "99c370e1-4e23-4ef6-bd9f-05cc3005402a",
+  "timestamp": "2026-04-30T15:09:30.824Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/middleware/auth.ts:21:export function actorMiddleware(db: Db, opts: ActorMiddlewareOptions): RequestHandler {\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/storage/provider-registry.ts:7:type StorageProviderFactory = (config: Config) =\u003e StorageProviderImpl;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/__tests__/plugin-routes-authz.test.ts:58:    req.actor = actor as typeof req.actor;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/__tests__/agent-cross-tenant-authz-routes.test.ts:134:    if (req.actor.type === \"agent\" \u0026\u0026 req.actor.companyId !== expectedCompanyId) {\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/__tests__/agent-cross-tenant-authz-routes.test.ts:137:    if (req.actor.type === \"board\" \u0026\u0026 req.actor.source !== \"local_implicit\") {\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/__tests__/environment-routes.test.ts:111:    (req as any).actor = currentActor;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/__tests__/plugin-scoped-api-routes.test.ts:78:    req.actor = input.actor as typeof req.actor;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/__tests__/instance-database-backups-routes.test.ts:15:    req.actor = actor as typeof req.actor;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/projects.ts:74:    if (req.actor.type === \"agent\" \u0026\u0026 req.actor.companyId) {\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/projects.ts:157:    const actor = getActorInfo(req);\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/projects.ts:211:    const actor = getActorInfo(req);\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/projects.ts:262:    const actor = getActorInfo(req);\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/projects.ts:309:      const actor = getActorInfo(req);\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/projects.ts:418:    const actor = getActorInfo(req);\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/projects.ts:621:    const actor = getActorInfo(req);\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/projects.ts:653:    const actor = getActorInfo(req);\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/llms.ts:19:    if (req.actor.type !== \"agent\" || !req.actor.agentId) {\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/http/types.ts:54:  actor: ActorContext | null;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/authz.ts:44:  if (req.actor.type === \"agent\" \u0026\u0026 req.actor.companyId !== companyId) {\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/authz.ts:47:  if (req.actor.type === \"board\" \u0026\u0026 req.actor.source !== \"local_implicit\") {"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "690a9561-e633-479f-a301-482444391998",
+  "version": "2.1.123"
+}

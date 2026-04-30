@@ -1,0 +1,26 @@
+{
+  "agentId": "ab8a7a43e45ac1ba4",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "48\t      for (const [name, value] of Object.entries(req.headers)) {\n49\t        if (value === undefined) continue;\n50\t        if (Array.isArray(value)) {\n51\t          for (const v of value) headers.append(name, v);\n52\t        } else {\n53\t          headers.set(name, value);\n54\t        }\n55\t      }\n56\t\n57\t      const ctx: RequestCtx = {\n58\t        method: req.method,\n59\t        url,\n60\t        headers,\n61\t\n62\t        // Body is already parsed by express.json() — just return the cached",
+        "tool_use_id": "toolu_017o6ec2TgVpxpaoSsC4KL2r",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "d1398f67-f2c0-4546-ab7d-692ef6ba4301",
+  "promptId": "55e923aa-08dd-4d92-8756-2825f1e554d7",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "sourceToolAssistantUUID": "d1398f67-f2c0-4546-ab7d-692ef6ba4301",
+  "timestamp": "2026-04-30T14:51:47.092Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "8f63411d-25ca-4e62-a8f5-1be513f6a56b",
+  "version": "2.1.123"
+}

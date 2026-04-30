@@ -1,0 +1,52 @@
+{
+  "agentId": "a8fd5512baf043009",
+  "attributionAgent": "general-purpose",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_017jnk4LjkvR4aZZ8YSkB2aP",
+        "input": {
+          "command": "grep -n \"Handler\\|RouteDefinition\\|RequestCtx\\|assertBoard\\|assertCompanyAccess\\|getActorInfo\\|ctx\\.actor\\|req\\.actor\" /Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/companies.ts | head -40",
+          "description": "Check companies.ts migration status"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01MJsCNrw6SaywsMf7rmG3LX",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": null,
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 1590
+      },
+      "cache_creation_input_tokens": 1590,
+      "cache_read_input_tokens": 20311,
+      "inference_geo": "global",
+      "input_tokens": 1,
+      "output_tokens": 41,
+      "service_tier": "standard"
+    }
+  },
+  "parentUuid": "5ff3baf4-8255-44e4-af08-aa39df315f5d",
+  "requestId": "req_011CaaAmmdXvB2eneT9Tn8xW",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "timestamp": "2026-04-30T15:10:55.634Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "3e841ab5-9d36-405e-b094-773fc5b1bae0",
+  "version": "2.1.123"
+}

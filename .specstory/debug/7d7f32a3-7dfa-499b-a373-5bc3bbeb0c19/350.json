@@ -1,0 +1,52 @@
+{
+  "agentId": "a6710083ef9195699",
+  "attributionAgent": "backend-architect",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01BckHv3stX6Y8bMi9jcjouS",
+        "input": {
+          "command": "grep -n \"RunProcessResult\" /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapter-utils/src/server-utils.test.ts | head -5; find /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapter-utils/src -name \"server-utils.ts\" | head -3",
+          "description": "Find server-utils.ts file"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01HDsb9wYH3EHYWxzgVft19Y",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": null,
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 12344
+      },
+      "cache_creation_input_tokens": 12344,
+      "cache_read_input_tokens": 32516,
+      "inference_geo": "global",
+      "input_tokens": 1,
+      "output_tokens": 2,
+      "service_tier": "standard"
+    }
+  },
+  "parentUuid": "1ff2eced-3f35-4da5-9820-943e907146ca",
+  "requestId": "req_011Caa9JbAs4Hx7ye8FvMjTy",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "timestamp": "2026-04-30T14:51:41.216Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "bfc08b90-8001-4643-8261-f4c64e43fc73",
+  "version": "2.1.123"
+}

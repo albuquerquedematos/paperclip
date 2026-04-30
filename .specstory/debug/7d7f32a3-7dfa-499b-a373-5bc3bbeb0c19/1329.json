@@ -1,0 +1,52 @@
+{
+  "agentId": "a8fd5512baf043009",
+  "attributionAgent": "general-purpose",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01Mh6uQ8NFBdFbH5FDp2DZXE",
+        "input": {
+          "command": "grep -l \"ctx as unknown as Request\\|as unknown as Request\" /Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/*.ts",
+          "description": "Find files using ctx as unknown as Request pattern"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01WfWsjSG1UKP1nAtGPbJtAz",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": null,
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 8543
+      },
+      "cache_creation_input_tokens": 8543,
+      "cache_read_input_tokens": 21901,
+      "inference_geo": "global",
+      "input_tokens": 1,
+      "output_tokens": 2,
+      "service_tier": "standard"
+    }
+  },
+  "parentUuid": "dbc0eb3e-ad73-491c-9215-51ec50d56f83",
+  "requestId": "req_011CaaAnKWgZBHHZzfvqr3Le",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "timestamp": "2026-04-30T15:11:05.200Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "d76baa49-dbda-4ffb-959f-b7fc4bae1733",
+  "version": "2.1.123"
+}

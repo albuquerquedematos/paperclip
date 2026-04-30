@@ -1,0 +1,70 @@
+{
+  "agentId": "a6710083ef9195699",
+  "attributionAgent": "backend-architect",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "master",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_011umohjW6dxCHskncgChmWq",
+        "input": {
+          "content": "# =============================================================================\n# Paperclip — Cloudflare Workers deployment configuration\n#\n# After running `wrangler deploy` for the first time, fill in the placeholder\n# IDs that Cloudflare generates (search for \"FILL_IN_AFTER_DEPLOY\").\n#\n# Quick start:\n#   1. wrangler deploy\n#   2. wrangler hyperdrive create paperclip-hyperdrive --connection-string=\"\u003cneon-url\u003e\"\n#      Then paste the returned ID into [hyperdrive] binding below.\n#   3. Open https://\u003cyour-worker\u003e.workers.dev/setup to complete first-run setup.\n# =============================================================================\n\nname = \"paperclip-api\"\ncompatibility_date = \"2024-09-23\"\ncompatibility_flags = [\"nodejs_compat\"]\nmain = \"src/worker/api.ts\"\n\n# ---------------------------------------------------------------------------\n# Pages — serves the React UI build from ui/dist\n# ---------------------------------------------------------------------------\n[pages_build_output_dir]\npath = \"../../ui/dist\"\n\n# ---------------------------------------------------------------------------\n# Variables (non-secret; override secrets via `wrangler secret put`)\n# ---------------------------------------------------------------------------\n[vars]\nDEPLOYMENT_PLATFORM = \"cloudflare\"\nDEPLOYMENT_MODE = \"authenticated\"\nDEPLOYMENT_EXPOSURE = \"public\"\n\n# ---------------------------------------------------------------------------\n# R2 object storage — artifacts, skill bundles, attachments, DB backups\n# ---------------------------------------------------------------------------\n[[r2_buckets]]\nbinding = \"PAPERCLIP_STORAGE\"\nbucket_name = \"paperclip-storage\"\n# preview_bucket_name = \"paperclip-storage-preview\"\n\n# ---------------------------------------------------------------------------\n# KV — sessions cache, hot config, first-run setup flag\n# ---------------------------------------------------------------------------\n[[kv_namespaces]]\nbinding = \"PAPERCLIP_KV\"\nid = \"FILL_IN_AFTER_DEPLOY\"\n# preview_id = \"FILL_IN_AFTER_DEPLOY_PREVIEW\"\n\n# ---------------------------------------------------------------------------\n# Hyperdrive — Phase 1: wraps Neon/Postgres for low-latency DB access\n# After deploying: wrangler hyperdrive create paperclip-hyperdrive --connection-string=\"\u003cneon-url\u003e\"\n# ---------------------------------------------------------------------------\n[[hyperdrive]]\nbinding = \"HYPERDRIVE\"\nid = \"FILL_IN_AFTER_DEPLOY\"\n\n# ---------------------------------------------------------------------------\n# Queues — background fanout (cost rollups, activity log flush, plugin jobs)\n# ---------------------------------------------------------------------------\n[[queues.producers]]\nbinding = \"PAPERCLIP_QUEUE\"\nqueue = \"paperclip-jobs\"\n\n[[queues.consumers]]\nqueue = \"paperclip-jobs\"\nmax_batch_size = 10\nmax_batch_timeout = 5\nmax_retries = 3\ndead_letter_queue = \"paperclip-jobs-dlq\"\n\n# ---------------------------------------------------------------------------\n# Durable Objects — per-task state, per-agent-run state, scheduler alarms\n# ---------------------------------------------------------------------------\n[[durable_objects.bindings]]\nname = \"TASK_DO\"\nclass_name = \"TaskDO\"\n\n[[durable_objects.bindings]]\nname = \"AGENT_RUN_DO\"\nclass_name = \"AgentRunDO\"\n\n[[durable_objects.bindings]]\nname = \"SCHEDULER_DO\"\nclass_name = \"SchedulerDO\"\n\n# DO migrations — bump new_classes when adding a new DO class\n[[migrations]]\ntag = \"v1\"\nnew_classes = [\"TaskDO\", \"AgentRunDO\", \"SchedulerDO\"]\n\n# ---------------------------------------------------------------------------\n# Workflows — checkpointed multi-step agent execution\n# ---------------------------------------------------------------------------\n[[workflows]]\nbinding = \"HEARTBEAT_WORKFLOW\"\nname = \"heartbeat-workflow\"\nclass_name = \"HeartbeatWorkflow\"\nscript_name = \"paperclip-api\"\n\n[[workflows]]\nbinding = \"PLUGIN_DISPATCH_WORKFLOW\"\nname = \"plugin-dispatch-workflow\"\nclass_name = \"PluginDispatchWorkflow\"\nscript_name = \"paperclip-api\"\n\n# ---------------------------------------------------------------------------\n# Cron triggers — fire heartbeat sweep, budget checks, DB backup\n# Adjust intervals to taste; avoid high-frequency triggers (see CLOUDFLARE.md §10)\n# ---------------------------------------------------------------------------\n[triggers]\ncrons = [\n  \"*/5 * * * *\",   # heartbeat sweep every 5 minutes\n  \"0 * * * *\",     # budget threshold check every hour\n  \"0 3 * * *\",     # DB backup daily at 03:00 UTC\n]\n",
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/wrangler.toml"
+        },
+        "name": "Write",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01CKKqSDcbhN39N7i4CDVHfZ",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 239
+      },
+      "cache_creation_input_tokens": 239,
+      "cache_read_input_tokens": 48158,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 239
+          },
+          "cache_creation_input_tokens": 239,
+          "cache_read_input_tokens": 48158,
+          "input_tokens": 1,
+          "output_tokens": 1194,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 1194,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "ffe8dce7-82ba-4a60-92bb-6b3ef987314b",
+  "requestId": "req_011Caa9LFitES6inzAScTyZR",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "timestamp": "2026-04-30T14:52:16.052Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "e59ed76b-549a-438e-9d1d-88c6c8ee22d3",
+  "version": "2.1.123"
+}

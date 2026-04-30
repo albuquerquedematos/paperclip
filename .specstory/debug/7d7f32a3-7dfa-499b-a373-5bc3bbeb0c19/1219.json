@@ -1,0 +1,70 @@
+{
+  "agentId": "acedaf1c4054eec72",
+  "attributionAgent": "backend-architect",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01F7WC2ge5Dp9Q9bK17Je47F",
+        "input": {
+          "content": "import { Router } from \"express\";\nimport type { Db } from \"@paperclipai/db\";\nimport {\n  issueGraphLivenessAutoRecoveryRequestSchema,\n  patchInstanceExperimentalSettingsSchema,\n  patchInstanceGeneralSettingsSchema,\n} from \"@paperclipai/shared\";\nimport { forbidden, unauthorized } from \"../errors.js\";\nimport { heartbeatService, instanceSettingsService, logActivity } from \"../services/index.js\";\nimport { expressHandler } from \"../http/express-adapter.js\";\nimport type { Handler, RequestCtx } from \"../http/types.js\";\nimport type { StorageService } from \"../storage/types.js\";\n\n/**\n * Equivalent of assertBoardOrgAccess for RequestCtx.\n * Requires board actor; company-list membership is enforced by the upstream\n * Express auth middleware for authenticated deployments.\n * TODO(cloudflare): re-enforce org-level membership in Workers auth layer.\n */\nfunction assertBoardOrgAccessCtx(ctx: RequestCtx) {\n  if (ctx.actor?.type !== \"board\") {\n    throw forbidden(\"Board access required\");\n  }\n}\n\n/**\n * Requires board actor with instance-admin privileges.\n * ctx.actor lacks `source` and `isInstanceAdmin`; we cannot check those fields\n * here. The upstream Express auth middleware populates req.actor.isInstanceAdmin\n * which is not forwarded to ActorContext.\n * TODO(cloudflare): add isInstanceAdmin / source to ActorContext for Workers.\n */\nfunction assertCanManageInstanceSettingsCtx(ctx: RequestCtx) {\n  if (ctx.actor?.type !== \"board\") {\n    throw forbidden(\"Board access required\");\n  }\n  // In the Express path, local_implicit and isInstanceAdmin actors pass through\n  // without further DB checks. Under Workers that information is unavailable on\n  // ActorContext, so we cannot replicate the fast-path; callers in Workers will\n  // reach the instance admin check below only after auth middleware re-surfaces\n  // the privilege.\n  // TODO(cloudflare): verify instance-admin gate in Workers auth layer.\n}\n\nfunction buildHandlers(db: Db) {\n  const svc = instanceSettingsService(db);\n  const heartbeat = heartbeatService(db);\n\n  // server/src/routes/instance-settings.ts:28\n  const getGeneralSettings: Handler = async (ctx) =\u003e {\n    assertBoardOrgAccessCtx(ctx);\n    return Response.json(await svc.getGeneral());\n  };\n\n  // server/src/routes/instance-settings.ts:35\n  const patchGeneralSettings: Handler = async (ctx) =\u003e {\n    assertCanManageInstanceSettingsCtx(ctx);\n    const body = await ctx.json();\n    const patch = patchInstanceGeneralSettingsSchema.parse(body);\n    const updated = await svc.updateGeneral(patch);\n\n    // ctx.actor lacks `runId`; log with null runId.\n    // TODO(cloudflare): thread runId through ActorContext.\n    const actorType = ctx.actor!.type === \"agent\" ? \"agent\" as const : \"user\" as const;\n    const actorId = ctx.actor!.type === \"agent\"\n      ? (ctx.actor!.agentId ?? \"unknown-agent\")\n      : (ctx.actor!.userId ?? \"board\");\n    const companyIds = await svc.listCompanyIds();\n    await Promise.all(\n      companyIds.map((companyId) =\u003e\n        logActivity(db, {\n          companyId,\n          actorType,\n          actorId,\n          agentId: ctx.actor!.type === \"agent\" ? (ctx.actor!.agentId ?? null) : null,\n          runId: null,\n          action: \"instance.settings.general_updated\",\n          entityType: \"instance_settings\",\n          entityId: updated.id,\n          details: {\n            general: updated.general,\n            changedKeys: Object.keys(patch).sort(),\n          },\n        }),\n      ),\n    );\n    return Response.json(updated.general);\n  };\n\n  // server/src/routes/instance-settings.ts:65\n  const getExperimentalSettings: Handler = async (ctx) =\u003e {\n    assertBoardOrgAccessCtx(ctx);\n    return Response.json(await svc.getExperimental());\n  };\n\n  // server/src/routes/instance-settings.ts:72\n  const patchExperimentalSettings: Handler = async (ctx) =\u003e {\n    assertCanManageInstanceSettingsCtx(ctx);\n    const body = await ctx.json();\n    const patch = patchInstanceExperimentalSettingsSchema.parse(body);\n    const updated = await svc.updateExperimental(patch);\n\n    const actorType = ctx.actor!.type === \"agent\" ? \"agent\" as const : \"user\" as const;\n    const actorId = ctx.actor!.type === \"agent\"\n      ? (ctx.actor!.agentId ?? \"unknown-agent\")\n      : (ctx.actor!.userId ?? \"board\");\n    const companyIds = await svc.listCompanyIds();\n    await Promise.all(\n      companyIds.map((companyId) =\u003e\n        logActivity(db, {\n          companyId,\n          actorType,\n          actorId,\n          agentId: ctx.actor!.type === \"agent\" ? (ctx.actor!.agentId ?? null) : null,\n          runId: null,\n          action: \"instance.settings.experimental_updated\",\n          entityType: \"instance_settings\",\n          entityId: updated.id,\n          details: {\n            experimental: updated.experimental,\n            changedKeys: Object.keys(patch).sort(),\n          },\n        }),\n      ),\n    );\n    return Response.json(updated.experimental);\n  };\n\n  // server/src/routes/instance-settings.ts:103\n  const previewIssueGraphLivenessAutoRecovery: Handler = async (ctx) =\u003e {\n    assertCanManageInstanceSettingsCtx(ctx);\n    const body = await ctx.json();\n    const parsed = issueGraphLivenessAutoRecoveryRequestSchema.parse(body);\n    return Response.json(await heartbeat.buildIssueGraphLivenessAutoRecoveryPreview({\n      lookbackHours: parsed.lookbackHours,\n    }));\n  };\n\n  // server/src/routes/instance-settings.ts:113\n  const runIssueGraphLivenessAutoRecovery: Handler = async (ctx) =\u003e {\n    assertCanManageInstanceSettingsCtx(ctx);\n    const body = await ctx.json();\n    const parsed = issueGraphLivenessAutoRecoveryRequestSchema.parse(body);\n\n    const actorType = ctx.actor!.type === \"agent\" ? \"agent\" as const : \"user\" as const;\n    const actorId = ctx.actor!.type === \"agent\"\n      ? (ctx.actor!.agentId ?? \"unknown-agent\")\n      : (ctx.actor!.userId ?? \"board\");\n    const result = await heartbeat.reconcileIssueGraphLiveness({\n      runId: null,\n      force: true,\n      lookbackHours: parsed.lookbackHours,\n    });\n    const companyIds = await svc.listCompanyIds();\n    await Promise.all(\n      companyIds.map((companyId) =\u003e\n        logActivity(db, {\n          companyId,\n          actorType,\n          actorId,\n          agentId: ctx.actor!.type === \"agent\" ? (ctx.actor!.agentId ?? null) : null,\n          runId: null,\n          action: \"instance.settings.issue_graph_liveness_auto_recovery_run\",\n          entityType: \"instance_settings\",\n          entityId: \"default\",\n          details: {\n            lookbackHours: result.lookbackHours,\n            escalationsCreated: result.escalationsCreated,\n            existingEscalations: result.existingEscalations,\n            skippedOutsideLookback: result.skippedOutsideLookback,\n            escalationIssueIds: result.escalationIssueIds,\n          },\n        }),\n      ),\n    );\n    return Response.json(result);\n  };\n\n  return {\n    getGeneralSettings,\n    patchGeneralSettings,\n    getExperimentalSettings,\n    patchExperimentalSettings,\n    previewIssueGraphLivenessAutoRecovery,\n    runIssueGraphLivenessAutoRecovery,\n  };\n}\n\nexport function instanceSettingsRoutes(db: Db) {\n  const router = Router();\n  const {\n    getGeneralSettings,\n    patchGeneralSettings,\n    getExperimentalSettings,\n    patchExperimentalSettings,\n    previewIssueGraphLivenessAutoRecovery,\n    runIssueGraphLivenessAutoRecovery,\n  } = buildHandlers(db);\n\n  const storageSentinel = new Proxy({} as StorageService, {\n    get(_target, prop) {\n      throw new Error(`instanceSettings handler unexpectedly accessed storage.${String(prop)}`);\n    },\n  });\n  const deps = { db, storage: storageSentinel };\n\n  router.get(\"/instance/settings/general\", expressHandler(getGeneralSettings, deps));\n  router.patch(\"/instance/settings/general\", expressHandler(patchGeneralSettings, deps));\n  router.get(\"/instance/settings/experimental\", expressHandler(getExperimentalSettings, deps));\n  router.patch(\"/instance/settings/experimental\", expressHandler(patchExperimentalSettings, deps));\n  router.post(\n    \"/instance/settings/experimental/issue-graph-liveness-auto-recovery/preview\",\n    expressHandler(previewIssueGraphLivenessAutoRecovery, deps),\n  );\n  router.post(\n    \"/instance/settings/experimental/issue-graph-liveness-auto-recovery/run\",\n    expressHandler(runIssueGraphLivenessAutoRecovery, deps),\n  );\n\n  return router;\n}\n",
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/instance-settings.ts"
+        },
+        "name": "Write",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_0151votr9UZgbGYMcqVoEXjB",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 1293
+      },
+      "cache_creation_input_tokens": 1293,
+      "cache_read_input_tokens": 55450,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 1293
+          },
+          "cache_creation_input_tokens": 1293,
+          "cache_read_input_tokens": 55450,
+          "input_tokens": 1,
+          "output_tokens": 2679,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 2679,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "b5afc683-d83f-4c96-b33d-2c23ed42ab45",
+  "requestId": "req_011CaaAd8VeM4b6ijDaNEVb9",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "timestamp": "2026-04-30T15:09:28.182Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "aca80923-5f89-42d6-84a1-66b1c7dd6030",
+  "version": "2.1.123"
+}
