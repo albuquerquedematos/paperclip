@@ -12,18 +12,22 @@ export interface PluginDispatchParams {
   companyId: string;
   /**
    * Executor mode: `sandbox_bridge` (default) routes to the existing E2B/SSH
-   * sandbox bridge; `container` uses a Cloudflare Container binding.
+   * sandbox bridge; `container` uses the PLUGIN_CONTAINER CF Container binding.
    */
   executorMode: "sandbox_bridge" | "container";
 }
 
 /**
  * Env bindings required by the PluginDispatchWorkflow.
+ * Keep in sync with `src/worker/env.ts`.
  */
 interface Env {
   AGENT_RUN_DO: DurableObjectNamespace;
   PAPERCLIP_KV: KVNamespace;
-  // TODO: PLUGIN_CONTAINER_SERVICE binding (Fetcher) for container executor mode
+  // CF-native: Fetcher bindings to CF Containers.
+  // When present these are preferred over SANDBOX_BRIDGE_URL from KV.
+  SIDECAR_SERVICE?: Fetcher;   // handles plugin job lifecycle (claim/complete)
+  PLUGIN_CONTAINER?: Fetcher;  // handles command execution (POST /execute)
 }
 
 /**
@@ -33,10 +37,13 @@ interface Env {
  * (replaced by a Cloudflare Queue consumer on CF deployments). Each job has a
  * `plugin_jobs` record in the database. The Workflow:
  *
- *   1. Marks the job as "running" via the internal API.
- *   2. Dispatches execution to the configured executor (sandbox bridge or
- *      Cloudflare Container), with timeout and retry semantics.
- *   3. Records the outcome — success or failure — via the internal API.
+ *   1. Marks the job as "running" via the sidecar internal API.
+ *   2. Dispatches execution to the configured executor:
+ *        - `container`     → PLUGIN_CONTAINER CF Container binding (CF-native)
+ *        - `sandbox_bridge` → external sandbox bridge via HTTP (fallback)
+ *      Falls back to SIDECAR_SERVICE or the KV-stored bridge URL when the
+ *      preferred binding is absent.
+ *   3. Records the outcome (success or failure) via the sidecar internal API.
  *
  * Retries up to 2 times on transient executor failures before marking the
  * job as permanently failed.
@@ -48,28 +55,40 @@ export class PluginDispatchWorkflow extends WorkflowEntrypoint<Env, PluginDispat
   async run(event: WorkflowEvent<PluginDispatchParams>, step: WorkflowStep): Promise<void> {
     const { pluginJobId, pluginSlug, companyId, executorMode } = event.payload;
 
+    // Read fallback bridge config once per run (outside steps so it doesn't
+    // count against step retry limits; fast KV reads are acceptable here).
+    // Only performed when no CF Container binding is available.
+    let bridgeUrl: string | null = null;
+    let bridgeApiKey: string | null = null;
+    if (!this.env.SIDECAR_SERVICE) {
+      bridgeUrl = (await this.env.PAPERCLIP_KV.get("SANDBOX_BRIDGE_URL")) ?? "http://localhost:8788";
+      bridgeApiKey = await this.env.PAPERCLIP_KV.get("SANDBOX_BRIDGE_API_KEY");
+    }
+
+    /** Call the sidecar internal API — CF Container binding preferred, fallback to bridge. */
+    const sidecarPost = async (path: string, body: unknown): Promise<Response> => {
+      const init: RequestInit = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      };
+      if (this.env.SIDECAR_SERVICE) {
+        return this.env.SIDECAR_SERVICE.fetch(`http://sidecar${path}`, init);
+      }
+      const authHeaders = bridgeApiKey ? { Authorization: `Bearer ${bridgeApiKey}` } : {};
+      return fetch(`${bridgeUrl}${path}`, {
+        ...init,
+        headers: { ...init.headers as Record<string, string>, ...authHeaders },
+      });
+    };
+
     // ------------------------------------------------------------------
     // Step 1: Claim the job — mark it as running to prevent duplicate dispatch
     // ------------------------------------------------------------------
     const claimed = await step.do("claim-job", async () => {
-      // TODO: call the internal plugin job claim endpoint once the HTTP
-      // adapter migration (PR #6/#7) lands.
-      const bridgeUrl =
-        (await this.env.PAPERCLIP_KV.get("SANDBOX_BRIDGE_URL")) ??
-        "http://localhost:8788";
-      const apiKey = await this.env.PAPERCLIP_KV.get("SANDBOX_BRIDGE_API_KEY");
-
-      const resp = await fetch(`${bridgeUrl}/internal/plugin-jobs/${pluginJobId}/claim`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(apiKey ? { Authorization: `Bearer ${apiKey}` } : {}),
-        },
-        body: JSON.stringify({ companyId }),
-      });
+      const resp = await sidecarPost(`/internal/plugin-jobs/${pluginJobId}/claim`, { companyId });
 
       if (resp.status === 409) {
-        // Already claimed by another worker — skip this invocation
         return { claimed: false };
       }
       if (!resp.ok) {
@@ -79,7 +98,6 @@ export class PluginDispatchWorkflow extends WorkflowEntrypoint<Env, PluginDispat
     });
 
     if (!claimed.claimed) {
-      // Another invocation already owns this job; exit cleanly
       return;
     }
 
@@ -93,32 +111,28 @@ export class PluginDispatchWorkflow extends WorkflowEntrypoint<Env, PluginDispat
         retries: { limit: 2, delay: "10 seconds", backoff: "exponential" },
       },
       async () => {
-        const bridgeUrl =
-          (await this.env.PAPERCLIP_KV.get("SANDBOX_BRIDGE_URL")) ??
-          "http://localhost:8788";
-        const apiKey = await this.env.PAPERCLIP_KV.get("SANDBOX_BRIDGE_API_KEY");
+        const body = { pluginJobId, pluginSlug, companyId };
+        let resp: Response;
 
-        let executionEndpoint: string;
-        if (executorMode === "container") {
-          // TODO: route to Cloudflare Container service binding
-          // executionEndpoint = `http://container/plugin-jobs/${pluginJobId}/execute`;
-          executionEndpoint = `${bridgeUrl}/internal/plugin-jobs/${pluginJobId}/execute`;
+        if (executorMode === "container" && this.env.PLUGIN_CONTAINER) {
+          // CF-native path: route command execution to the plugin sandbox
+          // container via its Fetcher binding. No external server needed.
+          resp = await this.env.PLUGIN_CONTAINER.fetch(
+            `http://plugin-container/internal/plugin-jobs/${pluginJobId}/execute`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(body),
+            },
+          );
         } else {
-          executionEndpoint = `${bridgeUrl}/internal/plugin-jobs/${pluginJobId}/execute`;
+          // Fallback: sidecar internal API (CF Container or external bridge).
+          resp = await sidecarPost(`/internal/plugin-jobs/${pluginJobId}/execute`, body);
         }
 
-        const resp = await fetch(executionEndpoint, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            ...(apiKey ? { Authorization: `Bearer ${apiKey}` } : {}),
-          },
-          body: JSON.stringify({ pluginJobId, pluginSlug, companyId }),
-        });
-
         if (!resp.ok) {
-          const body = await resp.text().catch(() => "(unreadable)");
-          throw new Error(`Plugin job execution failed: HTTP ${resp.status}: ${body}`);
+          const text = await resp.text().catch(() => "(unreadable)");
+          throw new Error(`Plugin job execution failed: HTTP ${resp.status}: ${text}`);
         }
 
         return (await resp.json()) as { status: string; exitCode?: number };
@@ -129,25 +143,17 @@ export class PluginDispatchWorkflow extends WorkflowEntrypoint<Env, PluginDispat
     // Step 3: Record the result
     // ------------------------------------------------------------------
     await step.do("record-result", async () => {
-      const bridgeUrl =
-        (await this.env.PAPERCLIP_KV.get("SANDBOX_BRIDGE_URL")) ??
-        "http://localhost:8788";
-      const apiKey = await this.env.PAPERCLIP_KV.get("SANDBOX_BRIDGE_API_KEY");
-
       const succeeded = executionResult?.status !== "failed";
-      await fetch(`${bridgeUrl}/internal/plugin-jobs/${pluginJobId}/complete`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(apiKey ? { Authorization: `Bearer ${apiKey}` } : {}),
-        },
-        body: JSON.stringify({
-          companyId,
-          status: succeeded ? "succeeded" : "failed",
-          exitCode: executionResult?.exitCode,
-          completedAt: new Date().toISOString(),
-        }),
+      const resp = await sidecarPost(`/internal/plugin-jobs/${pluginJobId}/complete`, {
+        companyId,
+        status: succeeded ? "succeeded" : "failed",
+        exitCode: executionResult?.exitCode,
+        completedAt: new Date().toISOString(),
       });
+      if (!resp.ok) {
+        const text = await resp.text().catch(() => "(unreadable)");
+        throw new Error(`Record result failed: HTTP ${resp.status}: ${text}`);
+      }
     });
   }
 }

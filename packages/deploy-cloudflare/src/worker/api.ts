@@ -5,13 +5,15 @@
  * queue consumer, and cron handlers, then re-exports named Durable Object
  * and Workflow classes so Wrangler can register them.
  *
- * Routes skipped (use Node-only features — left as 501 TODOs):
- *   - adapterRoutes           reads packages from disk
- *   - pluginRoutes            SSE, child processes, scoped plugin API
+ * Routes skipped (use Node-only features):
  *   - pluginUiStaticRoutes    fs.readFileSync / res.sendFile
- *   - companySkillRoutes      local filesystem (CF version: cf-company-skills.ts)
- *   - accessRoutes            reads bundled SKILL.md files from disk
  *   - instanceDatabaseBackupRoutes  pg_dump
+ *
+ * Routes handled via CF-native modules (not in route-registry.ts):
+ *   - adapterRoutes       → src/worker/routes/adapters.ts
+ *   - pluginRoutes        → src/worker/routes/plugins.ts
+ *   - companySkillRoutes  → src/worker/routes/company-skills-cf.ts
+ *   - accessRoutes        → route-registry.ts (extractAllRoutesFromRouter)
  *
  * Architecture note on per-request DB injection:
  *   Route handlers capture a `db` reference via service factory closures.

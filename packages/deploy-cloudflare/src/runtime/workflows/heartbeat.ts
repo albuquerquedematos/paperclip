@@ -19,14 +19,16 @@ export interface HeartbeatParams {
 
 /**
  * Env bindings required by the HeartbeatWorkflow.
- * Keep in sync with `src/worker/api.ts#Env`.
+ * Keep in sync with `src/worker/env.ts`.
  */
 interface Env {
   AGENT_RUN_DO: DurableObjectNamespace;
   TASK_DO: DurableObjectNamespace;
   HYPERDRIVE: { connectionString: string };
   PAPERCLIP_KV: KVNamespace;
-  // TODO: add SANDBOX_BRIDGE_URL and SANDBOX_BRIDGE_API_KEY secrets
+  // CF-native: Fetcher binding to the sidecar CF Container.
+  // If absent, falls back to SANDBOX_BRIDGE_URL stored in KV.
+  SIDECAR_SERVICE?: Fetcher;
 }
 
 /**
@@ -39,10 +41,14 @@ interface Env {
  *
  * Steps:
  *   1. init-run      — Create the AgentRunDO record; mark run as "running".
- *   2. execute       — Call the sandbox bridge to run the actual heartbeat.
+ *   2. execute       — Call the sidecar to run the actual heartbeat.
  *                      Retries up to 2 times with a 5-second delay on failure.
  *   3. record-result — Update the AgentRunDO with the final outcome; notify
  *                      the TaskDO so connected UIs receive a state update.
+ *
+ * Execution routing (step 2):
+ *   - CF-native (preferred): SIDECAR_SERVICE Fetcher binding → CF Container.
+ *   - Fallback: SANDBOX_BRIDGE_URL / SANDBOX_BRIDGE_API_KEY read from KV.
  *
  * The Workflow is triggered by the SchedulerDO alarm handler or the
  * `POST /api/agents/:agentId/wakeup` endpoint.
@@ -62,7 +68,6 @@ export class HeartbeatWorkflow extends WorkflowEntrypoint<Env, HeartbeatParams> 
       const id = this.env.AGENT_RUN_DO.idFromName(runId);
       const stub = this.env.AGENT_RUN_DO.get(id);
 
-      // Initialise the run document in the DO
       const initResp = await stub.fetch("http://internal/init", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -80,8 +85,6 @@ export class HeartbeatWorkflow extends WorkflowEntrypoint<Env, HeartbeatParams> 
         throw new Error(`AgentRunDO init failed: HTTP ${initResp.status}`);
       }
 
-      // If there is an associated task, update the TaskDO so the UI reflects
-      // that a heartbeat is now running.
       if (taskId) {
         const taskId_ = this.env.TASK_DO.idFromName(taskId);
         const taskStub = this.env.TASK_DO.get(taskId_);
@@ -99,7 +102,7 @@ export class HeartbeatWorkflow extends WorkflowEntrypoint<Env, HeartbeatParams> 
     });
 
     // ------------------------------------------------------------------
-    // Step 2: Execute the heartbeat via the sandbox bridge
+    // Step 2: Execute the heartbeat via sidecar (CF Container or bridge)
     // ------------------------------------------------------------------
     const executeResult = await step.do(
       "execute",
@@ -108,26 +111,36 @@ export class HeartbeatWorkflow extends WorkflowEntrypoint<Env, HeartbeatParams> 
         retries: { limit: 2, delay: "5 seconds", backoff: "linear" },
       },
       async () => {
-        // TODO: replace with the actual internal heartbeat API URL once
-        // the HTTP adapter migration (PR #6/#7) lands. For now we call a
-        // placeholder endpoint on the main Worker.
-        const bridgeUrl =
-          (await this.env.PAPERCLIP_KV.get("SANDBOX_BRIDGE_URL")) ??
-          "http://localhost:8788";
-        const apiKey = await this.env.PAPERCLIP_KV.get("SANDBOX_BRIDGE_API_KEY");
+        const body = JSON.stringify({ agentId, companyId, runId, taskId });
+        const headers = { "Content-Type": "application/json" };
 
-        const resp = await fetch(`${bridgeUrl}/internal/heartbeat`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            ...(apiKey ? { Authorization: `Bearer ${apiKey}` } : {}),
-          },
-          body: JSON.stringify({ agentId, companyId, runId, taskId }),
-        });
+        let resp: Response;
+        if (this.env.SIDECAR_SERVICE) {
+          // CF-native path: call the sidecar container directly via the
+          // service binding. No network egress, no external server needed.
+          resp = await this.env.SIDECAR_SERVICE.fetch(
+            "http://sidecar/internal/heartbeat",
+            { method: "POST", headers, body },
+          );
+        } else {
+          // Fallback: read bridge URL + key from KV and call via fetch().
+          const bridgeUrl =
+            (await this.env.PAPERCLIP_KV.get("SANDBOX_BRIDGE_URL")) ??
+            "http://localhost:8788";
+          const apiKey = await this.env.PAPERCLIP_KV.get("SANDBOX_BRIDGE_API_KEY");
+          resp = await fetch(`${bridgeUrl}/internal/heartbeat`, {
+            method: "POST",
+            headers: {
+              ...headers,
+              ...(apiKey ? { Authorization: `Bearer ${apiKey}` } : {}),
+            },
+            body,
+          });
+        }
 
         if (!resp.ok) {
-          const body = await resp.text().catch(() => "(unreadable)");
-          throw new Error(`Heartbeat execution failed: HTTP ${resp.status}: ${body}`);
+          const text = await resp.text().catch(() => "(unreadable)");
+          throw new Error(`Heartbeat execution failed: HTTP ${resp.status}: ${text}`);
         }
 
         return (await resp.json()) as { status: string; liveness?: string };
@@ -151,7 +164,6 @@ export class HeartbeatWorkflow extends WorkflowEntrypoint<Env, HeartbeatParams> 
         }),
       });
 
-      // Update TaskDO so the UI reflects the completed heartbeat
       if (taskId) {
         const taskId_ = this.env.TASK_DO.idFromName(taskId);
         const taskStub = this.env.TASK_DO.get(taskId_);

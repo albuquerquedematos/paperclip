@@ -119,3 +119,31 @@ crons = [
   "0 * * * *",     # budget threshold check every hour
   "0 3 * * *",     # DB backup daily at 03:00 UTC
 ]
+
+# ---------------------------------------------------------------------------
+# Cloudflare Containers — run execution services natively on Cloudflare.
+#
+# CF Containers (beta) let Workers communicate with Docker containers via
+# a Fetcher service binding. No external servers needed.
+#
+# Required secrets (set via `wrangler secret put`):
+#   - none for containers (authentication is implicit via the binding)
+#
+# For external sidecar fallback (optional, for non-CF deployments):
+#   wrangler secret put SIDECAR_URL
+#   wrangler secret put SIDECAR_API_KEY
+# ---------------------------------------------------------------------------
+
+# Sidecar — companion Node.js server for agent heartbeat execution, plugin job
+# lifecycle (claim/execute/complete), filesystem and git operations.
+# Exposes POST /internal/heartbeat, POST /internal/plugin-jobs/:id/* endpoints.
+[[containers]]
+binding = "SIDECAR_SERVICE"
+image = "ghcr.io/paperclipai/paperclip-sidecar:latest"
+
+# Plugin sandbox — isolated command execution environment for adapter plugins.
+# Exposes POST /execute and POST /cancel/:runId (same wire format as the
+# sandbox bridge HTTP API so both executors are fully interchangeable).
+[[containers]]
+binding = "PLUGIN_CONTAINER"
+image = "ghcr.io/paperclipai/plugin-sandbox:latest"
