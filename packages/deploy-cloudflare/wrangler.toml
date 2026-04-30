@@ -89,10 +89,25 @@ class_name = "AgentRunDO"
 name = "SCHEDULER_DO"
 class_name = "SchedulerDO"
 
+# Container DO bindings — each wraps a CF Container (Docker image).
+# The DO proxies HTTP to the container via getTcpPort(); falls back to
+# SANDBOX_BRIDGE_URL from KV when running locally without Docker.
+[[durable_objects.bindings]]
+name = "SIDECAR_SERVICE"
+class_name = "SidecarContainer"
+
+[[durable_objects.bindings]]
+name = "PLUGIN_CONTAINER"
+class_name = "PluginContainer"
+
 # DO migrations — bump new_classes when adding a new DO class
 [[migrations]]
 tag = "v1"
 new_classes = ["TaskDO", "AgentRunDO", "SchedulerDO"]
+
+[[migrations]]
+tag = "v2"
+new_classes = ["SidecarContainer", "PluginContainer"]
 
 # ---------------------------------------------------------------------------
 # Workflows — checkpointed multi-step agent execution
@@ -136,14 +151,13 @@ crons = [
 
 # Sidecar — companion Node.js server for agent heartbeat execution, plugin job
 # lifecycle (claim/execute/complete), filesystem and git operations.
-# Exposes POST /internal/heartbeat, POST /internal/plugin-jobs/:id/* endpoints.
+# The SidecarContainer DO class wraps this image (see src/worker/containers.ts).
 [[containers]]
-binding = "SIDECAR_SERVICE"
+class_name = "SidecarContainer"
 image = "ghcr.io/paperclipai/paperclip-sidecar:latest"
 
 # Plugin sandbox — isolated command execution environment for adapter plugins.
-# Exposes POST /execute and POST /cancel/:runId (same wire format as the
-# sandbox bridge HTTP API so both executors are fully interchangeable).
+# Exposes POST /execute and POST /cancel/:runId.
 [[containers]]
-binding = "PLUGIN_CONTAINER"
+class_name = "PluginContainer"
 image = "ghcr.io/paperclipai/plugin-sandbox:latest"

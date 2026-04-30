@@ -115,3 +115,4 @@ export { AgentRunDO } from "../runtime/agent-run-do.js";
 export { SchedulerDO } from "../scheduler/scheduler-do.js";
 export { HeartbeatWorkflow } from "../runtime/workflows/heartbeat.js";
 export { PluginDispatchWorkflow } from "../runtime/workflows/plugin-dispatch.js";
+export { SidecarContainer, PluginContainer } from "./containers.js";

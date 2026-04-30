@@ -24,10 +24,10 @@ export interface PluginDispatchParams {
 interface Env {
   AGENT_RUN_DO: DurableObjectNamespace;
   PAPERCLIP_KV: KVNamespace;
-  // CF-native: Fetcher bindings to CF Containers.
-  // When present these are preferred over SANDBOX_BRIDGE_URL from KV.
-  SIDECAR_SERVICE?: Fetcher;   // handles plugin job lifecycle (claim/complete)
-  PLUGIN_CONTAINER?: Fetcher;  // handles command execution (POST /execute)
+  // CF-native: Container DO namespaces (proxy to Docker containers).
+  // Absent in local dev → falls back to SANDBOX_BRIDGE_URL from KV.
+  SIDECAR_SERVICE?: DurableObjectNamespace;   // plugin job lifecycle (claim/complete)
+  PLUGIN_CONTAINER?: DurableObjectNamespace;  // command execution (POST /execute)
 }
 
 /**
@@ -65,15 +65,17 @@ export class PluginDispatchWorkflow extends WorkflowEntrypoint<Env, PluginDispat
       bridgeApiKey = await this.env.PAPERCLIP_KV.get("SANDBOX_BRIDGE_API_KEY");
     }
 
-    /** Call the sidecar internal API — CF Container binding preferred, fallback to bridge. */
+    /** Call the sidecar internal API — SidecarContainer DO preferred, fallback to bridge. */
     const sidecarPost = async (path: string, body: unknown): Promise<Response> => {
-      const init: RequestInit = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      };
       if (this.env.SIDECAR_SERVICE) {
-        return this.env.SIDECAR_SERVICE.fetch(`http://sidecar${path}`, init);
+        // SidecarContainer DO proxies to the Docker sidecar (or KV bridge in local dev).
+        const id = this.env.SIDECAR_SERVICE.idFromName("sidecar");
+        const stub = this.env.SIDECAR_SERVICE.get(id);
+        return stub.fetch(`http://sidecar${path}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
       }
       const headers: Record<string, string> = { "Content-Type": "application/json" };
       if (bridgeApiKey) headers.Authorization = `Bearer ${bridgeApiKey}`;
@@ -113,9 +115,11 @@ export class PluginDispatchWorkflow extends WorkflowEntrypoint<Env, PluginDispat
         let resp: Response;
 
         if (executorMode === "container" && this.env.PLUGIN_CONTAINER) {
-          // CF-native path: route command execution to the plugin sandbox
-          // container via its Fetcher binding. No external server needed.
-          resp = await this.env.PLUGIN_CONTAINER.fetch(
+          // CF-native path: PluginContainer DO proxies command execution to
+          // the Docker sandbox container.
+          const id = this.env.PLUGIN_CONTAINER.idFromName(pluginJobId);
+          const stub = this.env.PLUGIN_CONTAINER.get(id);
+          resp = await stub.fetch(
             `http://plugin-container/internal/plugin-jobs/${pluginJobId}/execute`,
             {
               method: "POST",

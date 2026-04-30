@@ -26,9 +26,9 @@ interface Env {
   TASK_DO: DurableObjectNamespace;
   HYPERDRIVE: { connectionString: string };
   PAPERCLIP_KV: KVNamespace;
-  // CF-native: Fetcher binding to the sidecar CF Container.
-  // If absent, falls back to SANDBOX_BRIDGE_URL stored in KV.
-  SIDECAR_SERVICE?: Fetcher;
+  // CF-native: DO namespace for the SidecarContainer (proxies to Docker).
+  // Local dev: absent → falls back to SANDBOX_BRIDGE_URL stored in KV.
+  SIDECAR_SERVICE?: DurableObjectNamespace;
 }
 
 /**
@@ -116,9 +116,11 @@ export class HeartbeatWorkflow extends WorkflowEntrypoint<Env, HeartbeatParams> 
 
         let resp: Response;
         if (this.env.SIDECAR_SERVICE) {
-          // CF-native path: call the sidecar container directly via the
-          // service binding. No network egress, no external server needed.
-          resp = await this.env.SIDECAR_SERVICE.fetch(
+          // CF-native path: SidecarContainer DO proxies to the Docker container.
+          // The DO handles container start/lifecycle; we just call fetch().
+          const id = this.env.SIDECAR_SERVICE.idFromName("sidecar");
+          const stub = this.env.SIDECAR_SERVICE.get(id);
+          resp = await stub.fetch(
             "http://sidecar/internal/heartbeat",
             { method: "POST", headers, body },
           );

@@ -38,17 +38,11 @@ export interface Env {
   STORAGE_R2_BUCKET?: string;
   STORAGE_R2_PREFIX?: string;
 
-  // Sidecar — companion server for agent heartbeat execution and plugin jobs.
-  // CF-native: use SIDECAR_SERVICE (Fetcher to a CF Container).
-  // Fallback: set SIDECAR_URL + SIDECAR_API_KEY to point at an external server.
-  SIDECAR_SERVICE?: Fetcher;
-  SIDECAR_URL?: string;
-  SIDECAR_API_KEY?: string;
-
-  // Plugin sandbox — isolated command execution for adapter plugins.
-  // CF-native: PLUGIN_CONTAINER is a Fetcher to a CF Container that exposes
-  // POST /execute and POST /cancel/:runId (same interface as the sandbox bridge).
-  PLUGIN_CONTAINER?: Fetcher;
+  // Container DO namespaces — each wraps a CF Container that starts a Docker
+  // image and proxies HTTP to it.  Absent in local dev (no Docker); the DO
+  // transparently falls back to SANDBOX_BRIDGE_URL read from KV.
+  SIDECAR_SERVICE?: DurableObjectNamespace;   // companion Node server
+  PLUGIN_CONTAINER?: DurableObjectNamespace;  // isolated command executor
 
   // Static assets binding — serves ui/dist alongside the Worker.
   // Use env.ASSETS.fetch(request) to serve static files or let CF fall
