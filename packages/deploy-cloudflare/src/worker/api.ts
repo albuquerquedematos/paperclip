@@ -109,14 +109,13 @@ export interface Env {
 }
 
 // ---------------------------------------------------------------------------
-// Per-isolate route cache
+// Per-request route resolution
 //
-// Workers isolates are long-lived within a datacenter edge node. We build the
-// Express Routers (and extract RouteDefinitions) once per isolate, keyed on
-// the Hyperdrive connection string (proxy for "same DB config").
+// Route handlers close over service instances which close over the DB
+// connection. CF Workers prohibits reusing I/O objects (TCP sockets) across
+// requests, so we rebuild DB + route tables on every request.
 //
-// Subsequent requests in the same isolate reuse the cached routes, skipping
-// the router construction overhead.
+// Route path patterns (regexp, paramNames) are static and are cached.
 // ---------------------------------------------------------------------------
 
 interface CompiledRoute {
@@ -125,15 +124,9 @@ interface CompiledRoute {
   paramNames: string[];
 }
 
-interface RouteCache {
-  routes: RouteDefinition[];
-  compiled: CompiledRoute[];
-  db: Db;
-  storage: StorageService;
-  hyperdriveConnStr: string;
-}
-
-let routeCache: RouteCache | null = null;
+// Cached route path patterns — these don't depend on DB so they survive
+// across requests in the same isolate.
+let compiledPathCache: Array<{ method: string; path: string; re: RegExp; paramNames: string[] }> | null = null;
 
 // Convert an Express-style path pattern (with :param segments) to a RegExp.
 function pathToRegex(path: string): { re: RegExp; paramNames: string[] } {
@@ -147,7 +140,7 @@ function pathToRegex(path: string): { re: RegExp; paramNames: string[] } {
   return { re: new RegExp(`^${pattern}$`), paramNames };
 }
 
-function buildRouteCache(env: Env): RouteCache {
+function buildRequestResources(env: Env) {
   const db = createHyperdriveDb(env.HYPERDRIVE);
   const r2Provider = new R2Provider(env.PAPERCLIP_STORAGE, {
     bucket: env.STORAGE_R2_BUCKET ?? "paperclip-storage",
@@ -184,20 +177,18 @@ function buildRouteCache(env: Env): RouteCache {
     ...ext(authRoutes(db), "/api"),
   ];
 
-  const compiled: CompiledRoute[] = routes.map((route) => ({
+  if (!compiledPathCache) {
+    compiledPathCache = routes.map((r) => ({ method: r.method, path: r.path, ...pathToRegex(r.path) }));
+    console.log(`[CF Worker] Compiled ${compiledPathCache.length} route patterns`);
+  }
+
+  const compiled: CompiledRoute[] = routes.map((route, i) => ({
     route,
-    ...pathToRegex(route.path),
+    re: compiledPathCache![i]!.re,
+    paramNames: compiledPathCache![i]!.paramNames,
   }));
 
-  return { routes, compiled, db, storage, hyperdriveConnStr: env.HYPERDRIVE.connectionString };
-}
-
-function getRouteCache(env: Env): RouteCache {
-  if (!routeCache || routeCache.hyperdriveConnStr !== env.HYPERDRIVE.connectionString) {
-    routeCache = buildRouteCache(env);
-    console.log(`[CF Worker] Built route cache: ${routeCache.routes.length} routes`);
-  }
-  return routeCache;
+  return { compiled, db, storage };
 }
 
 // ---------------------------------------------------------------------------
@@ -219,6 +210,10 @@ app.get("/api/health", (c) =>
 // First-run setup gate
 app.use("*", async (c, next) => {
   if (c.req.path === "/api/health" || c.req.path.startsWith("/setup")) {
+    return next();
+  }
+  // In local_trusted mode the DB is already set up; skip the KV gate.
+  if (c.env.DEPLOYMENT_MODE === "local_trusted") {
     return next();
   }
   const setupCompleted = await c.env.PAPERCLIP_KV.get("SETUP_COMPLETED");
@@ -257,18 +252,17 @@ app.all("/setup", async (c) => {
 // ---------------------------------------------------------------------------
 
 function getCompiledRoutes(env: Env) {
-  const cache = getRouteCache(env);
-  return { compiled: cache.compiled, db: cache.db, storage: cache.storage };
+  return buildRequestResources(env);
 }
 
 // R2-native upload endpoints (registered before the catch-all)
 app.put("/api/assets/:assetId/upload", async (c) => {
-  const { assets } = await import("@paperclipai/db");
+  const { assets } = await import("../../../db/src/schema/index.js");
   const { eq } = await import("drizzle-orm");
   const { forbidden, notFound, badRequest } = await import("../../../../server/src/errors.js");
 
   const env = c.env;
-  const { db } = getRouteCache(env);
+  const { db } = buildRequestResources(env);
   const deploymentMode = env.DEPLOYMENT_MODE === "local_trusted" ? "local_trusted" as const : "authenticated" as const;
   const actor = await resolveActorFromRequest(c.req.raw, db, { deploymentMode });
 
@@ -299,12 +293,12 @@ app.put("/api/assets/:assetId/upload", async (c) => {
 });
 
 app.post("/api/issues/:issueId/attachments/upload", async (c) => {
-  const { issues } = await import("@paperclipai/db");
+  const { issues } = await import("../../../db/src/schema/index.js");
   const { eq } = await import("drizzle-orm");
   const { forbidden, notFound, badRequest } = await import("../../../../server/src/errors.js");
 
   const env = c.env;
-  const { db } = getRouteCache(env);
+  const { db } = buildRequestResources(env);
   const deploymentMode = env.DEPLOYMENT_MODE === "local_trusted" ? "local_trusted" as const : "authenticated" as const;
   const actor = await resolveActorFromRequest(c.req.raw, db, { deploymentMode });
 
@@ -339,7 +333,9 @@ app.post("/api/issues/:issueId/attachments/upload", async (c) => {
 // Main API catch-all -- manual routing through cached route definitions
 app.all("/api/*", async (c) => {
   const { compiled, db, storage } = getCompiledRoutes(c.env);
-  const pathname = new URL(c.req.url).pathname;
+  // Strip trailing slash so /api/companies/ matches /api/companies routes.
+  const rawPathname = new URL(c.req.url).pathname;
+  const pathname = rawPathname.length > 1 ? rawPathname.replace(/\/$/, "") : rawPathname;
   const method = c.req.method.toUpperCase();
 
   for (const { route, re, paramNames } of compiled) {
@@ -425,8 +421,7 @@ export default {
     // Boot the Cloudflare implementations on first request (idempotent).
     bootCloudflare(env);
 
-    // Ensure route cache is warm before handling the request.
-    getRouteCache(env);
+    // Route patterns are compiled lazily on first request; no warm-up needed.
 
     // CF service layer -- instantiated per-request (Workers are stateless).
     const sidecar = new SidecarClient({

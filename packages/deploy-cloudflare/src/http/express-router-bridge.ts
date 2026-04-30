@@ -79,7 +79,9 @@ export function extractRoutesFromRouter(
   for (const layer of router.stack ?? []) {
     if (layer.route) {
       // This layer is a concrete route (GET /foo, POST /bar, etc.)
-      const path = prefix + layer.route.path;
+      const rawPath = prefix + layer.route.path;
+      // Normalize: strip trailing slash except for a bare "/"
+      const path = rawPath.length > 1 && rawPath.endsWith("/") ? rawPath.slice(0, -1) : rawPath;
       for (const [method, enabled] of Object.entries(layer.route.methods)) {
         if (!enabled) continue;
         for (const rl of layer.route.stack) {
