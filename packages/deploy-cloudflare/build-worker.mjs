@@ -103,6 +103,10 @@ await build({
     "multer":             path.join(SHIMS, "multer-shim.ts"),
     "node:os":            path.join(SHIMS, "node-os.ts"),
     "os":                 path.join(SHIMS, "node-os.ts"),
+    "node:dns":           path.join(SHIMS, "node-dns.ts"),
+    "dns":                path.join(SHIMS, "node-dns.ts"),
+    "node:dns/promises":  path.join(SHIMS, "node-dns.ts"),
+    "dns/promises":       path.join(SHIMS, "node-dns.ts"),
   },
   plugins: [
     // esbuild alias only supports bare module names; use a plugin to intercept

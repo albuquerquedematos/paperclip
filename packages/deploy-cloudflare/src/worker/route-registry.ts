@@ -16,6 +16,8 @@ import { createHyperdriveDb } from "../db/hyperdrive.js";
 import { R2Provider } from "../storage/r2-provider.js";
 import { createCfStorageService } from "../storage/cf-storage-service.js";
 import { extractRoutesFromRouter } from "../http/express-router-bridge.js";
+import { extractAllRoutesFromRouter } from "../http/cf-express-bridge.js";
+import { resolveDeploymentMode } from "./env.js";
 import type { Env } from "./env.js";
 import type { RouteDefinition } from "../../../../server/src/http/types.js";
 import type { StorageService } from "../../../../server/src/storage/types.js";
@@ -23,6 +25,7 @@ import type { Db } from "@paperclipai/db";
 
 // Route factory imports
 import { companyRoutes } from "../../../../server/src/routes/companies.js";
+import { accessRoutes } from "../../../../server/src/routes/access.js";
 import { agentRoutes } from "../../../../server/src/routes/agents.js";
 import { assetRoutes } from "../../../../server/src/routes/assets.js";
 import { projectRoutes } from "../../../../server/src/routes/projects.js";
@@ -132,6 +135,16 @@ export function buildRequestResources(env: Env): RequestResources {
     ...ext(instanceSettingsRoutes(db), "/api"),
     ...ext(llmRoutes(db), "/api"),
     ...ext(authRoutes(db), "/api/auth"),
+    // Access routes use raw Express handlers — use the CF bridge to capture all of them
+    ...extractAllRoutesFromRouter(
+      accessRoutes(db, {
+        deploymentMode: resolveDeploymentMode(env),
+        deploymentExposure: (env.DEPLOYMENT_EXPOSURE ?? "private") as "private" | "public",
+        bindHost: "",
+        allowedHostnames: [],
+      }),
+      "/api",
+    ),
   ];
 
   if (!compiledPathCache) {
