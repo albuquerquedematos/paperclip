@@ -14,7 +14,7 @@ import { createHash } from "node:crypto";
 import { notFound } from "../errors.js";
 import { resolvePaperclipInstanceRoot } from "../home-paths.js";
 
-export type RunLogStoreType = "local_file";
+export type RunLogStoreType = "local_file" | "r2";
 
 export interface RunLogHandle {
   store: RunLogStoreType;

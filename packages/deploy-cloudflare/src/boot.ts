@@ -59,6 +59,8 @@ export function bootCloudflare(env: BootEnv): void {
   const prefix = env.STORAGE_R2_PREFIX ?? "";
 
   registerStorageProvider("r2", (_config) => {
-    return new R2Provider(env.PAPERCLIP_STORAGE, { bucket: bucketName, prefix });
+    // R2Provider.getObject returns a Web ReadableStream, not a Node Readable.
+    // The type cast is intentional — in the CF runtime this is correct.
+    return new R2Provider(env.PAPERCLIP_STORAGE, { bucket: bucketName, prefix }) as never;
   });
 }

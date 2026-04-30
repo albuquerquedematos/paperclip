@@ -41,34 +41,34 @@ import { createCfStorageService } from "../storage/cf-storage-service.js";
 import { extractRoutesFromRouter } from "../http/express-router-bridge.js";
 import { resolveActorFromRequest } from "../auth/resolve-actor.js";
 import { runHeartbeatSweep } from "../cron/heartbeat-sweep.js";
-import { HttpError } from "../../../server/src/errors.js";
-import type { RouteDefinition } from "../../../server/src/http/types.js";
-import type { StorageService } from "../../../server/src/storage/types.js";
+import { HttpError } from "../../../../server/src/errors.js";
+import type { RouteDefinition } from "../../../../server/src/http/types.js";
+import type { StorageService } from "../../../../server/src/storage/types.js";
 import type { Db } from "@paperclipai/db";
 
 // Server-side route factories
-import { companyRoutes } from "../../../server/src/routes/companies.js";
-import { agentRoutes } from "../../../server/src/routes/agents.js";
-import { assetRoutes } from "../../../server/src/routes/assets.js";
-import { projectRoutes } from "../../../server/src/routes/projects.js";
-import { issueRoutes } from "../../../server/src/routes/issues.js";
-import { issueTreeControlRoutes } from "../../../server/src/routes/issue-tree-control.js";
-import { routineRoutes } from "../../../server/src/routes/routines.js";
-import { environmentRoutes } from "../../../server/src/routes/environments.js";
-import { executionWorkspaceRoutes } from "../../../server/src/routes/execution-workspaces.js";
-import { goalRoutes } from "../../../server/src/routes/goals.js";
-import { approvalRoutes } from "../../../server/src/routes/approvals.js";
-import { secretRoutes } from "../../../server/src/routes/secrets.js";
-import { costRoutes } from "../../../server/src/routes/costs.js";
-import { activityRoutes } from "../../../server/src/routes/activity.js";
-import { dashboardRoutes } from "../../../server/src/routes/dashboard.js";
-import { userProfileRoutes } from "../../../server/src/routes/user-profiles.js";
-import { sidebarBadgeRoutes } from "../../../server/src/routes/sidebar-badges.js";
-import { sidebarPreferenceRoutes } from "../../../server/src/routes/sidebar-preferences.js";
-import { inboxDismissalRoutes } from "../../../server/src/routes/inbox-dismissals.js";
-import { instanceSettingsRoutes } from "../../../server/src/routes/instance-settings.js";
-import { llmRoutes } from "../../../server/src/routes/llms.js";
-import { authRoutes } from "../../../server/src/routes/auth.js";
+import { companyRoutes } from "../../../../server/src/routes/companies.js";
+import { agentRoutes } from "../../../../server/src/routes/agents.js";
+import { assetRoutes } from "../../../../server/src/routes/assets.js";
+import { projectRoutes } from "../../../../server/src/routes/projects.js";
+import { issueRoutes } from "../../../../server/src/routes/issues.js";
+import { issueTreeControlRoutes } from "../../../../server/src/routes/issue-tree-control.js";
+import { routineRoutes } from "../../../../server/src/routes/routines.js";
+import { environmentRoutes } from "../../../../server/src/routes/environments.js";
+import { executionWorkspaceRoutes } from "../../../../server/src/routes/execution-workspaces.js";
+import { goalRoutes } from "../../../../server/src/routes/goals.js";
+import { approvalRoutes } from "../../../../server/src/routes/approvals.js";
+import { secretRoutes } from "../../../../server/src/routes/secrets.js";
+import { costRoutes } from "../../../../server/src/routes/costs.js";
+import { activityRoutes } from "../../../../server/src/routes/activity.js";
+import { dashboardRoutes } from "../../../../server/src/routes/dashboard.js";
+import { userProfileRoutes } from "../../../../server/src/routes/user-profiles.js";
+import { sidebarBadgeRoutes } from "../../../../server/src/routes/sidebar-badges.js";
+import { sidebarPreferenceRoutes } from "../../../../server/src/routes/sidebar-preferences.js";
+import { inboxDismissalRoutes } from "../../../../server/src/routes/inbox-dismissals.js";
+import { instanceSettingsRoutes } from "../../../../server/src/routes/instance-settings.js";
+import { llmRoutes } from "../../../../server/src/routes/llms.js";
+import { authRoutes } from "../../../../server/src/routes/auth.js";
 
 // ---------------------------------------------------------------------------
 // Env -- Cloudflare bindings injected at runtime
@@ -265,7 +265,7 @@ function getCompiledRoutes(env: Env) {
 app.put("/api/assets/:assetId/upload", async (c) => {
   const { assets } = await import("@paperclipai/db");
   const { eq } = await import("drizzle-orm");
-  const { forbidden, notFound, badRequest } = await import("../../../server/src/errors.js");
+  const { forbidden, notFound, badRequest } = await import("../../../../server/src/errors.js");
 
   const env = c.env;
   const { db } = getRouteCache(env);
@@ -301,7 +301,7 @@ app.put("/api/assets/:assetId/upload", async (c) => {
 app.post("/api/issues/:issueId/attachments/upload", async (c) => {
   const { issues } = await import("@paperclipai/db");
   const { eq } = await import("drizzle-orm");
-  const { forbidden, notFound, badRequest } = await import("../../../server/src/errors.js");
+  const { forbidden, notFound, badRequest } = await import("../../../../server/src/errors.js");
 
   const env = c.env;
   const { db } = getRouteCache(env);
@@ -364,7 +364,7 @@ app.all("/api/*", async (c) => {
       },
     );
 
-    const ctx: import("../../../server/src/http/types.js").RequestCtx = {
+    const ctx: import("../../../../server/src/http/types.js").RequestCtx = {
       method: c.req.method,
       url: new URL(c.req.url),
       headers: new Headers(c.req.raw.headers),

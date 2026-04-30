@@ -13,7 +13,7 @@ import { createHash } from "node:crypto";
 import { notFound } from "../errors.js";
 import { resolvePaperclipInstanceRoot } from "../home-paths.js";
 
-export type WorkspaceOperationLogStoreType = "local_file";
+export type WorkspaceOperationLogStoreType = "local_file" | "r2";
 
 export interface WorkspaceOperationLogHandle {
   store: WorkspaceOperationLogStoreType;

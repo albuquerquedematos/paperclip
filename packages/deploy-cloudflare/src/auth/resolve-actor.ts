@@ -148,7 +148,7 @@ export async function resolveActorFromRequest(
         userName: access.user.name ?? null,
         userEmail: access.user.email ?? null,
         companyIds: access.companyIds,
-        memberships: access.memberships,
+        memberships: access.memberships.map((m) => ({ ...m, membershipRole: m.membershipRole ?? "" })),
         isInstanceAdmin: access.isInstanceAdmin,
         keyId: boardKey.id,
         runId: runIdHeader,

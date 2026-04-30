@@ -5,12 +5,17 @@
   "type": "module",
   "main": "./src/boot.ts",
   "dependencies": {
-    "hono": "^4.0.0",
+    "@paperclipai/db": "workspace:*",
     "@paperclipai/shared": "workspace:*",
-    "@paperclipai/db": "workspace:*"
+    "drizzle-orm": "^0.38.4",
+    "hono": "^4.0.0",
+    "postgres": "^3.4.5"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.0.0",
+    "@types/express": "^5.0.0",
+    "@types/node": "^25.6.0",
+    "express": "^5.1.0",
     "typescript": "^5.0.0",
     "wrangler": "^3.0.0"
   }
