@@ -44,6 +44,7 @@ import {
   parseClaudeStreamJson,
   describeClaudeFailure,
   detectClaudeLoginRequired,
+  detectClaudeUnknownSession,
   extractClaudeRetryNotBefore,
   isClaudeMaxTurnsResult,
   isClaudeTransientUpstreamError,
@@ -829,13 +830,20 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
 
   try {
     const initial = await runAttempt(sessionId ?? null);
-    if (
+    // Claude may report an unknown-session failure either in parsed JSON
+    // (exit 0 + result text) or by exiting non-zero with the error in
+    // stderr — detect both so the retry-with-fresh-session fallback fires.
+    const unknownSessionFailure =
       sessionId &&
       !initial.proc.timedOut &&
       (initial.proc.exitCode ?? 0) !== 0 &&
-      initial.parsed &&
-      isClaudeUnknownSessionError(initial.parsed)
-    ) {
+      detectClaudeUnknownSession({
+        parsed: initial.parsed,
+        stdout: initial.proc.stdout,
+        stderr: initial.proc.stderr,
+      });
+
+    if (unknownSessionFailure) {
       await onLog(
         "stdout",
         `[paperclip] Claude resume session "${sessionId}" is unavailable; retrying with a fresh session.\n`,

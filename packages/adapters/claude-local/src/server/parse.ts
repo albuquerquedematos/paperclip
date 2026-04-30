@@ -177,15 +177,40 @@ export function isClaudeMaxTurnsResult(parsed: Record<string, unknown> | null | 
   return /max(?:imum)?\s+turns?/i.test(resultText);
 }
 
+const UNKNOWN_SESSION_RE =
+  /no conversation found with session id|unknown session|session .* not found/i;
+
 export function isClaudeUnknownSessionError(parsed: Record<string, unknown>): boolean {
   const resultText = asString(parsed.result, "").trim();
   const allMessages = [resultText, ...extractClaudeErrorMessages(parsed)]
     .map((msg) => msg.trim())
     .filter(Boolean);
 
-  return allMessages.some((msg) =>
-    /no conversation found with session id|unknown session|session .* not found/i.test(msg),
-  );
+  return allMessages.some((msg) => UNKNOWN_SESSION_RE.test(msg));
+}
+
+/**
+ * Detect the unknown-session error from any signal claude produced.
+ *
+ * Use this when the parsed JSON may be absent — claude often exits with
+ * code 1 and writes the error to stderr without producing stream JSON.
+ * Checking parsed alone misses those cases and the retry-with-fresh-session
+ * fallback never fires.
+ */
+export function detectClaudeUnknownSession(input: {
+  parsed?: Record<string, unknown> | null;
+  stdout?: string | null;
+  stderr?: string | null;
+}): boolean {
+  const messages: string[] = [];
+  if (input.parsed) {
+    const resultText = asString(input.parsed.result, "").trim();
+    if (resultText) messages.push(resultText);
+    messages.push(...extractClaudeErrorMessages(input.parsed));
+  }
+  if (input.stderr) messages.push(input.stderr);
+  if (input.stdout) messages.push(input.stdout);
+  return messages.some((msg) => UNKNOWN_SESSION_RE.test(msg));
 }
 
 function buildClaudeTransientHaystack(input: {
