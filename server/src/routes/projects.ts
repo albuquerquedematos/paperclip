@@ -92,8 +92,17 @@ export function projectRoutes(db: Db) {
 
   router.param("id", async (req: Request, _res: ExpressResponse, next: NextFunction, rawId: string) => {
     try {
-      // The Express req is a superset of RequestCtx; cast it for the helper.
-      req.params.id = await normalizeProjectReference(req as unknown as RequestCtx, rawId);
+      // Build a minimal RequestCtx-compatible object for Express middleware.
+      // req.query is an object in Express; wrap it so helpers can call ctx.query(name).
+      const minCtx = {
+        actor: req.actor ?? null,
+        method: req.method,
+        query(name: string) {
+          const v = req.query[name];
+          return typeof v === "string" ? v : undefined;
+        },
+      } as unknown as RequestCtx;
+      req.params.id = await normalizeProjectReference(minCtx, rawId);
       next();
     } catch (err) {
       next(err);

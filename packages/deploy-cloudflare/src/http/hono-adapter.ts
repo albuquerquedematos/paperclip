@@ -1,51 +1,39 @@
 import { Hono } from "hono";
 import type { Db } from "@paperclipai/db";
+import { HttpError } from "../../../../server/src/errors.js";
+import { extractRoutesFromRouter } from "./express-router-bridge.js";
 
 /**
- * Local copies of the HTTP handler types from `server/src/http/types.ts`.
+ * Re-export the full ActorContext types from the server package.
  *
- * We duplicate rather than import because the server package uses Node-only
- * modules (`node:stream`, etc.) and cannot be bundled into a Worker. These
- * shapes must remain structurally identical to the upstream definitions.
- * When upstream types change, update these in lock-step.
- *
- * TODO: extract `server/src/http/types.ts` into a separate `@paperclipai/http`
- * package with zero Node dependencies so both the server and CF Worker can
- * import it directly (tracked in PR #6).
+ * We import directly rather than duplicating because these types are pure
+ * TypeScript interfaces with zero runtime code — Wrangler/esbuild strips them
+ * at bundle time. If the server package ever gains Node-specific runtime
+ * imports at the type-import level, move these to a shared `@paperclipai/http`
+ * package (tracked as follow-up to PR #6).
  */
-export interface ActorContext {
-  type: "board" | "agent";
-  userId?: string;
-  agentId?: string;
-  companyId?: string;
-}
+export type {
+  ActorContext,
+  ActorMembership,
+  ActorSource,
+  BoardActor,
+  AgentActor,
+  RequestCtx,
+  Handler,
+  RouteDefinition,
+} from "../../../../server/src/http/types.js";
 
-export interface RequestCtx {
-  method: string;
-  url: URL;
-  headers: Headers;
-  json<T = unknown>(): Promise<T>;
-  text(): Promise<string>;
-  param(name: string): string | undefined;
-  query(name: string): string | undefined;
-  actor: ActorContext | null;
-  db: Db;
-  storage: StorageServiceLike;
-}
-
-export type Handler = (ctx: RequestCtx) => Promise<Response>;
-
-export interface RouteDefinition {
-  method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
-  /** Express/Hono-style path, e.g. `/api/companies/:companyId`. */
-  path: string;
-  handler: Handler;
-}
+import type {
+  ActorContext,
+  Handler,
+  RequestCtx,
+  RouteDefinition,
+} from "../../../../server/src/http/types.js";
 
 /**
- * Minimal shape of the storage service dependency.
- * We use a structural alias to avoid importing the server's Node-typed
- * `StorageService` directly.
+ * Minimal structural alias for the storage service dependency.
+ * Avoids importing the Node-typed `StorageService` directly from the server
+ * package while remaining structurally compatible at runtime.
  */
 export interface StorageServiceLike {
   provider: string;
@@ -69,21 +57,28 @@ export interface MountRoutesOptions {
 }
 
 /**
+ * Maps an `HttpError` (from `server/src/errors.ts`) to the appropriate HTTP
+ * response. All other thrown values become 500 Internal Server Error.
+ */
+function errorResponse(err: unknown): Response {
+  if (err instanceof HttpError) {
+    return Response.json(
+      { error: err.message, ...(err.details !== undefined ? { details: err.details } : {}) },
+      { status: err.status },
+    );
+  }
+  console.error(
+    `[HonoAdapter] Unhandled error: ${err instanceof Error ? err.stack ?? err.message : String(err)}`,
+  );
+  return Response.json({ error: "Internal Server Error" }, { status: 500 });
+}
+
+/**
  * Mounts an array of `RouteDefinition` objects onto a Hono app.
  *
  * Each route definition is a transport-agnostic handler (from the
  * `server/src/http/types.ts` seam). This function bridges from the Hono
  * request context to the `RequestCtx` shape those handlers expect.
- *
- * Usage:
- * ```ts
- * import { Hono } from "hono";
- * import { mountRoutes } from "./hono-adapter.js";
- * import { myRoutes } from "../../server/src/routes/my-routes.js";
- *
- * const app = new Hono();
- * mountRoutes(app, myRoutes, { db, storage });
- * ```
  */
 export function mountRoutes(
   app: Hono,
@@ -122,21 +117,38 @@ export function mountRoutes(
 
         actor,
         db,
-        storage,
+        storage: storage as import("../../../../server/src/storage/types.js").StorageService,
       };
 
       try {
         return await route.handler(ctx);
       } catch (err) {
-        // Unhandled errors become 500s. In production, Cloudflare's Worker
-        // error logging captures the stack trace.
-        console.error(
-          `[HonoAdapter] Unhandled error in ${route.method} ${route.path}: ${
-            err instanceof Error ? err.stack ?? err.message : String(err)
-          }`,
-        );
-        return c.json({ error: "Internal Server Error" }, 500);
+        return errorResponse(err);
       }
     });
   }
+}
+
+/**
+ * Walks an Express Router's `.stack`, extracts all tagged route definitions
+ * (those whose innermost handler carries `__handler` set by `expressHandler`),
+ * and mounts them on the Hono app via `mountRoutes`.
+ *
+ * @param app      - The Hono application instance.
+ * @param router   - An Express `Router` instance (opaque `unknown` to avoid
+ *                   importing Express types into this Workers-safe file).
+ * @param prefix   - Optional path prefix to prepend to every extracted route.
+ *                   Use `"/companies"` for the company router, `""` for all
+ *                   others (matches the `api.use("/companies", ...)` pattern
+ *                   in `server/src/app.ts`).
+ * @param options  - Same options passed to `mountRoutes`.
+ */
+export function mountExpressRouter(
+  app: Hono,
+  router: unknown,
+  prefix: string,
+  options: MountRoutesOptions,
+): void {
+  const routes = extractRoutesFromRouter(router, prefix);
+  mountRoutes(app, routes, options);
 }

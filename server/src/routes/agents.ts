@@ -1,4 +1,4 @@
-import { Router, type Request, type Response, type NextFunction } from "express";
+import { Router, type Request, type Response as ExpressResponse, type NextFunction } from "express";
 import type { Handler, RequestCtx } from "../http/types.js";
 import { expressHandler } from "../http/express-adapter.js";
 import { generateKeyPairSync, randomUUID } from "node:crypto";
@@ -1051,7 +1051,7 @@ export function agentRoutes(
     },
   });
 
-  router.param("id", async (req: Request, _res: Response, next: NextFunction, rawId: string) => {
+  router.param("id", async (req: Request, _res: ExpressResponse, next: NextFunction, rawId: string) => {
     try {
       req.params.id = await normalizeAgentReference(req as unknown as RequestCtx, String(rawId));
       next();
@@ -1632,37 +1632,38 @@ export function agentRoutes(
   router.get("/agents/:id/task-sessions", expressHandler(listAgentTaskSessions, { db, storage: storageSentinel }));
   router.post("/agents/:id/runtime-state/reset-session", validate(resetAgentSessionSchema), expressHandler(resetAgentRuntimeSession, { db, storage: storageSentinel }));
 
-  router.post("/companies/:companyId/agent-hires", validate(createAgentHireSchema), async (req, res) => {
-    const companyId = req.params.companyId as string;
-    await assertCanCreateAgentsForCompany(req, companyId);
-    const sourceIssueIds = parseSourceIssueIds(req.body);
+  const createAgentHire: Handler = async (ctx) => {
+    const companyId = ctx.param("companyId")!;
+    await assertCanCreateAgentsForCompany(ctx, companyId);
+    const reqBody = await ctx.json<Record<string, unknown>>();
+    const sourceIssueIds = parseSourceIssueIds(reqBody as { sourceIssueId?: string | null; sourceIssueIds?: string[] });
     const {
       desiredSkills: requestedDesiredSkills,
       instructionsBundle,
       sourceIssueId: _sourceIssueId,
       sourceIssueIds: _sourceIssueIds,
       ...hireInput
-    } = req.body;
-    hireInput.adapterType = assertKnownAdapterType(hireInput.adapterType);
+    } = reqBody as Record<string, unknown> & { desiredSkills?: string[]; instructionsBundle?: { files: Record<string, string>; entryFile?: string }; sourceIssueId?: string | null; sourceIssueIds?: string[] };
+    hireInput.adapterType = assertKnownAdapterType(hireInput.adapterType as string | null | undefined);
     assertNoNewAgentLegacyPromptTemplate(
-      hireInput.adapterType,
+      hireInput.adapterType as string,
       (hireInput.adapterConfig ?? {}) as Record<string, unknown>,
     );
     assertNoAgentHostWorkspaceCommandMutation(
-      req,
+      ctx,
       collectAgentAdapterWorkspaceCommandPaths(hireInput.adapterConfig),
     );
     assertNoAgentInstructionsConfigMutation(
-      req,
+      ctx,
       (hireInput.adapterConfig ?? {}) as Record<string, unknown>,
     );
     const requestedAdapterConfig = applyCreateDefaultsByAdapterType(
-      hireInput.adapterType,
+      hireInput.adapterType as string,
       ((hireInput.adapterConfig ?? {}) as Record<string, unknown>),
     );
     const desiredSkillAssignment = await resolveDesiredSkillAssignment(
       companyId,
-      hireInput.adapterType,
+      hireInput.adapterType as string,
       requestedAdapterConfig,
       Array.isArray(requestedDesiredSkills) ? requestedDesiredSkills : undefined,
     );
@@ -1673,7 +1674,7 @@ export function agentRoutes(
     );
     await assertAdapterConfigConstraints(
       companyId,
-      hireInput.adapterType,
+      hireInput.adapterType as string,
       normalizedAdapterConfig,
     );
     const normalizedHireInput = {
@@ -1688,8 +1689,7 @@ export function agentRoutes(
       .where(eq(companies.id, companyId))
       .then((rows) => rows[0] ?? null);
     if (!company) {
-      res.status(404).json({ error: "Company not found" });
-      return;
+      return Response.json({ error: "Company not found" }, { status: 404 });
     }
 
     const requiresApproval = company.requireBoardApprovalForNewAgents;
@@ -1703,7 +1703,7 @@ export function agentRoutes(
     const agent = await materializeDefaultInstructionsBundleForNewAgent(createdAgent, instructionsBundle);
 
     let approval: Awaited<ReturnType<typeof approvalsSvc.getById>> | null = null;
-    const actor = getActorInfo(req);
+    const actor = getActorInfo(ctx);
 
     if (requiresApproval) {
       const requestedAdapterType = normalizedHireInput.adapterType ?? agent.adapterType;
@@ -1806,12 +1806,14 @@ export function agentRoutes(
       });
     }
 
-    res.status(201).json({ agent, approval });
-  });
+    return Response.json({ agent, approval }, { status: 201 });
+  };
 
-  router.post("/companies/:companyId/agents", validate(createAgentSchema), async (req, res) => {
-    const companyId = req.params.companyId as string;
-    await assertCanCreateAgentsForCompany(req, companyId);
+  router.post("/companies/:companyId/agent-hires", validate(createAgentHireSchema), expressHandler(createAgentHire, { db, storage: storageSentinel }));
+
+  const createAgent: Handler = async (ctx) => {
+    const companyId = ctx.param("companyId")!;
+    await assertCanCreateAgentsForCompany(ctx, companyId);
 
     const company = await db
       .select()
@@ -1819,8 +1821,7 @@ export function agentRoutes(
       .where(eq(companies.id, companyId))
       .then((rows) => rows[0] ?? null);
     if (!company) {
-      res.status(404).json({ error: "Company not found" });
-      return;
+      return Response.json({ error: "Company not found" }, { status: 404 });
     }
     if (company.requireBoardApprovalForNewAgents) {
       throw conflict(
@@ -1828,31 +1829,32 @@ export function agentRoutes(
       );
     }
 
+    const body = await ctx.json<Record<string, unknown>>();
     const {
       desiredSkills: requestedDesiredSkills,
       instructionsBundle,
       ...createInput
-    } = req.body;
-    createInput.adapterType = assertKnownAdapterType(createInput.adapterType);
+    } = body as Record<string, unknown> & { desiredSkills?: string[]; instructionsBundle?: unknown };
+    (createInput as Record<string, unknown>).adapterType = assertKnownAdapterType((createInput as Record<string, unknown>).adapterType as string | null | undefined);
     assertNoNewAgentLegacyPromptTemplate(
-      createInput.adapterType,
-      (createInput.adapterConfig ?? {}) as Record<string, unknown>,
+      (createInput as Record<string, unknown>).adapterType as string,
+      ((createInput as Record<string, unknown>).adapterConfig ?? {}) as Record<string, unknown>,
     );
     assertNoAgentHostWorkspaceCommandMutation(
-      req,
-      collectAgentAdapterWorkspaceCommandPaths(createInput.adapterConfig),
+      ctx,
+      collectAgentAdapterWorkspaceCommandPaths((createInput as Record<string, unknown>).adapterConfig),
     );
     assertNoAgentInstructionsConfigMutation(
-      req,
-      (createInput.adapterConfig ?? {}) as Record<string, unknown>,
+      ctx,
+      ((createInput as Record<string, unknown>).adapterConfig ?? {}) as Record<string, unknown>,
     );
     const requestedAdapterConfig = applyCreateDefaultsByAdapterType(
-      createInput.adapterType,
-      ((createInput.adapterConfig ?? {}) as Record<string, unknown>),
+      (createInput as Record<string, unknown>).adapterType as string,
+      (((createInput as Record<string, unknown>).adapterConfig ?? {}) as Record<string, unknown>),
     );
     const desiredSkillAssignment = await resolveDesiredSkillAssignment(
       companyId,
-      createInput.adapterType,
+      (createInput as Record<string, unknown>).adapterType as string,
       requestedAdapterConfig,
       Array.isArray(requestedDesiredSkills) ? requestedDesiredSkills : undefined,
     );
@@ -1863,26 +1865,26 @@ export function agentRoutes(
     );
     await assertAdapterConfigConstraints(
       companyId,
-      createInput.adapterType,
+      (createInput as Record<string, unknown>).adapterType as string,
       normalizedAdapterConfig,
     );
-    await assertAgentEnvironmentSelection(companyId, createInput.adapterType, createInput.defaultEnvironmentId);
-    await assertAgentDefaultEnvironmentSelection(companyId, createInput.defaultEnvironmentId, {
-      allowedDrivers: allowedEnvironmentDriversForAgent(createInput.adapterType),
-      allowedSandboxProviders: allowedSandboxProvidersForAgent(createInput.adapterType),
+    await assertAgentEnvironmentSelection(companyId, (createInput as Record<string, unknown>).adapterType as string, (createInput as Record<string, unknown>).defaultEnvironmentId as string | null | undefined);
+    await assertAgentDefaultEnvironmentSelection(companyId, (createInput as Record<string, unknown>).defaultEnvironmentId as string | null | undefined, {
+      allowedDrivers: allowedEnvironmentDriversForAgent((createInput as Record<string, unknown>).adapterType as string),
+      allowedSandboxProviders: allowedSandboxProvidersForAgent((createInput as Record<string, unknown>).adapterType as string),
     });
 
     const createdAgent = await svc.create(companyId, {
-      ...createInput,
+      ...(createInput as Record<string, unknown>),
       adapterConfig: normalizedAdapterConfig,
-      runtimeConfig: normalizeNewAgentRuntimeConfig(createInput.runtimeConfig),
+      runtimeConfig: normalizeNewAgentRuntimeConfig((createInput as Record<string, unknown>).runtimeConfig),
       status: "idle",
       spentMonthlyCents: 0,
       lastHeartbeatAt: null,
-    });
-    const agent = await materializeDefaultInstructionsBundleForNewAgent(createdAgent, instructionsBundle);
+    } as Parameters<typeof svc.create>[1]);
+    const agent = await materializeDefaultInstructionsBundleForNewAgent(createdAgent, instructionsBundle as { files: Record<string, string>; entryFile?: string } | undefined);
 
-    const actor = getActorInfo(req);
+    const actor = getActorInfo(ctx);
     await logActivity(db, {
       companyId,
       actorType: actor.actorType,
@@ -1906,7 +1908,7 @@ export function agentRoutes(
     await applyDefaultAgentTaskAssignGrant(
       companyId,
       agent.id,
-      req.actor.type === "board" ? (req.actor.userId ?? null) : null,
+      ctx.actor?.type === "board" ? (ctx.actor.userId ?? null) : null,
     );
 
     if (agent.budgetMonthlyCents > 0) {
@@ -1922,51 +1924,46 @@ export function agentRoutes(
       );
     }
 
-    res.status(201).json(agent);
-  });
+    return Response.json(agent, { status: 201 });
+  };
 
-  router.patch("/agents/:id/permissions", validate(updateAgentPermissionsSchema), async (req, res) => {
-    const id = req.params.id as string;
+  router.post("/companies/:companyId/agents", validate(createAgentSchema), expressHandler(createAgent, { db, storage: storageSentinel }));
+
+  const updateAgentPermissions: Handler = async (ctx) => {
+    const id = ctx.param("id")!;
     const existing = await svc.getById(id);
-    if (!existing) {
-      res.status(404).json({ error: "Agent not found" });
-      return;
-    }
-    assertCompanyAccess(req, existing.companyId);
+    if (!existing) return Response.json({ error: "Agent not found" }, { status: 404 });
+    assertCompanyAccess(ctx, existing.companyId);
 
-    if (req.actor.type === "agent") {
-      const actorAgent = req.actor.agentId ? await svc.getById(req.actor.agentId) : null;
+    if (ctx.actor?.type === "agent") {
+      const actorAgent = ctx.actor.agentId ? await svc.getById(ctx.actor.agentId) : null;
       if (!actorAgent || actorAgent.companyId !== existing.companyId) {
-        res.status(403).json({ error: "Forbidden" });
-        return;
+        return Response.json({ error: "Forbidden" }, { status: 403 });
       }
       if (actorAgent.role !== "ceo") {
-        res.status(403).json({ error: "Only CEO can manage permissions" });
-        return;
+        return Response.json({ error: "Only CEO can manage permissions" }, { status: 403 });
       }
     } else {
-      await assertBoardCanManageAgentsForCompany(req, existing.companyId);
+      await assertBoardCanManageAgentsForCompany(ctx, existing.companyId);
     }
 
-    const agent = await svc.updatePermissions(id, req.body);
-    if (!agent) {
-      res.status(404).json({ error: "Agent not found" });
-      return;
-    }
+    const body = await ctx.json<Record<string, unknown>>();
+    const agent = await svc.updatePermissions(id, body);
+    if (!agent) return Response.json({ error: "Agent not found" }, { status: 404 });
 
     const effectiveCanAssignTasks =
-      agent.role === "ceo" || Boolean(agent.permissions?.canCreateAgents) || req.body.canAssignTasks;
+      agent.role === "ceo" || Boolean(agent.permissions?.canCreateAgents) || body.canAssignTasks;
     await access.ensureMembership(agent.companyId, "agent", agent.id, "member", "active");
     await access.setPrincipalPermission(
       agent.companyId,
       "agent",
       agent.id,
       "tasks:assign",
-      effectiveCanAssignTasks,
-      req.actor.type === "board" ? (req.actor.userId ?? null) : null,
+      Boolean(effectiveCanAssignTasks),
+      ctx.actor?.type === "board" ? (ctx.actor.userId ?? null) : null,
     );
 
-    const actor = getActorInfo(req);
+    const actor = getActorInfo(ctx);
     await logActivity(db, {
       companyId: agent.companyId,
       actorType: actor.actorType,
@@ -1978,43 +1975,42 @@ export function agentRoutes(
       entityId: agent.id,
       details: {
         canCreateAgents: agent.permissions?.canCreateAgents ?? false,
-        canAssignTasks: effectiveCanAssignTasks,
+        canAssignTasks: Boolean(effectiveCanAssignTasks),
       },
     });
 
-    res.json(await buildAgentDetail(agent));
-  });
+    return Response.json(await buildAgentDetail(agent));
+  };
 
-  router.patch("/agents/:id/instructions-path", validate(updateAgentInstructionsPathSchema), async (req, res) => {
-    if (req.actor.type !== "board") {
+  router.patch("/agents/:id/permissions", validate(updateAgentPermissionsSchema), expressHandler(updateAgentPermissions, { db, storage: storageSentinel }));
+
+  const updateAgentInstructionsPath: Handler = async (ctx) => {
+    if (ctx.actor?.type !== "board") {
       throw forbidden("Only board-authenticated callers can manage instructions path or bundle configuration");
     }
 
-    const id = req.params.id as string;
+    const id = ctx.param("id")!;
     const existing = await svc.getById(id);
-    if (!existing) {
-      res.status(404).json({ error: "Agent not found" });
-      return;
-    }
+    if (!existing) return Response.json({ error: "Agent not found" }, { status: 404 });
 
-    await assertCanManageInstructionsPath(req, existing);
+    await assertCanManageInstructionsPath(ctx, existing);
 
+    const body = await ctx.json<Record<string, unknown>>();
     const existingAdapterConfig = asRecord(existing.adapterConfig) ?? {};
-    const explicitKey = asNonEmptyString(req.body.adapterConfigKey);
+    const explicitKey = asNonEmptyString(body.adapterConfigKey);
     const defaultKey = resolveInstructionsPathKey(existing.adapterType);
     const adapterConfigKey = explicitKey ?? defaultKey;
     if (!adapterConfigKey) {
-      res.status(422).json({
+      return Response.json({
         error: `No default instructions path key for adapter type '${existing.adapterType}'. Provide adapterConfigKey.`,
-      });
-      return;
+      }, { status: 422 });
     }
 
     const nextAdapterConfig: Record<string, unknown> = { ...existingAdapterConfig };
-    if (req.body.path === null) {
+    if (body.path === null) {
       delete nextAdapterConfig[adapterConfigKey];
     } else {
-      nextAdapterConfig[adapterConfigKey] = resolveInstructionsFilePath(req.body.path, existingAdapterConfig);
+      nextAdapterConfig[adapterConfigKey] = resolveInstructionsFilePath(body.path as string, existingAdapterConfig);
     }
 
     const syncedAdapterConfig = syncInstructionsBundleConfigFromFilePath(existing, nextAdapterConfig);
@@ -2023,7 +2019,7 @@ export function agentRoutes(
       syncedAdapterConfig,
       { strictMode: strictSecretsMode },
     );
-    const actor = getActorInfo(req);
+    const actor = getActorInfo(ctx);
     const agent = await svc.update(
       id,
       { adapterConfig: normalizedAdapterConfig },
@@ -2035,10 +2031,7 @@ export function agentRoutes(
         },
       },
     );
-    if (!agent) {
-      res.status(404).json({ error: "Agent not found" });
-      return;
-    }
+    if (!agent) return Response.json({ error: "Agent not found" }, { status: 404 });
 
     const updatedAdapterConfig = asRecord(agent.adapterConfig) ?? {};
     const pathValue = asNonEmptyString(updatedAdapterConfig[adapterConfigKey]);
@@ -2055,40 +2048,37 @@ export function agentRoutes(
       details: {
         adapterConfigKey,
         path: pathValue,
-        cleared: req.body.path === null,
+        cleared: body.path === null,
       },
     });
 
-    res.json({
+    return Response.json({
       agentId: agent.id,
       adapterType: agent.adapterType,
       adapterConfigKey,
       path: pathValue,
     });
-  });
+  };
 
-  router.get("/agents/:id/instructions-bundle", async (req, res) => {
-    const id = req.params.id as string;
+  router.patch("/agents/:id/instructions-path", validate(updateAgentInstructionsPathSchema), expressHandler(updateAgentInstructionsPath, { db, storage: storageSentinel }));
+
+  const getAgentInstructionsBundle: Handler = async (ctx) => {
+    const id = ctx.param("id")!;
     const existing = await svc.getById(id);
-    if (!existing) {
-      res.status(404).json({ error: "Agent not found" });
-      return;
-    }
-    await assertCanReadAgent(req, existing);
-    res.json(await instructions.getBundle(existing));
-  });
+    if (!existing) return Response.json({ error: "Agent not found" }, { status: 404 });
+    await assertCanReadAgent(ctx, existing);
+    return Response.json(await instructions.getBundle(existing));
+  };
 
-  router.patch("/agents/:id/instructions-bundle", validate(updateAgentInstructionsBundleSchema), async (req, res) => {
-    const id = req.params.id as string;
+  const updateAgentInstructionsBundle: Handler = async (ctx) => {
+    const id = ctx.param("id")!;
     const existing = await svc.getById(id);
-    if (!existing) {
-      res.status(404).json({ error: "Agent not found" });
-      return;
-    }
-    await assertCanManageInstructionsPath(req, existing);
+    if (!existing) return Response.json({ error: "Agent not found" }, { status: 404 });
+    await assertCanManageInstructionsPath(ctx, existing);
 
-    const actor = getActorInfo(req);
-    const { bundle, adapterConfig } = await instructions.updateBundle(existing, req.body);
+    const body = await ctx.json<Record<string, unknown>>();
+    const actor = getActorInfo(ctx);
+    const { bundle, adapterConfig } = await instructions.updateBundle(existing, body);
     const normalizedAdapterConfig = await secretsSvc.normalizeAdapterConfigForPersistence(
       existing.companyId,
       adapterConfig,
@@ -2119,43 +2109,37 @@ export function agentRoutes(
         mode: bundle.mode,
         rootPath: bundle.rootPath,
         entryFile: bundle.entryFile,
-        clearLegacyPromptTemplate: req.body.clearLegacyPromptTemplate === true,
+        clearLegacyPromptTemplate: body.clearLegacyPromptTemplate === true,
       },
     });
 
-    res.json(bundle);
-  });
+    return Response.json(bundle);
+  };
 
-  router.get("/agents/:id/instructions-bundle/file", async (req, res) => {
-    const id = req.params.id as string;
+  const getAgentInstructionsBundleFile: Handler = async (ctx) => {
+    const id = ctx.param("id")!;
     const existing = await svc.getById(id);
-    if (!existing) {
-      res.status(404).json({ error: "Agent not found" });
-      return;
-    }
-    await assertCanReadAgent(req, existing);
+    if (!existing) return Response.json({ error: "Agent not found" }, { status: 404 });
+    await assertCanReadAgent(ctx, existing);
 
-    const relativePath = typeof req.query.path === "string" ? req.query.path : "";
+    const relativePath = ctx.query("path") ?? "";
     if (!relativePath.trim()) {
-      res.status(422).json({ error: "Query parameter 'path' is required" });
-      return;
+      return Response.json({ error: "Query parameter 'path' is required" }, { status: 422 });
     }
 
-    res.json(await instructions.readFile(existing, relativePath));
-  });
+    return Response.json(await instructions.readFile(existing, relativePath));
+  };
 
-  router.put("/agents/:id/instructions-bundle/file", validate(upsertAgentInstructionsFileSchema), async (req, res) => {
-    const id = req.params.id as string;
+  const upsertAgentInstructionsBundleFile: Handler = async (ctx) => {
+    const id = ctx.param("id")!;
     const existing = await svc.getById(id);
-    if (!existing) {
-      res.status(404).json({ error: "Agent not found" });
-      return;
-    }
-    await assertCanManageInstructionsPath(req, existing);
+    if (!existing) return Response.json({ error: "Agent not found" }, { status: 404 });
+    await assertCanManageInstructionsPath(ctx, existing);
 
-    const actor = getActorInfo(req);
-    const result = await instructions.writeFile(existing, req.body.path, req.body.content, {
-      clearLegacyPromptTemplate: req.body.clearLegacyPromptTemplate,
+    const body = await ctx.json<Record<string, unknown>>();
+    const actor = getActorInfo(ctx);
+    const result = await instructions.writeFile(existing, body.path as string, body.content as string, {
+      clearLegacyPromptTemplate: body.clearLegacyPromptTemplate as boolean | undefined,
     });
     const normalizedAdapterConfig = await secretsSvc.normalizeAdapterConfigForPersistence(
       existing.companyId,
@@ -2186,29 +2170,25 @@ export function agentRoutes(
       details: {
         path: result.file.path,
         size: result.file.size,
-        clearLegacyPromptTemplate: req.body.clearLegacyPromptTemplate === true,
+        clearLegacyPromptTemplate: body.clearLegacyPromptTemplate === true,
       },
     });
 
-    res.json(result.file);
-  });
+    return Response.json(result.file);
+  };
 
-  router.delete("/agents/:id/instructions-bundle/file", async (req, res) => {
-    const id = req.params.id as string;
+  const deleteAgentInstructionsBundleFile: Handler = async (ctx) => {
+    const id = ctx.param("id")!;
     const existing = await svc.getById(id);
-    if (!existing) {
-      res.status(404).json({ error: "Agent not found" });
-      return;
-    }
-    await assertCanManageInstructionsPath(req, existing);
+    if (!existing) return Response.json({ error: "Agent not found" }, { status: 404 });
+    await assertCanManageInstructionsPath(ctx, existing);
 
-    const relativePath = typeof req.query.path === "string" ? req.query.path : "";
+    const relativePath = ctx.query("path") ?? "";
     if (!relativePath.trim()) {
-      res.status(422).json({ error: "Query parameter 'path' is required" });
-      return;
+      return Response.json({ error: "Query parameter 'path' is required" }, { status: 422 });
     }
 
-    const actor = getActorInfo(req);
+    const actor = getActorInfo(ctx);
     const result = await instructions.deleteFile(existing, relativePath);
     await logActivity(db, {
       companyId: existing.companyId,
@@ -2219,47 +2199,47 @@ export function agentRoutes(
       action: "agent.instructions_file_deleted",
       entityType: "agent",
       entityId: existing.id,
-      details: {
-        path: relativePath,
-      },
+      details: { path: relativePath },
     });
 
-    res.json(result.bundle);
-  });
+    return Response.json(result.bundle);
+  };
 
-  router.patch("/agents/:id", validate(updateAgentSchema), async (req, res) => {
-    const id = req.params.id as string;
+  router.get("/agents/:id/instructions-bundle", expressHandler(getAgentInstructionsBundle, { db, storage: storageSentinel }));
+  router.patch("/agents/:id/instructions-bundle", validate(updateAgentInstructionsBundleSchema), expressHandler(updateAgentInstructionsBundle, { db, storage: storageSentinel }));
+  router.get("/agents/:id/instructions-bundle/file", expressHandler(getAgentInstructionsBundleFile, { db, storage: storageSentinel }));
+  router.put("/agents/:id/instructions-bundle/file", validate(upsertAgentInstructionsFileSchema), expressHandler(upsertAgentInstructionsBundleFile, { db, storage: storageSentinel }));
+  router.delete("/agents/:id/instructions-bundle/file", expressHandler(deleteAgentInstructionsBundleFile, { db, storage: storageSentinel }));
+
+  const updateAgent: Handler = async (ctx) => {
+    const id = ctx.param("id")!;
     const existing = await svc.getById(id);
-    if (!existing) {
-      res.status(404).json({ error: "Agent not found" });
-      return;
-    }
-    await assertCanUpdateAgent(req, existing);
+    if (!existing) return Response.json({ error: "Agent not found" }, { status: 404 });
+    await assertCanUpdateAgent(ctx, existing);
 
-    if (hasOwn(req.body as object, "permissions")) {
-      res.status(422).json({ error: "Use /api/agents/:id/permissions for permission changes" });
-      return;
+    const body = await ctx.json<Record<string, unknown>>();
+    if (hasOwn(body as object, "permissions")) {
+      return Response.json({ error: "Use /api/agents/:id/permissions for permission changes" }, { status: 422 });
     }
 
-    const patchData = { ...(req.body as Record<string, unknown>) };
+    const patchData = { ...body };
     const replaceAdapterConfig = patchData.replaceAdapterConfig === true;
     delete patchData.replaceAdapterConfig;
     if (hasOwn(patchData, "adapterConfig")) {
       const adapterConfig = asRecord(patchData.adapterConfig);
       if (!adapterConfig) {
-        res.status(422).json({ error: "adapterConfig must be an object" });
-        return;
+        return Response.json({ error: "adapterConfig must be an object" }, { status: 422 });
       }
-      assertNoAgentInstructionsConfigMutation(req, adapterConfig);
+      assertNoAgentInstructionsConfigMutation(ctx, adapterConfig);
       assertNoAgentHostWorkspaceCommandMutation(
-        req,
+        ctx,
         collectAgentAdapterWorkspaceCommandPaths(adapterConfig),
       );
       const changingInstructionsConfig = Object.keys(adapterConfig).some((key) =>
         KNOWN_INSTRUCTIONS_BUNDLE_KEYS.includes(key as (typeof KNOWN_INSTRUCTIONS_BUNDLE_KEYS)[number]),
       );
       if (changingInstructionsConfig) {
-        await assertCanManageInstructionsPath(req, existing);
+        await assertCanManageInstructionsPath(ctx, existing);
       }
       patchData.adapterConfig = adapterConfig;
     }
@@ -2284,7 +2264,7 @@ export function agentRoutes(
           existingAdapterConfig[key] !== undefined && requestedAdapterConfig[key] === undefined,
         )
       ) {
-        await assertCanManageInstructionsPath(req, existing);
+        await assertCanManageInstructionsPath(ctx, existing);
       }
       let rawEffectiveAdapterConfig = requestedAdapterConfig ?? existingAdapterConfig;
       if (requestedAdapterConfig && !changingAdapterType && !replaceAdapterConfig) {
@@ -2340,7 +2320,7 @@ export function agentRoutes(
       );
     }
 
-    const actor = getActorInfo(req);
+    const actor = getActorInfo(ctx);
     const agent = await svc.update(id, patchData, {
       recordRevision: {
         createdByAgentId: actor.agentId,
@@ -2348,10 +2328,7 @@ export function agentRoutes(
         source: "patch",
       },
     });
-    if (!agent) {
-      res.status(404).json({ error: "Agent not found" });
-      return;
-    }
+    if (!agent) return Response.json({ error: "Agent not found" }, { status: 404 });
 
     await logActivity(db, {
       companyId: agent.companyId,
@@ -2365,250 +2342,231 @@ export function agentRoutes(
       details: summarizeAgentUpdateDetails(patchData),
     });
 
-    res.json(agent);
-  });
+    return Response.json(agent);
+  };
 
-  router.post("/agents/:id/pause", async (req, res) => {
-    assertBoard(req);
-    const id = req.params.id as string;
-    if (!(await getAccessibleAgent(req, res, id))) {
-      return;
+  router.patch("/agents/:id", validate(updateAgentSchema), expressHandler(updateAgent, { db, storage: storageSentinel }));
+
+  const pauseAgent: Handler = async (ctx) => {
+    assertBoard(ctx);
+    const id = ctx.param("id")!;
+    if (!(await getAccessibleAgent(ctx, id))) {
+      return Response.json({ error: "Agent not found" }, { status: 404 });
     }
     const agent = await svc.pause(id);
-    if (!agent) {
-      res.status(404).json({ error: "Agent not found" });
-      return;
-    }
+    if (!agent) return Response.json({ error: "Agent not found" }, { status: 404 });
 
     await heartbeat.cancelActiveForAgent(id);
 
     await logActivity(db, {
       companyId: agent.companyId,
       actorType: "user",
-      actorId: req.actor.userId ?? "board",
+      actorId: ctx.actor?.type === "board" ? (ctx.actor.userId ?? "board") : "board",
       action: "agent.paused",
       entityType: "agent",
       entityId: agent.id,
     });
 
-    res.json(agent);
-  });
+    return Response.json(agent);
+  };
 
-  router.post("/agents/:id/resume", async (req, res) => {
-    assertBoard(req);
-    const id = req.params.id as string;
-    if (!(await getAccessibleAgent(req, res, id))) {
-      return;
+  const resumeAgent: Handler = async (ctx) => {
+    assertBoard(ctx);
+    const id = ctx.param("id")!;
+    if (!(await getAccessibleAgent(ctx, id))) {
+      return Response.json({ error: "Agent not found" }, { status: 404 });
     }
     const agent = await svc.resume(id);
-    if (!agent) {
-      res.status(404).json({ error: "Agent not found" });
-      return;
-    }
+    if (!agent) return Response.json({ error: "Agent not found" }, { status: 404 });
 
     await logActivity(db, {
       companyId: agent.companyId,
       actorType: "user",
-      actorId: req.actor.userId ?? "board",
+      actorId: ctx.actor?.type === "board" ? (ctx.actor.userId ?? "board") : "board",
       action: "agent.resumed",
       entityType: "agent",
       entityId: agent.id,
     });
 
-    res.json(agent);
-  });
+    return Response.json(agent);
+  };
 
-  router.post("/agents/:id/approve", async (req, res) => {
-    assertBoard(req);
-    const id = req.params.id as string;
-    const existing = await getAccessibleAgent(req, res, id);
-    if (!existing) {
-      return;
-    }
+  const approveAgent: Handler = async (ctx) => {
+    assertBoard(ctx);
+    const id = ctx.param("id")!;
+    const existing = await getAccessibleAgent(ctx, id);
+    if (!existing) return Response.json({ error: "Agent not found" }, { status: 404 });
     if (existing.status !== "pending_approval") {
-      res.status(409).json({ error: "Only pending approval agents can be approved" });
-      return;
+      return Response.json({ error: "Only pending approval agents can be approved" }, { status: 409 });
     }
     const approval = await svc.activatePendingApproval(id);
-    if (!approval) {
-      res.status(404).json({ error: "Agent not found" });
-      return;
-    }
+    if (!approval) return Response.json({ error: "Agent not found" }, { status: 404 });
     if (!approval.activated) {
-      res.status(409).json({ error: "Only pending approval agents can be approved" });
-      return;
+      return Response.json({ error: "Only pending approval agents can be approved" }, { status: 409 });
     }
     const { agent } = approval;
 
     await logActivity(db, {
       companyId: agent.companyId,
       actorType: "user",
-      actorId: req.actor.userId ?? "board",
+      actorId: ctx.actor?.type === "board" ? (ctx.actor.userId ?? "board") : "board",
       action: "agent.approved",
       entityType: "agent",
       entityId: agent.id,
       details: { source: "agent_detail" },
     });
 
-    res.json(agent);
-  });
+    return Response.json(agent);
+  };
 
-  router.post("/agents/:id/terminate", async (req, res) => {
-    assertBoard(req);
-    const id = req.params.id as string;
-    if (!(await getAccessibleAgent(req, res, id))) {
-      return;
+  const terminateAgent: Handler = async (ctx) => {
+    assertBoard(ctx);
+    const id = ctx.param("id")!;
+    if (!(await getAccessibleAgent(ctx, id))) {
+      return Response.json({ error: "Agent not found" }, { status: 404 });
     }
     const agent = await svc.terminate(id);
-    if (!agent) {
-      res.status(404).json({ error: "Agent not found" });
-      return;
-    }
+    if (!agent) return Response.json({ error: "Agent not found" }, { status: 404 });
 
     await heartbeat.cancelActiveForAgent(id);
 
     await logActivity(db, {
       companyId: agent.companyId,
       actorType: "user",
-      actorId: req.actor.userId ?? "board",
+      actorId: ctx.actor?.type === "board" ? (ctx.actor.userId ?? "board") : "board",
       action: "agent.terminated",
       entityType: "agent",
       entityId: agent.id,
     });
 
-    res.json(agent);
-  });
+    return Response.json(agent);
+  };
 
-  router.delete("/agents/:id", async (req, res) => {
-    assertBoard(req);
-    const id = req.params.id as string;
-    if (!(await getAccessibleAgent(req, res, id))) {
-      return;
+  router.post("/agents/:id/pause", expressHandler(pauseAgent, { db, storage: storageSentinel }));
+  router.post("/agents/:id/resume", expressHandler(resumeAgent, { db, storage: storageSentinel }));
+  router.post("/agents/:id/approve", expressHandler(approveAgent, { db, storage: storageSentinel }));
+  router.post("/agents/:id/terminate", expressHandler(terminateAgent, { db, storage: storageSentinel }));
+
+  const deleteAgent: Handler = async (ctx) => {
+    assertBoard(ctx);
+    const id = ctx.param("id")!;
+    if (!(await getAccessibleAgent(ctx, id))) {
+      return Response.json({ error: "Agent not found" }, { status: 404 });
     }
     const agent = await svc.remove(id);
-    if (!agent) {
-      res.status(404).json({ error: "Agent not found" });
-      return;
-    }
+    if (!agent) return Response.json({ error: "Agent not found" }, { status: 404 });
 
     await logActivity(db, {
       companyId: agent.companyId,
       actorType: "user",
-      actorId: req.actor.userId ?? "board",
+      actorId: ctx.actor?.type === "board" ? (ctx.actor.userId ?? "board") : "board",
       action: "agent.deleted",
       entityType: "agent",
       entityId: agent.id,
     });
 
-    res.json({ ok: true });
-  });
+    return Response.json({ ok: true });
+  };
 
-  router.get("/agents/:id/keys", async (req, res) => {
-    assertBoard(req);
-    const id = req.params.id as string;
-    const agent = await getAccessibleAgent(req, res, id);
-    if (!agent) {
-      return;
-    }
+  router.delete("/agents/:id", expressHandler(deleteAgent, { db, storage: storageSentinel }));
+
+  const listAgentKeys: Handler = async (ctx) => {
+    assertBoard(ctx);
+    const id = ctx.param("id")!;
+    const agent = await getAccessibleAgent(ctx, id);
+    if (!agent) return Response.json({ error: "Agent not found" }, { status: 404 });
     const keys = await svc.listKeys(id);
-    res.json(keys);
-  });
+    return Response.json(keys);
+  };
 
-  router.post("/agents/:id/keys", validate(createAgentKeySchema), async (req, res) => {
-    assertBoard(req);
-    const id = req.params.id as string;
-    const agent = await getAccessibleAgent(req, res, id);
-    if (!agent) {
-      return;
-    }
-    const key = await svc.createApiKey(id, req.body.name);
+  const createAgentKey: Handler = async (ctx) => {
+    assertBoard(ctx);
+    const id = ctx.param("id")!;
+    const agent = await getAccessibleAgent(ctx, id);
+    if (!agent) return Response.json({ error: "Agent not found" }, { status: 404 });
+    const body = await ctx.json<Record<string, unknown>>();
+    const key = await svc.createApiKey(id, body.name as string);
 
     await logActivity(db, {
       companyId: agent.companyId,
       actorType: "user",
-      actorId: req.actor.userId ?? "board",
+      actorId: ctx.actor?.type === "board" ? (ctx.actor.userId ?? "board") : "board",
       action: "agent.key_created",
       entityType: "agent",
       entityId: agent.id,
       details: { keyId: key.id, name: key.name },
     });
 
-    res.status(201).json(key);
-  });
+    return Response.json(key, { status: 201 });
+  };
 
-  router.delete("/agents/:id/keys/:keyId", async (req, res) => {
-    assertBoard(req);
-    const id = req.params.id as string;
-    const keyId = req.params.keyId as string;
-    const agent = await getAccessibleAgent(req, res, id);
-    if (!agent) {
-      return;
-    }
+  const revokeAgentKey: Handler = async (ctx) => {
+    assertBoard(ctx);
+    const id = ctx.param("id")!;
+    const keyId = ctx.param("keyId")!;
+    const agent = await getAccessibleAgent(ctx, id);
+    if (!agent) return Response.json({ error: "Agent not found" }, { status: 404 });
 
     const key = await svc.getKeyById(keyId);
     if (!key || key.agentId !== agent.id) {
-      res.status(404).json({ error: "Key not found" });
-      return;
+      return Response.json({ error: "Key not found" }, { status: 404 });
     }
 
     const revoked = await svc.revokeKey(agent.id, keyId);
-    if (!revoked) {
-      res.status(404).json({ error: "Key not found" });
-      return;
-    }
+    if (!revoked) return Response.json({ error: "Key not found" }, { status: 404 });
 
     await logActivity(db, {
       companyId: agent.companyId,
       actorType: "user",
-      actorId: req.actor.userId ?? "board",
+      actorId: ctx.actor?.type === "board" ? (ctx.actor.userId ?? "board") : "board",
       action: "agent.key_revoked",
       entityType: "agent",
       entityId: agent.id,
       details: { keyId: key.id, name: key.name },
     });
 
-    res.json({ ok: true });
-  });
+    return Response.json({ ok: true });
+  };
 
-  router.post("/agents/:id/wakeup", validate(wakeAgentSchema), async (req, res) => {
-    const id = req.params.id as string;
+  router.get("/agents/:id/keys", expressHandler(listAgentKeys, { db, storage: storageSentinel }));
+  router.post("/agents/:id/keys", validate(createAgentKeySchema), expressHandler(createAgentKey, { db, storage: storageSentinel }));
+  router.delete("/agents/:id/keys/:keyId", expressHandler(revokeAgentKey, { db, storage: storageSentinel }));
+
+  const wakeupAgent: Handler = async (ctx) => {
+    const id = ctx.param("id")!;
     const agent = await svc.getById(id);
-    if (!agent) {
-      res.status(404).json({ error: "Agent not found" });
-      return;
-    }
-    assertCompanyAccess(req, agent.companyId);
+    if (!agent) return Response.json({ error: "Agent not found" }, { status: 404 });
+    assertCompanyAccess(ctx, agent.companyId);
 
-    if (req.actor.type === "agent") {
-      if (req.actor.agentId !== id) {
-        res.status(403).json({ error: "Agent can only invoke itself" });
-        return;
+    if (ctx.actor?.type === "agent") {
+      if (ctx.actor.agentId !== id) {
+        return Response.json({ error: "Agent can only invoke itself" }, { status: 403 });
       }
     } else {
-      await assertBoardCanManageAgentsForCompany(req, agent.companyId);
+      await assertBoardCanManageAgentsForCompany(ctx, agent.companyId);
     }
 
+    const body = await ctx.json<Record<string, unknown>>();
     const run = await heartbeat.wakeup(id, {
-      source: req.body.source,
-      triggerDetail: req.body.triggerDetail ?? "manual",
-      reason: req.body.reason ?? null,
-      payload: req.body.payload ?? null,
-      idempotencyKey: req.body.idempotencyKey ?? null,
-      requestedByActorType: req.actor.type === "agent" ? "agent" : "user",
-      requestedByActorId: req.actor.type === "agent" ? req.actor.agentId ?? null : req.actor.userId ?? null,
+      source: body.source as "timer" | "assignment" | "on_demand" | "automation",
+      triggerDetail: ((body.triggerDetail as string | undefined) ?? "manual") as "system" | "manual" | "ping" | "callback",
+      reason: (body.reason as string | null) ?? null,
+      payload: (body.payload as Record<string, unknown> | null) ?? null,
+      idempotencyKey: (body.idempotencyKey as string | null) ?? null,
+      requestedByActorType: ctx.actor?.type === "agent" ? "agent" : "user",
+      requestedByActorId: ctx.actor?.type === "agent" ? ctx.actor.agentId ?? null : (ctx.actor?.userId ?? null),
       contextSnapshot: {
-        triggeredBy: req.actor.type,
-        actorId: req.actor.type === "agent" ? req.actor.agentId : req.actor.userId,
-        forceFreshSession: req.body.forceFreshSession === true,
+        triggeredBy: ctx.actor?.type ?? "none",
+        actorId: ctx.actor?.type === "agent" ? ctx.actor.agentId : ctx.actor?.userId,
+        forceFreshSession: body.forceFreshSession === true,
       },
     });
 
     if (!run) {
-      res.status(202).json(await buildSkippedWakeupResponse(agent, req.body.payload ?? null));
-      return;
+      return Response.json(await buildSkippedWakeupResponse(agent, (body.payload as Record<string, unknown> | null) ?? null), { status: 202 });
     }
 
-    const actor = getActorInfo(req);
+    const actor = getActorInfo(ctx);
     await logActivity(db, {
       companyId: agent.companyId,
       actorType: actor.actorType,
@@ -2621,47 +2579,40 @@ export function agentRoutes(
       details: { agentId: id },
     });
 
-    res.status(202).json(run);
-  });
+    return Response.json(run, { status: 202 });
+  };
 
-  router.post("/agents/:id/heartbeat/invoke", async (req, res) => {
-    const id = req.params.id as string;
+  const invokeHeartbeat: Handler = async (ctx) => {
+    const id = ctx.param("id")!;
     const agent = await svc.getById(id);
-    if (!agent) {
-      res.status(404).json({ error: "Agent not found" });
-      return;
-    }
-    assertCompanyAccess(req, agent.companyId);
+    if (!agent) return Response.json({ error: "Agent not found" }, { status: 404 });
+    assertCompanyAccess(ctx, agent.companyId);
 
-    if (req.actor.type === "agent") {
-      if (req.actor.agentId !== id) {
-        res.status(403).json({ error: "Agent can only invoke itself" });
-        return;
+    if (ctx.actor?.type === "agent") {
+      if (ctx.actor.agentId !== id) {
+        return Response.json({ error: "Agent can only invoke itself" }, { status: 403 });
       }
     } else {
-      await assertBoardCanManageAgentsForCompany(req, agent.companyId);
+      await assertBoardCanManageAgentsForCompany(ctx, agent.companyId);
     }
 
     const run = await heartbeat.invoke(
       id,
       "on_demand",
       {
-        triggeredBy: req.actor.type,
-        actorId: req.actor.type === "agent" ? req.actor.agentId : req.actor.userId,
+        triggeredBy: ctx.actor?.type ?? "none",
+        actorId: ctx.actor?.type === "agent" ? ctx.actor.agentId : ctx.actor?.userId,
       },
       "manual",
       {
-        actorType: req.actor.type === "agent" ? "agent" : "user",
-        actorId: req.actor.type === "agent" ? req.actor.agentId ?? null : req.actor.userId ?? null,
+        actorType: ctx.actor?.type === "agent" ? "agent" : "user",
+        actorId: ctx.actor?.type === "agent" ? ctx.actor.agentId ?? null : (ctx.actor?.userId ?? null),
       },
     );
 
-    if (!run) {
-      res.status(202).json({ status: "skipped" });
-      return;
-    }
+    if (!run) return Response.json({ status: "skipped" }, { status: 202 });
 
-    const actor = getActorInfo(req);
+    const actor = getActorInfo(ctx);
     await logActivity(db, {
       companyId: agent.companyId,
       actorType: actor.actorType,
@@ -2674,22 +2625,18 @@ export function agentRoutes(
       details: { agentId: id },
     });
 
-    res.status(202).json(run);
-  });
+    return Response.json(run, { status: 202 });
+  };
 
-  router.post("/agents/:id/claude-login", async (req, res) => {
-    assertBoard(req);
-    const id = req.params.id as string;
+  const claudeLogin: Handler = async (ctx) => {
+    assertBoard(ctx);
+    const id = ctx.param("id")!;
     const agent = await svc.getById(id);
-    if (!agent) {
-      res.status(404).json({ error: "Agent not found" });
-      return;
-    }
-    await assertBoardCanManageAgentsForCompany(req, agent.companyId);
-    assertCompanyAccess(req, agent.companyId);
+    if (!agent) return Response.json({ error: "Agent not found" }, { status: 404 });
+    await assertBoardCanManageAgentsForCompany(ctx, agent.companyId);
+    assertCompanyAccess(ctx, agent.companyId);
     if (agent.adapterType !== "claude_local") {
-      res.status(400).json({ error: "Login is only supported for claude_local agents" });
-      return;
+      return Response.json({ error: "Login is only supported for claude_local agents" }, { status: 400 });
     }
 
     const config = asRecord(agent.adapterConfig) ?? {};
@@ -2706,25 +2653,31 @@ export function agentRoutes(
       config: runtimeConfig,
     });
 
-    res.json(result);
-  });
+    return Response.json(result);
+  };
 
-  router.get("/companies/:companyId/heartbeat-runs", async (req, res) => {
-    const companyId = req.params.companyId as string;
-    assertCompanyAccess(req, companyId);
-    const agentId = req.query.agentId as string | undefined;
-    const limitParam = req.query.limit as string | undefined;
+  router.post("/agents/:id/wakeup", validate(wakeAgentSchema), expressHandler(wakeupAgent, { db, storage: storageSentinel }));
+  router.post("/agents/:id/heartbeat/invoke", expressHandler(invokeHeartbeat, { db, storage: storageSentinel }));
+  router.post("/agents/:id/claude-login", expressHandler(claudeLogin, { db, storage: storageSentinel }));
+
+  const listHeartbeatRuns: Handler = async (ctx) => {
+    const companyId = ctx.param("companyId")!;
+    assertCompanyAccess(ctx, companyId);
+    const agentId = ctx.query("agentId");
+    const limitParam = ctx.query("limit");
     const limit = limitParam ? Math.max(1, Math.min(1000, parseInt(limitParam, 10) || 200)) : undefined;
     const runs = await heartbeat.list(companyId, agentId, limit);
-    res.json(runs);
-  });
+    return Response.json(runs);
+  };
 
-  router.get("/companies/:companyId/live-runs", async (req, res) => {
-    const companyId = req.params.companyId as string;
-    assertCompanyAccess(req, companyId);
+  router.get("/companies/:companyId/heartbeat-runs", expressHandler(listHeartbeatRuns, { db, storage: storageSentinel }));
 
-    const minCount = readLiveRunsQueryInt(req.query.minCount, 50);
-    const limit = readLiveRunsQueryInt(req.query.limit, 50);
+  const listLiveRuns: Handler = async (ctx) => {
+    const companyId = ctx.param("companyId")!;
+    assertCompanyAccess(ctx, companyId);
+
+    const minCount = readLiveRunsQueryInt(ctx.query("minCount"), 50);
+    const limit = readLiveRunsQueryInt(ctx.query("limit"), 50);
 
     const columns = {
       id: heartbeatRuns.id,
@@ -2784,42 +2737,38 @@ export function agentRoutes(
         .limit(targetRunCount - liveRuns.length);
 
       const rows = [...liveRuns, ...recentRuns];
-      res.json(await Promise.all(rows.map(async (run) => ({
+      return Response.json(await Promise.all(rows.map(async (run) => ({
         ...run,
         outputSilence: await heartbeat.buildRunOutputSilence(run),
       }))));
-      return;
     }
 
-    res.json(await Promise.all(liveRuns.map(async (run) => ({
+    return Response.json(await Promise.all(liveRuns.map(async (run) => ({
       ...run,
       outputSilence: await heartbeat.buildRunOutputSilence(run),
     }))));
-  });
+  };
 
-  router.get("/heartbeat-runs/:runId", async (req, res) => {
-    const runId = req.params.runId as string;
+  const getHeartbeatRun: Handler = async (ctx) => {
+    const runId = ctx.param("runId")!;
     const run = await heartbeat.getRun(runId);
-    if (!run) {
-      res.status(404).json({ error: "Heartbeat run not found" });
-      return;
-    }
-    assertCompanyAccess(req, run.companyId);
+    if (!run) return Response.json({ error: "Heartbeat run not found" }, { status: 404 });
+    assertCompanyAccess(ctx, run.companyId);
     const retryExhaustedReason = await heartbeat.getRetryExhaustedReason(runId);
-    res.json(
+    return Response.json(
       redactCurrentUserValue(
         { ...run, retryExhaustedReason, outputSilence: await heartbeat.buildRunOutputSilence(run) },
         await getCurrentUserRedactionOptions(),
       ),
     );
-  });
+  };
 
-  router.post("/heartbeat-runs/:runId/cancel", async (req, res) => {
-    assertBoard(req);
-    const runId = req.params.runId as string;
+  const cancelHeartbeatRun: Handler = async (ctx) => {
+    assertBoard(ctx);
+    const runId = ctx.param("runId")!;
     const existing = await heartbeat.getRun(runId);
     if (existing) {
-      assertCompanyAccess(req, existing.companyId);
+      assertCompanyAccess(ctx, existing.companyId);
     }
     const run = await heartbeat.cancelRun(runId);
 
@@ -2827,7 +2776,7 @@ export function agentRoutes(
       await logActivity(db, {
         companyId: run.companyId,
         actorType: "user",
-        actorId: req.actor.userId ?? "board",
+        actorId: ctx.actor?.type === "board" ? (ctx.actor.userId ?? "board") : "board",
         action: "heartbeat.cancelled",
         entityType: "heartbeat_run",
         entityId: run.id,
@@ -2835,56 +2784,48 @@ export function agentRoutes(
       });
     }
 
-    res.json(run);
-  });
+    return Response.json(run);
+  };
 
-  router.post("/heartbeat-runs/:runId/watchdog-decisions", async (req, res) => {
-    const runId = req.params.runId as string;
+  router.get("/companies/:companyId/live-runs", expressHandler(listLiveRuns, { db, storage: storageSentinel }));
+  router.get("/heartbeat-runs/:runId", expressHandler(getHeartbeatRun, { db, storage: storageSentinel }));
+  router.post("/heartbeat-runs/:runId/cancel", expressHandler(cancelHeartbeatRun, { db, storage: storageSentinel }));
+
+  const recordWatchdogDecision: Handler = async (ctx) => {
+    const runId = ctx.param("runId")!;
     const existing = await heartbeat.getRun(runId);
-    if (!existing) {
-      res.status(404).json({ error: "Heartbeat run not found" });
-      return;
-    }
-    assertCompanyAccess(req, existing.companyId);
-    const decision = typeof req.body?.decision === "string" ? req.body.decision : "";
+    if (!existing) return Response.json({ error: "Heartbeat run not found" }, { status: 404 });
+    assertCompanyAccess(ctx, existing.companyId);
+    const body = await ctx.json<Record<string, unknown>>();
+    const decision = typeof body?.decision === "string" ? body.decision : "";
     if (!["snooze", "continue", "dismissed_false_positive"].includes(decision)) {
-      res.status(400).json({ error: "Unsupported watchdog decision" });
-      return;
+      return Response.json({ error: "Unsupported watchdog decision" }, { status: 400 });
     }
-    const evaluationIssueId = typeof req.body?.evaluationIssueId === "string" ? req.body.evaluationIssueId : null;
-    const reason = typeof req.body?.reason === "string" ? req.body.reason.slice(0, 4000) : null;
-    const snoozedUntil = decision === "snooze"
-      ? new Date(String(req.body?.snoozedUntil ?? ""))
-      : null;
+    const evaluationIssueId = typeof body?.evaluationIssueId === "string" ? body.evaluationIssueId : null;
+    const reason = typeof body?.reason === "string" ? body.reason.slice(0, 4000) : null;
+    const snoozedUntil = decision === "snooze" ? new Date(String(body?.snoozedUntil ?? "")) : null;
     if (decision === "snooze" && (!snoozedUntil || Number.isNaN(snoozedUntil.getTime()) || snoozedUntil <= new Date())) {
-      res.status(400).json({ error: "snoozedUntil must be a future ISO datetime" });
-      return;
+      return Response.json({ error: "snoozedUntil must be a future ISO datetime" }, { status: 400 });
     }
-
     const row = await recovery.recordWatchdogDecision({
       runId: existing.id,
-      actor: req.actor,
+      actor: ctx.actor ?? { type: "none" as const },
       decision: decision as "snooze" | "continue" | "dismissed_false_positive",
       evaluationIssueId,
       reason,
       snoozedUntil,
-      createdByRunId: req.actor.runId ?? null,
+      createdByRunId: ctx.actor?.runId ?? null,
     });
+    return Response.json(row);
+  };
 
-    res.json(row);
-  });
-
-  router.get("/heartbeat-runs/:runId/events", async (req, res) => {
-    const runId = req.params.runId as string;
+  const listHeartbeatRunEvents: Handler = async (ctx) => {
+    const runId = ctx.param("runId")!;
     const run = await heartbeat.getRun(runId);
-    if (!run) {
-      res.status(404).json({ error: "Heartbeat run not found" });
-      return;
-    }
-    assertCompanyAccess(req, run.companyId);
-
-    const afterSeq = Number(req.query.afterSeq ?? 0);
-    const limit = Number(req.query.limit ?? 200);
+    if (!run) return Response.json({ error: "Heartbeat run not found" }, { status: 404 });
+    assertCompanyAccess(ctx, run.companyId);
+    const afterSeq = Number(ctx.query("afterSeq") ?? 0);
+    const limit = Number(ctx.query("limit") ?? 200);
     const events = await heartbeat.listEvents(runId, Number.isFinite(afterSeq) ? afterSeq : 0, Number.isFinite(limit) ? limit : 200);
     const currentUserRedactionOptions = await getCurrentUserRedactionOptions();
     const redactedEvents = events.map((event) =>
@@ -2893,75 +2834,55 @@ export function agentRoutes(
         payload: redactEventPayload(event.payload),
       }, currentUserRedactionOptions),
     );
-    res.json(redactedEvents);
-  });
+    return Response.json(redactedEvents);
+  };
 
-  router.get("/heartbeat-runs/:runId/log", async (req, res) => {
-    const runId = req.params.runId as string;
+  const getHeartbeatRunLog: Handler = async (ctx) => {
+    const runId = ctx.param("runId")!;
     const run = await heartbeat.getRunLogAccess(runId);
-    if (!run) {
-      res.status(404).json({ error: "Heartbeat run not found" });
-      return;
-    }
-    assertCompanyAccess(req, run.companyId);
-
-    const offset = Number(req.query.offset ?? 0);
-    const limitBytes = readRunLogLimitBytes(req.query.limitBytes);
+    if (!run) return Response.json({ error: "Heartbeat run not found" }, { status: 404 });
+    assertCompanyAccess(ctx, run.companyId);
+    const offset = Number(ctx.query("offset") ?? 0);
+    const limitBytes = readRunLogLimitBytes(ctx.query("limitBytes"));
     const result = await heartbeat.readLog(run, {
       offset: Number.isFinite(offset) ? offset : 0,
       limitBytes,
     });
+    return new Response(JSON.stringify(result), { headers: { "Content-Type": "application/json", "Cache-Control": "no-cache, no-store" } });
+  };
 
-    res.set("Cache-Control", "no-cache, no-store");
-    res.json(result);
-  });
-
-  router.get("/heartbeat-runs/:runId/workspace-operations", async (req, res) => {
-    const runId = req.params.runId as string;
+  const listHeartbeatRunWorkspaceOperations: Handler = async (ctx) => {
+    const runId = ctx.param("runId")!;
     const run = await heartbeat.getRun(runId);
-    if (!run) {
-      res.status(404).json({ error: "Heartbeat run not found" });
-      return;
-    }
-    assertCompanyAccess(req, run.companyId);
-
+    if (!run) return Response.json({ error: "Heartbeat run not found" }, { status: 404 });
+    assertCompanyAccess(ctx, run.companyId);
     const context = asRecord(run.contextSnapshot);
     const executionWorkspaceId = asNonEmptyString(context?.executionWorkspaceId);
     const operations = await workspaceOperations.listForRun(runId, executionWorkspaceId);
-    res.json(redactCurrentUserValue(operations, await getCurrentUserRedactionOptions()));
-  });
+    return Response.json(redactCurrentUserValue(operations, await getCurrentUserRedactionOptions()));
+  };
 
-  router.get("/workspace-operations/:operationId/log", async (req, res) => {
-    const operationId = req.params.operationId as string;
+  const getWorkspaceOperationLog: Handler = async (ctx) => {
+    const operationId = ctx.param("operationId")!;
     const operation = await workspaceOperations.getById(operationId);
-    if (!operation) {
-      res.status(404).json({ error: "Workspace operation not found" });
-      return;
-    }
-    assertCompanyAccess(req, operation.companyId);
-
-    const offset = Number(req.query.offset ?? 0);
-    const limitBytes = readRunLogLimitBytes(req.query.limitBytes);
+    if (!operation) return Response.json({ error: "Workspace operation not found" }, { status: 404 });
+    assertCompanyAccess(ctx, operation.companyId);
+    const offset = Number(ctx.query("offset") ?? 0);
+    const limitBytes = readRunLogLimitBytes(ctx.query("limitBytes"));
     const result = await workspaceOperations.readLog(operationId, {
       offset: Number.isFinite(offset) ? offset : 0,
       limitBytes,
     });
+    return new Response(JSON.stringify(result), { headers: { "Content-Type": "application/json", "Cache-Control": "no-cache, no-store" } });
+  };
 
-    res.set("Cache-Control", "no-cache, no-store");
-    res.json(result);
-  });
-
-  router.get("/issues/:issueId/live-runs", async (req, res) => {
-    const rawId = req.params.issueId as string;
+  const listIssueLiveRuns: Handler = async (ctx) => {
+    const rawId = ctx.param("issueId")!;
     const issueSvc = issueService(db);
     const isIdentifier = /^[A-Z]+-\d+$/i.test(rawId);
     const issue = isIdentifier ? await issueSvc.getByIdentifier(rawId) : await issueSvc.getById(rawId);
-    if (!issue) {
-      res.status(404).json({ error: "Issue not found" });
-      return;
-    }
-    assertCompanyAccess(req, issue.companyId);
-
+    if (!issue) return Response.json({ error: "Issue not found" }, { status: 404 });
+    assertCompanyAccess(ctx, issue.companyId);
     const liveRuns = await db
       .select({
         id: heartbeatRuns.id,
@@ -2996,24 +2917,19 @@ export function agentRoutes(
         ),
       )
       .orderBy(desc(heartbeatRuns.createdAt));
-
-    res.json(await Promise.all(liveRuns.map(async (run) => ({
+    return Response.json(await Promise.all(liveRuns.map(async (run) => ({
       ...run,
       outputSilence: await heartbeat.buildRunOutputSilence({ ...run, companyId: issue.companyId }),
     }))));
-  });
+  };
 
-  router.get("/issues/:issueId/active-run", async (req, res) => {
-    const rawId = req.params.issueId as string;
+  const getIssueActiveRun: Handler = async (ctx) => {
+    const rawId = ctx.param("issueId")!;
     const issueSvc = issueService(db);
     const isIdentifier = /^[A-Z]+-\d+$/i.test(rawId);
     const issue = isIdentifier ? await issueSvc.getByIdentifier(rawId) : await issueSvc.getById(rawId);
-    if (!issue) {
-      res.status(404).json({ error: "Issue not found" });
-      return;
-    }
-    assertCompanyAccess(req, issue.companyId);
-
+    if (!issue) return Response.json({ error: "Issue not found" }, { status: 404 });
+    assertCompanyAccess(ctx, issue.companyId);
     let run = issue.executionRunId ? await heartbeat.getRunIssueSummary(issue.executionRunId) : null;
     if (
       run &&
@@ -3024,7 +2940,6 @@ export function agentRoutes(
     ) {
       run = null;
     }
-
     if (!run && issue.assigneeAgentId && issue.status === "in_progress") {
       const candidateRun = await heartbeat.getActiveRunIssueSummaryForAgent(issue.assigneeAgentId);
       const candidateIssueId = asNonEmptyString(candidateRun?.issueId);
@@ -3032,25 +2947,25 @@ export function agentRoutes(
         run = candidateRun;
       }
     }
-    if (!run) {
-      res.json(null);
-      return;
-    }
-
+    if (!run) return Response.json(null);
     const agent = await svc.getById(run.agentId);
-    if (!agent) {
-      res.json(null);
-      return;
-    }
-
-    res.json({
+    if (!agent) return Response.json(null);
+    return Response.json({
       ...run,
       agentId: agent.id,
       agentName: agent.name,
       adapterType: agent.adapterType,
       outputSilence: await heartbeat.buildRunOutputSilence({ ...run, companyId: issue.companyId }),
     });
-  });
+  };
+
+  router.post("/heartbeat-runs/:runId/watchdog-decisions", expressHandler(recordWatchdogDecision, { db, storage: storageSentinel }));
+  router.get("/heartbeat-runs/:runId/events", expressHandler(listHeartbeatRunEvents, { db, storage: storageSentinel }));
+  router.get("/heartbeat-runs/:runId/log", expressHandler(getHeartbeatRunLog, { db, storage: storageSentinel }));
+  router.get("/heartbeat-runs/:runId/workspace-operations", expressHandler(listHeartbeatRunWorkspaceOperations, { db, storage: storageSentinel }));
+  router.get("/workspace-operations/:operationId/log", expressHandler(getWorkspaceOperationLog, { db, storage: storageSentinel }));
+  router.get("/issues/:issueId/live-runs", expressHandler(listIssueLiveRuns, { db, storage: storageSentinel }));
+  router.get("/issues/:issueId/active-run", expressHandler(getIssueActiveRun, { db, storage: storageSentinel }));
 
   return router;
 }

@@ -1,4 +1,4 @@
-import type { RequestHandler } from "express";
+import type { Request, Response, NextFunction, RequestHandler } from "express";
 import type { Db } from "@paperclipai/db";
 import type { StorageService } from "../storage/types.js";
 import type { ActorContext, ActorMembership, Handler, RequestCtx } from "./types.js";
@@ -7,6 +7,9 @@ export interface AdapterDeps {
   db: Db;
   storage: StorageService;
 }
+
+/** Express RequestHandler tagged with the original transport-agnostic Handler. */
+export type TaggedHandler = RequestHandler & { __handler: Handler };
 
 /**
  * Wraps a transport-agnostic {@link Handler} as an Express {@link RequestHandler}.
@@ -19,9 +22,11 @@ export interface AdapterDeps {
  *   simple null-check rather than inspecting the string.
  * - The Web API `Response` returned by the handler is forwarded to Express `res`
  *   by copying status, headers, and body.
+ * - The returned wrapper is tagged with `__handler` pointing to the original
+ *   `Handler` so Cloudflare Workers can extract it via the express-router-bridge.
  */
-export function expressHandler(handler: Handler, deps: AdapterDeps): RequestHandler {
-  return async (req, res, next) => {
+export function expressHandler(handler: Handler, deps: AdapterDeps): TaggedHandler {
+  const wrapper = async (req: Request, res: Response, next: NextFunction) => {
     try {
       // Build the base URL from the incoming request. Express provides
       // req.hostname and req.originalUrl which together give us a fully-formed
@@ -125,4 +130,6 @@ export function expressHandler(handler: Handler, deps: AdapterDeps): RequestHand
       next(err);
     }
   };
+  (wrapper as TaggedHandler).__handler = handler;
+  return wrapper as TaggedHandler;
 }
