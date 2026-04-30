@@ -10,6 +10,7 @@
     "dev:list": "pnpm --filter @paperclipai/server exec tsx ../scripts/dev-service.ts list",
     "dev:stop": "pnpm --filter @paperclipai/server exec tsx ../scripts/dev-service.ts stop",
     "dev:server": "pnpm --filter @paperclipai/server dev",
+    "dev:cf": "pnpm --filter @paperclipai/deploy-cloudflare dev",
     "dev:ui": "pnpm --filter @paperclipai/ui dev",
     "storybook": "pnpm --filter @paperclipai/ui storybook",
     "build-storybook": "pnpm --filter @paperclipai/ui build-storybook",

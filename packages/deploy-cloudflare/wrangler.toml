@@ -14,13 +14,12 @@
 name = "paperclip-api"
 compatibility_date = "2024-09-23"
 compatibility_flags = ["nodejs_compat"]
-main = "src/worker/api.ts"
+main = "dist/worker.js"
 
 # ---------------------------------------------------------------------------
 # Pages — serves the React UI build from ui/dist
 # ---------------------------------------------------------------------------
-[pages_build_output_dir]
-path = "../../ui/dist"
+pages_build_output_dir = "../../ui/dist"
 
 # ---------------------------------------------------------------------------
 # Variables (non-secret; override secrets via `wrangler secret put`)
@@ -53,6 +52,7 @@ id = "FILL_IN_AFTER_DEPLOY"
 [[hyperdrive]]
 binding = "HYPERDRIVE"
 id = "FILL_IN_AFTER_DEPLOY"
+localConnectionString = "postgres://paperclip:paperclip@127.0.0.1:54329/paperclip"
 
 # ---------------------------------------------------------------------------
 # Queues — background fanout (cost rollups, activity log flush, plugin jobs)

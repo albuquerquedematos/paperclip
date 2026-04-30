@@ -4,6 +4,11 @@
   "private": true,
   "type": "module",
   "main": "./src/boot.ts",
+  "scripts": {
+    "build": "node build-worker.mjs",
+    "dev": "node build-worker.mjs && wrangler dev --no-bundle --local",
+    "deploy": "node build-worker.mjs && wrangler deploy --no-bundle"
+  },
   "dependencies": {
     "@paperclipai/db": "workspace:*",
     "@paperclipai/shared": "workspace:*",
