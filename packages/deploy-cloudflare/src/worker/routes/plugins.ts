@@ -169,7 +169,22 @@ export function registerPluginRoutes(app: Hono<{ Bindings: Env }>): void {
     });
     if (!actor) return c.json({ error: "Unauthorized" }, 401);
 
-    const resp = await proxySidecar(c.env, "/api/plugins/install", c.req.raw);
+    // CF has no local filesystem, so isLocalPath is never meaningful here.
+    // If the UI sent isLocalPath: true with an npm package name (e.g. from
+    // the examples list), rewrite the body to use npm install semantics.
+    const body = await c.req.json<{ packageName?: string; version?: string; isLocalPath?: boolean }>();
+    const isNpmPackage = !body.isLocalPath || !body.packageName?.startsWith("/");
+    const rewritten = isNpmPackage
+      ? { packageName: body.packageName, version: body.version, isLocalPath: false }
+      : body;
+
+    const resp = await proxySidecar(c.env, "/api/plugins/install",
+      new Request(c.req.url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(rewritten),
+      }),
+    );
     return new Response(resp.body, {
       status: resp.status,
       headers: { "Content-Type": "application/json" },
