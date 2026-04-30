@@ -80,6 +80,7 @@ interface MockRes {
   _headers: Headers;
   _settled: boolean;
   _resolve: (r: Response) => void;
+  _reject: (e: unknown) => void;
   promise: Promise<Response>;
   status(code: number): this;
   json(data: unknown): this;
@@ -91,13 +92,15 @@ interface MockRes {
 
 function createMockRes(): MockRes {
   let _resolve!: (r: Response) => void;
-  const promise = new Promise<Response>((r) => { _resolve = r; });
+  let _rejectInner!: (e: unknown) => void;
+  const promise = new Promise<Response>((res, rej) => { _resolve = res; _rejectInner = rej; });
 
   const res: MockRes = {
     _status: 200,
     _headers: new Headers(),
     _settled: false,
     _resolve,
+    _reject(e: unknown) { if (!this._settled) { this._settled = true; _rejectInner(e); } },
     promise,
     status(code) { this._status = code; return this; },
     json(data) {
@@ -144,22 +147,26 @@ function createMockRes(): MockRes {
 // Middleware chain runner
 // ---------------------------------------------------------------------------
 
-async function runChain(
+function runChain(
   req: Record<string, unknown>,
   res: MockRes,
   handlers: HandlerLayer[],
-): Promise<void> {
+): void {
   let i = 0;
-  const next = async (err?: unknown): Promise<void> => {
+  // next is synchronous: each handler is fired as a fire-and-forget Promise,
+  // with errors redirected to res._reject so res.promise always settles.
+  const next = (err?: unknown): void => {
     if (err) {
-      // Propagate errors thrown by middleware (e.g. validate() on bad input)
-      throw err instanceof Error ? err : new Error(String(err));
+      res._reject(err instanceof Error ? err : new Error(String(err)));
+      return;
     }
     if (i >= handlers.length) return;
     const fn = handlers[i++].handle;
-    await (fn as (req: unknown, res: unknown, next: unknown) => Promise<void>)(req, res, next);
+    Promise.resolve(
+      (fn as (req: unknown, res: unknown, next: unknown) => unknown)(req, res, next),
+    ).catch((e: unknown) => res._reject(e));
   };
-  await next();
+  next();
 }
 
 // ---------------------------------------------------------------------------
@@ -216,8 +223,12 @@ export function bridgeExpressHandlers(
     const req = buildMockReq(ctx, params, body);
     const res = createMockRes();
 
+    // runChain fires the handler chain; errors (including from async handlers
+    // invoked via synchronous next() calls) are redirected to res._reject so
+    // res.promise always settles — either with the response or an error.
+    runChain(req, res, handlers);
+
     try {
-      await runChain(req, res, handlers);
       return await res.promise;
     } catch (err) {
       if (err instanceof HttpError) {
