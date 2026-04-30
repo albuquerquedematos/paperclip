@@ -9,7 +9,7 @@
  */
 
 import type { Hono } from "hono";
-import { and, asc, desc, eq, inArray } from "drizzle-orm";
+import { and, asc, desc, eq, inArray, ne } from "drizzle-orm";
 import {
   agents,
   authUsers,
@@ -17,9 +17,11 @@ import {
   companySkills,
   invites,
   joinRequests,
+  plugins,
 } from "@paperclipai/db";
 import { collapseDuplicatePendingHumanJoinRequests } from "../../../../server/src/lib/join-request-dedupe.js";
 import { resolveHumanInviteRole } from "../../../../server/src/services/company-member-roles.js";
+import { getPluginUiContributionMetadata } from "../../../../server/src/services/plugin-loader.js";
 import { createHyperdriveDb } from "../db/hyperdrive.js";
 import type { Env } from "./env.js";
 
@@ -87,11 +89,46 @@ export function registerCfExtraRoutes(app: Hono<{ Bindings: Env }>): void {
   app.get("/api/adapters", (c) => c.json([]));
 
   // -------------------------------------------------------------------------
-  // GET /api/plugins — no plugin registry in CF Workers
-  // GET /api/plugins/ui-contributions — no plugin registry in CF Workers
+  // GET /api/plugins — list installed plugins from DB (registry state comes
+  // from manifestJson stored at install time; worker processes not available)
+  // GET /api/plugins/ui-contributions — derive from manifestJson in DB
   // -------------------------------------------------------------------------
-  app.get("/api/plugins", (c) => c.json([]));
-  app.get("/api/plugins/ui-contributions", (c) => c.json([]));
+  app.get("/api/plugins", async (c) => {
+    const db = createHyperdriveDb(c.env.HYPERDRIVE);
+    const rows = await db
+      .select()
+      .from(plugins)
+      .where(ne(plugins.status, "uninstalled"))
+      .orderBy(asc(plugins.installOrder));
+    return c.json(rows);
+  });
+
+  app.get("/api/plugins/ui-contributions", async (c) => {
+    const db = createHyperdriveDb(c.env.HYPERDRIVE);
+    const rows = await db
+      .select()
+      .from(plugins)
+      .where(ne(plugins.status, "uninstalled"))
+      .orderBy(asc(plugins.installOrder));
+
+    const contributions = rows.flatMap((plugin) => {
+      const manifest = plugin.manifestJson;
+      if (!manifest) return [];
+      const uiMetadata = getPluginUiContributionMetadata(manifest);
+      if (!uiMetadata) return [];
+      return [{
+        pluginId: plugin.id,
+        pluginKey: plugin.pluginKey,
+        displayName: manifest.displayName,
+        version: plugin.version,
+        updatedAt: plugin.updatedAt.toISOString(),
+        uiEntryFile: uiMetadata.uiEntryFile,
+        slots: uiMetadata.slots,
+        launchers: uiMetadata.launchers,
+      }];
+    });
+    return c.json(contributions);
+  });
 
   // -------------------------------------------------------------------------
   // GET /api/companies/:companyId/skills
