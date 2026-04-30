@@ -22,6 +22,9 @@ import {
 import { collapseDuplicatePendingHumanJoinRequests } from "../../../../server/src/lib/join-request-dedupe.js";
 import { resolveHumanInviteRole } from "../../../../server/src/services/company-member-roles.js";
 import { getPluginUiContributionMetadata } from "../../../../server/src/services/plugin-loader.js";
+import { listServerAdapters, isOverridePaused } from "../../../../server/src/adapters/registry.js";
+import { BUILTIN_ADAPTER_TYPES } from "../../../../server/src/adapters/builtin-adapter-types.js";
+import { getDisabledAdapterTypes } from "../../../../server/src/services/adapter-plugin-store.js";
 import { createHyperdriveDb } from "../db/hyperdrive.js";
 import type { Env } from "./env.js";
 
@@ -84,9 +87,33 @@ function deriveSkillSource(skill: {
 
 export function registerCfExtraRoutes(app: Hono<{ Bindings: Env }>): void {
   // -------------------------------------------------------------------------
-  // GET /api/adapters — no adapter registry in CF Workers
+  // GET /api/adapters — built-in adapters from registry (external adapters
+  // require FS-backed plugin store not available in CF; built-ins always load)
   // -------------------------------------------------------------------------
-  app.get("/api/adapters", (c) => c.json([]));
+  app.get("/api/adapters", (c) => {
+    const adapters = listServerAdapters();
+    const disabledSet = new Set(getDisabledAdapterTypes());
+    const result = adapters
+      .map((adapter) => ({
+        type: adapter.type,
+        label: adapter.type,
+        source: "builtin" as const,
+        modelsCount: (adapter.models ?? []).length,
+        loaded: true,
+        disabled: disabledSet.has(adapter.type),
+        capabilities: {
+          supportsInstructionsBundle: adapter.supportsInstructionsBundle ?? false,
+          supportsSkills: Boolean(adapter.listSkills || adapter.syncSkills),
+          supportsLocalAgentJwt: adapter.supportsLocalAgentJwt ?? false,
+          requiresMaterializedRuntimeSkills: adapter.requiresMaterializedRuntimeSkills ?? false,
+        },
+        overridePaused: BUILTIN_ADAPTER_TYPES.has(adapter.type)
+          ? isOverridePaused(adapter.type)
+          : undefined,
+      }))
+      .sort((a, b) => a.type.localeCompare(b.type));
+    return c.json(result);
+  });
 
   // -------------------------------------------------------------------------
   // GET /api/plugins — list installed plugins from DB (registry state comes
