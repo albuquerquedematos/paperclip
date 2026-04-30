@@ -45,10 +45,13 @@ export type MigrationState =
       reason: "no-migration-journal-empty-db" | "no-migration-journal-non-empty-db" | "pending-migrations";
     };
 
-export function createDb(url: string) {
+export function createPostgresDb(url: string) {
   const sql = postgres(url);
   return drizzlePg(sql, { schema });
 }
+
+/** @deprecated Use createPostgresDb */
+export const createDb = createPostgresDb;
 
 export async function getPostgresDataDirectory(url: string): Promise<string | null> {
   const sql = createUtilitySql(url);

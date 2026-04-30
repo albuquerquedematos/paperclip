@@ -1,3 +1,10 @@
+// TODO(cloudflare): plugin-runtime-sandbox.ts uses node:fs (existsSync,
+// readFileSync, realpathSync) to load plugin entrypoint modules from the
+// local filesystem via a vm-based sandbox at plugin-load time (which is
+// triggered by request flows). For Workers compatibility plugin code must be
+// bundled into Worker scripts or uploaded as Worker modules rather than
+// loaded from local disk via vm.Script. The entire vm-based sandboxing
+// approach is not available in the Workers runtime.
 import { existsSync, readFileSync, realpathSync } from "node:fs";
 import path from "node:path";
 import vm from "node:vm";

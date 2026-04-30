@@ -1,3 +1,12 @@
+// TODO(cloudflare): workspace-operation-log-store.ts implements a
+// local-file-backed workspace operation log store using node:fs
+// (createReadStream, writeFile, appendFile, stat, mkdir). Operation logs are
+// written to ~/.paperclip/data/workspace-operation-logs/ during workspace
+// operations and read back via byte-range streaming. For Workers compatibility
+// this must be replaced with an R2-backed implementation (multipart upload or
+// Durable Object buffering), analogous to the run-log-store migration. The
+// WorkspaceOperationLogStore interface is already abstract so only this
+// implementation module and getWorkspaceOperationLogStore() need to change.
 import { createReadStream, promises as fs } from "node:fs";
 import path from "node:path";
 import { createHash } from "node:crypto";

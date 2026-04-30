@@ -24,6 +24,16 @@
 
 <br/>
 
+## Deploy to Cloudflare
+
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/YOUR_FORK/paperclip)
+
+Click the button above to deploy Paperclip to your own Cloudflare account in one click. Cloudflare provisions all resources (Workers, R2, KV, Durable Objects, Queues, Workflows). After ~2 minutes, visit `/setup` on your deployment to configure secrets and create your first admin account.
+
+See [doc/CLOUDFLARE.md](doc/CLOUDFLARE.md) for the full architecture and [packages/deploy-cloudflare/deploy/post-deploy-setup.md](packages/deploy-cloudflare/deploy/post-deploy-setup.md) for step-by-step operator instructions.
+
+<br/>
+
 ## What is Paperclip?
 
 # Open-source orchestration for zero-human companies

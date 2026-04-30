@@ -136,6 +136,10 @@ function buildCliAuthApprovalPath(challengeId: string, token: string) {
   return `/cli-auth/${challengeId}?token=${encodeURIComponent(token)}`;
 }
 
+// TODO(cloudflare): readSkillMarkdown reads bundled SKILL.md files from the
+// local filesystem at request time. For Workers compatibility these static
+// assets must be inlined as TypeScript constants or served from R2/KV at
+// deploy time instead of reading from node:fs at runtime.
 function readSkillMarkdown(skillName: string): string | null {
   const normalized = skillName.trim().toLowerCase();
   if (
@@ -162,6 +166,14 @@ function readSkillMarkdown(skillName: string): string | null {
   return null;
 }
 
+// TODO(cloudflare): resolvePaperclipSkillsDir and listAvailableSkills use
+// node:fs (statSync, readdirSync, readFileSync) to scan ~/.claude/skills/ and
+// the bundled skills directory at request time. For Workers compatibility:
+// - Bundled Paperclip skills must be inlined as bundled assets or pre-loaded
+//   into R2/KV at deploy time.
+// - User-local skills (~/.claude/skills/) are inherently host-specific and
+//   cannot be served from a stateless Worker; this surface requires rethinking
+//   for the Workers deployment model.
 /** Resolve the Paperclip repo skills directory (built-in / managed skills). */
 function resolvePaperclipSkillsDir(): string | null {
   const moduleDir = path.dirname(fileURLToPath(import.meta.url));

@@ -66,3 +66,7 @@ export type {
   SandboxCallbackBridgeWorkerHandle,
   StartedSandboxCallbackBridgeServer,
 } from "./sandbox-callback-bridge.js";
+// CommandExecutor types are exported here for type-only consumers.
+// Runtime implementations (createLocalCommandExecutor) are available via the
+// dedicated server-side subpath: @paperclipai/adapter-utils/local-executor
+export type { CommandExecutorInput, CommandExecutor } from "./executor.js";

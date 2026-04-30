@@ -1,3 +1,10 @@
+// TODO(cloudflare): plugin-database.ts reads SQL migration files from a plugin
+// package's migrations directory on the local filesystem using node:fs/promises
+// (readdir, readFile) inside applyMigrations(). This is called from plugin
+// setup flows that run as part of request processing. For Workers compatibility
+// plugin SQL migration files must be bundled into the plugin package as Worker
+// assets or uploaded to R2/KV at install time so that applyMigrations() can
+// fetch them without accessing the local filesystem.
 import { createHash } from "node:crypto";
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";

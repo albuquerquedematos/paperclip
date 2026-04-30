@@ -1,5 +1,6 @@
 export {
   createDb,
+  createPostgresDb,
   getPostgresDataDirectory,
   ensurePostgresDatabase,
   inspectMigrations,

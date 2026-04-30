@@ -1,3 +1,10 @@
+// TODO(cloudflare): agent-instructions.ts manages a per-agent directory tree
+// of Markdown instruction files entirely through node:fs/promises (readdir,
+// stat, readFile, writeFile, mkdir, rm). All of these operations touch the
+// local host filesystem at request time. For Workers compatibility this entire
+// service must be ported to a storage abstraction backed by R2 (or D1 for
+// small files), with directory listing replaced by a database-tracked file
+// inventory and path-based operations replaced by object-key operations.
 import fs from "node:fs/promises";
 import path from "node:path";
 import { notFound, unprocessable } from "../errors.js";

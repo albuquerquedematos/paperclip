@@ -16,6 +16,12 @@ function resolveServerLogDir(): string {
   return resolveDefaultLogsDir();
 }
 
+// TODO(cloudflare): The pino transport writes structured logs to a local file
+// (server.log) using node:fs. mkdirSync runs at module load and the file
+// transport runs on every logged request. For Workers compatibility the file
+// transport must be removed or replaced with a Workers-compatible sink
+// (e.g., Logpush / tail workers / console-only transport). mkdirSync is also
+// unavailable in the Workers runtime.
 const logDir = resolveServerLogDir();
 fs.mkdirSync(logDir, { recursive: true });
 

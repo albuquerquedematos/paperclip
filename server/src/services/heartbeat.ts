@@ -1,3 +1,9 @@
+// TODO(cloudflare): heartbeat.ts uses node:fs/promises (mkdir, stat, readdir,
+// rm) to manage agent workspace directories on the local host filesystem during
+// the heartbeat tick. These calls provision git checkout directories and check
+// whether working directories exist. For Workers compatibility workspace
+// provisioning must be delegated to a separate sidecar process or an external
+// sandbox API; the Worker itself cannot perform host filesystem operations.
 import fs from "node:fs/promises";
 import path from "node:path";
 import { execFile as execFileCallback } from "node:child_process";

@@ -20,6 +20,16 @@
  * 4. **Shutdown** — `shutdownAll()` gracefully stops all active workers
  *    and unregisters runtime hooks.
  *
+ * TODO(cloudflare): plugin-loader.ts uses node:fs extensively (existsSync,
+ * readdir, readFile, rm, stat) to discover, install, and load plugin packages
+ * from the local filesystem. It also resolves module paths through node_modules
+ * and spawns worker processes. For Workers compatibility:
+ *   - Plugin discovery and manifest loading must be database-driven (plugins
+ *     registered in DB at install time, manifests stored as JSON columns).
+ *   - Plugin installation (npm install / local path) cannot run in a Worker.
+ *   - Worker process spawning must be replaced by a sidecar or Durable Object.
+ *   - All direct fs probes must be replaced by DB or R2 lookups.
+ *
  * @see PLUGIN_SPEC.md §8 — Plugin Discovery
  * @see PLUGIN_SPEC.md §10 — Package Contract
  * @see PLUGIN_SPEC.md §12 — Process Model

@@ -11,6 +11,13 @@
  * backend across platforms and avoid exhausting file descriptors as quickly in
  * large dev workspaces.
  *
+ * TODO(cloudflare): plugin-dev-watcher.ts uses node:fs (existsSync,
+ * readFileSync, readdirSync, statSync) and chokidar to watch local plugin
+ * package directories for hot-reload. This is a dev-only feature that is
+ * inherently tied to the local filesystem and is not applicable to a Workers
+ * deployment. This entire module should be disabled/excluded for the Workers
+ * build target.
+ *
  * @see PLUGIN_SPEC.md §27.2 — Local Development Workflow
  */
 import chokidar, { type FSWatcher } from "chokidar";

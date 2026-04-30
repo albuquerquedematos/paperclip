@@ -44,6 +44,7 @@ import { getBoardClaimWarningUrl, initializeBoardClaimChallenge } from "./board-
 import { maybePersistWorktreeRuntimePorts } from "./worktree-config.js";
 import { initTelemetry, getTelemetryClient } from "./telemetry.js";
 import { conflict } from "./errors.js";
+import { createNodeScheduler } from "./scheduler/index.js";
 import type {
   InstanceDatabaseBackupRunResult,
   InstanceDatabaseBackupTrigger,
@@ -715,7 +716,8 @@ export async function startServer(): Promise<StartedServer> {
       .catch((err) => {
         logger.error({ err }, "startup heartbeat recovery failed");
       });
-    setInterval(() => {
+    const scheduler = createNodeScheduler();
+    scheduler.every("heartbeat", config.heartbeatSchedulerIntervalMs, async () => {
       void heartbeat
         .tickTimers(new Date())
         .then((result) => {
@@ -737,7 +739,7 @@ export async function startServer(): Promise<StartedServer> {
         .catch((err) => {
           logger.error({ err }, "routine scheduler tick failed");
         });
-  
+
       // Periodically reap orphaned runs (5-min staleness threshold) and make sure
       // persisted queued work is still being driven forward.
       void heartbeat
@@ -780,7 +782,7 @@ export async function startServer(): Promise<StartedServer> {
         .catch((err) => {
           logger.error({ err }, "periodic heartbeat recovery failed");
         });
-    }, config.heartbeatSchedulerIntervalMs);
+    });
   }
   
   if (config.databaseBackupEnabled) {
@@ -794,11 +796,12 @@ export async function startServer(): Promise<StartedServer> {
       },
       "Automatic database backups enabled",
     );
-    setInterval(() => {
-      void runServerDatabaseBackup("scheduled").catch(() => {
+    const backupScheduler = createNodeScheduler();
+    backupScheduler.every("database-backup", backupIntervalMs, async () => {
+      await runServerDatabaseBackup("scheduled").catch(() => {
         // runServerDatabaseBackup already logs the failure with context.
       });
-    }, backupIntervalMs);
+    });
   }
   
   // Wait for external adapters to finish loading before accepting requests.

@@ -1,0 +1,17 @@
+{
+  "name": "@paperclipai/deploy-cloudflare",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/boot.ts",
+  "dependencies": {
+    "hono": "^4.0.0",
+    "@paperclipai/shared": "workspace:*",
+    "@paperclipai/db": "workspace:*"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.0.0",
+    "typescript": "^5.0.0",
+    "wrangler": "^3.0.0"
+  }
+}

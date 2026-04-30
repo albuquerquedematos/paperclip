@@ -1,0 +1,115 @@
+# =============================================================================
+# Paperclip — Cloudflare Workers deployment configuration
+#
+# After running `wrangler deploy` for the first time, fill in the placeholder
+# IDs that Cloudflare generates (search for "FILL_IN_AFTER_DEPLOY").
+#
+# Quick start:
+#   1. wrangler deploy
+#   2. wrangler hyperdrive create paperclip-hyperdrive --connection-string="<neon-url>"
+#      Then paste the returned ID into [hyperdrive] binding below.
+#   3. Open https://<your-worker>.workers.dev/setup to complete first-run setup.
+# =============================================================================
+
+name = "paperclip-api"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+main = "src/worker/api.ts"
+
+# ---------------------------------------------------------------------------
+# Pages — serves the React UI build from ui/dist
+# ---------------------------------------------------------------------------
+[pages_build_output_dir]
+path = "../../ui/dist"
+
+# ---------------------------------------------------------------------------
+# Variables (non-secret; override secrets via `wrangler secret put`)
+# ---------------------------------------------------------------------------
+[vars]
+DEPLOYMENT_PLATFORM = "cloudflare"
+DEPLOYMENT_MODE = "authenticated"
+DEPLOYMENT_EXPOSURE = "public"
+
+# ---------------------------------------------------------------------------
+# R2 object storage — artifacts, skill bundles, attachments, DB backups
+# ---------------------------------------------------------------------------
+[[r2_buckets]]
+binding = "PAPERCLIP_STORAGE"
+bucket_name = "paperclip-storage"
+# preview_bucket_name = "paperclip-storage-preview"
+
+# ---------------------------------------------------------------------------
+# KV — sessions cache, hot config, first-run setup flag
+# ---------------------------------------------------------------------------
+[[kv_namespaces]]
+binding = "PAPERCLIP_KV"
+id = "FILL_IN_AFTER_DEPLOY"
+# preview_id = "FILL_IN_AFTER_DEPLOY_PREVIEW"
+
+# ---------------------------------------------------------------------------
+# Hyperdrive — Phase 1: wraps Neon/Postgres for low-latency DB access
+# After deploying: wrangler hyperdrive create paperclip-hyperdrive --connection-string="<neon-url>"
+# ---------------------------------------------------------------------------
+[[hyperdrive]]
+binding = "HYPERDRIVE"
+id = "FILL_IN_AFTER_DEPLOY"
+
+# ---------------------------------------------------------------------------
+# Queues — background fanout (cost rollups, activity log flush, plugin jobs)
+# ---------------------------------------------------------------------------
+[[queues.producers]]
+binding = "PAPERCLIP_QUEUE"
+queue = "paperclip-jobs"
+
+[[queues.consumers]]
+queue = "paperclip-jobs"
+max_batch_size = 10
+max_batch_timeout = 5
+max_retries = 3
+dead_letter_queue = "paperclip-jobs-dlq"
+
+# ---------------------------------------------------------------------------
+# Durable Objects — per-task state, per-agent-run state, scheduler alarms
+# ---------------------------------------------------------------------------
+[[durable_objects.bindings]]
+name = "TASK_DO"
+class_name = "TaskDO"
+
+[[durable_objects.bindings]]
+name = "AGENT_RUN_DO"
+class_name = "AgentRunDO"
+
+[[durable_objects.bindings]]
+name = "SCHEDULER_DO"
+class_name = "SchedulerDO"
+
+# DO migrations — bump new_classes when adding a new DO class
+[[migrations]]
+tag = "v1"
+new_classes = ["TaskDO", "AgentRunDO", "SchedulerDO"]
+
+# ---------------------------------------------------------------------------
+# Workflows — checkpointed multi-step agent execution
+# ---------------------------------------------------------------------------
+[[workflows]]
+binding = "HEARTBEAT_WORKFLOW"
+name = "heartbeat-workflow"
+class_name = "HeartbeatWorkflow"
+script_name = "paperclip-api"
+
+[[workflows]]
+binding = "PLUGIN_DISPATCH_WORKFLOW"
+name = "plugin-dispatch-workflow"
+class_name = "PluginDispatchWorkflow"
+script_name = "paperclip-api"
+
+# ---------------------------------------------------------------------------
+# Cron triggers — fire heartbeat sweep, budget checks, DB backup
+# Adjust intervals to taste; avoid high-frequency triggers (see CLOUDFLARE.md §10)
+# ---------------------------------------------------------------------------
+[triggers]
+crons = [
+  "*/5 * * * *",   # heartbeat sweep every 5 minutes
+  "0 * * * *",     # budget threshold check every hour
+  "0 3 * * *",     # DB backup daily at 03:00 UTC
+]

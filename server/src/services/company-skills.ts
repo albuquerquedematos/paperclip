@@ -1,3 +1,16 @@
+// TODO(cloudflare): company-skills.ts reads and writes skill Markdown files
+// directly on the local host filesystem using node:fs/promises (readdir, stat,
+// readFile, writeFile, mkdir, rm). Operations include:
+//   - walkLocalFiles / collectLocalSkillInventory: directory traversal for
+//     skill file discovery (local_path and catalog source types)
+//   - readFile: reads SKILL.md and supporting files at request time
+//   - createLocalSkill / updateFile: writes skill Markdown to disk
+//   - materializeCatalogSkillFiles / materializeRuntimeSkillFiles: copies skill
+//     files into a runtime-materialized directory tree
+// For Workers compatibility the managed skill storage must migrate to R2 (file
+// contents keyed by companyId/skillId/relativePath), with directory listing
+// replaced by a database-backed file inventory. Local-path skills referencing
+// host directories cannot be supported in a stateless Worker deployment.
 import { createHash } from "node:crypto";
 import { promises as fs } from "node:fs";
 import path from "node:path";

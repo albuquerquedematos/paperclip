@@ -9,6 +9,15 @@
  * the first read. Writes invalidate the cache so the next read picks up
  * the new state without a redundant disk round-trip.
  *
+ * TODO(cloudflare): adapter-plugin-store.ts uses node:fs (mkdirSync,
+ * existsSync, readFileSync, writeFileSync) to maintain a JSON registry file
+ * at ~/.paperclip/adapter-plugins/. This is called from routes at request
+ * time (addAdapterPlugin, removeAdapterPlugin, setAdapterDisabled). For
+ * Workers compatibility the adapter registry must be moved to a D1 or KV
+ * store. The concept of locally installed npm packages is also inherently
+ * host-filesystem-dependent and requires a broader architectural change for
+ * the Workers deployment model.
+ *
  * @module server/services/adapter-plugin-store
  */
 

@@ -5,6 +5,7 @@ import type { ChildProcess } from "node:child_process";
 import { logger } from "../middleware/logger.js";
 import * as serverUtils from "@paperclipai/adapter-utils/server-utils";
 export type { RunProcessResult } from "@paperclipai/adapter-utils/server-utils";
+import type { CommandExecutor } from "@paperclipai/adapter-utils/executor";
 
 type BuildInvocationEnvForLogsOptions = {
   runtimeEnv?: NodeJS.ProcessEnv | Record<string, string>;
@@ -71,7 +72,6 @@ export function buildInvocationEnvForLogs(
 }
 
 // Re-export runChildProcess with the server's pino logger wired in.
-import type { RunProcessResult } from "@paperclipai/adapter-utils/server-utils";
 const _runChildProcess = serverUtils.runChildProcess;
 
 export async function runChildProcess(
@@ -84,8 +84,21 @@ export async function runChildProcess(
     timeoutSec: number;
     graceSec: number;
     onLog: (stream: "stdout" | "stderr", chunk: string) => Promise<void>;
+    executor?: CommandExecutor;
   },
 ): Promise<RunProcessResult> {
+  if (opts.executor) {
+    return opts.executor.run({
+      runId,
+      command,
+      args,
+      cwd: opts.cwd,
+      env: opts.env,
+      timeoutSec: opts.timeoutSec,
+      graceSec: opts.graceSec,
+      onLog: opts.onLog,
+    });
+  }
   return _runChildProcess(runId, command, args, {
     ...opts,
     onLogError: (err, id, msg) => logger.warn({ err, runId: id }, msg),

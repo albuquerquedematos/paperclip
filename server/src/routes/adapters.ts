@@ -101,6 +101,13 @@ function resolveAdapterPackageDir(record: AdapterPluginRecord): string {
 /**
  * Read `version` from the adapter's package.json on disk.
  * This is the source of truth for what is actually installed (npm or local path).
+ *
+ * TODO(cloudflare): readAdapterPackageVersionFromDisk uses fs.readFileSync to
+ * read package.json from a locally installed npm package directory. The entire
+ * concept of locally installed adapter packages assumes a persistent filesystem
+ * and a Node-compatible module loader. For Workers compatibility the installed
+ * version should be persisted to the database at install time and read from
+ * there instead of from disk at request time.
  */
 function readAdapterPackageVersionFromDisk(record: AdapterPluginRecord): string | undefined {
   try {
@@ -266,6 +273,10 @@ export function adapterRoutes() {
         });
 
         // Read installed version from package.json
+        // TODO(cloudflare): reading package.json from the npm install directory
+        // uses node:fs/promises at request time. For Workers compatibility the
+        // installed version should be persisted to the DB by the install job and
+        // read from there rather than from the local filesystem.
         try {
           const pkgJsonPath = path.join(pluginsDir, "node_modules", canonicalName, "package.json");
           const pkgContent = await import("node:fs/promises");
@@ -280,6 +291,10 @@ export function adapterRoutes() {
       } else {
         // Local path — normalize (e.g., Windows → WSL) and use the resolved path
         moduleLocalPath = path.resolve(await normalizeLocalPath(packageName));
+        // TODO(cloudflare): reading package.json from a local-path adapter
+        // directory uses node:fs/promises at request time. For Workers
+        // compatibility the version should be captured during the install step
+        // and stored in the database rather than read from disk at request time.
         try {
           const pkgRaw = await readFile(path.join(moduleLocalPath, "package.json"), "utf-8");
           const v = JSON.parse(pkgRaw).version;

@@ -1,3 +1,9 @@
+// TODO(cloudflare): loadDefaultAgentInstructionsBundle reads bundled onboarding
+// asset files (AGENTS.md, HEARTBEAT.md, SOUL.md, TOOLS.md) from disk using
+// node:fs/promises at request time. For Workers compatibility these static
+// assets must be inlined as TypeScript constants or pre-loaded into R2/KV at
+// deploy time. The file:// URL resolution via import.meta.url is also not
+// supported in Workers.
 import fs from "node:fs/promises";
 
 const DEFAULT_AGENT_BUNDLE_FILES = {

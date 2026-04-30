@@ -74,6 +74,12 @@ export const storageS3ConfigSchema = z.object({
   forcePathStyle: z.boolean().default(false),
 });
 
+export const storageR2ConfigSchema = z.object({
+  bucket: z.string().min(1).default("paperclip"),
+  prefix: z.string().default(""),
+  accountId: z.string().optional(),
+});
+
 export const storageConfigSchema = z.object({
   provider: z.enum(STORAGE_PROVIDERS).default("local_disk"),
   localDisk: storageLocalDiskConfigSchema.default({
@@ -84,6 +90,10 @@ export const storageConfigSchema = z.object({
     region: "us-east-1",
     prefix: "",
     forcePathStyle: false,
+  }),
+  r2: storageR2ConfigSchema.default({
+    bucket: "paperclip",
+    prefix: "",
   }),
 });
 
@@ -191,6 +201,7 @@ export type ServerConfig = z.infer<typeof serverConfigSchema>;
 export type StorageConfig = z.infer<typeof storageConfigSchema>;
 export type StorageLocalDiskConfig = z.infer<typeof storageLocalDiskConfigSchema>;
 export type StorageS3Config = z.infer<typeof storageS3ConfigSchema>;
+export type StorageR2Config = z.infer<typeof storageR2ConfigSchema>;
 export type SecretsConfig = z.infer<typeof secretsConfigSchema>;
 export type SecretsLocalEncryptedConfig = z.infer<typeof secretsLocalEncryptedConfigSchema>;
 export type AuthConfig = z.infer<typeof authConfigSchema>;

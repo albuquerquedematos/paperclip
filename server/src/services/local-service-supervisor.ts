@@ -1,3 +1,11 @@
+// TODO(cloudflare): local-service-supervisor.ts manages a per-service JSON
+// registry on the local filesystem (~/.paperclip/runtime-services/) using
+// node:fs/promises (readFile, writeFile, rm, mkdir, readdir). This service
+// is responsible for launching and tracking local subprocess services (e.g.
+// workspace runtimes) at request / heartbeat time. For Workers compatibility
+// this entire subsystem must be extracted to a separate long-running sidecar
+// process; the Worker cannot spawn child processes or maintain a local
+// runtime-service registry on disk.
 import { execFile } from "node:child_process";
 import { createHash } from "node:crypto";
 import fs from "node:fs/promises";

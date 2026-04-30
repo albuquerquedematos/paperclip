@@ -19,6 +19,7 @@ Before making changes, read in this order:
 
 `doc/SPEC.md` is long-horizon product context.
 `doc/SPEC-implementation.md` is the concrete V1 build contract.
+`doc/CLOUDFLARE.md` is the design for the optional Cloudflare deployment target (additive, upstream-mergeable).
 
 ## 3. Repo Map
 
@@ -29,6 +30,7 @@ Before making changes, read in this order:
 - `packages/adapters/`: agent adapter implementations (Claude, Codex, Cursor, etc.)
 - `packages/adapter-utils/`: shared adapter utilities
 - `packages/plugins/`: plugin system packages
+- `packages/deploy-cloudflare/`: (planned) Cloudflare Workers/Pages/DO/R2 deployment target — see `doc/CLOUDFLARE.md`
 - `doc/`: operational and product docs
 
 ## 4. Dev Setup (Auto DB)

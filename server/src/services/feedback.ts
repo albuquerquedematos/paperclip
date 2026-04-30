@@ -1,3 +1,10 @@
+// TODO(cloudflare): feedback.ts reads adapter trace files from the local host
+// filesystem at request time using node:fs/promises (readFile, readdir).
+// readTextFileIfPresent reads individual trace log files by absolute path.
+// listChildFiles / listNestedFiles / findMatchingFile walk arbitrary directories.
+// For Workers compatibility adapter trace files must be stored in R2 (written
+// via StorageService at trace-collection time) and fetched via getObject at
+// feedback-bundle-assembly time rather than read directly from disk.
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { and, asc, desc, eq, getTableColumns, gte, lte, ne, or } from "drizzle-orm";

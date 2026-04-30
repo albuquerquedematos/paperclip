@@ -1,3 +1,13 @@
+// TODO(cloudflare): run-log-store.ts implements a local-file-backed run log
+// store using node:fs (createReadStream, writeFile, appendFile, stat, mkdir).
+// Run logs are currently written to ~/.paperclip/data/run-logs/ during a run
+// and read back via byte-range streaming during and after the run. For Workers
+// compatibility this must be replaced with an R2-backed implementation:
+//   - begin/append/finalize: stream chunks to a multipart R2 upload or buffer
+//     in a Durable Object and flush to R2 on finalize.
+//   - read: fetch the R2 object and return a byte-range slice.
+// The RunLogStore interface is already abstract so only this implementation
+// module and its instantiation in getRunLogStore() need to change.
 import { createReadStream, promises as fs } from "node:fs";
 import path from "node:path";
 import { createHash } from "node:crypto";

@@ -1,3 +1,8 @@
+// TODO(cloudflare): execution-workspaces.ts uses fs.access (via pathExists)
+// to test whether a workspace directory path exists on the local filesystem
+// at request time. For Workers compatibility workspace existence checks must
+// be replaced by database-state lookups or delegated to a sidecar that has
+// access to the host filesystem.
 import { execFile } from "node:child_process";
 import fs from "node:fs/promises";
 import path from "node:path";

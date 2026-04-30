@@ -1,3 +1,10 @@
+// TODO(cloudflare): workspace-runtime.ts manages local subprocess workspace
+// runtime services (e.g. Docker/nix environments) and probes their state via
+// node:fs (existsSync, lstatSync, readdirSync, readFileSync, realpathSync,
+// and node:fs/promises). It also spawns child processes. For Workers
+// compatibility workspace runtime management must be entirely offloaded to an
+// external sidecar; the Worker cannot spawn processes or access the host
+// filesystem.
 import { spawn, type ChildProcess } from "node:child_process";
 import { existsSync, lstatSync, readdirSync, readFileSync, realpathSync } from "node:fs";
 import fs from "node:fs/promises";

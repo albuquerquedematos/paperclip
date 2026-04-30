@@ -175,6 +175,12 @@ const BUNDLED_PLUGIN_EXAMPLES: AvailablePluginExample[] = [
   },
 ];
 
+// TODO(cloudflare): listBundledPluginExamples uses existsSync to probe
+// local repo paths at request time. These are development-only fixtures that
+// reference monorepo-relative paths and are incompatible with Workers where
+// there is no persistent local filesystem. This function should either be
+// disabled entirely for the Workers deployment or the examples list should be
+// served from a static bundled asset.
 function listBundledPluginExamples(): AvailablePluginExample[] {
   return BUNDLED_PLUGIN_EXAMPLES.flatMap((plugin) => {
     const absoluteLocalPath = path.resolve(REPO_ROOT, plugin.localPath);

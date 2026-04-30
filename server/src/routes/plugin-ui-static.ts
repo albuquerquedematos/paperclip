@@ -105,6 +105,11 @@ const MIME_TYPES: Record<string, string> = {
  * @param packageName - The npm package name
  * @param entrypointsUi - The UI entrypoint path from the manifest (e.g., "./dist/ui/")
  * @returns Absolute path to the UI directory, or null if not found
+ *
+ * TODO(cloudflare): resolvePluginUiDir uses node:fs (existsSync) to resolve
+ * plugin UI bundle directories from the local filesystem at request time. For
+ * Workers compatibility plugin UI bundles must be pre-uploaded to R2 or served
+ * as Worker static assets rather than read from local node_modules at runtime.
  */
 export function resolvePluginUiDir(
   localPluginDir: string,
@@ -411,6 +416,10 @@ export function pluginUiStaticRoutes(db: Db, options: PluginUiStaticRouteOptions
     const resolvedFilePath = path.resolve(uiDir, rawFilePath);
 
     // Step 5: Check that the file exists and is a regular file
+    // TODO(cloudflare): fs.statSync, fs.realpathSync, and res.sendFile all
+    // require a local filesystem. For Workers compatibility plugin UI bundles
+    // must be served from R2 or pre-built Worker static assets. The stat-based
+    // ETag and byte-range logic must also be redesigned for that storage model.
     let fileStat: fs.Stats;
     try {
       fileStat = fs.statSync(resolvedFilePath);
