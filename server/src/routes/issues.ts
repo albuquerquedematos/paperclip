@@ -1546,7 +1546,7 @@ export function issueRoutes(
     const issue = await svc.getById(id);
     if (!issue) return Response.json({ error: "Issue not found" }, { status: 404 });
     assertCompanyAccess(ctx, issue.companyId);
-    const approvals = await issueApprovalsSvc.listApprovalsForIssue(id);
+    const approvals = await issueApprovalsSvc.listApprovalsForIssue(issue.id);
     return Response.json(approvals);
   };
 
@@ -1559,7 +1559,7 @@ export function issueRoutes(
     await assertCanManageIssueApprovalLinks(ctx, issue.companyId);
     const body = await ctx.json<{ approvalId: string }>();
     const actor = getActorInfo(ctx);
-    await issueApprovalsSvc.link(id, body.approvalId, {
+    await issueApprovalsSvc.link(issue.id, body.approvalId, {
       agentId: actor.agentId,
       userId: actor.actorType === "user" ? actor.actorId : null,
     });
@@ -1574,7 +1574,7 @@ export function issueRoutes(
       entityId: issue.id,
       details: { approvalId: body.approvalId },
     });
-    const approvals = await issueApprovalsSvc.listApprovalsForIssue(id);
+    const approvals = await issueApprovalsSvc.listApprovalsForIssue(issue.id);
     return Response.json(approvals, { status: 201 });
   };
 
@@ -1586,7 +1586,7 @@ export function issueRoutes(
     assertCompanyAccess(ctx, issue.companyId);
     await assertAgentIssueMutationAllowed(ctx, issue);
     await assertCanManageIssueApprovalLinks(ctx, issue.companyId);
-    await issueApprovalsSvc.unlink(id, approvalId);
+    await issueApprovalsSvc.unlink(issue.id, approvalId);
     const actor = getActorInfo(ctx);
     await logActivity(db, {
       companyId: issue.companyId,
@@ -2565,7 +2565,7 @@ export function issueRoutes(
     }
 
     const checkoutRunId = requireAgentRunId(ctx);
-    const updated = await svc.checkout(id, body.agentId as string, body.expectedStatuses as string[] | undefined, checkoutRunId);
+    const updated = await svc.checkout(issue.id, body.agentId as string, body.expectedStatuses as string[] | undefined, checkoutRunId);
     const actor = getActorInfo(ctx);
 
     await logActivity(db, {
@@ -2615,7 +2615,7 @@ export function issueRoutes(
     const actorRunId = requireAgentRunId(ctx);
 
     const released = await svc.release(
-      id,
+      existing.id,
       ctx.actor?.type === "agent" ? ctx.actor.agentId ?? undefined : undefined,
       actorRunId,
     );
@@ -2654,7 +2654,7 @@ export function issueRoutes(
     assertCompanyAccess(ctx, existing.companyId);
 
     const clearAssignee = ctx.query("clearAssignee") === "true";
-    const result = await svc.adminForceRelease(id, { clearAssignee });
+    const result = await svc.adminForceRelease(existing.id, { clearAssignee });
     if (!result) {
       return Response.json({ error: "Issue not found" }, { status: 404 });
     }
@@ -2715,7 +2715,7 @@ export function issueRoutes(
       limitRaw && Number.isFinite(limitRaw) && limitRaw > 0
         ? Math.min(Math.floor(limitRaw), MAX_ISSUE_COMMENT_LIMIT)
         : null;
-    const comments = await svc.listComments(id, {
+    const comments = await svc.listComments(issue.id, {
       afterCommentId,
       order,
       limit,
@@ -2730,7 +2730,7 @@ export function issueRoutes(
       return Response.json({ error: "Issue not found" }, { status: 404 });
     }
     assertCompanyAccess(ctx, issue.companyId);
-    const interactions = await issueThreadInteractionService(db).listForIssue(id);
+    const interactions = await issueThreadInteractionService(db).listForIssue(issue.id);
     return Response.json(interactions);
   };
 
@@ -3065,7 +3065,7 @@ export function issueRoutes(
       return Response.json({ error: "Only board users can view feedback votes" }, { status: 403 });
     }
 
-    const votes = await feedback.listIssueVotesForUser(id, ctx.actor.userId ?? "local-board");
+    const votes = await feedback.listIssueVotesForUser(issue.id, ctx.actor.userId ?? "local-board");
     return Response.json(votes);
   };
 
@@ -3401,7 +3401,7 @@ export function issueRoutes(
     const body = await ctx.json<Record<string, unknown>>();
     const actor = getActorInfo(ctx);
     const result = await feedback.saveIssueVote({
-      issueId: id,
+      issueId: issue.id,
       targetType: body.targetType as string,
       targetId: body.targetId as string,
       vote: body.vote as string,
@@ -3492,7 +3492,7 @@ export function issueRoutes(
       return Response.json({ error: "Issue not found" }, { status: 404 });
     }
     assertCompanyAccess(ctx, issue.companyId);
-    const attachments = await svc.listAttachments(issueId);
+    const attachments = await svc.listAttachments(issue.id);
     return Response.json(attachments.map(withContentPath));
   };
 
