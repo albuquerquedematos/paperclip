@@ -39,10 +39,15 @@ export interface Env {
   STORAGE_R2_PREFIX?: string;
 
   // Container DO namespaces — each wraps a CF Container that starts a Docker
-  // image and proxies HTTP to it.  Absent in local dev (no Docker); the DO
-  // transparently falls back to SANDBOX_BRIDGE_URL read from KV.
+  // image and proxies HTTP to it.  In local dev the DO falls back to
+  // SIDECAR_URL (env var) or SANDBOX_BRIDGE_URL (KV) for its requests.
   SIDECAR_SERVICE?: DurableObjectNamespace;   // companion Node server
   PLUGIN_CONTAINER?: DurableObjectNamespace;  // isolated command executor
+
+  // Direct sidecar URL — used by SidecarContainer as fallback when no Docker
+  // container is running (local dev).  Set in .dev.vars or via wrangler secret.
+  SIDECAR_URL?: string;
+  SIDECAR_API_KEY?: string;
 
   // Static assets binding — serves ui/dist alongside the Worker.
   // Use env.ASSETS.fetch(request) to serve static files or let CF fall

@@ -76,13 +76,18 @@ export class SidecarContainer implements DurableObject {
       return fetcher.fetch(request);
     }
 
-    // Local-dev fallback: forward to an external bridge server.
-    const bridgeUrl =
-      (await this.env.PAPERCLIP_KV.get("SANDBOX_BRIDGE_URL")) ?? "http://localhost:8788";
-    const apiKey = await this.env.PAPERCLIP_KV.get("SANDBOX_BRIDGE_API_KEY");
+    // Local-dev fallback: try SIDECAR_URL env var first (set in .dev.vars),
+    // then fall back to SANDBOX_BRIDGE_URL from KV.
+    const baseUrl =
+      this.env.SIDECAR_URL ??
+      (await this.env.PAPERCLIP_KV.get("SANDBOX_BRIDGE_URL")) ??
+      "http://localhost:8788";
+    const apiKey =
+      this.env.SIDECAR_API_KEY ??
+      await this.env.PAPERCLIP_KV.get("SANDBOX_BRIDGE_API_KEY");
 
     const url = new URL(request.url);
-    const proxyUrl = `${bridgeUrl}${url.pathname}${url.search}`;
+    const proxyUrl = `${baseUrl}${url.pathname}${url.search}`;
     const headers = new Headers(request.headers);
     if (apiKey) headers.set("Authorization", `Bearer ${apiKey}`);
 
@@ -129,13 +134,17 @@ export class PluginContainer implements DurableObject {
       return fetcher.fetch(request);
     }
 
-    // Local-dev fallback: forward to the sandbox bridge.
-    const bridgeUrl =
-      (await this.env.PAPERCLIP_KV.get("SANDBOX_BRIDGE_URL")) ?? "http://localhost:8788";
-    const apiKey = await this.env.PAPERCLIP_KV.get("SANDBOX_BRIDGE_API_KEY");
+    // Fallback: SIDECAR_URL env var → KV SANDBOX_BRIDGE_URL (same service hosts both).
+    const baseUrl =
+      this.env.SIDECAR_URL ??
+      (await this.env.PAPERCLIP_KV.get("SANDBOX_BRIDGE_URL")) ??
+      "http://localhost:8788";
+    const apiKey =
+      this.env.SIDECAR_API_KEY ??
+      await this.env.PAPERCLIP_KV.get("SANDBOX_BRIDGE_API_KEY");
 
     const url = new URL(request.url);
-    const proxyUrl = `${bridgeUrl}${url.pathname}${url.search}`;
+    const proxyUrl = `${baseUrl}${url.pathname}${url.search}`;
     const headers = new Headers(request.headers);
     if (apiKey) headers.set("Authorization", `Bearer ${apiKey}`);
 
