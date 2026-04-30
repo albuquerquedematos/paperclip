@@ -50,7 +50,11 @@ export function registerEventRoutes(app: Hono<{ Bindings: Env }>): void {
 
     const { 0: client, 1: server } = new WebSocketPair();
     server.accept();
-    server.addEventListener("message", () => { /* no-op: no pub/sub wired yet */ });
+    server.addEventListener("message", () => { /* no-op: no pub/sub bus wired yet */ });
+    server.addEventListener("close", () => { /* expected: client disconnected */ });
+    server.addEventListener("error", (ev) => {
+      console.error("[EventsWS] WebSocket error:", ev);
+    });
     return new Response(null, { status: 101, webSocket: client });
   });
 }

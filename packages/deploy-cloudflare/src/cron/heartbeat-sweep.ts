@@ -18,7 +18,7 @@
  * to the sidecar process via HTTP.
  */
 
-import { eq } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import { agents, heartbeatRuns } from "@paperclipai/db";
 import type { Env } from "../worker/env.js";
@@ -89,7 +89,6 @@ export async function runHeartbeatSweep(env: Env, db: Db): Promise<void> {
 
     // Check if there is already a queued or running run for this agent to avoid
     // double-dispatching.
-    const { and, inArray } = await import("drizzle-orm");
     const existingQueued = await db
       .select({ id: heartbeatRuns.id })
       .from(heartbeatRuns)
@@ -113,7 +112,7 @@ export async function runHeartbeatSweep(env: Env, db: Db): Promise<void> {
   }
 
   if (messagesToSend.length === 0) {
-    console.log("[HeartbeatSweep] No agents due for heartbeat.");
+    console.debug("[HeartbeatSweep] No agents due for heartbeat.");
     return;
   }
 
@@ -134,5 +133,5 @@ export async function runHeartbeatSweep(env: Env, db: Db): Promise<void> {
     );
   }
 
-  console.log(`[HeartbeatSweep] Dispatched ${messagesToSend.length} heartbeat(s).`);
+  console.debug(`[HeartbeatSweep] Dispatched ${messagesToSend.length} heartbeat(s).`);
 }

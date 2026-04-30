@@ -11,12 +11,16 @@
  *     └─ DurableObjectNamespace.idFromName("sidecar").get().fetch(url, init)
  *          └─ SidecarContainer.fetch(request)
  *               ├─ [production] proxies to Docker container on port 8080
- *               └─ [local dev]  proxies to SANDBOX_BRIDGE_URL from KV
+ *               └─ [local dev]  proxies to SIDECAR_URL or SANDBOX_BRIDGE_URL from KV
  *
  * Local dev fallback:
  *   `this.ctx.container` is undefined in `wrangler dev` (no Docker available).
- *   When absent, the DO reads SANDBOX_BRIDGE_URL + SANDBOX_BRIDGE_API_KEY from
- *   KV and proxies the request to the external bridge server.
+ *   When absent, the DO falls back to: SIDECAR_URL env var (.dev.vars)
+ *   → KV SANDBOX_BRIDGE_URL → localhost:8788.
+ *
+ * Security: caller Authorization headers are never forwarded. The production
+ * container path uses the internal CF network (no auth needed). The local-dev
+ * fallback sets SIDECAR_API_KEY when available.
  *
  * wrangler.toml requirements (already added):
  *   [[durable_objects.bindings]]   name = "SIDECAR_SERVICE"   class_name = "SidecarContainer"
@@ -27,17 +31,23 @@
 
 import type { Env } from "./env.js";
 
-// ---------------------------------------------------------------------------
-// Shared helper
-// ---------------------------------------------------------------------------
-
 const SIDECAR_PORT = 8080;
 
-/** Build fallback headers, appending auth if an API key is available. */
-function bridgeHeaders(apiKey: string | null, extra?: Record<string, string>): Record<string, string> {
-  const h: Record<string, string> = { ...extra };
-  if (apiKey) h.Authorization = `Bearer ${apiKey}`;
-  return h;
+/**
+ * Build a clean internal request: strip caller headers, keep Content-Type,
+ * and optionally set an Authorization key for the sidecar bridge.
+ */
+function buildInternalRequest(
+  url: string,
+  method: string,
+  contentType: string | null,
+  body: ReadableStream | null,
+  apiKey?: string | null,
+): Request {
+  const headers = new Headers();
+  if (contentType) headers.set("Content-Type", contentType);
+  if (apiKey) headers.set("Authorization", `Bearer ${apiKey}`);
+  return new Request(url, { method, headers, body });
 }
 
 // ---------------------------------------------------------------------------
@@ -52,6 +62,8 @@ function bridgeHeaders(apiKey: string | null, extra?: Record<string, string>): R
  *   POST /internal/plugin-jobs/:id/claim
  *   POST /internal/plugin-jobs/:id/execute
  *   POST /internal/plugin-jobs/:id/complete
+ *   GET  /api/plugins/examples
+ *   POST /api/plugins/install
  */
 export class SidecarContainer implements DurableObject {
   private readonly ctx: DurableObjectState;
@@ -64,40 +76,35 @@ export class SidecarContainer implements DurableObject {
 
   async fetch(request: Request): Promise<Response> {
     const container = this.ctx.container;
+    const url = new URL(request.url);
+    const ct = request.headers.get("Content-Type");
 
     if (container) {
-      // Production path: start the container if it isn't running yet, then
-      // proxy the request to its HTTP port. getTcpPort returns a Fetcher that
-      // speaks to that port.
       if (!container.running) {
         container.start();
       }
+      // Internal CF network: no auth header needed; strip caller headers.
       const fetcher = container.getTcpPort(SIDECAR_PORT);
-      return fetcher.fetch(request);
+      return fetcher.fetch(
+        buildInternalRequest(url.pathname + url.search, request.method, ct, request.body),
+      );
     }
 
-    // Local-dev fallback: try SIDECAR_URL env var first (set in .dev.vars),
-    // then fall back to SANDBOX_BRIDGE_URL from KV.
+    // Local-dev fallback: SIDECAR_URL env var → KV SANDBOX_BRIDGE_URL → localhost:8788.
     const baseUrl =
       this.env.SIDECAR_URL ??
       (await this.env.PAPERCLIP_KV.get("SANDBOX_BRIDGE_URL")) ??
       "http://localhost:8788";
     const apiKey =
       this.env.SIDECAR_API_KEY ??
-      await this.env.PAPERCLIP_KV.get("SANDBOX_BRIDGE_API_KEY");
+      (await this.env.PAPERCLIP_KV.get("SANDBOX_BRIDGE_API_KEY"));
 
-    const url = new URL(request.url);
     const proxyUrl = `${baseUrl}${url.pathname}${url.search}`;
-    const headers = new Headers(request.headers);
-    if (apiKey) headers.set("Authorization", `Bearer ${apiKey}`);
-
-    return fetch(proxyUrl, {
-      method: request.method,
-      headers,
-      body: request.body,
-      // @ts-expect-error CF-specific option — prevents Request.body stream from being consumed twice
-      duplex: "half",
-    });
+    return fetch(
+      buildInternalRequest(proxyUrl, request.method, ct, request.body, apiKey),
+      // @ts-expect-error CF-specific duplex option
+      { duplex: "half" },
+    );
   }
 }
 
@@ -125,35 +132,33 @@ export class PluginContainer implements DurableObject {
 
   async fetch(request: Request): Promise<Response> {
     const container = this.ctx.container;
+    const url = new URL(request.url);
+    const ct = request.headers.get("Content-Type");
 
     if (container) {
       if (!container.running) {
         container.start();
       }
       const fetcher = container.getTcpPort(SIDECAR_PORT);
-      return fetcher.fetch(request);
+      return fetcher.fetch(
+        buildInternalRequest(url.pathname + url.search, request.method, ct, request.body),
+      );
     }
 
-    // Fallback: SIDECAR_URL env var → KV SANDBOX_BRIDGE_URL (same service hosts both).
+    // Fallback: same bridge service as SidecarContainer.
     const baseUrl =
       this.env.SIDECAR_URL ??
       (await this.env.PAPERCLIP_KV.get("SANDBOX_BRIDGE_URL")) ??
       "http://localhost:8788";
     const apiKey =
       this.env.SIDECAR_API_KEY ??
-      await this.env.PAPERCLIP_KV.get("SANDBOX_BRIDGE_API_KEY");
+      (await this.env.PAPERCLIP_KV.get("SANDBOX_BRIDGE_API_KEY"));
 
-    const url = new URL(request.url);
     const proxyUrl = `${baseUrl}${url.pathname}${url.search}`;
-    const headers = new Headers(request.headers);
-    if (apiKey) headers.set("Authorization", `Bearer ${apiKey}`);
-
-    return fetch(proxyUrl, {
-      method: request.method,
-      headers,
-      body: request.body,
-      // @ts-expect-error CF-specific option
-      duplex: "half",
-    });
+    return fetch(
+      buildInternalRequest(proxyUrl, request.method, ct, request.body, apiKey),
+      // @ts-expect-error CF-specific duplex option
+      { duplex: "half" },
+    );
   }
 }

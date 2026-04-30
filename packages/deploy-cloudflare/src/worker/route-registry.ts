@@ -71,7 +71,12 @@ export interface RequestResources {
 
 // Cached route path patterns. These are stateless (no DB reference) and safe
 // to reuse across requests within the same isolate.
-let compiledPathCache: Array<{ re: RegExp; paramNames: string[] }> | null = null;
+// Keyed by a path-order fingerprint so any change in routes (add, remove,
+// reorder) invalidates the cache instead of silently misaligning patterns.
+let compiledPathCache: {
+  fingerprint: string;
+  patterns: Array<{ re: RegExp; paramNames: string[] }>;
+} | null = null;
 
 /** Converts an Express-style path (with :param segments) to a RegExp + param names. */
 function pathToRegex(path: string): { re: RegExp; paramNames: string[] } {
@@ -157,28 +162,24 @@ export function buildRequestResources(env: Env): RequestResources {
 
   // Populate or invalidate the path-pattern cache.
   //
-  // The routes array is rebuilt on every request (closures capture the new
-  // `db` instance), but the path patterns themselves are purely static.  We
-  // cache them across requests within the same isolate to avoid re-running
-  // the regex compiler on every request.
-  //
-  // Guard: if the number of routes changes (e.g. a future code path calls
-  // buildRequestResources with opts that produce a different route count),
-  // invalidate the cache rather than silently misaligning handlers with
-  // patterns.  This makes the invariant explicit and easy to spot in tests.
-  if (compiledPathCache && compiledPathCache.length !== routes.length) {
-    compiledPathCache = null;
-  }
-  if (!compiledPathCache) {
-    compiledPathCache = routes.map((r) => pathToRegex(r.path));
-    // This fires once per isolate cold start (not per request).
-    console.log(`[CF Worker] Compiled ${compiledPathCache.length} route patterns`);
+  // Route path patterns are purely static (no DB reference) and are safe to
+  // reuse across requests in the same isolate. The fingerprint is the ordered
+  // concatenation of all route paths, so any add/remove/reorder invalidates
+  // the cache rather than silently misaligning handlers with patterns.
+  const fingerprint = routes.map((r) => r.path).join("|");
+  if (compiledPathCache?.fingerprint !== fingerprint) {
+    compiledPathCache = {
+      fingerprint,
+      patterns: routes.map((r) => pathToRegex(r.path)),
+    };
+    // Fires once per isolate cold start.
+    console.debug(`[CF Worker] Compiled ${compiledPathCache.patterns.length} route patterns`);
   }
 
   const compiled: CompiledRoute[] = routes.map((route, i) => ({
     route,
-    re: compiledPathCache![i]!.re,
-    paramNames: compiledPathCache![i]!.paramNames,
+    re: compiledPathCache!.patterns[i]!.re,
+    paramNames: compiledPathCache!.patterns[i]!.paramNames,
   }));
 
   return { compiled, db, storage };

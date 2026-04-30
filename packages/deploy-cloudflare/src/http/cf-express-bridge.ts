@@ -100,7 +100,10 @@ function createMockRes(): MockRes {
     _headers: new Headers(),
     _settled: false,
     _resolve,
-    _reject(e: unknown) { if (!this._settled) { this._settled = true; _rejectInner(e); } },
+    _reject(e: unknown) {
+      if (!this._settled) { this._settled = true; _rejectInner(e); }
+      else console.error("[CF Worker] Handler error after response settled:", e);
+    },
     promise,
     status(code) { this._status = code; return this; },
     json(data) {

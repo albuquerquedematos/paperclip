@@ -32,14 +32,21 @@ import { resolveDeploymentMode } from "../env.js";
 import type { Env } from "../env.js";
 
 
-/** Proxy a request to the sidecar companion server. */
+/** Proxy a request to the sidecar companion server.
+ *
+ * Security: caller Authorization headers are stripped. The SIDECAR_SERVICE DO
+ * uses internal CF network auth; direct SIDECAR_URL calls use SIDECAR_API_KEY.
+ */
 async function proxySidecar(env: Env, path: string, req: Request): Promise<Response> {
+  const ct = req.headers.get("Content-Type");
+  const internalHeaders = new Headers();
+  if (ct) internalHeaders.set("Content-Type", ct);
+
   if (env.SIDECAR_SERVICE) {
-    const id = env.SIDECAR_SERVICE.idFromName("sidecar");
-    const stub = env.SIDECAR_SERVICE.get(id);
+    const stub = env.SIDECAR_SERVICE.get(env.SIDECAR_SERVICE.idFromName("sidecar"));
     return stub.fetch(`http://sidecar${path}`, {
       method: req.method,
-      headers: req.headers,
+      headers: internalHeaders,
       body: req.body,
     });
   }
@@ -50,9 +57,8 @@ async function proxySidecar(env: Env, path: string, req: Request): Promise<Respo
       { status: 503 },
     );
   }
-  const headers = new Headers(req.headers);
-  if (env.SIDECAR_API_KEY) headers.set("Authorization", `Bearer ${env.SIDECAR_API_KEY}`);
-  return fetch(`${baseUrl}${path}`, { method: req.method, headers, body: req.body });
+  if (env.SIDECAR_API_KEY) internalHeaders.set("Authorization", `Bearer ${env.SIDECAR_API_KEY}`);
+  return fetch(`${baseUrl}${path}`, { method: req.method, headers: internalHeaders, body: req.body });
 }
 
 export function registerPluginRoutes(app: Hono<{ Bindings: Env }>): void {
