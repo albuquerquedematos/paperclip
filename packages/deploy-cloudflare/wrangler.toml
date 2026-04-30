@@ -31,8 +31,10 @@ not_found_handling = "single-page-application"
 # Local dev settings
 # ---------------------------------------------------------------------------
 [dev]
-# Containers require Docker; disable in local dev so wrangler dev starts without it.
-# The SidecarContainer / PluginContainer DOs fall back to SANDBOX_BRIDGE_URL from KV.
+# CF Containers require Docker at the machine level; disable them for local dev so
+# `wrangler dev` starts without Docker. The SidecarContainer / PluginContainer DOs
+# fall back in order: SIDECAR_URL env var (.dev.vars) → KV SANDBOX_BRIDGE_URL →
+# localhost:8788. Set SIDECAR_URL in .dev.vars to point at `pnpm dev:server`.
 enable_containers = false
 
 # ---------------------------------------------------------------------------
@@ -146,15 +148,19 @@ crons = [
 # ---------------------------------------------------------------------------
 # Cloudflare Containers — run execution services natively on Cloudflare.
 #
-# CF Containers (beta) let Workers communicate with Docker containers via
-# a Fetcher service binding. No external servers needed.
+# CF Containers (beta) let Workers communicate with Docker containers via a
+# Durable Object proxy. Each [[containers]] entry must have a matching
+# [[durable_objects.bindings]] entry with the same class_name (see above).
+# The DO starts the container, monitors its lifecycle, and proxies HTTP via
+# this.ctx.container.getTcpPort(8080).
+#
+# Local dev fallback (enable_containers = false in [dev]):
+#   Container DOs fall back to: SIDECAR_URL env var (.dev.vars) →
+#   KV SANDBOX_BRIDGE_URL → localhost:8788.
 #
 # Required secrets (set via `wrangler secret put`):
-#   - none for containers (authentication is implicit via the binding)
-#
-# For external sidecar fallback (optional, for non-CF deployments):
-#   wrangler secret put SIDECAR_URL
-#   wrangler secret put SIDECAR_API_KEY
+#   - none for CF Container paths (DO ↔ container auth is implicit)
+#   - SIDECAR_URL + SIDECAR_API_KEY for non-CF / local-dev direct-URL fallback
 # ---------------------------------------------------------------------------
 
 # Sidecar — companion Node.js server for agent heartbeat execution, plugin job

@@ -16,6 +16,7 @@ import type { Hono } from "hono";
 import { listServerAdapters, isOverridePaused } from "../../../../../server/src/adapters/registry.js";
 import { BUILTIN_ADAPTER_TYPES } from "../../../../../server/src/adapters/builtin-adapter-types.js";
 import { getDisabledAdapterTypes } from "../../../../../server/src/services/adapter-plugin-store.js";
+import { createHyperdriveDb } from "../../db/hyperdrive.js";
 import { resolveActorFromRequest } from "../../auth/resolve-actor.js";
 import { resolveDeploymentMode } from "../env.js";
 import type { Env } from "../env.js";
@@ -26,7 +27,6 @@ export function registerAdapterRoutes(app: Hono<{ Bindings: Env }>): void {
   // require FS-backed plugin store not available in CF; built-ins always load)
   // -------------------------------------------------------------------------
   app.get("/api/adapters", async (c) => {
-    const { createHyperdriveDb } = await import("../../db/hyperdrive.js");
     const db = createHyperdriveDb(c.env.HYPERDRIVE);
     const actor = await resolveActorFromRequest(c.req.raw, db, {
       deploymentMode: resolveDeploymentMode(c.env),
