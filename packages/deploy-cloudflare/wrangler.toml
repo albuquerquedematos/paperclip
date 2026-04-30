@@ -28,6 +28,14 @@ binding = "ASSETS"
 not_found_handling = "single-page-application"
 
 # ---------------------------------------------------------------------------
+# Local dev settings
+# ---------------------------------------------------------------------------
+[dev]
+# Containers require Docker; disable in local dev so wrangler dev starts without it.
+# The SidecarContainer / PluginContainer DOs fall back to SANDBOX_BRIDGE_URL from KV.
+enable_containers = false
+
+# ---------------------------------------------------------------------------
 # Variables (non-secret; override secrets via `wrangler secret put`)
 # ---------------------------------------------------------------------------
 [vars]
