@@ -136,9 +136,14 @@ export function buildRequestResources(env: Env): RequestResources {
     ...ext(instanceSettingsRoutes(db), "/api"),
     ...ext(llmRoutes(db), "/api"),
     ...ext(authRoutes(db), "/api/auth"),
-    // adapterRoutes needs no db/storage (uses in-memory registry + sentinel proxies)
+    // adapterRoutes() needs no db/storage: its handlers read from an in-memory
+    // registry populated at bundle time (no DB lookups, no filesystem I/O).
+    // Passing sentinel Proxy objects satisfies TypeScript without touching DB.
     ...ext(adapterRoutes(), "/api"),
-    // Access routes use raw Express handlers — use the CF bridge to capture all of them
+    // accessRoutes uses raw Express handlers (not the expressHandler adapter),
+    // so extractRoutesFromRouter cannot see them via __handler tags.
+    // extractAllRoutesFromRouter walks the full router stack and wraps raw
+    // handlers via bridgeExpressHandlers, making them transport-agnostic.
     ...extractAllRoutesFromRouter(
       accessRoutes(db, {
         deploymentMode: resolveDeploymentMode(env),
@@ -150,8 +155,23 @@ export function buildRequestResources(env: Env): RequestResources {
     ),
   ];
 
+  // Populate or invalidate the path-pattern cache.
+  //
+  // The routes array is rebuilt on every request (closures capture the new
+  // `db` instance), but the path patterns themselves are purely static.  We
+  // cache them across requests within the same isolate to avoid re-running
+  // the regex compiler on every request.
+  //
+  // Guard: if the number of routes changes (e.g. a future code path calls
+  // buildRequestResources with opts that produce a different route count),
+  // invalidate the cache rather than silently misaligning handlers with
+  // patterns.  This makes the invariant explicit and easy to spot in tests.
+  if (compiledPathCache && compiledPathCache.length !== routes.length) {
+    compiledPathCache = null;
+  }
   if (!compiledPathCache) {
     compiledPathCache = routes.map((r) => pathToRegex(r.path));
+    // This fires once per isolate cold start (not per request).
     console.log(`[CF Worker] Compiled ${compiledPathCache.length} route patterns`);
   }
 

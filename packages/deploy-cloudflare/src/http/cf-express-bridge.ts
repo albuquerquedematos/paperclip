@@ -155,18 +155,30 @@ function runChain(
   let i = 0;
   // next is synchronous: each handler is fired as a fire-and-forget Promise,
   // with errors redirected to res._reject so res.promise always settles.
-  const next = (err?: unknown): void => {
+  //
+  // Double-next() guard: a buggy middleware that calls next() more than once
+  // would skip handlers or invoke them out of order.  We defend against this
+  // by giving each handler invocation its own `used` flag.  The first call
+  // to the bound `next` advances the chain; subsequent calls are ignored.
+  function advance(err?: unknown): void {
     if (err) {
       res._reject(err instanceof Error ? err : new Error(String(err)));
       return;
     }
     if (i >= handlers.length) return;
-    const fn = handlers[i++].handle;
+    const fn = handlers[i++]!.handle;
+    // Bind a single-use next for this handler slot.
+    let called = false;
+    const boundNext = (e?: unknown): void => {
+      if (called) return; // ignore double-calls from the same handler
+      called = true;
+      advance(e);
+    };
     Promise.resolve(
-      (fn as (req: unknown, res: unknown, next: unknown) => unknown)(req, res, next),
+      (fn as (req: unknown, res: unknown, next: unknown) => unknown)(req, res, boundNext),
     ).catch((e: unknown) => res._reject(e));
-  };
-  next();
+  }
+  advance();
 }
 
 // ---------------------------------------------------------------------------
