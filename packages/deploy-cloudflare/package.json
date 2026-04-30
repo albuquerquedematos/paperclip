@@ -6,8 +6,8 @@
   "main": "./src/boot.ts",
   "scripts": {
     "build": "node build-worker.mjs",
-    "dev": "node build-worker.mjs && wrangler dev --no-bundle --local",
-    "deploy": "node build-worker.mjs && wrangler deploy --no-bundle"
+    "dev": "node build-worker.mjs && bash -c 'source \"${NVM_DIR:-$HOME/.nvm}/nvm.sh\" && nvm use 22 && wrangler dev --no-bundle --local'",
+    "deploy": "node build-worker.mjs && bash -c 'source \"${NVM_DIR:-$HOME/.nvm}/nvm.sh\" && nvm use 22 && wrangler deploy --no-bundle'"
   },
   "dependencies": {
     "@paperclipai/db": "workspace:*",

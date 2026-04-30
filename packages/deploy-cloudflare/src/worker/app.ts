@@ -12,6 +12,7 @@ import { createSetupApp } from "./setup.js";
 import { buildRequestResources } from "./route-registry.js";
 import { resolveActorFromRequest } from "../auth/resolve-actor.js";
 import { registerUploadHandlers } from "./upload-handlers.js";
+import { registerCfExtraRoutes } from "./cf-extra-routes.js";
 import { HttpError } from "../../../../server/src/errors.js";
 import type { Env } from "./env.js";
 import { resolveDeploymentMode } from "./env.js";
@@ -75,6 +76,13 @@ app.all("/setup", async (c) => {
 // ---------------------------------------------------------------------------
 
 registerUploadHandlers(app);
+
+// ---------------------------------------------------------------------------
+// CF-native implementations of routes that use raw Express handlers or depend
+// on runtime registries not present in CF Workers (adapters, plugins, access)
+// ---------------------------------------------------------------------------
+
+registerCfExtraRoutes(app);
 
 // ---------------------------------------------------------------------------
 // Main API catch-all
