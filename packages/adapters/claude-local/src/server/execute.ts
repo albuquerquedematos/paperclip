@@ -843,6 +843,16 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
         stderr: initial.proc.stderr,
       });
 
+    // Diagnostic: confirms the new code path is loaded after `dev:cf` restart.
+    // Logged unconditionally on a non-zero exit so it's easy to grep for.
+    if (sessionId && (initial.proc.exitCode ?? 0) !== 0) {
+      await onLog(
+        "stdout",
+        `[paperclip] claude exit=${initial.proc.exitCode} ` +
+          `unknownSession=${unknownSessionFailure} sessionId=${sessionId}\n`,
+      );
+    }
+
     if (unknownSessionFailure) {
       await onLog(
         "stdout",
