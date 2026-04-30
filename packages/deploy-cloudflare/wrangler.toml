@@ -17,9 +17,15 @@ compatibility_flags = ["nodejs_compat"]
 main = "dist/worker.js"
 
 # ---------------------------------------------------------------------------
-# Pages — serves the React UI build from ui/dist
+# Static assets — serves the React UI build from ui/dist alongside the Worker.
+# not_found_handling = "single-page-application" makes CF serve index.html for
+# any path that doesn't match a static file (needed for client-side routing).
+# The Worker gets an ASSETS Fetcher binding to delegate non-API requests.
 # ---------------------------------------------------------------------------
-pages_build_output_dir = "../../ui/dist"
+[assets]
+directory = "../../ui/dist"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
 
 # ---------------------------------------------------------------------------
 # Variables (non-secret; override secrets via `wrangler secret put`)

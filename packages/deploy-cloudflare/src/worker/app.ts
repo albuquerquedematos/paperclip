@@ -144,15 +144,9 @@ app.all("/api/*", async (c) => {
 });
 
 // ---------------------------------------------------------------------------
-// SPA fallback — serves a minimal HTML shell for all non-API paths
+// SPA fallback — delegates to the ASSETS binding (Workers Static Assets).
+// CF serves the matching file from ui/dist, or index.html for unknown paths
+// (not_found_handling = "single-page-application" in wrangler.toml).
 // ---------------------------------------------------------------------------
 
-app.all("*", (c) =>
-  c.html(
-    `<!DOCTYPE html>
-<html><head><meta charset="UTF-8"><title>Paperclip</title></head>
-<body>
-  <p>Loading Paperclip UI... If this persists, the Pages build may not be deployed yet.</p>
-</body></html>`,
-  ),
-);
+app.all("*", (c) => c.env.ASSETS.fetch(c.req.raw));

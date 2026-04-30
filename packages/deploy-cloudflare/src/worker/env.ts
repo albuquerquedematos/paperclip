@@ -41,6 +41,11 @@ export interface Env {
   // Sidecar -- the Node server running alongside the Workers deployment
   SIDECAR_URL: string;
   SIDECAR_API_KEY: string;
+
+  // Static assets binding — serves ui/dist alongside the Worker.
+  // Use env.ASSETS.fetch(request) to serve static files or let CF fall
+  // back to index.html for SPA routes (not_found_handling = "single-page-application").
+  ASSETS: Fetcher;
 }
 
 // ---------------------------------------------------------------------------

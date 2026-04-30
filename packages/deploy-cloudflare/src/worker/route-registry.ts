@@ -131,7 +131,7 @@ export function buildRequestResources(env: Env): RequestResources {
     ...ext(inboxDismissalRoutes(db), "/api"),
     ...ext(instanceSettingsRoutes(db), "/api"),
     ...ext(llmRoutes(db), "/api"),
-    ...ext(authRoutes(db), "/api"),
+    ...ext(authRoutes(db), "/api/auth"),
   ];
 
   if (!compiledPathCache) {
