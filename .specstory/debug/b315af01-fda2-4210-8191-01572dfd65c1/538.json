@@ -1,0 +1,62 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "signature": "EtUCClsIDRgCKkAvcbnATBeZMzImE1RgfjoE5vZSXHIrT/bgR5L9IVmVDDrg9eyV4kuKHYXaXKhpjAHvHEiESAKTx6YBjUxEF54bMhFjbGF1ZGUtc29ubmV0LTQtNjgAEgyGGDYBe3+almChsUUaDL8fJZJshZojbhiTISIwqZ93hU4Yas7dFdO/1g3/5VIRnz7FqVvtAUa5R2U2Z453VDrnwPnM2DPJ4fTZqo95KqcBepDt2eADcwANG7kjUJ0NAXcLIECbPCRlPTvi0Q8mhF1OWbOxt/MKQL02DrW+SCf4qr/ibRU61e3ne3HrabqTrGFg1W/8xYEy/wrOZnR5GfeXbctG6VmLgEWASeqVtsikyjtJlMyTqFIBZkjqvR2B6NDbrn+UKHFlmHWNnd+vfZD3dPqV1Y2LkFhaVRek6K5JXga18mQyDr/PO3HWM6FXaM8gTb87fUMYAQ==",
+        "thinking": "Same error even with `platform: \"node\"`. The `__require` function is still the same. Let me check the top of the new bundle to see if anything changed:",
+        "type": "thinking"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_015NrSp3rLofk74wUcctAzsN",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 945
+      },
+      "cache_creation_input_tokens": 945,
+      "cache_read_input_tokens": 61991,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 945
+          },
+          "cache_creation_input_tokens": 945,
+          "cache_read_input_tokens": 61991,
+          "input_tokens": 1,
+          "output_tokens": 165,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 165,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "48af60bb-1eb7-4e4b-9d64-d1a2594ed7eb",
+  "requestId": "req_011CaaMfwpKSK7js3T6eKNeC",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T17:33:50.631Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "5f86691f-f491-4fd1-bc43-2c42470d4923",
+  "version": "2.1.123"
+}

@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "  client2.track(\"agent.task_completed\", {\n    agent_role: dims.agentRole,\n    ...dims.agentId ? { agent_id: dims.agentId } : {},\n    ...dims.adapterType ? { adapter_type: dims.adapterType } : {},\n    ...dims.model ? { model: dims.model } : {}\n  });\n}\n\n// ../../server/src/services/routines.ts\ninit_errors();\n\n// ../../server/src/telemetry.ts\nimport path46 from \"node:path\";\n\n// ../../server/src/version.ts\nimport { createRequire } from \"node:module\";\nvar require2 = createRequire(\"file:///worker.js\");\nvar pkg = require2(\"../package.json\");\nvar serverVersion = pkg.version ?? \"0.0.0\";\n\n// ../../server/src/telemetry.ts\nvar client = null;\nfunction getTelemetryClient() {\n  return client;\n}\n\n// ../../server/src/services/cron.ts\nvar FIELD_SPECS = [\n  { min: 0, max: 59, name: \"minute\" },\n  { min: 0, max: 23, name: \"hour\" },\n  { min: 1, max: 31, name: \"day of month\" },",
+        "is_error": false,
+        "tool_use_id": "toolu_01Sdb9CKjLbfmWBiE4FpCakz",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "86552501-7f62-4f40-a83b-ca4ea74002c7",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "86552501-7f62-4f40-a83b-ca4ea74002c7",
+  "timestamp": "2026-04-30T17:29:40.717Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "  client2.track(\"agent.task_completed\", {\n    agent_role: dims.agentRole,\n    ...dims.agentId ? { agent_id: dims.agentId } : {},\n    ...dims.adapterType ? { adapter_type: dims.adapterType } : {},\n    ...dims.model ? { model: dims.model } : {}\n  });\n}\n\n// ../../server/src/services/routines.ts\ninit_errors();\n\n// ../../server/src/telemetry.ts\nimport path46 from \"node:path\";\n\n// ../../server/src/version.ts\nimport { createRequire } from \"node:module\";\nvar require2 = createRequire(\"file:///worker.js\");\nvar pkg = require2(\"../package.json\");\nvar serverVersion = pkg.version ?? \"0.0.0\";\n\n// ../../server/src/telemetry.ts\nvar client = null;\nfunction getTelemetryClient() {\n  return client;\n}\n\n// ../../server/src/services/cron.ts\nvar FIELD_SPECS = [\n  { min: 0, max: 59, name: \"minute\" },\n  { min: 0, max: 23, name: \"hour\" },\n  { min: 1, max: 31, name: \"day of month\" },"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "234e2c50-1e78-4f8f-95a5-ee251b354306",
+  "version": "2.1.123"
+}

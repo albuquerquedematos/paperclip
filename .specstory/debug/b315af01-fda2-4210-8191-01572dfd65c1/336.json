@@ -1,0 +1,33 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "import type { Config } from \"../config.js\";\nimport type { StorageProvider as StorageProviderImpl } from \"./types.js\";\nimport type { StorageProvider as StorageProviderId } from \"@paperclipai/shared\";\nimport { createLocalDiskStorageProvider } from \"./local-disk-provider.js\";\nimport { createS3StorageProvider } from \"./s3-provider.js\";\n\ntype StorageProviderFactory = (config: Config) =\u003e StorageProviderImpl;\nconst externalProviders = new Map\u003cStorageProviderId, StorageProviderFactory\u003e();\n\nexport function registerStorageProvider(id: StorageProviderId, factory: StorageProviderFactory): void {\n  externalProviders.set(id, factory);\n}\n\nexport function createStorageProviderFromConfig(config: Config): StorageProviderImpl {\n  if (config.storageProvider === \"local_disk\") {\n    return createLocalDiskStorageProvider(config.storageLocalDiskBaseDir);\n  }\n\n  if (config.storageProvider === \"s3\") {\n    return createS3StorageProvider({\n      bucket: config.storageS3Bucket,\n      region: config.storageS3Region,\n      endpoint: config.storageS3Endpoint,\n      prefix: config.storageS3Prefix,\n      forcePathStyle: config.storageS3ForcePathStyle,\n    });\n  }\n\n  const external = externalProviders.get(config.storageProvider);\n  if (external) {",
+        "is_error": false,
+        "tool_use_id": "toolu_013jbbWHpz1sXhjDqpehec5Z",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "1adfa0bd-383a-417a-9098-c5bd6baf5364",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "sourceToolAssistantUUID": "1adfa0bd-383a-417a-9098-c5bd6baf5364",
+  "timestamp": "2026-04-30T17:19:29.830Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "import type { Config } from \"../config.js\";\nimport type { StorageProvider as StorageProviderImpl } from \"./types.js\";\nimport type { StorageProvider as StorageProviderId } from \"@paperclipai/shared\";\nimport { createLocalDiskStorageProvider } from \"./local-disk-provider.js\";\nimport { createS3StorageProvider } from \"./s3-provider.js\";\n\ntype StorageProviderFactory = (config: Config) =\u003e StorageProviderImpl;\nconst externalProviders = new Map\u003cStorageProviderId, StorageProviderFactory\u003e();\n\nexport function registerStorageProvider(id: StorageProviderId, factory: StorageProviderFactory): void {\n  externalProviders.set(id, factory);\n}\n\nexport function createStorageProviderFromConfig(config: Config): StorageProviderImpl {\n  if (config.storageProvider === \"local_disk\") {\n    return createLocalDiskStorageProvider(config.storageLocalDiskBaseDir);\n  }\n\n  if (config.storageProvider === \"s3\") {\n    return createS3StorageProvider({\n      bucket: config.storageS3Bucket,\n      region: config.storageS3Region,\n      endpoint: config.storageS3Endpoint,\n      prefix: config.storageS3Prefix,\n      forcePathStyle: config.storageS3ForcePathStyle,\n    });\n  }\n\n  const external = externalProviders.get(config.storageProvider);\n  if (external) {"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "7453d2e2-fb48-4e47-8161-ec9ac9466f17",
+  "version": "2.1.123"
+}

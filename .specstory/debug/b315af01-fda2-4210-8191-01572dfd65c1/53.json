@@ -1,0 +1,61 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "signature": "EqoEClsIDRgCKkAEdTAAhtJ68mVmhqfOPNzq22mvIQq30wnQZHT9GMqev9HBbPC9cxzj0VS94KIfWJWXukY5ccslNq6uKapK47MeMhFjbGF1ZGUtc29ubmV0LTQtNjgAEgzWrrKoW4S9MXq04BAaDP/q4mAH4TSjxK4cfCIw8/DUyL6mkQ6EOHGNI9XBe07nuHG6RwjMS8RAiifzWBprKjHSNIi0r12ZMw1//dV+KvwCsndzW9kjqQfSG+Ho8BuGALfO3p7Q73ftRPYANE8+a7YPVcV0wyE5M7W0HmaEa8WeiQwLmnicw4SeBh3YY1O+Evq159DJrd+hBcXGOwcmor/uwMKNJROxDeGxlQB/gtS8c5HwMPddDpUBR7/8JQb7GZNhq8guAyhT5xceugQC57ukXjeS6VATMwBg1pKfPb0k4b7039Qafk0UD85y2hfgMD+K1HNswIFhbkBv8OgOACheCNFn4d/U6gD+aFrZdo8jkATZUzyKzNNka6OzwZCYc3we3ycZgYbq9yIgkqQRdNBrnLq3J0r6LH55+JETds+R7Q5mqSi+BWpn5+Pr+E1IuIE7dvGJWWmU7Xyw3cQq/IbuiTvkq55kyqhNpB6eX5VBeRdYC2+APJtNnUakPsMwvDkocsBTQUY0Y6PMUOU2nLG8GWZNnWQSuz1o/a4Tti06Q5TI/d4iJDhgjWsW1nsTj3+zNPiBZcZOkeK8j6yvOXdB1KtXv5KbgYUlcukYAQ==",
+        "thinking": "The local paperclip instance uses embedded postgres on port 54329. I need to start the embedded postgres and then configure wrangler to use it.\n\nLet me check if there's a way to start the embedded postgres instance, or if it's already running and just on a different port.\n\nLet me also check what the embedded postgres data dir is and if there's a way to start it.",
+        "type": "thinking"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01S2TSkxMdK9gHsW3s1Erc9Z",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 615
+      },
+      "cache_creation_input_tokens": 615,
+      "cache_read_input_tokens": 41007,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 615
+          },
+          "cache_creation_input_tokens": 615,
+          "cache_read_input_tokens": 41007,
+          "input_tokens": 1,
+          "output_tokens": 209,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 209,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "2eff74cc-3889-42cd-9ce5-2314faad0db1",
+  "requestId": "req_011CaaKHitr5xdVsBRozBAc2",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "timestamp": "2026-04-30T17:02:36.146Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "53416cfd-3c0f-4c38-a8ac-84bb45fa77de",
+  "version": "2.1.123"
+}

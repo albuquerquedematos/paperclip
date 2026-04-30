@@ -1,0 +1,33 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "File created successfully at: /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-net.ts",
+        "tool_use_id": "toolu_016i8mBaahbavLt3CD6ByjHW",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "da2ba4e8-07c0-4afc-86fb-2bb849727b78",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "sourceToolAssistantUUID": "da2ba4e8-07c0-4afc-86fb-2bb849727b78",
+  "timestamp": "2026-04-30T17:16:59.623Z",
+  "toolUseResult": {
+    "content": "// Stub for node:net — not available in CF Workers.\nexport class Socket { on() { return this; } connect() { return this; } end() { return this; } }\nexport class Server { on() { return this; } listen() { return this; } }\nexport function createServer() { return new Server(); }\nexport function createConnection() { return new Socket(); }\nexport function connect() { return new Socket(); }\nexport default { Socket, Server, createServer, createConnection, connect };\n",
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-net.ts",
+    "originalFile": null,
+    "structuredPatch": [],
+    "type": "create",
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "0967704f-eb60-4ab8-b037-7a5ce67c435d",
+  "version": "2.1.123"
+}

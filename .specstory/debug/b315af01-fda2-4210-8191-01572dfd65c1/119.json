@@ -1,0 +1,33 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "Legend: production dependency, optional only, dev only\n\n@paperclipai/server@0.3.1 /Users/migmac/Documents/GitHub/_ABM/paperclip/server\n\ndependencies:\nbetter-auth 1.4.18\n└─┬ vitest 3.2.4 peer\n  └─┬ jsdom 28.1.0 peer\n    └── undici 7.24.4\njsdom 28.1.0\n└── undici 7.24.4\n\ndevDependencies:\nvitest 3.2.4\n└─┬ jsdom 28.1.0 peer\n  └── undici 7.24.4",
+        "is_error": false,
+        "tool_use_id": "toolu_01FPf36jmuZLaNoWKDFvaR4L",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "a1bd9e9c-6eec-4f0a-94fc-183ed1afb957",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "sourceToolAssistantUUID": "a1bd9e9c-6eec-4f0a-94fc-183ed1afb957",
+  "timestamp": "2026-04-30T17:06:09.980Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "Legend: production dependency, optional only, dev only\n\n@paperclipai/server@0.3.1 /Users/migmac/Documents/GitHub/_ABM/paperclip/server\n\ndependencies:\nbetter-auth 1.4.18\n└─┬ vitest 3.2.4 peer\n  └─┬ jsdom 28.1.0 peer\n    └── undici 7.24.4\njsdom 28.1.0\n└── undici 7.24.4\n\ndevDependencies:\nvitest 3.2.4\n└─┬ jsdom 28.1.0 peer\n  └── undici 7.24.4"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "c266cd04-4548-43cb-8045-f7a8164aab7d",
+  "version": "2.1.123"
+}

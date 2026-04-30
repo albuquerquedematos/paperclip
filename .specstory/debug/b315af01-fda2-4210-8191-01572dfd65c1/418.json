@@ -1,0 +1,33 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "File created successfully at: /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/server-logger-shim.ts",
+        "tool_use_id": "toolu_01Bhrc8k3dGnijmGBrGSPP1m",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "616e6e3e-f81c-4b64-9da4-1464cdca521c",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "sourceToolAssistantUUID": "616e6e3e-f81c-4b64-9da4-1464cdca521c",
+  "timestamp": "2026-04-30T17:25:34.011Z",
+  "toolUseResult": {
+    "content": "/**\n * CF Workers replacement for server/src/middleware/logger.ts\n *\n * The Node.js logger writes to a local file using pino-pretty + pino transports.\n * In CF Workers, file I/O is unavailable. This shim replaces it with a\n * console-backed logger that has the same export shape.\n */\n\nimport pino from \"./pino-shim.js\";\n\nexport const logger = pino({ level: \"info\" });\n\n// httpLogger is an Express middleware — never used in CF (we use Hono directly).\n// Export a no-op so any import of httpLogger doesn't crash at module load.\nexport const httpLogger = (_req: unknown, _res: unknown, next: () =\u003e void) =\u003e next?.();\n",
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/server-logger-shim.ts",
+    "originalFile": null,
+    "structuredPatch": [],
+    "type": "create",
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "25d39f47-07fd-45c7-bfdc-1b9fc8bdd00d",
+  "version": "2.1.123"
+}

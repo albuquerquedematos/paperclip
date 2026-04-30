@@ -1,0 +1,33 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "✘ [ERROR] Could not resolve \"node:readline\"\n✘ [ERROR] Could not resolve \"worker_threads\"\n✘ [ERROR] Could not resolve \"worker_threads\"\n../../node_modules/.pnpm/pino@9.14.0/node_modules/pino/lib/tools.js:28:33: ERROR: Could not resolve \"worker_threads\"\n../../node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/index.js:5:27: ERROR: Could not resolve \"worker_threads\"\n../db/src/backup-lib.ts:3:32: ERROR: Could not resolve \"node:readline\"",
+        "is_error": false,
+        "tool_use_id": "toolu_01CMz3eXfiq4ZMFvEHw2JaRV",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "69e33598-9e46-4eb5-a35c-937aeb49b9bb",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "sourceToolAssistantUUID": "69e33598-9e46-4eb5-a35c-937aeb49b9bb",
+  "timestamp": "2026-04-30T17:18:34.906Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "✘ [ERROR] Could not resolve \"node:readline\"\n✘ [ERROR] Could not resolve \"worker_threads\"\n✘ [ERROR] Could not resolve \"worker_threads\"\n../../node_modules/.pnpm/pino@9.14.0/node_modules/pino/lib/tools.js:28:33: ERROR: Could not resolve \"worker_threads\"\n../../node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/index.js:5:27: ERROR: Could not resolve \"worker_threads\"\n../db/src/backup-lib.ts:3:32: ERROR: Could not resolve \"node:readline\""
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "6128bfcf-5273-4c38-a51d-f75c3550423c",
+  "version": "2.1.123"
+}

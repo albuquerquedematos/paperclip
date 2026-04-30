@@ -1,0 +1,90 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/api.ts has been updated successfully.",
+        "tool_use_id": "toolu_01HB87qVws4ZDyao1EkSQvb9",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "9dcaf3bc-362d-40df-8a90-12bdd6a5fff3",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "9dcaf3bc-362d-40df-8a90-12bdd6a5fff3",
+  "timestamp": "2026-04-30T17:43:17.267Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/api.ts",
+    "newString": "// ---------------------------------------------------------------------------\n// Per-request route resolution\n//\n// Route handlers close over service instances which close over the DB\n// connection. CF Workers prohibits reusing I/O objects (TCP sockets) across\n// requests, so we rebuild DB + route tables on every request.\n//\n// Route path patterns (regexp, paramNames) are static and are cached.\n// ---------------------------------------------------------------------------\n\ninterface CompiledRoute {\n  route: RouteDefinition;\n  re: RegExp;\n  paramNames: string[];\n}\n\n// Cached route path patterns — these don't depend on DB so they survive\n// across requests in the same isolate.\nlet compiledPathCache: Array\u003c{ method: string; path: string; re: RegExp; paramNames: string[] }\u003e | null = null;",
+    "oldString": "// ---------------------------------------------------------------------------\n// Per-isolate route cache\n//\n// Workers isolates are long-lived within a datacenter edge node. We build the\n// Express Routers (and extract RouteDefinitions) once per isolate, keyed on\n// the Hyperdrive connection string (proxy for \"same DB config\").\n//\n// Subsequent requests in the same isolate reuse the cached routes, skipping\n// the router construction overhead.\n// ---------------------------------------------------------------------------\n\ninterface CompiledRoute {\n  route: RouteDefinition;\n  re: RegExp;\n  paramNames: string[];\n}\n\ninterface RouteCache {\n  routes: RouteDefinition[];\n  compiled: CompiledRoute[];\n  db: Db;\n  storage: StorageService;\n  hyperdriveConnStr: string;\n}\n\nlet routeCache: RouteCache | null = null;",
+    "originalFile": null,
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          " }",
+          " ",
+          " // ---------------------------------------------------------------------------",
+          "-// Per-isolate route cache",
+          "+// Per-request route resolution",
+          " //",
+          "-// Workers isolates are long-lived within a datacenter edge node. We build the",
+          "-// Express Routers (and extract RouteDefinitions) once per isolate, keyed on",
+          "-// the Hyperdrive connection string (proxy for \"same DB config\").",
+          "+// Route handlers close over service instances which close over the DB",
+          "+// connection. CF Workers prohibits reusing I/O objects (TCP sockets) across",
+          "+// requests, so we rebuild DB + route tables on every request.",
+          " //",
+          "-// Subsequent requests in the same isolate reuse the cached routes, skipping",
+          "-// the router construction overhead.",
+          "+// Route path patterns (regexp, paramNames) are static and are cached.",
+          " // ---------------------------------------------------------------------------",
+          " ",
+          " interface CompiledRoute {"
+        ],
+        "newLines": 13,
+        "newStart": 109,
+        "oldLines": 14,
+        "oldStart": 109
+      },
+      {
+        "lines": [
+          "   paramNames: string[];",
+          " }",
+          " ",
+          "-interface RouteCache {",
+          "-  routes: RouteDefinition[];",
+          "-  compiled: CompiledRoute[];",
+          "-  db: Db;",
+          "-  storage: StorageService;",
+          "-  hyperdriveConnStr: string;",
+          "-}",
+          "+// Cached route path patterns — these don't depend on DB so they survive",
+          "+// across requests in the same isolate.",
+          "+let compiledPathCache: Array\u003c{ method: string; path: string; re: RegExp; paramNames: string[] }\u003e | null = null;",
+          " ",
+          "-let routeCache: RouteCache | null = null;",
+          "-",
+          " // Convert an Express-style path pattern (with :param segments) to a RegExp.",
+          " function pathToRegex(path: string): { re: RegExp; paramNames: string[] } {",
+          "   const paramNames: string[] = [];"
+        ],
+        "newLines": 10,
+        "newStart": 124,
+        "oldLines": 16,
+        "oldStart": 125
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "ece65a07-61a9-420b-aded-123b85862fe0",
+  "version": "2.1.123"
+}

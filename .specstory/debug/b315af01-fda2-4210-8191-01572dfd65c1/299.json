@@ -1,0 +1,33 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "File created successfully at: /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-fs.ts",
+        "tool_use_id": "toolu_01QgcJjB3NQe8jP5ASdnbnxC",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "f53b92dc-5b4b-4556-9e01-dec424598dc4",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "sourceToolAssistantUUID": "f53b92dc-5b4b-4556-9e01-dec424598dc4",
+  "timestamp": "2026-04-30T17:17:45.531Z",
+  "toolUseResult": {
+    "content": "// Stub for node:fs and node:fs/promises — not available in CF Workers.\nconst notAvailable = (name: string) =\u003e () =\u003e { throw new Error(`node:fs.${name} not available in CF Workers`); };\n\n// Sync API stubs\nexport const readFileSync = notAvailable(\"readFileSync\");\nexport const writeFileSync = notAvailable(\"writeFileSync\");\nexport const existsSync = () =\u003e false;\nexport const mkdirSync = notAvailable(\"mkdirSync\");\nexport const readdirSync = notAvailable(\"readdirSync\");\nexport const statSync = notAvailable(\"statSync\");\nexport const unlinkSync = notAvailable(\"unlinkSync\");\nexport const createReadStream = notAvailable(\"createReadStream\");\nexport const createWriteStream = notAvailable(\"createWriteStream\");\nexport const realpath = { native: notAvailable(\"realpath.native\") };\nexport const realpathSync = { native: notAvailable(\"realpathSync.native\") };\n\n// Async/promises API stubs\nconst notAvailableAsync = (name: string) =\u003e async () =\u003e { throw new Error(`node:fs.${name} not available in CF Workers`); };\nexport const promises = {\n  readFile: notAvailableAsync(\"promises.readFile\"),\n  writeFile: notAvailableAsync(\"promises.writeFile\"),\n  readdir: notAvailableAsync(\"promises.readdir\"),\n  mkdir: notAvailableAsync(\"promises.mkdir\"),\n  stat: notAvailableAsync(\"promises.stat\"),\n  unlink: notAvailableAsync(\"promises.unlink\"),\n  access: notAvailableAsync(\"promises.access\"),\n  realpath: notAvailableAsync(\"promises.realpath\"),\n};\n\nexport default { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, statSync,\n  unlinkSync, createReadStream, createWriteStream, realpathSync, realpath, promises };\n",
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-fs.ts",
+    "originalFile": null,
+    "structuredPatch": [],
+    "type": "create",
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "49e3a694-ebc5-4971-93ed-f709ff1329a3",
+  "version": "2.1.123"
+}

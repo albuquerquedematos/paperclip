@@ -1,0 +1,91 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/api.ts has been updated successfully.",
+        "tool_use_id": "toolu_01B8dJrzXAeucjTQuNviX12v",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "16d2a0bb-7142-4f0f-98a1-572fa6fd9742",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "16d2a0bb-7142-4f0f-98a1-572fa6fd9742",
+  "timestamp": "2026-04-30T17:43:29.757Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/api.ts",
+    "newString": "function buildRequestResources(env: Env) {\n  const db = createHyperdriveDb(env.HYPERDRIVE);\n  const r2Provider = new R2Provider(env.PAPERCLIP_STORAGE, {\n    bucket: env.STORAGE_R2_BUCKET ?? \"paperclip-storage\",\n    prefix: env.STORAGE_R2_PREFIX ?? \"\",\n  });\n  const storage = createCfStorageService(r2Provider) as unknown as StorageService;\n\n  function ext(router: unknown, prefix: string): RouteDefinition[] {\n    return extractRoutesFromRouter(router, prefix);\n  }\n\n  const routes: RouteDefinition[] = [\n    ...ext(companyRoutes(db, storage), \"/api/companies\"),\n    ...ext(agentRoutes(db, {}), \"/api\"),\n    ...ext(assetRoutes(db, storage), \"/api\"),\n    ...ext(projectRoutes(db), \"/api\"),\n    ...ext(issueRoutes(db, storage, {}), \"/api\"),\n    ...ext(issueTreeControlRoutes(db), \"/api\"),\n    ...ext(routineRoutes(db, {}), \"/api\"),\n    ...ext(environmentRoutes(db, {}), \"/api\"),\n    ...ext(executionWorkspaceRoutes(db), \"/api\"),\n    ...ext(goalRoutes(db), \"/api\"),\n    ...ext(approvalRoutes(db, {}), \"/api\"),\n    ...ext(secretRoutes(db), \"/api\"),\n    ...ext(costRoutes(db, {}), \"/api\"),\n    ...ext(activityRoutes(db), \"/api\"),\n    ...ext(dashboardRoutes(db), \"/api\"),\n    ...ext(userProfileRoutes(db), \"/api\"),\n    ...ext(sidebarBadgeRoutes(db), \"/api\"),\n    ...ext(sidebarPreferenceRoutes(db), \"/api\"),\n    ...ext(inboxDismissalRoutes(db), \"/api\"),\n    ...ext(instanceSettingsRoutes(db), \"/api\"),\n    ...ext(llmRoutes(db), \"/api\"),\n    ...ext(authRoutes(db), \"/api\"),\n  ];\n\n  if (!compiledPathCache) {\n    compiledPathCache = routes.map((r) =\u003e ({ method: r.method, path: r.path, ...pathToRegex(r.path) }));\n    console.log(`[CF Worker] Compiled ${compiledPathCache.length} route patterns`);\n  }\n\n  const compiled: CompiledRoute[] = routes.map((route, i) =\u003e ({\n    route,\n    re: compiledPathCache![i]!.re,\n    paramNames: compiledPathCache![i]!.paramNames,\n  }));\n\n  return { compiled, db, storage };\n}",
+    "oldString": "function buildRouteCache(env: Env): RouteCache {\n  const db = createHyperdriveDb(env.HYPERDRIVE);\n  const r2Provider = new R2Provider(env.PAPERCLIP_STORAGE, {\n    bucket: env.STORAGE_R2_BUCKET ?? \"paperclip-storage\",\n    prefix: env.STORAGE_R2_PREFIX ?? \"\",\n  });\n  const storage = createCfStorageService(r2Provider) as unknown as StorageService;\n\n  function ext(router: unknown, prefix: string): RouteDefinition[] {\n    return extractRoutesFromRouter(router, prefix);\n  }\n\n  const routes: RouteDefinition[] = [\n    ...ext(companyRoutes(db, storage), \"/api/companies\"),\n    ...ext(agentRoutes(db, {}), \"/api\"),\n    ...ext(assetRoutes(db, storage), \"/api\"),\n    ...ext(projectRoutes(db), \"/api\"),\n    ...ext(issueRoutes(db, storage, {}), \"/api\"),\n    ...ext(issueTreeControlRoutes(db), \"/api\"),\n    ...ext(routineRoutes(db, {}), \"/api\"),\n    ...ext(environmentRoutes(db, {}), \"/api\"),\n    ...ext(executionWorkspaceRoutes(db), \"/api\"),\n    ...ext(goalRoutes(db), \"/api\"),\n    ...ext(approvalRoutes(db, {}), \"/api\"),\n    ...ext(secretRoutes(db), \"/api\"),\n    ...ext(costRoutes(db, {}), \"/api\"),\n    ...ext(activityRoutes(db), \"/api\"),\n    ...ext(dashboardRoutes(db), \"/api\"),\n    ...ext(userProfileRoutes(db), \"/api\"),\n    ...ext(sidebarBadgeRoutes(db), \"/api\"),\n    ...ext(sidebarPreferenceRoutes(db), \"/api\"),\n    ...ext(inboxDismissalRoutes(db), \"/api\"),\n    ...ext(instanceSettingsRoutes(db), \"/api\"),\n    ...ext(llmRoutes(db), \"/api\"),\n    ...ext(authRoutes(db), \"/api\"),\n  ];\n\n  const compiled: CompiledRoute[] = routes.map((route) =\u003e ({\n    route,\n    ...pathToRegex(route.path),\n  }));\n\n  return { routes, compiled, db, storage, hyperdriveConnStr: env.HYPERDRIVE.connectionString };\n}\n\nfunction getRouteCache(env: Env): RouteCache {\n  if (!routeCache || routeCache.hyperdriveConnStr !== env.HYPERDRIVE.connectionString) {\n    routeCache = buildRouteCache(env);\n    console.log(`[CF Worker] Built route cache: ${routeCache.routes.length} routes`);\n  }\n  return routeCache;\n}",
+    "originalFile": null,
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          "   return { re: new RegExp(`^${pattern}$`), paramNames };",
+          " }",
+          " ",
+          "-function buildRouteCache(env: Env): RouteCache {",
+          "+function buildRequestResources(env: Env) {",
+          "   const db = createHyperdriveDb(env.HYPERDRIVE);",
+          "   const r2Provider = new R2Provider(env.PAPERCLIP_STORAGE, {",
+          "     bucket: env.STORAGE_R2_BUCKET ?? \"paperclip-storage\","
+        ],
+        "newLines": 7,
+        "newStart": 140,
+        "oldLines": 7,
+        "oldStart": 140
+      },
+      {
+        "lines": [
+          "     ...ext(authRoutes(db), \"/api\"),",
+          "   ];",
+          " ",
+          "-  const compiled: CompiledRoute[] = routes.map((route) =\u003e ({",
+          "+  if (!compiledPathCache) {",
+          "+    compiledPathCache = routes.map((r) =\u003e ({ method: r.method, path: r.path, ...pathToRegex(r.path) }));",
+          "+    console.log(`[CF Worker] Compiled ${compiledPathCache.length} route patterns`);",
+          "+  }",
+          "+",
+          "+  const compiled: CompiledRoute[] = routes.map((route, i) =\u003e ({",
+          "     route,",
+          "-    ...pathToRegex(route.path),",
+          "+    re: compiledPathCache![i]!.re,",
+          "+    paramNames: compiledPathCache![i]!.paramNames,",
+          "   }));",
+          " ",
+          "-  return { routes, compiled, db, storage, hyperdriveConnStr: env.HYPERDRIVE.connectionString };",
+          "+  return { compiled, db, storage };",
+          " }",
+          " ",
+          "-function getRouteCache(env: Env): RouteCache {",
+          "-  if (!routeCache || routeCache.hyperdriveConnStr !== env.HYPERDRIVE.connectionString) {",
+          "-    routeCache = buildRouteCache(env);",
+          "-    console.log(`[CF Worker] Built route cache: ${routeCache.routes.length} routes`);",
+          "-  }",
+          "-  return routeCache;",
+          "-}",
+          "-",
+          " // ---------------------------------------------------------------------------",
+          " // Hono app",
+          " // ---------------------------------------------------------------------------"
+        ],
+        "newLines": 20,
+        "newStart": 177,
+        "oldLines": 22,
+        "oldStart": 177
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "7f996117-2b3f-4a80-b006-5fbd51b33e5f",
+  "version": "2.1.123"
+}

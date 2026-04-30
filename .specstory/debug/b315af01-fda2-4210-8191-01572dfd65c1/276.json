@@ -1,0 +1,33 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "  \"../../node_modules/.pnpm/@smithy+node-http-handler@4.4.10/node_modules/@smithy/node-http-handler/dist-es/write-request-body.js\"() {\n    init_timing();\n    MIN_WAIT_TIME = 6e3;\n  }\n});\n\n// ../../node_modules/.pnpm/@smithy+node-http-handler@4.4.10/node_modules/@smithy/node-http-handler/dist-es/node-http-handler.js\nimport { Agent as hAgent, request as hRequest } from \"http\";\nimport { Agent as hsAgent, request as hsRequest } from \"https\";\nvar NodeHttpHandler;\nvar init_node_http_handler = __esm({\n  \"../../node_modules/.pnpm/@smithy+node-http-handler@4.4.10/node_modules/@smithy/node-http-handler/dist-es/node-http-handler.js\"() {\n    init_dist_es2();\n    init_dist_es10();\n    init_constants();\n    init_get_transformed_headers();\n---\n  \"../../node_modules/.pnpm/@aws-sdk+credential-provider-env@3.972.9/node_modules/@aws-sdk/credential-provider-env/dist-es/index.js\"() {\n    init_fromEnv2();\n  }\n});\n\n// ../../node_modules/.pnpm/@smithy+credential-provider-imds@4.2.8/node_modules/@smithy/credential-provider-imds/dist-es/remoteProvider/httpRequest.js\nimport { Buffer as Buffer4 } from \"buffer\";\nimport { request } from \"http\";\nfunction httpRequest(options) {\n  return new Promise((resolve3, reject) =\u003e {\n    const req = request({\n      method: \"GET\",\n      ...options,\n      hostname: options.hostname?.replace(/^\\[(.+)\\]$/, \"$1\")\n    });\n    req.on(\"error\", (err) =\u003e {",
+        "is_error": false,
+        "tool_use_id": "toolu_01YVqBMMacmdXccCb1mje8XT",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "6c3fc95d-e178-46ca-9da3-27e8b3e35bc6",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "sourceToolAssistantUUID": "6c3fc95d-e178-46ca-9da3-27e8b3e35bc6",
+  "timestamp": "2026-04-30T17:16:19.129Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "  \"../../node_modules/.pnpm/@smithy+node-http-handler@4.4.10/node_modules/@smithy/node-http-handler/dist-es/write-request-body.js\"() {\n    init_timing();\n    MIN_WAIT_TIME = 6e3;\n  }\n});\n\n// ../../node_modules/.pnpm/@smithy+node-http-handler@4.4.10/node_modules/@smithy/node-http-handler/dist-es/node-http-handler.js\nimport { Agent as hAgent, request as hRequest } from \"http\";\nimport { Agent as hsAgent, request as hsRequest } from \"https\";\nvar NodeHttpHandler;\nvar init_node_http_handler = __esm({\n  \"../../node_modules/.pnpm/@smithy+node-http-handler@4.4.10/node_modules/@smithy/node-http-handler/dist-es/node-http-handler.js\"() {\n    init_dist_es2();\n    init_dist_es10();\n    init_constants();\n    init_get_transformed_headers();\n---\n  \"../../node_modules/.pnpm/@aws-sdk+credential-provider-env@3.972.9/node_modules/@aws-sdk/credential-provider-env/dist-es/index.js\"() {\n    init_fromEnv2();\n  }\n});\n\n// ../../node_modules/.pnpm/@smithy+credential-provider-imds@4.2.8/node_modules/@smithy/credential-provider-imds/dist-es/remoteProvider/httpRequest.js\nimport { Buffer as Buffer4 } from \"buffer\";\nimport { request } from \"http\";\nfunction httpRequest(options) {\n  return new Promise((resolve3, reject) =\u003e {\n    const req = request({\n      method: \"GET\",\n      ...options,\n      hostname: options.hostname?.replace(/^\\[(.+)\\]$/, \"$1\")\n    });\n    req.on(\"error\", (err) =\u003e {"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "b46ef0b0-85e8-42b7-90d2-d1a519fdc61b",
+  "version": "2.1.123"
+}

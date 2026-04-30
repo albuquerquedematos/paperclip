@@ -1,0 +1,73 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01JTBQwauP4hEfP2qCLpyK2R",
+        "input": {
+          "command": "timeout 40 npx wrangler dev --no-bundle --local 2\u003e\u00261 \u0026\nWRANGLER_PID=$!\nsleep 8\n# Test companies with verbose wrangler output\ncurl -s http://localhost:8787/api/companies\nsleep 2\nkill $WRANGLER_PID 2\u003e/dev/null || true\nwait $WRANGLER_PID 2\u003e/dev/null || true",
+          "description": "Check wrangler logs when companies is called"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": {
+      "cache_miss_reason": {
+        "type": "unavailable"
+      }
+    },
+    "id": "msg_01PqojkADPEEc5AAtDCjUHRj",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 493
+      },
+      "cache_creation_input_tokens": 493,
+      "cache_read_input_tokens": 88759,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 493
+          },
+          "cache_creation_input_tokens": 493,
+          "cache_read_input_tokens": 88759,
+          "input_tokens": 1,
+          "output_tokens": 216,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 216,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "b2338470-0808-4811-92e0-a4bd3f78a922",
+  "requestId": "req_011CaaN3hnaMgxt3RWMvo3DW",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T17:38:47.264Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "cd5292b3-82fe-411b-a243-35bfa9bc94ec",
+  "version": "2.1.123"
+}

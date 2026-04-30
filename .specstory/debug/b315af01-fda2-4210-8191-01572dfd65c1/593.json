@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": " ⛅️ wrangler 3.114.17 (update available 4.86.0)\n-----------------------------------------------\n\n\u001b[33m▲ \u001b[43;33m[\u001b[43;30mWARNING\u001b[43;33m]\u001b[0m \u001b[1mThe version of Wrangler you are using is now out-of-date.\u001b[0m\n\n  Please update to the latest version to prevent critical errors.\n  Run `npm install --save-dev wrangler@4` to update to the latest version.\n  After installation, run Wrangler with `npx wrangler`.\n\n\nUsing vars defined in .dev.vars\nYour Worker and resources are simulated locally via Miniflare. For more information, see: https://developers.cloudflare.com/workers/testing/local-development.\n\nYour worker has access to the following bindings:\n- Durable Objects:\n  - TASK_DO: TaskDO\n  - AGENT_RUN_DO: AgentRunDO\n  - SCHEDULER_DO: SchedulerDO\n- Workflows:\n  - HEARTBEAT_WORKFLOW: HeartbeatWorkflow (defined in paperclip-api)\n  - PLUGIN_DISPATCH_WORKFLOW: PluginDispatchWorkflow (defined in paperclip-api)\n- KV Namespaces:\n  - PAPERCLIP_KV: FILL_IN_AFTER_DEPLOY [simulated locally]\n- Queues:\n  - PAPERCLIP_QUEUE: paperclip-jobs [simulated locally]\n- Hyperdrive Configs:\n  - HYPERDRIVE: FILL_IN_AFTER_DEPLOY [simulated locally]\n- R2 Buckets:\n  - PAPERCLIP_STORAGE: paperclip-storage [simulated locally]\n- Vars:\n  - DEPLOYMENT_PLATFORM: \"cloudflare\"\n  - DEPLOYMENT_MODE: \"(hidden)\"\n  - DEPLOYMENT_EXPOSURE: \"(hidden)\"\n  - SIDECAR_URL: \"(hidden)\"\n  - SIDECAR_API_KEY: \"(hidden)\"\n[wrangler-UserWorker:wrn] Miniflare 3 does not currently trigger scheduled Workers automatically.\nUse `--test-scheduled` to forward fetch triggers.\n⎔ Starting local server...\n[wrangler:inf] Ready on http://localhost:8787\n=== companies (follow redirects) ===\nugrep: error: error at position 10\n(?m)^[\u003c\u003e]|{|}\n          \\___empty (sub)expression\n\n\n[CF Worker] Built route cache: 229 routes\n[wrangler:inf] GET /api/companies 302 Found (21ms)\n[wrangler:inf] GET /setup 200 OK (4ms)\n\n=== companies (headers) ===\nHTTP/1.1 302 Found\r\nLocation: /setup\r\n\r\n[wrangler:inf] HEAD /api/companies 302 Found (1ms)",
+        "is_error": false,
+        "tool_use_id": "toolu_01AHMsEz39uRB8SvTBdmphxn",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "cfab920e-0f38-4fae-9871-e6484b1a6bd8",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "cfab920e-0f38-4fae-9871-e6484b1a6bd8",
+  "timestamp": "2026-04-30T17:37:18.596Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": " ⛅️ wrangler 3.114.17 (update available 4.86.0)\n-----------------------------------------------\n\n\u001b[33m▲ \u001b[43;33m[\u001b[43;30mWARNING\u001b[43;33m]\u001b[0m \u001b[1mThe version of Wrangler you are using is now out-of-date.\u001b[0m\n\n  Please update to the latest version to prevent critical errors.\n  Run `npm install --save-dev wrangler@4` to update to the latest version.\n  After installation, run Wrangler with `npx wrangler`.\n\n\nUsing vars defined in .dev.vars\nYour Worker and resources are simulated locally via Miniflare. For more information, see: https://developers.cloudflare.com/workers/testing/local-development.\n\nYour worker has access to the following bindings:\n- Durable Objects:\n  - TASK_DO: TaskDO\n  - AGENT_RUN_DO: AgentRunDO\n  - SCHEDULER_DO: SchedulerDO\n- Workflows:\n  - HEARTBEAT_WORKFLOW: HeartbeatWorkflow (defined in paperclip-api)\n  - PLUGIN_DISPATCH_WORKFLOW: PluginDispatchWorkflow (defined in paperclip-api)\n- KV Namespaces:\n  - PAPERCLIP_KV: FILL_IN_AFTER_DEPLOY [simulated locally]\n- Queues:\n  - PAPERCLIP_QUEUE: paperclip-jobs [simulated locally]\n- Hyperdrive Configs:\n  - HYPERDRIVE: FILL_IN_AFTER_DEPLOY [simulated locally]\n- R2 Buckets:\n  - PAPERCLIP_STORAGE: paperclip-storage [simulated locally]\n- Vars:\n  - DEPLOYMENT_PLATFORM: \"cloudflare\"\n  - DEPLOYMENT_MODE: \"(hidden)\"\n  - DEPLOYMENT_EXPOSURE: \"(hidden)\"\n  - SIDECAR_URL: \"(hidden)\"\n  - SIDECAR_API_KEY: \"(hidden)\"\n[wrangler-UserWorker:wrn] Miniflare 3 does not currently trigger scheduled Workers automatically.\nUse `--test-scheduled` to forward fetch triggers.\n⎔ Starting local server...\n[wrangler:inf] Ready on http://localhost:8787\n=== companies (follow redirects) ===\nugrep: error: error at position 10\n(?m)^[\u003c\u003e]|{|}\n          \\___empty (sub)expression\n\n\n[CF Worker] Built route cache: 229 routes\n[wrangler:inf] GET /api/companies 302 Found (21ms)\n[wrangler:inf] GET /setup 200 OK (4ms)\n\n=== companies (headers) ===\nHTTP/1.1 302 Found\r\nLocation: /setup\r\n\r\n[wrangler:inf] HEAD /api/companies 302 Found (1ms)"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "9b0e2ee7-ecc4-4197-96a2-24fa7d13a119",
+  "version": "2.1.123"
+}

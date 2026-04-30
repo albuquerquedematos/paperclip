@@ -1,0 +1,33 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "File created successfully at: /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/.dev.vars",
+        "tool_use_id": "toolu_01W8ZB5iyuxGvGAkxyGn1rtf",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "e9bf2abf-13e5-40c0-8da3-91d37fe866bd",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "sourceToolAssistantUUID": "e9bf2abf-13e5-40c0-8da3-91d37fe866bd",
+  "timestamp": "2026-04-30T17:03:41.599Z",
+  "toolUseResult": {
+    "content": "# Local dev overrides — loaded by `wrangler dev` automatically\n# Override authenticated mode so requests don't require login tokens\nDEPLOYMENT_MODE=local_trusted\nDEPLOYMENT_PLATFORM=cloudflare\nDEPLOYMENT_EXPOSURE=private\n\n# Sidecar = the local Node server (runs plugin jobs, etc.)\n# Set to the running dev server; leave blank if not needed locally\nSIDECAR_URL=http://127.0.0.1:3101\nSIDECAR_API_KEY=dev-local\n",
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/.dev.vars",
+    "originalFile": null,
+    "structuredPatch": [],
+    "type": "create",
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "07c5b927-6098-46e5-87e0-55b7ab50c8af",
+  "version": "2.1.123"
+}

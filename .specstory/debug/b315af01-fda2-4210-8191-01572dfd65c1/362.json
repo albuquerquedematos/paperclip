@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_012wPgofS3yfVrUSb7UA4c4k",
+        "input": {
+          "command": "pkill -f \"wrangler dev\" 2\u003e/dev/null; sleep 1\nnode_modules/.bin/wrangler dev --no-bundle --local 2\u003e\u00261 \u0026\nsleep 15\necho \"=== health check ===\"\ncurl -s http://localhost:8787/api/health \u0026\u0026 echo \"\" || echo \"no response\"",
+          "description": "Test wrangler dev with process shim",
+          "timeout": 35000
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01WUq4vcj9nUNaLYVLoizqAW",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 149
+      },
+      "cache_creation_input_tokens": 149,
+      "cache_read_input_tokens": 146925,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 149
+          },
+          "cache_creation_input_tokens": 149,
+          "cache_read_input_tokens": 146925,
+          "input_tokens": 1,
+          "output_tokens": 173,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 173,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "f7d6832d-a7af-47db-bbfe-7d34f8fad9f1",
+  "requestId": "req_011CaaLhZsQczRJJvkr5rvQF",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "timestamp": "2026-04-30T17:21:06.321Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "4d0a64aa-3281-4d5e-ad2a-bbbf4727f905",
+  "version": "2.1.123"
+}

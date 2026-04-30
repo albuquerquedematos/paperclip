@@ -1,0 +1,62 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "signature": "EukDClsIDRgCKkD5nbdpE0fG4vdyILM8D8xuq0JbC2Jjo0daZuDqbtp2y1CVGQ25BHLVurfV3ZC03iq7ejeDeMPUsX1g54GyRSPTMhFjbGF1ZGUtc29ubmV0LTQtNjgAEgwiM47++Cen+e+YeLgaDDIKQb3x9MYCQwFQiyIw60a8Fs0TxHXqa6htDz2uEMHwOKtn+3ClJpMjd1UeZCXe2wtOgHybNP9CbrIrqwXlKrsCe65mXrSTpv02SNlCod63buYChiGH4zn0EqaoPsXeO7NV5k+V3OAcukjzVV0rVPdO6/PFMAjLWdCXJqk7BqXBMUSJZ1ZhOdSCP2oVMw5ZpObQ/8Z2j/dK2TzfXV9oScJpRwgsJNWZnxpumOhP6n887XXN8Gy6a1/PMNXh3SJQwTs6QQRN2ZREFPv9beSejehBRdycGZPWSia0teufem1K7asV8U02aOVoJU5/CAUgvk58RbLsYvs4AFTxxNesFLrDB9KHoTgFxP2pJ4KBqOkgQfw3RBKM0WwnVROrmrB0wOKoiGT2s6DVtXmLm0OQ4oiFrsoFXtz0Cw5kVEezlNbGQe1SrhCqrt0KA7ANmu1TLVcw3DA8UvP2+TTyxUg2QTF2F8iPIZwLLIaMORz4rX8AKJGdKH6BkF18SOa7GAE=",
+        "thinking": "It's redirecting to `/setup`. This means the setup middleware is running and detecting that the app isn't configured yet. Since we're using the local embedded postgres with the `local_trusted` mode, the postgres isn't running or doesn't have any data.\n\nLet me check if the local postgres is running:",
+        "type": "thinking"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_019doQqfKnM39iVkdfruD8V8",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 1014
+      },
+      "cache_creation_input_tokens": 1014,
+      "cache_read_input_tokens": 78547,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 1014
+          },
+          "cache_creation_input_tokens": 1014,
+          "cache_read_input_tokens": 78547,
+          "input_tokens": 1,
+          "output_tokens": 226,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 226,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "9b0e2ee7-ecc4-4197-96a2-24fa7d13a119",
+  "requestId": "req_011CaaMwTRDVy539H8pqKZZT",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T17:37:21.578Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "da8cf50f-a93b-4d3c-bcfc-62eb6edcb1f4",
+  "version": "2.1.123"
+}

@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "#   2. wrangler hyperdrive create paperclip-hyperdrive --connection-string=\"\u003cneon-url\u003e\"\n#      Then paste the returned ID into [hyperdrive] binding below.\n#   3. Open https://\u003cyour-worker\u003e.workers.dev/setup to complete first-run setup.\n# =============================================================================\n\nname = \"paperclip-api\"\ncompatibility_date = \"2024-09-23\"\n--\n# After deploying: wrangler hyperdrive create paperclip-hyperdrive --connection-string=\"\u003cneon-url\u003e\"\n# ---------------------------------------------------------------------------\n[[hyperdrive]]\nbinding = \"HYPERDRIVE\"\nid = \"FILL_IN_AFTER_DEPLOY\"\nlocalConnectionString = \"postgres://paperclip:paperclip@127.0.0.1:54329/paperclip\"\n\n# ---------------------------------------------------------------------------\n# Queues — background fanout (cost rollups, activity log flush, plugin jobs)",
+        "is_error": false,
+        "tool_use_id": "toolu_01Q3B7VjH4RxezUBD97QSf3K",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "38efde42-50cd-4d43-b8f4-4f9aa16e7eb2",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "38efde42-50cd-4d43-b8f4-4f9aa16e7eb2",
+  "timestamp": "2026-04-30T17:37:31.745Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "#   2. wrangler hyperdrive create paperclip-hyperdrive --connection-string=\"\u003cneon-url\u003e\"\n#      Then paste the returned ID into [hyperdrive] binding below.\n#   3. Open https://\u003cyour-worker\u003e.workers.dev/setup to complete first-run setup.\n# =============================================================================\n\nname = \"paperclip-api\"\ncompatibility_date = \"2024-09-23\"\n--\n# After deploying: wrangler hyperdrive create paperclip-hyperdrive --connection-string=\"\u003cneon-url\u003e\"\n# ---------------------------------------------------------------------------\n[[hyperdrive]]\nbinding = \"HYPERDRIVE\"\nid = \"FILL_IN_AFTER_DEPLOY\"\nlocalConnectionString = \"postgres://paperclip:paperclip@127.0.0.1:54329/paperclip\"\n\n# ---------------------------------------------------------------------------\n# Queues — background fanout (cost rollups, activity log flush, plugin jobs)"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "77d2d1e0-a58b-4c82-b8c8-4dfb3cd6ae44",
+  "version": "2.1.123"
+}

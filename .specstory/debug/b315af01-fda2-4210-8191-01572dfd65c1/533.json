@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01EYjs4Pmvyr8rthZRNTgM9k",
+        "input": {
+          "command": "node build-worker.mjs 2\u003e\u00261 | head -20",
+          "description": "Rebuild with platform node"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01SLJhDQvT8evak9rvrzbnxk",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 2693
+      },
+      "cache_creation_input_tokens": 2693,
+      "cache_read_input_tokens": 59162,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 2693
+          },
+          "cache_creation_input_tokens": 2693,
+          "cache_read_input_tokens": 59162,
+          "input_tokens": 1,
+          "output_tokens": 88,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 88,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "d9a7ca71-c3df-4a46-a31b-230d849f6216",
+  "requestId": "req_011CaaMfSBrUKo5snZRQ84Tr",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T17:33:43.386Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "282a4225-48d4-431e-8e3e-e65da816c1da",
+  "version": "2.1.123"
+}

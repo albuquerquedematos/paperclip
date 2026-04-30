@@ -1,0 +1,68 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01QgcJjB3NQe8jP5ASdnbnxC",
+        "input": {
+          "content": "// Stub for node:fs and node:fs/promises — not available in CF Workers.\nconst notAvailable = (name: string) =\u003e () =\u003e { throw new Error(`node:fs.${name} not available in CF Workers`); };\n\n// Sync API stubs\nexport const readFileSync = notAvailable(\"readFileSync\");\nexport const writeFileSync = notAvailable(\"writeFileSync\");\nexport const existsSync = () =\u003e false;\nexport const mkdirSync = notAvailable(\"mkdirSync\");\nexport const readdirSync = notAvailable(\"readdirSync\");\nexport const statSync = notAvailable(\"statSync\");\nexport const unlinkSync = notAvailable(\"unlinkSync\");\nexport const createReadStream = notAvailable(\"createReadStream\");\nexport const createWriteStream = notAvailable(\"createWriteStream\");\nexport const realpath = { native: notAvailable(\"realpath.native\") };\nexport const realpathSync = { native: notAvailable(\"realpathSync.native\") };\n\n// Async/promises API stubs\nconst notAvailableAsync = (name: string) =\u003e async () =\u003e { throw new Error(`node:fs.${name} not available in CF Workers`); };\nexport const promises = {\n  readFile: notAvailableAsync(\"promises.readFile\"),\n  writeFile: notAvailableAsync(\"promises.writeFile\"),\n  readdir: notAvailableAsync(\"promises.readdir\"),\n  mkdir: notAvailableAsync(\"promises.mkdir\"),\n  stat: notAvailableAsync(\"promises.stat\"),\n  unlink: notAvailableAsync(\"promises.unlink\"),\n  access: notAvailableAsync(\"promises.access\"),\n  realpath: notAvailableAsync(\"promises.realpath\"),\n};\n\nexport default { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, statSync,\n  unlinkSync, createReadStream, createWriteStream, realpathSync, realpath, promises };\n",
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-fs.ts"
+        },
+        "name": "Write",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01PaUXWMxowCtHjty5aVsiiq",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 1521
+      },
+      "cache_creation_input_tokens": 1521,
+      "cache_read_input_tokens": 129542,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 1521
+          },
+          "cache_creation_input_tokens": 1521,
+          "cache_read_input_tokens": 129542,
+          "input_tokens": 1,
+          "output_tokens": 581,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 581,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "9b762cc4-8726-4620-981d-102a2781a1bc",
+  "requestId": "req_011CaaLSRHoXhK1kxkDDF4G4",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "timestamp": "2026-04-30T17:17:44.442Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "f53b92dc-5b4b-4556-9e01-dec424598dc4",
+  "version": "2.1.123"
+}

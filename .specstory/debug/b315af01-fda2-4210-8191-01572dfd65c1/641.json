@@ -1,0 +1,66 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "signature": "ErICClsIDRgCKkB/1hJ7rFDawj+AsvUBvoN6yiZk1P0Tiox//ltwXB0tVBr1InVrAC7G+zAb1bV6mey3xvbFWiVpT1NPmvC+Avu8MhFjbGF1ZGUtc29ubmV0LTQtNjgAEgw0pEESftTC2QTz8a4aDPxx2dmpeTg+qWBuRyIw9azf1stxx2r8i13KtUBSt17Cby+5ueWlpczLCzar9K3iZy+mpcBY4hX9CDbX61ywKoQBqUhIn+XySoR3zCar94rVsw8AnSwg4FQUHKpiKSPxz0THEzS9Qxn5JBp9E3j6qj1ZoH2ucaUyXhzqOLxtEqIYiL+UfwmZcp6+AdkqbLRJQ2+PlfsOgimuxVPKE+vnTV7pSzJF8n067oivC3CpcuwBnToXn2RkdPKNlSaz1npK6QAjSCkiGAE=",
+        "thinking": "Let me look at `buildRouteCache` again, specifically to check if there's an error happening during route extraction:",
+        "type": "thinking"
+      }
+    ],
+    "diagnostics": {
+      "cache_miss_reason": {
+        "type": "unavailable"
+      }
+    },
+    "id": "msg_01PqojkADPEEc5AAtDCjUHRj",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 493
+      },
+      "cache_creation_input_tokens": 493,
+      "cache_read_input_tokens": 88759,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 493
+          },
+          "cache_creation_input_tokens": 493,
+          "cache_read_input_tokens": 88759,
+          "input_tokens": 1,
+          "output_tokens": 216,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 216,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "a3705440-3f94-4fb3-8640-9bb29a7ce09b",
+  "requestId": "req_011CaaN3hnaMgxt3RWMvo3DW",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T17:38:45.600Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "b2338470-0808-4811-92e0-a4bd3f78a922",
+  "version": "2.1.123"
+}

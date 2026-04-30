@@ -1,0 +1,33 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "import { readConfigFile } from \"./config-file.js\";\nimport { execFileSync } from \"node:child_process\";\nimport { existsSync, realpathSync } from \"node:fs\";\nimport { resolve } from \"node:path\";\nimport { config as loadDotenv } from \"dotenv\";\nimport { resolvePaperclipEnvPath } from \"./paths.js\";\nimport { maybeRepairLegacyWorktreeConfigAndEnvFiles } from \"./worktree-config.js\";\nimport {\n  AUTH_BASE_URL_MODES,\n  BIND_MODES,\n  DEPLOYMENT_EXPOSURES,\n  DEPLOYMENT_MODES,\n  DEPLOYMENT_PLATFORMS,\n  SECRET_PROVIDERS,\n  STORAGE_PROVIDERS,\n  type BindMode,\n  type AuthBaseUrlMode,\n  type DeploymentExposure,\n  type DeploymentMode,\n  type DeploymentPlatform,\n  type SecretProvider,\n  type StorageProvider,\n  inferBindModeFromHost,\n  resolveRuntimeBind,\n  validateConfiguredBindMode,\n} from \"@paperclipai/shared\";\nimport {\n  resolveDefaultBackupDir,\n  resolveDefaultEmbeddedPostgresDir,\n  resolveDefaultSecretsKeyFilePath,\n  resolveDefaultStorageDir,\n  resolveHomeAwarePath,\n} from \"./home-paths.js\";\n\nconst PAPERCLIP_ENV_FILE_PATH = resolvePaperclipEnvPath();\nif (existsSync(PAPERCLIP_ENV_FILE_PATH)) {\n  loadDotenv({ path: PAPERCLIP_ENV_FILE_PATH, override: false, quiet: true });\n}\n\nconst CWD_ENV_PATH = resolve(process.cwd(), \".env\");\nconst isSameFile = existsSync(CWD_ENV_PATH) \u0026\u0026 existsSync(PAPERCLIP_ENV_FILE_PATH)\n  ? realpathSync(CWD_ENV_PATH) === realpathSync(PAPERCLIP_ENV_FILE_PATH)\n  : CWD_ENV_PATH === PAPERCLIP_ENV_FILE_PATH;\nif (!isSameFile \u0026\u0026 existsSync(CWD_ENV_PATH)) {\n  loadDotenv({ path: CWD_ENV_PATH, override: false, quiet: true });\n}\n\nmaybeRepairLegacyWorktreeConfigAndEnvFiles();\n\nconst TAILSCALE_DETECT_TIMEOUT_MS = 3000;\n\ntype DatabaseMode = \"embedded-postgres\" | \"postgres\";\n\nexport interface Config {\n  deploymentMode: DeploymentMode;\n  deploymentPlatform: DeploymentPlatform;\n  deploymentExposure: DeploymentExposure;\n  bind: BindMode;\n  customBindHost: string | undefined;\n  host: string;\n  port: number;\n  allowedHostnames: string[];\n  authBaseUrlMode: AuthBaseUrlMode;\n  authPublicBaseUrl: string | undefined;\n  authDisableSignUp: boolean;\n  databaseMode: DatabaseMode;\n  databaseUrl: string | undefined;\n  databaseMigrationUrl: string | undefined;\n  embeddedPostgresDataDir: string;\n  embeddedPostgresPort: number;\n  databaseBackupEnabled: boolean;\n  databaseBackupIntervalMinutes: number;\n  databaseBackupRetentionDays: number;\n  databaseBackupDir: string;\n  serveUi: boolean;\n  uiDevMiddleware: boolean;\n  secretsProvider: SecretProvider;\n  secretsStrictMode: boolean;\n  secretsMasterKeyFilePath: string;\n  storageProvider: StorageProvider;",
+        "is_error": false,
+        "tool_use_id": "toolu_0197819tmqfD7Pc2H59NtKtv",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "9a9eac06-24ac-4979-8fef-41d651889258",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "sourceToolAssistantUUID": "9a9eac06-24ac-4979-8fef-41d651889258",
+  "timestamp": "2026-04-30T17:01:10.024Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "import { readConfigFile } from \"./config-file.js\";\nimport { execFileSync } from \"node:child_process\";\nimport { existsSync, realpathSync } from \"node:fs\";\nimport { resolve } from \"node:path\";\nimport { config as loadDotenv } from \"dotenv\";\nimport { resolvePaperclipEnvPath } from \"./paths.js\";\nimport { maybeRepairLegacyWorktreeConfigAndEnvFiles } from \"./worktree-config.js\";\nimport {\n  AUTH_BASE_URL_MODES,\n  BIND_MODES,\n  DEPLOYMENT_EXPOSURES,\n  DEPLOYMENT_MODES,\n  DEPLOYMENT_PLATFORMS,\n  SECRET_PROVIDERS,\n  STORAGE_PROVIDERS,\n  type BindMode,\n  type AuthBaseUrlMode,\n  type DeploymentExposure,\n  type DeploymentMode,\n  type DeploymentPlatform,\n  type SecretProvider,\n  type StorageProvider,\n  inferBindModeFromHost,\n  resolveRuntimeBind,\n  validateConfiguredBindMode,\n} from \"@paperclipai/shared\";\nimport {\n  resolveDefaultBackupDir,\n  resolveDefaultEmbeddedPostgresDir,\n  resolveDefaultSecretsKeyFilePath,\n  resolveDefaultStorageDir,\n  resolveHomeAwarePath,\n} from \"./home-paths.js\";\n\nconst PAPERCLIP_ENV_FILE_PATH = resolvePaperclipEnvPath();\nif (existsSync(PAPERCLIP_ENV_FILE_PATH)) {\n  loadDotenv({ path: PAPERCLIP_ENV_FILE_PATH, override: false, quiet: true });\n}\n\nconst CWD_ENV_PATH = resolve(process.cwd(), \".env\");\nconst isSameFile = existsSync(CWD_ENV_PATH) \u0026\u0026 existsSync(PAPERCLIP_ENV_FILE_PATH)\n  ? realpathSync(CWD_ENV_PATH) === realpathSync(PAPERCLIP_ENV_FILE_PATH)\n  : CWD_ENV_PATH === PAPERCLIP_ENV_FILE_PATH;\nif (!isSameFile \u0026\u0026 existsSync(CWD_ENV_PATH)) {\n  loadDotenv({ path: CWD_ENV_PATH, override: false, quiet: true });\n}\n\nmaybeRepairLegacyWorktreeConfigAndEnvFiles();\n\nconst TAILSCALE_DETECT_TIMEOUT_MS = 3000;\n\ntype DatabaseMode = \"embedded-postgres\" | \"postgres\";\n\nexport interface Config {\n  deploymentMode: DeploymentMode;\n  deploymentPlatform: DeploymentPlatform;\n  deploymentExposure: DeploymentExposure;\n  bind: BindMode;\n  customBindHost: string | undefined;\n  host: string;\n  port: number;\n  allowedHostnames: string[];\n  authBaseUrlMode: AuthBaseUrlMode;\n  authPublicBaseUrl: string | undefined;\n  authDisableSignUp: boolean;\n  databaseMode: DatabaseMode;\n  databaseUrl: string | undefined;\n  databaseMigrationUrl: string | undefined;\n  embeddedPostgresDataDir: string;\n  embeddedPostgresPort: number;\n  databaseBackupEnabled: boolean;\n  databaseBackupIntervalMinutes: number;\n  databaseBackupRetentionDays: number;\n  databaseBackupDir: string;\n  serveUi: boolean;\n  uiDevMiddleware: boolean;\n  secretsProvider: SecretProvider;\n  secretsStrictMode: boolean;\n  secretsMasterKeyFilePath: string;\n  storageProvider: StorageProvider;"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "b8835cfc-975c-4718-94ee-972debabdac9",
+  "version": "2.1.123"
+}

@@ -1,0 +1,53 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/api.ts has been updated successfully.",
+        "tool_use_id": "toolu_01B8VkgV8XZjHRByCjsEi1v3",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "e41f5ad1-5222-43be-879b-c56a94b01c74",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "e41f5ad1-5222-43be-879b-c56a94b01c74",
+  "timestamp": "2026-04-30T17:43:34.124Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/api.ts",
+    "newString": "function getCompiledRoutes(env: Env) {\n  return buildRequestResources(env);\n}",
+    "oldString": "function getCompiledRoutes(env: Env) {\n  const cache = getRouteCache(env);\n  return { compiled: cache.compiled, db: cache.db, storage: cache.storage };\n}",
+    "originalFile": null,
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          " // ---------------------------------------------------------------------------",
+          " ",
+          " function getCompiledRoutes(env: Env) {",
+          "-  const cache = getRouteCache(env);",
+          "-  return { compiled: cache.compiled, db: cache.db, storage: cache.storage };",
+          "+  return buildRequestResources(env);",
+          " }",
+          " ",
+          " // R2-native upload endpoints (registered before the catch-all)"
+        ],
+        "newLines": 7,
+        "newStart": 252,
+        "oldLines": 8,
+        "oldStart": 252
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "88ae35d7-dc04-43ce-85ff-971d05bbbdac",
+  "version": "2.1.123"
+}

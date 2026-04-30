@@ -1,0 +1,60 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "text": "The `fs/promises` alias conflicts with `fs`. Let me create a separate file for it and also add `http2`:",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01JXiHmp1LhCacYogpdyo2nQ",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 1040
+      },
+      "cache_creation_input_tokens": 1040,
+      "cache_read_input_tokens": 132443,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 1040
+          },
+          "cache_creation_input_tokens": 1040,
+          "cache_read_input_tokens": 132443,
+          "input_tokens": 1,
+          "output_tokens": 1315,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 1315,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "dfa4a04c-c894-4fdb-a10e-c33d30fa657d",
+  "requestId": "req_011CaaLU1pDwh8sirHfz6AqD",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "timestamp": "2026-04-30T17:18:16.990Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "a52e0b05-200a-41a3-912d-bc6ea74c71a0",
+  "version": "2.1.123"
+}

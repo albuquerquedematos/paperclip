@@ -1,0 +1,71 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01FaqgMnxSjx253Cksj1yU4W",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/build-worker.mjs",
+          "new_string": "  banner: {\n    js: [\n      \"// CF Workers polyfills for missing nodejs_compat APIs\",\n      \"if (typeof process !== 'undefined') {\",\n      \"  if (!process.hrtime) {\",\n      \"    process.hrtime = function(time) {\",\n      \"      const ms = Date.now();\",\n      \"      const s = Math.floor(ms / 1000);\",\n      \"      const ns = (ms % 1000) * 1000000;\",\n      \"      if (time) return [s - time[0], ns - time[1]];\",\n      \"      return [s, ns];\",\n      \"    };\",\n      \"    process.hrtime.bigint = function() { return BigInt(Date.now()) * 1000000n; };\",\n      \"  }\",\n      \"  if (!process.cwd) process.cwd = function() { return '/'; };\",\n      \"  if (!process.chdir) process.chdir = function() {};\",\n      \"  if (!process.exit) process.exit = function(code) { throw new Error('process.exit(' + code + ')'); };\",\n      \"}\",\n    ].join(\"\\n\"),\n  },",
+          "old_string": "  banner: {\n    js: [\n      \"// CF Workers polyfills for missing nodejs_compat APIs\",\n      \"if (typeof process !== 'undefined' \u0026\u0026 !process.hrtime) {\",\n      \"  process.hrtime = function(time) {\",\n      \"    const ms = Date.now();\",\n      \"    const s = Math.floor(ms / 1000);\",\n      \"    const ns = (ms % 1000) * 1000000;\",\n      \"    if (time) return [s - time[0], ns - time[1]];\",\n      \"    return [s, ns];\",\n      \"  };\",\n      \"  process.hrtime.bigint = function() { return BigInt(Date.now()) * 1000000n; };\",\n      \"}\",\n    ].join(\"\\n\"),\n  },",
+          "replace_all": false
+        },
+        "name": "Edit",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01CnRyQJXf4jGGw8BcrM5wSS",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 612
+      },
+      "cache_creation_input_tokens": 612,
+      "cache_read_input_tokens": 56758,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 612
+          },
+          "cache_creation_input_tokens": 612,
+          "cache_read_input_tokens": 56758,
+          "input_tokens": 1,
+          "output_tokens": 845,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 845,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "1c6c4ec2-4bd8-498b-a70f-5a5fea06849f",
+  "requestId": "req_011CaaMb6VKqtHB18prmZ9Zr",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T17:32:52.707Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "6d1f25da-9651-41cc-8d29-8912f8b7b4f4",
+  "version": "2.1.123"
+}

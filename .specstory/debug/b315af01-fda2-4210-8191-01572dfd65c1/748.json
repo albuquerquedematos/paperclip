@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "420\t  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise\u003cResponse\u003e {\n421\t    // Boot the Cloudflare implementations on first request (idempotent).\n422\t    bootCloudflare(env);\n423\t\n424\t    // Ensure route cache is warm before handling the request.\n425\t    getRouteCache(env);\n426\t\n427\t    // CF service layer -- instantiated per-request (Workers are stateless).\n428\t    const sidecar = new SidecarClient({\n429\t      baseUrl: env.SIDECAR_URL,",
+        "tool_use_id": "toolu_01Urm7mSVYeo9GsfEavx1W4L",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "7e9c5af0-a310-44d3-b331-9af5825e56a6",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "7e9c5af0-a310-44d3-b331-9af5825e56a6",
+  "timestamp": "2026-04-30T17:43:57.995Z",
+  "toolUseResult": {
+    "file": {
+      "content": "  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise\u003cResponse\u003e {\n    // Boot the Cloudflare implementations on first request (idempotent).\n    bootCloudflare(env);\n\n    // Ensure route cache is warm before handling the request.\n    getRouteCache(env);\n\n    // CF service layer -- instantiated per-request (Workers are stateless).\n    const sidecar = new SidecarClient({\n      baseUrl: env.SIDECAR_URL,",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/api.ts",
+      "numLines": 10,
+      "startLine": 420,
+      "totalLines": 527
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "db44995d-bada-43e8-bc55-3da293f75d5b",
+  "version": "2.1.123"
+}

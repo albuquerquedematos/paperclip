@@ -1,0 +1,70 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01W4bKQ2YJpyurS5WWccDvTW",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-fs-promises.ts",
+          "new_string": "export const pipeline = notAvailable(\"pipeline\");\nexport const open = notAvailable(\"open\");\nexport const lstat = notAvailable(\"lstat\");\nexport const watch = notAvailable(\"watch\");",
+          "old_string": "export const pipeline = notAvailable(\"pipeline\");",
+          "replace_all": false
+        },
+        "name": "Edit",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01T5o2KbFygyWEiumf4kCXYX",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 2318
+      },
+      "cache_creation_input_tokens": 2318,
+      "cache_read_input_tokens": 140617,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 2318
+          },
+          "cache_creation_input_tokens": 2318,
+          "cache_read_input_tokens": 140617,
+          "input_tokens": 1,
+          "output_tokens": 200,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 200,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "44ab16a8-8347-4251-b797-812c532652ae",
+  "requestId": "req_011CaaLcborGMw5nb92HBNrp",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "timestamp": "2026-04-30T17:20:00.202Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "62741cc1-175e-4287-a64f-088e11b13b2d",
+  "version": "2.1.123"
+}

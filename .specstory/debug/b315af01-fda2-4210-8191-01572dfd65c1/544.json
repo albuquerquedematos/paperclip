@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "// ../../node_modules/.pnpm/mime-types@2.1.35/node_modules/mime-types/index.js\nvar require_mime_types = __commonJS({\n  \"../../node_modules/.pnpm/mime-types@2.1.35/node_modules/mime-types/index.js\"(exports2) {\n    \"use strict\";\n    var db = require_mime_db();\n    var extname = __require(\"path\").extname;\n    var EXTRACT_TYPE_REGEXP = /^\\s*([^;\\s]*)(?:;|\\s|$)/;\n    var TEXT_TYPE_REGEXP = /^text\\//i;\n    exports2.charset = charset;\n    exports2.charsets = { lookup: charset };\n    exports2.contentType = contentType;\n    exports2.extension = extension;\n    exports2.extensions = /* @__PURE__ */ Object.create(null);\n    exports2.lookup = lookup;\n    exports2.types = /* @__PURE__ */ Object.create(null);",
+        "is_error": false,
+        "tool_use_id": "toolu_018ud3oXiqPH5XZKN9EtSA2q",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "58eb145b-d68a-4753-b676-7c029f6a442b",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "58eb145b-d68a-4753-b676-7c029f6a442b",
+  "timestamp": "2026-04-30T17:34:01.147Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "// ../../node_modules/.pnpm/mime-types@2.1.35/node_modules/mime-types/index.js\nvar require_mime_types = __commonJS({\n  \"../../node_modules/.pnpm/mime-types@2.1.35/node_modules/mime-types/index.js\"(exports2) {\n    \"use strict\";\n    var db = require_mime_db();\n    var extname = __require(\"path\").extname;\n    var EXTRACT_TYPE_REGEXP = /^\\s*([^;\\s]*)(?:;|\\s|$)/;\n    var TEXT_TYPE_REGEXP = /^text\\//i;\n    exports2.charset = charset;\n    exports2.charsets = { lookup: charset };\n    exports2.contentType = contentType;\n    exports2.extension = extension;\n    exports2.extensions = /* @__PURE__ */ Object.create(null);\n    exports2.lookup = lookup;\n    exports2.types = /* @__PURE__ */ Object.create(null);"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "133d79a2-90b3-45ef-90b8-8984545bbae8",
+  "version": "2.1.123"
+}

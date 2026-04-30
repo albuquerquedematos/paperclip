@@ -1,0 +1,62 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "signature": "EuMCClsIDRgCKkC3Bmvn/d3zOHP/xoLwThTjM8lK89/5eB8o7x8CEPZTHhsz2aofyA1oichXfW8o9Uzz3Rb7erqbsRsbf6OSb3WVMhFjbGF1ZGUtc29ubmV0LTQtNjgAEgzNdGgYFZw2GzcHB+UaDPlqrHxU1iylYQ3OSCIw6nOMyRRoIp1euq1lVMuNXPT2mcBy99OfI/jaKkS0nW5aGGXto4X8/x2GEX7CkG3OKrUBkNeU+VuxGqKe3CyVtZJL4ph824P84IAzm4TCJIjN8GMlFz4SOVj/6XLadKS1KkDie1w15L7i3nmh8+SjVnoVYRO9USahXlc63ZYa27RHBlldlMcbSwRcqyk9PVOF3f8qQ2bEe+fyrO2ZY4AQp7kihgyBw7EsshasNUYczGvFo23BZLrKH1tnhxrHQl5fCri5FuIJUDlBZYw16EASPel2IOt2WJ6CseBzKh4tqh1LeX+NQ+AVUhgB",
+        "thinking": "The user wants a summary of the entire conversation. Let me summarize all the work done across both the previous session (from the summary) and this current session.",
+        "type": "thinking"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01Uw13spvjL5eXYQ6JyuuwEE",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 523
+      },
+      "cache_creation_input_tokens": 523,
+      "cache_read_input_tokens": 77848,
+      "inference_geo": "",
+      "input_tokens": 3,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 523
+          },
+          "cache_creation_input_tokens": 523,
+          "cache_read_input_tokens": 77848,
+          "input_tokens": 3,
+          "output_tokens": 1256,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 1256,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "27e7ff0c-94b1-4106-bafe-dfc4f0052a9e",
+  "requestId": "req_011CaaK93yJi2erRFW4XBNT2",
+  "sessionId": "7d7f32a3-7dfa-499b-a373-5bc3bbeb0c19",
+  "slug": "cached-sniffing-penguin",
+  "timestamp": "2026-04-30T17:00:37.608Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "bdcfa380-e948-4deb-84cb-9a994f14a039",
+  "version": "2.1.123"
+}

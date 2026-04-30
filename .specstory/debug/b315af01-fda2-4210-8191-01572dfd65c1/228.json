@@ -1,0 +1,68 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01DPuLeZ58g3jjGrXB6AZgE4",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/package.json",
+          "limit": 20
+        },
+        "name": "Read",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_016ahzeoz7fk4zYMic2aYo7g",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 368
+      },
+      "cache_creation_input_tokens": 368,
+      "cache_read_input_tokens": 100463,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 368
+          },
+          "cache_creation_input_tokens": 368,
+          "cache_read_input_tokens": 100463,
+          "input_tokens": 1,
+          "output_tokens": 105,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 105,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "d1fdee67-c487-4a22-977e-a3dc46cf4658",
+  "requestId": "req_011CaaKzeU5e8ryYHmjpuBNX",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "timestamp": "2026-04-30T17:11:50.689Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "60b16b05-21f8-4f37-b583-0adf123141be",
+  "version": "2.1.123"
+}

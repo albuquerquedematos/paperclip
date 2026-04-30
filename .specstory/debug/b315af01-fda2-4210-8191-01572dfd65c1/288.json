@@ -1,0 +1,68 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01JyHVVTrUyyAbebXxZ8wp9y",
+        "input": {
+          "content": "// Stub for node:tls — not available in CF Workers.\nexport class TLSSocket { on() { return this; } }\nexport class Server { on() { return this; } listen() { return this; } }\nexport function createServer() { return new Server(); }\nexport function connect() { return new TLSSocket(); }\nexport default { TLSSocket, Server, createServer, connect };\n",
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-tls.ts"
+        },
+        "name": "Write",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01M1xBN9fM5nxZ2U5mManjBS",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 373
+      },
+      "cache_creation_input_tokens": 373,
+      "cache_read_input_tokens": 125781,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 373
+          },
+          "cache_creation_input_tokens": 373,
+          "cache_read_input_tokens": 125781,
+          "input_tokens": 1,
+          "output_tokens": 199,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 199,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "12251db4-37f6-4c3d-a881-7aa5d162dc72",
+  "requestId": "req_011CaaLPbrTgc7E2LMAwmwE7",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "timestamp": "2026-04-30T17:17:02.644Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "11a0bfa2-9204-47af-9f6a-e28e667ef481",
+  "version": "2.1.123"
+}

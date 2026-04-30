@@ -1,0 +1,33 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "        throw new Error(buildRunnerFailureMessage(\"stop sandbox callback bridge\", stopResult));\n      }\n    }\n  };\n}\nfunction getSandboxCallbackBridgeServerSource() {\n  return `import { randomUUID, timingSafeEqual } from \"node:crypto\";\nimport { createServer } from \"node:http\";\nimport { promises as fs } from \"node:fs\";\nimport path from \"node:path\";\n\nconst queueDir = process.env.PAPERCLIP_BRIDGE_QUEUE_DIR;\nconst bridgeToken = process.env.PAPERCLIP_BRIDGE_TOKEN;\nconst host = process.env.PAPERCLIP_BRIDGE_HOST || \"127.0.0.1\";\nconst port = Number(process.env.PAPERCLIP_BRIDGE_PORT || \"0\");\nconst pollIntervalMs = Number(process.env.PAPERCLIP_BRIDGE_POLL_INTERVAL_MS || \"100\");",
+        "is_error": false,
+        "tool_use_id": "toolu_01EVG9ULz766jjDXcsQD279J",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "b1074385-6428-4a01-8a99-6afa686150ef",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "sourceToolAssistantUUID": "b1074385-6428-4a01-8a99-6afa686150ef",
+  "timestamp": "2026-04-30T17:16:18.899Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "        throw new Error(buildRunnerFailureMessage(\"stop sandbox callback bridge\", stopResult));\n      }\n    }\n  };\n}\nfunction getSandboxCallbackBridgeServerSource() {\n  return `import { randomUUID, timingSafeEqual } from \"node:crypto\";\nimport { createServer } from \"node:http\";\nimport { promises as fs } from \"node:fs\";\nimport path from \"node:path\";\n\nconst queueDir = process.env.PAPERCLIP_BRIDGE_QUEUE_DIR;\nconst bridgeToken = process.env.PAPERCLIP_BRIDGE_TOKEN;\nconst host = process.env.PAPERCLIP_BRIDGE_HOST || \"127.0.0.1\";\nconst port = Number(process.env.PAPERCLIP_BRIDGE_PORT || \"0\");\nconst pollIntervalMs = Number(process.env.PAPERCLIP_BRIDGE_POLL_INTERVAL_MS || \"100\");"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "172351a1-5034-4f5e-b75b-37e2c788c837",
+  "version": "2.1.123"
+}

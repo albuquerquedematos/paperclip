@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01J7vKDUCVU8JMR3GAVCLVsp",
+        "input": {
+          "command": "node build-worker.mjs 2\u003e\u00261 | tail -30",
+          "description": "Run custom build script",
+          "timeout": 60000
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01BNeWrdXc4vcUiFq2HerHPh",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 2173
+      },
+      "cache_creation_input_tokens": 2173,
+      "cache_read_input_tokens": 97387,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 2173
+          },
+          "cache_creation_input_tokens": 2173,
+          "cache_read_input_tokens": 97387,
+          "input_tokens": 1,
+          "output_tokens": 132,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 132,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "591929b1-ad39-42b6-9965-c872fd8ac9ec",
+  "requestId": "req_011CaaKyV5kJzHxhUhLB1hu4",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "timestamp": "2026-04-30T17:11:35.261Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "c9d38ac7-0e70-4a41-b6af-f955c43b2d01",
+  "version": "2.1.123"
+}

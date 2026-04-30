@@ -1,0 +1,33 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "File created successfully at: /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-readline.ts",
+        "tool_use_id": "toolu_01GBeLekSCyHYq8zudxeWPuv",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "1a6a789c-f5eb-4763-b266-66ff5754601e",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "sourceToolAssistantUUID": "1a6a789c-f5eb-4763-b266-66ff5754601e",
+  "timestamp": "2026-04-30T17:18:52.012Z",
+  "toolUseResult": {
+    "content": "// Stub for node:readline — not available in CF Workers.\nexport function createInterface() { throw new Error(\"node:readline not available in CF Workers\"); }\nexport function question() { throw new Error(\"node:readline not available in CF Workers\"); }\nexport default { createInterface, question };\n",
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-readline.ts",
+    "originalFile": null,
+    "structuredPatch": [],
+    "type": "create",
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "01763ba0-cf32-49ec-9e94-b0bb71f798ba",
+  "version": "2.1.123"
+}

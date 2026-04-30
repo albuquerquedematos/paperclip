@@ -1,0 +1,33 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "File created successfully at: /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-fs-promises.ts",
+        "tool_use_id": "toolu_01TNB1wgEmy2EBW5METWmQWV",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "49a1a089-0336-424c-92e1-9235e0f95d6b",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "sourceToolAssistantUUID": "49a1a089-0336-424c-92e1-9235e0f95d6b",
+  "timestamp": "2026-04-30T17:18:19.082Z",
+  "toolUseResult": {
+    "content": "// Stub for node:fs/promises — not available in CF Workers.\nconst notAvailable = (name: string) =\u003e async () =\u003e { throw new Error(`node:fs/promises.${name} not available in CF Workers`); };\nexport const readFile = notAvailable(\"readFile\");\nexport const writeFile = notAvailable(\"writeFile\");\nexport const readdir = notAvailable(\"readdir\");\nexport const mkdir = notAvailable(\"mkdir\");\nexport const stat = notAvailable(\"stat\");\nexport const unlink = notAvailable(\"unlink\");\nexport const access = notAvailable(\"access\");\nexport const realpath = notAvailable(\"realpath\");\nexport const rm = notAvailable(\"rm\");\nexport const rename = notAvailable(\"rename\");\nexport const copyFile = notAvailable(\"copyFile\");\nexport const pipeline = notAvailable(\"pipeline\");\nexport default { readFile, writeFile, readdir, mkdir, stat, unlink, access, realpath, rm, rename, copyFile };\n",
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-fs-promises.ts",
+    "originalFile": null,
+    "structuredPatch": [],
+    "type": "create",
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "fab48bba-91c4-488e-a65e-c199fcd1cbe1",
+  "version": "2.1.123"
+}

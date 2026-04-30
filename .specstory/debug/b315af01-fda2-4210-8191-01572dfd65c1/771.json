@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_014UqLxWZwvcay9595CEdHPe",
+        "input": {
+          "command": "COMPANY_ID=\"9a7cf1f3-02a7-4751-9cdb-671c9c68edb5\"\ncd /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare\ntimeout 50 npx wrangler dev --no-bundle --local 2\u003e\u00261 \u0026\nWRANGLER_PID=$!\nsleep 8\n\necho \"--- health ---\"\ncurl -s http://localhost:8787/api/health | python3 -c \"import sys,json; d=json.load(sys.stdin); print(d['status'], d['platform'], d['mode'])\"\n\necho \"--- companies ---\"\ncurl -s http://localhost:8787/api/companies | python3 -c \"import sys,json; d=json.load(sys.stdin); print(len(d), 'companies')\"\n\necho \"--- company by ID ---\"\ncurl -s \"http://localhost:8787/api/companies/$COMPANY_ID\" | python3 -c \"import sys,json; d=json.load(sys.stdin); print(d.get('name'), d.get('status'))\"\n\necho \"--- agents for company ---\"\ncurl -s \"http://localhost:8787/api/companies/$COMPANY_ID/agents\" | python3 -c \"import sys,json; d=json.load(sys.stdin); print(type(d).__name__, len(d) if isinstance(d,list) else str(d)[:60])\"\n\necho \"--- issues ---\"\ncurl -s \"http://localhost:8787/api/issues?companyId=$COMPANY_ID\" | python3 -c \"import sys,json; d=json.load(sys.stdin); print(type(d).__name__, len(d) if isinstance(d,list) else d.get('error','?'))\"\n\necho \"--- projects ---\"\ncurl -s \"http://localhost:8787/api/projects?companyId=$COMPANY_ID\" | python3 -c \"import sys,json; d=json.load(sys.stdin); print(type(d).__name__, len(d) if isinstance(d,list) else d.get('error','?'))\"\n\necho \"--- llm models ---\"\ncurl -s \"http://localhost:8787/api/llm/models\" | python3 -c \"import sys,json; d=json.load(sys.stdin); print(type(d).__name__, str(d)[:80])\"\n\nkill $WRANGLER_PID 2\u003e/dev/null || true\nwait $WRANGLER_PID 2\u003e/dev/null || true",
+          "description": "Broad API smoke test from correct directory"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01HNRYeLL2wirSRSzycrJkKg",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 2956
+      },
+      "cache_creation_input_tokens": 2956,
+      "cache_read_input_tokens": 124482,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 2956
+          },
+          "cache_creation_input_tokens": 2956,
+          "cache_read_input_tokens": 124482,
+          "input_tokens": 1,
+          "output_tokens": 849,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 849,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "508f5aca-8abd-4081-82d0-a0bc3f348196",
+  "requestId": "req_011CaaNXHvfQpgUsh8QhccRW",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T17:45:09.178Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "eae118f6-8045-4b87-bf38-4964118cfd14",
+  "version": "2.1.123"
+}

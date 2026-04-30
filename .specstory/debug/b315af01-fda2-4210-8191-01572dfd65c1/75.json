@@ -1,0 +1,35 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "50\t# Hyperdrive — Phase 1: wraps Neon/Postgres for low-latency DB access\n51\t# After deploying: wrangler hyperdrive create paperclip-hyperdrive --connection-string=\"\u003cneon-url\u003e\"\n52\t# ---------------------------------------------------------------------------\n53\t[[hyperdrive]]\n54\tbinding = \"HYPERDRIVE\"\n55\tid = \"FILL_IN_AFTER_DEPLOY\"\n56\t\n57\t# ---------------------------------------------------------------------------\n58\t# Queues — background fanout (cost rollups, activity log flush, plugin jobs)\n59\t# ---------------------------------------------------------------------------\n60\t[[queues.producers]]\n61\tbinding = \"PAPERCLIP_QUEUE\"\n62\tqueue = \"paperclip-jobs\"\n63\t\n64\t[[queues.consumers]]\n65\tqueue = \"paperclip-jobs\"\n66\tmax_batch_size = 10\n67\tmax_batch_timeout = 5\n68\tmax_retries = 3\n69\tdead_letter_queue = \"paperclip-jobs-dlq\"",
+        "tool_use_id": "toolu_01XCkSuMixLKeKEqe7K4amvW",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "238c2d9e-fc3b-49ef-a18e-81af57c9d68d",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "sourceToolAssistantUUID": "238c2d9e-fc3b-49ef-a18e-81af57c9d68d",
+  "timestamp": "2026-04-30T17:03:32.147Z",
+  "toolUseResult": {
+    "file": {
+      "content": "# Hyperdrive — Phase 1: wraps Neon/Postgres for low-latency DB access\n# After deploying: wrangler hyperdrive create paperclip-hyperdrive --connection-string=\"\u003cneon-url\u003e\"\n# ---------------------------------------------------------------------------\n[[hyperdrive]]\nbinding = \"HYPERDRIVE\"\nid = \"FILL_IN_AFTER_DEPLOY\"\n\n# ---------------------------------------------------------------------------\n# Queues — background fanout (cost rollups, activity log flush, plugin jobs)\n# ---------------------------------------------------------------------------\n[[queues.producers]]\nbinding = \"PAPERCLIP_QUEUE\"\nqueue = \"paperclip-jobs\"\n\n[[queues.consumers]]\nqueue = \"paperclip-jobs\"\nmax_batch_size = 10\nmax_batch_timeout = 5\nmax_retries = 3\ndead_letter_queue = \"paperclip-jobs-dlq\"",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/wrangler.toml",
+      "numLines": 20,
+      "startLine": 50,
+      "totalLines": 116
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "e5448bb6-7454-4431-a2bb-f5119bdf9e39",
+  "version": "2.1.123"
+}

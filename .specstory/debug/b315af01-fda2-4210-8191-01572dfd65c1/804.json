@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01CBWT59A6Uo2guQnD25iEXi",
+        "input": {
+          "command": "COMPANY_ID=\"9a7cf1f3-02a7-4751-9cdb-671c9c68edb5\"\ncd /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare\ntimeout 50 npx wrangler dev --no-bundle --local 2\u003e\u00261 \u0026\nWRANGLER_PID=$!\nsleep 8\n\npass() { echo \"PASS: $1\"; }\nfail() { echo \"FAIL: $1 — $2\"; }\n\nresult=$(curl -sw \"%{http_code}\" -o /dev/null http://localhost:8787/api/health)\n[ \"$result\" = \"200\" ] \u0026\u0026 pass \"GET /api/health\" || fail \"GET /api/health\" \"$result\"\n\nresult=$(curl -sw \"%{http_code}\" -o /dev/null http://localhost:8787/api/companies)\n[ \"$result\" = \"200\" ] \u0026\u0026 pass \"GET /api/companies\" || fail \"GET /api/companies\" \"$result\"\n\nresult=$(curl -sw \"%{http_code}\" -o /dev/null \"http://localhost:8787/api/companies/$COMPANY_ID\")\n[ \"$result\" = \"200\" ] \u0026\u0026 pass \"GET /api/companies/:id\" || fail \"GET /api/companies/:id\" \"$result\"\n\nresult=$(curl -sw \"%{http_code}\" -o /dev/null \"http://localhost:8787/api/companies/$COMPANY_ID/agents\")\n[ \"$result\" = \"200\" ] \u0026\u0026 pass \"GET /api/companies/:id/agents\" || fail \"GET /api/companies/:id/agents\" \"$result\"\n\nresult=$(curl -sw \"%{http_code}\" -o /dev/null \"http://localhost:8787/api/companies/$COMPANY_ID/issues\")\n[ \"$result\" = \"200\" ] \u0026\u0026 pass \"GET /api/companies/:id/issues\" || fail \"GET /api/companies/:id/issues\" \"$result\"\n\nresult=$(curl -sw \"%{http_code}\" -o /dev/null \"http://localhost:8787/api/companies/$COMPANY_ID/projects\")\n[ \"$result\" = \"200\" ] \u0026\u0026 pass \"GET /api/companies/:id/projects\" || fail \"GET /api/companies/:id/projects\" \"$result\"\n\nresult=$(curl -sw \"%{http_code}\" -o /dev/null \"http://localhost:8787/api/companies/$COMPANY_ID/dashboard\")\n[ \"$result\" = \"200\" ] \u0026\u0026 pass \"GET /api/companies/:id/dashboard\" || fail \"GET /api/companies/:id/dashboard\" \"$result\"\n\nresult=$(curl -sw \"%{http_code}\" -o /dev/null \"http://localhost:8787/api/companies/stats\")\n[ \"$result\" = \"200\" ] \u0026\u0026 pass \"GET /api/companies/stats\" || fail \"GET /api/companies/stats\" \"$result\"\n\nkill $WRANGLER_PID 2\u003e/dev/null || true\nwait $WRANGLER_PID 2\u003e/dev/null || true",
+          "description": "Final smoke test of all major API routes"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_011Jf76LDULFU2G49PEgSPDb",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 297
+      },
+      "cache_creation_input_tokens": 297,
+      "cache_read_input_tokens": 133310,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 297
+          },
+          "cache_creation_input_tokens": 297,
+          "cache_read_input_tokens": 133310,
+          "input_tokens": 1,
+          "output_tokens": 849,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 849,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "9f0ecaba-c184-4bea-9a78-b7c8a19913df",
+  "requestId": "req_011CaaNcjo3VpuovbMYy2BRw",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T17:46:20.157Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "494a614e-8d96-426b-8294-afc6789789b8",
+  "version": "2.1.123"
+}

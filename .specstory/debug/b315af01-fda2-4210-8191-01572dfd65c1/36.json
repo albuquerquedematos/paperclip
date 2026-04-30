@@ -1,0 +1,68 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_0197819tmqfD7Pc2H59NtKtv",
+        "input": {
+          "command": "cat /Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/config.ts 2\u003e/dev/null | head -80 || cat /Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/env.ts 2\u003e/dev/null | head -80",
+          "description": "Read server config/env to understand DB connection setup"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_011vGYctoE4snCt3RGkR5BfL",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 2349
+      },
+      "cache_creation_input_tokens": 2349,
+      "cache_read_input_tokens": 35484,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 2349
+          },
+          "cache_creation_input_tokens": 2349,
+          "cache_read_input_tokens": 35484,
+          "input_tokens": 1,
+          "output_tokens": 729,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 729,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "adb67b69-117f-4520-a614-a4e33f1484a4",
+  "requestId": "req_011CaaKAjydjmgyPLZhST7xU",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "timestamp": "2026-04-30T17:01:09.530Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "9a9eac06-24ac-4979-8fef-41d651889258",
+  "version": "2.1.123"
+}

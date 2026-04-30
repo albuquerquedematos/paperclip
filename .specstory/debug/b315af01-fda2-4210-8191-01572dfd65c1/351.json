@@ -1,0 +1,33 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "    };\n  }\n});\n\n// ../../node_modules/.pnpm/@aws-sdk+util-user-agent-node@3.972.9/node_modules/@aws-sdk/util-user-agent-node/dist-es/defaultUserAgent.js\nimport { env, versions } from \"process\";\nvar createDefaultUserAgentProvider;\nvar init_defaultUserAgent = __esm({\n  \"../../node_modules/.pnpm/@aws-sdk+util-user-agent-node@3.972.9/node_modules/@aws-sdk/util-user-agent-node/dist-es/defaultUserAgent.js\"() {\n    init_node_os();\n    init_is_crt_available();\n    createDefaultUserAgentProvider = ({ serviceId, clientVersion }) =\u003e {\n      return async (config) =\u003e {\n        const sections = [\n          [\"aws-sdk-js\", clientVersion],\n          [\"ua\", \"2.1\"],",
+        "is_error": false,
+        "tool_use_id": "toolu_012RAtJpA27bKLYa7Fu6S8od",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "95a7bdfb-4d36-4fa4-9d99-b2b96b237723",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "sourceToolAssistantUUID": "95a7bdfb-4d36-4fa4-9d99-b2b96b237723",
+  "timestamp": "2026-04-30T17:20:35.691Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "    };\n  }\n});\n\n// ../../node_modules/.pnpm/@aws-sdk+util-user-agent-node@3.972.9/node_modules/@aws-sdk/util-user-agent-node/dist-es/defaultUserAgent.js\nimport { env, versions } from \"process\";\nvar createDefaultUserAgentProvider;\nvar init_defaultUserAgent = __esm({\n  \"../../node_modules/.pnpm/@aws-sdk+util-user-agent-node@3.972.9/node_modules/@aws-sdk/util-user-agent-node/dist-es/defaultUserAgent.js\"() {\n    init_node_os();\n    init_is_crt_available();\n    createDefaultUserAgentProvider = ({ serviceId, clientVersion }) =\u003e {\n      return async (config) =\u003e {\n        const sections = [\n          [\"aws-sdk-js\", clientVersion],\n          [\"ua\", \"2.1\"],"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "c45aef92-ff1c-4da8-a7ec-e1503573d835",
+  "version": "2.1.123"
+}

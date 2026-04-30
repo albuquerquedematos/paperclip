@@ -1,0 +1,61 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "signature": "EqIFClsIDRgCKkDBU1X5/o3AI8tU8u5giHyet3C7oF/3WGhZn6fxFGkpaq2XYae9yYedkjtW693BONvqjgPtJB8/Iid+R4sF1c9pMhFjbGF1ZGUtc29ubmV0LTQtNjgAEgyFqMdXR0JS4Hvws6waDAKF/md2v1yXpqOYTyIweJGIUA0kV3qT4PXKStiCz83iBv79OFuv+lRXAK1yk7l0ZFnCQqqbs11XAn4EBCvlKvQDPpI1r1ix6LdSkSbh2BgKQ9xJEztkQvfuT6EzUx8luFmGUevxwKTtxrZiCi5QggsSWWWnd3egcCyvlvSX35f5BlBpWCfhQtwbvljpUbN0AlZQ4cVM7+J2UiXVuMgnRU9B/JRpWVnFva9uMvOKHy/+wj0OlpR2PYGAmxkyFQOsbDpTC8Fr2GvJod96/94lMIeKlESObKZmble2XlNHBIewSymW0KdE98zLInkJE+zFrdZzUwLJH3DFNPwTQDy71LqbTMkp9GxbdaRzvUccDBLxeTGnDFM4b1Ap65KnB0ehP1VxtD3dXdvhMWl2ujzqakHpqVK41n5vaIPbJ3Knv6Zv3SPRQiJKnClVarYlht8BzIOSH4fk0DQi7lZGHGvzCisbywxtL62vy57cAGDCqTbxEljb0X7nMmzBmowrArFXfyCYjNlZf9Ue1sYVWj/vJwDR2SDE31wTUt2ekXSmJUOPAGg4IWt0VKHAe0uFjE0Gd/MiVCI7SEuwYDB4lDM2catgRGgo8zN6CqxEnSRDLccfvgycnpTYnKpgbf69J0SPjJ7JE/pEgUFGtLVJyQdkw3fwmP+rh378VtQpPyn/6wUbi+fBBf1FGfKsQAvT87LF+i/jmbXeNjaF2ykoUdoGQeXuyhfGEe8qSfcXYWifAAccPb2bNJgYAQ==",
+        "thinking": "New error: `Cannot read properties of undefined (reading 'stringifySym')` in `pino-http`. `pino-http` uses `pino` directly and accesses internal symbols from pino. Our pino shim doesn't have these internal symbols.\n\nLet me check what `pino-http` needs from pino:\n- `pino.symbols.stringifySym` or similar internal properties\n\nThis suggests that `pino-http` is wrapping our pino shim and accessing internal pino properties.\n\nLet me check what `pino-http` does with `pino` at line 33688.",
+        "type": "thinking"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01MvYCK3QWitEVyAxj82H5Am",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 1270
+      },
+      "cache_creation_input_tokens": 1270,
+      "cache_read_input_tokens": 161091,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 1270
+          },
+          "cache_creation_input_tokens": 1270,
+          "cache_read_input_tokens": 161091,
+          "input_tokens": 1,
+          "output_tokens": 249,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 249,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "5a00d095-d86b-475e-aaf6-1abc540117e0",
+  "requestId": "req_011CaaLzHtSjYnoLJNU4Lddj",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "timestamp": "2026-04-30T17:24:54.458Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "ef46cbb0-b961-4877-b625-dd53cd5ba1a9",
+  "version": "2.1.123"
+}

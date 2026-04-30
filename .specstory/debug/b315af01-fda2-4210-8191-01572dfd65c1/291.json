@@ -1,0 +1,70 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_011sUbHVSmA3WyvRRHN3yC6S",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/build-worker.mjs",
+          "new_string": "// Node.js built-ins that CF Workers DOES provide via nodejs_compat flag.\n// Mark these as external so esbuild leaves the imports as-is; the CF runtime resolves them.\nconst NODE_BUILTINS_AVAILABLE_IN_CF = [\n  \"node:assert\", \"node:async_hooks\", \"node:buffer\", \"node:crypto\",\n  \"node:diagnostics_channel\", \"node:events\", \"node:module\",\n  \"node:path\", \"node:perf_hooks\", \"node:process\", \"node:querystring\",\n  \"node:stream\", \"node:stream/consumers\", \"node:stream/promises\",\n  \"node:stream/web\", \"node:string_decoder\", \"node:timers\",\n  \"node:timers/promises\", \"node:url\", \"node:util\", \"node:util/types\",\n  \"node:worker_threads\", \"node:zlib\",\n  // Without \"node:\" prefix (legacy imports)\n  \"assert\", \"async_hooks\", \"buffer\", \"crypto\", \"diagnostics_channel\",\n  \"events\", \"module\", \"path\", \"perf_hooks\", \"process\", \"querystring\",\n  \"stream\", \"string_decoder\", \"timers\", \"url\", \"util\", \"zlib\",\n  // Node 22.5+ built-in pulled in by undici@7 — not available in Workers but\n  // will only be referenced inside try/catch or lazy code; mark external so esbuild\n  // leaves the import as-is and the CF runtime handles it gracefully.\n  \"node:sqlite\",\n];\n\n// Node.js APIs NOT available in CF Workers even with nodejs_compat.\n// These must be STUBBED (not external) — if left external the CF runtime\n// would try to resolve them and fail at startup.\nconst SHIMS_DIR = path.join(__dirname, \"src/shims\");",
+          "old_string": "// Node.js built-ins that CF provides via nodejs_compat flag\nconst NODE_BUILTINS = [\n  \"node:assert\", \"node:async_hooks\", \"node:buffer\", \"node:crypto\",\n  \"node:cluster\", \"node:console\", \"node:constants\", \"node:crypto\",\n  \"node:dgram\", \"node:diagnostics_channel\", \"node:dns\", \"node:domain\",\n  \"node:events\", \"node:fs\", \"node:fs/promises\", \"node:http\", \"node:http2\",\n  \"node:https\", \"node:inspector\", \"node:module\", \"node:net\", \"node:os\",\n  \"node:path\", \"node:perf_hooks\", \"node:process\", \"node:querystring\",\n  \"node:readline\", \"node:repl\", \"node:stream\", \"node:stream/consumers\",\n  \"node:stream/promises\", \"node:stream/web\", \"node:string_decoder\",\n  \"node:sys\", \"node:timers\", \"node:timers/promises\", \"node:tls\",\n  \"node:trace_events\", \"node:tty\", \"node:url\", \"node:util\", \"node:util/types\",\n  \"node:v8\", \"node:vm\", \"node:wasi\", \"node:worker_threads\", \"node:zlib\",\n  // Without \"node:\" prefix (legacy imports)\n  \"assert\", \"async_hooks\", \"buffer\", \"child_process\", \"cluster\", \"console\",\n  \"constants\", \"crypto\", \"dgram\", \"diagnostics_channel\", \"dns\", \"domain\",\n  \"events\", \"fs\", \"http\", \"http2\", \"https\", \"inspector\", \"module\", \"net\",\n  \"os\", \"path\", \"perf_hooks\", \"process\", \"querystring\", \"readline\", \"repl\",\n  \"stream\", \"string_decoder\", \"sys\", \"timers\", \"tls\", \"trace_events\", \"tty\",\n  \"url\", \"util\", \"v8\", \"vm\", \"wasi\", \"worker_threads\", \"zlib\",\n  // Node 22.5+ built-in pulled in by undici@7 — not available in Workers\n  \"node:sqlite\",\n];",
+          "replace_all": false
+        },
+        "name": "Edit",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01AT1xXGwTuWjnNdWB4UCZLd",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 253
+      },
+      "cache_creation_input_tokens": 253,
+      "cache_read_input_tokens": 126154,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 253
+          },
+          "cache_creation_input_tokens": 253,
+          "cache_read_input_tokens": 126154,
+          "input_tokens": 1,
+          "output_tokens": 1134,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 1134,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "0b66cf23-72cd-4320-9fef-69ae149f67ee",
+  "requestId": "req_011CaaLPvFVgirRuEZiakDcY",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "timestamp": "2026-04-30T17:17:18.069Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "0dcbeae2-dc7f-4eaa-bc91-5fe87355bbc2",
+  "version": "2.1.123"
+}

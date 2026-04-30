@@ -1,0 +1,68 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01TNB1wgEmy2EBW5METWmQWV",
+        "input": {
+          "content": "// Stub for node:fs/promises — not available in CF Workers.\nconst notAvailable = (name: string) =\u003e async () =\u003e { throw new Error(`node:fs/promises.${name} not available in CF Workers`); };\nexport const readFile = notAvailable(\"readFile\");\nexport const writeFile = notAvailable(\"writeFile\");\nexport const readdir = notAvailable(\"readdir\");\nexport const mkdir = notAvailable(\"mkdir\");\nexport const stat = notAvailable(\"stat\");\nexport const unlink = notAvailable(\"unlink\");\nexport const access = notAvailable(\"access\");\nexport const realpath = notAvailable(\"realpath\");\nexport const rm = notAvailable(\"rm\");\nexport const rename = notAvailable(\"rename\");\nexport const copyFile = notAvailable(\"copyFile\");\nexport const pipeline = notAvailable(\"pipeline\");\nexport default { readFile, writeFile, readdir, mkdir, stat, unlink, access, realpath, rm, rename, copyFile };\n",
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-fs-promises.ts"
+        },
+        "name": "Write",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01JXiHmp1LhCacYogpdyo2nQ",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 1040
+      },
+      "cache_creation_input_tokens": 1040,
+      "cache_read_input_tokens": 132443,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 1040
+          },
+          "cache_creation_input_tokens": 1040,
+          "cache_read_input_tokens": 132443,
+          "input_tokens": 1,
+          "output_tokens": 1315,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 1315,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "a52e0b05-200a-41a3-912d-bc6ea74c71a0",
+  "requestId": "req_011CaaLU1pDwh8sirHfz6AqD",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "timestamp": "2026-04-30T17:18:18.001Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "49a1a089-0336-424c-92e1-9235e0f95d6b",
+  "version": "2.1.123"
+}

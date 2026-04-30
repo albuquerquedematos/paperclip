@@ -1,0 +1,35 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "1\texport {\n2\t  createDb,\n3\t  createPostgresDb,\n4\t  getPostgresDataDirectory,\n5\t  ensurePostgresDatabase,\n6\t  inspectMigrations,\n7\t  applyPendingMigrations,\n8\t  reconcilePendingMigrationHistory,\n9\t  type MigrationState,\n10\t  type MigrationHistoryReconcileResult,\n11\t  migratePostgresIfEmpty,\n12\t  type MigrationBootstrapResult,\n13\t  type Db,\n14\t} from \"./client.js\";\n15\texport {\n16\t  getEmbeddedPostgresTestSupport,\n17\t  startEmbeddedPostgresTestDatabase,\n18\t  type EmbeddedPostgresTestDatabase,\n19\t  type EmbeddedPostgresTestSupport,\n20\t} from \"./test-embedded-postgres.js\";\n21\texport {\n22\t  runDatabaseBackup,\n23\t  runDatabaseRestore,\n24\t  formatDatabaseBackupResult,\n25\t  type BackupRetentionPolicy,\n26\t  type RunDatabaseBackupOptions,\n27\t  type RunDatabaseBackupResult,\n28\t  type RunDatabaseRestoreOptions,\n29\t} from \"./backup-lib.js\";\n30\texport {",
+        "tool_use_id": "toolu_01VWcub7JgAcK26PuL8Eck2o",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "3fe286ac-5650-4158-a4f8-d4a24ae01143",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "sourceToolAssistantUUID": "3fe286ac-5650-4158-a4f8-d4a24ae01143",
+  "timestamp": "2026-04-30T17:04:46.973Z",
+  "toolUseResult": {
+    "file": {
+      "content": "export {\n  createDb,\n  createPostgresDb,\n  getPostgresDataDirectory,\n  ensurePostgresDatabase,\n  inspectMigrations,\n  applyPendingMigrations,\n  reconcilePendingMigrationHistory,\n  type MigrationState,\n  type MigrationHistoryReconcileResult,\n  migratePostgresIfEmpty,\n  type MigrationBootstrapResult,\n  type Db,\n} from \"./client.js\";\nexport {\n  getEmbeddedPostgresTestSupport,\n  startEmbeddedPostgresTestDatabase,\n  type EmbeddedPostgresTestDatabase,\n  type EmbeddedPostgresTestSupport,\n} from \"./test-embedded-postgres.js\";\nexport {\n  runDatabaseBackup,\n  runDatabaseRestore,\n  formatDatabaseBackupResult,\n  type BackupRetentionPolicy,\n  type RunDatabaseBackupOptions,\n  type RunDatabaseBackupResult,\n  type RunDatabaseRestoreOptions,\n} from \"./backup-lib.js\";\nexport {",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/db/src/index.ts",
+      "numLines": 30,
+      "startLine": 1,
+      "totalLines": 37
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "3501b4aa-5d96-4344-8966-6f31852d0c84",
+  "version": "2.1.123"
+}

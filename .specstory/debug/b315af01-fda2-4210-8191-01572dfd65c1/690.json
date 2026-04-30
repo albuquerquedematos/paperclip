@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "import { drizzle } from \"drizzle-orm/postgres-js\";\nimport postgres from \"postgres\";\n// Import the schema directly from the workspace source. The package.json exports\n// map \"./*\" to \"./src/*.ts\", so \"@paperclipai/db/schema\" resolves to\n// packages/db/src/schema.ts — but that file does not exist; the entry is\n// packages/db/src/schema/index.ts. We use a relative path to be explicit and\n// avoid relying on bundler heuristics for directory index resolution.\nimport * as schema from \"../../../db/src/schema/index.js\";\nimport type { Db } from \"@paperclipai/db\";\n\n/**\n * Minimal interface that matches the Cloudflare Hyperdrive binding shape.\n * The full type is `Hyperdrive` from `@cloudflare/workers-types`, but we\n * declare a local structural equivalent so this file compiles without\n * requiring the workers-types package at import time.\n */\nexport interface HyperdriveBinding {\n  /** The connection string Cloudflare injects — points to the Hyperdrive proxy. */\n  connectionString: string;\n}\n\n/**\n * Creates a Drizzle `Db` instance backed by Cloudflare Hyperdrive.\n *\n * Hyperdrive terminates the Postgres connection pool near the Worker and\n * forwards queries to the upstream Neon/Postgres database over a long-lived\n * TCP connection. The `postgres-js` driver is compatible with the Workers\n * `nodejs_compat` flag, which provides a polyfilled TCP socket layer.\n *\n * Pool size is capped at 5 — each Worker invocation is short-lived so a\n * large pool wastes Hyperdrive connection slots.\n *\n * @param hyperdrive - The Hyperdrive binding from the Worker `Env`.\n */\nexport function createHyperdriveDb(hyperdrive: HyperdriveBinding): Db {\n  // max: 5 keeps connection usage low across concurrent invocations.\n  // prepare: false disables prepared-statement caching because Hyperdrive\n  // routes across multiple upstream connections and cannot share PS state.\n  const sql = postgres(hyperdrive.connectionString, {\n    max: 5,\n    prepare: false,\n  });\n  // drizzle-orm's postgres-js adapter returns a type that is structurally\n  // identical to the `Db` exported from @paperclipai/db. The cast via\n  // `unknown` is necessary only because the generic parameters differ at\n  // the type level; the runtime shapes are identical.\n  return drizzle(sql, { schema }) as unknown as Db;\n}",
+        "is_error": false,
+        "tool_use_id": "toolu_01CGyoPfU43TLj4RmHbbfhjT",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "4c67a2ed-1263-4618-bfbb-9093ef6a3fe8",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "4c67a2ed-1263-4618-bfbb-9093ef6a3fe8",
+  "timestamp": "2026-04-30T17:41:06.744Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "import { drizzle } from \"drizzle-orm/postgres-js\";\nimport postgres from \"postgres\";\n// Import the schema directly from the workspace source. The package.json exports\n// map \"./*\" to \"./src/*.ts\", so \"@paperclipai/db/schema\" resolves to\n// packages/db/src/schema.ts — but that file does not exist; the entry is\n// packages/db/src/schema/index.ts. We use a relative path to be explicit and\n// avoid relying on bundler heuristics for directory index resolution.\nimport * as schema from \"../../../db/src/schema/index.js\";\nimport type { Db } from \"@paperclipai/db\";\n\n/**\n * Minimal interface that matches the Cloudflare Hyperdrive binding shape.\n * The full type is `Hyperdrive` from `@cloudflare/workers-types`, but we\n * declare a local structural equivalent so this file compiles without\n * requiring the workers-types package at import time.\n */\nexport interface HyperdriveBinding {\n  /** The connection string Cloudflare injects — points to the Hyperdrive proxy. */\n  connectionString: string;\n}\n\n/**\n * Creates a Drizzle `Db` instance backed by Cloudflare Hyperdrive.\n *\n * Hyperdrive terminates the Postgres connection pool near the Worker and\n * forwards queries to the upstream Neon/Postgres database over a long-lived\n * TCP connection. The `postgres-js` driver is compatible with the Workers\n * `nodejs_compat` flag, which provides a polyfilled TCP socket layer.\n *\n * Pool size is capped at 5 — each Worker invocation is short-lived so a\n * large pool wastes Hyperdrive connection slots.\n *\n * @param hyperdrive - The Hyperdrive binding from the Worker `Env`.\n */\nexport function createHyperdriveDb(hyperdrive: HyperdriveBinding): Db {\n  // max: 5 keeps connection usage low across concurrent invocations.\n  // prepare: false disables prepared-statement caching because Hyperdrive\n  // routes across multiple upstream connections and cannot share PS state.\n  const sql = postgres(hyperdrive.connectionString, {\n    max: 5,\n    prepare: false,\n  });\n  // drizzle-orm's postgres-js adapter returns a type that is structurally\n  // identical to the `Db` exported from @paperclipai/db. The cast via\n  // `unknown` is necessary only because the generic parameters differ at\n  // the type level; the runtime shapes are identical.\n  return drizzle(sql, { schema }) as unknown as Db;\n}"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "d0d6280e-4039-4d63-a33e-ffcece240d6d",
+  "version": "2.1.123"
+}

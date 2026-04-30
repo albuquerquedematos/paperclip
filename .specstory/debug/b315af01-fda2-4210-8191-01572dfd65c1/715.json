@@ -1,0 +1,71 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01CvTdZpXeza5xvZbqE3YvVo",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/api.ts",
+          "new_string": "// ---------------------------------------------------------------------------\n// Per-request route resolution\n//\n// Route handlers close over service instances which close over the DB\n// connection. CF Workers prohibits reusing I/O objects (TCP sockets, streams)\n// across requests, so we must build fresh DB + route tables on every request.\n//\n// The CPU cost is small (route factory calls are pure object construction with\n// no I/O). The postgres client connects lazily, so the connection overhead is\n// paid only by the first query, not by the route-build step.\n// ---------------------------------------------------------------------------\n\ninterface CompiledRoute {\n  route: RouteDefinition;\n  re: RegExp;\n  paramNames: string[];\n}\n\n// Route path patterns are static — cache them to avoid rebuilding regexps.\nlet compiledPathCache: Array\u003c{ method: string; path: string; re: RegExp; paramNames: string[] }\u003e | null = null;\n\n// Convert an Express-style path pattern (with :param segments) to a RegExp.\nfunction pathToRegex(path: string): { re: RegExp; paramNames: string[] } {\n  const paramNames: string[] = [];\n  const pattern = path\n    .replace(/[$()*+.?[\\\\\\]^{|}]/g, \"\\\\$\u0026\")\n    .replace(/:([a-zA-Z_][a-zA-Z0-9_]*)/g, (_match, name: string) =\u003e {\n      paramNames.push(name);\n      return \"([^/]+)\";\n    });\n  return { re: new RegExp(`^${pattern}$`), paramNames };\n}\n\nfunction buildRequestResources(env: Env) {\n  const db = createHyperdriveDb(env.HYPERDRIVE);\n  const r2Provider = new R2Provider(env.PAPERCLIP_STORAGE, {\n    bucket: env.STORAGE_R2_BUCKET ?? \"paperclip-storage\",\n    prefix: env.STORAGE_R2_PREFIX ?? \"\",\n  });\n  const storage = createCfStorageService(r2Provider) as unknown as StorageService;\n\n  function ext(router: unknown, prefix: string): RouteDefinition[] {\n    return extractRoutesFromRouter(router, prefix);\n  }\n\n  const routes: RouteDefinition[] = [\n    ...ext(companyRoutes(db, storage), \"/api/companies\"),\n    ...ext(agentRoutes(db, {}), \"/api\"),\n    ...ext(assetRoutes(db, storage), \"/api\"),\n    ...ext(projectRoutes(db), \"/api\"),\n    ...ext(issueRoutes(db, storage, {}), \"/api\"),\n    ...ext(issueTreeControlRoutes(db), \"/api\"),\n    ...ext(routineRoutes(db, {}), \"/api\"),\n    ...ext(environmentRoutes(db, {}), \"/api\"),\n    ...ext(executionWorkspaceRoutes(db), \"/api\"),\n    ...ext(goalRoutes(db), \"/api\"),\n    ...ext(approvalRoutes(db, {}), \"/api\"),\n    ...ext(secretRoutes(db), \"/api\"),\n    ...ext(costRoutes(db, {}), \"/api\"),\n    ...ext(activityRoutes(db), \"/api\"),\n    ...ext(dashboardRoutes(db), \"/api\"),\n    ...ext(userProfileRoutes(db), \"/api\"),\n    ...ext(sidecarBadgeRoutes(db), \"/api\"),\n    ...ext(sidebarPreferenceRoutes(db), \"/api\"),\n    ...ext(inboxDismissalRoutes(db), \"/api\"),\n    ...ext(instanceSettingsRoutes(db), \"/api\"),\n    ...ext(llmRoutes(db), \"/api\"),\n    ...ext(authRoutes(db), \"/api\"),\n  ];\n\n  if (!compiledPathCache) {\n    compiledPathCache = routes.map((r) =\u003e ({ method: r.method, path: r.path, ...pathToRegex(r.path) }));\n    console.log(`[CF Worker] Compiled ${compiledPathCache.length} route patterns`);\n  }\n\n  const compiled: CompiledRoute[] = routes.map((route, i) =\u003e ({\n    route,\n    re: compiledPathCache![i]!.re,\n    paramNames: compiledPathCache![i]!.paramNames,\n  }));\n\n  return { compiled, db, storage };\n}",
+          "old_string": "// ---------------------------------------------------------------------------\n// Per-isolate route cache\n//\n// Workers isolates are long-lived within a datacenter edge node. We build the\n// Express Routers (and extract RouteDefinitions) once per isolate, keyed on\n// the Hyperdrive connection string (proxy for \"same DB config\").\n//\n// Subsequent requests in the same isolate reuse the cached routes, skipping\n// the router construction overhead.\n// ---------------------------------------------------------------------------\n\ninterface CompiledRoute {\n  route: RouteDefinition;\n  re: RegExp;\n  paramNames: string[];\n}\n\ninterface RouteCache {\n  routes: RouteDefinition[];\n  compiled: CompiledRoute[];\n  db: Db;\n  storage: StorageService;\n  hyperdriveConnStr: string;\n}\n\nlet routeCache: RouteCache | null = null;\n\n// Convert an Express-style path pattern (with :param segments) to a RegExp.\nfunction pathToRegex(path: string): { re: RegExp; paramNames: string[] } {\n  const paramNames: string[] = [];\n  const pattern = path\n    .replace(/[$()*+.?[\\\\\\]^{|}]/g, \"\\\\$\u0026\")\n    .replace(/:([a-zA-Z_][a-zA-Z0-9_]*)/g, (_match, name: string) =\u003e {\n      paramNames.push(name);\n      return \"([^/]+)\";\n    });\n  return { re: new RegExp(`^${pattern}$`), paramNames };\n}\n\nfunction buildRouteCache(env: Env): RouteCache {\n  const db = createHyperdriveDb(env.HYPERDRIVE);\n  const r2Provider = new R2Provider(env.PAPERCLIP_STORAGE, {\n    bucket: env.STORAGE_R2_BUCKET ?? \"paperclip-storage\",\n    prefix: env.STORAGE_R2_PREFIX ?? \"\",\n  });\n  const storage = createCfStorageService(r2Provider) as unknown as StorageService;\n\n  function ext(router: unknown, prefix: string): RouteDefinition[] {\n    return extractRoutesFromRouter(router, prefix);\n  }\n\n  const routes: RouteDefinition[] = [\n    ...ext(companyRoutes(db, storage), \"/api/companies\"),\n    ...ext(agentRoutes(db, {}), \"/api\"),\n    ...ext(assetRoutes(db, storage), \"/api\"),\n    ...ext(projectRoutes(db), \"/api\"),\n    ...ext(issueRoutes(db, storage, {}), \"/api\"),\n    ...ext(issueTreeControlRoutes(db), \"/api\"),\n    ...ext(routineRoutes(db, {}), \"/api\"),\n    ...ext(environmentRoutes(db, {}), \"/api\"),\n    ...ext(executionWorkspaceRoutes(db), \"/api\"),\n    ...ext(goalRoutes(db), \"/api\"),\n    ...ext(approvalRoutes(db, {}), \"/api\"),\n    ...ext(secretRoutes(db), \"/api\"),\n    ...ext(costRoutes(db, {}), \"/api\"),\n    ...ext(activityRoutes(db), \"/api\"),\n    ...ext(dashboardRoutes(db), \"/api\"),\n    ...ext(userProfileRoutes(db), \"/api\"),\n    ...ext(sidecarBadgeRoutes(db), \"/api\"),\n    ...ext(sidebarPreferenceRoutes(db), \"/api\"),\n    ...ext(inboxDismissalRoutes(db), \"/api\"),\n    ...ext(instanceSettingsRoutes(db), \"/api\"),\n    ...ext(llmRoutes(db), \"/api\"),\n    ...ext(authRoutes(db), \"/api\"),\n  ];\n\n  const compiled: CompiledRoute[] = routes.map((route) =\u003e ({\n    route,\n    ...pathToRegex(route.path),\n  }));\n\n  return { routes, compiled, db, storage, hyperdriveConnStr: env.HYPERDRIVE.connectionString };\n}\n\nfunction getRouteCache(env: Env): RouteCache {\n  if (!routeCache || routeCache.hyperdriveConnStr !== env.HYPERDRIVE.connectionString) {\n    routeCache = buildRouteCache(env);\n    console.log(`[CF Worker] Built route cache: ${routeCache.routes.length} routes`);\n  }\n  return routeCache;\n}\n\nfunction getCompiledRoutes(env: Env) {\n  const cache = getRouteCache(env);\n  return { compiled: cache.compiled, db: cache.db, storage: cache.storage };\n}",
+          "replace_all": false
+        },
+        "name": "Edit",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_013pJhZWXYh4PjE9TW4jPcKY",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 703
+      },
+      "cache_creation_input_tokens": 703,
+      "cache_read_input_tokens": 109209,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 703
+          },
+          "cache_creation_input_tokens": 703,
+          "cache_read_input_tokens": 109209,
+          "input_tokens": 1,
+          "output_tokens": 4478,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 4478,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "89b577f2-df30-4589-b009-1d9c86b18d08",
+  "requestId": "req_011CaaNHtpExaGbfokfGoU16",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T17:42:56.381Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "7c07e9a6-62ec-46d7-b088-0207d9d88046",
+  "version": "2.1.123"
+}

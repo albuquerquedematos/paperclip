@@ -1,0 +1,33 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "File created successfully at: /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-child-process.ts",
+        "tool_use_id": "toolu_01HYLg9XZadGd9K7MRihuKtr",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "be069791-0e20-40b7-8374-06a16facc45e",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "sourceToolAssistantUUID": "be069791-0e20-40b7-8374-06a16facc45e",
+  "timestamp": "2026-04-30T17:17:50.405Z",
+  "toolUseResult": {
+    "content": "// Stub for node:child_process — not available in CF Workers.\nconst notAvailable = (name: string) =\u003e () =\u003e { throw new Error(`node:child_process.${name} not available in CF Workers`); };\nexport const spawn = notAvailable(\"spawn\");\nexport const exec = notAvailable(\"exec\");\nexport const execFile = notAvailable(\"execFile\");\nexport const execFileSync = notAvailable(\"execFileSync\");\nexport const execSync = notAvailable(\"execSync\");\nexport const spawnSync = notAvailable(\"spawnSync\");\nexport const fork = notAvailable(\"fork\");\nexport default { spawn, exec, execFile, execFileSync, execSync, spawnSync, fork };\n",
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-child-process.ts",
+    "originalFile": null,
+    "structuredPatch": [],
+    "type": "create",
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "30659618-e36b-469e-a395-ec3e438915a3",
+  "version": "2.1.123"
+}

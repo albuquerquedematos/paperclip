@@ -1,0 +1,68 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01E5gVbPgTjydgnZx4Koes15",
+        "input": {
+          "content": "/**\n * Custom esbuild bundler for the Cloudflare Worker.\n *\n * Wrangler's built-in esbuild cannot mark specific packages as external, so we\n * pre-bundle the worker here and point wrangler to the output with --no-bundle.\n *\n * Packages marked external:\n *   - embedded-postgres / @embedded-postgres/*  — native Node binaries, never\n *     called in CF (Hyperdrive handles DB).\n *   - jsdom                                      — used only for SVG sanitization\n *     in assets.ts; not available in Workers runtime.\n *   - node:sqlite                                — Node 22.5+ built-in pulled in\n *     by undici@7 (via jsdom); unavailable in Workers.\n */\n\nimport { build } from \"esbuild\";\nimport { fileURLToPath } from \"url\";\nimport path from \"path\";\n\nconst __dirname = path.dirname(fileURLToPath(import.meta.url));\n\nawait build({\n  entryPoints: [path.join(__dirname, \"src/worker/api.ts\")],\n  bundle: true,\n  outfile: path.join(__dirname, \"dist/worker.js\"),\n  format: \"esm\",\n  target: \"es2022\",\n  platform: \"browser\",\n  conditions: [\"worker\", \"browser\", \"module\"],\n  mainFields: [\"module\", \"main\"],\n  external: [\n    // Node-only embedded postgres binaries\n    \"embedded-postgres\",\n    \"@embedded-postgres/*\",\n    // SVG sanitization (not available in Workers; dynamic import in assets.ts will throw at runtime for SVG uploads)\n    \"jsdom\",\n    // Node 22.5+ built-in pulled in transitively via jsdom → undici@7\n    \"node:sqlite\",\n  ],\n  // Keep dynamic imports as-is so wrangler/miniflare can handle code splitting\n  splitting: false,\n  define: {\n    \"process.env.NODE_ENV\": '\"production\"',\n  },\n  logLevel: \"info\",\n});\n\nconsole.log(\"Worker bundle written to dist/worker.js\");\n",
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/build-worker.mjs"
+        },
+        "name": "Write",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01W9FzWETJ9NGjePEsobVrg4",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 1936
+      },
+      "cache_creation_input_tokens": 1936,
+      "cache_read_input_tokens": 89610,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 1936
+          },
+          "cache_creation_input_tokens": 1936,
+          "cache_read_input_tokens": 89610,
+          "input_tokens": 1,
+          "output_tokens": 2555,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 2555,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "f2911c1f-94bf-4df5-88f3-039d5c595c6c",
+  "requestId": "req_011CaaKt2kavgMFULXgEzUU5",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "timestamp": "2026-04-30T17:10:57.058Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "64460fa4-30d5-4a12-a1dd-480099f16f1e",
+  "version": "2.1.123"
+}

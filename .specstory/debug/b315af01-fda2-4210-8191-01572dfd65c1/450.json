@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01V6LUWeWzZaTGGDxbfn3eCZ",
+        "input": {
+          "command": "sed -n '107550,107565p' dist/worker.js",
+          "description": "Show context around line 107557 in worker bundle"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01NTqoWuLqPh43LheT3odtdg",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 769
+      },
+      "cache_creation_input_tokens": 769,
+      "cache_read_input_tokens": 35749,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 769
+          },
+          "cache_creation_input_tokens": 769,
+          "cache_read_input_tokens": 35749,
+          "input_tokens": 1,
+          "output_tokens": 148,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 148,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "b494ec02-b645-42ae-b10a-fe53e959061f",
+  "requestId": "req_011CaaMEU13Y6xBC621VQtoF",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T17:28:05.540Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "498058fd-f36a-4ebb-857f-ac9c8b13cc71",
+  "version": "2.1.123"
+}

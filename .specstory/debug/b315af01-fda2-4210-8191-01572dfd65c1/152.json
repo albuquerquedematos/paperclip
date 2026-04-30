@@ -1,0 +1,35 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "43\t    }\n44\t  });\n45\t\n46\t  let parsedDom: JSDOM | null = null;\n47\t  try {\n48\t    const sanitized = domPurify.sanitize(raw, {\n49\t      USE_PROFILES: { svg: true, svgFilters: true, html: false },\n50\t      FORBID_TAGS: [\"script\", \"foreignObject\"],\n51\t      FORBID_CONTENTS: [\"script\", \"foreignObject\"],\n52\t      RETURN_TRUSTED_TYPE: false,",
+        "tool_use_id": "toolu_01WMX9kQPZPjRCdHHb8kjFJo",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "9b2c7035-f2c3-47cd-ab99-4f5126490568",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "sourceToolAssistantUUID": "9b2c7035-f2c3-47cd-ab99-4f5126490568",
+  "timestamp": "2026-04-30T17:07:26.080Z",
+  "toolUseResult": {
+    "file": {
+      "content": "    }\n  });\n\n  let parsedDom: JSDOM | null = null;\n  try {\n    const sanitized = domPurify.sanitize(raw, {\n      USE_PROFILES: { svg: true, svgFilters: true, html: false },\n      FORBID_TAGS: [\"script\", \"foreignObject\"],\n      FORBID_CONTENTS: [\"script\", \"foreignObject\"],\n      RETURN_TRUSTED_TYPE: false,",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/assets.ts",
+      "numLines": 10,
+      "startLine": 43,
+      "totalLines": 360
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "e5d599e3-ec74-481d-ba17-6620b921ebcf",
+  "version": "2.1.123"
+}

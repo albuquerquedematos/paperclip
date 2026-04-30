@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01RHYkSzmgFgFaiRboGhsBgw",
+        "input": {
+          "command": "COMPANY_ID=\"9a7cf1f3-02a7-4751-9cdb-671c9c68edb5\"\ntimeout 40 npx wrangler dev --no-bundle --local 2\u003e\u00261 \u0026\nWRANGLER_PID=$!\nsleep 8\necho \"=== GET /api/companies/:id/agents ===\" \u0026\u0026 curl -s \"http://localhost:8787/api/companies/$COMPANY_ID/agents\" | python3 -c \"import sys,json; d=json.load(sys.stdin); print(f'agents: {len(d)}')\" 2\u003e/dev/null\necho \"=== GET /api/companies/$COMPANY_ID ===\" \u0026\u0026 curl -s \"http://localhost:8787/api/companies/$COMPANY_ID\" | python3 -c \"import sys,json; d=json.load(sys.stdin); print(d.get('name'), d.get('status'))\" 2\u003e/dev/null\necho \"=== POST /api/auth/login (401 expected) ===\" \u0026\u0026 curl -s -o /dev/null -w \"%{http_code}\" -X POST http://localhost:8787/api/auth/login -H \"Content-Type: application/json\" -d '{\"email\":\"test@test.com\",\"password\":\"bad\"}'\nkill $WRANGLER_PID 2\u003e/dev/null || true\nwait $WRANGLER_PID 2\u003e/dev/null || true",
+          "description": "Test correct API routes"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_013EMsyvkpvGAqqiRa5FJ9aD",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 1006
+      },
+      "cache_creation_input_tokens": 1006,
+      "cache_read_input_tokens": 99098,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 1006
+          },
+          "cache_creation_input_tokens": 1006,
+          "cache_read_input_tokens": 99098,
+          "input_tokens": 1,
+          "output_tokens": 610,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 610,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "506ad356-3bdc-43b0-9921-f593d96ff202",
+  "requestId": "req_011CaaNBQBPg9J6LPtJK56kU",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T17:40:36.794Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "27399f6e-44bb-4ab0-abae-7bccad2d4c0d",
+  "version": "2.1.123"
+}

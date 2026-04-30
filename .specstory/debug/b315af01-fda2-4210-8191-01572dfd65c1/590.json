@@ -1,0 +1,62 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "signature": "ErADClsIDRgCKkDgQVQEPMrR25JjMMOdgXbJql8J82Q9y/6sswHazGi14AJzLkR4XqoEnKJkS2j8IN8aDWdXyIHuVVCWHCppnhwhMhFjbGF1ZGUtc29ubmV0LTQtNjgAEgxlysC+8Y1V1bVAEOgaDO2GNKFBWbnVLBIqRSIwE8weFvXmubDyuFL0behPxvA4nWKfFXf+SqEdgX3UBDMmRln/CP2GGqzen4SbTe+hKoIC2HELw7u9jRODmDO7XznfWAmo32E7QXwP/8wvCX4lyNWG0GkwRBx1YMU6oZ3kXoTttCC2BsI8A8WfX2Kt+mg88FqhnBtPR0vk7+sURlR93gMMv7As0qvMj2/tNfc+BK58GzAwmm2UbXSVbYfsGPEo0YRarJNZuX8oec1QSZeBFoJaOci5e0RJFI8e1kaV6ZeR+g7h2W1lhFx01+cuDT5QFq4E2e4zPwCpU0ggju8WtTlqIMAKdlnWIgpE86pWQb2VGYMg0iErEohDYQM4sFCtMn+FGP6/eqnXGe0MIzSB43H7dWDGkOoQsZauwsq6hK+lnHMn4JhSpRxc42U/OsvxdB3YGAE=",
+        "thinking": "The routes are returning 302 redirects, not data. That's probably a redirect to a login page since even though DEPLOYMENT_MODE is `local_trusted`, some middleware might be redirecting. Let me check what those 302 responses are redirecting to.",
+        "type": "thinking"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01VSCvjGUXSWiBHu1zk84SEB",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 1061
+      },
+      "cache_creation_input_tokens": 1061,
+      "cache_read_input_tokens": 77486,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 1061
+          },
+          "cache_creation_input_tokens": 1061,
+          "cache_read_input_tokens": 77486,
+          "input_tokens": 1,
+          "output_tokens": 328,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 328,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "f193c6a6-4752-4edf-a631-a4e78e3339b0",
+  "requestId": "req_011CaaMvVWwr7yzTkEcbGmaX",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T17:37:08.075Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "c984de0b-8a5e-4cde-9d5a-2a36d7450bf2",
+  "version": "2.1.123"
+}

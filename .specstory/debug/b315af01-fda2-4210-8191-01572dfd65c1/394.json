@@ -1,0 +1,68 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01NGTJaKkv4DYy1zQRrCuSrf",
+        "input": {
+          "content": "/**\n * CF Workers-compatible pino shim.\n *\n * The real pino requires Node.js APIs (events, worker_threads, etc.) that are\n * not available in the Workers runtime. This shim provides the same interface\n * backed by console.log/warn/error so server code works without changes.\n */\n\ntype LogLevel = \"trace\" | \"debug\" | \"info\" | \"warn\" | \"error\" | \"fatal\";\ntype LogFn = (msg: string, context?: Record\u003cstring, unknown\u003e) =\u003e void;\n\nconst LEVELS: Record\u003cLogLevel, number\u003e = {\n  trace: 10, debug: 20, info: 30, warn: 40, error: 50, fatal: 60,\n};\n\nfunction makeLogger(bindings: Record\u003cstring, unknown\u003e = {}, minLevel: LogLevel = \"info\"): PinoLogger {\n  const minNum = LEVELS[minLevel] ?? 30;\n\n  function logAt(level: LogLevel, ...args: unknown[]) {\n    if ((LEVELS[level] ?? 0) \u003c minNum) return;\n    const [msgOrObj, ...rest] = args;\n    const context = { ...bindings };\n    let msg: string;\n    if (typeof msgOrObj === \"string\") {\n      msg = msgOrObj;\n    } else if (msgOrObj \u0026\u0026 typeof msgOrObj === \"object\") {\n      Object.assign(context, msgOrObj);\n      msg = (rest[0] as string) ?? \"\";\n    } else {\n      msg = String(msgOrObj ?? \"\");\n    }\n    const entry = JSON.stringify({ level: LEVELS[level], msg, ...context });\n    if (level === \"error\" || level === \"fatal\") console.error(entry);\n    else if (level === \"warn\") console.warn(entry);\n    else console.log(entry);\n  }\n\n  const logger: PinoLogger = {\n    level: minLevel,\n    trace: (...args: unknown[]) =\u003e logAt(\"trace\", ...args),\n    debug: (...args: unknown[]) =\u003e logAt(\"debug\", ...args),\n    info: (...args: unknown[]) =\u003e logAt(\"info\", ...args),\n    warn: (...args: unknown[]) =\u003e logAt(\"warn\", ...args),\n    error: (...args: unknown[]) =\u003e logAt(\"error\", ...args),\n    fatal: (...args: unknown[]) =\u003e logAt(\"fatal\", ...args),\n    child: (childBindings: Record\u003cstring, unknown\u003e) =\u003e\n      makeLogger({ ...bindings, ...childBindings }, minLevel),\n    isLevelEnabled: (level: string) =\u003e (LEVELS[level as LogLevel] ?? 0) \u003e= minNum,\n    // pino compat properties\n    bindings: () =\u003e ({ ...bindings }),\n    flush: () =\u003e {},\n    setBindings: (_: Record\u003cstring, unknown\u003e) =\u003e {},\n    // pino v9 adds these\n    silent: () =\u003e {},\n  };\n  return logger;\n}\n\ninterface PinoLogger {\n  level: string;\n  trace: LogFn;\n  debug: LogFn;\n  info: LogFn;\n  warn: LogFn;\n  error: LogFn;\n  fatal: LogFn;\n  child: (bindings: Record\u003cstring, unknown\u003e) =\u003e PinoLogger;\n  isLevelEnabled: (level: string) =\u003e boolean;\n  bindings: () =\u003e Record\u003cstring, unknown\u003e;\n  flush: () =\u003e void;\n  setBindings: (bindings: Record\u003cstring, unknown\u003e) =\u003e void;\n  silent: () =\u003e void;\n}\n\n// pino(opts?) or pino(opts?, stream?)\nfunction pino(opts?: Record\u003cstring, unknown\u003e | null): PinoLogger {\n  const level = (opts?.level as LogLevel) ?? \"info\";\n  return makeLogger({}, level);\n}\n\n// pino.destination() stub\npino.destination = () =\u003e ({ write: () =\u003e {} });\n// pino.transport() stub\npino.transport = () =\u003e ({ write: () =\u003e {} });\n// pino.levels compat\npino.levels = { values: LEVELS };\n// pino.stdSerializers\npino.stdSerializers = {\n  err: (e: Error) =\u003e ({ type: e.name, msg: e.message, stack: e.stack }),\n  req: (r: unknown) =\u003e r,\n  res: (r: unknown) =\u003e r,\n};\n\nexport default pino;\nexport { pino };\n",
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/pino-shim.ts"
+        },
+        "name": "Write",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01AWUYhez349SL8nMLBhw8Yc",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 1488
+      },
+      "cache_creation_input_tokens": 1488,
+      "cache_read_input_tokens": 156455,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 1488
+          },
+          "cache_creation_input_tokens": 1488,
+          "cache_read_input_tokens": 156455,
+          "input_tokens": 1,
+          "output_tokens": 2588,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 2588,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "72cd6125-f2ea-4e44-a6af-ee53194dc1c0",
+  "requestId": "req_011CaaLuLdG2JUpEEy337BYr",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "timestamp": "2026-04-30T17:24:19.844Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "bff7c9ce-fbbe-4bec-817b-5c9448265889",
+  "version": "2.1.123"
+}

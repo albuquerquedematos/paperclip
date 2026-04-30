@@ -1,0 +1,71 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01HB87qVws4ZDyao1EkSQvb9",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/api.ts",
+          "new_string": "// ---------------------------------------------------------------------------\n// Per-request route resolution\n//\n// Route handlers close over service instances which close over the DB\n// connection. CF Workers prohibits reusing I/O objects (TCP sockets) across\n// requests, so we rebuild DB + route tables on every request.\n//\n// Route path patterns (regexp, paramNames) are static and are cached.\n// ---------------------------------------------------------------------------\n\ninterface CompiledRoute {\n  route: RouteDefinition;\n  re: RegExp;\n  paramNames: string[];\n}\n\n// Cached route path patterns — these don't depend on DB so they survive\n// across requests in the same isolate.\nlet compiledPathCache: Array\u003c{ method: string; path: string; re: RegExp; paramNames: string[] }\u003e | null = null;",
+          "old_string": "// ---------------------------------------------------------------------------\n// Per-isolate route cache\n//\n// Workers isolates are long-lived within a datacenter edge node. We build the\n// Express Routers (and extract RouteDefinitions) once per isolate, keyed on\n// the Hyperdrive connection string (proxy for \"same DB config\").\n//\n// Subsequent requests in the same isolate reuse the cached routes, skipping\n// the router construction overhead.\n// ---------------------------------------------------------------------------\n\ninterface CompiledRoute {\n  route: RouteDefinition;\n  re: RegExp;\n  paramNames: string[];\n}\n\ninterface RouteCache {\n  routes: RouteDefinition[];\n  compiled: CompiledRoute[];\n  db: Db;\n  storage: StorageService;\n  hyperdriveConnStr: string;\n}\n\nlet routeCache: RouteCache | null = null;",
+          "replace_all": false
+        },
+        "name": "Edit",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01QPEKZPUm3oR7BtCbArjhQS",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 502
+      },
+      "cache_creation_input_tokens": 502,
+      "cache_read_input_tokens": 117301,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 502
+          },
+          "cache_creation_input_tokens": 502,
+          "cache_read_input_tokens": 117301,
+          "input_tokens": 1,
+          "output_tokens": 528,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 528,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "f085b8c5-4e9a-4691-80e2-f4714a316104",
+  "requestId": "req_011CaaNPHf4ZTEhydX7B8Vh8",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T17:43:16.133Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "9dcaf3bc-362d-40df-8a90-12bdd6a5fff3",
+  "version": "2.1.123"
+}

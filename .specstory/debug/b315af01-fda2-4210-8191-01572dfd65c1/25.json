@@ -1,0 +1,33 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "{\n  \"extends\": \"../../tsconfig.base.json\",\n  \"compilerOptions\": {\n    \"types\": [\"@cloudflare/workers-types\", \"node\"],\n    \"lib\": [\"ES2022\"],\n    \"target\": \"ES2022\",\n    \"module\": \"ES2022\",\n    \"moduleResolution\": \"bundler\",\n    \"rootDir\": \"../../\",\n    \"noEmit\": true\n  },\n  \"include\": [\"src/**/*.ts\"]\n}",
+        "is_error": false,
+        "tool_use_id": "toolu_01PhRwjR7SUzDKEv95BDmtDr",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "7a2339a6-3db1-4350-9bfb-7df799492268",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "sourceToolAssistantUUID": "7a2339a6-3db1-4350-9bfb-7df799492268",
+  "timestamp": "2026-04-30T17:00:41.814Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "{\n  \"extends\": \"../../tsconfig.base.json\",\n  \"compilerOptions\": {\n    \"types\": [\"@cloudflare/workers-types\", \"node\"],\n    \"lib\": [\"ES2022\"],\n    \"target\": \"ES2022\",\n    \"module\": \"ES2022\",\n    \"moduleResolution\": \"bundler\",\n    \"rootDir\": \"../../\",\n    \"noEmit\": true\n  },\n  \"include\": [\"src/**/*.ts\"]\n}"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "31a19c64-6e9d-47b0-b72c-586edc8ce4f4",
+  "version": "2.1.123"
+}

@@ -1,0 +1,33 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "const DEFAULT_RECENT_LOG_LIMIT = 40;\nconst RECENT_LOG_SUMMARY_LINES = 8;\n\nfunction toError(error: unknown, fallbackMessage: string): Error {\n  if (error instanceof Error) return error;\n  if (error === undefined) return new Error(fallbackMessage);\n  if (typeof error === \"string\") return new Error(`${fallbackMessage}: ${error}`);\n\n  try {\n    return new Error(`${fallbackMessage}: ${JSON.stringify(error)}`);\nimport fs from \"node:fs\";\nimport net from \"node:net\";\nimport os from \"node:os\";\nimport path from \"node:path\";\nimport { applyPendingMigrations, ensurePostgresDatabase } from \"./client.js\";\n\ntype EmbeddedPostgresInstance = {\n  initialise(): Promise\u003cvoid\u003e;\n  start(): Promise\u003cvoid\u003e;\n  stop(): Promise\u003cvoid\u003e;",
+        "is_error": false,
+        "tool_use_id": "toolu_01D7sxFYDSswPVYWdtRv5Low",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "8fc9b60b-84ad-4810-9669-3a8788b0f989",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "sourceToolAssistantUUID": "8fc9b60b-84ad-4810-9669-3a8788b0f989",
+  "timestamp": "2026-04-30T17:09:07.622Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "const DEFAULT_RECENT_LOG_LIMIT = 40;\nconst RECENT_LOG_SUMMARY_LINES = 8;\n\nfunction toError(error: unknown, fallbackMessage: string): Error {\n  if (error instanceof Error) return error;\n  if (error === undefined) return new Error(fallbackMessage);\n  if (typeof error === \"string\") return new Error(`${fallbackMessage}: ${error}`);\n\n  try {\n    return new Error(`${fallbackMessage}: ${JSON.stringify(error)}`);\nimport fs from \"node:fs\";\nimport net from \"node:net\";\nimport os from \"node:os\";\nimport path from \"node:path\";\nimport { applyPendingMigrations, ensurePostgresDatabase } from \"./client.js\";\n\ntype EmbeddedPostgresInstance = {\n  initialise(): Promise\u003cvoid\u003e;\n  start(): Promise\u003cvoid\u003e;\n  stop(): Promise\u003cvoid\u003e;"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "b89170a7-19f0-4c3f-aa8d-a3afcfc9550a",
+  "version": "2.1.123"
+}

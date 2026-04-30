@@ -1,0 +1,27 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "\u003ctool_use_error\u003eString to replace not found in file.\nString: // Node.js built-ins that CF provides via nodejs_compat flag\nconst NODE_BUILTINS = [\n  \"node:assert\", \"node:async_hooks\", \"node:buffer\", \"node:crypto\",\n  \"node:cluster\", \"node:console\", \"node:constants\", \"node:crypto\",\n  \"node:dgram\", \"node:diagnostics_channel\", \"node:dns\", \"node:domain\",\n  \"node:events\", \"node:fs\", \"node:fs/promises\", \"node:http\", \"node:http2\",\n  \"node:https\", \"node:inspector\", \"node:module\", \"node:net\", \"node:os\",\n  \"node:path\", \"node:perf_hooks\", \"node:process\", \"node:querystring\",\n  \"node:readline\", \"node:repl\", \"node:stream\", \"node:stream/consumers\",\n  \"node:stream/promises\", \"node:stream/web\", \"node:string_decoder\",\n  \"node:sys\", \"node:timers\", \"node:timers/promises\", \"node:tls\",\n  \"node:trace_events\", \"node:tty\", \"node:url\", \"node:util\", \"node:util/types\",\n  \"node:v8\", \"node:vm\", \"node:wasi\", \"node:worker_threads\", \"node:zlib\",\n  // Without \"node:\" prefix (legacy imports)\n  \"assert\", \"async_hooks\", \"buffer\", \"child_process\", \"cluster\", \"console\",\n  \"constants\", \"crypto\", \"dgram\", \"diagnostics_channel\", \"dns\", \"domain\",\n  \"events\", \"fs\", \"http\", \"http2\", \"https\", \"inspector\", \"module\", \"net\",\n  \"os\", \"path\", \"perf_hooks\", \"process\", \"querystring\", \"readline\", \"repl\",\n  \"stream\", \"string_decoder\", \"sys\", \"timers\", \"tls\", \"trace_events\", \"tty\",\n  \"url\", \"util\", \"v8\", \"vm\", \"wasi\", \"worker_threads\", \"zlib\",\n  // Node 22.5+ built-in pulled in by undici@7 — not available in Workers\n  \"node:sqlite\",\n];\n(note: Edit also tried swapping \\uXXXX escapes and their characters; neither form matched, so the mismatch is likely elsewhere in old_string. Re-read the file and copy the exact surrounding text.)\u003c/tool_use_error\u003e",
+        "is_error": true,
+        "tool_use_id": "toolu_011sUbHVSmA3WyvRRHN3yC6S",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "0dcbeae2-dc7f-4eaa-bc91-5fe87355bbc2",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "sourceToolAssistantUUID": "0dcbeae2-dc7f-4eaa-bc91-5fe87355bbc2",
+  "timestamp": "2026-04-30T17:17:18.072Z",
+  "toolUseResult": "Error: String to replace not found in file.\nString: // Node.js built-ins that CF provides via nodejs_compat flag\nconst NODE_BUILTINS = [\n  \"node:assert\", \"node:async_hooks\", \"node:buffer\", \"node:crypto\",\n  \"node:cluster\", \"node:console\", \"node:constants\", \"node:crypto\",\n  \"node:dgram\", \"node:diagnostics_channel\", \"node:dns\", \"node:domain\",\n  \"node:events\", \"node:fs\", \"node:fs/promises\", \"node:http\", \"node:http2\",\n  \"node:https\", \"node:inspector\", \"node:module\", \"node:net\", \"node:os\",\n  \"node:path\", \"node:perf_hooks\", \"node:process\", \"node:querystring\",\n  \"node:readline\", \"node:repl\", \"node:stream\", \"node:stream/consumers\",\n  \"node:stream/promises\", \"node:stream/web\", \"node:string_decoder\",\n  \"node:sys\", \"node:timers\", \"node:timers/promises\", \"node:tls\",\n  \"node:trace_events\", \"node:tty\", \"node:url\", \"node:util\", \"node:util/types\",\n  \"node:v8\", \"node:vm\", \"node:wasi\", \"node:worker_threads\", \"node:zlib\",\n  // Without \"node:\" prefix (legacy imports)\n  \"assert\", \"async_hooks\", \"buffer\", \"child_process\", \"cluster\", \"console\",\n  \"constants\", \"crypto\", \"dgram\", \"diagnostics_channel\", \"dns\", \"domain\",\n  \"events\", \"fs\", \"http\", \"http2\", \"https\", \"inspector\", \"module\", \"net\",\n  \"os\", \"path\", \"perf_hooks\", \"process\", \"querystring\", \"readline\", \"repl\",\n  \"stream\", \"string_decoder\", \"sys\", \"timers\", \"tls\", \"trace_events\", \"tty\",\n  \"url\", \"util\", \"v8\", \"vm\", \"wasi\", \"worker_threads\", \"zlib\",\n  // Node 22.5+ built-in pulled in by undici@7 — not available in Workers\n  \"node:sqlite\",\n];\n(note: Edit also tried swapping \\uXXXX escapes and their characters; neither form matched, so the mismatch is likely elsewhere in old_string. Re-read the file and copy the exact surrounding text.)",
+  "type": "user",
+  "userType": "external",
+  "uuid": "de7914eb-3793-4ab0-89a7-5f79eb1c2037",
+  "version": "2.1.123"
+}

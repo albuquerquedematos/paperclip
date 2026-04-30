@@ -1,0 +1,33 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "deploy\nnode_modules\npackage.json\nsrc\ntsconfig.json\nwrangler.toml\n{\n  \"name\": \"@paperclipai/deploy-cloudflare\",\n  \"version\": \"0.1.0\",\n  \"private\": true,\n  \"type\": \"module\",\n  \"main\": \"./src/boot.ts\",\n  \"dependencies\": {\n    \"@paperclipai/db\": \"workspace:*\",\n    \"@paperclipai/shared\": \"workspace:*\",\n    \"drizzle-orm\": \"^0.38.4\",\n    \"hono\": \"^4.0.0\",\n    \"postgres\": \"^3.4.5\"\n  },\n  \"devDependencies\": {\n    \"@cloudflare/workers-types\": \"^4.0.0\",\n    \"@types/express\": \"^5.0.0\",\n    \"@types/node\": \"^25.6.0\",\n    \"express\": \"^5.1.0\",\n    \"typescript\": \"^5.0.0\",\n    \"wrangler\": \"^3.0.0\"\n  }\n}",
+        "is_error": false,
+        "tool_use_id": "toolu_01DfrwVgMPVofZ74Eig7oKTq",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "374fb1ff-5651-402d-a845-b7db9b34f291",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "sourceToolAssistantUUID": "374fb1ff-5651-402d-a845-b7db9b34f291",
+  "timestamp": "2026-04-30T17:00:26.725Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "deploy\nnode_modules\npackage.json\nsrc\ntsconfig.json\nwrangler.toml\n{\n  \"name\": \"@paperclipai/deploy-cloudflare\",\n  \"version\": \"0.1.0\",\n  \"private\": true,\n  \"type\": \"module\",\n  \"main\": \"./src/boot.ts\",\n  \"dependencies\": {\n    \"@paperclipai/db\": \"workspace:*\",\n    \"@paperclipai/shared\": \"workspace:*\",\n    \"drizzle-orm\": \"^0.38.4\",\n    \"hono\": \"^4.0.0\",\n    \"postgres\": \"^3.4.5\"\n  },\n  \"devDependencies\": {\n    \"@cloudflare/workers-types\": \"^4.0.0\",\n    \"@types/express\": \"^5.0.0\",\n    \"@types/node\": \"^25.6.0\",\n    \"express\": \"^5.1.0\",\n    \"typescript\": \"^5.0.0\",\n    \"wrangler\": \"^3.0.0\"\n  }\n}"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "382499a2-fcd7-4c20-8cf7-4c32bc42b837",
+  "version": "2.1.123"
+}

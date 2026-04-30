@@ -1,0 +1,61 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "text": "302 redirects — let me check where they redirect to and follow them:",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01VSCvjGUXSWiBHu1zk84SEB",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 1061
+      },
+      "cache_creation_input_tokens": 1061,
+      "cache_read_input_tokens": 77486,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 1061
+          },
+          "cache_creation_input_tokens": 1061,
+          "cache_read_input_tokens": 77486,
+          "input_tokens": 1,
+          "output_tokens": 328,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 328,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "c984de0b-8a5e-4cde-9d5a-2a36d7450bf2",
+  "requestId": "req_011CaaMvVWwr7yzTkEcbGmaX",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T17:37:08.878Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "16ce82ac-3ef9-4e7d-9eed-8cf19b5b90be",
+  "version": "2.1.123"
+}

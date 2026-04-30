@@ -1,0 +1,35 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { Router, type Request, type Response } from \"express\";\n2\timport multer from \"multer\";\n3\timport createDOMPurify from \"dompurify\";\n4\timport { JSDOM } from \"jsdom\";\n5\timport type { Db } from \"@paperclipai/db\";\n6\timport { createAssetImageMetadataSchema } from \"@paperclipai/shared\";\n7\timport type { StorageService } from \"../storage/types.js\";\n8\timport { assetService, logActivity } from \"../services/index.js\";\n9\timport { isAllowedContentType, MAX_ATTACHMENT_BYTES } from \"../attachment-types.js\";\n10\timport { assertCompanyAccess, getActorInfo } from \"./authz.js\";\n11\timport { expressHandler } from \"../http/express-adapter.js\";\n12\timport type { Handler } from \"../http/types.js\";\n13\t\n14\tconst SVG_CONTENT_TYPE = \"image/svg+xml\";\n15\tconst ALLOWED_COMPANY_LOGO_CONTENT_TYPES = new Set([\n16\t  \"image/png\",\n17\t  \"image/jpeg\",\n18\t  \"image/jpg\",\n19\t  \"image/webp\",\n20\t  \"image/gif\",\n21\t  SVG_CONTENT_TYPE,\n22\t]);\n23\t\n24\tfunction sanitizeSvgBuffer(input: Buffer): Buffer | null {\n25\t  const raw = input.toString(\"utf8\").trim();\n26\t  if (!raw) return null;\n27\t\n28\t  const baseDom = new JSDOM(\"\");\n29\t  const domPurify = createDOMPurify(\n30\t    baseDom.window as unknown as Parameters\u003ctypeof createDOMPurify\u003e[0],\n31\t  );\n32\t  domPurify.addHook(\"uponSanitizeAttribute\", (_node, data) =\u003e {\n33\t    const attrName = data.attrName.toLowerCase();\n34\t    const attrValue = (data.attrValue ?? \"\").trim();\n35\t\n36\t    if (attrName.startsWith(\"on\")) {\n37\t      data.keepAttr = false;\n38\t      return;\n39\t    }\n40\t\n41\t    if ((attrName === \"href\" || attrName === \"xlink:href\") \u0026\u0026 attrValue \u0026\u0026 !attrValue.startsWith(\"#\")) {\n42\t      data.keepAttr = false;\n43\t    }\n44\t  });\n45\t\n46\t  let parsedDom: JSDOM | null = null;\n47\t  try {\n48\t    const sanitized = domPurify.sanitize(raw, {\n49\t      USE_PROFILES: { svg: true, svgFilters: true, html: false },\n50\t      FORBID_TAGS: [\"script\", \"foreignObject\"],\n51\t      FORBID_CONTENTS: [\"script\", \"foreignObject\"],\n52\t      RETURN_TRUSTED_TYPE: false,\n53\t    });\n54\t\n55\t    parsedDom = new JSDOM(sanitized, { contentType: SVG_CONTENT_TYPE });\n56\t    const document = parsedDom.window.document;\n57\t    const root = document.documentElement;\n58\t    if (!root || root.tagName.toLowerCase() !== \"svg\") return null;\n59\t\n60\t    for (const el of Array.from(root.querySelectorAll(\"script, foreignObject\"))) {",
+        "tool_use_id": "toolu_01XstLmgho2k1bQgXrha9gdV",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "4c138997-2099-498f-82e5-6a65aba4aeb4",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "sourceToolAssistantUUID": "4c138997-2099-498f-82e5-6a65aba4aeb4",
+  "timestamp": "2026-04-30T17:06:58.222Z",
+  "toolUseResult": {
+    "file": {
+      "content": "import { Router, type Request, type Response } from \"express\";\nimport multer from \"multer\";\nimport createDOMPurify from \"dompurify\";\nimport { JSDOM } from \"jsdom\";\nimport type { Db } from \"@paperclipai/db\";\nimport { createAssetImageMetadataSchema } from \"@paperclipai/shared\";\nimport type { StorageService } from \"../storage/types.js\";\nimport { assetService, logActivity } from \"../services/index.js\";\nimport { isAllowedContentType, MAX_ATTACHMENT_BYTES } from \"../attachment-types.js\";\nimport { assertCompanyAccess, getActorInfo } from \"./authz.js\";\nimport { expressHandler } from \"../http/express-adapter.js\";\nimport type { Handler } from \"../http/types.js\";\n\nconst SVG_CONTENT_TYPE = \"image/svg+xml\";\nconst ALLOWED_COMPANY_LOGO_CONTENT_TYPES = new Set([\n  \"image/png\",\n  \"image/jpeg\",\n  \"image/jpg\",\n  \"image/webp\",\n  \"image/gif\",\n  SVG_CONTENT_TYPE,\n]);\n\nfunction sanitizeSvgBuffer(input: Buffer): Buffer | null {\n  const raw = input.toString(\"utf8\").trim();\n  if (!raw) return null;\n\n  const baseDom = new JSDOM(\"\");\n  const domPurify = createDOMPurify(\n    baseDom.window as unknown as Parameters\u003ctypeof createDOMPurify\u003e[0],\n  );\n  domPurify.addHook(\"uponSanitizeAttribute\", (_node, data) =\u003e {\n    const attrName = data.attrName.toLowerCase();\n    const attrValue = (data.attrValue ?? \"\").trim();\n\n    if (attrName.startsWith(\"on\")) {\n      data.keepAttr = false;\n      return;\n    }\n\n    if ((attrName === \"href\" || attrName === \"xlink:href\") \u0026\u0026 attrValue \u0026\u0026 !attrValue.startsWith(\"#\")) {\n      data.keepAttr = false;\n    }\n  });\n\n  let parsedDom: JSDOM | null = null;\n  try {\n    const sanitized = domPurify.sanitize(raw, {\n      USE_PROFILES: { svg: true, svgFilters: true, html: false },\n      FORBID_TAGS: [\"script\", \"foreignObject\"],\n      FORBID_CONTENTS: [\"script\", \"foreignObject\"],\n      RETURN_TRUSTED_TYPE: false,\n    });\n\n    parsedDom = new JSDOM(sanitized, { contentType: SVG_CONTENT_TYPE });\n    const document = parsedDom.window.document;\n    const root = document.documentElement;\n    if (!root || root.tagName.toLowerCase() !== \"svg\") return null;\n\n    for (const el of Array.from(root.querySelectorAll(\"script, foreignObject\"))) {",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/assets.ts",
+      "numLines": 60,
+      "startLine": 1,
+      "totalLines": 360
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "01bcf674-c0dd-47eb-832f-c5eec29061fa",
+  "version": "2.1.123"
+}

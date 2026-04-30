@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "  dist/worker.js  5.2mb ⚠️\n\n⚡ Done in 316ms\nWorker bundle written to dist/worker.js\n[wrangler:inf] Ready on http://localhost:8787\n\u001b[31m✘ \u001b[41;31m[\u001b[41;97mERROR\u001b[41;31m]\u001b[0m \u001b[1mservice core:user:paperclip-api: Uncaught Error: Dynamic require of \"path\" is not supported\u001b[0m\n\u001b[31m✘ \u001b[41;31m[\u001b[41;97mERROR\u001b[41;31m]\u001b[0m \u001b[1m  at worker.js:27:9\u001b[0m\n\u001b[31m✘ \u001b[41;31m[\u001b[41;97mERROR\u001b[41;31m]\u001b[0m \u001b[1m  at worker.js:48436:19 in ../../node_modules/.pnpm/mime-types@2.1.35/node_modules/mime-types/index.js\u001b[0m\n\u001b[31m✘ \u001b[41;31m[\u001b[41;97mERROR\u001b[41;31m]\u001b[0m \u001b[1m  at worker.js:33:52 in __require2\u001b[0m\n\u001b[31m✘ \u001b[41;31m[\u001b[41;97mERROR\u001b[41;31m]\u001b[0m \u001b[1m  at worker.js:48526:16 in ../../node_modules/.pnpm/type-is@1.6.18/node_modules/type-is/index.js\u001b[0m\n\u001b[31m✘ \u001b[41;31m[\u001b[41;97mERROR\u001b[41;31m]\u001b[0m \u001b[1m  at worker.js:33:52 in __require2\u001b[0m\n\u001b[31m✘ \u001b[41;31m[\u001b[41;97mERROR\u001b[41;31m]\u001b[0m \u001b[1m  at worker.js:52645:15 in ../../node_modules/.pnpm/multer@2.1.1/node_modules/multer/lib/make-middleware.js\u001b[0m\n\u001b[31m✘ \u001b[41;31m[\u001b[41;97mERROR\u001b[41;31m]\u001b[0m \u001b[1m  at worker.js:33:52 in __require2\u001b[0m\n\u001b[31m✘ \u001b[41;31m[\u001b[41;97mERROR\u001b[41;31m]\u001b[0m \u001b[1m  at worker.js:56080:26 in ../../node_modules/.pnpm/multer@2.1.1/node_modules/multer/index.js\u001b[0m\n\u001b[31m✘ \u001b[41;31m[\u001b[41;97mERROR\u001b[41;31m]\u001b[0m \u001b[1m  at worker.js:33:52 in __require2\u001b[0m\n\u001b[31m✘ \u001b[41;31m[\u001b[41;97mERROR\u001b[41;31m]\u001b[0m \u001b[1m  at worker.js:132280:29\u001b[0m\n\u001b[31m✘ \u001b[41;31m[\u001b[41;97mERROR\u001b[41;31m]\u001b[0m \u001b[1mThe Workers runtime failed to start. There is likely additional logging output above.\u001b[0m",
+        "is_error": false,
+        "tool_use_id": "toolu_01A5axJfknDSJCNCsmqG3Jqw",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "514c9ba9-a1d4-4bd2-8f87-a7374ab783f7",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "514c9ba9-a1d4-4bd2-8f87-a7374ab783f7",
+  "timestamp": "2026-04-30T17:32:58.695Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "  dist/worker.js  5.2mb ⚠️\n\n⚡ Done in 316ms\nWorker bundle written to dist/worker.js\n[wrangler:inf] Ready on http://localhost:8787\n\u001b[31m✘ \u001b[41;31m[\u001b[41;97mERROR\u001b[41;31m]\u001b[0m \u001b[1mservice core:user:paperclip-api: Uncaught Error: Dynamic require of \"path\" is not supported\u001b[0m\n\u001b[31m✘ \u001b[41;31m[\u001b[41;97mERROR\u001b[41;31m]\u001b[0m \u001b[1m  at worker.js:27:9\u001b[0m\n\u001b[31m✘ \u001b[41;31m[\u001b[41;97mERROR\u001b[41;31m]\u001b[0m \u001b[1m  at worker.js:48436:19 in ../../node_modules/.pnpm/mime-types@2.1.35/node_modules/mime-types/index.js\u001b[0m\n\u001b[31m✘ \u001b[41;31m[\u001b[41;97mERROR\u001b[41;31m]\u001b[0m \u001b[1m  at worker.js:33:52 in __require2\u001b[0m\n\u001b[31m✘ \u001b[41;31m[\u001b[41;97mERROR\u001b[41;31m]\u001b[0m \u001b[1m  at worker.js:48526:16 in ../../node_modules/.pnpm/type-is@1.6.18/node_modules/type-is/index.js\u001b[0m\n\u001b[31m✘ \u001b[41;31m[\u001b[41;97mERROR\u001b[41;31m]\u001b[0m \u001b[1m  at worker.js:33:52 in __require2\u001b[0m\n\u001b[31m✘ \u001b[41;31m[\u001b[41;97mERROR\u001b[41;31m]\u001b[0m \u001b[1m  at worker.js:52645:15 in ../../node_modules/.pnpm/multer@2.1.1/node_modules/multer/lib/make-middleware.js\u001b[0m\n\u001b[31m✘ \u001b[41;31m[\u001b[41;97mERROR\u001b[41;31m]\u001b[0m \u001b[1m  at worker.js:33:52 in __require2\u001b[0m\n\u001b[31m✘ \u001b[41;31m[\u001b[41;97mERROR\u001b[41;31m]\u001b[0m \u001b[1m  at worker.js:56080:26 in ../../node_modules/.pnpm/multer@2.1.1/node_modules/multer/index.js\u001b[0m\n\u001b[31m✘ \u001b[41;31m[\u001b[41;97mERROR\u001b[41;31m]\u001b[0m \u001b[1m  at worker.js:33:52 in __require2\u001b[0m\n\u001b[31m✘ \u001b[41;31m[\u001b[41;97mERROR\u001b[41;31m]\u001b[0m \u001b[1m  at worker.js:132280:29\u001b[0m\n\u001b[31m✘ \u001b[41;31m[\u001b[41;97mERROR\u001b[41;31m]\u001b[0m \u001b[1mThe Workers runtime failed to start. There is likely additional logging output above.\u001b[0m"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "e13b2720-4077-49ab-bdc4-4af56a2ecd99",
+  "version": "2.1.123"
+}

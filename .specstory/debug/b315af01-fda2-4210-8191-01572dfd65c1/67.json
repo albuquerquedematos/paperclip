@@ -1,0 +1,33 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/worktree-config.ts:  embeddedPostgresDataDir: string;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/worktree-config.ts:    embeddedPostgresDataDir: path.resolve(instanceRoot, \"db\"),\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/worktree-config.ts:        Number.isInteger(siblingConfig.database.embeddedPostgresPort) \u0026\u0026\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/worktree-config.ts:        siblingConfig.database.embeddedPostgresPort \u003e 0\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/worktree-config.ts:        databasePorts.add(siblingConfig.database.embeddedPostgresPort);\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/worktree-config.ts:      ? portOverrides?.databasePort ?? config.database.embeddedPostgresPort\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/worktree-config.ts:            embeddedPostgresDataDir: context.embeddedPostgresDataDir,\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/worktree-config.ts:            embeddedPostgresPort: databasePort ?? config.database.embeddedPostgresPort,\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/worktree-config.ts:    if (!isPathInside(config.database.embeddedPostgresDataDir, context.instanceRoot)) {\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/worktree-config.ts:    nextConfig.database.embeddedPostgresPort !== input.databasePort\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/worktree-config.ts:        embeddedPostgresPort: input.databasePort,\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/worktree-config.ts:          siblingPorts.databasePorts.has(parsed.database.embeddedPostgresPort));\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/worktree-config.ts:                parsed.database.embeddedPostgresPort === 54329\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/worktree-config.ts:                  : parsed.database.embeddedPostgresPort,\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/index.ts:  let embeddedPostgres: EmbeddedPostgresInstance | null = null;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/index.ts:  let embeddedPostgresStartedByThisProcess = false;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/index.ts:    const dataDir = resolve(config.embeddedPostgresDataDir);\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/index.ts:    const configuredPort = config.embeddedPostgresPort;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/index.ts:        logger.info({ embeddedPostgresLog: line }, \"embedded-postgres\");\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/index.ts:      const configuredAdminConnectionString = `postgres://paperclip:paperclip@127.0.0.1:${configuredPort}/postgres`;",
+        "is_error": false,
+        "tool_use_id": "toolu_016VmV3AAVWJ2T8XPs5VG1N5",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "596ff298-f04e-4f33-8a78-31ce2b3faf95",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "sourceToolAssistantUUID": "596ff298-f04e-4f33-8a78-31ce2b3faf95",
+  "timestamp": "2026-04-30T17:03:16.132Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/worktree-config.ts:  embeddedPostgresDataDir: string;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/worktree-config.ts:    embeddedPostgresDataDir: path.resolve(instanceRoot, \"db\"),\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/worktree-config.ts:        Number.isInteger(siblingConfig.database.embeddedPostgresPort) \u0026\u0026\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/worktree-config.ts:        siblingConfig.database.embeddedPostgresPort \u003e 0\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/worktree-config.ts:        databasePorts.add(siblingConfig.database.embeddedPostgresPort);\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/worktree-config.ts:      ? portOverrides?.databasePort ?? config.database.embeddedPostgresPort\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/worktree-config.ts:            embeddedPostgresDataDir: context.embeddedPostgresDataDir,\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/worktree-config.ts:            embeddedPostgresPort: databasePort ?? config.database.embeddedPostgresPort,\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/worktree-config.ts:    if (!isPathInside(config.database.embeddedPostgresDataDir, context.instanceRoot)) {\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/worktree-config.ts:    nextConfig.database.embeddedPostgresPort !== input.databasePort\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/worktree-config.ts:        embeddedPostgresPort: input.databasePort,\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/worktree-config.ts:          siblingPorts.databasePorts.has(parsed.database.embeddedPostgresPort));\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/worktree-config.ts:                parsed.database.embeddedPostgresPort === 54329\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/worktree-config.ts:                  : parsed.database.embeddedPostgresPort,\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/index.ts:  let embeddedPostgres: EmbeddedPostgresInstance | null = null;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/index.ts:  let embeddedPostgresStartedByThisProcess = false;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/index.ts:    const dataDir = resolve(config.embeddedPostgresDataDir);\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/index.ts:    const configuredPort = config.embeddedPostgresPort;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/index.ts:        logger.info({ embeddedPostgresLog: line }, \"embedded-postgres\");\n/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/index.ts:      const configuredAdminConnectionString = `postgres://paperclip:paperclip@127.0.0.1:${configuredPort}/postgres`;"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "8c10ddad-1fa7-497a-9edf-d55563749435",
+  "version": "2.1.123"
+}

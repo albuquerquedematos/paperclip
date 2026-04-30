@@ -1,0 +1,70 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01NMVeRu9xFC2T7G6Z2U37UR",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/issues.ts",
+          "limit": 10,
+          "offset": 848
+        },
+        "name": "Read",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_017JjYXNeETXsySSwzBf5h8k",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 543
+      },
+      "cache_creation_input_tokens": 543,
+      "cache_read_input_tokens": 129591,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 543
+          },
+          "cache_creation_input_tokens": 543,
+          "cache_read_input_tokens": 129591,
+          "input_tokens": 1,
+          "output_tokens": 238,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 238,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "3434bef9-77a1-4345-aa61-68e3a29b0f07",
+  "requestId": "req_011CaaNZLi9hEDhehK3swAaZ",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T17:45:30.197Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "2607d177-4177-4266-b37b-ae55abca0653",
+  "version": "2.1.123"
+}

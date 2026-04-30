@@ -1,0 +1,52 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/build-worker.mjs has been updated successfully.",
+        "tool_use_id": "toolu_017jaY26B2havC6ieq9Prmc3",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "6786c7f1-4a05-4eb8-859e-8392f52fe719",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "6786c7f1-4a05-4eb8-859e-8392f52fe719",
+  "timestamp": "2026-04-30T17:32:29.027Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/build-worker.mjs",
+    "newString": "    // pino-http: Express HTTP logger middleware using pino internals; not used in CF.\n    \"pino-http\":          path.join(SHIMS, \"pino-shim.ts\"),\n    // dotenv: CJS module that does require(\"path\"/\"crypto\") at init — not needed in CF.\n    \"dotenv\":             path.join(SHIMS, \"dotenv-shim.ts\"),",
+    "oldString": "    // pino-http: Express HTTP logger middleware using pino internals; not used in CF.\n    \"pino-http\":          path.join(SHIMS, \"pino-shim.ts\"),",
+    "originalFile": "/**\n * Custom esbuild bundler for the Cloudflare Worker.\n *\n * Wrangler's built-in esbuild cannot mark specific packages as external or\n * alias individual modules, so we pre-bundle the worker here and point wrangler\n * to the output with --no-bundle.\n *\n * Two categories of problematic packages:\n *\n * 1. Available in CF Workers via nodejs_compat → mark as `external` so the CF\n *    runtime resolves them (node:crypto, node:stream, node:path, etc.)\n *\n * 2. NOT available in CF Workers (node:http, node:net, node:tls, node:fs, etc.)\n *    → alias to lightweight stubs bundled into the output. If the CF runtime tried\n *    to resolve these as externals it would crash on startup.\n *\n * Other stubs:\n *   - express → cf-express-shim (zero-dep Router that Express-router-bridge can walk)\n *   - embedded-postgres / @embedded-postgres/* → external (never called in CF)\n *   - jsdom → external (SVG sanitize path throws at runtime; acceptable for CF)\n */\n\nimport { build } from \"esbuild\";\nimport { fileURLToPath } from \"url\";\nimport path from \"path\";\n\nconst __dirname = path.dirname(fileURLToPath(import.meta.url));\nconst SHIMS = path.join(__dirname, \"src/shims\");\n\n// Node.js built-ins CF Workers DOES provide via nodejs_compat.\n// Mark external → CF runtime resolves them at runtime.\nconst CF_PROVIDED_BUILTINS = [\n  \"node:assert\", \"node:async_hooks\", \"node:buffer\", \"node:crypto\",\n  \"node:diagnostics_channel\", \"node:events\", \"node:module\",\n  \"node:path\", \"node:perf_hooks\", \"node:process\", \"node:querystring\",\n  \"node:stream\", \"node:stream/consumers\", \"node:stream/promises\",\n  \"node:stream/web\", \"node:string_decoder\", \"node:timers\",\n  \"node:timers/promises\", \"node:url\", \"node:util\", \"node:util/types\",\n  \"node:worker_threads\", \"node:zlib\",\n  // Without \"node:\" prefix (legacy imports resolved by CF runtime too)\n  \"assert\", \"async_hooks\", \"buffer\", \"crypto\", \"diagnostics_channel\",\n  \"events\", \"module\", \"path\", \"perf_hooks\", \"querystring\",\n  \"stream\", \"string_decoder\", \"timers\", \"url\", \"util\", \"worker_threads\", \"zlib\",\n  // node:sqlite (Node 22.5+) — only referenced in try/catch inside undici@7;\n  // the CF runtime will reject it but that code path is never reached.\n  \"node:sqlite\",\n  // Node-only packages not available in CF — never called in CF code paths\n  \"embedded-postgres\",\n  \"@embedded-postgres/*\",\n  \"jsdom\",\n];\n\nawait build({\n  entryPoints: [path.join(__dirname, \"src/worker/api.ts\")],\n  bundle: true,\n  outfile: path.join(__dirname, \"dist/worker.js\"),\n  format: \"esm\",\n  target: \"es2022\",\n  platform: \"neutral\",\n  conditions: [\"workerd\", \"worker\", \"browser\", \"module\"],\n  mainFields: [\"module\", \"main\"],\n  external: [\n    \"cloudflare:*\",\n    ...CF_PROVIDED_BUILTINS,\n  ],\n  alias: {\n    // Express replacement: zero-dep CF-safe Router shim\n    \"express\": path.join(__dirname, \"src/http/cf-express-shim.ts\"),\n\n    // Node.js APIs NOT available in CF Workers — stub them so the bundle\n    // doesn't fail to load (code that calls these throws at runtime, which\n    // is acceptable since these paths are not exercised in CF).\n    \"node:http\":          path.join(SHIMS, \"node-http.ts\"),\n    \"http\":               path.join(SHIMS, \"node-http.ts\"),\n    \"node:https\":         path.join(SHIMS, \"node-https.ts\"),\n    \"https\":              path.join(SHIMS, \"node-https.ts\"),\n    \"node:net\":           path.join(SHIMS, \"node-net.ts\"),\n    \"net\":                path.join(SHIMS, \"node-net.ts\"),\n    \"node:tls\":           path.join(SHIMS, \"node-tls.ts\"),\n    \"tls\":                path.join(SHIMS, \"node-tls.ts\"),\n    \"node:fs\":            path.join(SHIMS, \"node-fs.ts\"),\n    \"fs\":                 path.join(SHIMS, \"node-fs.ts\"),\n    \"node:fs/promises\":   path.join(SHIMS, \"node-fs-promises.ts\"),\n    \"fs/promises\":        path.join(SHIMS, \"node-fs-promises.ts\"),\n    \"node:http2\":         path.join(SHIMS, \"node-http2.ts\"),\n    \"http2\":              path.join(SHIMS, \"node-http2.ts\"),\n    \"node:child_process\": path.join(SHIMS, \"node-child-process.ts\"),\n    \"child_process\":      path.join(SHIMS, \"node-child-process.ts\"),\n    \"node:readline\":      path.join(SHIMS, \"node-readline.ts\"),\n    \"readline\":           path.join(SHIMS, \"node-readline.ts\"),\n    // process module: CF Workers has 'process' as a global but its module export\n    // doesn't have named exports like 'versions'; provide a shim that does.\n    \"process\":            path.join(SHIMS, \"node-process.ts\"),\n    \"node:process\":       path.join(SHIMS, \"node-process.ts\"),\n    // pino: Node.js-specific CJS logger; replace with a CF-safe console-backed shim.\n    \"pino\":               path.join(SHIMS, \"pino-shim.ts\"),\n    // pino-http: Express HTTP logger middleware using pino internals; not used in CF.\n    \"pino-http\":          path.join(SHIMS, \"pino-shim.ts\"),\n    \"node:os\":            path.join(SHIMS, \"node-os.ts\"),\n    \"os\":                 path.join(SHIMS, \"node-os.ts\"),\n  },\n  plugins: [\n    // esbuild alias only supports bare module names; use a plugin to intercept\n    // specific server source files that require CF-safe shims. We match by path\n    // suffix so relative and package-alias imports are both caught.\n    {\n      name: \"server-file-shims\",\n      setup(build) {\n        const SERVER_SRC = path.resolve(__dirname, \"../../server/src\");\n        const intercepts = [\n          { serverRelPath: \"middleware/logger\", shimFile: \"server-logger-shim.ts\", filter: /logger/ },\n          { serverRelPath: \"version\",           shimFile: \"server-version-shim.ts\", filter: /version/ },\n        ];\n        for (const { serverRelPath, shimFile, filter } of intercepts) {\n          const targetNoExt = path.join(SERVER_SRC, serverRelPath);\n          const shimPath = path.join(SHIMS, shimFile);\n          build.onResolve({ filter }, (args) =\u003e {\n            if (!args.resolveDir) return;\n            const absNoExt = path.resolve(args.resolveDir, args.path).replace(/\\.[jt]sx?$/, \"\");\n            if (absNoExt === targetNoExt) return { path: shimPath };\n          });\n        }\n      },\n    },\n  ],\n  // Inject a banner that polyfills Node.js globals missing from CF Workers nodejs_compat.\n  // Must run before any module initialization (pino uses process.hrtime.bigint at load time).\n  banner: {\n    js: [\n      \"// CF Workers polyfills for missing nodejs_compat APIs\",\n      \"if (typeof process !== 'undefined' \u0026\u0026 !process.hrtime) {\",\n      \"  process.hrtime = function(time) {\",\n      \"    const ms = Date.now();\",\n      \"    const s = Math.floor(ms / 1000);\",\n      \"    const ns = (ms % 1000) * 1000000;\",\n      \"    if (time) return [s - time[0], ns - time[1]];\",\n      \"    return [s, ns];\",\n      \"  };\",\n      \"  process.hrtime.bigint = function() { return BigInt(Date.now()) * 1000000n; };\",\n      \"}\",\n    ].join(\"\\n\"),\n  },\n  splitting: false,\n  define: {\n    \"process.env.NODE_ENV\": '\"production\"',\n    // db/src/client.ts uses import.meta.url to locate migration files.\n    // In CF Workers this code path is never exercised (migrations run externally),\n    // but the variable is assigned at module level so we need a valid URL base.\n    \"import.meta.url\": '\"file:///worker.js\"',\n  },\n  logLevel: \"info\",\n});\n\nconsole.log(\"Worker bundle written to dist/worker.js\");\n",
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          "     \"pino\":               path.join(SHIMS, \"pino-shim.ts\"),",
+          "     // pino-http: Express HTTP logger middleware using pino internals; not used in CF.",
+          "     \"pino-http\":          path.join(SHIMS, \"pino-shim.ts\"),",
+          "+    // dotenv: CJS module that does require(\"path\"/\"crypto\") at init — not needed in CF.",
+          "+    \"dotenv\":             path.join(SHIMS, \"dotenv-shim.ts\"),",
+          "     \"node:os\":            path.join(SHIMS, \"node-os.ts\"),",
+          "     \"os\":                 path.join(SHIMS, \"node-os.ts\"),",
+          "   },"
+        ],
+        "newLines": 8,
+        "newStart": 96,
+        "oldLines": 6,
+        "oldStart": 96
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "5457b7b9-d436-4d65-95a5-1994675569c6",
+  "version": "2.1.123"
+}

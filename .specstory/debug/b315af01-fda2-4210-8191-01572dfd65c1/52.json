@@ -1,0 +1,33 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "{\n  \"$meta\": {\n    \"version\": 1,\n    \"updatedAt\": \"2026-04-30T12:48:31.298Z\",\n    \"source\": \"onboard\"\n  },\n  \"database\": {\n    \"mode\": \"embedded-postgres\",\n    \"embeddedPostgresDataDir\": \"/Users/migmac/.paperclip/instances/default/db\",\n    \"embeddedPostgresPort\": 54329,\n    \"backup\": {\n      \"enabled\": true,\n      \"intervalMinutes\": 60,\n      \"retentionDays\": 30,\n      \"dir\": \"/Users/migmac/.paperclip/instances/default/data/backups\"\n    }\n  },\n  \"logging\": {\n    \"mode\": \"file\",\n    \"logDir\": \"/Users/migmac/.paperclip/instances/default/logs\"\n  },\n  \"server\": {\n    \"deploymentMode\": \"local_trusted\",\n    \"exposure\": \"private\",\n    \"bind\": \"loopback\",\n    \"host\": \"127.0.0.1\",\n    \"port\": 3100,\n    \"allowedHostnames\": [],\n    \"serveUi\": true\n  },\n  \"auth\": {\n    \"baseUrlMode\": \"auto\",\n    \"disableSignUp\": false\n  },\n  \"telemetry\": {\n    \"enabled\": true\n  },\n  \"storage\": {\n    \"provider\": \"local_disk\",\n    \"localDisk\": {\n      \"baseDir\": \"/Users/migmac/.paperclip/instances/default/data/storage\"\n    },\n    \"s3\": {\n      \"bucket\": \"paperclip\",\n      \"region\": \"us-east-1\",\n      \"prefix\": \"\",\n      \"forcePathStyle\": false\n    }\n  },\n  \"secrets\": {\n    \"provider\": \"local_encrypted\",\n    \"strictMode\": false,\n    \"localEncrypted\": {\n      \"keyFilePath\": \"/Users/migmac/.paperclip/instances/default/secrets/master.key\"\n    }\n  }\n}",
+        "is_error": false,
+        "tool_use_id": "toolu_01DcRVDU7535BB3xiipaWebK",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "92e0863b-8b5e-45b8-96bc-8b81225bba3d",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "sourceToolAssistantUUID": "92e0863b-8b5e-45b8-96bc-8b81225bba3d",
+  "timestamp": "2026-04-30T17:02:31.677Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "{\n  \"$meta\": {\n    \"version\": 1,\n    \"updatedAt\": \"2026-04-30T12:48:31.298Z\",\n    \"source\": \"onboard\"\n  },\n  \"database\": {\n    \"mode\": \"embedded-postgres\",\n    \"embeddedPostgresDataDir\": \"/Users/migmac/.paperclip/instances/default/db\",\n    \"embeddedPostgresPort\": 54329,\n    \"backup\": {\n      \"enabled\": true,\n      \"intervalMinutes\": 60,\n      \"retentionDays\": 30,\n      \"dir\": \"/Users/migmac/.paperclip/instances/default/data/backups\"\n    }\n  },\n  \"logging\": {\n    \"mode\": \"file\",\n    \"logDir\": \"/Users/migmac/.paperclip/instances/default/logs\"\n  },\n  \"server\": {\n    \"deploymentMode\": \"local_trusted\",\n    \"exposure\": \"private\",\n    \"bind\": \"loopback\",\n    \"host\": \"127.0.0.1\",\n    \"port\": 3100,\n    \"allowedHostnames\": [],\n    \"serveUi\": true\n  },\n  \"auth\": {\n    \"baseUrlMode\": \"auto\",\n    \"disableSignUp\": false\n  },\n  \"telemetry\": {\n    \"enabled\": true\n  },\n  \"storage\": {\n    \"provider\": \"local_disk\",\n    \"localDisk\": {\n      \"baseDir\": \"/Users/migmac/.paperclip/instances/default/data/storage\"\n    },\n    \"s3\": {\n      \"bucket\": \"paperclip\",\n      \"region\": \"us-east-1\",\n      \"prefix\": \"\",\n      \"forcePathStyle\": false\n    }\n  },\n  \"secrets\": {\n    \"provider\": \"local_encrypted\",\n    \"strictMode\": false,\n    \"localEncrypted\": {\n      \"keyFilePath\": \"/Users/migmac/.paperclip/instances/default/secrets/master.key\"\n    }\n  }\n}"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "2eff74cc-3889-42cd-9ce5-2314faad0db1",
+  "version": "2.1.123"
+}

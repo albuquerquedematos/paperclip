@@ -1,0 +1,33 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "'use strict'\n\nconst { Writable } = require('node:stream')\nconst { assertCacheKey, assertCacheValue } = require('../util/cache.js')\n\nlet DatabaseSync\n\nconst VERSION = 3\n\n// 2gb\nconst MAX_ENTRY_SIZE = 2 * 1000 * 1000 * 1000\n\n/**\n * @typedef {import('../../types/cache-interceptor.d.ts').default.CacheStore} CacheStore\n * @implements {CacheStore}\n *\n * @typedef {{\n *  id: Readonly\u003cnumber\u003e,\n *  body?: Uint8Array\n *  statusCode: number\nundici-types@6.21.0\nundici-types@7.16.0\nundici-types@7.19.2\nundici-types@7.24.4\nundici@5.29.0\nundici@7.24.4",
+        "is_error": false,
+        "tool_use_id": "toolu_01U7G6sWJNS1jH8TVthgf3Yc",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "43ded073-5185-41b3-8b6c-f34be98f8fc0",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "sourceToolAssistantUUID": "43ded073-5185-41b3-8b6c-f34be98f8fc0",
+  "timestamp": "2026-04-30T17:05:40.553Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "'use strict'\n\nconst { Writable } = require('node:stream')\nconst { assertCacheKey, assertCacheValue } = require('../util/cache.js')\n\nlet DatabaseSync\n\nconst VERSION = 3\n\n// 2gb\nconst MAX_ENTRY_SIZE = 2 * 1000 * 1000 * 1000\n\n/**\n * @typedef {import('../../types/cache-interceptor.d.ts').default.CacheStore} CacheStore\n * @implements {CacheStore}\n *\n * @typedef {{\n *  id: Readonly\u003cnumber\u003e,\n *  body?: Uint8Array\n *  statusCode: number\nundici-types@6.21.0\nundici-types@7.16.0\nundici-types@7.19.2\nundici-types@7.24.4\nundici@5.29.0\nundici@7.24.4"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "ccbcc613-3f9d-4e8d-baf4-d1675f255a96",
+  "version": "2.1.123"
+}

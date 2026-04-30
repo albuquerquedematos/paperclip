@@ -1,0 +1,33 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "File created successfully at: /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/build-worker.mjs",
+        "tool_use_id": "toolu_01E5gVbPgTjydgnZx4Koes15",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "64460fa4-30d5-4a12-a1dd-480099f16f1e",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "sourceToolAssistantUUID": "64460fa4-30d5-4a12-a1dd-480099f16f1e",
+  "timestamp": "2026-04-30T17:10:58.213Z",
+  "toolUseResult": {
+    "content": "/**\n * Custom esbuild bundler for the Cloudflare Worker.\n *\n * Wrangler's built-in esbuild cannot mark specific packages as external, so we\n * pre-bundle the worker here and point wrangler to the output with --no-bundle.\n *\n * Packages marked external:\n *   - embedded-postgres / @embedded-postgres/*  — native Node binaries, never\n *     called in CF (Hyperdrive handles DB).\n *   - jsdom                                      — used only for SVG sanitization\n *     in assets.ts; not available in Workers runtime.\n *   - node:sqlite                                — Node 22.5+ built-in pulled in\n *     by undici@7 (via jsdom); unavailable in Workers.\n */\n\nimport { build } from \"esbuild\";\nimport { fileURLToPath } from \"url\";\nimport path from \"path\";\n\nconst __dirname = path.dirname(fileURLToPath(import.meta.url));\n\nawait build({\n  entryPoints: [path.join(__dirname, \"src/worker/api.ts\")],\n  bundle: true,\n  outfile: path.join(__dirname, \"dist/worker.js\"),\n  format: \"esm\",\n  target: \"es2022\",\n  platform: \"browser\",\n  conditions: [\"worker\", \"browser\", \"module\"],\n  mainFields: [\"module\", \"main\"],\n  external: [\n    // Node-only embedded postgres binaries\n    \"embedded-postgres\",\n    \"@embedded-postgres/*\",\n    // SVG sanitization (not available in Workers; dynamic import in assets.ts will throw at runtime for SVG uploads)\n    \"jsdom\",\n    // Node 22.5+ built-in pulled in transitively via jsdom → undici@7\n    \"node:sqlite\",\n  ],\n  // Keep dynamic imports as-is so wrangler/miniflare can handle code splitting\n  splitting: false,\n  define: {\n    \"process.env.NODE_ENV\": '\"production\"',\n  },\n  logLevel: \"info\",\n});\n\nconsole.log(\"Worker bundle written to dist/worker.js\");\n",
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/build-worker.mjs",
+    "originalFile": null,
+    "structuredPatch": [],
+    "type": "create",
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "844e84ac-9651-48a0-afda-308f65b437b1",
+  "version": "2.1.123"
+}

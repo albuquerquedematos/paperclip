@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "File created successfully at: /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/multer-shim.ts",
+        "tool_use_id": "toolu_018fCmRn7uDKBLjwYRRsryb9",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "d8bdaa24-e09e-48ab-b12a-58935659351b",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "d8bdaa24-e09e-48ab-b12a-58935659351b",
+  "timestamp": "2026-04-30T17:35:08.722Z",
+  "toolUseResult": {
+    "content": "// CF Workers replacement for multer.\n// File uploads in CF Workers use Request.formData() instead of multer middleware.\n// This shim provides the same API shape so the module loads without error;\n// the actual upload routes will throw at request time if invoked.\n\nclass MulterError extends Error {\n  code: string;\n  field?: string;\n  constructor(code: string, field?: string) {\n    super(code);\n    this.name = \"MulterError\";\n    this.code = code;\n    this.field = field;\n  }\n}\n\nconst noopMiddleware = (_req: unknown, _res: unknown, next: (err?: unknown) =\u003e void) =\u003e next();\n\nfunction multer(_opts?: unknown) {\n  const middleware = {\n    single: (_field?: string) =\u003e noopMiddleware,\n    array: (_field?: string, _maxCount?: number) =\u003e noopMiddleware,\n    fields: (_fields?: unknown) =\u003e noopMiddleware,\n    none: () =\u003e noopMiddleware,\n    any: () =\u003e noopMiddleware,\n  };\n  return middleware;\n}\n\nmulter.memoryStorage = () =\u003e ({});\nmulter.diskStorage = (_opts?: unknown) =\u003e ({});\nmulter.MulterError = MulterError;\n\nexport default multer;\nexport { MulterError };\n",
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/multer-shim.ts",
+    "originalFile": null,
+    "structuredPatch": [],
+    "type": "create",
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "da829819-62ca-4723-8be7-ea1ae83ea718",
+  "version": "2.1.123"
+}

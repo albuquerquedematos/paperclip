@@ -1,0 +1,54 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/package.json has been updated successfully.",
+        "tool_use_id": "toolu_01Xhzfh3aoDE13uLdNrjfqjU",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "61af8610-79e0-42f4-babc-037dae5ce782",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "sourceToolAssistantUUID": "61af8610-79e0-42f4-babc-037dae5ce782",
+  "timestamp": "2026-04-30T17:11:48.253Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/package.json",
+    "newString": "{\n  \"name\": \"@paperclipai/deploy-cloudflare\",\n  \"version\": \"0.1.0\",\n  \"private\": true,\n  \"type\": \"module\",\n  \"main\": \"./src/boot.ts\",\n  \"scripts\": {\n    \"build\": \"node build-worker.mjs\",\n    \"dev\": \"node build-worker.mjs \u0026\u0026 wrangler dev --no-bundle --local\",\n    \"deploy\": \"node build-worker.mjs \u0026\u0026 wrangler deploy --no-bundle\"\n  },",
+    "oldString": "{\n  \"name\": \"@paperclipai/deploy-cloudflare\",\n  \"version\": \"0.1.0\",\n  \"private\": true,\n  \"type\": \"module\",\n  \"main\": \"./src/boot.ts\",",
+    "originalFile": "{\n  \"name\": \"@paperclipai/deploy-cloudflare\",\n  \"version\": \"0.1.0\",\n  \"private\": true,\n  \"type\": \"module\",\n  \"main\": \"./src/boot.ts\",\n  \"dependencies\": {\n    \"@paperclipai/db\": \"workspace:*\",\n    \"@paperclipai/shared\": \"workspace:*\",\n    \"drizzle-orm\": \"^0.38.4\",\n    \"hono\": \"^4.0.0\",\n    \"postgres\": \"^3.4.5\"\n  },\n  \"devDependencies\": {\n    \"@cloudflare/workers-types\": \"^4.0.0\",\n    \"@types/express\": \"^5.0.0\",\n    \"@types/node\": \"^25.6.0\",\n    \"express\": \"^5.1.0\",\n    \"typescript\": \"^5.0.0\",\n    \"wrangler\": \"^3.0.0\"\n  }\n}\n",
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          "   \"private\": true,",
+          "   \"type\": \"module\",",
+          "   \"main\": \"./src/boot.ts\",",
+          "+  \"scripts\": {",
+          "+    \"build\": \"node build-worker.mjs\",",
+          "+    \"dev\": \"node build-worker.mjs \u0026\u0026 wrangler dev --no-bundle --local\",",
+          "+    \"deploy\": \"node build-worker.mjs \u0026\u0026 wrangler deploy --no-bundle\"",
+          "+  },",
+          "   \"dependencies\": {",
+          "     \"@paperclipai/db\": \"workspace:*\",",
+          "     \"@paperclipai/shared\": \"workspace:*\","
+        ],
+        "newLines": 11,
+        "newStart": 4,
+        "oldLines": 6,
+        "oldStart": 4
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "87bafe29-6446-4c0a-a2bd-f62ec4cac9e0",
+  "version": "2.1.123"
+}

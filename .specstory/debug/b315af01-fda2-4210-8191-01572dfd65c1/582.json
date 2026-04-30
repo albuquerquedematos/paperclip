@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_018V8nNqmsHhsw5WZJz9XhhD",
+        "input": {
+          "command": "git commit -m \"$(cat \u003c\u003c'EOF'\nfeat(deploy-cloudflare): CF Workers shims and custom esbuild bundler\n\nAdds build-worker.mjs (custom esbuild pre-bundler) and a set of CF-safe\nshims to replace Node.js APIs not available in the Workers runtime:\n- node-http/https/net/tls/fs/fs-promises/child_process/readline/os/http2\n- pino, pino-http → console-backed logger shim\n- express → zero-dep CF Router shim (with router.param stub)\n- server/src/middleware/logger.ts → CF-safe shim (esbuild plugin)\n- server/src/version.ts → CF-safe shim (no createRequire/package.json)\n- dotenv → no-op shim (CF env vars come from wrangler bindings)\n- multer → no-op shim (CF file uploads use Request.formData())\n- process global polyfill for hrtime, cwd, chdir, exit in banner\n\nAdds .dev.vars for local-trusted mode, wrangler.toml Hyperdrive\nlocalConnectionString, and dev/deploy scripts in package.json.\n\nGET /api/health returns {\"status\":\"ok\",\"platform\":\"cloudflare\",...} locally.\n\nCo-Authored-By: Claude Sonnet 4.6 \u003cnoreply@anthropic.com\u003e\nEOF\n)\"",
+          "description": "Commit cloudflare shims and bundler"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01L2MstGkcBt5mL6gNKy1Bn5",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 1851
+      },
+      "cache_creation_input_tokens": 1851,
+      "cache_read_input_tokens": 73976,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 1851
+          },
+          "cache_creation_input_tokens": 1851,
+          "cache_read_input_tokens": 73976,
+          "input_tokens": 1,
+          "output_tokens": 433,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 433,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "a5b16653-4197-4769-9bf8-6b732251a5bf",
+  "requestId": "req_011CaaMsv3VSr2KQsgUnRyHm",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T17:36:39.207Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "f484c396-5a0d-41aa-b3dd-a3e150872668",
+  "version": "2.1.123"
+}

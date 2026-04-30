@@ -1,0 +1,60 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "text": "Now create the remaining stubs:",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01PaUXWMxowCtHjty5aVsiiq",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 1521
+      },
+      "cache_creation_input_tokens": 1521,
+      "cache_read_input_tokens": 129542,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 1521
+          },
+          "cache_creation_input_tokens": 1521,
+          "cache_read_input_tokens": 129542,
+          "input_tokens": 1,
+          "output_tokens": 581,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 581,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "95fc17b6-48c2-4ba6-a407-c5090239f151",
+  "requestId": "req_011CaaLSRHoXhK1kxkDDF4G4",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "timestamp": "2026-04-30T17:17:39.941Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "9b762cc4-8726-4620-981d-102a2781a1bc",
+  "version": "2.1.123"
+}

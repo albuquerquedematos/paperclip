@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "155\t  });\n156\t  const storage = createCfStorageService(r2Provider) as unknown as StorageService;\n157\t\n158\t  function ext(router: unknown, prefix: string): RouteDefinition[] {\n159\t    return extractRoutesFromRouter(router, prefix);\n160\t  }\n161\t\n162\t  const routes: RouteDefinition[] = [\n163\t    ...ext(companyRoutes(db, storage), \"/api/companies\"),\n164\t    ...ext(agentRoutes(db, {}), \"/api\"),\n165\t    ...ext(assetRoutes(db, storage), \"/api\"),\n166\t    ...ext(projectRoutes(db), \"/api\"),\n167\t    ...ext(issueRoutes(db, storage, {}), \"/api\"),\n168\t    ...ext(issueTreeControlRoutes(db), \"/api\"),\n169\t    ...ext(routineRoutes(db, {}), \"/api\"),\n170\t    ...ext(environmentRoutes(db, {}), \"/api\"),\n171\t    ...ext(executionWorkspaceRoutes(db), \"/api\"),\n172\t    ...ext(goalRoutes(db), \"/api\"),\n173\t    ...ext(approvalRoutes(db, {}), \"/api\"),\n174\t    ...ext(secretRoutes(db), \"/api\"),\n175\t    ...ext(costRoutes(db, {}), \"/api\"),\n176\t    ...ext(activityRoutes(db), \"/api\"),\n177\t    ...ext(dashboardRoutes(db), \"/api\"),\n178\t    ...ext(userProfileRoutes(db), \"/api\"),\n179\t    ...ext(sidebarBadgeRoutes(db), \"/api\"),\n180\t    ...ext(sidebarPreferenceRoutes(db), \"/api\"),\n181\t    ...ext(inboxDismissalRoutes(db), \"/api\"),\n182\t    ...ext(instanceSettingsRoutes(db), \"/api\"),\n183\t    ...ext(llmRoutes(db), \"/api\"),\n184\t    ...ext(authRoutes(db), \"/api\"),",
+        "tool_use_id": "toolu_013mZDb9xhzc77En5GvzGLbB",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "9b77c196-3ed7-47ca-88b3-9d16d15eb5f6",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "9b77c196-3ed7-47ca-88b3-9d16d15eb5f6",
+  "timestamp": "2026-04-30T17:38:29.773Z",
+  "toolUseResult": {
+    "file": {
+      "content": "  });\n  const storage = createCfStorageService(r2Provider) as unknown as StorageService;\n\n  function ext(router: unknown, prefix: string): RouteDefinition[] {\n    return extractRoutesFromRouter(router, prefix);\n  }\n\n  const routes: RouteDefinition[] = [\n    ...ext(companyRoutes(db, storage), \"/api/companies\"),\n    ...ext(agentRoutes(db, {}), \"/api\"),\n    ...ext(assetRoutes(db, storage), \"/api\"),\n    ...ext(projectRoutes(db), \"/api\"),\n    ...ext(issueRoutes(db, storage, {}), \"/api\"),\n    ...ext(issueTreeControlRoutes(db), \"/api\"),\n    ...ext(routineRoutes(db, {}), \"/api\"),\n    ...ext(environmentRoutes(db, {}), \"/api\"),\n    ...ext(executionWorkspaceRoutes(db), \"/api\"),\n    ...ext(goalRoutes(db), \"/api\"),\n    ...ext(approvalRoutes(db, {}), \"/api\"),\n    ...ext(secretRoutes(db), \"/api\"),\n    ...ext(costRoutes(db, {}), \"/api\"),\n    ...ext(activityRoutes(db), \"/api\"),\n    ...ext(dashboardRoutes(db), \"/api\"),\n    ...ext(userProfileRoutes(db), \"/api\"),\n    ...ext(sidebarBadgeRoutes(db), \"/api\"),\n    ...ext(sidebarPreferenceRoutes(db), \"/api\"),\n    ...ext(inboxDismissalRoutes(db), \"/api\"),\n    ...ext(instanceSettingsRoutes(db), \"/api\"),\n    ...ext(llmRoutes(db), \"/api\"),\n    ...ext(authRoutes(db), \"/api\"),",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/api.ts",
+      "numLines": 30,
+      "startLine": 155,
+      "totalLines": 535
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "6807e339-41ab-4094-b886-189bedf78707",
+  "version": "2.1.123"
+}

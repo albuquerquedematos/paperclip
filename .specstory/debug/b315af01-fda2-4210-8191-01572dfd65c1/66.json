@@ -1,0 +1,68 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_016VmV3AAVWJ2T8XPs5VG1N5",
+        "input": {
+          "command": "grep -r \"embeddedPostgres\\|embedded_postgres\\|pg_user\\|pg_pass\\|paperclip:\" /Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/ 2\u003e/dev/null | grep -v \".js\" | grep -v node_modules | head -20",
+          "description": "Find embedded postgres credentials in server source"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01C9qCj4E2eHYCfM8RwWS49k",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 994
+      },
+      "cache_creation_input_tokens": 994,
+      "cache_read_input_tokens": 43785,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 994
+          },
+          "cache_creation_input_tokens": 994,
+          "cache_read_input_tokens": 43785,
+          "input_tokens": 1,
+          "output_tokens": 151,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 151,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "1cd16026-5bb0-47a4-9ef9-f252d6f18ca2",
+  "requestId": "req_011CaaKLewYxt5URziwv9tJQ",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "timestamp": "2026-04-30T17:03:15.861Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "596ff298-f04e-4f33-8a78-31ce2b3faf95",
+  "version": "2.1.123"
+}

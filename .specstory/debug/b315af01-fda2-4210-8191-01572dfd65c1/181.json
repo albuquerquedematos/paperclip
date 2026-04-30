@@ -1,0 +1,68 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01LG2i2kS7HJCJEAG221vWnh",
+        "input": {
+          "command": "grep -n \"embedded-postgres\\|EmbeddedPostgres\" /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/db/src/client.ts 2\u003e/dev/null | head -10\ngrep -n \"embedded-postgres\\|EmbeddedPostgres\" /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/db/src/runtime-config.ts 2\u003e/dev/null | head -10",
+          "description": "Check if client.ts and runtime-config.ts import embedded-postgres"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01Q25KrZ9gSqnbuCT8LJSg6R",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 1457
+      },
+      "cache_creation_input_tokens": 1457,
+      "cache_read_input_tokens": 81952,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 1457
+          },
+          "cache_creation_input_tokens": 1457,
+          "cache_read_input_tokens": 81952,
+          "input_tokens": 1,
+          "output_tokens": 1194,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 1194,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "0f7f6b56-9c96-4b44-ac42-ae23e28aed1b",
+  "requestId": "req_011CaaKjeRwGnJkbygNYSjMj",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "timestamp": "2026-04-30T17:08:43.212Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "3e1edf7f-e2b4-4205-8974-9a5e572c3da1",
+  "version": "2.1.123"
+}

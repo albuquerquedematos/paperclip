@@ -1,0 +1,61 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "text": "Dashboard is at `/api/companies/:companyId/dashboard` — the test was hitting the wrong path. All the 501s are for non-existent routes. Let me run a final clean smoke test with the right paths:",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_011Jf76LDULFU2G49PEgSPDb",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 297
+      },
+      "cache_creation_input_tokens": 297,
+      "cache_read_input_tokens": 133310,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 297
+          },
+          "cache_creation_input_tokens": 297,
+          "cache_read_input_tokens": 133310,
+          "input_tokens": 1,
+          "output_tokens": 849,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 849,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "1cad6b08-897f-4ffc-89ea-c37770d1d4fd",
+  "requestId": "req_011CaaNcjo3VpuovbMYy2BRw",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T17:46:14.276Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "9f0ecaba-c184-4bea-9a78-b7c8a19913df",
+  "version": "2.1.123"
+}

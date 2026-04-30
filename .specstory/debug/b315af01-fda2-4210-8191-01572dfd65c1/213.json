@@ -1,0 +1,68 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01FWTY5zWyWKjQFDhC7eaLEK",
+        "input": {
+          "content": "/**\n * Custom esbuild bundler for the Cloudflare Worker.\n *\n * Wrangler's built-in esbuild cannot mark specific packages as external, so we\n * pre-bundle the worker here and point wrangler to the output with --no-bundle.\n *\n * Approach:\n *   - platform: \"neutral\" so esbuild doesn't inject browser/node polyfills\n *   - node:* builtins are external — provided at runtime by CF nodejs_compat\n *   - cloudflare:* modules are external — provided by the CF runtime\n *   - embedded-postgres / @embedded-postgres/* — native Node binaries, not available\n *     in Workers; no CF code path reaches these\n *   - jsdom — Node-only; SVG sanitization path (assets.ts) will throw at runtime in CF\n *   - node:sqlite — pulled in by undici@7 via jsdom; not available in Workers\n */\n\nimport { build } from \"esbuild\";\nimport { fileURLToPath } from \"url\";\nimport path from \"path\";\n\nconst __dirname = path.dirname(fileURLToPath(import.meta.url));\n\n// Node.js built-ins that CF provides via nodejs_compat flag\nconst NODE_BUILTINS = [\n  \"node:assert\", \"node:async_hooks\", \"node:buffer\", \"node:child_process\",\n  \"node:cluster\", \"node:console\", \"node:constants\", \"node:crypto\",\n  \"node:dgram\", \"node:diagnostics_channel\", \"node:dns\", \"node:domain\",\n  \"node:events\", \"node:fs\", \"node:fs/promises\", \"node:http\", \"node:http2\",\n  \"node:https\", \"node:inspector\", \"node:module\", \"node:net\", \"node:os\",\n  \"node:path\", \"node:perf_hooks\", \"node:process\", \"node:querystring\",\n  \"node:readline\", \"node:repl\", \"node:stream\", \"node:stream/consumers\",\n  \"node:stream/promises\", \"node:stream/web\", \"node:string_decoder\",\n  \"node:sys\", \"node:timers\", \"node:timers/promises\", \"node:tls\",\n  \"node:trace_events\", \"node:tty\", \"node:url\", \"node:util\", \"node:util/types\",\n  \"node:v8\", \"node:vm\", \"node:wasi\", \"node:worker_threads\", \"node:zlib\",\n  // Without \"node:\" prefix (legacy imports)\n  \"assert\", \"async_hooks\", \"buffer\", \"child_process\", \"cluster\", \"console\",\n  \"constants\", \"crypto\", \"dgram\", \"diagnostics_channel\", \"dns\", \"domain\",\n  \"events\", \"fs\", \"http\", \"http2\", \"https\", \"inspector\", \"module\", \"net\",\n  \"os\", \"path\", \"perf_hooks\", \"process\", \"querystring\", \"readline\", \"repl\",\n  \"stream\", \"string_decoder\", \"sys\", \"timers\", \"tls\", \"trace_events\", \"tty\",\n  \"url\", \"util\", \"v8\", \"vm\", \"wasi\", \"worker_threads\", \"zlib\",\n  // Node 22.5+ built-in pulled in by undici@7 — not available in Workers\n  \"node:sqlite\",\n];\n\nawait build({\n  entryPoints: [path.join(__dirname, \"src/worker/api.ts\")],\n  bundle: true,\n  outfile: path.join(__dirname, \"dist/worker.js\"),\n  format: \"esm\",\n  target: \"es2022\",\n  platform: \"neutral\",\n  conditions: [\"workerd\", \"worker\", \"browser\", \"module\"],\n  mainFields: [\"module\", \"main\"],\n  external: [\n    // CF runtime modules\n    \"cloudflare:*\",\n    // Node built-ins (provided by nodejs_compat)\n    ...NODE_BUILTINS,\n    // Node-only packages not available in CF Workers\n    \"embedded-postgres\",\n    \"@embedded-postgres/*\",\n    \"jsdom\",\n  ],\n  splitting: false,\n  define: {\n    \"process.env.NODE_ENV\": '\"production\"',\n  },\n  logLevel: \"info\",\n});\n\nconsole.log(\"Worker bundle written to dist/worker.js\");\n",
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/build-worker.mjs"
+        },
+        "name": "Write",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_011h7jhByzWKfu7e6mn9QoS8",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 3184
+      },
+      "cache_creation_input_tokens": 3184,
+      "cache_read_input_tokens": 94203,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 3184
+          },
+          "cache_creation_input_tokens": 3184,
+          "cache_read_input_tokens": 94203,
+          "input_tokens": 1,
+          "output_tokens": 2034,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 2034,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "7315bbc6-570d-41d4-b34a-7002de2a7e4b",
+  "requestId": "req_011CaaKwDttfKDAjBbFWDfVo",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "timestamp": "2026-04-30T17:11:31.342Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "2b4eaae2-a2c7-4fea-96cd-daf419d254da",
+  "version": "2.1.123"
+}

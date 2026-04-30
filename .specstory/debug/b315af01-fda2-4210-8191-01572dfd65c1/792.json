@@ -1,0 +1,62 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "signature": "EtgCClsIDRgCKkC6W4GV2Qr8VNNmCRwli4ifDQnTReY+5ZjRhBcak5Sfi3iw7IvKSKHIDG1nsiZNUHIWiYin/mYz+65gKD9FIYjmMhFjbGF1ZGUtc29ubmV0LTQtNjgAEgxtGTg13b1lB7PSjn8aDFoOgwpQgOV7EWN8hCIwcokvV3Qudqy7Ktm5HVSo2H1j8BF2MX/gJCRNKkjWQUrOCf9XNpim9I3gTeK3H+0eKqoBtYlM87f3LiP4HeUkFPHrvwO23PCJMXFHxm1zu51sI+AP8rGRP4roditmagCgLW6cjDSsdOmi4ErWKutOyAgHcXPcUq5Ue4JsZTJAXbHKcHndCtXtHJRQcKb6ElY/ysNeQRjO6h4e4zYg01Ox46xvuVs8u123jK9L1K5GlPrNvjfnwwofVAXyXo/NdWchZ4PnnsE4vhtfp9DIzYS4ltubDvIXLmSRJ6irlQMYAQ==",
+        "thinking": "Great results! Issues, projects, company stats — all returning 200. Dashboard summary returns 501 — let me check if there's a dashboard summary route:",
+        "type": "thinking"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01C5FK9fjYh1CMrSDAR3W71a",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 1563
+      },
+      "cache_creation_input_tokens": 1563,
+      "cache_read_input_tokens": 131200,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 1563
+          },
+          "cache_creation_input_tokens": 1563,
+          "cache_read_input_tokens": 131200,
+          "input_tokens": 1,
+          "output_tokens": 207,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 207,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "ae189098-a81e-4cff-b262-b09dea7abc67",
+  "requestId": "req_011CaaNbmgsNbrwcBTLBiQ6V",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T17:46:01.408Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "7c794865-89dc-451d-a0fa-4fd7923e6e28",
+  "version": "2.1.123"
+}

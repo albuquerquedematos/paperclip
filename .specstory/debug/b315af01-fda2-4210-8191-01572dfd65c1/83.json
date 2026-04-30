@@ -1,0 +1,33 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "Cloudflare collects anonymous telemetry about your usage of Wrangler. Learn more at https://github.com/cloudflare/workers-sdk/tree/main/packages/wrangler/telemetry.md\n\n ⛅️ wrangler 3.114.17 (update available 4.86.0)\n-----------------------------------------------\n\n\u001b[33m▲ \u001b[43;33m[\u001b[43;30mWARNING\u001b[43;33m]\u001b[0m \u001b[1mThe version of Wrangler you are using is now out-of-date.\u001b[0m\n\n  Please update to the latest version to prevent critical errors.\n  Run `npm install --save-dev wrangler@4` to update to the latest version.\n  After installation, run Wrangler with `npx wrangler`.\n\n\n\n\u001b[31m✘ \u001b[41;31m[\u001b[41;97mERROR\u001b[41;31m]\u001b[0m \u001b[1mProcessing wrangler.toml configuration:\u001b[0m\n\n    - Expected \"pages_build_output_dir\" to be of type string but got {\"path\":\"../../ui/dist\"}.\n\n\n🪵  Logs were written to \"/Users/migmac/Library/Preferences/.wrangler/logs/wrangler-2026-04-30_17-03-45_457.log\"\n=== wrangler started, checking health ===\nno response yet",
+        "is_error": false,
+        "tool_use_id": "toolu_01PCsrAems6XAbeb4K118kQR",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "a92b8d46-98b2-45a3-b804-06eb8eace6ea",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "sourceToolAssistantUUID": "a92b8d46-98b2-45a3-b804-06eb8eace6ea",
+  "timestamp": "2026-04-30T17:03:55.353Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "Cloudflare collects anonymous telemetry about your usage of Wrangler. Learn more at https://github.com/cloudflare/workers-sdk/tree/main/packages/wrangler/telemetry.md\n\n ⛅️ wrangler 3.114.17 (update available 4.86.0)\n-----------------------------------------------\n\n\u001b[33m▲ \u001b[43;33m[\u001b[43;30mWARNING\u001b[43;33m]\u001b[0m \u001b[1mThe version of Wrangler you are using is now out-of-date.\u001b[0m\n\n  Please update to the latest version to prevent critical errors.\n  Run `npm install --save-dev wrangler@4` to update to the latest version.\n  After installation, run Wrangler with `npx wrangler`.\n\n\n\n\u001b[31m✘ \u001b[41;31m[\u001b[41;97mERROR\u001b[41;31m]\u001b[0m \u001b[1mProcessing wrangler.toml configuration:\u001b[0m\n\n    - Expected \"pages_build_output_dir\" to be of type string but got {\"path\":\"../../ui/dist\"}.\n\n\n🪵  Logs were written to \"/Users/migmac/Library/Preferences/.wrangler/logs/wrangler-2026-04-30_17-03-45_457.log\"\n=== wrangler started, checking health ===\nno response yet"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "057f87c6-8aa1-4911-aa5f-5d2d0f41f92f",
+  "version": "2.1.123"
+}

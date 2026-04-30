@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "1085:  router.get(\"/companies/:companyId/adapters/:type/models\", expressHandler(listAdapterModelsHandler, { db, storage: storageSentinel }));\n1086:  router.get(\"/companies/:companyId/adapters/:type/detect-model\", expressHandler(detectAdapterModelHandler, { db, storage: storageSentinel }));\n1139:  router.post(\n1273:  router.get(\"/agents/:id/skills\", expressHandler(listAgentSkills, { db, storage: storageSentinel }));\n1274:  router.post(\n1416:  router.get(\"/companies/:companyId/agents\", expressHandler(listCompanyAgents, { db, storage: storageSentinel }));\n1417:  router.get(\"/instance/scheduler-heartbeats\", expressHandler(listSchedulerHeartbeats, { db, storage: storageSentinel }));\n1418:  router.get(\"/companies/:companyId/org\", expressHandler(getCompanyOrg, { db, storage: storageSentinel }));\n1419:  router.get(\"/companies/:companyId/org.svg\", expressHandler(getCompanyOrgSvg, { db, storage: storageSentinel }));\n1420:  router.get(\"/companies/:companyId/org.png\", expressHandler(getCompanyOrgPng, { db, storage: storageSentinel }));",
+        "is_error": false,
+        "tool_use_id": "toolu_01AS1zNMeAjKWZMp6j8Drcud",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "05f18c39-696e-4965-9fca-9fad9d527283",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "05f18c39-696e-4965-9fca-9fad9d527283",
+  "timestamp": "2026-04-30T17:40:24.720Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "1085:  router.get(\"/companies/:companyId/adapters/:type/models\", expressHandler(listAdapterModelsHandler, { db, storage: storageSentinel }));\n1086:  router.get(\"/companies/:companyId/adapters/:type/detect-model\", expressHandler(detectAdapterModelHandler, { db, storage: storageSentinel }));\n1139:  router.post(\n1273:  router.get(\"/agents/:id/skills\", expressHandler(listAgentSkills, { db, storage: storageSentinel }));\n1274:  router.post(\n1416:  router.get(\"/companies/:companyId/agents\", expressHandler(listCompanyAgents, { db, storage: storageSentinel }));\n1417:  router.get(\"/instance/scheduler-heartbeats\", expressHandler(listSchedulerHeartbeats, { db, storage: storageSentinel }));\n1418:  router.get(\"/companies/:companyId/org\", expressHandler(getCompanyOrg, { db, storage: storageSentinel }));\n1419:  router.get(\"/companies/:companyId/org.svg\", expressHandler(getCompanyOrgSvg, { db, storage: storageSentinel }));\n1420:  router.get(\"/companies/:companyId/org.png\", expressHandler(getCompanyOrgPng, { db, storage: storageSentinel }));"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "76530f95-27c5-45df-aa22-e221a1cc8ab3",
+  "version": "2.1.123"
+}

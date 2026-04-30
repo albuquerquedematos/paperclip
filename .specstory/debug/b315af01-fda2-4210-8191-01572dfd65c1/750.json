@@ -1,0 +1,53 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/api.ts has been updated successfully.",
+        "tool_use_id": "toolu_01Rzf3z9tAujTPE8NdMtEsgB",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "bcfdf43e-1673-477f-9aaf-dc2de5dbedf5",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "bcfdf43e-1673-477f-9aaf-dc2de5dbedf5",
+  "timestamp": "2026-04-30T17:44:02.128Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/api.ts",
+    "newString": "    // Route patterns are compiled lazily on first request; no warm-up needed.",
+    "oldString": "    // Ensure route cache is warm before handling the request.\n    getRouteCache(env);",
+    "originalFile": null,
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          "     // Boot the Cloudflare implementations on first request (idempotent).",
+          "     bootCloudflare(env);",
+          " ",
+          "-    // Ensure route cache is warm before handling the request.",
+          "-    getRouteCache(env);",
+          "+    // Route patterns are compiled lazily on first request; no warm-up needed.",
+          " ",
+          "     // CF service layer -- instantiated per-request (Workers are stateless).",
+          "     const sidecar = new SidecarClient({"
+        ],
+        "newLines": 7,
+        "newStart": 421,
+        "oldLines": 8,
+        "oldStart": 421
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "aac2a3cd-9ad4-4792-b836-26484d39ff4c",
+  "version": "2.1.123"
+}

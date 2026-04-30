@@ -1,0 +1,51 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/assets.ts has been updated successfully.",
+        "tool_use_id": "toolu_019Tqb4iziw7JLk4ShASp4oR",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "e16933c2-a5f6-42ae-bd0f-83b3702850dc",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "sourceToolAssistantUUID": "e16933c2-a5f6-42ae-bd0f-83b3702850dc",
+  "timestamp": "2026-04-30T17:07:29.689Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/assets.ts",
+    "newString": "  let parsedDom: InstanceType\u003ctypeof JSDOM\u003e | null = null;",
+    "oldString": "  let parsedDom: JSDOM | null = null;",
+    "originalFile": null,
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          "     }",
+          "   });",
+          " ",
+          "-  let parsedDom: JSDOM | null = null;",
+          "+  let parsedDom: InstanceType\u003ctypeof JSDOM\u003e | null = null;",
+          "   try {",
+          "     const sanitized = domPurify.sanitize(raw, {",
+          "       USE_PROFILES: { svg: true, svgFilters: true, html: false },"
+        ],
+        "newLines": 7,
+        "newStart": 43,
+        "oldLines": 7,
+        "oldStart": 43
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "f9c248ab-55b2-48e5-ac0b-b97f69cf06c8",
+  "version": "2.1.123"
+}

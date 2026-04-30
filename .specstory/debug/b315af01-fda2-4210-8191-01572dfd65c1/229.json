@@ -1,0 +1,35 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "1\t{\n2\t  \"name\": \"paperclip\",\n3\t  \"private\": true,\n4\t  \"type\": \"module\",\n5\t  \"scripts\": {\n6\t    \"preflight:workspace-links\": \"node cli/node_modules/tsx/dist/cli.mjs scripts/ensure-workspace-package-links.ts\",\n7\t    \"dev\": \"pnpm --filter @paperclipai/server exec tsx ../scripts/dev-runner.ts watch\",\n8\t    \"dev:watch\": \"pnpm --filter @paperclipai/server exec tsx ../scripts/dev-runner.ts watch\",\n9\t    \"dev:once\": \"pnpm --filter @paperclipai/server exec tsx ../scripts/dev-runner.ts dev\",\n10\t    \"dev:list\": \"pnpm --filter @paperclipai/server exec tsx ../scripts/dev-service.ts list\",\n11\t    \"dev:stop\": \"pnpm --filter @paperclipai/server exec tsx ../scripts/dev-service.ts stop\",\n12\t    \"dev:server\": \"pnpm --filter @paperclipai/server dev\",\n13\t    \"dev:ui\": \"pnpm --filter @paperclipai/ui dev\",\n14\t    \"storybook\": \"pnpm --filter @paperclipai/ui storybook\",\n15\t    \"build-storybook\": \"pnpm --filter @paperclipai/ui build-storybook\",\n16\t    \"build\": \"pnpm run preflight:workspace-links \u0026\u0026 pnpm -r build\",\n17\t    \"typecheck\": \"pnpm run preflight:workspace-links \u0026\u0026 pnpm -r typecheck\",\n18\t    \"test\": \"pnpm run test:run\",\n19\t    \"test:watch\": \"pnpm run preflight:workspace-links \u0026\u0026 vitest\",\n20\t    \"test:run\": \"pnpm run preflight:workspace-links \u0026\u0026 node scripts/run-vitest-stable.mjs\",",
+        "tool_use_id": "toolu_01DPuLeZ58g3jjGrXB6AZgE4",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "60b16b05-21f8-4f37-b583-0adf123141be",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "sourceToolAssistantUUID": "60b16b05-21f8-4f37-b583-0adf123141be",
+  "timestamp": "2026-04-30T17:11:50.936Z",
+  "toolUseResult": {
+    "file": {
+      "content": "{\n  \"name\": \"paperclip\",\n  \"private\": true,\n  \"type\": \"module\",\n  \"scripts\": {\n    \"preflight:workspace-links\": \"node cli/node_modules/tsx/dist/cli.mjs scripts/ensure-workspace-package-links.ts\",\n    \"dev\": \"pnpm --filter @paperclipai/server exec tsx ../scripts/dev-runner.ts watch\",\n    \"dev:watch\": \"pnpm --filter @paperclipai/server exec tsx ../scripts/dev-runner.ts watch\",\n    \"dev:once\": \"pnpm --filter @paperclipai/server exec tsx ../scripts/dev-runner.ts dev\",\n    \"dev:list\": \"pnpm --filter @paperclipai/server exec tsx ../scripts/dev-service.ts list\",\n    \"dev:stop\": \"pnpm --filter @paperclipai/server exec tsx ../scripts/dev-service.ts stop\",\n    \"dev:server\": \"pnpm --filter @paperclipai/server dev\",\n    \"dev:ui\": \"pnpm --filter @paperclipai/ui dev\",\n    \"storybook\": \"pnpm --filter @paperclipai/ui storybook\",\n    \"build-storybook\": \"pnpm --filter @paperclipai/ui build-storybook\",\n    \"build\": \"pnpm run preflight:workspace-links \u0026\u0026 pnpm -r build\",\n    \"typecheck\": \"pnpm run preflight:workspace-links \u0026\u0026 pnpm -r typecheck\",\n    \"test\": \"pnpm run test:run\",\n    \"test:watch\": \"pnpm run preflight:workspace-links \u0026\u0026 vitest\",\n    \"test:run\": \"pnpm run preflight:workspace-links \u0026\u0026 node scripts/run-vitest-stable.mjs\",",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/package.json",
+      "numLines": 20,
+      "startLine": 1,
+      "totalLines": 67
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "93b048e5-23a2-4b88-82d2-ff2efe40cce3",
+  "version": "2.1.123"
+}

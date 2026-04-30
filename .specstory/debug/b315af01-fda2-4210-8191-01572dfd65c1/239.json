@@ -1,0 +1,33 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "import { Router } from \"express\";\nimport type { Db } from \"@paperclipai/db\";\nimport {\n  DEFAULT_FEEDBACK_DATA_SHARING_TERMS_VERSION,\n  companyPortabilityExportSchema,\n  companyPortabilityImportSchema,\n  companyPortabilityPreviewSchema,\n  createCompanySchema,\n  feedbackTargetTypeSchema,\n  feedbackTraceStatusSchema,\n  feedbackVoteValueSchema,\n  updateCompanyBrandingSchema,\n  updateCompanySchema,\n} from \"@paperclipai/shared\";\nimport { badRequest, forbidden } from \"../errors.js\";\nimport { validate } from \"../middleware/validate.js\";\nimport {\n  accessService,\n  agentService,\n  budgetService,\n  companyPortabilityService,\n  companyService,\n  feedbackService,\n  logActivity,\n} from \"../services/index.js\";\nimport type { StorageService } from \"../storage/types.js\";\nimport { assertBoard, assertCompanyAccess, assertInstanceAdmin, getActorInfo } from \"./authz.js\";\nimport type { BoardActor, Handler, RequestCtx } from \"../http/types.js\";\nimport { expressHandler } from \"../http/express-adapter.js\";",
+        "is_error": false,
+        "tool_use_id": "toolu_019KQ9Fy5MeoPuGpfZLmj287",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "46caa450-f94e-46b1-aaaa-07c84599c2e2",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "sourceToolAssistantUUID": "46caa450-f94e-46b1-aaaa-07c84599c2e2",
+  "timestamp": "2026-04-30T17:13:00.701Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "import { Router } from \"express\";\nimport type { Db } from \"@paperclipai/db\";\nimport {\n  DEFAULT_FEEDBACK_DATA_SHARING_TERMS_VERSION,\n  companyPortabilityExportSchema,\n  companyPortabilityImportSchema,\n  companyPortabilityPreviewSchema,\n  createCompanySchema,\n  feedbackTargetTypeSchema,\n  feedbackTraceStatusSchema,\n  feedbackVoteValueSchema,\n  updateCompanyBrandingSchema,\n  updateCompanySchema,\n} from \"@paperclipai/shared\";\nimport { badRequest, forbidden } from \"../errors.js\";\nimport { validate } from \"../middleware/validate.js\";\nimport {\n  accessService,\n  agentService,\n  budgetService,\n  companyPortabilityService,\n  companyService,\n  feedbackService,\n  logActivity,\n} from \"../services/index.js\";\nimport type { StorageService } from \"../storage/types.js\";\nimport { assertBoard, assertCompanyAccess, assertInstanceAdmin, getActorInfo } from \"./authz.js\";\nimport type { BoardActor, Handler, RequestCtx } from \"../http/types.js\";\nimport { expressHandler } from \"../http/express-adapter.js\";"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "2bd033c0-ac74-4ff5-9dee-753921ade275",
+  "version": "2.1.123"
+}

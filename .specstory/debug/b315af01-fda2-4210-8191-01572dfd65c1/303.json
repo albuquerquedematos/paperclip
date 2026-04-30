@@ -1,0 +1,33 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "File created successfully at: /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-os.ts",
+        "tool_use_id": "toolu_0192RGQLK4U8b2WVrj6DqtkG",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "56532c75-52fb-4ba3-999c-d61628ecc14e",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "sourceToolAssistantUUID": "56532c75-52fb-4ba3-999c-d61628ecc14e",
+  "timestamp": "2026-04-30T17:17:56.363Z",
+  "toolUseResult": {
+    "content": "// Stub for node:os — limited availability in CF Workers.\nexport const platform = () =\u003e \"linux\";\nexport const arch = () =\u003e \"x64\";\nexport const hostname = () =\u003e \"cf-worker\";\nexport const homedir = () =\u003e \"/tmp\";\nexport const tmpdir = () =\u003e \"/tmp\";\nexport const cpus = () =\u003e [{ model: \"CF Worker\", speed: 0 }];\nexport const totalmem = () =\u003e 0;\nexport const freemem = () =\u003e 0;\nexport const uptime = () =\u003e 0;\nexport const networkInterfaces = () =\u003e ({});\nexport const userInfo = () =\u003e ({ username: \"worker\", uid: 0, gid: 0, shell: null, homedir: \"/tmp\" });\nexport const EOL = \"\\n\";\nexport const type = () =\u003e \"Linux\";\nexport const release = () =\u003e \"cf\";\nexport const version = () =\u003e \"cf\";\nexport default { platform, arch, hostname, homedir, tmpdir, cpus, totalmem, freemem,\n  uptime, networkInterfaces, userInfo, EOL, type, release, version };\n",
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-os.ts",
+    "originalFile": null,
+    "structuredPatch": [],
+    "type": "create",
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "a53268eb-5783-41d0-95cf-afff9b0b311c",
+  "version": "2.1.123"
+}

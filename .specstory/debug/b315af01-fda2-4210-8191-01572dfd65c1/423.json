@@ -1,0 +1,29 @@
+{
+  "attachment": {
+    "content": {
+      "file": {
+        "content": "// Stub for node:fs/promises — not available in CF Workers.\nconst notAvailable = (name: string) =\u003e async () =\u003e { throw new Error(`node:fs/promises.${name} not available in CF Workers`); };\nexport const readFile = notAvailable(\"readFile\");\nexport const writeFile = notAvailable(\"writeFile\");\nexport const readdir = notAvailable(\"readdir\");\nexport const mkdir = notAvailable(\"mkdir\");\nexport const stat = notAvailable(\"stat\");\nexport const unlink = notAvailable(\"unlink\");\nexport const access = notAvailable(\"access\");\nexport const realpath = notAvailable(\"realpath\");\nexport const rm = notAvailable(\"rm\");\nexport const rename = notAvailable(\"rename\");\nexport const copyFile = notAvailable(\"copyFile\");\nexport const pipeline = notAvailable(\"pipeline\");\nexport const open = notAvailable(\"open\");\nexport const lstat = notAvailable(\"lstat\");\nexport const watch = notAvailable(\"watch\");\nexport default { readFile, writeFile, readdir, mkdir, stat, unlink, access, realpath, rm, rename, copyFile };\n",
+        "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-fs-promises.ts",
+        "numLines": 19,
+        "startLine": 1,
+        "totalLines": 19
+      },
+      "type": "text"
+    },
+    "displayPath": "src/shims/node-fs-promises.ts",
+    "filename": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-fs-promises.ts",
+    "type": "file"
+  },
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "parentUuid": "7420f074-1d1f-4c6c-835e-e307d1b93899",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T17:27:33.629Z",
+  "type": "attachment",
+  "userType": "external",
+  "uuid": "ca58d17c-4153-4e06-a7e2-992d7c99a634",
+  "version": "2.1.123"
+}

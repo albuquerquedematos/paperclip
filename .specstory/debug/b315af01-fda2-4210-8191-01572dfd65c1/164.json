@@ -1,0 +1,35 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "300\t\n301\tapp.post(\"/api/issues/:issueId/attachments/upload\", async (c) =\u003e {\n302\t  const { issues } = await import(\"@paperclipai/db\");\n303\t  const { eq } = await import(\"drizzle-orm\");\n304\t  const { forbidden, notFound, badRequest } = await import(\"../../../../server/src/errors.js\");\n305\t\n306\t  const env = c.env;\n307\t  const { db } = getRouteCache(env);\n308\t  const deploymentMode = env.DEPLOYMENT_MODE === \"local_trusted\" ? \"local_trusted\" as const : \"authenticated\" as const;\n309\t  const actor = await resolveActorFromRequest(c.req.raw, db, { deploymentMode });\n310\t\n311\t  try {\n312\t    const issueId = c.req.param(\"issueId\");\n313\t    if (!issueId) return c.json({ error: \"Missing issueId\" }, 400);\n314\t    const issueRow = await db.select({ id: issues.id, companyId: issues.companyId })",
+        "tool_use_id": "toolu_011H3pfRtqurTjbPjpP7ZfWk",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "ea3e8a0f-0943-4ba7-9711-56d6a10c334c",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "sourceToolAssistantUUID": "ea3e8a0f-0943-4ba7-9711-56d6a10c334c",
+  "timestamp": "2026-04-30T17:07:42.416Z",
+  "toolUseResult": {
+    "file": {
+      "content": "\napp.post(\"/api/issues/:issueId/attachments/upload\", async (c) =\u003e {\n  const { issues } = await import(\"@paperclipai/db\");\n  const { eq } = await import(\"drizzle-orm\");\n  const { forbidden, notFound, badRequest } = await import(\"../../../../server/src/errors.js\");\n\n  const env = c.env;\n  const { db } = getRouteCache(env);\n  const deploymentMode = env.DEPLOYMENT_MODE === \"local_trusted\" ? \"local_trusted\" as const : \"authenticated\" as const;\n  const actor = await resolveActorFromRequest(c.req.raw, db, { deploymentMode });\n\n  try {\n    const issueId = c.req.param(\"issueId\");\n    if (!issueId) return c.json({ error: \"Missing issueId\" }, 400);\n    const issueRow = await db.select({ id: issues.id, companyId: issues.companyId })",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/api.ts",
+      "numLines": 15,
+      "startLine": 300,
+      "totalLines": 531
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "bed4b663-3602-473b-935f-696fb8d275ab",
+  "version": "2.1.123"
+}

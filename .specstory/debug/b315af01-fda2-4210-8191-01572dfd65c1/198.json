@@ -1,0 +1,33 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "{\n  \"name\": \"@paperclipai/db\",\n  \"version\": \"0.3.1\",\n  \"license\": \"MIT\",\n  \"homepage\": \"https://github.com/paperclipai/paperclip\",\n  \"bugs\": {\n    \"url\": \"https://github.com/paperclipai/paperclip/issues\"\n  },\n  \"repository\": {\n    \"type\": \"git\",\n    \"url\": \"https://github.com/paperclipai/paperclip\",\n    \"directory\": \"packages/db\"\n  },\n  \"type\": \"module\",\n  \"exports\": {\n    \".\": \"./src/index.ts\",\n    \"./*\": \"./src/*.ts\"\n  },\n  \"publishConfig\": {\n    \"access\": \"public\",\n    \"exports\": {\n      \".\": {\n        \"types\": \"./dist/index.d.ts\",\n        \"import\": \"./dist/index.js\"\n      },\n      \"./*\": {\n        \"types\": \"./dist/*.d.ts\",\n        \"import\": \"./dist/*.js\"\n      }\n    },",
+        "is_error": false,
+        "tool_use_id": "toolu_011fx71VbNpq39s2878Y4349",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "40da5186-9f73-4f7e-81ea-8cdecc852f71",
+  "promptId": "8e950f71-1968-4073-b124-6bba73a5ca4e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "sourceToolAssistantUUID": "40da5186-9f73-4f7e-81ea-8cdecc852f71",
+  "timestamp": "2026-04-30T17:09:48.264Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "{\n  \"name\": \"@paperclipai/db\",\n  \"version\": \"0.3.1\",\n  \"license\": \"MIT\",\n  \"homepage\": \"https://github.com/paperclipai/paperclip\",\n  \"bugs\": {\n    \"url\": \"https://github.com/paperclipai/paperclip/issues\"\n  },\n  \"repository\": {\n    \"type\": \"git\",\n    \"url\": \"https://github.com/paperclipai/paperclip\",\n    \"directory\": \"packages/db\"\n  },\n  \"type\": \"module\",\n  \"exports\": {\n    \".\": \"./src/index.ts\",\n    \"./*\": \"./src/*.ts\"\n  },\n  \"publishConfig\": {\n    \"access\": \"public\",\n    \"exports\": {\n      \".\": {\n        \"types\": \"./dist/index.d.ts\",\n        \"import\": \"./dist/index.js\"\n      },\n      \"./*\": {\n        \"types\": \"./dist/*.d.ts\",\n        \"import\": \"./dist/*.js\"\n      }\n    },"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "1f13213f-0fb7-40d7-917b-0544b26d7129",
+  "version": "2.1.123"
+}
