@@ -1,0 +1,61 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "text": "All four have the same bug pattern: they correctly resolve the issue but then pass the raw param (`id` / `issueId`) to the downstream service instead of `issue.id`. Fix:",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01GwA6RBy3dPoD7v8LP49Rhd",
+    "model": "claude-opus-4-7",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1591,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 1591,
+      "cache_read_input_tokens": 319815,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 1591,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 1591,
+          "cache_read_input_tokens": 319815,
+          "input_tokens": 1,
+          "output_tokens": 337,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 337,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "862373dc-4186-47ec-b1a0-bdf402b06960",
+  "requestId": "req_011CaanHGzkZaCCs3byU7ZbQ",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T22:56:35.121Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "814dd610-509f-4de7-b66f-3f71c3f7d825",
+  "version": "2.1.123"
+}

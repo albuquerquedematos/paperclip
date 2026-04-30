@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { pgTable, uuid, text, timestamp, date, index, jsonb } from \"drizzle-orm/pg-core\";\n2\timport type { AgentEnvConfig } from \"@paperclipai/shared\";\n3\timport { companies } from \"./companies.js\";\n4\timport { goals } from \"./goals.js\";\n5\timport { agents } from \"./agents.js\";\n6\t\n7\texport const projects = pgTable(\n8\t  \"projects\",\n9\t  {\n10\t    id: uuid(\"id\").primaryKey().defaultRandom(),\n11\t    companyId: uuid(\"company_id\").notNull().references(() =\u003e companies.id),\n12\t    goalId: uuid(\"goal_id\").references(() =\u003e goals.id),\n13\t    name: text(\"name\").notNull(),\n14\t    description: text(\"description\"),\n15\t    status: text(\"status\").notNull().default(\"backlog\"),\n16\t    leadAgentId: uuid(\"lead_agent_id\").references(() =\u003e agents.id),\n17\t    targetDate: date(\"target_date\"),\n18\t    color: text(\"color\"),\n19\t    env: jsonb(\"env\").$type\u003cAgentEnvConfig\u003e(),\n20\t    pauseReason: text(\"pause_reason\"),\n21\t    pausedAt: timestamp(\"paused_at\", { withTimezone: true }),\n22\t    executionWorkspacePolicy: jsonb(\"execution_workspace_policy\").$type\u003cRecord\u003cstring, unknown\u003e\u003e(),\n23\t    archivedAt: timestamp(\"archived_at\", { withTimezone: true }),\n24\t    createdAt: timestamp(\"created_at\", { withTimezone: true }).notNull().defaultNow(),\n25\t    updatedAt: timestamp(\"updated_at\", { withTimezone: true }).notNull().defaultNow(),\n26\t  },\n27\t  (table) =\u003e ({\n28\t    companyIdx: index(\"projects_company_idx\").on(table.companyId),\n29\t  }),\n30\t);\n31\t",
+        "tool_use_id": "toolu_01CUfFfmL5oTpAEfg9xpW3ge",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "d3fefaa4-e590-4bdb-8800-f2f74e7c406e",
+  "promptId": "a4189397-43e1-4afc-b7a6-218998e9917e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "d3fefaa4-e590-4bdb-8800-f2f74e7c406e",
+  "timestamp": "2026-04-30T23:12:11.347Z",
+  "toolUseResult": {
+    "file": {
+      "content": "import { pgTable, uuid, text, timestamp, date, index, jsonb } from \"drizzle-orm/pg-core\";\nimport type { AgentEnvConfig } from \"@paperclipai/shared\";\nimport { companies } from \"./companies.js\";\nimport { goals } from \"./goals.js\";\nimport { agents } from \"./agents.js\";\n\nexport const projects = pgTable(\n  \"projects\",\n  {\n    id: uuid(\"id\").primaryKey().defaultRandom(),\n    companyId: uuid(\"company_id\").notNull().references(() =\u003e companies.id),\n    goalId: uuid(\"goal_id\").references(() =\u003e goals.id),\n    name: text(\"name\").notNull(),\n    description: text(\"description\"),\n    status: text(\"status\").notNull().default(\"backlog\"),\n    leadAgentId: uuid(\"lead_agent_id\").references(() =\u003e agents.id),\n    targetDate: date(\"target_date\"),\n    color: text(\"color\"),\n    env: jsonb(\"env\").$type\u003cAgentEnvConfig\u003e(),\n    pauseReason: text(\"pause_reason\"),\n    pausedAt: timestamp(\"paused_at\", { withTimezone: true }),\n    executionWorkspacePolicy: jsonb(\"execution_workspace_policy\").$type\u003cRecord\u003cstring, unknown\u003e\u003e(),\n    archivedAt: timestamp(\"archived_at\", { withTimezone: true }),\n    createdAt: timestamp(\"created_at\", { withTimezone: true }).notNull().defaultNow(),\n    updatedAt: timestamp(\"updated_at\", { withTimezone: true }).notNull().defaultNow(),\n  },\n  (table) =\u003e ({\n    companyIdx: index(\"projects_company_idx\").on(table.companyId),\n  }),\n);\n",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/db/src/schema/projects.ts",
+      "numLines": 31,
+      "startLine": 1,
+      "totalLines": 31
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "b6a03504-8a6e-488b-882e-857264cbd313",
+  "version": "2.1.123"
+}

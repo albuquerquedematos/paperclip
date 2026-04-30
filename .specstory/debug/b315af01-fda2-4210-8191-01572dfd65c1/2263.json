@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "113\tfunction readSettings(): AdapterSettings {\n114\t  const { adapterSettingsPath } = adapterPluginPaths();\n115\t  if (settingsCache?.path === adapterSettingsPath) return settingsCache.settings;\n116\t  try {\n117\t    const raw = fs.readFileSync(adapterSettingsPath, \"utf-8\");\n118\t    const parsed = JSON.parse(raw);\n119\t    settingsCache = {\n120\t      path: adapterSettingsPath,\n121\t      settings: parsed \u0026\u0026 Array.isArray(parsed.disabledTypes)\n122\t        ? (parsed as AdapterSettings)\n123\t        : { disabledTypes: [] },\n124\t    };\n125\t  } catch {\n126\t    settingsCache = { path: adapterSettingsPath, settings: { disabledTypes: [] } };\n127\t  }\n128\t  return settingsCache.settings;\n129\t}\n130\t\n131\tfunction writeSettings(settings: AdapterSettings): void {\n132\t  ensureDirs();\n133\t  const { adapterSettingsPath } = adapterPluginPaths();\n134\t  fs.writeFileSync(adapterSettingsPath, JSON.stringify(settings, null, 2), \"utf-8\");\n135\t  settingsCache = { path: adapterSettingsPath, settings };\n136\t}\n137\t\n138\t// ---------------------------------------------------------------------------\n139\t// Public API\n140\t// ---------------------------------------------------------------------------\n141\t\n142\texport function listAdapterPlugins(): AdapterPluginRecord[] {",
+        "tool_use_id": "toolu_01RQLJXmVtBvuSgVUQLLPobt",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "30b86f83-1fe4-4049-9985-889b924f46e2",
+  "promptId": "0d05d433-ef46-4bba-8105-f1d502a42e1e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "30b86f83-1fe4-4049-9985-889b924f46e2",
+  "timestamp": "2026-04-30T19:30:15.413Z",
+  "toolUseResult": {
+    "file": {
+      "content": "function readSettings(): AdapterSettings {\n  const { adapterSettingsPath } = adapterPluginPaths();\n  if (settingsCache?.path === adapterSettingsPath) return settingsCache.settings;\n  try {\n    const raw = fs.readFileSync(adapterSettingsPath, \"utf-8\");\n    const parsed = JSON.parse(raw);\n    settingsCache = {\n      path: adapterSettingsPath,\n      settings: parsed \u0026\u0026 Array.isArray(parsed.disabledTypes)\n        ? (parsed as AdapterSettings)\n        : { disabledTypes: [] },\n    };\n  } catch {\n    settingsCache = { path: adapterSettingsPath, settings: { disabledTypes: [] } };\n  }\n  return settingsCache.settings;\n}\n\nfunction writeSettings(settings: AdapterSettings): void {\n  ensureDirs();\n  const { adapterSettingsPath } = adapterPluginPaths();\n  fs.writeFileSync(adapterSettingsPath, JSON.stringify(settings, null, 2), \"utf-8\");\n  settingsCache = { path: adapterSettingsPath, settings };\n}\n\n// ---------------------------------------------------------------------------\n// Public API\n// ---------------------------------------------------------------------------\n\nexport function listAdapterPlugins(): AdapterPluginRecord[] {",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/services/adapter-plugin-store.ts",
+      "numLines": 30,
+      "startLine": 113,
+      "totalLines": 202
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "3995e91a-5741-4c29-a3cf-6bab09a8ed3c",
+  "version": "2.1.123"
+}

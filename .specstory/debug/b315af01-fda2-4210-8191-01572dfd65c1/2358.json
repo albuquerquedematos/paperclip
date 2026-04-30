@@ -1,0 +1,71 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_018ahgmKct78nDvmLGcLTW5L",
+        "input": {
+          "description": "Comprehensive CF deployment audit and refactor",
+          "isolation": "worktree",
+          "prompt": "You are doing a thorough audit and refactor of the Cloudflare Workers deployment package at `packages/deploy-cloudflare/`. The goal is: correct behaviour, security, low-noise/high-signal, best practices, maintainability, modularity, and up-to-date docs. Split large files into focused modules where it makes sense.\n\n## Context\n\nThis is a TypeScript monorepo. The `deploy-cloudflare` package bridges the existing Express/Node.js server into a Cloudflare Workers runtime. Key files:\n\n- `packages/deploy-cloudflare/src/worker/` — entry points, route registry, extra routes\n- `packages/deploy-cloudflare/src/http/` — Express bridge, router bridge, Hono adapter\n- `packages/deploy-cloudflare/src/auth/resolve-actor.ts` — auth/actor resolution\n- `packages/deploy-cloudflare/src/shims/` — stubs for Node.js APIs not in CF Workers\n- `packages/deploy-cloudflare/build-worker.mjs` — esbuild bundler config\n\n## Work to do\n\n### 1. Read everything first\n\nRead ALL of these files before touching anything:\n- `packages/deploy-cloudflare/src/worker/app.ts`\n- `packages/deploy-cloudflare/src/worker/route-registry.ts`\n- `packages/deploy-cloudflare/src/worker/cf-extra-routes.ts`\n- `packages/deploy-cloudflare/src/worker/env.ts`\n- `packages/deploy-cloudflare/src/worker/setup.ts`\n- `packages/deploy-cloudflare/src/http/cf-express-bridge.ts`\n- `packages/deploy-cloudflare/src/http/express-router-bridge.ts`\n- `packages/deploy-cloudflare/src/http/hono-adapter.ts`\n- `packages/deploy-cloudflare/src/auth/resolve-actor.ts`\n- `packages/deploy-cloudflare/src/shims/node-net.ts`\n- `packages/deploy-cloudflare/src/shims/node-dns.ts`\n- `packages/deploy-cloudflare/src/shims/pino-shim.ts`\n- `packages/deploy-cloudflare/src/shims/multer-shim.ts`\n- `packages/deploy-cloudflare/src/db/hyperdrive.ts`\n- `packages/deploy-cloudflare/build-worker.mjs`\n- `packages/deploy-cloudflare/package.json`\n- `packages/deploy-cloudflare/wrangler.toml` (if exists, find with find)\n- `server/src/http/types.ts`\n- `server/src/errors.ts`\n\n### 2. Security audit\n\nCheck for:\n- **Authentication gaps**: Does every API route that should require auth actually require it? Look at `app.ts` — does the setup gate bypass allow unauthenticated access to routes that shouldn't be accessible? Verify the auth middleware order.\n- **Secret handling**: Is `SIDECAR_API_KEY`, `PAPERCLIP_KV`, etc. ever exposed in responses?\n- **Input validation**: The bridge's `buildMockReq` provides `req.body` — is there any place where unsanitized input could cause issues?\n- **Path traversal / injection**: Any place where user-supplied path params are used in dangerous ways?\n- **CORS**: Are CORS headers set? Should they be?\n- **Error info leakage**: Does the 500 handler leak stack traces to the client?\n\nFix any security issues you find.\n\n### 3. Logging / noise audit\n\n- The bridge logs `[CF Bridge] Unhandled error:` with full stack traces — this is correct behaviour, keep it but ensure it only fires for genuine 500s (not HttpErrors)\n- Check if `[CF Worker] Compiled N route patterns` log fires on every cold start or per-request — it should only fire once\n- Check if there is excessive logging in the IIFE from registry.ts that would spam console on every CF Worker boot\n- Remove or downgrade any log statements that would generate noise in production\n\n### 4. Correctness audit\n\n- **compiledPathCache bug**: In `route-registry.ts`, `compiledPathCache` is populated with `routes.length` entries on first call. On every subsequent call the routes array is rebuilt (new closures), but its length must equal `compiledPathCache.length`. If `accessRoutes(db, opts)` is called with different opts that somehow produce different routes, this would silently misalign. Add a runtime assertion: `if (compiledPathCache.length !== routes.length) { compiledPathCache = null; compiledPathCache = routes.map(...); }` — i.e., invalidate and rebuild if length changes.\n- **Bridge body parsing**: In `cf-express-bridge.ts`, for DELETE requests with a body (some REST APIs do this), the body is currently discarded. Is this the right behaviour for access.ts routes? Check if any DELETE routes have bodies.\n- **`res._reject` and `_settled`**: In `createMockRes`, when `_reject` is called it sets `_settled = true`. But `json/send/end` also set `_settled = true` AND call `_resolve`. If a handler calls both `res.json(data)` AND throws later, `_reject` would be a no-op (already settled). Verify this is correct — it is, first settlement wins.\n- **runChain fire-and-forget**: The `next` function in `runChain` is synchronous and calls `Promise.resolve(...).catch(...)`. This is correct — errors go to `res._reject`. But what if a handler calls `next()` more than once (a common bug in Express middleware)? The `i` counter prevents double-execution, but the second call to `next()` would call the NEXT handler in the chain (i is incremented). Add a guard against double-calls to `next()`.\n\n### 5. Modularity / file splitting\n\n**`cf-extra-routes.ts` is ~320 lines and growing.** Split it:\n\nCreate these focused files under `packages/deploy-cloudflare/src/worker/routes/`:\n- `adapters.ts` — `GET /api/adapters` (the Hono handler, imports from registry)\n- `plugins.ts` — `GET /api/plugins`, `GET /api/plugins/ui-contributions`\n- `company-access.ts` — join-requests, user-directory, members (the large inlined helpers too)\n- `company-skills-cf.ts` — `GET /api/companies/:id/skills` + `deriveSkillSource` helper\n- `events.ts` — `GET /api/companies/:id/events/ws`\n\nThen `cf-extra-routes.ts` becomes a thin barrel that just calls each module's `register*(app)` function.\n\nThe inlined helpers in cf-extra-routes.ts (`extractInviteMessage`, `deriveSkillSource`, `SkillSourceBadge` type) should move to their respective focused files.\n\n**`route-registry.ts`** is fine as-is (it's a registration table by design, flat is readable).\n\n**`cf-express-bridge.ts`** is well-focused, keep as-is.\n\n### 6. Documentation\n\n- Update the file-level JSDoc in `cf-extra-routes.ts` (or its replacement barrel) to reflect the new modular structure\n- Add a brief comment to any new route file explaining what it handles and any CF-specific caveats\n- In `route-registry.ts`, add a comment explaining WHY `adapterRoutes()` needs no db/storage (sentinel proxies), and WHY `accessRoutes` uses `extractAllRoutesFromRouter` instead of `ext`\n- In `cf-express-bridge.ts`, add a note to `runChain` explaining the double-`next()` guard if you add one\n- Update `build-worker.mjs` comments if the alias/extern list changed\n\n### 7. Build verification\n\nAfter all changes, run:\n```\nnode packages/deploy-cloudflare/build-worker.mjs\n```\nThe build MUST succeed. If it fails, fix the issue before finishing.\n\n### 8. Commit\n\nOnce everything looks good, create a single commit titled:\n`refactor(deploy-cloudflare): security hardening, modularity, and doc pass`\n\nInclude a body that summarizes what changed. Use Co-Authored-By: Claude Sonnet 4.6 \u0026lt;noreply@anthropic.com\u0026gt;\n\n## Constraints\n\n- Do NOT change the observable API behaviour of any route handler\n- Do NOT add new features beyond what's described above  \n- Do NOT modify files outside `packages/deploy-cloudflare/`\n- The build must pass when you're done\n- Keep the `compiledPathCache` cache design — just make the length guard safer\n- TypeScript errors are NOT caught by esbuild (it strips types) — so TypeScript issues won't fail the build. But write correct types anyway.\n",
+          "subagent_type": "architect-reviewer"
+        },
+        "name": "Agent",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01TNSvvKDzzBy1moKkoR3Njn",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 336
+      },
+      "cache_creation_input_tokens": 336,
+      "cache_read_input_tokens": 139912,
+      "inference_geo": "",
+      "input_tokens": 3,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 336
+          },
+          "cache_creation_input_tokens": 336,
+          "cache_read_input_tokens": 139912,
+          "input_tokens": 3,
+          "output_tokens": 2957,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 2957,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "56ffeaeb-fb2b-4f9b-9ce6-46741d19b422",
+  "requestId": "req_011CaaWw23353Jk3MtPwGjcU",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T19:36:02.514Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "e53a3320-e56a-4e1a-bb4c-1319e2c98fa2",
+  "version": "2.1.123"
+}

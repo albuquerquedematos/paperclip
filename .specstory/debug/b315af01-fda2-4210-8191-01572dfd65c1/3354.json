@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "1\t/**\n2\t * cf-extra-routes.ts — barrel for CF-native route modules.\n3\t *\n4\t * CF-native handlers for API endpoints that use raw Express handlers in the\n5\t * server package (making them invisible to extractRoutesFromRouter) or depend\n6\t * on runtime registries (adapters, plugins) that don't exist in a CF Worker.\n7\t *\n8\t * Registered in app.ts BEFORE the /api/* catch-all so they shadow the 501.\n9\t *\n10\t * Modules:\n11\t *   routes/adapters.ts       — GET /api/adapters\n12\t *   routes/plugins.ts        — GET /api/plugins, GET /api/plugins/ui-contributions\n13\t *   routes/company-access.ts — GET /api/companies/:id/join-requests,\n14\t *                               GET /api/companies/:id/user-directory\n15\t *   routes/company-skills-cf.ts — GET /api/companies/:id/skills\n16\t *   routes/events.ts         — GET /api/companies/:id/events/ws\n17\t *\n18\t * All routes in this barrel require an authenticated actor (board or agent key,\n19\t * or local_trusted mode). Unauthenticated requests receive 401.\n20\t */\n21\t\n22\timport type { Hono } from \"hono\";\n23\timport type { Env } from \"./env.js\";\n24\timport { registerAdapterRoutes } from \"./routes/adapters.js\";\n25\timport { registerPluginRoutes } from \"./routes/plugins.js\";\n26\timport { registerCompanyAccessRoutes } from \"./routes/company-access.js\";\n27\timport { registerCompanySkillRoutes } from \"./routes/company-skills-cf.js\";\n28\timport { registerEventRoutes } from \"./routes/events.js\";\n29\t\n30\texport function registerCfExtraRoutes(app: Hono\u003c{ Bindings: Env }\u003e): void {\n31\t  registerAdapterRoutes(app);\n32\t  registerPluginRoutes(app);\n33\t  registerCompanyAccessRoutes(app);\n34\t  registerCompanySkillRoutes(app);\n35\t  registerEventRoutes(app);\n36\t}\n37\t",
+        "tool_use_id": "toolu_016Cz7qGVgGnGFSCVN11fb4G",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "40ea6cbf-917e-4c16-ae08-9a74179be3f1",
+  "promptId": "a0dd8f6d-e0d4-4f57-8650-1c60e1512696",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "40ea6cbf-917e-4c16-ae08-9a74179be3f1",
+  "timestamp": "2026-04-30T21:52:27.571Z",
+  "toolUseResult": {
+    "file": {
+      "content": "/**\n * cf-extra-routes.ts — barrel for CF-native route modules.\n *\n * CF-native handlers for API endpoints that use raw Express handlers in the\n * server package (making them invisible to extractRoutesFromRouter) or depend\n * on runtime registries (adapters, plugins) that don't exist in a CF Worker.\n *\n * Registered in app.ts BEFORE the /api/* catch-all so they shadow the 501.\n *\n * Modules:\n *   routes/adapters.ts       — GET /api/adapters\n *   routes/plugins.ts        — GET /api/plugins, GET /api/plugins/ui-contributions\n *   routes/company-access.ts — GET /api/companies/:id/join-requests,\n *                               GET /api/companies/:id/user-directory\n *   routes/company-skills-cf.ts — GET /api/companies/:id/skills\n *   routes/events.ts         — GET /api/companies/:id/events/ws\n *\n * All routes in this barrel require an authenticated actor (board or agent key,\n * or local_trusted mode). Unauthenticated requests receive 401.\n */\n\nimport type { Hono } from \"hono\";\nimport type { Env } from \"./env.js\";\nimport { registerAdapterRoutes } from \"./routes/adapters.js\";\nimport { registerPluginRoutes } from \"./routes/plugins.js\";\nimport { registerCompanyAccessRoutes } from \"./routes/company-access.js\";\nimport { registerCompanySkillRoutes } from \"./routes/company-skills-cf.js\";\nimport { registerEventRoutes } from \"./routes/events.js\";\n\nexport function registerCfExtraRoutes(app: Hono\u003c{ Bindings: Env }\u003e): void {\n  registerAdapterRoutes(app);\n  registerPluginRoutes(app);\n  registerCompanyAccessRoutes(app);\n  registerCompanySkillRoutes(app);\n  registerEventRoutes(app);\n}\n",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/cf-extra-routes.ts",
+      "numLines": 37,
+      "startLine": 1,
+      "totalLines": 37
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "dc5ec9e0-7bec-45ad-a2ac-d8bc823b1bf1",
+  "version": "2.1.123"
+}

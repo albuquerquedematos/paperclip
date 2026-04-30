@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "1\t// Stub for node:net — not available in CF Workers.\n2\texport class Socket { on() { return this; } connect() { return this; } end() { return this; } }\n3\texport class Server { on() { return this; } listen() { return this; } }\n4\texport function createServer() { return new Server(); }\n5\texport function createConnection() { return new Socket(); }\n6\texport function connect() { return new Socket(); }\n7\texport default { Socket, Server, createServer, createConnection, connect };\n8\t",
+        "tool_use_id": "toolu_017yNGhLP6D9ryKnEHk7Vsba",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "b9015604-c642-4ab5-a0c8-5d073f1e088f",
+  "promptId": "6578f9d8-71c9-42ed-bd5d-4cac4f413d52",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "b9015604-c642-4ab5-a0c8-5d073f1e088f",
+  "timestamp": "2026-04-30T19:17:39.039Z",
+  "toolUseResult": {
+    "file": {
+      "content": "// Stub for node:net — not available in CF Workers.\nexport class Socket { on() { return this; } connect() { return this; } end() { return this; } }\nexport class Server { on() { return this; } listen() { return this; } }\nexport function createServer() { return new Server(); }\nexport function createConnection() { return new Socket(); }\nexport function connect() { return new Socket(); }\nexport default { Socket, Server, createServer, createConnection, connect };\n",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-net.ts",
+      "numLines": 8,
+      "startLine": 1,
+      "totalLines": 8
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "fcac84c3-1d96-4069-a372-011aae52ba8a",
+  "version": "2.1.123"
+}

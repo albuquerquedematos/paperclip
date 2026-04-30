@@ -1,0 +1,28 @@
+{
+  "agentId": "a3a306fc5d1924556",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1549:    const approvals = await issueApprovalsSvc.listApprovalsForIssue(id);\n1562:    await issueApprovalsSvc.link(id, body.approvalId, {\n1577:    const approvals = await issueApprovalsSvc.listApprovalsForIssue(id);\n1589:    await issueApprovalsSvc.unlink(id, approvalId);\n2568:    const updated = await svc.checkout(id, body.agentId as string, body.expectedStatuses as string[] | undefined, checkoutRunId);\n3403:    const result = await feedback.saveIssueVote({",
+        "is_error": false,
+        "tool_use_id": "toolu_01EALMhs7ra4kfGp9dvPVAcb",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "982436c5-a319-412e-81ec-2a6abf3ecf44",
+  "promptId": "e7cbb211-1d37-4345-b546-c3d4bd07be80",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "982436c5-a319-412e-81ec-2a6abf3ecf44",
+  "timestamp": "2026-04-30T22:58:16.042Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "3293fbec-2007-435e-b5a4-17a10a1ad19a",
+  "version": "2.1.123"
+}

@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_016sTuBTbrkViLrq3DPAWWWW",
+        "input": {
+          "command": "grep -n \"no manifest found\\|paperclip\\.manifest\\|manifestJson\\|getPluginUiContribution\" /Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/services/plugin-loader.ts 2\u003e/dev/null | head -40",
+          "description": "Search for manifest detection logic in plugin-loader"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01Wrs91J6MudixQXUjGcMLL7",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 22337
+      },
+      "cache_creation_input_tokens": 22337,
+      "cache_read_input_tokens": 12673,
+      "inference_geo": "",
+      "input_tokens": 3,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 22337
+          },
+          "cache_creation_input_tokens": 22337,
+          "cache_read_input_tokens": 12673,
+          "input_tokens": 3,
+          "output_tokens": 384,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 384,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "e2e6998a-74e3-466f-b480-1b3ac987dc02",
+  "requestId": "req_011CaafiDTZcLfta3cV8p8gj",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T21:30:27.286Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "43fef065-8dbb-4b97-9cea-3fc575a48e9d",
+  "version": "2.1.123"
+}

@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "113\t    send(data) {\n114\t      if (this._settled) return this;\n115\t      this._settled = true;\n116\t      if (typeof data === \"string\") {\n117\t        _resolve(new Response(data, { status: this._status, headers: this._headers }));\n118\t      } else if (data instanceof Uint8Array || data instanceof ArrayBuffer) {\n119\t        _resolve(new Response(data, { status: this._status, headers: this._headers }));\n120\t      } else if (data == null) {\n121\t        _resolve(new Response(null, { status: this._status }));\n122\t      } else {\n123\t        _resolve(Response.json(data, { status: this._status, headers: this._headers }));\n124\t      }\n125\t      return this;\n126\t    },\n127\t    sendStatus(code) {",
+        "tool_use_id": "toolu_012vzjv3ALiz9MaVBuERYsae",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "352945a7-12f7-455d-8b7f-00d83bc086bc",
+  "promptId": "40300358-f678-4595-930e-40794ab9bf23",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "352945a7-12f7-455d-8b7f-00d83bc086bc",
+  "timestamp": "2026-04-30T20:15:56.269Z",
+  "toolUseResult": {
+    "file": {
+      "content": "    send(data) {\n      if (this._settled) return this;\n      this._settled = true;\n      if (typeof data === \"string\") {\n        _resolve(new Response(data, { status: this._status, headers: this._headers }));\n      } else if (data instanceof Uint8Array || data instanceof ArrayBuffer) {\n        _resolve(new Response(data, { status: this._status, headers: this._headers }));\n      } else if (data == null) {\n        _resolve(new Response(null, { status: this._status }));\n      } else {\n        _resolve(Response.json(data, { status: this._status, headers: this._headers }));\n      }\n      return this;\n    },\n    sendStatus(code) {",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/http/cf-express-bridge.ts",
+      "numLines": 15,
+      "startLine": 113,
+      "totalLines": 321
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "6bb5e73d-ca94-48e4-8d21-6c18f226fbab",
+  "version": "2.1.123"
+}

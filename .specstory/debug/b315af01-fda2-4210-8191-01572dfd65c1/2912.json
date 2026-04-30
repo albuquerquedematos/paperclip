@@ -1,0 +1,61 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "text": "The example plugins aren't published to npm — they're monorepo-only packages. The correct fix is to proxy `GET /api/plugins/examples` to the sidecar (which runs the server's `listBundledPluginExamples()` that checks if the local paths actually exist and returns them with their real absolute paths):",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_013ykJQemMSBv4yFpPu9BGv3",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 268
+      },
+      "cache_creation_input_tokens": 268,
+      "cache_read_input_tokens": 142991,
+      "inference_geo": "",
+      "input_tokens": 3,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 268
+          },
+          "cache_creation_input_tokens": 268,
+          "cache_read_input_tokens": 142991,
+          "input_tokens": 3,
+          "output_tokens": 1849,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 1849,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "3490f2d9-b9db-4bf7-94d1-9f63094ad44c",
+  "requestId": "req_011CaaekuEfKXKyNJPb6dDG7",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T21:18:14.866Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "1cba78e6-d614-4067-bff6-987159827713",
+  "version": "2.1.123"
+}

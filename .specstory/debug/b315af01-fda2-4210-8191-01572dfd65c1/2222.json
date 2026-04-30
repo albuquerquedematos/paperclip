@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "380\tconst externalAdaptersReady: Promise\u003cvoid\u003e = (async () =\u003e {\n381\t  try {\n382\t    const externalAdapters = await buildExternalAdapters();\n383\t    for (const externalAdapter of externalAdapters) {\n384\t      const overriding = BUILTIN_ADAPTER_TYPES.has(externalAdapter.type);\n385\t      if (overriding) {\n386\t        console.log(\n387\t          `[paperclip] External adapter \"${externalAdapter.type}\" overrides built-in adapter`,\n388\t        );\n389\t        // Save the original builtin for later restoration.\n390\t        const existing = adaptersByType.get(externalAdapter.type);\n391\t        if (existing \u0026\u0026 !builtinFallbacks.has(externalAdapter.type)) {\n392\t          builtinFallbacks.set(externalAdapter.type, existing);\n393\t        }\n394\t      }\n395\t      adaptersByType.set(\n396\t        externalAdapter.type,\n397\t        resolveExternalAdapterRegistration(externalAdapter),\n398\t      );\n399\t    }\n400\t  } catch (err) {\n401\t    console.error(\"[paperclip] Failed to load external adapters:\", err);\n402\t  }\n403\t})();\n404\t\n405\t/**\n406\t * Await this before validating adapter types to avoid race conditions\n407\t * during server startup. External adapters are loaded asynchronously;\n408\t * calling assertKnownAdapterType before this resolves will reject\n409\t * valid external adapter types.\n410\t */\n411\texport function waitForExternalAdapters(): Promise\u003cvoid\u003e {\n412\t  return externalAdaptersReady;\n413\t}\n414\t\n415\texport function registerServerAdapter(adapter: ServerAdapterModule): void {\n416\t  if (BUILTIN_ADAPTER_TYPES.has(adapter.type) \u0026\u0026 !builtinFallbacks.has(adapter.type)) {\n417\t    const existing = adaptersByType.get(adapter.type);\n418\t    if (existing) {\n419\t      builtinFallbacks.set(adapter.type, existing);\n420\t    }\n421\t  }\n422\t  adaptersByType.set(adapter.type, adapter);\n423\t}\n424\t\n425\texport function unregisterServerAdapter(type: string): void {\n426\t  if (type === processAdapter.type || type === httpAdapter.type) return;\n427\t  if (builtinFallbacks.has(type)) {\n428\t    pausedOverrides.delete(type);\n429\t    const fallback = builtinFallbacks.get(type);\n430\t    if (fallback) {\n431\t      adaptersByType.set(type, fallback);\n432\t    }\n433\t    return;\n434\t  }\n435\t  if (BUILTIN_ADAPTER_TYPES.has(type)) {\n436\t    return;\n437\t  }\n438\t  adaptersByType.delete(type);\n439\t}",
+        "tool_use_id": "toolu_01GBuFf38aPWweRmB9ww4Mdr",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "451263ae-b69b-4d08-8c7d-f4a1fcbbc4ee",
+  "promptId": "0d05d433-ef46-4bba-8105-f1d502a42e1e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "451263ae-b69b-4d08-8c7d-f4a1fcbbc4ee",
+  "timestamp": "2026-04-30T19:28:50.041Z",
+  "toolUseResult": {
+    "file": {
+      "content": "const externalAdaptersReady: Promise\u003cvoid\u003e = (async () =\u003e {\n  try {\n    const externalAdapters = await buildExternalAdapters();\n    for (const externalAdapter of externalAdapters) {\n      const overriding = BUILTIN_ADAPTER_TYPES.has(externalAdapter.type);\n      if (overriding) {\n        console.log(\n          `[paperclip] External adapter \"${externalAdapter.type}\" overrides built-in adapter`,\n        );\n        // Save the original builtin for later restoration.\n        const existing = adaptersByType.get(externalAdapter.type);\n        if (existing \u0026\u0026 !builtinFallbacks.has(externalAdapter.type)) {\n          builtinFallbacks.set(externalAdapter.type, existing);\n        }\n      }\n      adaptersByType.set(\n        externalAdapter.type,\n        resolveExternalAdapterRegistration(externalAdapter),\n      );\n    }\n  } catch (err) {\n    console.error(\"[paperclip] Failed to load external adapters:\", err);\n  }\n})();\n\n/**\n * Await this before validating adapter types to avoid race conditions\n * during server startup. External adapters are loaded asynchronously;\n * calling assertKnownAdapterType before this resolves will reject\n * valid external adapter types.\n */\nexport function waitForExternalAdapters(): Promise\u003cvoid\u003e {\n  return externalAdaptersReady;\n}\n\nexport function registerServerAdapter(adapter: ServerAdapterModule): void {\n  if (BUILTIN_ADAPTER_TYPES.has(adapter.type) \u0026\u0026 !builtinFallbacks.has(adapter.type)) {\n    const existing = adaptersByType.get(adapter.type);\n    if (existing) {\n      builtinFallbacks.set(adapter.type, existing);\n    }\n  }\n  adaptersByType.set(adapter.type, adapter);\n}\n\nexport function unregisterServerAdapter(type: string): void {\n  if (type === processAdapter.type || type === httpAdapter.type) return;\n  if (builtinFallbacks.has(type)) {\n    pausedOverrides.delete(type);\n    const fallback = builtinFallbacks.get(type);\n    if (fallback) {\n      adaptersByType.set(type, fallback);\n    }\n    return;\n  }\n  if (BUILTIN_ADAPTER_TYPES.has(type)) {\n    return;\n  }\n  adaptersByType.delete(type);\n}",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/adapters/registry.ts",
+      "numLines": 60,
+      "startLine": 380,
+      "totalLines": 563
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "6e3e8b2c-b966-443f-b866-5993855169c9",
+  "version": "2.1.123"
+}

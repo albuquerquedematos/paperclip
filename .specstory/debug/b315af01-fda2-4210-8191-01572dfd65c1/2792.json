@@ -1,0 +1,71 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01HFVKMTHefbPRmquCPbZWUw",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/package.json",
+          "new_string": "    \"dev:cf\": \"cd packages/deploy-cloudflare \u0026\u0026 bun run dev\",\n    \"deploy:cf\": \"cd packages/deploy-cloudflare \u0026\u0026 bun run deploy\",",
+          "old_string": "    \"dev:cf\": \"pnpm --filter @paperclipai/deploy-cloudflare dev\",",
+          "replace_all": false
+        },
+        "name": "Edit",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01BN5TAbCSnbme41Jh5SHMKw",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 2538
+      },
+      "cache_creation_input_tokens": 2538,
+      "cache_read_input_tokens": 106456,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 2538
+          },
+          "cache_creation_input_tokens": 2538,
+          "cache_read_input_tokens": 106456,
+          "input_tokens": 1,
+          "output_tokens": 177,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 177,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "de289363-d11c-46ea-9b9c-34a25b2eba25",
+  "requestId": "req_011CaacgT1zJwUcxUavpChzp",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T20:50:39.931Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "a832cc30-1afc-48da-be66-1155698f9e45",
+  "version": "2.1.123"
+}

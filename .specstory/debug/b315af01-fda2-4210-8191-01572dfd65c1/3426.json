@@ -1,0 +1,28 @@
+{
+  "agentId": "a07aabe33abdc139f",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "  router.get(\"/plugins\", expressHandler(listPlugins, adapterDeps));\n  router.get(\"/plugins/examples\", expressHandler(listPluginExamples, adapterDeps));\n  router.get(\"/plugins/ui-contributions\", expressHandler(listUiContributions, adapterDeps));\n  router.get(\"/plugins/tools\", expressHandler(listPluginTools, adapterDeps));\n  router.post(\"/plugins/tools/execute\", expressHandler(executePluginTool, adapterDeps));\n  router.post(\"/plugins/install\", expressHandler(installPlugin, adapterDeps));\n  router.post(\"/plugins/:pluginId/bridge/data\", async (req, _res, next) =\u003e {\n  router.post(\"/plugins/:pluginId/bridge/action\", async (req, _res, next) =\u003e {\n  router.post(\"/plugins/:pluginId/data/:key\", async (req, _res, next) =\u003e {\n  router.post(\"/plugins/:pluginId/actions/:key\", async (req, _res, next) =\u003e {\n  router.get(\"/plugins/:pluginId/bridge/stream/:channel\", async (req, res) =\u003e {\n  router.get(\"/plugins/:pluginId\", expressHandler(getPlugin, adapterDeps));\n  router.delete(\"/plugins/:pluginId\", expressHandler(deletePlugin, adapterDeps));\n  router.post(\"/plugins/:pluginId/enable\", expressHandler(enablePlugin, adapterDeps));\n  router.post(\"/plugins/:pluginId/disable\", expressHandler(disablePlugin, adapterDeps));\n  router.get(\"/plugins/:pluginId/health\", expressHandler(getPluginHealth, adapterDeps));\n  router.get(\"/plugins/:pluginId/logs\", expressHandler(getPluginLogs, adapterDeps));\n  router.post(\"/plugins/:pluginId/upgrade\", expressHandler(upgradePlugin, adapterDeps));\n  router.get(\"/plugins/:pluginId/config\", expressHandler(getPluginConfig, adapterDeps));\n  router.post(\"/plugins/:pluginId/config\", expressHandler(savePluginConfig, adapterDeps));\n  router.post(\"/plugins/:pluginId/config/test\", expressHandler(testPluginConfig, adapterDeps));\n  router.get(\"/plugins/:pluginId/jobs\", expressHandler(listPluginJobs, adapterDeps));\n  router.get(\"/plugins/:pluginId/jobs/:jobId/runs\", expressHandler(listPluginJobRuns, adapterDeps));\n  router.post(\"/plugins/:pluginId/jobs/:jobId/trigger\", expressHandler(triggerPluginJob, adapterDeps));\n  router.post(\"/plugins/:pluginId/webhooks/:endpointKey\", expressHandler(receiveWebhook, adapterDeps));\n  router.get(\"/plugins/:pluginId/dashboard\", expressHandler(getPluginDashboard, adapterDeps));",
+        "is_error": false,
+        "tool_use_id": "toolu_01FP5iJAHaxmoU5fw3D2hGc5",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "118b3b0b-eb9d-4c63-a616-acfb40e5f04a",
+  "promptId": "ba04e90f-0d7c-4dcc-9bf9-971187295dfd",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "118b3b0b-eb9d-4c63-a616-acfb40e5f04a",
+  "timestamp": "2026-04-30T21:58:27.391Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "3891eb99-7b64-4810-b0ed-6db29eae9566",
+  "version": "2.1.123"
+}

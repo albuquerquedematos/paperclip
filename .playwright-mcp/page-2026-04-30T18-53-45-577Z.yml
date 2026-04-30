@@ -1,0 +1,159 @@
+- generic [ref=e3]:
+  - link "Skip to Main Content" [ref=e4] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e5]:
+    - generic [ref=e6]:
+      - generic [ref=e7]:
+        - generic [ref=e8]:
+          - img [ref=e10]
+          - generic [ref=e12]:
+            - button "A" [ref=e13]:
+              - link "A" [ref=e14] [cursor=pointer]:
+                - /url: /ALM/dashboard
+                - generic [ref=e16]:
+                  - img [ref=e17]
+                  - generic [ref=e18]: A
+            - status [ref=e19]
+          - button "Add company" [ref=e22]:
+            - img [ref=e23]
+        - complementary [ref=e25]:
+          - generic [ref=e26]:
+            - img [ref=e27]
+            - generic [ref=e30]: Instance Settings
+          - navigation [ref=e31]:
+            - generic [ref=e32]:
+              - link "Profile" [ref=e33] [cursor=pointer]:
+                - /url: /instance/settings/profile
+                - img [ref=e35]
+                - generic [ref=e39]: Profile
+              - link "General" [ref=e40] [cursor=pointer]:
+                - /url: /instance/settings/general
+                - img [ref=e42]
+                - generic [ref=e43]: General
+              - link "Access" [ref=e44] [cursor=pointer]:
+                - /url: /instance/settings/access
+                - img [ref=e46]
+                - generic [ref=e48]: Access
+              - link "Heartbeats" [ref=e49] [cursor=pointer]:
+                - /url: /instance/settings/heartbeats
+                - img [ref=e51]
+                - generic [ref=e54]: Heartbeats
+              - link "Experimental" [ref=e55] [cursor=pointer]:
+                - /url: /instance/settings/experimental
+                - img [ref=e57]
+                - generic [ref=e59]: Experimental
+              - link "Plugins" [ref=e60] [cursor=pointer]:
+                - /url: /instance/settings/plugins
+                - img [ref=e62]
+                - generic [ref=e64]: Plugins
+              - link "Adapters" [ref=e65] [cursor=pointer]:
+                - /url: /instance/settings/adapters
+                - img [ref=e67]
+                - generic [ref=e70]: Adapters
+      - button "Open account menu" [ref=e72]:
+        - generic [ref=e74]: BO
+        - generic [ref=e75]: Board
+    - generic [ref=e76]:
+      - navigation "breadcrumb" [ref=e80]:
+        - list [ref=e81]:
+          - listitem [ref=e82]:
+            - link "Instance Settings" [disabled] [ref=e83]
+          - listitem [ref=e84]:
+            - img [ref=e85]
+          - listitem [ref=e87]:
+            - link "General" [disabled] [ref=e88]
+      - main [active] [ref=e90]:
+        - generic [ref=e91]:
+          - generic [ref=e92]:
+            - generic [ref=e93]:
+              - img [ref=e94]
+              - heading "General" [level=1] [ref=e95]
+            - paragraph [ref=e96]: Configure instance-wide preferences including log display, keyboard shortcuts, backup retention, and data sharing.
+          - generic [ref=e98]:
+            - heading "Deployment and auth" [level=2] [ref=e100]
+            - generic [ref=e101]: Authenticated private mode requires sign-in and is intended for LAN, VPN, or other private-network deployments.
+            - generic [ref=e102]:
+              - generic [ref=e103]:
+                - generic [ref=e104]: Auth readiness
+                - generic [ref=e105]: Not ready
+              - generic [ref=e106]:
+                - generic [ref=e107]: Bootstrap status
+                - generic [ref=e108]: Ready
+              - generic [ref=e109]:
+                - generic [ref=e110]: Bootstrap invite
+                - generic [ref=e111]: None
+          - generic [ref=e113]:
+            - generic [ref=e114]:
+              - heading "Censor username in logs" [level=2] [ref=e115]
+              - paragraph [ref=e116]: Hide the username segment in home-directory paths and similar operator-visible log output. Standalone username mentions outside of paths are not yet masked in the live transcript view. This is off by default.
+            - switch "Toggle username log censoring" [ref=e117]
+          - generic [ref=e119]:
+            - generic [ref=e120]:
+              - heading "Keyboard shortcuts" [level=2] [ref=e121]
+              - paragraph [ref=e122]: Enable app keyboard shortcuts, including inbox navigation and global shortcuts like creating issues or toggling panels. This is off by default.
+            - switch "Toggle keyboard shortcuts" [ref=e123]
+          - generic [ref=e125]:
+            - generic [ref=e126]:
+              - heading "Backup retention" [level=2] [ref=e127]
+              - paragraph [ref=e128]: Configure how long automatic database backups are retained. Backups run roughly every hour and are compressed with gzip. Within the daily window all backups are kept; beyond that, one backup per week and one per month are preserved.
+            - generic [ref=e129]:
+              - heading "Daily" [level=3] [ref=e130]
+              - generic [ref=e131]:
+                - button "3 days" [ref=e132]:
+                  - generic [ref=e133]: 3 days
+                - button "7 days" [ref=e134]:
+                  - generic [ref=e135]: 7 days
+                - button "14 days" [ref=e136]:
+                  - generic [ref=e137]: 14 days
+            - generic [ref=e138]:
+              - heading "Weekly" [level=3] [ref=e139]
+              - generic [ref=e140]:
+                - button "1 week" [ref=e141]:
+                  - generic [ref=e142]: 1 week
+                - button "2 weeks" [ref=e143]:
+                  - generic [ref=e144]: 2 weeks
+                - button "4 weeks" [ref=e145]:
+                  - generic [ref=e146]: 4 weeks
+            - generic [ref=e147]:
+              - heading "Monthly" [level=3] [ref=e148]
+              - generic [ref=e149]:
+                - button "1 month" [ref=e150]:
+                  - generic [ref=e151]: 1 month
+                - button "3 months" [ref=e152]:
+                  - generic [ref=e153]: 3 months
+                - button "6 months" [ref=e154]:
+                  - generic [ref=e155]: 6 months
+          - generic [ref=e157]:
+            - generic [ref=e158]:
+              - heading "AI feedback sharing" [level=2] [ref=e159]
+              - paragraph [ref=e160]: Control whether thumbs up and thumbs down votes can send the voted AI output to Paperclip Labs. Votes are always saved locally.
+              - link "Read our terms of service" [ref=e161] [cursor=pointer]:
+                - /url: https://paperclip.ing/tos
+            - generic [ref=e162]: No default is saved yet. The next thumbs up or thumbs down choice will ask once and then save the answer here.
+            - generic [ref=e163]:
+              - button "Always allow Share voted AI outputs automatically." [ref=e164]:
+                - generic [ref=e165]: Always allow
+                - generic [ref=e166]: Share voted AI outputs automatically.
+              - button "Don't allow Keep voted AI outputs local only." [ref=e167]:
+                - generic [ref=e168]: Don't allow
+                - generic [ref=e169]: Keep voted AI outputs local only.
+            - paragraph [ref=e170]:
+              - text: To retest the first-use prompt in local dev, remove the
+              - code [ref=e171]: feedbackDataSharingPreference
+              - text: key from the
+              - code [ref=e172]: instance_settings.general
+              - text: JSON row for this instance, or set it back to
+              - code [ref=e173]: "\"prompt\""
+              - text: . Unset and
+              - code [ref=e174]: "\"prompt\""
+              - text: both mean no default has been chosen yet.
+          - generic [ref=e176]:
+            - generic [ref=e177]:
+              - heading "Sign out" [level=2] [ref=e178]
+              - paragraph [ref=e179]: Sign out of this Paperclip instance. You will be redirected to the login page.
+            - button "Sign out" [ref=e180]:
+              - img
+              - text: Sign out
+  - generic [ref=e181]:
+    - heading "Command Palette" [level=2] [ref=e182]
+    - paragraph [ref=e183]: Search for a command to run...

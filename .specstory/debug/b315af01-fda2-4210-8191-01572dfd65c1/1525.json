@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "{\"status\":\"ok\",\"platform\":\"cloudflare\",\"mode\":\"local_trusted\",\"ts\":\"2026-04-30T18:45:55.954Z\"}\nenv.HYPERDRIVE (FILL_IN_AFTER_DEPLOY)                                                 Hyperdrive Config         local\nenv.PAPERCLIP_STORAGE (paperclip-storage)                                             R2 Bucket                 local\nenv.ASSETS                                                                            Assets                    local\nenv.DEPLOYMENT_PLATFORM (\"(hidden)\")                                                  Environment Variable      local\nenv.DEPLOYMENT_MODE (\"(hidden)\")                                                      Environment Variable      local\nenv.DEPLOYMENT_EXPOSURE (\"(hidden)\")                                                  Environment Variable      local\nenv.SIDECAR_URL (\"(hidden)\")                                                          Environment Variable      local\nenv.SIDECAR_API_KEY (\"(hidden)\")                                                      Environment Variable      local\n\n⎔ Starting local server...\n\u001b[33m▲ \u001b[43;33m[\u001b[43;30mWARNING\u001b[43;33m]\u001b[0m \u001b[1mScheduled Workers are not automatically triggered during local development.\u001b[0m\n\n  To manually trigger a scheduled event, run:\n    curl \"http://localhost:8787/cdn-cgi/handler/scheduled\"\n  For more details, see \u001b[4mhttps://developers.cloudflare.com/workers/configuration/cron-triggers/#test-cron-triggers-locally\u001b[0m\n\n\n[wrangler:info] Ready on http://localhost:8787\n[wrangler:info] GET /api/companies/9a7cf1f3-02a7-4751-9cdb-671c9c68edb5/events/ws 101 Switching Protocols (10ms)\n[wrangler:info] GET /api/health 200 OK (2ms)",
+        "is_error": false,
+        "tool_use_id": "toolu_01HojmZKYs4soAUD5hg712jK",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "3127e12c-443e-4e75-80ae-9e707e4f77aa",
+  "promptId": "1b384992-7bf0-4117-b43d-35657ad43bbf",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "3127e12c-443e-4e75-80ae-9e707e4f77aa",
+  "timestamp": "2026-04-30T18:45:56.048Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "{\"status\":\"ok\",\"platform\":\"cloudflare\",\"mode\":\"local_trusted\",\"ts\":\"2026-04-30T18:45:55.954Z\"}\nenv.HYPERDRIVE (FILL_IN_AFTER_DEPLOY)                                                 Hyperdrive Config         local\nenv.PAPERCLIP_STORAGE (paperclip-storage)                                             R2 Bucket                 local\nenv.ASSETS                                                                            Assets                    local\nenv.DEPLOYMENT_PLATFORM (\"(hidden)\")                                                  Environment Variable      local\nenv.DEPLOYMENT_MODE (\"(hidden)\")                                                      Environment Variable      local\nenv.DEPLOYMENT_EXPOSURE (\"(hidden)\")                                                  Environment Variable      local\nenv.SIDECAR_URL (\"(hidden)\")                                                          Environment Variable      local\nenv.SIDECAR_API_KEY (\"(hidden)\")                                                      Environment Variable      local\n\n⎔ Starting local server...\n\u001b[33m▲ \u001b[43;33m[\u001b[43;30mWARNING\u001b[43;33m]\u001b[0m \u001b[1mScheduled Workers are not automatically triggered during local development.\u001b[0m\n\n  To manually trigger a scheduled event, run:\n    curl \"http://localhost:8787/cdn-cgi/handler/scheduled\"\n  For more details, see \u001b[4mhttps://developers.cloudflare.com/workers/configuration/cron-triggers/#test-cron-triggers-locally\u001b[0m\n\n\n[wrangler:info] Ready on http://localhost:8787\n[wrangler:info] GET /api/companies/9a7cf1f3-02a7-4751-9cdb-671c9c68edb5/events/ws 101 Switching Protocols (10ms)\n[wrangler:info] GET /api/health 200 OK (2ms)"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "6e51fe8c-67d1-47ca-9f97-25367b750e98",
+  "version": "2.1.123"
+}

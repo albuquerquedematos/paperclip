@@ -1,0 +1,63 @@
+{
+  "agentId": "a3a306fc5d1924556",
+  "attributionAgent": "Explore",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "text": "Based on my analysis of the code, let me compile my findings. I've identified all the bugs by examining the code patterns. Here's my complete report:\n\n## Complete Bug Report: Raw ID Passed to Downstream Service Calls\n\nBased on my comprehensive analysis of `/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/issues.ts`, I found **6 remaining bugs** where raw `id`/`issueId` parameters (which may be human keys like \"ALM-1\") are passed to downstream service calls instead of the resolved UUID from `issue.id`:\n\n### Bug #1: `listIssueApprovals`\n- **Line:** 1549\n- **Code:** `const approvals = await issueApprovalsSvc.listApprovalsForIssue(id);`\n- **Fix:** Replace `id` with `issue.id`\n\n### Bug #2: `linkIssueApproval` (two occurrences)\n- **Lines:** 1562, 1577\n- **Code:** \n  - Line 1562: `await issueApprovalsSvc.link(id, body.approvalId, {`\n  - Line 1577: `const approvals = await issueApprovalsSvc.listApprovalsForIssue(id);`\n- **Fix:** Replace `id` with `issue.id` on both lines\n\n### Bug #3: `unlinkIssueApproval`\n- **Line:** 1589\n- **Code:** `await issueApprovalsSvc.unlink(id, approvalId);`\n- **Fix:** Replace `id` with `issue.id`\n\n### Bug #4: `checkoutIssue`\n- **Line:** 2568\n- **Code:** `const updated = await svc.checkout(id, body.agentId as string, body.expectedStatuses as string[] | undefined, checkoutRunId);`\n- **Fix:** Replace `id` with `issue.id`\n\n### Bug #5: `releaseIssue`\n- **Line:** 2618 (within the `svc.release()` call)\n- **Code:** `const released = await svc.release(id, ...)`\n- **Fix:** Replace `id` with `issue.id`\n\n### Bug #6: `adminForceRelease`\n- **Line:** 2657\n- **Code:** `const result = await svc.adminForceRelease(id, { clearAssignee });`\n- **Fix:** Replace `id` with `issue.id`\n\n### Bug #7: `saveFeedbackVote`\n- **Line:** 3404\n- **Code:** `issueId: id,` (within `feedback.saveIssueVote()` call)\n- **Fix:** Replace `id` with `issue.id`\n\n**Total: 7 bugs** (6 handlers with 1 having 2 instances in the same call span)",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01SkitG5nC2AsZPd8sfgxciw",
+    "model": "claude-haiku-4-5-20251001",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 164
+      },
+      "cache_creation_input_tokens": 164,
+      "cache_read_input_tokens": 85537,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 164
+          },
+          "cache_creation_input_tokens": 164,
+          "cache_read_input_tokens": 85537,
+          "input_tokens": 1,
+          "output_tokens": 693,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 693,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "366afe85-bde2-4ce7-86b1-ef2f51f70abb",
+  "requestId": "req_011CaanU723KscRKzUt2B6Sk",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T22:59:05.410Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "23721ce0-bfd6-4f77-8b9e-cc36dc69ad19",
+  "version": "2.1.123"
+}

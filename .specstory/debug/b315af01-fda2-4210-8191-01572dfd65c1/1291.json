@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01RmRKKX6Md3St5j8vmzoP6N",
+        "input": {
+          "command": "command -v nvm 2\u003e/dev/null || source ~/.nvm/nvm.sh 2\u003e/dev/null \u0026\u0026 nvm --version 2\u003e/dev/null || echo \"nvm not found\"",
+          "description": "Check if nvm is available"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01PsnrEkZXCrAJcyqU5uY1Ae",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 724
+      },
+      "cache_creation_input_tokens": 724,
+      "cache_read_input_tokens": 158440,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 724
+          },
+          "cache_creation_input_tokens": 724,
+          "cache_read_input_tokens": 158440,
+          "input_tokens": 1,
+          "output_tokens": 119,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 119,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "793b2e07-4574-418a-9a98-5882c99f65b9",
+  "requestId": "req_011CaaRH6P6AZrs71gkcjoSS",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T18:21:07.962Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "6f745a5b-89b0-4b05-9ce0-de6ba571add0",
+  "version": "2.1.123"
+}

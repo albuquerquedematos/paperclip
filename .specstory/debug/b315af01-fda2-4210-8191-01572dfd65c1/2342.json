@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01Nm4xZanFWNsyX4upiFgTM9",
+        "input": {
+          "command": "git add packages/deploy-cloudflare/src/worker/route-registry.ts \u0026\u0026 git commit -m \"$(cat \u003c\u003c'EOF'\nfeat(deploy-cloudflare): register adapterRoutes in route-registry for config-schema and management endpoints\n\nadapterRoutes() uses expressHandler throughout, so extractRoutesFromRouter\ncaptures all its handlers. Adds GET /api/adapters/:type/config-schema (pure\nin-memory adapter registry lookup, works in CF), plus install/delete/reload\nroutes (fail at runtime on FS ops, acceptable). No db/storage needed —\nadapterRoutes uses sentinel proxies that throw if accidentally accessed.\n\nCo-Authored-By: Claude Sonnet 4.6 \u003cnoreply@anthropic.com\u003e\nEOF\n)\"",
+          "description": "Commit adapterRoutes registration"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01FiNwzUYmuJ46bDJt8ko8ad",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 172
+      },
+      "cache_creation_input_tokens": 172,
+      "cache_read_input_tokens": 137361,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 172
+          },
+          "cache_creation_input_tokens": 172,
+          "cache_read_input_tokens": 137361,
+          "input_tokens": 1,
+          "output_tokens": 252,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 252,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "da490796-6fb5-48ff-ba02-6faed6aa7c58",
+  "requestId": "req_011CaaWnfbk7baoYHGfdko17",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T19:33:25.026Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "7081bb9d-23c6-4325-8366-e7bcd7c051e8",
+  "version": "2.1.123"
+}

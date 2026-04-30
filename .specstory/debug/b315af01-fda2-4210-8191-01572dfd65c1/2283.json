@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "83\t// ---------------------------------------------------------------------------\n84\t\n85\texport function registerCfExtraRoutes(app: Hono\u003c{ Bindings: Env }\u003e): void {\n86\t  // -------------------------------------------------------------------------\n87\t  // GET /api/adapters — no adapter registry in CF Workers\n88\t  // -------------------------------------------------------------------------\n89\t  app.get(\"/api/adapters\", (c) =\u003e c.json([]));\n90\t\n91\t  // -------------------------------------------------------------------------\n92\t  // GET /api/plugins — list installed plugins from DB (registry state comes\n93\t  // from manifestJson stored at install time; worker processes not available)\n94\t  // GET /api/plugins/ui-contributions — derive from manifestJson in DB\n95\t  // -------------------------------------------------------------------------\n96\t  app.get(\"/api/plugins\", async (c) =\u003e {\n97\t    const db = createHyperdriveDb(c.env.HYPERDRIVE);",
+        "tool_use_id": "toolu_01UNC5XBPX6dq9X5LozeJvu7",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "ea4dc4db-ce74-418d-95e2-768e4fa9a961",
+  "promptId": "0d05d433-ef46-4bba-8105-f1d502a42e1e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "ea4dc4db-ce74-418d-95e2-768e4fa9a961",
+  "timestamp": "2026-04-30T19:30:52.164Z",
+  "toolUseResult": {
+    "file": {
+      "content": "// ---------------------------------------------------------------------------\n\nexport function registerCfExtraRoutes(app: Hono\u003c{ Bindings: Env }\u003e): void {\n  // -------------------------------------------------------------------------\n  // GET /api/adapters — no adapter registry in CF Workers\n  // -------------------------------------------------------------------------\n  app.get(\"/api/adapters\", (c) =\u003e c.json([]));\n\n  // -------------------------------------------------------------------------\n  // GET /api/plugins — list installed plugins from DB (registry state comes\n  // from manifestJson stored at install time; worker processes not available)\n  // GET /api/plugins/ui-contributions — derive from manifestJson in DB\n  // -------------------------------------------------------------------------\n  app.get(\"/api/plugins\", async (c) =\u003e {\n    const db = createHyperdriveDb(c.env.HYPERDRIVE);",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/cf-extra-routes.ts",
+      "numLines": 15,
+      "startLine": 83,
+      "totalLines": 352
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "3b1f030b-5c98-479b-922a-dcb83fc067eb",
+  "version": "2.1.123"
+}

@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/CompanyImport.tsx:365:      .map((agent) =\u003e [agent.slug, agent.id]),\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/CompanyImport.tsx:559:            const selectedType = adapterOverrides[agent.slug] ?? agent.adapterType;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/CompanyImport.tsx:560:            const isExpanded = expandedSlugs.has(agent.slug);\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/CompanyImport.tsx:561:            const vals = configValues[agent.slug] ?? { ...defaultCreateValues, adapterType: selectedType };\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/CompanyImport.tsx:564:              \u003cdiv key={agent.slug}\u003e\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/CompanyImport.tsx:579:                    onChange={(e) =\u003e onChangeAdapter(agent.slug, e.target.value)}\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/CompanyImport.tsx:595:                    onClick={() =\u003e onToggleExpand(agent.slug)}\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/CompanyImport.tsx:606:                      onChange={(patch) =\u003e onChangeConfig(agent.slug, patch)}\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/CompanyImport.tsx:767:        defaultAdapters[agent.slug] = ceoAdapterType;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/CompanyImport.tsx:1065:      const selectedType = adapterOverrides[agent.slug] ?? agent.adapterType;",
+        "is_error": false,
+        "tool_use_id": "toolu_01N5UAyH68u3xwfPmjKcLnz9",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "23dc8a3e-c1db-4610-a6f2-e59d319f495d",
+  "promptId": "0c147d6f-915f-4b9e-a139-f26417e7157e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "23dc8a3e-c1db-4610-a6f2-e59d319f495d",
+  "timestamp": "2026-04-30T23:04:39.707Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/CompanyImport.tsx:365:      .map((agent) =\u003e [agent.slug, agent.id]),\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/CompanyImport.tsx:559:            const selectedType = adapterOverrides[agent.slug] ?? agent.adapterType;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/CompanyImport.tsx:560:            const isExpanded = expandedSlugs.has(agent.slug);\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/CompanyImport.tsx:561:            const vals = configValues[agent.slug] ?? { ...defaultCreateValues, adapterType: selectedType };\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/CompanyImport.tsx:564:              \u003cdiv key={agent.slug}\u003e\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/CompanyImport.tsx:579:                    onChange={(e) =\u003e onChangeAdapter(agent.slug, e.target.value)}\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/CompanyImport.tsx:595:                    onClick={() =\u003e onToggleExpand(agent.slug)}\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/CompanyImport.tsx:606:                      onChange={(patch) =\u003e onChangeConfig(agent.slug, patch)}\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/CompanyImport.tsx:767:        defaultAdapters[agent.slug] = ceoAdapterType;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/CompanyImport.tsx:1065:      const selectedType = adapterOverrides[agent.slug] ?? agent.adapterType;"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "1447badd-264b-4790-b3b0-4215aef85680",
+  "version": "2.1.123"
+}

@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "   × CF Worker smoke — agent-scoped reads (regression: URL-key resolution) \u003e GET /api/agents/:urlKey/skills (regression) 33ms\n     → GET /api/agents/ceo-2/skills returned 500 (worker crash): expected 500 to be less than 500\n   × CF Worker smoke — agent-scoped reads (regression: URL-key resolution) \u003e GET /api/agents/:urlKey/instructions-bundle (regression) 7ms\n     → GET /api/agents/ceo-2/instructions-bundle returned 500 (worker crash): expected 500 to be less than 500\n   × CF Worker smoke — agent-scoped reads (regression: URL-key resolution) \u003e GET /api/agents/:urlKey/keys (regression) 25ms\n     → GET /api/agents/ceo-2/keys returned 500 (worker crash): expected 500 to be less than 500\n FAIL  tests/cf-smoke/cf-smoke.spec.ts \u003e CF Worker smoke — agent-scoped reads (regression: URL-key resolution) \u003e GET /api/agents/:urlKey/skills (regression)\nAssertionError: GET /api/agents/ceo-2/skills returned 500 (worker crash): expected 500 to be less than 500\n FAIL  tests/cf-smoke/cf-smoke.spec.ts \u003e CF Worker smoke — agent-scoped reads (regression: URL-key resolution) \u003e GET /api/agents/:urlKey/instructions-bundle (regression)\nAssertionError: GET /api/agents/ceo-2/instructions-bundle returned 500 (worker crash): expected 500 to be less than 500\n FAIL  tests/cf-smoke/cf-smoke.spec.ts \u003e CF Worker smoke — agent-scoped reads (regression: URL-key resolution) \u003e GET /api/agents/:urlKey/keys (regression)\nAssertionError: GET /api/agents/ceo-2/keys returned 500 (worker crash): expected 500 to be less than 500",
+        "is_error": false,
+        "tool_use_id": "toolu_01CrHYYBfYFa5aCprn7gUXn1",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "9486a6bc-a127-458b-a5fc-12a5454ef8e7",
+  "promptId": "0c147d6f-915f-4b9e-a139-f26417e7157e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "9486a6bc-a127-458b-a5fc-12a5454ef8e7",
+  "timestamp": "2026-04-30T23:09:02.870Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "   × CF Worker smoke — agent-scoped reads (regression: URL-key resolution) \u003e GET /api/agents/:urlKey/skills (regression) 33ms\n     → GET /api/agents/ceo-2/skills returned 500 (worker crash): expected 500 to be less than 500\n   × CF Worker smoke — agent-scoped reads (regression: URL-key resolution) \u003e GET /api/agents/:urlKey/instructions-bundle (regression) 7ms\n     → GET /api/agents/ceo-2/instructions-bundle returned 500 (worker crash): expected 500 to be less than 500\n   × CF Worker smoke — agent-scoped reads (regression: URL-key resolution) \u003e GET /api/agents/:urlKey/keys (regression) 25ms\n     → GET /api/agents/ceo-2/keys returned 500 (worker crash): expected 500 to be less than 500\n FAIL  tests/cf-smoke/cf-smoke.spec.ts \u003e CF Worker smoke — agent-scoped reads (regression: URL-key resolution) \u003e GET /api/agents/:urlKey/skills (regression)\nAssertionError: GET /api/agents/ceo-2/skills returned 500 (worker crash): expected 500 to be less than 500\n FAIL  tests/cf-smoke/cf-smoke.spec.ts \u003e CF Worker smoke — agent-scoped reads (regression: URL-key resolution) \u003e GET /api/agents/:urlKey/instructions-bundle (regression)\nAssertionError: GET /api/agents/ceo-2/instructions-bundle returned 500 (worker crash): expected 500 to be less than 500\n FAIL  tests/cf-smoke/cf-smoke.spec.ts \u003e CF Worker smoke — agent-scoped reads (regression: URL-key resolution) \u003e GET /api/agents/:urlKey/keys (regression)\nAssertionError: GET /api/agents/ceo-2/keys returned 500 (worker crash): expected 500 to be less than 500"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "011721c1-9cc1-4ef8-9de8-80a532c3380e",
+  "version": "2.1.123"
+}

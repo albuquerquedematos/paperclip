@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "198\texport function adapterRoutes() {\n199\t  const router = Router();\n200\t\n201\t  // Storage is not used by any adapter handler.\n202\t  const storageSentinel = new Proxy({} as StorageService, {\n203\t    get(_target, prop) {\n204\t      throw new Error(`adapter handler unexpectedly accessed storage.${String(prop)}`);\n205\t    },\n206\t  });\n207\t\n208\t  // A placeholder Db sentinel — adapter routes do not touch the database.\n209\t  // expressHandler requires a Db in deps; supply a proxy that throws on access.\n210\t  // eslint-disable-next-line @typescript-eslint/no-explicit-any\n211\t  const dbSentinel = new Proxy({} as any, {\n212\t    get(_target, prop) {\n213\t      throw new Error(`adapter handler unexpectedly accessed db.${String(prop)}`);\n214\t    },\n215\t  });\n216\t\n217\t  const adapterDeps = { db: dbSentinel, storage: storageSentinel };\n218\t\n219\t  // ---------------------------------------------------------------------------\n220\t  // Authz helpers — assertBoardOrgAccess and assertInstanceAdmin from authz.ts\n221\t  // accept RequestCtx directly (both satisfy the AuthzReq structural interface).\n222\t  // ---------------------------------------------------------------------------\n223\t\n224\t  // config schema cache shared across the router's lifetime\n225\t  const configSchemaCache = new Map\u003cstring, {\n226\t    adapter: ServerAdapterModule;\n227\t    schema: AdapterConfigSchema;",
+        "tool_use_id": "toolu_01FXEeiwFy3hpYdN8ESSk1XQ",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "bc0023f7-ac85-48e1-bb49-30b5e847730a",
+  "promptId": "0d05d433-ef46-4bba-8105-f1d502a42e1e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "bc0023f7-ac85-48e1-bb49-30b5e847730a",
+  "timestamp": "2026-04-30T19:32:48.364Z",
+  "toolUseResult": {
+    "file": {
+      "content": "export function adapterRoutes() {\n  const router = Router();\n\n  // Storage is not used by any adapter handler.\n  const storageSentinel = new Proxy({} as StorageService, {\n    get(_target, prop) {\n      throw new Error(`adapter handler unexpectedly accessed storage.${String(prop)}`);\n    },\n  });\n\n  // A placeholder Db sentinel — adapter routes do not touch the database.\n  // expressHandler requires a Db in deps; supply a proxy that throws on access.\n  // eslint-disable-next-line @typescript-eslint/no-explicit-any\n  const dbSentinel = new Proxy({} as any, {\n    get(_target, prop) {\n      throw new Error(`adapter handler unexpectedly accessed db.${String(prop)}`);\n    },\n  });\n\n  const adapterDeps = { db: dbSentinel, storage: storageSentinel };\n\n  // ---------------------------------------------------------------------------\n  // Authz helpers — assertBoardOrgAccess and assertInstanceAdmin from authz.ts\n  // accept RequestCtx directly (both satisfy the AuthzReq structural interface).\n  // ---------------------------------------------------------------------------\n\n  // config schema cache shared across the router's lifetime\n  const configSchemaCache = new Map\u003cstring, {\n    adapter: ServerAdapterModule;\n    schema: AdapterConfigSchema;",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/adapters.ts",
+      "numLines": 30,
+      "startLine": 198,
+      "totalLines": 674
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "1cc8be8a-d183-4e36-9e56-f9fa70edc9bb",
+  "version": "2.1.123"
+}

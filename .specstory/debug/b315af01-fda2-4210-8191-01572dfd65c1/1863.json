@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "95:    // pino: Node.js-specific CJS logger; replace with a CF-safe console-backed shim.\n96:    \"pino\":               path.join(SHIMS, \"pino-shim.ts\"),\n97:    // pino-http: Express HTTP logger middleware using pino internals; not used in CF.\n98:    \"pino-http\":          path.join(SHIMS, \"pino-shim.ts\"),\n132:  // Must run before any module initialization (pino uses process.hrtime.bigint at load time).",
+        "is_error": false,
+        "tool_use_id": "toolu_01SaZ8G1hyPDHVxmjX4n9vk8",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "7526f1a9-5dc4-4ab9-acee-25d787f9f274",
+  "promptId": "6578f9d8-71c9-42ed-bd5d-4cac4f413d52",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "7526f1a9-5dc4-4ab9-acee-25d787f9f274",
+  "timestamp": "2026-04-30T19:09:27.640Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "95:    // pino: Node.js-specific CJS logger; replace with a CF-safe console-backed shim.\n96:    \"pino\":               path.join(SHIMS, \"pino-shim.ts\"),\n97:    // pino-http: Express HTTP logger middleware using pino internals; not used in CF.\n98:    \"pino-http\":          path.join(SHIMS, \"pino-shim.ts\"),\n132:  // Must run before any module initialization (pino uses process.hrtime.bigint at load time)."
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "f03b8ff4-5b04-4fd5-b522-8c5f8a2a8ee3",
+  "version": "2.1.123"
+}

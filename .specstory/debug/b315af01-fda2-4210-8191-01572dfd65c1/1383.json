@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "function extractInviteMessage(\n  invite: typeof invites.$inferSelect\n): string | null {\n  const rawDefaults = invite.defaultsPayload;\n  if (\n    !rawDefaults ||\n    typeof rawDefaults !== \"object\" ||\n    Array.isArray(rawDefaults)\n  ) {\n    return null;\n  }\n  const rawMessage = (rawDefaults as Record\u003cstring, unknown\u003e).agentMessage;\n  if (typeof rawMessage !== \"string\") {\n    return null;\n  }\n  const trimmed = rawMessage.trim();\n  return trimmed.length ? trimmed : null;\n}\n\nfunction mergeInviteDefaults(\n  defaultsPayload: Record\u003cstring, unknown\u003e | null | undefined,\n  agentMessage: string | null,\n  humanRole: \"owner\" | \"admin\" | \"operator\" | \"viewer\" | null = null,\n): Record\u003cstring, unknown\u003e | null {\n  const merged =\n    defaultsPayload \u0026\u0026 typeof defaultsPayload === \"object\"\n      ? { ...defaultsPayload }\n      : {};\n  if (humanRole) {\n    const existingHuman =",
+        "is_error": false,
+        "tool_use_id": "toolu_01EvbKGkHooE5FSzApdHnp2B",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "f5147109-4693-47f3-b02b-02c63c01da4c",
+  "promptId": "9aae9721-e466-4259-b66e-e724bd2f2c66",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "f5147109-4693-47f3-b02b-02c63c01da4c",
+  "timestamp": "2026-04-30T18:25:25.370Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "function extractInviteMessage(\n  invite: typeof invites.$inferSelect\n): string | null {\n  const rawDefaults = invite.defaultsPayload;\n  if (\n    !rawDefaults ||\n    typeof rawDefaults !== \"object\" ||\n    Array.isArray(rawDefaults)\n  ) {\n    return null;\n  }\n  const rawMessage = (rawDefaults as Record\u003cstring, unknown\u003e).agentMessage;\n  if (typeof rawMessage !== \"string\") {\n    return null;\n  }\n  const trimmed = rawMessage.trim();\n  return trimmed.length ? trimmed : null;\n}\n\nfunction mergeInviteDefaults(\n  defaultsPayload: Record\u003cstring, unknown\u003e | null | undefined,\n  agentMessage: string | null,\n  humanRole: \"owner\" | \"admin\" | \"operator\" | \"viewer\" | null = null,\n): Record\u003cstring, unknown\u003e | null {\n  const merged =\n    defaultsPayload \u0026\u0026 typeof defaultsPayload === \"object\"\n      ? { ...defaultsPayload }\n      : {};\n  if (humanRole) {\n    const existingHuman ="
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "e8b64e11-888c-43b8-b943-1e191401408c",
+  "version": "2.1.123"
+}

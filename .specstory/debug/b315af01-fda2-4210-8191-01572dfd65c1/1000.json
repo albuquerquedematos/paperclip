@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": " ⛅️ wrangler 3.114.17 (update available 4.87.0)\n-----------------------------------------------\n\n\u001b[33m▲ \u001b[43;33m[\u001b[43;30mWARNING\u001b[43;33m]\u001b[0m \u001b[1mThe version of Wrangler you are using is now out-of-date.\u001b[0m\n\n  Please update to the latest version to prevent critical errors.\n  Run `npm install --save-dev wrangler@4` to update to the latest version.\n  After installation, run Wrangler with `npx wrangler`.\n\n\nUsing vars defined in .dev.vars\nYour Worker and resources are simulated locally via Miniflare. For more information, see: https://developers.cloudflare.com/workers/testing/local-development.\n\nYour worker has access to the following bindings:\n- Durable Objects:\n  - TASK_DO: TaskDO\n  - AGENT_RUN_DO: AgentRunDO\n  - SCHEDULER_DO: SchedulerDO\n- Workflows:\n  - HEARTBEAT_WORKFLOW: HeartbeatWorkflow (defined in paperclip-api)\n  - PLUGIN_DISPATCH_WORKFLOW: PluginDispatchWorkflow (defined in paperclip-api)\n- KV Namespaces:\n  - PAPERCLIP_KV: FILL_IN_AFTER_DEPLOY [simulated locally]\n- Queues:\n  - PAPERCLIP_QUEUE: paperclip-jobs [simulated locally]\n- Hyperdrive Configs:\n  - HYPERDRIVE: FILL_IN_AFTER_DEPLOY [simulated locally]\n- R2 Buckets:\n  - PAPERCLIP_STORAGE: paperclip-storage [simulated locally]\n- Vars:\n  - DEPLOYMENT_PLATFORM: \"cloudflare\"\n  - DEPLOYMENT_MODE: \"(hidden)\"\n  - DEPLOYMENT_EXPOSURE: \"(hidden)\"\n  - SIDECAR_URL: \"(hidden)\"\n  - SIDECAR_API_KEY: \"(hidden)\"\n[wrangler-UserWorker:wrn] Miniflare 3 does not currently trigger scheduled Workers automatically.\nUse `--test-scheduled` to forward fetch triggers.\n⎔ Starting local server...\n[wrangler:inf] Ready on http://localhost:8787\n--- wrangler started ---",
+        "is_error": false,
+        "tool_use_id": "toolu_011Vo4qVvezZMwTigao3dtf8",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "11493e08-c823-4d84-9061-79ce7b764180",
+  "promptId": "285fd922-5736-481c-a4fc-cf130aed3e81",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "11493e08-c823-4d84-9061-79ce7b764180",
+  "timestamp": "2026-04-30T18:00:39.257Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": " ⛅️ wrangler 3.114.17 (update available 4.87.0)\n-----------------------------------------------\n\n\u001b[33m▲ \u001b[43;33m[\u001b[43;30mWARNING\u001b[43;33m]\u001b[0m \u001b[1mThe version of Wrangler you are using is now out-of-date.\u001b[0m\n\n  Please update to the latest version to prevent critical errors.\n  Run `npm install --save-dev wrangler@4` to update to the latest version.\n  After installation, run Wrangler with `npx wrangler`.\n\n\nUsing vars defined in .dev.vars\nYour Worker and resources are simulated locally via Miniflare. For more information, see: https://developers.cloudflare.com/workers/testing/local-development.\n\nYour worker has access to the following bindings:\n- Durable Objects:\n  - TASK_DO: TaskDO\n  - AGENT_RUN_DO: AgentRunDO\n  - SCHEDULER_DO: SchedulerDO\n- Workflows:\n  - HEARTBEAT_WORKFLOW: HeartbeatWorkflow (defined in paperclip-api)\n  - PLUGIN_DISPATCH_WORKFLOW: PluginDispatchWorkflow (defined in paperclip-api)\n- KV Namespaces:\n  - PAPERCLIP_KV: FILL_IN_AFTER_DEPLOY [simulated locally]\n- Queues:\n  - PAPERCLIP_QUEUE: paperclip-jobs [simulated locally]\n- Hyperdrive Configs:\n  - HYPERDRIVE: FILL_IN_AFTER_DEPLOY [simulated locally]\n- R2 Buckets:\n  - PAPERCLIP_STORAGE: paperclip-storage [simulated locally]\n- Vars:\n  - DEPLOYMENT_PLATFORM: \"cloudflare\"\n  - DEPLOYMENT_MODE: \"(hidden)\"\n  - DEPLOYMENT_EXPOSURE: \"(hidden)\"\n  - SIDECAR_URL: \"(hidden)\"\n  - SIDECAR_API_KEY: \"(hidden)\"\n[wrangler-UserWorker:wrn] Miniflare 3 does not currently trigger scheduled Workers automatically.\nUse `--test-scheduled` to forward fetch triggers.\n⎔ Starting local server...\n[wrangler:inf] Ready on http://localhost:8787\n--- wrangler started ---"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "11163115-deee-4335-bf04-c2a288dffd01",
+  "version": "2.1.123"
+}

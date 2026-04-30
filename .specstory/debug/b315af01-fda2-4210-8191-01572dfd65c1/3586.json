@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "File created successfully at: /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/adapter-executor/anthropic-api.ts",
+        "tool_use_id": "toolu_01KhNSqJTpEaa73my8u3dRDU",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "df72dabe-c505-447f-bf85-5b0517c2de7a",
+  "promptId": "d5c23de2-96c1-4514-bfd5-8fcbb53cc021",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "df72dabe-c505-447f-bf85-5b0517c2de7a",
+  "timestamp": "2026-04-30T22:43:52.386Z",
+  "toolUseResult": {
+    "content": "/**\n * adapter-executor/anthropic-api.ts — SCAFFOLD\n *\n * Worker-direct Anthropic API adapter executor. This is the framework for\n * running an agent loop entirely inside the CF Worker (no sidecar required\n * for the LLM call itself), using `fetch()` against api.anthropic.com.\n *\n * Status: scaffolded only. The function below validates the API key and\n * shows the call shape, but the full agent loop, tool dispatch, and\n * conversation persistence are NOT YET IMPLEMENTED.\n *\n * Why a separate adapter:\n *   The existing `claude` adapter spawns the `claude` CLI as a child process.\n *   That gives you the full CLI feature set (Edit/Write/Bash/Glob/Grep tools,\n *   skill loading, hooks, MCP, etc.) at the cost of needing a host with a\n *   filesystem and child_process. CF Workers cannot do either, so Option A\n *   (proxy to sidecar) is the production path today.\n *\n *   This module is Option B: a CF-safe adapter that calls the Anthropic API\n *   directly. It will never have feature parity with the CLI — too many of\n *   the CLI's tools assume a filesystem. But it can support a useful subset\n *   for chat-style agents and read-only repo analysis.\n *\n * What still needs to be built (in priority order):\n *   1. Agent loop: read agent config + last message → call /v1/messages →\n *      handle tool_use blocks → loop until stop. ~150 lines.\n *   2. Tool registry: replace CLI tools with CF-safe equivalents:\n *        - file_read/file_write   → R2 (PAPERCLIP_STORAGE binding)\n *        - bash                   → proxy to PluginContainer DO\n *        - glob/grep              → R2 list + fetch\n *        - web_fetch              → fetch() (already CF-native)\n *      ~300 lines plus per-tool handlers.\n *   3. Conversation state: persist turns to AgentRunDO so the workflow can\n *      checkpoint and resume. ~50 lines.\n *   4. Cost/token accounting: forward usage to the existing cost-rollup\n *      pipeline. ~30 lines.\n *   5. Skill loading: fetch skill bundles from R2 and inject into the\n *      system prompt. ~80 lines.\n *   6. Hook into HeartbeatWorkflow: when an agent's adapterType is\n *      \"claude-api\", route to this executor instead of the sidecar.\n *\n * Total scope: ~600–800 lines + tests + integration. Realistic build time\n * is days, not hours. Track in CLOUDFLARE.md §6.4 (Adapter Executor Interface).\n */\n\nconst ANTHROPIC_API_URL = \"https://api.anthropic.com/v1/messages\";\nconst DEFAULT_MODEL = \"claude-opus-4-7\";\n\nexport interface AnthropicAdapterInput {\n  apiKey: string;\n  model?: string;\n  systemPrompt?: string;\n  messages: Array\u003c{ role: \"user\" | \"assistant\"; content: string }\u003e;\n  maxTokens?: number;\n}\n\nexport interface AnthropicAdapterOutput {\n  text: string;\n  stopReason: string;\n  usage: { inputTokens: number; outputTokens: number };\n}\n\n/**\n * Single Anthropic /v1/messages call. No tool dispatch, no agent loop, no\n * conversation persistence — those are the missing pieces above. Useful as\n * the leaf primitive once the loop is built.\n */\nexport async function callAnthropic(input: AnthropicAdapterInput): Promise\u003cAnthropicAdapterOutput\u003e {\n  if (!input.apiKey) {\n    throw new Error(\"ANTHROPIC_API_KEY missing\");\n  }\n  const resp = await fetch(ANTHROPIC_API_URL, {\n    method: \"POST\",\n    headers: {\n      \"x-api-key\": input.apiKey,\n      \"anthropic-version\": \"2023-06-01\",\n      \"content-type\": \"application/json\",\n    },\n    body: JSON.stringify({\n      model: input.model ?? DEFAULT_MODEL,\n      max_tokens: input.maxTokens ?? 4096,\n      ...(input.systemPrompt ? { system: input.systemPrompt } : {}),\n      messages: input.messages,\n    }),\n  });\n  if (!resp.ok) {\n    const text = await resp.text().catch(() =\u003e \"(unreadable)\");\n    throw new Error(`Anthropic API ${resp.status}: ${text}`);\n  }\n  const data = await resp.json() as {\n    content: Array\u003c{ type: string; text?: string }\u003e;\n    stop_reason: string;\n    usage: { input_tokens: number; output_tokens: number };\n  };\n  const text = data.content\n    .filter((c) =\u003e c.type === \"text\" \u0026\u0026 typeof c.text === \"string\")\n    .map((c) =\u003e c.text!)\n    .join(\"\");\n  return {\n    text,\n    stopReason: data.stop_reason,\n    usage: { inputTokens: data.usage.input_tokens, outputTokens: data.usage.output_tokens },\n  };\n}\n",
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/adapter-executor/anthropic-api.ts",
+    "originalFile": null,
+    "structuredPatch": [],
+    "type": "create",
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "64bc2097-3386-478e-b100-b2f7e7a8d9a5",
+  "version": "2.1.123"
+}

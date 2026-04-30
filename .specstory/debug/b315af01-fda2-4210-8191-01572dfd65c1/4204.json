@@ -1,0 +1,25 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "text": "[wrangler] [wrangler:info] GET /api/companies/9a7cf1f3-02a7-4751-9cdb-671c9c68edb5/sidebar-badges 200 OK (37ms)\n[wrangler] ✘ [ERROR] [CF Worker] Unhandled error in GET /api/projects/:id: PostgresError: invalid input syntax for type uuid: \"onboarding\"\n[wrangler] \n[wrangler]       at ErrorResponse (file:///Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/dist/worker.js:53186:31)\n[wrangler]       at handle (file:///Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/dist/worker.js:52957:7)\n[wrangler]       at EventEmitter.data (file:///Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/dist/worker.js:52776:9)\n[wrangler]       at EventEmitter.emit (node-internal:events:311:32)\n[wrangler]       at read (file:///Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/dist/worker.js:51920:13)\n[wrangler] \n[wrangler] \n[wrangler] [wrangler:info] GET /api/projects/onboarding 500 Internal Server Error (42ms)\n[wrangler] [wrangler:info] GET /api/companies/9a7cf1f3-02a7-4751-9cdb-671c9c68edb5/budgets/overview 200 OK (43ms)\n[wrangler] ✘ [ERROR] [CF Worker] Unhandled error in GET /api/projects/:id: PostgresError: invalid input syntax for type uuid: \"onboarding\"\n[wrangler] \n[wrangler]       at ErrorResponse (file:///Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/dist/worker.js:53186:31)\n[wrangler]       at handle (file:///Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/dist/worker.js:52957:7)\n[wrangler]       at EventEmitter.data (file:///Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/dist/worker.js:52776:9)\n[wrangler]       at EventEmitter.emit (node-internal:events:311:32)\n[wrangler]       at read (file:///Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/dist/worker.js:51920:13)\n[wrangler] \n[wrangler] \n[wrangler] [wrangler:info] GET /api/projects/onboarding 500 Internal Server Error (48ms)\n[wrangler] ✘ [ERROR] [CF Worker] Unhandled error in GET /api/projects/:id: PostgresError: invalid input syntax for type uuid: \"onboarding\"\n[wrangler] \n[wrangler]       at ErrorResponse (file:///Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/dist/worker.js:53186:31)\n[wrangler]       at handle (file:///Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/dist/worker.js:52957:7)\n[wrangler]       at EventEmitter.data (file:///Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/dist/worker.js:52776:9)\n[wrangler]       at EventEmitter.emit (node-internal:events:311:32)\n[wrangler]       at read (file:///Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/dist/worker.js:51920:13)\n[wrangler] \n[wrangler] \n[wrangler] [wrangler:info] GET /api/projects/onboarding 500 Internal Server Error (41ms)\n[wrangler] [wrangler:info] GET /api/companies/9a7cf1f3-02a7-4751-9cdb-671c9c68edb5/live-runs 200 OK (44ms)",
+        "type": "text"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "cd65dda1-3b1f-4df3-82b1-1f3dd09eff56",
+  "permissionMode": "bypassPermissions",
+  "promptId": "a4189397-43e1-4afc-b7a6-218998e9917e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T23:12:01.733Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "35c13190-9eeb-416d-a0ba-38133b39ca54",
+  "version": "2.1.123"
+}

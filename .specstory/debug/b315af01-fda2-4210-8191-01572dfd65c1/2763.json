@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "npm warn Unknown project config \"auto-install-peers\". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.\n\n ⛅️ wrangler 4.87.0\n───────────────────\nUsing secrets defined in .dev.vars\nYour Worker has access to the following bindings:\nBinding                                                                               Resource                  Mode\nenv.TASK_DO (TaskDO)                                                                  Durable Object            local\nenv.AGENT_RUN_DO (AgentRunDO)                                                         Durable Object            local\nenv.SCHEDULER_DO (SchedulerDO)                                                        Durable Object            local\nenv.SIDECAR_SERVICE (SidecarContainer)                                                Durable Object            local\nenv.PLUGIN_CONTAINER (PluginContainer)                                                Durable Object            local\nenv.HEARTBEAT_WORKFLOW (HeartbeatWorkflow (defined in paperclip-api))                 Workflow                  local\nenv.PLUGIN_DISPATCH_WORKFLOW (PluginDispatchWorkflow (defined in paperclip-api))      Workflow                  local\nenv.PAPERCLIP_KV (FILL_IN_AFTER_DEPLOY)                                               KV Namespace              local\nenv.PAPERCLIP_QUEUE (paperclip-jobs)                                                  Queue                     local\nenv.HYPERDRIVE (FILL_IN_AFTER_DEPLOY)                                                 Hyperdrive Config         local\nenv.PAPERCLIP_STORAGE (paperclip-storage)                                             R2 Bucket                 local\nenv.ASSETS                                                                            Assets                    local\nenv.DEPLOYMENT_PLATFORM (\"(hidden)\")                                                  Environment Variable      local\nenv.DEPLOYMENT_MODE (\"(hidden)\")                                                      Environment Variable      local\nenv.DEPLOYMENT_EXPOSURE (\"(hidden)\")                                                  Environment Variable      local\nenv.SIDECAR_URL (\"(hidden)\")                                                          Environment Variable      local\nenv.SIDECAR_API_KEY (\"(hidden)\")                                                      Environment Variable      local\n\nThe following containers are available:\n- paperclip-api-sidecarcontainer (ghcr.io/paperclipai/paperclip-sidecar:latest)\n- paperclip-api-plugincontainer (ghcr.io/paperclipai/plugin-sandbox:latest)",
+        "is_error": false,
+        "tool_use_id": "toolu_01Ngf7PCuwXiTVXNrvuXbCav",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "0afffd93-bcbc-44be-aaf3-b1a618aff3fc",
+  "promptId": "90af47bf-faac-4347-b1a7-d8ed0c820fb6",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "0afffd93-bcbc-44be-aaf3-b1a618aff3fc",
+  "timestamp": "2026-04-30T20:37:59.527Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "npm warn Unknown project config \"auto-install-peers\". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.\n\n ⛅️ wrangler 4.87.0\n───────────────────\nUsing secrets defined in .dev.vars\nYour Worker has access to the following bindings:\nBinding                                                                               Resource                  Mode\nenv.TASK_DO (TaskDO)                                                                  Durable Object            local\nenv.AGENT_RUN_DO (AgentRunDO)                                                         Durable Object            local\nenv.SCHEDULER_DO (SchedulerDO)                                                        Durable Object            local\nenv.SIDECAR_SERVICE (SidecarContainer)                                                Durable Object            local\nenv.PLUGIN_CONTAINER (PluginContainer)                                                Durable Object            local\nenv.HEARTBEAT_WORKFLOW (HeartbeatWorkflow (defined in paperclip-api))                 Workflow                  local\nenv.PLUGIN_DISPATCH_WORKFLOW (PluginDispatchWorkflow (defined in paperclip-api))      Workflow                  local\nenv.PAPERCLIP_KV (FILL_IN_AFTER_DEPLOY)                                               KV Namespace              local\nenv.PAPERCLIP_QUEUE (paperclip-jobs)                                                  Queue                     local\nenv.HYPERDRIVE (FILL_IN_AFTER_DEPLOY)                                                 Hyperdrive Config         local\nenv.PAPERCLIP_STORAGE (paperclip-storage)                                             R2 Bucket                 local\nenv.ASSETS                                                                            Assets                    local\nenv.DEPLOYMENT_PLATFORM (\"(hidden)\")                                                  Environment Variable      local\nenv.DEPLOYMENT_MODE (\"(hidden)\")                                                      Environment Variable      local\nenv.DEPLOYMENT_EXPOSURE (\"(hidden)\")                                                  Environment Variable      local\nenv.SIDECAR_URL (\"(hidden)\")                                                          Environment Variable      local\nenv.SIDECAR_API_KEY (\"(hidden)\")                                                      Environment Variable      local\n\nThe following containers are available:\n- paperclip-api-sidecarcontainer (ghcr.io/paperclipai/paperclip-sidecar:latest)\n- paperclip-api-plugincontainer (ghcr.io/paperclipai/plugin-sandbox:latest)"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "2e70b9e8-fa7a-4b39-99d2-72ae6dbabe05",
+  "version": "2.1.123"
+}

@@ -1,0 +1,27 @@
+{
+  "agentId": "a07aabe33abdc139f",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\t/**\n2\t * routes/plugins.ts\n3\t *\n4\t * CF-native handlers for the plugin REST API.\n5\t *\n6\t * The server-side pluginRoutes() relies on an in-process plugin registry\n7\t * (worker processes, SSE, child_process) that does not exist in a CF Worker.\n8\t * These handlers split the work two ways:\n9\t *\n10\t *   1. DB-derived routes — list, get, dashboard, config, jobs, job runs,\n11\t *      health, ui-contributions: read directly from Hyperdrive. The plugin\n12\t *      registry state (`status`, `manifest_json`, `last_error`) is written\n13\t *      by the sidecar at install/lifecycle transitions and stays in sync.\n14\t *\n15\t *   2. Process-dependent routes — install, upgrade, enable, disable, delete,\n16\t *      logs, config-test, jobs/trigger, webhooks, examples: proxied to the\n17\t *      sidecar companion server (SidecarContainer DO or SIDECAR_URL env var).\n18\t *      These need npm, child_process, or a running plugin worker.\n19\t *\n20\t * Auth: every handler resolves an actor (board user or agent) before doing\n21\t * anything. Unauthenticated requests get 401.\n22\t */\n23\t\n24\timport type { Context, Hono } from \"hono\";\n25\timport { and, asc, desc, eq, ne } from \"drizzle-orm\";\n26\timport {\n27\t  plugins,\n28\t  pluginConfig,\n29\t  pluginJobs,\n30\t  pluginJobRuns,\n31\t  pluginWebhookDeliveries,\n32\t} from \"@paperclipai/db\";\n33\timport { getPluginUiContributionMetadata } from \"../../../../../server/src/services/plugin-loader.js\";\n34\timport { createHyperdriveDb } from \"../../db/hyperdrive.js\";\n35\timport { resolveActorFromRequest } from \"../../auth/resolve-actor.js\";\n36\timport { resolveDeploymentMode } from \"../env.js\";\n37\timport type { Env } from \"../env.js\";\n38\t\n39\t/**\n40\t * Proxy a request to the sidecar companion server. Caller Authorization\n41\t * headers are stripped: the SIDECAR_SERVICE DO uses internal CF network auth;\n42\t * direct SIDECAR_URL calls use SIDECAR_API_KEY.\n43\t */\n44\tasync function proxySidecar(env: Env, path: string, req: Request): Promise\u003cResponse\u003e {\n45\t  const ct = req.headers.get(\"Content-Type\");\n46\t  const internalHeaders = new Headers();\n47\t  if (ct) internalHeaders.set(\"Content-Type\", ct);\n48\t\n49\t  if (env.SIDECAR_SERVICE) {\n50\t    const stub = env.SIDECAR_SERVICE.get(env.SIDECAR_SERVICE.idFromName(\"sidecar\"));\n51\t    return stub.fetch(`http://sidecar${path}`, {\n52\t      method: req.method,\n53\t      headers: internalHeaders,\n54\t      body: req.body,\n55\t    });\n56\t  }\n57\t  const baseUrl = env.SIDECAR_URL;\n58\t  if (!baseUrl) {\n59\t    return Response.json(\n60\t      { error: \"Plugin operation not available: configure SIDECAR_URL or SIDECAR_SERVICE\" },\n61\t      { status: 503 },\n62\t    );\n63\t  }\n64\t  if (env.SIDECAR_API_KEY) internalHeaders.set(\"Authorization\", `Bearer ${env.SIDECAR_API_KEY}`);\n65\t  return fetch(`${baseUrl}${path}`, { method: req.method, headers: internalHeaders, body: req.body });\n66\t}\n67\t\n68\t/** Forward a sidecar response back through Hono, preserving status and JSON content-type. */\n69\tasync function relaySidecarResponse(env: Env, path: string, req: Request): Promise\u003cResponse\u003e {\n70\t  try {\n71\t    const resp = await proxySidecar(env, path, req);\n72\t    return new Response(resp.body, {\n73\t      status: resp.status,\n74\t      headers: { \"Content-Type\": \"application/json\" },\n75\t    });\n76\t  } catch {\n77\t    return Response.json(\n78\t      { error: \"Plugin operation requires the Node.js server to be running (pnpm dev or bun run dev)\" },\n79\t      { status: 503 },\n80\t    );\n\n\u003csystem-reminder\u003e\nWhenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.\n\u003c/system-reminder\u003e\n",
+        "tool_use_id": "toolu_01PmonibtfV5d3ZHXY4UBm5T",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "62f4a2ba-5827-46a9-a7a4-8784f27953f3",
+  "promptId": "ba04e90f-0d7c-4dcc-9bf9-971187295dfd",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "62f4a2ba-5827-46a9-a7a4-8784f27953f3",
+  "timestamp": "2026-04-30T21:57:55.571Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "9b1f94f6-4175-4361-a097-cf8f72a62dd0",
+  "version": "2.1.123"
+}

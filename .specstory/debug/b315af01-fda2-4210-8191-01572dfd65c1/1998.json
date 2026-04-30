@@ -1,0 +1,61 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "text": "There's a subtle but important bug in the bridge: when `validate()` middleware calls `next()` synchronously, async errors from the actual handler become unhandled rejections. Let me fix this:",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01Dfk8cYZgbjRZN61hQGWHRt",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 974
+      },
+      "cache_creation_input_tokens": 974,
+      "cache_read_input_tokens": 65513,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 974
+          },
+          "cache_creation_input_tokens": 974,
+          "cache_read_input_tokens": 65513,
+          "input_tokens": 1,
+          "output_tokens": 10969,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 10969,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "ad586596-4473-4264-b5f3-e1691e51b6f6",
+  "requestId": "req_011CaaVeGhW8UUB2Qp7hQcfU",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T19:21:04.615Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "2483ff05-998f-4d1e-a5fa-38d7ca0b8223",
+  "version": "2.1.123"
+}

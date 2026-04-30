@@ -1,0 +1,27 @@
+{
+  "agentId": "a3a306fc5d1924556",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "2530\t      entityType: \"issue\",\n2531\t      entityId: issue.id,\n2532\t    });\n2533\t\n2534\t    return Response.json(issue);\n2535\t  };\n2536\t\n2537\t  const checkoutIssue: Handler = async (ctx) =\u003e {\n2538\t    const id = ctx.param(\"id\")!;\n2539\t    const issue = await svc.getById(id);\n2540\t    if (!issue) {\n2541\t      return Response.json({ error: \"Issue not found\" }, { status: 404 });\n2542\t    }\n2543\t    assertCompanyAccess(ctx, issue.companyId);\n2544\t\n2545\t    if (issue.projectId) {\n2546\t      const project = await projectsSvc.getById(issue.projectId);\n2547\t      if (project?.pausedAt) {\n2548\t        return Response.json({\n2549\t          error:\n2550\t            project.pauseReason === \"budget\"\n2551\t              ? \"Project is paused because its budget hard-stop was reached\"\n2552\t              : \"Project is paused\",\n2553\t        }, { status: 409 });\n2554\t      }\n2555\t    }\n2556\t\n2557\t    const body = await ctx.json\u003cRecord\u003cstring, unknown\u003e\u003e();\n2558\t    if (ctx.actor?.type === \"agent\" \u0026\u0026 ctx.actor.agentId !== body.agentId) {\n2559\t      return Response.json({ error: \"Agent can only checkout as itself\" }, { status: 403 });\n2560\t    }\n2561\t\n2562\t    const closedExecutionWorkspace = await getClosedIssueExecutionWorkspace(issue);\n2563\t    if (closedExecutionWorkspace) {\n2564\t      return closedIssueExecutionWorkspaceResponse(closedExecutionWorkspace);\n2565\t    }\n2566\t\n2567\t    const checkoutRunId = requireAgentRunId(ctx);\n2568\t    const updated = await svc.checkout(id, body.agentId as string, body.expectedStatuses as string[] | undefined, checkoutRunId);\n2569\t    const actor = getActorInfo(ctx);\n\n\u003csystem-reminder\u003e\nWhenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.\n\u003c/system-reminder\u003e\n",
+        "tool_use_id": "toolu_019Go3tv3fMgfXquLBfqp4VM",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "d02dda5c-6316-4bd1-87ee-9800dcc45b26",
+  "promptId": "e7cbb211-1d37-4345-b546-c3d4bd07be80",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "d02dda5c-6316-4bd1-87ee-9800dcc45b26",
+  "timestamp": "2026-04-30T22:57:57.200Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "c126a3a7-c354-4722-9e46-e993b23b3494",
+  "version": "2.1.123"
+}

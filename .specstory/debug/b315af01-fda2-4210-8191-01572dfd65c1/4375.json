@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "175\t\n176\t  const resultText = asString(parsed.result, \"\").trim();\n177\t  return /max(?:imum)?\\s+turns?/i.test(resultText);\n178\t}\n179\t\n180\texport function isClaudeUnknownSessionError(parsed: Record\u003cstring, unknown\u003e): boolean {\n181\t  const resultText = asString(parsed.result, \"\").trim();\n182\t  const allMessages = [resultText, ...extractClaudeErrorMessages(parsed)]\n183\t    .map((msg) =\u003e msg.trim())\n184\t    .filter(Boolean);\n185\t\n186\t  return allMessages.some((msg) =\u003e\n187\t    /no conversation found with session id|unknown session|session .* not found/i.test(msg),\n188\t  );\n189\t}\n190\t\n191\tfunction buildClaudeTransientHaystack(input: {\n192\t  parsed?: Record\u003cstring, unknown\u003e | null;\n193\t  stdout?: string | null;\n194\t  stderr?: string | null;\n195\t  errorMessage?: string | null;\n196\t}): string {\n197\t  const parsed = input.parsed ?? null;\n198\t  const resultText = parsed ? asString(parsed.result, \"\") : \"\";\n199\t  const parsedErrors = parsed ? extractClaudeErrorMessages(parsed) : [];\n200\t  return [\n201\t    input.errorMessage ?? \"\",\n202\t    resultText,\n203\t    ...parsedErrors,\n204\t    input.stdout ?? \"\",\n205\t    input.stderr ?? \"\",\n206\t  ]\n207\t    .join(\"\\n\")\n208\t    .split(/\\r?\\n/)\n209\t    .map((line) =\u003e line.trim())",
+        "tool_use_id": "toolu_012ZLDuKeXoimDYM2bh7gUYF",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "a60d32c4-6708-4c96-ad23-944bc50da54d",
+  "promptId": "bbb6be00-c456-48d1-b25a-d991686281be",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "a60d32c4-6708-4c96-ad23-944bc50da54d",
+  "timestamp": "2026-04-30T23:22:04.214Z",
+  "toolUseResult": {
+    "file": {
+      "content": "\n  const resultText = asString(parsed.result, \"\").trim();\n  return /max(?:imum)?\\s+turns?/i.test(resultText);\n}\n\nexport function isClaudeUnknownSessionError(parsed: Record\u003cstring, unknown\u003e): boolean {\n  const resultText = asString(parsed.result, \"\").trim();\n  const allMessages = [resultText, ...extractClaudeErrorMessages(parsed)]\n    .map((msg) =\u003e msg.trim())\n    .filter(Boolean);\n\n  return allMessages.some((msg) =\u003e\n    /no conversation found with session id|unknown session|session .* not found/i.test(msg),\n  );\n}\n\nfunction buildClaudeTransientHaystack(input: {\n  parsed?: Record\u003cstring, unknown\u003e | null;\n  stdout?: string | null;\n  stderr?: string | null;\n  errorMessage?: string | null;\n}): string {\n  const parsed = input.parsed ?? null;\n  const resultText = parsed ? asString(parsed.result, \"\") : \"\";\n  const parsedErrors = parsed ? extractClaudeErrorMessages(parsed) : [];\n  return [\n    input.errorMessage ?? \"\",\n    resultText,\n    ...parsedErrors,\n    input.stdout ?? \"\",\n    input.stderr ?? \"\",\n  ]\n    .join(\"\\n\")\n    .split(/\\r?\\n/)\n    .map((line) =\u003e line.trim())",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/parse.ts",
+      "numLines": 35,
+      "startLine": 175,
+      "totalLines": 384
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "22922612-2b70-4a09-8980-b38f5b76c17f",
+  "version": "2.1.123"
+}

@@ -1,0 +1,51 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/cron/heartbeat-sweep.ts has been updated successfully.",
+        "tool_use_id": "toolu_01799m9YqUqLRB2Apjh8WvwU",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "9d04f6b1-5a80-42fa-a6bd-13231f31325d",
+  "promptId": "7323a41a-dd8a-4783-b590-aea4ab5316a7",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "9d04f6b1-5a80-42fa-a6bd-13231f31325d",
+  "timestamp": "2026-04-30T21:33:03.710Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/cron/heartbeat-sweep.ts",
+    "newString": "    // Check if there is already a queued or running run for this agent to avoid\n    // double-dispatching.\n    const existingQueued = await db",
+    "oldString": "    // Check if there is already a queued or running run for this agent to avoid\n    // double-dispatching.\n    const { and, inArray } = await import(\"drizzle-orm\");\n    const existingQueued = await db",
+    "originalFile": "/*\n * heartbeat-sweep.ts -- Cloudflare Cron Trigger handler for the heartbeat sweep.\n *\n * Fired every 5 minutes by the every-5-minutes cron trigger in wrangler.toml.\n *\n * Design: instead of running the full Node-based heartbeatService.tickTimers()\n * (which depends on node:fs, node:child_process, and other Worker-incompatible\n * APIs to provision workspace directories), we perform only the scheduling query:\n *\n * 1. Select all active agents that have a heartbeat policy enabled and whose\n *    last heartbeat is older than policy.intervalSec seconds.\n * 2. For each due agent, enqueue a heartbeat_dispatch message to the\n *    PAPERCLIP_QUEUE which the queue consumer handles by starting a\n *    HeartbeatWorkflow Durable Object instance.\n *\n * The actual heartbeat execution (adapter invocation, workspace provisioning)\n * happens inside the HeartbeatWorkflow, which can delegate Node-only operations\n * to the sidecar process via HTTP.\n */\n\nimport { and, eq, inArray } from \"drizzle-orm\";\nimport type { Db } from \"@paperclipai/db\";\nimport { agents, heartbeatRuns } from \"@paperclipai/db\";\nimport type { Env } from \"../worker/env.js\";\n\n/** Minimal heartbeat policy shape read from agent.runtimeConfig.heartbeat JSON. */\ninterface HeartbeatPolicy {\n  enabled: boolean;\n  intervalSec: number;\n}\n\nfunction parseHeartbeatPolicy(agent: { runtimeConfig?: unknown }): HeartbeatPolicy {\n  const runtimeConfig = agent.runtimeConfig;\n  if (!runtimeConfig || typeof runtimeConfig !== \"object\") {\n    return { enabled: false, intervalSec: 0 };\n  }\n  const rc = runtimeConfig as Record\u003cstring, unknown\u003e;\n  const heartbeat = rc[\"heartbeat\"];\n  if (!heartbeat || typeof heartbeat !== \"object\") {\n    return { enabled: false, intervalSec: 0 };\n  }\n  const h = heartbeat as Record\u003cstring, unknown\u003e;\n  const enabled = Boolean(h[\"enabled\"]);\n  const intervalSec = typeof h[\"intervalSec\"] === \"number\" ? h[\"intervalSec\"] : 0;\n  return { enabled, intervalSec };\n}\n\n/**\n * Runs the heartbeat sweep: finds agents that are due for a heartbeat based on\n * their configured interval, then enqueues `heartbeat_dispatch` messages for\n * each one. The queue consumer (`api.ts`) starts a `HeartbeatWorkflow` per message.\n *\n * @param env - The Worker Env bindings (provides `PAPERCLIP_QUEUE`).\n * @param db  - A Drizzle DB instance backed by Hyperdrive.\n */\nexport async function runHeartbeatSweep(env: Env, db: Db): Promise\u003cvoid\u003e {\n  const now = new Date();\n\n  // Fetch all non-paused, non-terminated agents. We filter in-process rather\n  // than in SQL to keep the query simple and avoid importing drizzle operators\n  // beyond what's needed. The agent count is expected to be in the hundreds,\n  // not millions, so a full table scan is acceptable here.\n  const allAgents = await db\n    .select({\n      id: agents.id,\n      companyId: agents.companyId,\n      status: agents.status,\n      runtimeConfig: agents.runtimeConfig,\n      lastHeartbeatAt: agents.lastHeartbeatAt,\n      createdAt: agents.createdAt,\n    })\n    .from(agents)\n    .where(eq(agents.status, \"active\"));\n\n  const messagesToSend: Array\u003c{\n    agentId: string;\n    companyId: string;\n    runId: string;\n    taskId?: string;\n  }\u003e = [];\n\n  for (const agent of allAgents) {\n    const policy = parseHeartbeatPolicy(agent);\n    if (!policy.enabled || policy.intervalSec \u003c= 0) continue;\n\n    const baseline = new Date(agent.lastHeartbeatAt ?? agent.createdAt).getTime();\n    const elapsedMs = now.getTime() - baseline;\n    if (elapsedMs \u003c policy.intervalSec * 1000) continue;\n\n    // Check if there is already a queued or running run for this agent to avoid\n    // double-dispatching.\n    const { and, inArray } = await import(\"drizzle-orm\");\n    const existingQueued = await db\n      .select({ id: heartbeatRuns.id })\n      .from(heartbeatRuns)\n      .where(\n        and(\n          eq(heartbeatRuns.agentId, agent.id),\n          inArray(heartbeatRuns.status, [\"queued\", \"running\"]),\n        ),\n      )\n      .then((rows) =\u003e rows.length \u003e 0);\n\n    if (existingQueued) continue;\n\n    // Generate a run ID for the heartbeat workflow instance.\n    const runId = crypto.randomUUID();\n    messagesToSend.push({\n      agentId: agent.id,\n      companyId: agent.companyId,\n      runId,\n    });\n  }\n\n  if (messagesToSend.length === 0) {\n    console.debug(\"[HeartbeatSweep] No agents due for heartbeat.\");\n    return;\n  }\n\n  // Enqueue all messages. CF Queues supports batching up to 100 messages per call.\n  const BATCH_SIZE = 100;\n  for (let i = 0; i \u003c messagesToSend.length; i += BATCH_SIZE) {\n    const batch = messagesToSend.slice(i, i + BATCH_SIZE);\n    await Promise.all(\n      batch.map((msg) =\u003e\n        env.PAPERCLIP_QUEUE.send({\n          type: \"heartbeat_dispatch\",\n          agentId: msg.agentId,\n          companyId: msg.companyId,\n          runId: msg.runId,\n          taskId: msg.taskId,\n        }),\n      ),\n    );\n  }\n\n  console.debug(`[HeartbeatSweep] Dispatched ${messagesToSend.length} heartbeat(s).`);\n}\n",
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          " ",
+          "     // Check if there is already a queued or running run for this agent to avoid",
+          "     // double-dispatching.",
+          "-    const { and, inArray } = await import(\"drizzle-orm\");",
+          "     const existingQueued = await db",
+          "       .select({ id: heartbeatRuns.id })",
+          "       .from(heartbeatRuns)"
+        ],
+        "newLines": 6,
+        "newStart": 89,
+        "oldLines": 7,
+        "oldStart": 89
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "33d6951b-ecb9-47e7-8d54-206cecf60176",
+  "version": "2.1.123"
+}

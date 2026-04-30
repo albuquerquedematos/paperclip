@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01CC4eP2noGaRBUVjL44Tn5a",
+        "input": {
+          "command": "find /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src -name \"*adapter*\" -o -name \"*registry*\" 2\u003e/dev/null | head -10\nls /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/",
+          "description": "Check if CF package has its own adapter registry"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01CuW1PujdgZj3jJcmYkVxrj",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 442
+      },
+      "cache_creation_input_tokens": 442,
+      "cache_read_input_tokens": 100979,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 442
+          },
+          "cache_creation_input_tokens": 442,
+          "cache_read_input_tokens": 100979,
+          "input_tokens": 1,
+          "output_tokens": 553,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 553,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "0be6f4c8-796b-4e6b-a9ac-cd5c7070e2ea",
+  "requestId": "req_011CaaWHJA6MDT2tVwc6XCoi",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T19:26:53.296Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "47a5c74d-c53f-4bbf-83e9-28457d37c5c6",
+  "version": "2.1.123"
+}

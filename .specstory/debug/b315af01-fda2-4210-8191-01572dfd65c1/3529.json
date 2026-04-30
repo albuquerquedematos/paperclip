@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01QuKyNBmRz88Gm2CaABKWtC",
+        "input": {
+          "content": "/**\n * routes/instance-backups.ts\n *\n * CF-native handler for POST /api/instance/database-backups.\n *\n * Database backups dump a snapshot of the embedded Postgres to disk via\n * pg_dump (a child process). Neither pg_dump nor a writable filesystem are\n * available in CF Workers, so we proxy to the sidecar — it runs the original\n * server handler against its local filesystem and uploads the resulting blob\n * to the configured StorageProvider (R2 in CF deployments).\n *\n * Auth: instance admin only (enforced server-side by the proxied handler).\n */\n\nimport type { Hono } from \"hono\";\nimport { createHyperdriveDb } from \"../../db/hyperdrive.js\";\nimport { resolveActorFromRequest } from \"../../auth/resolve-actor.js\";\nimport { resolveDeploymentMode } from \"../env.js\";\nimport type { Env } from \"../env.js\";\n\nexport function registerInstanceBackupRoutes(app: Hono\u003c{ Bindings: Env }\u003e): void {\n  app.post(\"/api/instance/database-backups\", async (c) =\u003e {\n    const db = createHyperdriveDb(c.env.HYPERDRIVE);\n    const actor = await resolveActorFromRequest(c.req.raw, db, {\n      deploymentMode: resolveDeploymentMode(c.env),\n    });\n    if (!actor) return c.json({ error: \"Unauthorized\" }, 401);\n\n    const ct = c.req.header(\"Content-Type\");\n    const headers = new Headers();\n    if (ct) headers.set(\"Content-Type\", ct);\n    const path = \"/api/instance/database-backups\";\n\n    if (c.env.SIDECAR_SERVICE) {\n      const stub = c.env.SIDECAR_SERVICE.get(c.env.SIDECAR_SERVICE.idFromName(\"sidecar\"));\n      return stub.fetch(`http://sidecar${path}`, {\n        method: \"POST\",\n        headers,\n        body: c.req.raw.body,\n      });\n    }\n    const baseUrl = c.env.SIDECAR_URL;\n    if (!baseUrl) {\n      return c.json(\n        { error: \"Database backup requires the sidecar: configure SIDECAR_URL or SIDECAR_SERVICE\" },\n        503,\n      );\n    }\n    if (c.env.SIDECAR_API_KEY) headers.set(\"Authorization\", `Bearer ${c.env.SIDECAR_API_KEY}`);\n    try {\n      return await fetch(`${baseUrl}${path}`, {\n        method: \"POST\",\n        headers,\n        body: c.req.raw.body,\n      });\n    } catch {\n      return c.json({ error: \"Sidecar unreachable\" }, 503);\n    }\n  });\n}\n",
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/routes/instance-backups.ts"
+        },
+        "name": "Write",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01ToDAZkBPeNv1UZnLeghMmx",
+    "model": "claude-opus-4-7",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1428,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 1428,
+      "cache_read_input_tokens": 241734,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 1428,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 1428,
+          "cache_read_input_tokens": 241734,
+          "input_tokens": 1,
+          "output_tokens": 1098,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 1098,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "da24cfda-9ad3-4b1b-aae7-ecff0953e4ab",
+  "requestId": "req_011CaaiBSy9nVgMS2JzD7oq7",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T22:02:56.005Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "26388a23-0d33-4771-9222-614f984c2a48",
+  "version": "2.1.123"
+}

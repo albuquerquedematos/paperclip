@@ -1,0 +1,62 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "signature": "EtkEClsIDRgCKkCL28gd4ZNo+biRyf2TMOcg7x6UOvQPaqQcF1ISIbEm4IF6h7f8K72qGq1jEZvOO5lERRAELQKR1XHebbqRvzB0MhFjbGF1ZGUtc29ubmV0LTQtNjgAEgzLtLEjvVv1hUkrnNQaDNWbo5oY3FIJ7c2yOSIwjX6HbrkV3HFDCtLg4w7BXdDkQJYszInqEdjWT4vMZt8JR1rHF5J/0NcTKrkeR5fJKqsD8aRqFOwD9KSprwvwhQZim2ViZ4XvlE+5PGmcs8PLwIndKksFCkd8Y9MYmuKhGYeprZSKfpO6rpdg6u+3gRnhhmIgD+Bg5R4WGDj5gByCFhK6Ioe0CeqXcg+pBdO4gjA2A8jEBk0DtF7s3C3VrsM+wVwK6OS/dkBKDKaSKY3y2bEey5v5N6w6Antci844I5fcRbo+uODTr9UFx+0lgvPuQxJYT6vIEuurh7R2448QwLCtGl3iTjDyqgiPkeic5UhPIhkO78jm0fdtw0QnZCFdu3DKoCO5O/YdbgQ+cLZfMu8YorLK6nieCyJ9h20vOvUrkU0Gd3/zEKje6QSNdwjfx1UUjL/RzOjAEWXmT6u+hww+r8Nuoli5D/CxgzIz7ldX9taysWh8p5yCj49w2/RCqrHGbR3VxK5sPuHvlHJlzaCZsq7OS3+ppghkCgJr0UqylH9yPFF5l5uF1+DUlsvipgNuoCcFwkebWp3Ck5dYpczUvlRCKHBy9VWzIZ6ZJBW3Lf0LmBISiWhBjkfqG5MHInyA7QIvV6NOthIxAvj1ZxlnXx4MVDeGieTamxgB",
+        "thinking": "Now I need to understand the `DeploymentMode` and `DeploymentExposure` types and what values to pass. These are from `@paperclipai/shared`.\n\nFor CF mode with `DEPLOYMENT_MODE=local_trusted`:\n- `deploymentMode: \"local_trusted\"`\n- `deploymentExposure: \"local\"` (or whatever default)\n- `bindHost: \"localhost\"`\n- `allowedHostnames: [\"localhost\"]`\n\nNow let me look at how `company-skills.ts` route file is structured:",
+        "type": "thinking"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01NaZQCKcXtpv52oczconbNp",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 669
+      },
+      "cache_creation_input_tokens": 669,
+      "cache_read_input_tokens": 141882,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 669
+          },
+          "cache_creation_input_tokens": 669,
+          "cache_read_input_tokens": 141882,
+          "input_tokens": 1,
+          "output_tokens": 366,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 366,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "b5398219-db9b-420f-8d36-22273d9f9a5c",
+  "requestId": "req_011CaaUk6gJ5C1dVZhhsHmBL",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T19:06:36.159Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "26227989-142c-4038-9b18-36a8f0cd078e",
+  "version": "2.1.123"
+}

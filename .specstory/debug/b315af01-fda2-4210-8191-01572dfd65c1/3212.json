@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "/**\n * route-registry.ts\n *\n * Builds the full set of compiled route definitions for every request.\n *\n * Because CF Workers prohibits reusing TCP sockets (and therefore postgres\n * connections) across requests, we rebuild the Drizzle DB instance, all\n * service instances, and all route handler closures on every request.\n *\n * Route path patterns (regexp + paramNames) are purely static and are\n * cached at the module level so they survive across requests in the same\n * isolate — only the handler closures (which capture the DB) are rebuilt.\n */\n\nimport { createHyperdriveDb } from \"../db/hyperdrive.js\";\nimport { R2Provider } from \"../storage/r2-provider.js\";\nimport { createCfStorageService } from \"../storage/cf-storage-service.js\";\nimport { extractRoutesFromRouter } from \"../http/express-router-bridge.js\";\nimport { extractAllRoutesFromRouter } from \"../http/cf-express-bridge.js\";\nimport { resolveDeploymentMode } from \"./env.js\";\nimport type { Env } from \"./env.js\";\nimport type { RouteDefinition } from \"../../../../server/src/http/types.js\";\nimport type { StorageService } from \"../../../../server/src/storage/types.js\";\nimport type { Db } from \"@paperclipai/db\";",
+        "is_error": false,
+        "tool_use_id": "toolu_01Qt8CpfLVD9PvARadKT6RMp",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "442a8f11-393d-46e9-9828-792485a3485d",
+  "promptId": "7323a41a-dd8a-4783-b590-aea4ab5316a7",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "442a8f11-393d-46e9-9828-792485a3485d",
+  "timestamp": "2026-04-30T21:37:05.833Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "/**\n * route-registry.ts\n *\n * Builds the full set of compiled route definitions for every request.\n *\n * Because CF Workers prohibits reusing TCP sockets (and therefore postgres\n * connections) across requests, we rebuild the Drizzle DB instance, all\n * service instances, and all route handler closures on every request.\n *\n * Route path patterns (regexp + paramNames) are purely static and are\n * cached at the module level so they survive across requests in the same\n * isolate — only the handler closures (which capture the DB) are rebuilt.\n */\n\nimport { createHyperdriveDb } from \"../db/hyperdrive.js\";\nimport { R2Provider } from \"../storage/r2-provider.js\";\nimport { createCfStorageService } from \"../storage/cf-storage-service.js\";\nimport { extractRoutesFromRouter } from \"../http/express-router-bridge.js\";\nimport { extractAllRoutesFromRouter } from \"../http/cf-express-bridge.js\";\nimport { resolveDeploymentMode } from \"./env.js\";\nimport type { Env } from \"./env.js\";\nimport type { RouteDefinition } from \"../../../../server/src/http/types.js\";\nimport type { StorageService } from \"../../../../server/src/storage/types.js\";\nimport type { Db } from \"@paperclipai/db\";"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "e61dd39f-9ef3-4f8b-b58a-61f7aea0a415",
+  "version": "2.1.123"
+}

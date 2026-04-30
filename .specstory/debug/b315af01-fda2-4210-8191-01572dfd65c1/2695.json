@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "interface DurableObjectState\u003cProps = unknown\u003e {\n  waitUntil(promise: Promise\u003cany\u003e): void;\n  readonly props: Props;\n  readonly id: DurableObjectId;\n  readonly storage: DurableObjectStorage;\n  container?: Container;\n  facets: DurableObjectFacets;\n  blockConcurrencyWhile\u003cT\u003e(callback: () =\u003e Promise\u003cT\u003e): Promise\u003cT\u003e;\n  acceptWebSocket(ws: WebSocket, tags?: string[]): void;\n  getWebSockets(tag?: string): WebSocket[];\n  setWebSocketAutoResponse(maybeReqResp?: WebSocketRequestResponsePair): void;\n  getWebSocketAutoResponse(): WebSocketRequestResponsePair | null;\n  getWebSocketAutoResponseTimestamp(ws: WebSocket): Date | null;\n  setHibernatableWebSocketEventTimeout(timeoutMs?: number): void;\n  getHibernatableWebSocketEventTimeout(): number | null;\n  getTags(ws: WebSocket): string[];\n  abort(reason?: string): void;\n}\ninterface DurableObjectTransaction {\n  get\u003cT = unknown\u003e(\n    key: string,",
+        "is_error": false,
+        "tool_use_id": "toolu_0146tejtY5aCN4yx6B9SYpvP",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "5b1d7595-9692-4945-a3e9-b92cc6b9c1aa",
+  "promptId": "90af47bf-faac-4347-b1a7-d8ed0c820fb6",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "5b1d7595-9692-4945-a3e9-b92cc6b9c1aa",
+  "timestamp": "2026-04-30T20:34:44.728Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "interface DurableObjectState\u003cProps = unknown\u003e {\n  waitUntil(promise: Promise\u003cany\u003e): void;\n  readonly props: Props;\n  readonly id: DurableObjectId;\n  readonly storage: DurableObjectStorage;\n  container?: Container;\n  facets: DurableObjectFacets;\n  blockConcurrencyWhile\u003cT\u003e(callback: () =\u003e Promise\u003cT\u003e): Promise\u003cT\u003e;\n  acceptWebSocket(ws: WebSocket, tags?: string[]): void;\n  getWebSockets(tag?: string): WebSocket[];\n  setWebSocketAutoResponse(maybeReqResp?: WebSocketRequestResponsePair): void;\n  getWebSocketAutoResponse(): WebSocketRequestResponsePair | null;\n  getWebSocketAutoResponseTimestamp(ws: WebSocket): Date | null;\n  setHibernatableWebSocketEventTimeout(timeoutMs?: number): void;\n  getHibernatableWebSocketEventTimeout(): number | null;\n  getTags(ws: WebSocket): string[];\n  abort(reason?: string): void;\n}\ninterface DurableObjectTransaction {\n  get\u003cT = unknown\u003e(\n    key: string,"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "f027ac44-033e-435b-9b8a-0658a716082a",
+  "version": "2.1.123"
+}

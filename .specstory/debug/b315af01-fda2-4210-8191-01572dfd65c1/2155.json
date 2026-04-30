@@ -1,0 +1,70 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01Tqz3ys3Y7xmowf6wYGYbwS",
+        "input": {
+          "description": "Audit CF-compatible adapters",
+          "prompt": "In the repo at /Users/migmac/Documents/GitHub/_ABM/paperclip, I need to understand which AI model adapters are HTTP/fetch-compatible (can run in Cloudflare Workers) vs subprocess-only (require node:child_process to spawn a local process).\n\nRelevant files:\n- server/src/adapters/registry.ts — registers: claudeLocalAdapter, codexLocalAdapter, openCodeLocalAdapter, piLocalAdapter, cursorLocalAdapter, geminiLocalAdapter, openclawGatewayAdapter, hermesLocalAdapter, processAdapter, httpAdapter\n\nFor each of these adapters, I need to know:\n1. What package it imports from (e.g. @paperclipai/adapter-claude-local)\n2. Whether it spawns a subprocess (uses node:child_process, execa, or similar) or makes HTTP/fetch calls to an external API\n3. What the adapter `type` string is\n\nPlease read:\n- server/src/adapters/registry.ts (lines 1-100 to see imports and type assignments)\n- The first ~40 lines of each adapter package's main file to determine if it's subprocess or HTTP based\n\nFocus on these packages in packages/ or node_modules under packages/:\n- @paperclipai/adapter-claude-local\n- @paperclipai/adapter-gemini-local  \n- @paperclipai/adapter-openclaw-gateway (openclawGatewayAdapter)\n- httpAdapter source\n- processAdapter source\n\nReport: for each adapter, its type string and whether it's HTTP-compatible in CF Workers (yes/no/maybe).\n",
+          "subagent_type": "Explore"
+        },
+        "name": "Agent",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_017EjQJcQVzfsoiKhNJGkHrm",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 1267
+      },
+      "cache_creation_input_tokens": 1267,
+      "cache_read_input_tokens": 105915,
+      "inference_geo": "",
+      "input_tokens": 3,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 1267
+          },
+          "cache_creation_input_tokens": 1267,
+          "cache_read_input_tokens": 105915,
+          "input_tokens": 3,
+          "output_tokens": 565,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 565,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "cd7f3460-bf6b-4e1c-9b67-06630661bfde",
+  "requestId": "req_011CaaWMqVrtNGJDe5D2awgU",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T19:27:53.812Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "a3796949-9533-40cc-97f9-63f97f5a6831",
+  "version": "2.1.123"
+}

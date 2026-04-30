@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01KKyinVXt1KcfZsZVUGkGAG",
+        "input": {
+          "command": "grep -n \"router\\.get.*plugins\\b\" /Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/plugins.ts | head -5",
+          "description": "Find the plugins list route handler"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01AUB5p4aWTJ9Hrd3fjnBGK4",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 1489
+      },
+      "cache_creation_input_tokens": 1489,
+      "cache_read_input_tokens": 88764,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 1489
+          },
+          "cache_creation_input_tokens": 1489,
+          "cache_read_input_tokens": 88764,
+          "input_tokens": 1,
+          "output_tokens": 322,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 322,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "09c72c77-a863-4e97-a73d-d188d22c060c",
+  "requestId": "req_011CaaW9a1rw5t9J4NswRsQw",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T19:25:03.954Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "18963108-007e-4eeb-8cf7-f85e6f5f0528",
+  "version": "2.1.123"
+}

@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "a9edf933 fix(deploy-cloudflare): remove dynamic import in adapters route; clarify wrangler.toml comments\neef8d3fe refactor(deploy-cloudflare): extract shared sidecar routing and deduplicate pathToRegex\n9d2018c4 fix(deploy-cloudflare): security, correctness, and noise hardening\ne8aca7c4 chore: run Node server and CF worker together in dev:cf\n51a5c260 fix(deploy-cloudflare): handle sidecar unreachable for examples and install\ne02d0147 fix(deploy-cloudflare): proxy GET /api/plugins/examples to sidecar\n296133bb fix(deploy-cloudflare): rewrite isLocalPath:true to npm install for CF plugin installs\n3ce3b496 feat(deploy-cloudflare): implement GET /api/plugins/examples and POST /api/plugins/install",
+        "is_error": false,
+        "tool_use_id": "toolu_01VYUfNEj8RnUD2nhD6TLJc3",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "838fd59a-f07c-4dcc-a92a-a75d92a440ca",
+  "promptId": "7323a41a-dd8a-4783-b590-aea4ab5316a7",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "838fd59a-f07c-4dcc-a92a-a75d92a440ca",
+  "timestamp": "2026-04-30T21:38:50.971Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "a9edf933 fix(deploy-cloudflare): remove dynamic import in adapters route; clarify wrangler.toml comments\neef8d3fe refactor(deploy-cloudflare): extract shared sidecar routing and deduplicate pathToRegex\n9d2018c4 fix(deploy-cloudflare): security, correctness, and noise hardening\ne8aca7c4 chore: run Node server and CF worker together in dev:cf\n51a5c260 fix(deploy-cloudflare): handle sidecar unreachable for examples and install\ne02d0147 fix(deploy-cloudflare): proxy GET /api/plugins/examples to sidecar\n296133bb fix(deploy-cloudflare): rewrite isLocalPath:true to npm install for CF plugin installs\n3ce3b496 feat(deploy-cloudflare): implement GET /api/plugins/examples and POST /api/plugins/install"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "d0ff8e4d-6b06-4d72-9a9a-453614f1c71c",
+  "version": "2.1.123"
+}

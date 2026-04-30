@@ -1,0 +1,61 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "text": "Done. Here's what was changed and committed:\n\n**`wrangler.toml`** — two new `[[containers]]` sections:\n- `SIDECAR_SERVICE` → `paperclip-sidecar` image (handles `/internal/heartbeat`, `/internal/plugin-jobs/*`)\n- `PLUGIN_CONTAINER` → `plugin-sandbox` image (handles `POST /execute`, `POST /cancel/:runId`)\n\n**`env.ts`** — `SIDECAR_SERVICE?: Fetcher` and `PLUGIN_CONTAINER?: Fetcher` added; `SIDECAR_URL`/`SIDECAR_API_KEY` demoted to optional fallbacks.\n\n**`heartbeat.ts`** — step 2 now calls `this.env.SIDECAR_SERVICE.fetch(\"http://sidecar/internal/heartbeat\")` when the binding is present; only falls back to the KV-read URL if not.\n\n**`plugin-dispatch.ts`** — KV is read once per run (not 3× across 3 steps); lifecycle calls (claim, complete) go through `sidecarPost()` which prefers `SIDECAR_SERVICE`; the execute step routes to `PLUGIN_CONTAINER` when `executorMode === \"container\"` and the binding exists.\n\nThe fallback to KV-stored `SANDBOX_BRIDGE_URL` is kept in both workflows so you can still point at an external bridge if you ever deploy without containers.",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01PrGMtDeQ4Qi7d3MXoaVkSn",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 343
+      },
+      "cache_creation_input_tokens": 343,
+      "cache_read_input_tokens": 66166,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 343
+          },
+          "cache_creation_input_tokens": 343,
+          "cache_read_input_tokens": 66166,
+          "input_tokens": 1,
+          "output_tokens": 347,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 347,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "90a0fe6b-4c2c-48a4-a0cb-cc16a3e94af6",
+  "requestId": "req_011CaaZgPb1cJNC6qgpXGXsT",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T20:11:22.524Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "1013c6d6-438c-48e7-9fb7-65221f036195",
+  "version": "2.1.123"
+}

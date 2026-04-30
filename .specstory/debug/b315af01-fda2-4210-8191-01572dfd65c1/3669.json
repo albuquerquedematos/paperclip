@@ -1,0 +1,25 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "text": "[wrangler] [wrangler:info] GET /api/companies/9a7cf1f3-02a7-4751-9cdb-671c9c68edb5/sidebar-badges 200 OK (51ms)\n[wrangler] [wrangler:info] GET /api/companies/9a7cf1f3-02a7-4751-9cdb-671c9c68edb5/live-runs 200 OK (24ms)\n[wrangler] ✘ [ERROR] [CF Worker] Unhandled error in POST /api/companies/:companyId/agent-hires: Error: node:fs/promises.readFile not available in CF Workers\n[wrangler] \n[wrangler]       at Object.readFile (file:///Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/dist/worker.js:13207:13)\n[wrangler]       at null.\u003canonymous\u003e (file:///Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/dist/worker.js:117198:54)\n[wrangler]       at [object Object]\n[wrangler]       at loadDefaultAgentInstructionsBundle (file:///Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/dist/worker.js:117197:15)\n[wrangler]       at materializeDefaultInstructionsBundleForNewAgent (file:///Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/dist/worker.js:117814:41)\n[wrangler]       at Object.createAgentHire [as handler] (file:///Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/dist/worker.js:118532:25)\n[wrangler]       at null.\u003canonymous\u003e (async file:///Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/dist/worker.js:129540:14)\n[wrangler]       at async dispatch (file:///Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/dist/worker.js:49536:17)\n[wrangler]       at async dispatch (file:///Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/dist/worker.js:49536:17)\n[wrangler]       at null.\u003canonymous\u003e (async file:///Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/dist/worker.js:50861:25)\n[wrangler] \n[wrangler] \n[wrangler] [wrangler:info] POST /api/companies/9a7cf1f3-02a7-4751-9cdb-671c9c68edb5/agent-hires 500 Internal Server Error (47ms)\n[wrangler] [wrangler:info] GET /api/companies/9a7cf1f3-02a7-4751-9cdb-671c9c68edb5/live-runs 200 OK (50ms)",
+        "type": "text"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "b9760c8e-d481-440e-b0d3-7f72d2781ed4",
+  "permissionMode": "bypassPermissions",
+  "promptId": "235b32a6-cd83-4ec7-8599-14103dbb84b8",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T22:52:03.733Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "c57710ac-144b-4fdf-b4cc-22aef01070ea",
+  "version": "2.1.123"
+}

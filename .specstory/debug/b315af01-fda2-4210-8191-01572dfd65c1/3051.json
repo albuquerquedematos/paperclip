@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "1\t{\n2\t  \"name\": \"@paperclipai/plugin-file-browser-example\",\n3\t  \"version\": \"0.1.0\",\n4\t  \"description\": \"Example plugin: project sidebar Files link + project detail tab with workspace selector and file browser\",\n5\t  \"type\": \"module\",\n6\t  \"private\": true,\n7\t  \"exports\": {\n8\t    \".\": \"./src/index.ts\"\n9\t  },\n10\t  \"paperclipPlugin\": {\n11\t    \"manifest\": \"./dist/manifest.js\",\n12\t    \"worker\": \"./dist/worker.js\",\n13\t    \"ui\": \"./dist/ui/\"\n14\t  },\n15\t  \"scripts\": {\n16\t    \"prebuild\": \"pnpm --filter @paperclipai/plugin-sdk ensure-build-deps\",\n17\t    \"build\": \"tsc \u0026\u0026 node ./scripts/build-ui.mjs\",\n18\t    \"clean\": \"rm -rf dist\",\n19\t    \"typecheck\": \"pnpm --filter @paperclipai/plugin-sdk ensure-build-deps \u0026\u0026 tsc --noEmit\"\n20\t  },\n21\t  \"dependencies\": {\n22\t    \"@codemirror/lang-javascript\": \"^6.2.2\",\n23\t    \"@codemirror/language\": \"^6.11.0\",\n24\t    \"@codemirror/state\": \"^6.4.0\",\n25\t    \"@codemirror/view\": \"^6.28.0\",\n26\t    \"@lezer/highlight\": \"^1.2.1\",\n27\t    \"@paperclipai/plugin-sdk\": \"workspace:*\",\n28\t    \"codemirror\": \"^6.0.1\"\n29\t  },\n30\t  \"devDependencies\": {\n31\t    \"@types/node\": \"^24.6.0\",\n32\t    \"@types/react\": \"^19.0.8\",\n33\t    \"@types/react-dom\": \"^19.0.3\",\n34\t    \"esbuild\": \"^0.27.3\",\n35\t    \"react\": \"^19.0.0\",\n36\t    \"react-dom\": \"^19.0.0\",\n37\t    \"typescript\": \"^5.7.3\"\n38\t  },\n39\t  \"peerDependencies\": {\n40\t    \"react\": \"\u003e=18\"\n41\t  }\n42\t}\n43\t",
+        "tool_use_id": "toolu_01YEFCQe95oD2msk9eZKjCPD",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "3663648a-7455-48f0-8d36-63f4537893d3",
+  "promptId": "7323a41a-dd8a-4783-b590-aea4ab5316a7",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "3663648a-7455-48f0-8d36-63f4537893d3",
+  "timestamp": "2026-04-30T21:30:34.861Z",
+  "toolUseResult": {
+    "file": {
+      "content": "{\n  \"name\": \"@paperclipai/plugin-file-browser-example\",\n  \"version\": \"0.1.0\",\n  \"description\": \"Example plugin: project sidebar Files link + project detail tab with workspace selector and file browser\",\n  \"type\": \"module\",\n  \"private\": true,\n  \"exports\": {\n    \".\": \"./src/index.ts\"\n  },\n  \"paperclipPlugin\": {\n    \"manifest\": \"./dist/manifest.js\",\n    \"worker\": \"./dist/worker.js\",\n    \"ui\": \"./dist/ui/\"\n  },\n  \"scripts\": {\n    \"prebuild\": \"pnpm --filter @paperclipai/plugin-sdk ensure-build-deps\",\n    \"build\": \"tsc \u0026\u0026 node ./scripts/build-ui.mjs\",\n    \"clean\": \"rm -rf dist\",\n    \"typecheck\": \"pnpm --filter @paperclipai/plugin-sdk ensure-build-deps \u0026\u0026 tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"@codemirror/lang-javascript\": \"^6.2.2\",\n    \"@codemirror/language\": \"^6.11.0\",\n    \"@codemirror/state\": \"^6.4.0\",\n    \"@codemirror/view\": \"^6.28.0\",\n    \"@lezer/highlight\": \"^1.2.1\",\n    \"@paperclipai/plugin-sdk\": \"workspace:*\",\n    \"codemirror\": \"^6.0.1\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"^24.6.0\",\n    \"@types/react\": \"^19.0.8\",\n    \"@types/react-dom\": \"^19.0.3\",\n    \"esbuild\": \"^0.27.3\",\n    \"react\": \"^19.0.0\",\n    \"react-dom\": \"^19.0.0\",\n    \"typescript\": \"^5.7.3\"\n  },\n  \"peerDependencies\": {\n    \"react\": \"\u003e=18\"\n  }\n}\n",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/plugins/examples/plugin-file-browser-example/package.json",
+      "numLines": 43,
+      "startLine": 1,
+      "totalLines": 43
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "5023aa56-60a3-4818-a606-356664ebf6bf",
+  "version": "2.1.123"
+}

@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_017Zcfrz11jQpnw3gzB79mc7",
+        "input": {
+          "command": "git add packages/adapters/claude-local/src/server/execute.ts \u0026\u0026 git commit -m \"$(cat \u003c\u003c'EOF'\nchore(claude-local): add temporary diagnostic log on non-zero claude exit\n\nWhen sessionId is set and claude exits non-zero, log the exit code,\nunknownSession detection result, and the failing sessionId. Lets us\ngrep run logs to verify the unknown-session retry path is reached\nafter a dev:cf restart. Will be removed once the retry path is\nconfirmed.\n\nCo-Authored-By: Claude Sonnet 4.6 \u003cnoreply@anthropic.com\u003e\nEOF\n)\"",
+          "description": "Commit diagnostic log"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01LWRYcJxA9pfaWYXNeNUCkp",
+    "model": "claude-opus-4-7",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1235,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 1235,
+      "cache_read_input_tokens": 488541,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 1235,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 1235,
+          "cache_read_input_tokens": 488541,
+          "input_tokens": 1,
+          "output_tokens": 298,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 298,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "129a8a87-5174-409d-bdcd-721b7b8a8a2d",
+  "requestId": "req_011CaapsKVkKtt87LnZeMu5s",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T23:30:34.839Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "6b4c97f1-b7b7-4c57-9868-e1c9d5e553f9",
+  "version": "2.1.123"
+}

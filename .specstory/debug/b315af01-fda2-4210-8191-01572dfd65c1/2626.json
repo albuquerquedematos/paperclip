@@ -1,0 +1,65 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/api.ts has been updated successfully.",
+        "tool_use_id": "toolu_01ErkgEUxmJB4soqTpmpP4bt",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "2724bad0-8869-4a28-833f-dfd77cb422ce",
+  "promptId": "df103658-737d-408a-8a80-546db4a85d64",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "2724bad0-8869-4a28-833f-dfd77cb422ce",
+  "timestamp": "2026-04-30T20:10:58.361Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/api.ts",
+    "newString": " * Routes skipped (use Node-only features):\n *   - pluginUiStaticRoutes    fs.readFileSync / res.sendFile\n *   - instanceDatabaseBackupRoutes  pg_dump\n *\n * Routes handled via CF-native modules (not in route-registry.ts):\n *   - adapterRoutes       → src/worker/routes/adapters.ts\n *   - pluginRoutes        → src/worker/routes/plugins.ts\n *   - companySkillRoutes  → src/worker/routes/company-skills-cf.ts\n *   - accessRoutes        → route-registry.ts (extractAllRoutesFromRouter)",
+    "oldString": " * Routes skipped (use Node-only features — left as 501 TODOs):\n *   - adapterRoutes           reads packages from disk\n *   - pluginRoutes            SSE, child processes, scoped plugin API\n *   - pluginUiStaticRoutes    fs.readFileSync / res.sendFile\n *   - companySkillRoutes      local filesystem (CF version: cf-company-skills.ts)\n *   - accessRoutes            reads bundled SKILL.md files from disk\n *   - instanceDatabaseBackupRoutes  pg_dump",
+    "originalFile": "/**\n * api.ts — Cloudflare Worker entry point\n *\n * This file is intentionally thin: it wires together the Hono app,\n * queue consumer, and cron handlers, then re-exports named Durable Object\n * and Workflow classes so Wrangler can register them.\n *\n * Routes skipped (use Node-only features — left as 501 TODOs):\n *   - adapterRoutes           reads packages from disk\n *   - pluginRoutes            SSE, child processes, scoped plugin API\n *   - pluginUiStaticRoutes    fs.readFileSync / res.sendFile\n *   - companySkillRoutes      local filesystem (CF version: cf-company-skills.ts)\n *   - accessRoutes            reads bundled SKILL.md files from disk\n *   - instanceDatabaseBackupRoutes  pg_dump\n *\n * Architecture note on per-request DB injection:\n *   Route handlers capture a `db` reference via service factory closures.\n *   Because Hyperdrive connections cannot be reused across CF Workers requests,\n *   we rebuild the DB + route handlers on every request. Route path regexps\n *   are static and are cached at module level in route-registry.ts.\n */\n\nimport { bootCloudflare } from \"../boot.js\";\nimport { app } from \"./app.js\";\nimport { createHyperdriveDb } from \"../db/hyperdrive.js\";\nimport { runHeartbeatSweep } from \"../cron/heartbeat-sweep.js\";\nimport type { Env } from \"./env.js\";\n\n// Re-export Env so other modules (e.g. heartbeat-sweep) can import it from here.\nexport type { Env };\n\n// ---------------------------------------------------------------------------\n// Workers fetch handler\n// ---------------------------------------------------------------------------\n\nexport default {\n  fetch(request: Request, env: Env, ctx: ExecutionContext): Promise\u003cResponse\u003e {\n    // Boot CF implementations (idempotent — safe to call on every request).\n    bootCloudflare(env);\n    return app.fetch(request, env, ctx);\n  },\n\n  // -------------------------------------------------------------------------\n  // Queues consumer\n  // -------------------------------------------------------------------------\n  async queue(batch: MessageBatch\u003cunknown\u003e, env: Env): Promise\u003cvoid\u003e {\n    for (const message of batch.messages) {\n      const body = message.body as Record\u003cstring, unknown\u003e;\n      const type = body?.type as string | undefined;\n\n      if (type === \"plugin_job_dispatch\") {\n        const pluginJobId = body.pluginJobId as string;\n        const pluginSlug = body.pluginSlug as string;\n        const companyId = body.companyId as string;\n        const executorMode = (body.executorMode as \"sandbox_bridge\" | \"container\") ?? \"sandbox_bridge\";\n        try {\n          await env.PLUGIN_DISPATCH_WORKFLOW.create({\n            id: `plugin-job-${pluginJobId}`,\n            params: { pluginJobId, pluginSlug, companyId, executorMode },\n          });\n          message.ack();\n        } catch (err) {\n          console.error(`[Queue] Failed to start PluginDispatchWorkflow for job ${pluginJobId}: ${err instanceof Error ? err.message : String(err)}`);\n          message.retry();\n        }\n        continue;\n      }\n\n      if (type === \"heartbeat_dispatch\") {\n        const agentId = body.agentId as string;\n        const companyId = body.companyId as string;\n        const runId = body.runId as string;\n        const taskId = body.taskId as string | undefined;\n        try {\n          await env.HEARTBEAT_WORKFLOW.create({\n            id: `heartbeat-${runId}`,\n            params: { agentId, companyId, runId, taskId },\n          });\n          message.ack();\n        } catch (err) {\n          console.error(`[Queue] Failed to start HeartbeatWorkflow for run ${runId}: ${err instanceof Error ? err.message : String(err)}`);\n          message.retry();\n        }\n        continue;\n      }\n\n      console.warn(`[Queue] Unknown message type: ${type ?? \"(none)\"}`);\n      message.ack();\n    }\n  },\n\n  // -------------------------------------------------------------------------\n  // Cron triggers\n  // -------------------------------------------------------------------------\n  async scheduled(event: ScheduledEvent, env: Env, _ctx: ExecutionContext): Promise\u003cvoid\u003e {\n    if (event.cron === \"*/5 * * * *\") {\n      const db = createHyperdriveDb(env.HYPERDRIVE);\n      await runHeartbeatSweep(env, db);\n      return;\n    }\n    // \"0 * * * *\"  — budget threshold check (not yet implemented)\n    // \"0 3 * * *\"  — DB backup (not yet implemented)\n  },\n};\n\n// ---------------------------------------------------------------------------\n// Named Durable Object + Workflow exports\n// Wrangler requires these to be named exports from the Worker's main module.\n// ---------------------------------------------------------------------------\n\nexport { TaskDO } from \"../runtime/task-do.js\";\nexport { AgentRunDO } from \"../runtime/agent-run-do.js\";\nexport { SchedulerDO } from \"../scheduler/scheduler-do.js\";\nexport { HeartbeatWorkflow } from \"../runtime/workflows/heartbeat.js\";\nexport { PluginDispatchWorkflow } from \"../runtime/workflows/plugin-dispatch.js\";\n",
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          "  * queue consumer, and cron handlers, then re-exports named Durable Object",
+          "  * and Workflow classes so Wrangler can register them.",
+          "  *",
+          "- * Routes skipped (use Node-only features — left as 501 TODOs):",
+          "- *   - adapterRoutes           reads packages from disk",
+          "- *   - pluginRoutes            SSE, child processes, scoped plugin API",
+          "+ * Routes skipped (use Node-only features):",
+          "  *   - pluginUiStaticRoutes    fs.readFileSync / res.sendFile",
+          "- *   - companySkillRoutes      local filesystem (CF version: cf-company-skills.ts)",
+          "- *   - accessRoutes            reads bundled SKILL.md files from disk",
+          "  *   - instanceDatabaseBackupRoutes  pg_dump",
+          "  *",
+          "+ * Routes handled via CF-native modules (not in route-registry.ts):",
+          "+ *   - adapterRoutes       → src/worker/routes/adapters.ts",
+          "+ *   - pluginRoutes        → src/worker/routes/plugins.ts",
+          "+ *   - companySkillRoutes  → src/worker/routes/company-skills-cf.ts",
+          "+ *   - accessRoutes        → route-registry.ts (extractAllRoutesFromRouter)",
+          "+ *",
+          "  * Architecture note on per-request DB injection:",
+          "  *   Route handlers capture a `db` reference via service factory closures.",
+          "  *   Because Hyperdrive connections cannot be reused across CF Workers requests,"
+        ],
+        "newLines": 16,
+        "newStart": 5,
+        "oldLines": 14,
+        "oldStart": 5
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "bb1c943f-536b-407f-92cd-163cc28afd01",
+  "version": "2.1.123"
+}

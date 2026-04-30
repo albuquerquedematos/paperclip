@@ -1,0 +1,71 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_012LUiwd7BShnmKgKNYoJVgn",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/tests/cf-smoke/cf-smoke.spec.ts",
+          "new_string": "describe(\"CF Worker smoke — project-scoped reads (regression: URL-key resolution)\", () =\u003e {\n  // Only routes that the server actually defines (server/src/routes/projects.ts).\n  const routes = [\"\", \"workspaces\"];\n  for (const tail of routes) {\n    it(`GET /api/projects/:uuid${tail ? \"/\" + tail : \"\"}`, async () =\u003e {\n      if (!project) return;\n      const path = `/api/projects/${project.id}${tail ? \"/\" + tail : \"\"}`;\n      const r = await get(path);\n      expectNoCrash(`GET ${path}`, r.status);\n    });\n\n    it(`GET /api/projects/:urlKey${tail ? \"/\" + tail : \"\"} (regression)`, async () =\u003e {\n      if (!project?.urlKey) return;\n      const path = `/api/projects/${project.urlKey}${tail ? \"/\" + tail : \"\"}`;\n      const r = await get(path);\n      expectNoCrash(`GET ${path}`, r.status);\n    });\n  }\n});",
+          "old_string": "describe(\"CF Worker smoke — project-scoped reads\", () =\u003e {\n  // Only routes that the server actually defines (server/src/routes/projects.ts).\n  const routes = [\"\", \"workspaces\"];\n  for (const tail of routes) {\n    it(`GET /api/projects/:id${tail ? \"/\" + tail : \"\"}`, async () =\u003e {\n      if (!project) return;\n      const path = `/api/projects/${project.id}${tail ? \"/\" + tail : \"\"}`;\n      const r = await get(path);\n      expectNoCrash(`GET ${path}`, r.status);\n    });\n  }\n});",
+          "replace_all": false
+        },
+        "name": "Edit",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_017ZwQPQfojkgKpJJ4zXsEFJ",
+    "model": "claude-opus-4-7",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 739,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 739,
+      "cache_read_input_tokens": 431671,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 739,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 739,
+          "cache_read_input_tokens": 431671,
+          "input_tokens": 1,
+          "output_tokens": 724,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 724,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "4d683268-e485-49d3-bbf4-63e0bd88a7c9",
+  "requestId": "req_011CaaogrQwJKMhubKeeWm4s",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T23:15:06.211Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "2102c783-68bc-4d0a-8414-40c3ca510314",
+  "version": "2.1.123"
+}

@@ -1,0 +1,71 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_013tKudUckZAfyvWxRXq1eFZ",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/cf-extra-routes.ts",
+          "new_string": "  // -------------------------------------------------------------------------\n  // GET /api/adapters — no adapter registry in CF Workers\n  // -------------------------------------------------------------------------\n  app.get(\"/api/adapters\", (c) =\u003e c.json([]));\n\n  // -------------------------------------------------------------------------\n  // GET /api/plugins — no plugin registry in CF Workers\n  // GET /api/plugins/ui-contributions — no plugin registry in CF Workers\n  // -------------------------------------------------------------------------\n  app.get(\"/api/plugins\", (c) =\u003e c.json([]));\n  app.get(\"/api/plugins/ui-contributions\", (c) =\u003e c.json([]));",
+          "old_string": "  // -------------------------------------------------------------------------\n  // GET /api/adapters — no adapter registry in CF Workers\n  // -------------------------------------------------------------------------\n  app.get(\"/api/adapters\", (c) =\u003e c.json([]));\n\n  // -------------------------------------------------------------------------\n  // GET /api/plugins/ui-contributions — no plugin registry in CF Workers\n  // -------------------------------------------------------------------------\n  app.get(\"/api/plugins/ui-contributions\", (c) =\u003e c.json([]));",
+          "replace_all": false
+        },
+        "name": "Edit",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01Me1QaRYRQqP2ERmX6pkQvw",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 429
+      },
+      "cache_creation_input_tokens": 429,
+      "cache_read_input_tokens": 85278,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 429
+          },
+          "cache_creation_input_tokens": 429,
+          "cache_read_input_tokens": 85278,
+          "input_tokens": 1,
+          "output_tokens": 385,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 385,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "0ab75995-a487-40f2-950d-e01b230dce8f",
+  "requestId": "req_011CaaTQVgjLcf3vdcK8fJUA",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T18:49:04.658Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "a6afd648-525b-4dc9-919e-c93d29622da7",
+  "version": "2.1.123"
+}

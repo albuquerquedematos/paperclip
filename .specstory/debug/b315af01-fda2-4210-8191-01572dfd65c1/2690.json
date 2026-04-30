@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_012p6aw5x5KF3rCa6DireGtC",
+        "input": {
+          "command": "grep -B5 -A20 \"^interface Container {\" /Users/migmac/Documents/GitHub/_ABM/paperclip/node_modules/.pnpm/@cloudflare+workers-types@4.20260430.1/node_modules/@cloudflare/workers-types/index.d.ts 2\u003e/dev/null | head -50",
+          "description": "Get full Container interface definition"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_018zSbT18EDsrkySYwRuD4Rd",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 449
+      },
+      "cache_creation_input_tokens": 449,
+      "cache_read_input_tokens": 82131,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 449
+          },
+          "cache_creation_input_tokens": 449,
+          "cache_read_input_tokens": 82131,
+          "input_tokens": 1,
+          "output_tokens": 156,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 156,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "5dfd7ac8-536a-4331-aae9-0e1f57fe22b2",
+  "requestId": "req_011CaabQYLQBKgMop573Asoa",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T20:33:56.952Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "c954b173-96d6-48fc-b3e0-ecaca92a336d",
+  "version": "2.1.123"
+}

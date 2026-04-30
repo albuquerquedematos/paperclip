@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01AUWNgz3XqYCz6wSDMz9gxj",
+        "input": {
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"es2022\",\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"strict\": true,\n    \"esModuleInterop\": true,\n    \"skipLibCheck\": true,\n    \"types\": [\"node\"]\n  },\n  \"include\": [\"**/*.ts\"]\n}\n",
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/tests/cf-smoke/tsconfig.json"
+        },
+        "name": "Write",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01SfLhqfyDMtUwkYiUxwwXTP",
+    "model": "claude-opus-4-7",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 934,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 934,
+      "cache_read_input_tokens": 346198,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 934,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 934,
+          "cache_read_input_tokens": 346198,
+          "input_tokens": 1,
+          "output_tokens": 489,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 489,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "3beba8c0-86e0-4311-a171-76781ceb8716",
+  "requestId": "req_011CaaniWNrrekqnY2Y45UUj",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T23:02:19.972Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "47d5a5e2-e7bd-4322-8a99-35ea67d1be16",
+  "version": "2.1.123"
+}

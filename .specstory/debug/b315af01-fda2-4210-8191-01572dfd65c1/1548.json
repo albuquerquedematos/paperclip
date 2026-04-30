@@ -1,0 +1,54 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/cf-extra-routes.ts has been updated successfully.",
+        "tool_use_id": "toolu_013tKudUckZAfyvWxRXq1eFZ",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "a6afd648-525b-4dc9-919e-c93d29622da7",
+  "promptId": "d55b1191-6053-4462-b18a-ea1b69fa27ee",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "a6afd648-525b-4dc9-919e-c93d29622da7",
+  "timestamp": "2026-04-30T18:49:06.162Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/cf-extra-routes.ts",
+    "newString": "  // -------------------------------------------------------------------------\n  // GET /api/adapters — no adapter registry in CF Workers\n  // -------------------------------------------------------------------------\n  app.get(\"/api/adapters\", (c) =\u003e c.json([]));\n\n  // -------------------------------------------------------------------------\n  // GET /api/plugins — no plugin registry in CF Workers\n  // GET /api/plugins/ui-contributions — no plugin registry in CF Workers\n  // -------------------------------------------------------------------------\n  app.get(\"/api/plugins\", (c) =\u003e c.json([]));\n  app.get(\"/api/plugins/ui-contributions\", (c) =\u003e c.json([]));",
+    "oldString": "  // -------------------------------------------------------------------------\n  // GET /api/adapters — no adapter registry in CF Workers\n  // -------------------------------------------------------------------------\n  app.get(\"/api/adapters\", (c) =\u003e c.json([]));\n\n  // -------------------------------------------------------------------------\n  // GET /api/plugins/ui-contributions — no plugin registry in CF Workers\n  // -------------------------------------------------------------------------\n  app.get(\"/api/plugins/ui-contributions\", (c) =\u003e c.json([]));",
+    "originalFile": null,
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          "   app.get(\"/api/adapters\", (c) =\u003e c.json([]));",
+          " ",
+          "   // -------------------------------------------------------------------------",
+          "+  // GET /api/plugins — no plugin registry in CF Workers",
+          "   // GET /api/plugins/ui-contributions — no plugin registry in CF Workers",
+          "   // -------------------------------------------------------------------------",
+          "+  app.get(\"/api/plugins\", (c) =\u003e c.json([]));",
+          "   app.get(\"/api/plugins/ui-contributions\", (c) =\u003e c.json([]));",
+          " ",
+          "   // -------------------------------------------------------------------------"
+        ],
+        "newLines": 10,
+        "newStart": 87,
+        "oldLines": 8,
+        "oldStart": 87
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "c7d6905d-1072-48c1-86b5-7ca7f9939020",
+  "version": "2.1.123"
+}

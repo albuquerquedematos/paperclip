@@ -1,0 +1,61 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "text": "Not exactly — there are a few intentional differences inherent to the CF Workers environment:\n\n**Works identically:**\n- All DB-backed API routes: companies, agents, assets, projects, issues, environments, routines, goals, approvals, secrets, costs, activity, dashboard, user profiles, sidebar preferences, auth, CLI auth, admin users, members, invites, join-requests, and more\n\n**Works differently:**\n- **Adapters / Plugins** → always returns `[]` (no plugin/adapter worker registry in CF)\n- **WebSocket events** (`/api/companies/:id/events/ws`) → accepts the connection but sends no events (no Durable Object pub/sub bus wired up yet)\n- **File uploads** → goes to R2 instead of local disk\n\n**Returns errors at runtime (not crash):**\n- **Skill create/delete/update** → fails when it tries to touch the host filesystem (FS shim throws)\n- **Skills browsing** (`/api/skills/available`, `/api/skills/index`) → same reason\n- **Invite DNS resolution test** → DNS shim rejects\n\n**Returns 501 intentionally:**\n- **Database backups** → requires a backup service that doesn't exist in CF\n\nSo for the core product UI — browsing companies, agents, issues, members, invites, approvals, costs, etc. — it should behave identically. The gaps are plugin/adapter functionality and local-filesystem-dependent skill management operations.",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_0114rAREudsZzgyAsf1cznsZ",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 511
+      },
+      "cache_creation_input_tokens": 511,
+      "cache_read_input_tokens": 87397,
+      "inference_geo": "",
+      "input_tokens": 3,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 511
+          },
+          "cache_creation_input_tokens": 511,
+          "cache_read_input_tokens": 87397,
+          "input_tokens": 3,
+          "output_tokens": 740,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 740,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "b6c12e91-20fc-43cb-a8ce-8a0ae92d891f",
+  "requestId": "req_011CaaW3e4H6AMbpwVUqgi7i",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T19:23:51.502Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "18b3480c-ff9f-4552-a346-d99c336bc940",
+  "version": "2.1.123"
+}

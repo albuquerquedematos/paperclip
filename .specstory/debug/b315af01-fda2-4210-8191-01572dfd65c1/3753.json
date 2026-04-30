@@ -1,0 +1,27 @@
+{
+  "agentId": "a3a306fc5d1924556",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1135\t      currentExecutionWorkspace,\n1136\t      workProducts,\n1137\t    });\n1138\t  };\n1139\t\n1140\t  const getIssueWorkProducts: Handler = async (ctx) =\u003e {\n1141\t    const id = ctx.param(\"id\")!;\n1142\t    const issue = await svc.getById(id);\n1143\t    if (!issue) return Response.json({ error: \"Issue not found\" }, { status: 404 });\n1144\t    assertCompanyAccess(ctx, issue.companyId);\n1145\t    const workProducts = await workProductsSvc.listForIssue(issue.id);\n1146\t    return Response.json(workProducts);\n1147\t  };\n1148\t\n1149\t  const listIssueDocuments: Handler = async (ctx) =\u003e {\n1150\t    const id = ctx.param(\"id\")!;\n1151\t    const issue = await svc.getById(id);\n1152\t    if (!issue) return Response.json({ error: \"Issue not found\" }, { status: 404 });\n1153\t    assertCompanyAccess(ctx, issue.companyId);\n1154\t    const docs = await documentsSvc.listIssueDocuments(issue.id, {\n1155\t      includeSystem: ctx.query(\"includeSystem\") === \"true\",\n1156\t    });\n1157\t    return Response.json(docs);\n1158\t  };\n1159\t\n1160\t  const getIssueDocument: Handler = async (ctx) =\u003e {\n1161\t    const id = ctx.param(\"id\")!;\n1162\t    const issue = await svc.getById(id);\n1163\t    if (!issue) return Response.json({ error: \"Issue not found\" }, { status: 404 });\n1164\t    assertCompanyAccess(ctx, issue.companyId);\n1165\t    const keyParsed = issueDocumentKeySchema.safeParse(String(ctx.param(\"key\") ?? \"\").trim().toLowerCase());\n1166\t    if (!keyParsed.success) {\n1167\t      return Response.json({ error: \"Invalid document key\", details: keyParsed.error.issues }, { status: 400 });\n1168\t    }\n1169\t    const doc = await documentsSvc.getIssueDocumentByKey(issue.id, keyParsed.data);\n\n\u003csystem-reminder\u003e\nWhenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.\n\u003c/system-reminder\u003e\n",
+        "tool_use_id": "toolu_01HtCyoUJD9M6m29QYEMvDrU",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "65211daf-54fc-4709-9647-9a5ca5fe31b8",
+  "promptId": "e7cbb211-1d37-4345-b546-c3d4bd07be80",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "65211daf-54fc-4709-9647-9a5ca5fe31b8",
+  "timestamp": "2026-04-30T22:57:34.961Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "c3a1fe54-be79-409d-adab-d0de9dad5db6",
+  "version": "2.1.123"
+}

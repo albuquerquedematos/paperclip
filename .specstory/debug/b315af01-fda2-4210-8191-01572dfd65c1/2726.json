@@ -1,0 +1,71 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01RpBuTGBvs34a9fKyeTHQDp",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/runtime/workflows/heartbeat.ts",
+          "new_string": "  PAPERCLIP_KV: KVNamespace;\n  // CF-native: DO namespace for the SidecarContainer (proxies to Docker).\n  // Local dev: absent → falls back to SANDBOX_BRIDGE_URL stored in KV.\n  SIDECAR_SERVICE?: DurableObjectNamespace;",
+          "old_string": "  PAPERCLIP_KV: KVNamespace;\n  // CF-native: Fetcher binding to the sidecar CF Container.\n  // If absent, falls back to SANDBOX_BRIDGE_URL stored in KV.\n  SIDECAR_SERVICE?: Fetcher;",
+          "replace_all": false
+        },
+        "name": "Edit",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01LZkj5AHV9eGi91s2TSjyhw",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 368
+      },
+      "cache_creation_input_tokens": 368,
+      "cache_read_input_tokens": 95534,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 368
+          },
+          "cache_creation_input_tokens": 368,
+          "cache_read_input_tokens": 95534,
+          "input_tokens": 1,
+          "output_tokens": 282,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 282,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "7ad76f27-4f74-4f4a-bf19-b97e96a47333",
+  "requestId": "req_011Caabc4nYJEpgn5wpGZiES",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T20:36:34.720Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "a4c2f162-7607-4559-add2-b3416f25cb0d",
+  "version": "2.1.123"
+}

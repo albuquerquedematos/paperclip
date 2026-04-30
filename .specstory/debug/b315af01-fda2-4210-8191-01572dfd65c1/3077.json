@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01DVrnu8tiBvhzAfZsFCtbGH",
+        "input": {
+          "content": "/**\n * containers.ts — Durable Object wrappers for Cloudflare Containers.\n *\n * CF Containers (2025) run Docker images alongside Workers. Each container\n * must be exposed via a Durable Object class: the DO acts as a per-container\n * controller that starts the container, monitors its lifecycle, and proxies\n * HTTP requests to it via `this.ctx.container.getTcpPort(port)`.\n *\n * Architecture:\n *   Worker / Workflow\n *     └─ DurableObjectNamespace.idFromName(\"sidecar\").get().fetch(url, init)\n *          └─ SidecarContainer.fetch(request)\n *               ├─ [production] proxies to Docker container on port 8080\n *               └─ [local dev]  proxies to SIDECAR_URL or SANDBOX_BRIDGE_URL from KV\n *\n * Local dev fallback:\n *   `this.ctx.container` is undefined in `wrangler dev` (no Docker available).\n *   When absent, the DO falls back to: SIDECAR_URL env var (.dev.vars)\n *   → KV SANDBOX_BRIDGE_URL → localhost:8788.\n *\n * Security: caller Authorization headers are never forwarded. The production\n * container path uses the internal CF network (no auth needed). The local-dev\n * fallback sets SIDECAR_API_KEY when available.\n *\n * wrangler.toml requirements (already added):\n *   [[durable_objects.bindings]]   name = \"SIDECAR_SERVICE\"   class_name = \"SidecarContainer\"\n *   [[durable_objects.bindings]]   name = \"PLUGIN_CONTAINER\"  class_name = \"PluginContainer\"\n *   [[containers]]  class_name = \"SidecarContainer\"  image = \"...\"\n *   [[containers]]  class_name = \"PluginContainer\"   image = \"...\"\n */\n\nimport type { Env } from \"./env.js\";\n\nconst SIDECAR_PORT = 8080;\n\n/**\n * Build a clean internal request: strip caller headers, keep Content-Type,\n * and optionally set an Authorization key for the sidecar bridge.\n */\nfunction buildInternalRequest(\n  url: string,\n  method: string,\n  contentType: string | null,\n  body: ReadableStream | null,\n  apiKey?: string | null,\n): Request {\n  const headers = new Headers();\n  if (contentType) headers.set(\"Content-Type\", contentType);\n  if (apiKey) headers.set(\"Authorization\", `Bearer ${apiKey}`);\n  return new Request(url, { method, headers, body });\n}\n\n// ---------------------------------------------------------------------------\n// SidecarContainer — companion Node.js server\n// ---------------------------------------------------------------------------\n\n/**\n * Proxy DO for the sidecar companion server container.\n *\n * Exposes the same internal API as the external sidecar HTTP server:\n *   POST /internal/heartbeat\n *   POST /internal/plugin-jobs/:id/claim\n *   POST /internal/plugin-jobs/:id/execute\n *   POST /internal/plugin-jobs/:id/complete\n *   GET  /api/plugins/examples\n *   POST /api/plugins/install\n */\nexport class SidecarContainer implements DurableObject {\n  private readonly ctx: DurableObjectState;\n  private readonly env: Env;\n\n  constructor(ctx: DurableObjectState, env: Env) {\n    this.ctx = ctx;\n    this.env = env;\n  }\n\n  async fetch(request: Request): Promise\u003cResponse\u003e {\n    const container = this.ctx.container;\n    const url = new URL(request.url);\n    const ct = request.headers.get(\"Content-Type\");\n\n    if (container) {\n      if (!container.running) {\n        container.start();\n      }\n      // Internal CF network: no auth header needed; strip caller headers.\n      const fetcher = container.getTcpPort(SIDECAR_PORT);\n      return fetcher.fetch(\n        buildInternalRequest(url.pathname + url.search, request.method, ct, request.body),\n      );\n    }\n\n    // Local-dev fallback: SIDECAR_URL env var → KV SANDBOX_BRIDGE_URL → localhost:8788.\n    const baseUrl =\n      this.env.SIDECAR_URL ??\n      (await this.env.PAPERCLIP_KV.get(\"SANDBOX_BRIDGE_URL\")) ??\n      \"http://localhost:8788\";\n    const apiKey =\n      this.env.SIDECAR_API_KEY ??\n      (await this.env.PAPERCLIP_KV.get(\"SANDBOX_BRIDGE_API_KEY\"));\n\n    const proxyUrl = `${baseUrl}${url.pathname}${url.search}`;\n    return fetch(\n      buildInternalRequest(proxyUrl, request.method, ct, request.body, apiKey),\n      // @ts-expect-error CF-specific duplex option\n      { duplex: \"half\" },\n    );\n  }\n}\n\n// ---------------------------------------------------------------------------\n// PluginContainer — isolated command executor for adapter plugins\n// ---------------------------------------------------------------------------\n\n/**\n * Proxy DO for the plugin sandbox container.\n *\n * Exposes the same wire format as the sandbox bridge command executor:\n *   POST /execute\n *   POST /cancel/:runId\n *\n * The container image must serve these endpoints on port 8080 (default).\n */\nexport class PluginContainer implements DurableObject {\n  private readonly ctx: DurableObjectState;\n  private readonly env: Env;\n\n  constructor(ctx: DurableObjectState, env: Env) {\n    this.ctx = ctx;\n    this.env = env;\n  }\n\n  async fetch(request: Request): Promise\u003cResponse\u003e {\n    const container = this.ctx.container;\n    const url = new URL(request.url);\n    const ct = request.headers.get(\"Content-Type\");\n\n    if (container) {\n      if (!container.running) {\n        container.start();\n      }\n      const fetcher = container.getTcpPort(SIDECAR_PORT);\n      return fetcher.fetch(\n        buildInternalRequest(url.pathname + url.search, request.method, ct, request.body),\n      );\n    }\n\n    // Fallback: same bridge service as SidecarContainer.\n    const baseUrl =\n      this.env.SIDECAR_URL ??\n      (await this.env.PAPERCLIP_KV.get(\"SANDBOX_BRIDGE_URL\")) ??\n      \"http://localhost:8788\";\n    const apiKey =\n      this.env.SIDECAR_API_KEY ??\n      (await this.env.PAPERCLIP_KV.get(\"SANDBOX_BRIDGE_API_KEY\"));\n\n    const proxyUrl = `${baseUrl}${url.pathname}${url.search}`;\n    return fetch(\n      buildInternalRequest(proxyUrl, request.method, ct, request.body, apiKey),\n      // @ts-expect-error CF-specific duplex option\n      { duplex: \"half\" },\n    );\n  }\n}\n",
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/containers.ts"
+        },
+        "name": "Write",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01U1FtDBxV7jTTBgTiwokeEW",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 3919
+      },
+      "cache_creation_input_tokens": 3919,
+      "cache_read_input_tokens": 44497,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 3919
+          },
+          "cache_creation_input_tokens": 3919,
+          "cache_read_input_tokens": 44497,
+          "input_tokens": 1,
+          "output_tokens": 1875,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 1875,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "ceea1b1a-5478-4610-a2dc-e82e5ef2fe8a",
+  "requestId": "req_011CaafoJFgEqt4HTRQQQmbn",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T21:31:47.618Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "1ee94ee0-0b9b-44d9-8dd0-b8480737909c",
+  "version": "2.1.123"
+}

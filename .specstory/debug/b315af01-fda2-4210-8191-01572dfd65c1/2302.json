@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "190\tasync function loadFromRecord(record: AdapterPluginRecord): Promise\u003cServerAdapterModule | null\u003e {\n191\t  try {\n192\t    return await loadExternalAdapterPackage(record.packageName, record.localPath);\n193\t  } catch (err) {\n194\t    logger.warn(\n195\t      { err, packageName: record.packageName, type: record.type },\n196\t      \"Failed to dynamically load external adapter; skipping\",\n197\t    );\n198\t    return null;\n199\t  }\n200\t}\n201\t\n202\t/**\n203\t * Reload an external adapter at runtime (dev iteration without server restart).\n204\t * Busts the ESM module cache via a cache-busting query string.\n205\t */\n206\texport async function reloadExternalAdapter(\n207\t  type: string,\n208\t): Promise\u003cServerAdapterModule | null\u003e {\n209\t  const record = getAdapterPluginByType(type);",
+        "tool_use_id": "toolu_017bjd9Un3M3XxpJYP4J22YX",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "eafe4651-8c6b-4222-873b-15ad69cb600a",
+  "promptId": "0d05d433-ef46-4bba-8105-f1d502a42e1e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "eafe4651-8c6b-4222-873b-15ad69cb600a",
+  "timestamp": "2026-04-30T19:31:36.982Z",
+  "toolUseResult": {
+    "file": {
+      "content": "async function loadFromRecord(record: AdapterPluginRecord): Promise\u003cServerAdapterModule | null\u003e {\n  try {\n    return await loadExternalAdapterPackage(record.packageName, record.localPath);\n  } catch (err) {\n    logger.warn(\n      { err, packageName: record.packageName, type: record.type },\n      \"Failed to dynamically load external adapter; skipping\",\n    );\n    return null;\n  }\n}\n\n/**\n * Reload an external adapter at runtime (dev iteration without server restart).\n * Busts the ESM module cache via a cache-busting query string.\n */\nexport async function reloadExternalAdapter(\n  type: string,\n): Promise\u003cServerAdapterModule | null\u003e {\n  const record = getAdapterPluginByType(type);",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/adapters/plugin-loader.ts",
+      "numLines": 20,
+      "startLine": 190,
+      "totalLines": 278
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "2704f3ce-b040-4a20-b3ba-984393fc186c",
+  "version": "2.1.123"
+}

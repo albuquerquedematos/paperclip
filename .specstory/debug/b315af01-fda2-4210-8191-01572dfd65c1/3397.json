@@ -1,0 +1,27 @@
+{
+  "agentId": "a07aabe33abdc139f",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\t/**\n2\t * routes/adapters.ts\n3\t *\n4\t * CF-native handler for GET /api/adapters.\n5\t *\n6\t * The server-side adapterRoutes() reads plugin manifests from disk and\n7\t * maintains an in-process registry — neither is available in a CF Worker.\n8\t * This handler reads the built-in adapter registry (always available) and\n9\t * the disabled-adapter set from the DB-backed adapter-plugin-store shim.\n10\t *\n11\t * Auth: requires an authenticated actor (board or agent). Unauthenticated\n12\t * requests receive 401.\n13\t */\n14\t\n15\timport type { Hono } from \"hono\";\n16\timport { listServerAdapters, isOverridePaused } from \"../../../../../server/src/adapters/registry.js\";\n17\timport { BUILTIN_ADAPTER_TYPES } from \"../../../../../server/src/adapters/builtin-adapter-types.js\";\n18\timport { getDisabledAdapterTypes } from \"../../../../../server/src/services/adapter-plugin-store.js\";\n19\timport { createHyperdriveDb } from \"../../db/hyperdrive.js\";\n20\timport { resolveActorFromRequest } from \"../../auth/resolve-actor.js\";\n21\timport { resolveDeploymentMode } from \"../env.js\";\n22\timport type { Env } from \"../env.js\";\n23\t\n24\texport function registerAdapterRoutes(app: Hono\u003c{ Bindings: Env }\u003e): void {\n25\t  // -------------------------------------------------------------------------\n26\t  // GET /api/adapters — built-in adapters from registry (external adapters\n27\t  // require FS-backed plugin store not available in CF; built-ins always load)\n28\t  // -------------------------------------------------------------------------\n29\t  app.get(\"/api/adapters\", async (c) =\u003e {\n30\t    const db = createHyperdriveDb(c.env.HYPERDRIVE);\n31\t    const actor = await resolveActorFromRequest(c.req.raw, db, {\n32\t      deploymentMode: resolveDeploymentMode(c.env),\n33\t    });\n34\t    if (!actor) return c.json({ error: \"Unauthorized\" }, 401);\n35\t\n36\t    const adapters = listServerAdapters();\n37\t    const disabledSet = new Set(getDisabledAdapterTypes());\n38\t    const result = adapters\n39\t      .map((adapter) =\u003e ({\n40\t        type: adapter.type,\n41\t        label: adapter.type,\n42\t        source: \"builtin\" as const,\n43\t        modelsCount: (adapter.models ?? []).length,\n44\t        loaded: true,\n45\t        disabled: disabledSet.has(adapter.type),\n46\t        capabilities: {\n47\t          supportsInstructionsBundle: adapter.supportsInstructionsBundle ?? false,\n48\t          supportsSkills: Boolean(adapter.listSkills || adapter.syncSkills),\n49\t          supportsLocalAgentJwt: adapter.supportsLocalAgentJwt ?? false,\n50\t          requiresMaterializedRuntimeSkills: adapter.requiresMaterializedRuntimeSkills ?? false,\n51\t        },\n52\t        overridePaused: BUILTIN_ADAPTER_TYPES.has(adapter.type)\n53\t          ? isOverridePaused(adapter.type)\n54\t          : undefined,\n55\t      }))\n56\t      .sort((a, b) =\u003e a.type.localeCompare(b.type));\n57\t    return c.json(result);\n58\t  });\n59\t}\n60\t\n\n\u003csystem-reminder\u003e\nWhenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.\n\u003c/system-reminder\u003e\n",
+        "tool_use_id": "toolu_01J1XA455Sq1ZkgSVgKb6q6r",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "bccb8685-ac73-43a0-930c-f70f070ddad7",
+  "promptId": "ba04e90f-0d7c-4dcc-9bf9-971187295dfd",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "bccb8685-ac73-43a0-930c-f70f070ddad7",
+  "timestamp": "2026-04-30T21:57:52.792Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "87f46435-d732-4e72-9a1d-caa062d6489f",
+  "version": "2.1.123"
+}

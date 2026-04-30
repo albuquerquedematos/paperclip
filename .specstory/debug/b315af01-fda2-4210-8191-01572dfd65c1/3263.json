@@ -1,0 +1,71 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01D5e4b1VwHqKh5niaXD2YEC",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/wrangler.toml",
+          "new_string": "# ---------------------------------------------------------------------------\n# Cloudflare Containers — run execution services natively on Cloudflare.\n#\n# CF Containers (beta) let Workers communicate with Docker containers via a\n# Durable Object proxy. Each [[containers]] entry must have a matching\n# [[durable_objects.bindings]] entry with the same class_name (see above).\n# The DO starts the container, monitors its lifecycle, and proxies HTTP via\n# this.ctx.container.getTcpPort(8080).\n#\n# Local dev fallback (enable_containers = false in [dev]):\n#   Container DOs fall back to: SIDECAR_URL env var (.dev.vars) →\n#   KV SANDBOX_BRIDGE_URL → localhost:8788.\n#\n# Required secrets (set via `wrangler secret put`):\n#   - none for CF Container paths (DO ↔ container auth is implicit)\n#   - SIDECAR_URL + SIDECAR_API_KEY for non-CF / local-dev direct-URL fallback\n# ---------------------------------------------------------------------------",
+          "old_string": "# ---------------------------------------------------------------------------\n# Cloudflare Containers — run execution services natively on Cloudflare.\n#\n# CF Containers (beta) let Workers communicate with Docker containers via\n# a Fetcher service binding. No external servers needed.\n#\n# Required secrets (set via `wrangler secret put`):\n#   - none for containers (authentication is implicit via the binding)\n#\n# For external sidecar fallback (optional, for non-CF deployments):\n#   wrangler secret put SIDECAR_URL\n#   wrangler secret put SIDECAR_API_KEY\n# ---------------------------------------------------------------------------",
+          "replace_all": false
+        },
+        "name": "Edit",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_0128sRaon2KoubG3AkmzjK1Y",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 358
+      },
+      "cache_creation_input_tokens": 358,
+      "cache_read_input_tokens": 106080,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 358
+          },
+          "cache_creation_input_tokens": 358,
+          "cache_read_input_tokens": 106080,
+          "input_tokens": 1,
+          "output_tokens": 526,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 526,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "44f3e8e3-7072-4334-b196-45fd16d547fa",
+  "requestId": "req_011CaagLWQ3EeGTGjKiX7RpU",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T21:38:41.040Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "d1f759c0-577d-4c2e-9941-4ad958e75b10",
+  "version": "2.1.123"
+}

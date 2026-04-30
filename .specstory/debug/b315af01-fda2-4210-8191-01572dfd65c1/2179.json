@@ -1,0 +1,52 @@
+{
+  "agentId": "ae240282fd51e7edd",
+  "attributionAgent": "Explore",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01UeRdbY4iZLLH1dndEK8GZQ",
+        "input": {
+          "command": "find /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters -name \"*.ts\" -type f -path \"*/src/*\" | grep -E \"(index|main|execute)\" | head -20"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01SpWN3qpJkEN5NSzZkD4y8V",
+    "model": "claude-haiku-4-5-20251001",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": null,
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 982
+      },
+      "cache_creation_input_tokens": 982,
+      "cache_read_input_tokens": 58143,
+      "inference_geo": "not_available",
+      "input_tokens": 6,
+      "output_tokens": 1,
+      "service_tier": "standard"
+    }
+  },
+  "parentUuid": "150f70ca-65b3-46ce-bbbf-eb463d04ed4e",
+  "requestId": "req_011CaaWPYPmZLvzZS6WiMzGA",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T19:28:09.008Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "badc2b72-f7df-4f09-8eed-66da92ae5144",
+  "version": "2.1.123"
+}

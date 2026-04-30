@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "3:  uuid,\n15:    id: uuid(\"id\").primaryKey().defaultRandom(),\n16:    companyId: uuid(\"company_id\").notNull().references(() =\u003e companies.id),\n18:    slug: text(\"slug\").notNull(),\n19:    name: text(\"name\").notNull(),\n22:    sourceType: text(\"source_type\").notNull().default(\"local_path\"),\n23:    sourceLocator: text(\"source_locator\"),\n25:    trustLevel: text(\"trust_level\").notNull().default(\"markdown_only\"),\n28:    metadata: jsonb(\"metadata\").$type\u003cRecord\u003cstring, unknown\u003e\u003e(),\n29:    createdAt: timestamp(\"created_at\", { withTimezone: true }).notNull().defaultNow(),\n30:    updatedAt: timestamp(\"updated_at\", { withTimezone: true }).notNull().defaultNow(),\n33:    companyKeyUniqueIdx: uniqueIndex(\"company_skills_company_key_idx\").on(table.companyId, table.key),\n34:    companyNameIdx: index(\"company_skills_company_name_idx\").on(table.companyId, table.name),",
+        "is_error": false,
+        "tool_use_id": "toolu_01NsGFh2eeW9uNhQ8o6FxQZd",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "80d9ddc1-65d8-4903-8a9f-ca46fc65a737",
+  "promptId": "9aae9721-e466-4259-b66e-e724bd2f2c66",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "80d9ddc1-65d8-4903-8a9f-ca46fc65a737",
+  "timestamp": "2026-04-30T18:20:40.875Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "3:  uuid,\n15:    id: uuid(\"id\").primaryKey().defaultRandom(),\n16:    companyId: uuid(\"company_id\").notNull().references(() =\u003e companies.id),\n18:    slug: text(\"slug\").notNull(),\n19:    name: text(\"name\").notNull(),\n22:    sourceType: text(\"source_type\").notNull().default(\"local_path\"),\n23:    sourceLocator: text(\"source_locator\"),\n25:    trustLevel: text(\"trust_level\").notNull().default(\"markdown_only\"),\n28:    metadata: jsonb(\"metadata\").$type\u003cRecord\u003cstring, unknown\u003e\u003e(),\n29:    createdAt: timestamp(\"created_at\", { withTimezone: true }).notNull().defaultNow(),\n30:    updatedAt: timestamp(\"updated_at\", { withTimezone: true }).notNull().defaultNow(),\n33:    companyKeyUniqueIdx: uniqueIndex(\"company_skills_company_key_idx\").on(table.companyId, table.key),\n34:    companyNameIdx: index(\"company_skills_company_name_idx\").on(table.companyId, table.name),"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "1fe9b1d6-d8b9-4903-a940-58f714777fd6",
+  "version": "2.1.123"
+}

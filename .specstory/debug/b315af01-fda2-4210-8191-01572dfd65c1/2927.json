@@ -1,0 +1,61 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "text": "The install is still sending the package name instead of a local path — the old build is still running. But there's also a deeper issue: even with the latest fix, the sidecar at `127.0.0.1:3101` needs to be **running** for the examples proxy to work.",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_014VQ8oBu1kBj3SvQUQffx3y",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 345
+      },
+      "cache_creation_input_tokens": 345,
+      "cache_read_input_tokens": 146552,
+      "inference_geo": "",
+      "input_tokens": 3,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 345
+          },
+          "cache_creation_input_tokens": 345,
+          "cache_read_input_tokens": 146552,
+          "input_tokens": 3,
+          "output_tokens": 2222,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 2222,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "ff908039-09ca-4cd7-be3c-2b039559f949",
+  "requestId": "req_011CaaexhKtX2cn2cpBMT23t",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T21:21:01.908Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "b4744b6c-e9cb-4659-9963-efc1df329e63",
+  "version": "2.1.123"
+}

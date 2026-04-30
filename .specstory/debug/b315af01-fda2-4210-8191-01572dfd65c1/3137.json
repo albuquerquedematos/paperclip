@@ -1,0 +1,56 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/routes/events.ts has been updated successfully.",
+        "tool_use_id": "toolu_01GpnMsudB8feX3R46VbHMaS",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "a1757f24-dbe4-470d-872f-67c75589c189",
+  "promptId": "7323a41a-dd8a-4783-b590-aea4ab5316a7",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "a1757f24-dbe4-470d-872f-67c75589c189",
+  "timestamp": "2026-04-30T21:33:42.792Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/routes/events.ts",
+    "newString": "    const { 0: client, 1: server } = new WebSocketPair();\n    server.accept();\n    server.addEventListener(\"message\", () =\u003e { /* no-op: no pub/sub bus wired yet */ });\n    server.addEventListener(\"close\", () =\u003e { /* expected: client disconnected */ });\n    server.addEventListener(\"error\", (ev) =\u003e {\n      console.error(\"[EventsWS] WebSocket error:\", ev);\n    });\n    return new Response(null, { status: 101, webSocket: client });",
+    "oldString": "    const { 0: client, 1: server } = new WebSocketPair();\n    server.accept();\n    server.addEventListener(\"message\", () =\u003e { /* no-op: no pub/sub wired yet */ });\n    return new Response(null, { status: 101, webSocket: client });",
+    "originalFile": "/**\n * routes/events.ts\n *\n * CF-native handler for GET /api/companies/:companyId/events/ws.\n *\n * The server-side WebSocket event bus relies on an in-process pub/sub\n * mechanism that does not exist in a CF Worker. This handler accepts the\n * WebSocket upgrade so the frontend does not receive a hard error, but the\n * connection stays silent (no server-sent events) until a Durable Object\n * pub/sub bus is wired up.\n *\n * Auth: the WebSocket protocol does not support request headers once the\n * upgrade completes, so auth is checked before the upgrade response is sent.\n * Unauthenticated requests receive 401 (plain HTTP, before the upgrade).\n *\n * CF-specific caveats:\n *   - WebSocketPair is a CF Workers global; not available in Node.js.\n *   - The connection is accepted but sends no events (stub behaviour).\n *   - TODO: Wire up a Durable Object pub/sub bus for real-time events.\n */\n\nimport type { Hono } from \"hono\";\nimport { createHyperdriveDb } from \"../../db/hyperdrive.js\";\nimport { resolveActorFromRequest } from \"../../auth/resolve-actor.js\";\nimport { resolveDeploymentMode } from \"../env.js\";\nimport type { Env } from \"../env.js\";\n\nexport function registerEventRoutes(app: Hono\u003c{ Bindings: Env }\u003e): void {\n  // -------------------------------------------------------------------------\n  // GET /api/companies/:companyId/events/ws\n  //\n  // CF-native WebSocket upgrade. Without a Durable Object pub/sub bus, the\n  // connection stays open but receives no server-sent events. The frontend\n  // treats this as a connected (but silent) event stream, which is better\n  // than a hard error.\n  // -------------------------------------------------------------------------\n  app.get(\"/api/companies/:companyId/events/ws\", async (c) =\u003e {\n    const upgrade = c.req.header(\"Upgrade\");\n    if (!upgrade || upgrade.toLowerCase() !== \"websocket\") {\n      return c.text(\"Expected WebSocket upgrade\", 426);\n    }\n\n    // Authenticate before accepting the upgrade. Once the 101 is sent the\n    // response is committed, so we must reject unauthenticated callers here.\n    const db = createHyperdriveDb(c.env.HYPERDRIVE);\n    const actor = await resolveActorFromRequest(c.req.raw, db, {\n      deploymentMode: resolveDeploymentMode(c.env),\n    });\n    if (!actor) return new Response(\"Unauthorized\", { status: 401 });\n\n    const { 0: client, 1: server } = new WebSocketPair();\n    server.accept();\n    server.addEventListener(\"message\", () =\u003e { /* no-op: no pub/sub wired yet */ });\n    return new Response(null, { status: 101, webSocket: client });\n  });\n}\n",
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          " ",
+          "     const { 0: client, 1: server } = new WebSocketPair();",
+          "     server.accept();",
+          "-    server.addEventListener(\"message\", () =\u003e { /* no-op: no pub/sub wired yet */ });",
+          "+    server.addEventListener(\"message\", () =\u003e { /* no-op: no pub/sub bus wired yet */ });",
+          "+    server.addEventListener(\"close\", () =\u003e { /* expected: client disconnected */ });",
+          "+    server.addEventListener(\"error\", (ev) =\u003e {",
+          "+      console.error(\"[EventsWS] WebSocket error:\", ev);",
+          "+    });",
+          "     return new Response(null, { status: 101, webSocket: client });",
+          "   });",
+          " }"
+        ],
+        "newLines": 11,
+        "newStart": 50,
+        "oldLines": 7,
+        "oldStart": 50
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "d7035a16-3e75-44cd-9ca9-3d0789f594ac",
+  "version": "2.1.123"
+}

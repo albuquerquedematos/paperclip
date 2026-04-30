@@ -1,0 +1,53 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/cf-extra-routes.ts has been updated successfully.",
+        "tool_use_id": "toolu_01RKGoZnkCkHw7k67sqbCwQZ",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "22f5fadf-7ce1-44a0-97eb-2d51e0b09679",
+  "promptId": "0d05d433-ef46-4bba-8105-f1d502a42e1e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "22f5fadf-7ce1-44a0-97eb-2d51e0b09679",
+  "timestamp": "2026-04-30T19:32:03.090Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/cf-extra-routes.ts",
+    "newString": "import { collapseDuplicatePendingHumanJoinRequests } from \"../../../../server/src/lib/join-request-dedupe.js\";\nimport { resolveHumanInviteRole } from \"../../../../server/src/services/company-member-roles.js\";\nimport { getPluginUiContributionMetadata } from \"../../../../server/src/services/plugin-loader.js\";\nimport { listServerAdapters, isOverridePaused } from \"../../../../server/src/adapters/registry.js\";\nimport { BUILTIN_ADAPTER_TYPES } from \"../../../../server/src/adapters/builtin-adapter-types.js\";\nimport { getDisabledAdapterTypes } from \"../../../../server/src/services/adapter-plugin-store.js\";\nimport { createHyperdriveDb } from \"../db/hyperdrive.js\";\nimport type { Env } from \"./env.js\";",
+    "oldString": "import { collapseDuplicatePendingHumanJoinRequests } from \"../../../../server/src/lib/join-request-dedupe.js\";\nimport { resolveHumanInviteRole } from \"../../../../server/src/services/company-member-roles.js\";\nimport { getPluginUiContributionMetadata } from \"../../../../server/src/services/plugin-loader.js\";\nimport { createHyperdriveDb } from \"../db/hyperdrive.js\";\nimport type { Env } from \"./env.js\";",
+    "originalFile": null,
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          " import { collapseDuplicatePendingHumanJoinRequests } from \"../../../../server/src/lib/join-request-dedupe.js\";",
+          " import { resolveHumanInviteRole } from \"../../../../server/src/services/company-member-roles.js\";",
+          " import { getPluginUiContributionMetadata } from \"../../../../server/src/services/plugin-loader.js\";",
+          "+import { listServerAdapters, isOverridePaused } from \"../../../../server/src/adapters/registry.js\";",
+          "+import { BUILTIN_ADAPTER_TYPES } from \"../../../../server/src/adapters/builtin-adapter-types.js\";",
+          "+import { getDisabledAdapterTypes } from \"../../../../server/src/services/adapter-plugin-store.js\";",
+          " import { createHyperdriveDb } from \"../db/hyperdrive.js\";",
+          " import type { Env } from \"./env.js\";",
+          " "
+        ],
+        "newLines": 9,
+        "newStart": 22,
+        "oldLines": 6,
+        "oldStart": 22
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "2f1c35b8-cd03-4481-8946-cd8df35e32af",
+  "version": "2.1.123"
+}

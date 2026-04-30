@@ -1,0 +1,51 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/package.json has been updated successfully.",
+        "tool_use_id": "toolu_01VEsbqwk1fuMx8f9syyrJo6",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "15acb07c-1597-4410-95f4-1a796babb6cc",
+  "promptId": "9aae9721-e466-4259-b66e-e724bd2f2c66",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "15acb07c-1597-4410-95f4-1a796babb6cc",
+  "timestamp": "2026-04-30T18:16:20.299Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/package.json",
+    "newString": "    \"wrangler\": \"^4.87.0\"",
+    "oldString": "    \"wrangler\": \"^3.0.0\"",
+    "originalFile": "{\n  \"name\": \"@paperclipai/deploy-cloudflare\",\n  \"version\": \"0.1.0\",\n  \"private\": true,\n  \"type\": \"module\",\n  \"main\": \"./src/boot.ts\",\n  \"scripts\": {\n    \"build\": \"node build-worker.mjs\",\n    \"dev\": \"node build-worker.mjs \u0026\u0026 wrangler dev --no-bundle --local\",\n    \"deploy\": \"node build-worker.mjs \u0026\u0026 wrangler deploy --no-bundle\"\n  },\n  \"dependencies\": {\n    \"@paperclipai/db\": \"workspace:*\",\n    \"@paperclipai/shared\": \"workspace:*\",\n    \"drizzle-orm\": \"^0.38.4\",\n    \"hono\": \"^4.0.0\",\n    \"postgres\": \"^3.4.5\"\n  },\n  \"devDependencies\": {\n    \"@cloudflare/workers-types\": \"^4.0.0\",\n    \"@types/express\": \"^5.0.0\",\n    \"@types/node\": \"^25.6.0\",\n    \"express\": \"^5.1.0\",\n    \"typescript\": \"^5.0.0\",\n    \"wrangler\": \"^3.0.0\"\n  }\n}\n",
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          "     \"@types/node\": \"^25.6.0\",",
+          "     \"express\": \"^5.1.0\",",
+          "     \"typescript\": \"^5.0.0\",",
+          "-    \"wrangler\": \"^3.0.0\"",
+          "+    \"wrangler\": \"^4.87.0\"",
+          "   }",
+          " }"
+        ],
+        "newLines": 6,
+        "newStart": 22,
+        "oldLines": 6,
+        "oldStart": 22
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "4a737a00-125b-46fa-a474-564092375349",
+  "version": "2.1.123"
+}

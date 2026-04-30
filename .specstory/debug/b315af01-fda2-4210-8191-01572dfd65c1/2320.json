@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "664:  router.patch(\"/adapters/:type\", expressHandler(patchAdapter, adapterDeps));\n665:  router.patch(\"/adapters/:type/override\", expressHandler(patchAdapterOverride, adapterDeps));\n666:  router.delete(\"/adapters/:type\", expressHandler(deleteAdapter, adapterDeps));\n667:  router.post(\"/adapters/:type/reload\", expressHandler(reloadAdapter, adapterDeps));\n668:  router.post(\"/adapters/:type/reinstall\", expressHandler(reinstallAdapter, adapterDeps));\n669:  router.get(\"/adapters/:type/config-schema\", expressHandler(getAdapterConfigSchema, adapterDeps));\n670:  router.get(\"/adapters/:type/ui-parser.js\", expressHandler(getAdapterUiParser, adapterDeps));",
+        "is_error": false,
+        "tool_use_id": "toolu_019XQTuTE6CMePRcLkXNBSHe",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "547019cc-b9ee-4756-80ff-c6b766761dae",
+  "promptId": "0d05d433-ef46-4bba-8105-f1d502a42e1e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "547019cc-b9ee-4756-80ff-c6b766761dae",
+  "timestamp": "2026-04-30T19:32:28.326Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "664:  router.patch(\"/adapters/:type\", expressHandler(patchAdapter, adapterDeps));\n665:  router.patch(\"/adapters/:type/override\", expressHandler(patchAdapterOverride, adapterDeps));\n666:  router.delete(\"/adapters/:type\", expressHandler(deleteAdapter, adapterDeps));\n667:  router.post(\"/adapters/:type/reload\", expressHandler(reloadAdapter, adapterDeps));\n668:  router.post(\"/adapters/:type/reinstall\", expressHandler(reinstallAdapter, adapterDeps));\n669:  router.get(\"/adapters/:type/config-schema\", expressHandler(getAdapterConfigSchema, adapterDeps));\n670:  router.get(\"/adapters/:type/ui-parser.js\", expressHandler(getAdapterUiParser, adapterDeps));"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "e4e8e95f-c186-4a50-9c16-7fb3b0c3566a",
+  "version": "2.1.123"
+}

@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:497:  const runtimeSessionId = asString(runtimeSessionParams.sessionId, runtime.sessionId ?? \"\");\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:508:  const sessionId = canResumeSession ? runtimeSessionId : null;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:550:    !sessionId \u0026\u0026 bootstrapPromptTemplate.trim().length \u003e 0\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:553:  const wakePrompt = renderPaperclipWakePrompt(context.paperclipWake, { resumedSession: Boolean(sessionId) });\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:554:  const shouldUseResumeDeltaPrompt = Boolean(sessionId) \u0026\u0026 wakePrompt.length \u003e 0;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:579:    if (resumeSessionId) args.push(\"--resume\", resumeSessionId);\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:755:      parsedStream.sessionId ??\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:756:      (asString(parsed.session_id, opts.fallbackSessionId ?? \"\") || opts.fallbackSessionId);\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:759:        sessionId: resolvedSessionId,\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:817:      sessionId: resolvedSessionId,\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:832:    const initial = await runAttempt(sessionId ?? null);\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:837:      sessionId \u0026\u0026\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:848:    if (sessionId \u0026\u0026 (initial.proc.exitCode ?? 0) !== 0) {\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:852:          `unknownSession=${unknownSessionFailure} sessionId=${sessionId}\\n`,\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:859:        `[paperclip] Claude resume session \"${sessionId}\" is unavailable; retrying with a fresh session.\\n`,\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:865:    return toAdapterResult(initial, { fallbackSessionId: runtimeSessionId || runtime.sessionId });",
+        "is_error": false,
+        "tool_use_id": "toolu_01GQHUSPCXUSvUSKLNzhMHFg",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "d4333def-1461-40f8-bbc6-b07fde10f2b5",
+  "promptId": "1792d932-1170-4ea3-9e17-78bf93c2b55e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "d4333def-1461-40f8-bbc6-b07fde10f2b5",
+  "timestamp": "2026-04-30T23:36:37.278Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:497:  const runtimeSessionId = asString(runtimeSessionParams.sessionId, runtime.sessionId ?? \"\");\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:508:  const sessionId = canResumeSession ? runtimeSessionId : null;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:550:    !sessionId \u0026\u0026 bootstrapPromptTemplate.trim().length \u003e 0\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:553:  const wakePrompt = renderPaperclipWakePrompt(context.paperclipWake, { resumedSession: Boolean(sessionId) });\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:554:  const shouldUseResumeDeltaPrompt = Boolean(sessionId) \u0026\u0026 wakePrompt.length \u003e 0;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:579:    if (resumeSessionId) args.push(\"--resume\", resumeSessionId);\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:755:      parsedStream.sessionId ??\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:756:      (asString(parsed.session_id, opts.fallbackSessionId ?? \"\") || opts.fallbackSessionId);\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:759:        sessionId: resolvedSessionId,\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:817:      sessionId: resolvedSessionId,\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:832:    const initial = await runAttempt(sessionId ?? null);\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:837:      sessionId \u0026\u0026\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:848:    if (sessionId \u0026\u0026 (initial.proc.exitCode ?? 0) !== 0) {\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:852:          `unknownSession=${unknownSessionFailure} sessionId=${sessionId}\\n`,\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:859:        `[paperclip] Claude resume session \"${sessionId}\" is unavailable; retrying with a fresh session.\\n`,\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:865:    return toAdapterResult(initial, { fallbackSessionId: runtimeSessionId || runtime.sessionId });"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "3a8948c6-fe15-4858-8ece-709926f8b7fc",
+  "version": "2.1.123"
+}

@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "104\t    // ------------------------------------------------------------------\n105\t    // Step 2: Execute the heartbeat via sidecar (CF Container or bridge)\n106\t    // ------------------------------------------------------------------\n107\t    const executeResult = await step.do(\n108\t      \"execute\",\n109\t      {\n110\t        timeout: \"5 minutes\",\n111\t        retries: { limit: 2, delay: \"5 seconds\", backoff: \"linear\" },\n112\t      },\n113\t      async () =\u003e {\n114\t        const body = JSON.stringify({ agentId, companyId, runId, taskId });\n115\t        const headers = { \"Content-Type\": \"application/json\" };\n116\t\n117\t        let resp: Response;\n118\t        if (this.env.SIDECAR_SERVICE) {\n119\t          // CF-native path: call the sidecar container directly via the\n120\t          // service binding. No network egress, no external server needed.\n121\t          resp = await this.env.SIDECAR_SERVICE.fetch(\n122\t            \"http://sidecar/internal/heartbeat\",\n123\t            { method: \"POST\", headers, body },",
+        "tool_use_id": "toolu_01MZbcR6Z5cADp14XkmeyLcQ",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "da693465-a628-42ab-ae6c-e8ee3eed5716",
+  "promptId": "90af47bf-faac-4347-b1a7-d8ed0c820fb6",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "da693465-a628-42ab-ae6c-e8ee3eed5716",
+  "timestamp": "2026-04-30T20:36:39.020Z",
+  "toolUseResult": {
+    "file": {
+      "content": "    // ------------------------------------------------------------------\n    // Step 2: Execute the heartbeat via sidecar (CF Container or bridge)\n    // ------------------------------------------------------------------\n    const executeResult = await step.do(\n      \"execute\",\n      {\n        timeout: \"5 minutes\",\n        retries: { limit: 2, delay: \"5 seconds\", backoff: \"linear\" },\n      },\n      async () =\u003e {\n        const body = JSON.stringify({ agentId, companyId, runId, taskId });\n        const headers = { \"Content-Type\": \"application/json\" };\n\n        let resp: Response;\n        if (this.env.SIDECAR_SERVICE) {\n          // CF-native path: call the sidecar container directly via the\n          // service binding. No network egress, no external server needed.\n          resp = await this.env.SIDECAR_SERVICE.fetch(\n            \"http://sidecar/internal/heartbeat\",\n            { method: \"POST\", headers, body },",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/runtime/workflows/heartbeat.ts",
+      "numLines": 20,
+      "startLine": 104,
+      "totalLines": 184
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "d35007be-32f0-48d3-bcf5-d31fdcd864b5",
+  "version": "2.1.123"
+}

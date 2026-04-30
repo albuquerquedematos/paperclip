@@ -1,0 +1,70 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01FTYgzr2H8PSXesC394Cwqf",
+        "input": {
+          "command": "COMPANY_ID=$(curl -s http://localhost:8787/api/companies | python3 -c \"import sys,json; d=json.load(sys.stdin); print(d[0]['id'])\")\ncurl -s \"http://localhost:8787/api/companies/$COMPANY_ID/dashboard\" | python3 -m json.tool 2\u003e/dev/null | head -10\necho \"---\"\ncurl -s \"http://localhost:8787/api/companies/stats\" | python3 -m json.tool 2\u003e/dev/null | head -10\necho \"---\"\ncurl -s \"http://localhost:8787/api/nonexistent\" | python3 -m json.tool 2\u003e/dev/null",
+          "description": "Test dashboard, stats, and 501 for unimplemented routes",
+          "timeout": 15000
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01Y8KP8LctiWEnQvLuVc55FL",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 468
+      },
+      "cache_creation_input_tokens": 468,
+      "cache_read_input_tokens": 77765,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 468
+          },
+          "cache_creation_input_tokens": 468,
+          "cache_read_input_tokens": 77765,
+          "input_tokens": 1,
+          "output_tokens": 271,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 271,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "8a2feace-5da7-44a2-a134-ffc2573fae06",
+  "requestId": "req_011CaaPjVkGDmwnNN6qWdAeY",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T18:00:53.962Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "93e1c8ee-9fe5-443f-b9bd-bbc58fbbb451",
+  "version": "2.1.123"
+}

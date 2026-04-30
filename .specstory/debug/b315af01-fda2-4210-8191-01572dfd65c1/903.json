@@ -1,0 +1,29 @@
+{
+  "attachment": {
+    "content": {
+      "file": {
+        "content": "---\nname: Cloudflare Workers local dev\ndescription: CF Workers local dev is working; run pnpm dev:cf from root; key shims and patterns established\ntype: project\noriginSessionId: b315af01-fda2-4210-8191-01572dfd65c1\n---\nCF Workers local dev is working as of 2026-04-30 on branch feat/cloudflare-deployment.\n\n**How to run:** `pnpm dev:cf` from root (or `pnpm dev` inside `packages/deploy-cloudflare`). Runs build-worker.mjs then `wrangler dev --no-bundle --local` on port 8787. Use `.dev.vars` with `DEPLOYMENT_MODE=local_trusted` to bypass auth.\n\n**Key architecture decisions:**\n- Custom esbuild bundler (build-worker.mjs) pre-bundles worker because wrangler 3 has no alias/external config\n- Route handlers close over DB via service instances → DB must be rebuilt per-request (not cached across requests) to avoid CF Workers \"Cannot perform I/O on behalf of a different request\" error\n- Route path regexps ARE cached (compiledPathCache module var) since they're stateless\n- 229 routes compiled from Express-style route factories via express-router-bridge\n\n**Shims in packages/deploy-cloudflare/src/shims/:**\n- pino, pino-http → pino-shim.ts (console-backed logger)\n- express → cf-express-shim.ts (zero-dep Router with param() no-op)\n- server/src/middleware/logger.ts → server-logger-shim.ts (esbuild plugin intercept)\n- server/src/version.ts → server-version-shim.ts (no createRequire)\n- dotenv, multer → no-op shims (not needed in CF)\n- node:http/https/net/tls/fs/etc. → stubs\n- Banner polyfills: process.hrtime, process.cwd, process.chdir, process.exit\n\n**Why:** Getting Node.js server codebase (Express, pino, multer, AWS SDK, postgres) to run in CF Workers which provides only a subset of Node.js APIs via nodejs_compat flag.\n",
+        "filePath": "/Users/migmac/.claude/projects/-Users-migmac-Documents-GitHub--ABM-paperclip/memory/project_cf_dev.md",
+        "numLines": 27,
+        "startLine": 1,
+        "totalLines": 27
+      },
+      "type": "text"
+    },
+    "displayPath": "../../../../.claude/projects/-Users-migmac-Documents-GitHub--ABM-paperclip/memory/project_cf_dev.md",
+    "filename": "/Users/migmac/.claude/projects/-Users-migmac-Documents-GitHub--ABM-paperclip/memory/project_cf_dev.md",
+    "type": "file"
+  },
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "parentUuid": "5188e3ec-2528-4aaa-90c4-3a5c9a3a9a85",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T17:53:52.533Z",
+  "type": "attachment",
+  "userType": "external",
+  "uuid": "1d286407-2b06-4fe0-8af1-b6df3aaa3a5d",
+  "version": "2.1.123"
+}

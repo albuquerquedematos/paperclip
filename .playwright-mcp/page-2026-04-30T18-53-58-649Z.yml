@@ -1,0 +1,152 @@
+- generic [ref=e3]:
+  - link "Skip to Main Content" [ref=e4] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e5]:
+    - generic [ref=e6]:
+      - generic [ref=e7]:
+        - generic [ref=e8]:
+          - img [ref=e10]
+          - status [ref=e13]
+          - button "Add company" [ref=e16]:
+            - img [ref=e17]
+        - complementary [ref=e19]:
+          - generic [ref=e20]:
+            - img [ref=e21]
+            - generic [ref=e24]: Instance Settings
+          - navigation [ref=e25]:
+            - generic [ref=e26]:
+              - link "Profile" [ref=e27] [cursor=pointer]:
+                - /url: /instance/settings/profile
+                - img [ref=e29]
+                - generic [ref=e33]: Profile
+              - link "General" [ref=e34] [cursor=pointer]:
+                - /url: /instance/settings/general
+                - img [ref=e36]
+                - generic [ref=e37]: General
+              - link "Access" [ref=e38] [cursor=pointer]:
+                - /url: /instance/settings/access
+                - img [ref=e40]
+                - generic [ref=e42]: Access
+              - link "Heartbeats" [ref=e43] [cursor=pointer]:
+                - /url: /instance/settings/heartbeats
+                - img [ref=e45]
+                - generic [ref=e48]: Heartbeats
+              - link "Experimental" [ref=e49] [cursor=pointer]:
+                - /url: /instance/settings/experimental
+                - img [ref=e51]
+                - generic [ref=e53]: Experimental
+              - link "Plugins" [ref=e54] [cursor=pointer]:
+                - /url: /instance/settings/plugins
+                - img [ref=e56]
+                - generic [ref=e58]: Plugins
+              - link "Adapters" [ref=e59] [cursor=pointer]:
+                - /url: /instance/settings/adapters
+                - img [ref=e61]
+                - generic [ref=e64]: Adapters
+      - button "Open account menu" [ref=e66]:
+        - generic [ref=e68]: BO
+        - generic [ref=e69]: Board
+    - generic [ref=e70]:
+      - navigation "breadcrumb" [ref=e74]:
+        - list [ref=e75]:
+          - listitem [ref=e76]:
+            - link "Instance Settings" [disabled] [ref=e77]
+          - listitem [ref=e78]:
+            - img [ref=e79]
+          - listitem [ref=e81]:
+            - link "General" [disabled] [ref=e82]
+      - main [active] [ref=e84]:
+        - generic [ref=e85]:
+          - generic [ref=e86]:
+            - generic [ref=e87]:
+              - img [ref=e88]
+              - heading "General" [level=1] [ref=e89]
+            - paragraph [ref=e90]: Configure instance-wide preferences including log display, keyboard shortcuts, backup retention, and data sharing.
+          - generic [ref=e92]:
+            - heading "Deployment and auth" [level=2] [ref=e94]
+            - generic [ref=e95]: Authenticated private mode requires sign-in and is intended for LAN, VPN, or other private-network deployments.
+            - generic [ref=e96]:
+              - generic [ref=e97]:
+                - generic [ref=e98]: Auth readiness
+                - generic [ref=e99]: Not ready
+              - generic [ref=e100]:
+                - generic [ref=e101]: Bootstrap status
+                - generic [ref=e102]: Ready
+              - generic [ref=e103]:
+                - generic [ref=e104]: Bootstrap invite
+                - generic [ref=e105]: None
+          - generic [ref=e107]:
+            - generic [ref=e108]:
+              - heading "Censor username in logs" [level=2] [ref=e109]
+              - paragraph [ref=e110]: Hide the username segment in home-directory paths and similar operator-visible log output. Standalone username mentions outside of paths are not yet masked in the live transcript view. This is off by default.
+            - switch "Toggle username log censoring" [ref=e111]
+          - generic [ref=e113]:
+            - generic [ref=e114]:
+              - heading "Keyboard shortcuts" [level=2] [ref=e115]
+              - paragraph [ref=e116]: Enable app keyboard shortcuts, including inbox navigation and global shortcuts like creating issues or toggling panels. This is off by default.
+            - switch "Toggle keyboard shortcuts" [ref=e117]
+          - generic [ref=e119]:
+            - generic [ref=e120]:
+              - heading "Backup retention" [level=2] [ref=e121]
+              - paragraph [ref=e122]: Configure how long automatic database backups are retained. Backups run roughly every hour and are compressed with gzip. Within the daily window all backups are kept; beyond that, one backup per week and one per month are preserved.
+            - generic [ref=e123]:
+              - heading "Daily" [level=3] [ref=e124]
+              - generic [ref=e125]:
+                - button "3 days" [ref=e126]:
+                  - generic [ref=e127]: 3 days
+                - button "7 days" [ref=e128]:
+                  - generic [ref=e129]: 7 days
+                - button "14 days" [ref=e130]:
+                  - generic [ref=e131]: 14 days
+            - generic [ref=e132]:
+              - heading "Weekly" [level=3] [ref=e133]
+              - generic [ref=e134]:
+                - button "1 week" [ref=e135]:
+                  - generic [ref=e136]: 1 week
+                - button "2 weeks" [ref=e137]:
+                  - generic [ref=e138]: 2 weeks
+                - button "4 weeks" [ref=e139]:
+                  - generic [ref=e140]: 4 weeks
+            - generic [ref=e141]:
+              - heading "Monthly" [level=3] [ref=e142]
+              - generic [ref=e143]:
+                - button "1 month" [ref=e144]:
+                  - generic [ref=e145]: 1 month
+                - button "3 months" [ref=e146]:
+                  - generic [ref=e147]: 3 months
+                - button "6 months" [ref=e148]:
+                  - generic [ref=e149]: 6 months
+          - generic [ref=e151]:
+            - generic [ref=e152]:
+              - heading "AI feedback sharing" [level=2] [ref=e153]
+              - paragraph [ref=e154]: Control whether thumbs up and thumbs down votes can send the voted AI output to Paperclip Labs. Votes are always saved locally.
+              - link "Read our terms of service" [ref=e155] [cursor=pointer]:
+                - /url: https://paperclip.ing/tos
+            - generic [ref=e156]: No default is saved yet. The next thumbs up or thumbs down choice will ask once and then save the answer here.
+            - generic [ref=e157]:
+              - button "Always allow Share voted AI outputs automatically." [ref=e158]:
+                - generic [ref=e159]: Always allow
+                - generic [ref=e160]: Share voted AI outputs automatically.
+              - button "Don't allow Keep voted AI outputs local only." [ref=e161]:
+                - generic [ref=e162]: Don't allow
+                - generic [ref=e163]: Keep voted AI outputs local only.
+            - paragraph [ref=e164]:
+              - text: To retest the first-use prompt in local dev, remove the
+              - code [ref=e165]: feedbackDataSharingPreference
+              - text: key from the
+              - code [ref=e166]: instance_settings.general
+              - text: JSON row for this instance, or set it back to
+              - code [ref=e167]: "\"prompt\""
+              - text: . Unset and
+              - code [ref=e168]: "\"prompt\""
+              - text: both mean no default has been chosen yet.
+          - generic [ref=e170]:
+            - generic [ref=e171]:
+              - heading "Sign out" [level=2] [ref=e172]
+              - paragraph [ref=e173]: Sign out of this Paperclip instance. You will be redirected to the login page.
+            - button "Sign out" [ref=e174]:
+              - img
+              - text: Sign out
+  - generic [ref=e175]:
+    - heading "Command Palette" [level=2] [ref=e176]
+    - paragraph [ref=e177]: Search for a command to run...

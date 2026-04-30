@@ -1,0 +1,71 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01PCLRwt4m7fYQUa94EsNbaW",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/wrangler.toml",
+          "new_string": "[triggers]\ncrons = [\n  \"*/5 * * * *\",   # heartbeat sweep every 5 minutes\n  \"0 * * * *\",     # budget threshold check every hour\n  \"0 3 * * *\",     # DB backup daily at 03:00 UTC\n]\n\n# ---------------------------------------------------------------------------\n# Cloudflare Containers — run execution services natively on Cloudflare.\n#\n# CF Containers (beta) let Workers communicate with Docker containers via\n# a Fetcher service binding. No external servers needed.\n#\n# Required secrets (set via `wrangler secret put`):\n#   - none for containers (authentication is implicit via the binding)\n#\n# For external sidecar fallback (optional, for non-CF deployments):\n#   wrangler secret put SIDECAR_URL\n#   wrangler secret put SIDECAR_API_KEY\n# ---------------------------------------------------------------------------\n\n# Sidecar — companion Node.js server for agent heartbeat execution, plugin job\n# lifecycle (claim/execute/complete), filesystem and git operations.\n# Exposes POST /internal/heartbeat, POST /internal/plugin-jobs/:id/* endpoints.\n[[containers]]\nbinding = \"SIDECAR_SERVICE\"\nimage = \"ghcr.io/paperclipai/paperclip-sidecar:latest\"\n\n# Plugin sandbox — isolated command execution environment for adapter plugins.\n# Exposes POST /execute and POST /cancel/:runId (same wire format as the\n# sandbox bridge HTTP API so both executors are fully interchangeable).\n[[containers]]\nbinding = \"PLUGIN_CONTAINER\"\nimage = \"ghcr.io/paperclipai/plugin-sandbox:latest\"",
+          "old_string": "[triggers]\ncrons = [\n  \"*/5 * * * *\",   # heartbeat sweep every 5 minutes\n  \"0 * * * *\",     # budget threshold check every hour\n  \"0 3 * * *\",     # DB backup daily at 03:00 UTC\n]",
+          "replace_all": false
+        },
+        "name": "Edit",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01AFsy5yD2e5xVwFZhYpUaAA",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 345
+      },
+      "cache_creation_input_tokens": 345,
+      "cache_read_input_tokens": 58242,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 345
+          },
+          "cache_creation_input_tokens": 345,
+          "cache_read_input_tokens": 58242,
+          "input_tokens": 1,
+          "output_tokens": 588,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 588,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "f51726e4-2b9f-49e7-8cbd-cdf6bce5e497",
+  "requestId": "req_011CaaZXt4GubA7JmSgpMpBb",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T20:09:29.033Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "05ccfffe-8f7e-4943-a285-2ce07e7e4cf2",
+  "version": "2.1.123"
+}

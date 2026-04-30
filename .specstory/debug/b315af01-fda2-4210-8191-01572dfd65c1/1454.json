@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "export const listJoinRequestsQuerySchema = z.object({\n  status: z.enum(JOIN_REQUEST_STATUSES).optional(),\n  requestType: z.enum(JOIN_REQUEST_TYPES).optional(),\n});\n\nexport type ListJoinRequestsQuery = z.infer\u003ctypeof listJoinRequestsQuerySchema\u003e;\n\nexport const listCompanyInvitesQuerySchema = z.object({\n  state: z.enum([\"active\", \"revoked\", \"accepted\", \"expired\"]).optional(),\n  limit: z.coerce.number().int().min(1).max(100).optional().default(20),\n  offset: z.coerce.number().int().min(0).optional().default(0),",
+        "is_error": false,
+        "tool_use_id": "toolu_011dMByuU89gKHfKtKjDnohP",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "c4a71b41-7bab-49cf-889d-a8844402b847",
+  "promptId": "9aae9721-e466-4259-b66e-e724bd2f2c66",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "c4a71b41-7bab-49cf-889d-a8844402b847",
+  "timestamp": "2026-04-30T18:28:14.173Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "export const listJoinRequestsQuerySchema = z.object({\n  status: z.enum(JOIN_REQUEST_STATUSES).optional(),\n  requestType: z.enum(JOIN_REQUEST_TYPES).optional(),\n});\n\nexport type ListJoinRequestsQuery = z.infer\u003ctypeof listJoinRequestsQuerySchema\u003e;\n\nexport const listCompanyInvitesQuerySchema = z.object({\n  state: z.enum([\"active\", \"revoked\", \"accepted\", \"expired\"]).optional(),\n  limit: z.coerce.number().int().min(1).max(100).optional().default(20),\n  offset: z.coerce.number().int().min(0).optional().default(0),"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "29839189-3d0d-4bc7-8f8d-d65699f92c4f",
+  "version": "2.1.123"
+}

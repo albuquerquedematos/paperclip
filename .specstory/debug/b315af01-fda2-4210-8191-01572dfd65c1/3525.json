@@ -1,0 +1,93 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/routes/company-skills-cf.ts has been updated successfully.",
+        "tool_use_id": "toolu_01XtwBqg3BRCtbb6u29zBVRA",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "bca1cb2b-520a-43d5-902a-289c1d88b093",
+  "promptId": "ba04e90f-0d7c-4dcc-9bf9-971187295dfd",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "bca1cb2b-520a-43d5-902a-289c1d88b093",
+  "timestamp": "2026-04-30T22:02:30.771Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/routes/company-skills-cf.ts",
+    "newString": "// ---------------------------------------------------------------------------\n// Sidecar proxy (for filesystem-bound routes)\n// ---------------------------------------------------------------------------\n\n/**\n * Proxy a request to the sidecar at the same path. Caller Authorization\n * headers are stripped; SIDECAR_API_KEY is added for direct-URL fallback.\n */\nasync function proxyToSidecar(c: Context\u003c{ Bindings: Env }\u003e): Promise\u003cResponse\u003e {\n  const env = c.env;\n  const url = new URL(c.req.url);\n  const path = url.pathname + url.search;\n  const ct = c.req.header(\"Content-Type\");\n  const headers = new Headers();\n  if (ct) headers.set(\"Content-Type\", ct);\n\n  if (env.SIDECAR_SERVICE) {\n    const stub = env.SIDECAR_SERVICE.get(env.SIDECAR_SERVICE.idFromName(\"sidecar\"));\n    return stub.fetch(`http://sidecar${path}`, {\n      method: c.req.method,\n      headers,\n      body: c.req.raw.body,\n    });\n  }\n  const baseUrl = env.SIDECAR_URL;\n  if (!baseUrl) {\n    return c.json(\n      { error: \"Operation requires the sidecar: configure SIDECAR_URL or SIDECAR_SERVICE\" },\n      503,\n    );\n  }\n  if (env.SIDECAR_API_KEY) headers.set(\"Authorization\", `Bearer ${env.SIDECAR_API_KEY}`);\n  try {\n    return await fetch(`${baseUrl}${path}`, {\n      method: c.req.method,\n      headers,\n      body: c.req.raw.body,\n    });\n  } catch {\n    return c.json({ error: \"Sidecar unreachable\" }, 503);\n  }\n}\n\n// ---------------------------------------------------------------------------\n// Route registration\n// ---------------------------------------------------------------------------\n\nexport function registerCompanySkillRoutes(app: Hono\u003c{ Bindings: Env }\u003e): void {",
+    "oldString": "// ---------------------------------------------------------------------------\n// Route registration\n// ---------------------------------------------------------------------------\n\nexport function registerCompanySkillRoutes(app: Hono\u003c{ Bindings: Env }\u003e): void {",
+    "originalFile": "/**\n * routes/company-skills-cf.ts\n *\n * CF-native handlers for /api/companies/:companyId/skills/*.\n *\n * The server-side companySkillService relies on the host filesystem for\n * SKILL.md inventory sync, file reads, and local-path mutations. CF Workers\n * have no filesystem, so we split the work two ways:\n *\n *   1. DB-readable routes (list, detail, update-status) read directly from\n *      Hyperdrive using `deriveSkillSource` for source metadata. These are\n *      always available, with `sourcePath: null` and no inventory refresh.\n *   2. File/install routes (POST/PATCH/DELETE skills, files, install-update)\n *      proxy to the sidecar, which runs the original server handlers with\n *      filesystem access.\n *\n * Auth: every handler resolves an actor; unauthenticated callers get 401.\n */\n\nimport type { Context, Hono } from \"hono\";\nimport { and, asc, eq } from \"drizzle-orm\";\nimport { agents, companySkills } from \"@paperclipai/db\";\nimport { createHyperdriveDb } from \"../../db/hyperdrive.js\";\nimport { resolveActorFromRequest } from \"../../auth/resolve-actor.js\";\nimport { resolveDeploymentMode } from \"../env.js\";\nimport type { Env } from \"../env.js\";\n\n// ---------------------------------------------------------------------------\n// Skill source derivation (inlined from server — CF-safe subset)\n// ---------------------------------------------------------------------------\n\nexport type SkillSourceBadge = \"paperclip\" | \"skills_sh\" | \"github\" | \"url\" | \"local\" | \"catalog\";\n\n/**\n * Derives display metadata for a skill's source.\n *\n * The `sourcePath` field is always null in CF Workers because local paths\n * are host-side filesystem locations that do not exist in the worker sandbox.\n */\nexport function deriveSkillSource(skill: {\n  sourceType: string;\n  sourceLocator: string | null;\n  metadata: unknown;\n}): {\n  editable: boolean;\n  editableReason: string | null;\n  sourceLabel: string | null;\n  sourceBadge: SkillSourceBadge;\n  sourcePath: null;\n} {\n  const meta =\n    skill.metadata \u0026\u0026 typeof skill.metadata === \"object\" \u0026\u0026 !Array.isArray(skill.metadata)\n      ? (skill.metadata as Record\u003cstring, unknown\u003e)\n      : {};\n\n  if (meta.sourceKind === \"paperclip_bundled\") {\n    return { editable: false, editableReason: \"Bundled Paperclip skills are read-only.\", sourceLabel: \"Paperclip bundled\", sourceBadge: \"paperclip\", sourcePath: null };\n  }\n  if (skill.sourceType === \"skills_sh\") {\n    return { editable: false, editableReason: \"Skills.sh-managed skills are read-only.\", sourceLabel: skill.sourceLocator, sourceBadge: \"skills_sh\", sourcePath: null };\n  }\n  if (skill.sourceType === \"github\") {\n    const owner = typeof meta.owner === \"string\" ? meta.owner : null;\n    const repo = typeof meta.repo === \"string\" ? meta.repo : null;\n    return { editable: false, editableReason: \"Remote GitHub skills are read-only.\", sourceLabel: owner \u0026\u0026 repo ? `${owner}/${repo}` : skill.sourceLocator, sourceBadge: \"github\", sourcePath: null };\n  }\n  if (skill.sourceType === \"url\") {\n    return { editable: false, editableReason: \"URL-based skills are read-only.\", sourceLabel: skill.sourceLocator, sourceBadge: \"url\", sourcePath: null };\n  }\n  if (skill.sourceType === \"local_path\") {\n    return { editable: true, editableReason: null, sourceLabel: skill.sourceLocator, sourceBadge: \"local\", sourcePath: null };\n  }\n  return { editable: false, editableReason: \"This skill source is read-only.\", sourceLabel: skill.sourceLocator, sourceBadge: \"catalog\", sourcePath: null };\n}\n\n// ---------------------------------------------------------------------------\n// Route registration\n// ---------------------------------------------------------------------------\n\nexport function registerCompanySkillRoutes(app: Hono\u003c{ Bindings: Env }\u003e): void {\n  // -------------------------------------------------------------------------\n  // GET /api/companies/:companyId/skills\n  //\n  // Mirrors companySkillService.list() but skips ensureSkillInventoryCurrent\n  // (which uses node:fs) since CF Workers have no host filesystem.\n  // -------------------------------------------------------------------------\n  app.get(\"/api/companies/:companyId/skills\", async (c) =\u003e {\n    const companyId = c.req.param(\"companyId\");\n    const db = createHyperdriveDb(c.env.HYPERDRIVE);\n    const actor = await resolveActorFromRequest(c.req.raw, db, {\n      deploymentMode: resolveDeploymentMode(c.env),\n    });\n    if (!actor) return c.json({ error: \"Unauthorized\" }, 401);\n\n    const rows = await db\n      .select({\n        id: companySkills.id,\n        companyId: companySkills.companyId,\n        key: companySkills.key,\n        slug: companySkills.slug,\n        name: companySkills.name,\n        description: companySkills.description,\n        sourceType: companySkills.sourceType,\n        sourceLocator: companySkills.sourceLocator,\n        sourceRef: companySkills.sourceRef,\n        trustLevel: companySkills.trustLevel,\n        compatibility: companySkills.compatibility,\n        fileInventory: companySkills.fileInventory,\n        metadata: companySkills.metadata,\n        createdAt: companySkills.createdAt,\n        updatedAt: companySkills.updatedAt,\n      })\n      .from(companySkills)\n      .where(eq(companySkills.companyId, companyId))\n      .orderBy(asc(companySkills.name), asc(companySkills.key));\n\n    // attachedAgentCount: resolveDesiredSkillKeys uses non-exported internals;\n    // query agents and do a simple adapterConfig scan instead.\n    const agentRows = await db\n      .select({ adapterConfig: agents.adapterConfig })\n      .from(agents)\n      .where(eq(agents.companyId, companyId));\n\n    const result = rows.map((row) =\u003e {\n      const source = deriveSkillSource({\n        sourceType: row.sourceType,\n        sourceLocator: row.sourceLocator ?? null,\n        metadata: row.metadata,\n      });\n\n      const attachedAgentCount = agentRows.filter((agent) =\u003e {\n        const cfg = agent.adapterConfig;\n        if (!cfg || typeof cfg !== \"object\" || Array.isArray(cfg)) return false;\n        const skillsValue = (cfg as Record\u003cstring, unknown\u003e).skills;\n        if (!Array.isArray(skillsValue)) return false;\n        return skillsValue.some(\n          (entry) =\u003e\n            (typeof entry === \"string\" \u0026\u0026 entry === row.key) ||\n            (entry \u0026\u0026 typeof entry === \"object\" \u0026\u0026 (entry as Record\u003cstring, unknown\u003e).key === row.key),\n        );\n      }).length;\n\n      return {\n        id: row.id,\n        companyId: row.companyId,\n        key: row.key,\n        slug: row.slug,\n        name: row.name,\n        description: row.description ?? null,\n        sourceType: row.sourceType,\n        sourceLocator: row.sourceLocator ?? null,\n        sourceRef: row.sourceRef ?? null,\n        trustLevel: row.trustLevel,\n        compatibility: row.compatibility,\n        fileInventory: Array.isArray(row.fileInventory) ? row.fileInventory : [],\n        metadata: row.metadata ?? null,\n        createdAt: row.createdAt,\n        updatedAt: row.updatedAt,\n        attachedAgentCount,\n        ...source,\n      };\n    });\n\n    return c.json(result);\n  });\n}\n",
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          " }",
+          " ",
+          " // ---------------------------------------------------------------------------",
+          "+// Sidecar proxy (for filesystem-bound routes)",
+          "+// ---------------------------------------------------------------------------",
+          "+",
+          "+/**",
+          "+ * Proxy a request to the sidecar at the same path. Caller Authorization",
+          "+ * headers are stripped; SIDECAR_API_KEY is added for direct-URL fallback.",
+          "+ */",
+          "+async function proxyToSidecar(c: Context\u003c{ Bindings: Env }\u003e): Promise\u003cResponse\u003e {",
+          "+  const env = c.env;",
+          "+  const url = new URL(c.req.url);",
+          "+  const path = url.pathname + url.search;",
+          "+  const ct = c.req.header(\"Content-Type\");",
+          "+  const headers = new Headers();",
+          "+  if (ct) headers.set(\"Content-Type\", ct);",
+          "+",
+          "+  if (env.SIDECAR_SERVICE) {",
+          "+    const stub = env.SIDECAR_SERVICE.get(env.SIDECAR_SERVICE.idFromName(\"sidecar\"));",
+          "+    return stub.fetch(`http://sidecar${path}`, {",
+          "+      method: c.req.method,",
+          "+      headers,",
+          "+      body: c.req.raw.body,",
+          "+    });",
+          "+  }",
+          "+  const baseUrl = env.SIDECAR_URL;",
+          "+  if (!baseUrl) {",
+          "+    return c.json(",
+          "+      { error: \"Operation requires the sidecar: configure SIDECAR_URL or SIDECAR_SERVICE\" },",
+          "+      503,",
+          "+    );",
+          "+  }",
+          "+  if (env.SIDECAR_API_KEY) headers.set(\"Authorization\", `Bearer ${env.SIDECAR_API_KEY}`);",
+          "+  try {",
+          "+    return await fetch(`${baseUrl}${path}`, {",
+          "+      method: c.req.method,",
+          "+      headers,",
+          "+      body: c.req.raw.body,",
+          "+    });",
+          "+  } catch {",
+          "+    return c.json({ error: \"Sidecar unreachable\" }, 503);",
+          "+  }",
+          "+}",
+          "+",
+          "+// ---------------------------------------------------------------------------",
+          " // Route registration",
+          " // ---------------------------------------------------------------------------",
+          " "
+        ],
+        "newLines": 49,
+        "newStart": 74,
+        "oldLines": 6,
+        "oldStart": 74
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "7560428e-2ba9-4696-94f2-f1e407fdfa40",
+  "version": "2.1.123"
+}

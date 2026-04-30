@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "477\texport function listServerAdapters(): ServerAdapterModule[] {\n478\t  return Array.from(adaptersByType.values());\n479\t}\n480\t\n481\t/**\n482\t * List adapters excluding those that are disabled in settings.\n483\t * Used for menus and agent creation flows — disabled adapters remain\n484\t * functional for existing agents but hidden from selection.\n485\t */\n486\texport function listEnabledServerAdapters(): ServerAdapterModule[] {\n487\t  const disabled = getDisabledAdapterTypesFromStore();\n488\t  const disabledSet = disabled.length \u003e 0 ? new Set(disabled) : null;\n489\t  return disabledSet\n490\t    ? Array.from(adaptersByType.values()).filter((a) =\u003e !disabledSet.has(a.type))\n491\t    : Array.from(adaptersByType.values());\n492\t}\n493\t\n494\texport async function detectAdapterModel(\n495\t  type: string,\n496\t): Promise\u003c{ model: string; provider: string; source: string; candidates?: string[] } | null\u003e {",
+        "tool_use_id": "toolu_018WkYtSC4YG1QUq1vFuombw",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "e68c00db-a4ed-4f91-9730-4ef2f7797997",
+  "promptId": "8e37c333-7c8a-4b0c-ae99-027b99e1bf51",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "e68c00db-a4ed-4f91-9730-4ef2f7797997",
+  "timestamp": "2026-04-30T19:26:39.391Z",
+  "toolUseResult": {
+    "file": {
+      "content": "export function listServerAdapters(): ServerAdapterModule[] {\n  return Array.from(adaptersByType.values());\n}\n\n/**\n * List adapters excluding those that are disabled in settings.\n * Used for menus and agent creation flows — disabled adapters remain\n * functional for existing agents but hidden from selection.\n */\nexport function listEnabledServerAdapters(): ServerAdapterModule[] {\n  const disabled = getDisabledAdapterTypesFromStore();\n  const disabledSet = disabled.length \u003e 0 ? new Set(disabled) : null;\n  return disabledSet\n    ? Array.from(adaptersByType.values()).filter((a) =\u003e !disabledSet.has(a.type))\n    : Array.from(adaptersByType.values());\n}\n\nexport async function detectAdapterModel(\n  type: string,\n): Promise\u003c{ model: string; provider: string; source: string; candidates?: string[] } | null\u003e {",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/adapters/registry.ts",
+      "numLines": 20,
+      "startLine": 477,
+      "totalLines": 563
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "aaf044e8-d606-4b92-9512-f25c4de6d2f3",
+  "version": "2.1.123"
+}

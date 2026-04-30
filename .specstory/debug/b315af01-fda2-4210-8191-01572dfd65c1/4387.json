@@ -1,0 +1,89 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/parse.ts has been updated successfully.",
+        "tool_use_id": "toolu_01VWTXB1hLXCusSSA3sMvBCi",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "535ba781-41a1-4ffe-b3ab-50e7a23d2b06",
+  "promptId": "bbb6be00-c456-48d1-b25a-d991686281be",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "535ba781-41a1-4ffe-b3ab-50e7a23d2b06",
+  "timestamp": "2026-04-30T23:22:54.388Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/parse.ts",
+    "newString": "const UNKNOWN_SESSION_RE =\n  /no conversation found with session id|unknown session|session .* not found/i;\n\nexport function isClaudeUnknownSessionError(parsed: Record\u003cstring, unknown\u003e): boolean {\n  const resultText = asString(parsed.result, \"\").trim();\n  const allMessages = [resultText, ...extractClaudeErrorMessages(parsed)]\n    .map((msg) =\u003e msg.trim())\n    .filter(Boolean);\n\n  return allMessages.some((msg) =\u003e UNKNOWN_SESSION_RE.test(msg));\n}\n\n/**\n * Detect the unknown-session error from any signal claude produced.\n *\n * Use this when the parsed JSON may be absent — claude often exits with\n * code 1 and writes the error to stderr without producing stream JSON.\n * Checking parsed alone misses those cases and the retry-with-fresh-session\n * fallback never fires.\n */\nexport function detectClaudeUnknownSession(input: {\n  parsed?: Record\u003cstring, unknown\u003e | null;\n  stdout?: string | null;\n  stderr?: string | null;\n}): boolean {\n  const messages: string[] = [];\n  if (input.parsed) {\n    const resultText = asString(input.parsed.result, \"\").trim();\n    if (resultText) messages.push(resultText);\n    messages.push(...extractClaudeErrorMessages(input.parsed));\n  }\n  if (input.stderr) messages.push(input.stderr);\n  if (input.stdout) messages.push(input.stdout);\n  return messages.some((msg) =\u003e UNKNOWN_SESSION_RE.test(msg));\n}",
+    "oldString": "export function isClaudeUnknownSessionError(parsed: Record\u003cstring, unknown\u003e): boolean {\n  const resultText = asString(parsed.result, \"\").trim();\n  const allMessages = [resultText, ...extractClaudeErrorMessages(parsed)]\n    .map((msg) =\u003e msg.trim())\n    .filter(Boolean);\n\n  return allMessages.some((msg) =\u003e\n    /no conversation found with session id|unknown session|session .* not found/i.test(msg),\n  );\n}",
+    "originalFile": null,
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          "   return /max(?:imum)?\\s+turns?/i.test(resultText);",
+          " }",
+          " ",
+          "+const UNKNOWN_SESSION_RE =",
+          "+  /no conversation found with session id|unknown session|session .* not found/i;",
+          "+",
+          " export function isClaudeUnknownSessionError(parsed: Record\u003cstring, unknown\u003e): boolean {",
+          "   const resultText = asString(parsed.result, \"\").trim();",
+          "   const allMessages = [resultText, ...extractClaudeErrorMessages(parsed)]",
+          "     .map((msg) =\u003e msg.trim())",
+          "     .filter(Boolean);",
+          " ",
+          "-  return allMessages.some((msg) =\u003e",
+          "-    /no conversation found with session id|unknown session|session .* not found/i.test(msg),",
+          "-  );",
+          "+  return allMessages.some((msg) =\u003e UNKNOWN_SESSION_RE.test(msg));",
+          " }",
+          " ",
+          "+/**",
+          "+ * Detect the unknown-session error from any signal claude produced.",
+          "+ *",
+          "+ * Use this when the parsed JSON may be absent — claude often exits with",
+          "+ * code 1 and writes the error to stderr without producing stream JSON.",
+          "+ * Checking parsed alone misses those cases and the retry-with-fresh-session",
+          "+ * fallback never fires.",
+          "+ */",
+          "+export function detectClaudeUnknownSession(input: {",
+          "+  parsed?: Record\u003cstring, unknown\u003e | null;",
+          "+  stdout?: string | null;",
+          "+  stderr?: string | null;",
+          "+}): boolean {",
+          "+  const messages: string[] = [];",
+          "+  if (input.parsed) {",
+          "+    const resultText = asString(input.parsed.result, \"\").trim();",
+          "+    if (resultText) messages.push(resultText);",
+          "+    messages.push(...extractClaudeErrorMessages(input.parsed));",
+          "+  }",
+          "+  if (input.stderr) messages.push(input.stderr);",
+          "+  if (input.stdout) messages.push(input.stdout);",
+          "+  return messages.some((msg) =\u003e UNKNOWN_SESSION_RE.test(msg));",
+          "+}",
+          "+",
+          " function buildClaudeTransientHaystack(input: {",
+          "   parsed?: Record\u003cstring, unknown\u003e | null;",
+          "   stdout?: string | null;"
+        ],
+        "newLines": 42,
+        "newStart": 177,
+        "oldLines": 17,
+        "oldStart": 177
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "8f58f62d-16bd-4d4f-9559-1a792d3fb664",
+  "version": "2.1.123"
+}

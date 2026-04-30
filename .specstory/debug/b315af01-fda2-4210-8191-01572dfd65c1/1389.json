@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "export function resolveHumanInviteRole(\n  defaultsPayload: Record\u003cstring, unknown\u003e | null | undefined\n): HumanCompanyMembershipRole {\n  if (!defaultsPayload || typeof defaultsPayload !== \"object\") return \"operator\";\n  const scoped = defaultsPayload.human;\n  if (!scoped || typeof scoped !== \"object\" || Array.isArray(scoped)) {\n    return \"operator\";\n  }\n  return normalizeHumanRole((scoped as Record\u003cstring, unknown\u003e).role, \"operator\");\n}",
+        "is_error": false,
+        "tool_use_id": "toolu_01HPTJeiNBfBaQ2QHAv6w7nY",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "698603a5-a512-41a1-82e2-11bb4bac8e51",
+  "promptId": "9aae9721-e466-4259-b66e-e724bd2f2c66",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "698603a5-a512-41a1-82e2-11bb4bac8e51",
+  "timestamp": "2026-04-30T18:25:28.996Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "export function resolveHumanInviteRole(\n  defaultsPayload: Record\u003cstring, unknown\u003e | null | undefined\n): HumanCompanyMembershipRole {\n  if (!defaultsPayload || typeof defaultsPayload !== \"object\") return \"operator\";\n  const scoped = defaultsPayload.human;\n  if (!scoped || typeof scoped !== \"object\" || Array.isArray(scoped)) {\n    return \"operator\";\n  }\n  return normalizeHumanRole((scoped as Record\u003cstring, unknown\u003e).role, \"operator\");\n}"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "cc5d6246-b335-4846-af3e-37fa2bbf6c6b",
+  "version": "2.1.123"
+}

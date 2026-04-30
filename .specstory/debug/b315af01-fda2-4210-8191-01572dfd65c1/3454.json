@@ -1,0 +1,85 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": [
+          {
+            "text": "Now I have sufficient information. Let me compile the audit results:\n\n## API Routes Audit: Server vs Cloudflare Workers Deployment\n\nBased on my analysis of the route registration mechanisms, here are the endpoints that will return **501** (Not Implemented) in the CF Worker deployment:\n\n### Routes with NO Handler in CF Worker\n\n#### **company-skills.ts** (6 routes)\n- `GET /api/companies/:companyId/skills` — shadowed by CF-native, but full server version includes skillId filtering/search\n- `GET /api/companies/:companyId/skills/:skillId` — **MISSING**\n- `GET /api/companies/:companyId/skills/:skillId/update-status` — **MISSING**\n- `GET /api/companies/:companyId/skills/:skillId/files` — **MISSING**\n- `DELETE /api/companies/:companyId/skills/:skillId` — **MISSING**\n- `POST /api/companies/:companyId/skills/:skillId/install-update` — **MISSING**\n- (Plus POST/PATCH routes for create/update skills — need exact paths)\n\n#### **health.ts** (1 route)\n- `GET /api/health` — CF Worker has hardcoded response at line 26-33 of app.ts, but server version reads from DB and exposes deployment details\n\n#### **plugins.ts** (22 server routes; 10 missing)\nAuto-bridged routes that WILL work:\n- `GET /api/plugins` ✓\n- `GET /api/plugins/examples` ✓\n- `GET /api/plugins/ui-contributions` ✓\n- `GET /api/plugins/tools` ✓\n- `POST /api/plugins/tools/execute` ✓\n- `POST /api/plugins/install` ✓\n- `GET /api/plugins/:pluginId` ✓\n- `POST /api/plugins/:pluginId/enable` ✓\n- `POST /api/plugins/:pluginId/disable` ✓\n- `GET /api/plugins/:pluginId/health` ✓\n- `GET /api/plugins/:pluginId/logs` ✓\n- `POST /api/plugins/:pluginId/upgrade` ✓\n- `GET /api/plugins/:pluginId/config` ✓\n- `POST /api/plugins/:pluginId/config` ✓\n- `POST /api/plugins/:pluginId/config/test` ✓\n- `GET /api/plugins/:pluginId/jobs` ✓\n- `GET /api/plugins/:pluginId/jobs/:jobId/runs` ✓\n- `POST /api/plugins/:pluginId/jobs/:jobId/trigger` ✓\n- `POST /api/plugins/:pluginId/webhooks/:endpointKey` ✓\n- `GET /api/plugins/:pluginId/dashboard` ✓\n- `GET /api/plugins/:pluginId/bridge/stream/:channel` ✓\n- `POST /api/plugins/:pluginId/bridge/data` ✓\n- `POST /api/plugins/:pluginId/bridge/action` ✓\n- `POST /api/plugins/:pluginId/data/:key` ✓\n- `POST /api/plugins/:pluginId/actions/:key` ✓\n- `DELETE /api/plugins/:pluginId` ✓\n\n(All plugins.ts routes are auto-bridged via route-registry.ts line 50)\n\n#### **plugin-ui-static.ts** (1 route) — NOT auto-bridged\n- `GET /_plugins/:pluginId/ui/*filePath` — **MISSING** (serves plugin UI assets)\n\n#### **instance-database-backups.ts** (1 route) — NOT auto-bridged\n- `POST /api/instance/database-backups` — **MISSING** (database backup trigger)\n\n#### **llms.ts** (3 routes) — auto-bridged\n- `GET /llms/agent-configuration.txt` ✓\n- `GET /llms/agent-configuration/:adapterType.txt` ✓\n- `GET /llms/agent-icons.txt` ✓\n\n(All llmRoutes imported in route-registry.ts line 49)\n\n#### **authz.ts** — No router exports; helper module only\n- Not a route module; provides `assertCompanyAccess()`, `getActorInfo()` utilities\n\n#### **environment-selection.ts** — Not found in routes/\n- (Possible file doesn't exist or has different name)\n\n#### **issues-checkout-wakeup.ts** — Not found in routes/\n- (Possible file doesn't exist or has different name)\n\n#### **org-chart-svg.ts** — Not found in routes/\n- (Possible file doesn't exist or has different name)\n\n#### **workspace-command-authz.ts** — Not found in routes/\n- (Possible file doesn't exist or has different name)\n\n#### **workspace-runtime-service-authz.ts** — Not found in routes/\n- (Possible file doesn't exist or has different name)\n\n---\n\n### Summary\n\nRoutes that **will return 501** today:\n1. `GET /api/companies/:companyId/skills/:skillId`\n2. `GET /api/companies/:companyId/skills/:skillId/update-status`\n3. `GET /api/companies/:companyId/skills/:skillId/files`\n4. `DELETE /api/companies/:companyId/skills/:skillId`\n5. `POST /api/companies/:companyId/skills/:skillId/install-update`\n6. `POST/PATCH /api/companies/:companyId/skills` (create/update routes)\n7. `GET /_plugins/:pluginId/ui/*filePath`\n8. `POST /api/instance/database-backups`\n\n**Notes:**\n- Routes from route-registry.ts imports (lines 27-50) are auto-bridged and **will work**\n- `/api/health` has a CF-native stub but lacks full server details (deploymentMode, version, db health probe)\n- `/api/adapters`, `/api/plugins`, and company access routes have CF-native handlers that **will work** (though with CF-specific limitations documented in their handler files)\n- The CF Worker catch-all at line 148-151 of app.ts returns the 501 response with code \"NOT_IMPLEMENTED\"",
+            "type": "text"
+          }
+        ],
+        "tool_use_id": "toolu_01QYWCGbEo6KpvbMNRjxNqXV",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "10eab48d-31ca-40ca-95d3-d1c09fc18872",
+  "promptId": "ba04e90f-0d7c-4dcc-9bf9-971187295dfd",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "10eab48d-31ca-40ca-95d3-d1c09fc18872",
+  "timestamp": "2026-04-30T21:59:11.235Z",
+  "toolUseResult": {
+    "agentId": "a07aabe33abdc139f",
+    "agentType": "Explore",
+    "content": [
+      {
+        "text": "Now I have sufficient information. Let me compile the audit results:\n\n## API Routes Audit: Server vs Cloudflare Workers Deployment\n\nBased on my analysis of the route registration mechanisms, here are the endpoints that will return **501** (Not Implemented) in the CF Worker deployment:\n\n### Routes with NO Handler in CF Worker\n\n#### **company-skills.ts** (6 routes)\n- `GET /api/companies/:companyId/skills` — shadowed by CF-native, but full server version includes skillId filtering/search\n- `GET /api/companies/:companyId/skills/:skillId` — **MISSING**\n- `GET /api/companies/:companyId/skills/:skillId/update-status` — **MISSING**\n- `GET /api/companies/:companyId/skills/:skillId/files` — **MISSING**\n- `DELETE /api/companies/:companyId/skills/:skillId` — **MISSING**\n- `POST /api/companies/:companyId/skills/:skillId/install-update` — **MISSING**\n- (Plus POST/PATCH routes for create/update skills — need exact paths)\n\n#### **health.ts** (1 route)\n- `GET /api/health` — CF Worker has hardcoded response at line 26-33 of app.ts, but server version reads from DB and exposes deployment details\n\n#### **plugins.ts** (22 server routes; 10 missing)\nAuto-bridged routes that WILL work:\n- `GET /api/plugins` ✓\n- `GET /api/plugins/examples` ✓\n- `GET /api/plugins/ui-contributions` ✓\n- `GET /api/plugins/tools` ✓\n- `POST /api/plugins/tools/execute` ✓\n- `POST /api/plugins/install` ✓\n- `GET /api/plugins/:pluginId` ✓\n- `POST /api/plugins/:pluginId/enable` ✓\n- `POST /api/plugins/:pluginId/disable` ✓\n- `GET /api/plugins/:pluginId/health` ✓\n- `GET /api/plugins/:pluginId/logs` ✓\n- `POST /api/plugins/:pluginId/upgrade` ✓\n- `GET /api/plugins/:pluginId/config` ✓\n- `POST /api/plugins/:pluginId/config` ✓\n- `POST /api/plugins/:pluginId/config/test` ✓\n- `GET /api/plugins/:pluginId/jobs` ✓\n- `GET /api/plugins/:pluginId/jobs/:jobId/runs` ✓\n- `POST /api/plugins/:pluginId/jobs/:jobId/trigger` ✓\n- `POST /api/plugins/:pluginId/webhooks/:endpointKey` ✓\n- `GET /api/plugins/:pluginId/dashboard` ✓\n- `GET /api/plugins/:pluginId/bridge/stream/:channel` ✓\n- `POST /api/plugins/:pluginId/bridge/data` ✓\n- `POST /api/plugins/:pluginId/bridge/action` ✓\n- `POST /api/plugins/:pluginId/data/:key` ✓\n- `POST /api/plugins/:pluginId/actions/:key` ✓\n- `DELETE /api/plugins/:pluginId` ✓\n\n(All plugins.ts routes are auto-bridged via route-registry.ts line 50)\n\n#### **plugin-ui-static.ts** (1 route) — NOT auto-bridged\n- `GET /_plugins/:pluginId/ui/*filePath` — **MISSING** (serves plugin UI assets)\n\n#### **instance-database-backups.ts** (1 route) — NOT auto-bridged\n- `POST /api/instance/database-backups` — **MISSING** (database backup trigger)\n\n#### **llms.ts** (3 routes) — auto-bridged\n- `GET /llms/agent-configuration.txt` ✓\n- `GET /llms/agent-configuration/:adapterType.txt` ✓\n- `GET /llms/agent-icons.txt` ✓\n\n(All llmRoutes imported in route-registry.ts line 49)\n\n#### **authz.ts** — No router exports; helper module only\n- Not a route module; provides `assertCompanyAccess()`, `getActorInfo()` utilities\n\n#### **environment-selection.ts** — Not found in routes/\n- (Possible file doesn't exist or has different name)\n\n#### **issues-checkout-wakeup.ts** — Not found in routes/\n- (Possible file doesn't exist or has different name)\n\n#### **org-chart-svg.ts** — Not found in routes/\n- (Possible file doesn't exist or has different name)\n\n#### **workspace-command-authz.ts** — Not found in routes/\n- (Possible file doesn't exist or has different name)\n\n#### **workspace-runtime-service-authz.ts** — Not found in routes/\n- (Possible file doesn't exist or has different name)\n\n---\n\n### Summary\n\nRoutes that **will return 501** today:\n1. `GET /api/companies/:companyId/skills/:skillId`\n2. `GET /api/companies/:companyId/skills/:skillId/update-status`\n3. `GET /api/companies/:companyId/skills/:skillId/files`\n4. `DELETE /api/companies/:companyId/skills/:skillId`\n5. `POST /api/companies/:companyId/skills/:skillId/install-update`\n6. `POST/PATCH /api/companies/:companyId/skills` (create/update routes)\n7. `GET /_plugins/:pluginId/ui/*filePath`\n8. `POST /api/instance/database-backups`\n\n**Notes:**\n- Routes from route-registry.ts imports (lines 27-50) are auto-bridged and **will work**\n- `/api/health` has a CF-native stub but lacks full server details (deploymentMode, version, db health probe)\n- `/api/adapters`, `/api/plugins`, and company access routes have CF-native handlers that **will work** (though with CF-specific limitations documented in their handler files)\n- The CF Worker catch-all at line 148-151 of app.ts returns the 501 response with code \"NOT_IMPLEMENTED\"",
+        "type": "text"
+      }
+    ],
+    "prompt": "Audit which server-side API routes are missing from the Cloudflare Workers deployment.\n\nWorking directory: /Users/migmac/Documents/GitHub/_ABM/paperclip\n\nGoal: produce a precise list of every API endpoint defined in `server/src/routes/*.ts` and indicate, for each, whether it's available in the CF Worker. The CF Worker mounts routes through TWO mechanisms:\n\n1. **Auto-bridged from server routes** via `route-registry.ts` at packages/deploy-cloudflare/src/worker/route-registry.ts — it imports route factories like `companyRoutes`, `agentRoutes`, etc. and uses `extractRoutesFromRouter`/`extractAllRoutesFromRouter` to expose them. Anything imported here is automatically available in the worker (assuming the handler doesn't crash on Workers).\n\n2. **CF-native handlers** in packages/deploy-cloudflare/src/worker/routes/*.ts and packages/deploy-cloudflare/src/worker/cf-extra-routes.ts — adapters, plugins, company-access, company-skills-cf, events. These shadow or replace the server versions.\n\nFor each route module in `server/src/routes/` (companies.ts, access.ts, adapters.ts, agents.ts, assets.ts, projects.ts, issues.ts, issue-tree-control.ts, routines.ts, environments.ts, execution-workspaces.ts, goals.ts, approvals.ts, secrets.ts, costs.ts, activity.ts, dashboard.ts, user-profiles.ts, sidebar-badges.ts, sidebar-preferences.ts, inbox-dismissals.ts, instance-settings.ts, llms.ts, auth.ts, plus any others I missed):\n\n- List each `router.get/post/put/delete/patch(...)` line\n- Mark whether it's wired into route-registry.ts (i.e. its parent factory is imported there)\n- Mark whether a CF-native handler shadows it\n- Flag routes that the server exposes but the CF worker has NO handler for (these will hit the 501 catch-all)\n\nAlso check these other route registration sites:\n- server/src/routes/plugins.ts is NOT auto-bridged — only the cf-native plugins.ts handles it (just verified)\n- check server/src/index.ts and server/src/app.ts for any other route mounts (e.g. /api/files, /api/health, /api/auth/*, MCP, etc.)\n\nReport format: a punch list of routes that will return 501 today (path + method + which server file defines it). Skip routes that are already handled either via auto-bridge or CF-native shim. Cap output at ~300 lines — collapse routes from the same file under a single heading when all are covered.",
+    "status": "completed",
+    "toolStats": {
+      "bashCount": 16,
+      "editFileCount": 0,
+      "linesAdded": 0,
+      "linesRemoved": 0,
+      "otherToolCount": 0,
+      "readCount": 13,
+      "searchCount": 0
+    },
+    "totalDurationMs": 101747,
+    "totalTokens": 100078,
+    "totalToolUseCount": 29,
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 1425
+      },
+      "cache_creation_input_tokens": 1425,
+      "cache_read_input_tokens": 97114,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 1425
+          },
+          "cache_creation_input_tokens": 1425,
+          "cache_read_input_tokens": 97114,
+          "input_tokens": 1,
+          "output_tokens": 1538,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 1538,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "ad489049-c907-4f42-9e80-61691db22779",
+  "version": "2.1.123"
+}

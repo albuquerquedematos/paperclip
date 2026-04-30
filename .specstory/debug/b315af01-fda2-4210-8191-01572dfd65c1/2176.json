@@ -1,0 +1,70 @@
+{
+  "agentId": "ae240282fd51e7edd",
+  "attributionAgent": "Explore",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01KiY9gcxuT5oW9kvfLEYJUf",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/server"
+        },
+        "name": "Read",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01WQcEBWZKW3NJ35Qav6h1Qe",
+    "model": "claude-haiku-4-5-20251001",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 5125
+      },
+      "cache_creation_input_tokens": 5125,
+      "cache_read_input_tokens": 53018,
+      "inference_geo": "",
+      "input_tokens": 6,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 5125
+          },
+          "cache_creation_input_tokens": 5125,
+          "cache_read_input_tokens": 53018,
+          "input_tokens": 6,
+          "output_tokens": 264,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 264,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "12aa3819-6343-43fb-9ed5-e5e12e9bcc72",
+  "requestId": "req_011CaaWPMC5K1fzEJ2rp4xiQ",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T19:28:06.876Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "ca5cf67b-da01-4e76-b6d6-a34a9f8dc467",
+  "version": "2.1.123"
+}

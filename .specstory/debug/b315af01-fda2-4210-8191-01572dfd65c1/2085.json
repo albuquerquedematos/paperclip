@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01VszLSb8X7NPoY1aEtDc5yV",
+        "input": {
+          "command": "grep -n \"^  plugins,\" /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/shared/src/db.ts 2\u003e/dev/null || grep -rn \"export.*plugins\\b\" /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/db/src/ | head -5",
+          "description": "Check plugins table export from db package"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01VtB1dyPCoWU7jSCN4ApCw3",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 898
+      },
+      "cache_creation_input_tokens": 898,
+      "cache_read_input_tokens": 92432,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 898
+          },
+          "cache_creation_input_tokens": 898,
+          "cache_read_input_tokens": 92432,
+          "input_tokens": 1,
+          "output_tokens": 155,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 155,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "a6366a3c-56ef-4feb-9c8f-33a1429eacc6",
+  "requestId": "req_011CaaWBvWTcu4CyxokV25BA",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T19:25:32.005Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "4231640d-9454-493c-8e1f-d1e81c628432",
+  "version": "2.1.123"
+}

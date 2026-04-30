@@ -1,0 +1,25 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "text": "The following containers are available:\n- paperclip-api-sidecarcontainer (ghcr.io/paperclipai/paperclip-sidecar:latest)\n- paperclip-api-plugincontainer (ghcr.io/paperclipai/plugin-sandbox:latest)\n\n✔ Select an account › A.L.M.A.\n╭───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮\n│  [b] open a browser [d] open devtools [e] open local explorer [r] rebuild container(s) [c] clear console [x] to exit  │\n╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯\n⎔ Preparing container image(s)...\n\n✘ [ERROR] The Docker CLI could not be launched. Please ensure that the Docker CLI is installed and the daemon is running.\n\n  Other container tooling that is compatible with the Docker CLI and engine may work, but is not yet\n  guaranteed to do so. You can specify an executable with the environment variable\n  WRANGLER_DOCKER_BIN and a socket with DOCKER_HOST.\n  To suppress this error if you do not intend on triggering any container instances, set\n  dev.enable_containers to false in your Wrangler config or passing in --enable-containers=false.\n\n\n🪵  Logs were written to \"/Users/migmac/Library/Preferences/.wrangler/logs/wrangler-2026-04-30_20-52-37_684.log\"\nerror: script \"dev\" exited with code 1\nerror: script \"dev:cf\" exited with code 1\nmigmac ~/Documents/GitHub/_ABM/paperclip",
+        "type": "text"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "2c669391-ae3f-41e2-bae3-ff638453114d",
+  "permissionMode": "bypassPermissions",
+  "promptId": "a2a67867-5b99-4833-a422-20ddd215983e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T20:52:52.486Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "afe8bea9-e3c7-44ee-a096-2cb17ad52bd3",
+  "version": "2.1.123"
+}

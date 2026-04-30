@@ -1,0 +1,54 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/package.json has been updated successfully.",
+        "tool_use_id": "toolu_01SqP5hqezJm43ghg4FDuGDu",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "1f9ae0b6-11b5-4d5f-a610-2094e054daec",
+  "promptId": "1b384992-7bf0-4117-b43d-35657ad43bbf",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "1f9ae0b6-11b5-4d5f-a610-2094e054daec",
+  "timestamp": "2026-04-30T18:45:40.024Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/package.json",
+    "newString": "  \"scripts\": {\n    \"build\": \"node build-worker.mjs\",\n    \"dev\": \"node build-worker.mjs \u0026\u0026 bash -c 'source \\\"${NVM_DIR:-$HOME/.nvm}/nvm.sh\\\" \u0026\u0026 nvm use 22 \u0026\u0026 wrangler dev --no-bundle --local'\",\n    \"deploy\": \"node build-worker.mjs \u0026\u0026 bash -c 'source \\\"${NVM_DIR:-$HOME/.nvm}/nvm.sh\\\" \u0026\u0026 nvm use 22 \u0026\u0026 wrangler deploy --no-bundle'\"\n  },",
+    "oldString": "  \"scripts\": {\n    \"build\": \"node build-worker.mjs\",\n    \"dev\": \"node build-worker.mjs \u0026\u0026 wrangler dev --no-bundle --local\",\n    \"deploy\": \"node build-worker.mjs \u0026\u0026 wrangler deploy --no-bundle\"\n  },",
+    "originalFile": "{\n  \"name\": \"@paperclipai/deploy-cloudflare\",\n  \"version\": \"0.1.0\",\n  \"private\": true,\n  \"type\": \"module\",\n  \"main\": \"./src/boot.ts\",\n  \"scripts\": {\n    \"build\": \"node build-worker.mjs\",\n    \"dev\": \"node build-worker.mjs \u0026\u0026 wrangler dev --no-bundle --local\",\n    \"deploy\": \"node build-worker.mjs \u0026\u0026 wrangler deploy --no-bundle\"\n  },\n  \"dependencies\": {\n    \"@paperclipai/db\": \"workspace:*\",\n    \"@paperclipai/shared\": \"workspace:*\",\n    \"drizzle-orm\": \"^0.38.4\",\n    \"hono\": \"^4.0.0\",\n    \"postgres\": \"^3.4.5\"\n  },\n  \"devDependencies\": {\n    \"@cloudflare/workers-types\": \"^4.0.0\",\n    \"@types/express\": \"^5.0.0\",\n    \"@types/node\": \"^25.6.0\",\n    \"express\": \"^5.1.0\",\n    \"typescript\": \"^5.0.0\",\n    \"wrangler\": \"^4.87.0\"\n  }\n}\n",
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          "   \"main\": \"./src/boot.ts\",",
+          "   \"scripts\": {",
+          "     \"build\": \"node build-worker.mjs\",",
+          "-    \"dev\": \"node build-worker.mjs \u0026\u0026 wrangler dev --no-bundle --local\",",
+          "-    \"deploy\": \"node build-worker.mjs \u0026\u0026 wrangler deploy --no-bundle\"",
+          "+    \"dev\": \"node build-worker.mjs \u0026\u0026 bash -c 'source \\\"${NVM_DIR:-$HOME/.nvm}/nvm.sh\\\" \u0026\u0026 nvm use 22 \u0026\u0026 wrangler dev --no-bundle --local'\",",
+          "+    \"deploy\": \"node build-worker.mjs \u0026\u0026 bash -c 'source \\\"${NVM_DIR:-$HOME/.nvm}/nvm.sh\\\" \u0026\u0026 nvm use 22 \u0026\u0026 wrangler deploy --no-bundle'\"",
+          "   },",
+          "   \"dependencies\": {",
+          "     \"@paperclipai/db\": \"workspace:*\","
+        ],
+        "newLines": 8,
+        "newStart": 6,
+        "oldLines": 8,
+        "oldStart": 6
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "3af0a5b2-012f-4809-90e5-dcad9c345833",
+  "version": "2.1.123"
+}

@@ -1,0 +1,28 @@
+{
+  "agentId": "aee092c208138b302",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "# Local dev overrides — loaded by `wrangler dev` automatically\n# Override authenticated mode so requests don't require login tokens\nDEPLOYMENT_MODE=local_trusted\nDEPLOYMENT_PLATFORM=cloudflare\nDEPLOYMENT_EXPOSURE=private\n\n# Sidecar = the local Node server (runs plugin jobs, etc.)\n# Set to the running dev server; leave blank if not needed locally\nSIDECAR_URL=http://127.0.0.1:3101\nSIDECAR_API_KEY=dev-local",
+        "is_error": false,
+        "tool_use_id": "toolu_01LVdJZHjAdcR7VmVBQhfetv",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "4b3a39f2-2396-4f99-a7ba-c16cbf245290",
+  "promptId": "285fd922-5736-481c-a4fc-cf130aed3e81",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "4b3a39f2-2396-4f99-a7ba-c16cbf245290",
+  "timestamp": "2026-04-30T17:51:14.230Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "c7de6366-1546-4174-8d74-75e84c5bba41",
+  "version": "2.1.123"
+}

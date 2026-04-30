@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "  container?: Container;\ninterface Container {\n  start(options?: ContainerStartupOptions): void;\n    options: ContainerDirectorySnapshotOptions,\n  ): Promise\u003cContainerDirectorySnapshot\u003e;\n  snapshotContainer(\n    options: ContainerSnapshotOptions,\n  ): Promise\u003cContainerSnapshot\u003e;\ninterface ContainerDirectorySnapshot {\ninterface ContainerDirectorySnapshotOptions {\ninterface ContainerDirectorySnapshotRestoreParams {\n  snapshot: ContainerDirectorySnapshot;\ninterface ContainerSnapshot {\ninterface ContainerSnapshotOptions {\ninterface ContainerStartupOptions {\n  directorySnapshots?: ContainerDirectorySnapshotRestoreParams[];\n  containerSnapshot?: ContainerSnapshot;\n   * Container specifies the file format wrapper for the output audio. The available options depend on the encoding type..\n  container?: \"none\" | \"wav\" | \"ogg\";\n   * Container specifies the file format wrapper for the output audio. The available options depend on the encoding type..\n  container?: \"none\" | \"wav\" | \"ogg\";\n   * Container specifies the file format wrapper for the output audio. The available options depend on the encoding type..\n  container?: \"none\" | \"wav\" | \"ogg\";",
+        "is_error": false,
+        "tool_use_id": "toolu_01VV9ccnb5h8ZcWEBqvpcSBg",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "6f1adbb1-13dd-4653-b4ae-db44e19a8493",
+  "promptId": "90af47bf-faac-4347-b1a7-d8ed0c820fb6",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "6f1adbb1-13dd-4653-b4ae-db44e19a8493",
+  "timestamp": "2026-04-30T20:33:54.690Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "  container?: Container;\ninterface Container {\n  start(options?: ContainerStartupOptions): void;\n    options: ContainerDirectorySnapshotOptions,\n  ): Promise\u003cContainerDirectorySnapshot\u003e;\n  snapshotContainer(\n    options: ContainerSnapshotOptions,\n  ): Promise\u003cContainerSnapshot\u003e;\ninterface ContainerDirectorySnapshot {\ninterface ContainerDirectorySnapshotOptions {\ninterface ContainerDirectorySnapshotRestoreParams {\n  snapshot: ContainerDirectorySnapshot;\ninterface ContainerSnapshot {\ninterface ContainerSnapshotOptions {\ninterface ContainerStartupOptions {\n  directorySnapshots?: ContainerDirectorySnapshotRestoreParams[];\n  containerSnapshot?: ContainerSnapshot;\n   * Container specifies the file format wrapper for the output audio. The available options depend on the encoding type..\n  container?: \"none\" | \"wav\" | \"ogg\";\n   * Container specifies the file format wrapper for the output audio. The available options depend on the encoding type..\n  container?: \"none\" | \"wav\" | \"ogg\";\n   * Container specifies the file format wrapper for the output audio. The available options depend on the encoding type..\n  container?: \"none\" | \"wav\" | \"ogg\";"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "5dfd7ac8-536a-4331-aae9-0e1f57fe22b2",
+  "version": "2.1.123"
+}

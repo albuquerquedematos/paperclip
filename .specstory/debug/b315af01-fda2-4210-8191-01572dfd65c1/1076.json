@@ -1,0 +1,63 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/app.ts has been updated successfully.",
+        "tool_use_id": "toolu_01NXAcJ7XUWM6s7iTgpifRzG",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "f7599f08-9f20-41e1-bc17-55d1a2474777",
+  "promptId": "3b760618-5209-4d12-a1b8-2c9bc64e4fcd",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "f7599f08-9f20-41e1-bc17-55d1a2474777",
+  "timestamp": "2026-04-30T18:07:10.525Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/app.ts",
+    "newString": "// ---------------------------------------------------------------------------\n// SPA fallback — delegates to the ASSETS binding (Workers Static Assets).\n// CF serves the matching file from ui/dist, or index.html for unknown paths\n// (not_found_handling = \"single-page-application\" in wrangler.toml).\n// ---------------------------------------------------------------------------\n\napp.all(\"*\", (c) =\u003e c.env.ASSETS.fetch(c.req.raw));",
+    "oldString": "// ---------------------------------------------------------------------------\n// SPA fallback — serves a minimal HTML shell for all non-API paths\n// ---------------------------------------------------------------------------\n\napp.all(\"*\", (c) =\u003e\n  c.html(\n    `\u003c!DOCTYPE html\u003e\n\u003chtml\u003e\u003chead\u003e\u003cmeta charset=\"UTF-8\"\u003e\u003ctitle\u003ePaperclip\u003c/title\u003e\u003c/head\u003e\n\u003cbody\u003e\n  \u003cp\u003eLoading Paperclip UI... If this persists, the Pages build may not be deployed yet.\u003c/p\u003e\n\u003c/body\u003e\u003c/html\u003e`,\n  ),\n);",
+    "originalFile": "/**\n * app.ts\n *\n * Hono application: middleware, setup gate, upload endpoints, and the\n * main `/api/*` catch-all that dispatches to transport-agnostic handlers.\n *\n * Exported as `app` so the thin `api.ts` entry point can call `app.fetch()`.\n */\n\nimport { Hono } from \"hono\";\nimport { createSetupApp } from \"./setup.js\";\nimport { buildRequestResources } from \"./route-registry.js\";\nimport { resolveActorFromRequest } from \"../auth/resolve-actor.js\";\nimport { registerUploadHandlers } from \"./upload-handlers.js\";\nimport { HttpError } from \"../../../../server/src/errors.js\";\nimport type { Env } from \"./env.js\";\nimport { resolveDeploymentMode } from \"./env.js\";\n\nexport const app = new Hono\u003c{ Bindings: Env }\u003e();\n\n// ---------------------------------------------------------------------------\n// Health check — always reachable, no auth, no setup gate\n// ---------------------------------------------------------------------------\n\napp.get(\"/api/health\", (c) =\u003e\n  c.json({\n    status: \"ok\",\n    platform: c.env.DEPLOYMENT_PLATFORM ?? \"cloudflare\",\n    mode: c.env.DEPLOYMENT_MODE ?? \"authenticated\",\n    ts: new Date().toISOString(),\n  }),\n);\n\n// ---------------------------------------------------------------------------\n// First-run setup gate\n//\n// Redirects all non-health, non-setup traffic to /setup until the operator\n// completes first-run configuration. Bypassed in `local_trusted` mode.\n// ---------------------------------------------------------------------------\n\napp.use(\"*\", async (c, next) =\u003e {\n  if (c.req.path === \"/api/health\" || c.req.path.startsWith(\"/setup\")) {\n    return next();\n  }\n  if (c.env.DEPLOYMENT_MODE === \"local_trusted\") {\n    return next();\n  }\n  const setupCompleted = await c.env.PAPERCLIP_KV.get(\"SETUP_COMPLETED\");\n  if (setupCompleted !== \"true\") {\n    return c.redirect(\"/setup\");\n  }\n  return next();\n});\n\n// ---------------------------------------------------------------------------\n// Setup sub-app (strips /setup prefix and forwards to the setup Hono app)\n// ---------------------------------------------------------------------------\n\napp.all(\"/setup/*\", async (c) =\u003e {\n  const setupSub = createSetupApp(c.env);\n  const url = new URL(c.req.url);\n  url.pathname = url.pathname.replace(/^\\/setup/, \"\") || \"/\";\n  return setupSub.fetch(new Request(url.toString(), c.req.raw));\n});\n\napp.all(\"/setup\", async (c) =\u003e {\n  const setupSub = createSetupApp(c.env);\n  const url = new URL(c.req.url);\n  url.pathname = \"/\";\n  return setupSub.fetch(new Request(url.toString(), c.req.raw));\n});\n\n// ---------------------------------------------------------------------------\n// R2-native upload endpoints (registered before the /api/* catch-all)\n// ---------------------------------------------------------------------------\n\nregisterUploadHandlers(app);\n\n// ---------------------------------------------------------------------------\n// Main API catch-all\n//\n// Manual routing: iterate compiled route definitions, match method + path,\n// and invoke the transport-agnostic Handler. Using a single wildcard route\n// avoids blowing Hono's internal route trie limit (229+ routes).\n// ---------------------------------------------------------------------------\n\napp.all(\"/api/*\", async (c) =\u003e {\n  const { compiled, db, storage } = buildRequestResources(c.env);\n\n  // Normalize trailing slash so /api/companies/ matches /api/companies routes.\n  const rawPathname = new URL(c.req.url).pathname;\n  const pathname = rawPathname.length \u003e 1 ? rawPathname.replace(/\\/$/, \"\") : rawPathname;\n  const method = c.req.method.toUpperCase();\n\n  for (const { route, re, paramNames } of compiled) {\n    if (route.method !== method) continue;\n    const match = re.exec(pathname);\n    if (!match) continue;\n\n    const params: Record\u003cstring, string\u003e = {};\n    for (let i = 0; i \u003c paramNames.length; i++) {\n      params[paramNames[i]!] = match[i + 1]!;\n    }\n\n    const actor = await resolveActorFromRequest(c.req.raw, db, {\n      deploymentMode: resolveDeploymentMode(c.env),\n    });\n\n    const ctx: import(\"../../../../server/src/http/types.js\").RequestCtx = {\n      method: c.req.method,\n      url: new URL(c.req.url),\n      headers: new Headers(c.req.raw.headers),\n      json\u003cT\u003e(): Promise\u003cT\u003e { return c.req.json\u003cT\u003e(); },\n      text(): Promise\u003cstring\u003e { return c.req.text(); },\n      param(name: string): string | undefined { return params[name]; },\n      query(name: string): string | undefined { return c.req.query(name); },\n      actor,\n      db,\n      storage,\n    };\n\n    try {\n      return await route.handler(ctx);\n    } catch (err) {\n      if (err instanceof HttpError) {\n        return Response.json(\n          { error: err.message, ...(err.details !== undefined ? { details: err.details } : {}) },\n          { status: err.status },\n        );\n      }\n      console.error(\n        `[CF Worker] Unhandled error in ${route.method} ${route.path}: ${\n          err instanceof Error ? (err.stack ?? err.message) : String(err)\n        }`,\n      );\n      return Response.json({ error: \"Internal Server Error\" }, { status: 500 });\n    }\n  }\n\n  return c.json(\n    { error: \"This API route is not available in the Cloudflare Workers deployment.\", code: \"NOT_IMPLEMENTED\" },\n    501,\n  );\n});\n\n// ---------------------------------------------------------------------------\n// SPA fallback — serves a minimal HTML shell for all non-API paths\n// ---------------------------------------------------------------------------\n\napp.all(\"*\", (c) =\u003e\n  c.html(\n    `\u003c!DOCTYPE html\u003e\n\u003chtml\u003e\u003chead\u003e\u003cmeta charset=\"UTF-8\"\u003e\u003ctitle\u003ePaperclip\u003c/title\u003e\u003c/head\u003e\n\u003cbody\u003e\n  \u003cp\u003eLoading Paperclip UI... If this persists, the Pages build may not be deployed yet.\u003c/p\u003e\n\u003c/body\u003e\u003c/html\u003e`,\n  ),\n);\n",
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          " });",
+          " ",
+          " // ---------------------------------------------------------------------------",
+          "-// SPA fallback — serves a minimal HTML shell for all non-API paths",
+          "+// SPA fallback — delegates to the ASSETS binding (Workers Static Assets).",
+          "+// CF serves the matching file from ui/dist, or index.html for unknown paths",
+          "+// (not_found_handling = \"single-page-application\" in wrangler.toml).",
+          " // ---------------------------------------------------------------------------",
+          " ",
+          "-app.all(\"*\", (c) =\u003e",
+          "-  c.html(",
+          "-    `\u003c!DOCTYPE html\u003e",
+          "-\u003chtml\u003e\u003chead\u003e\u003cmeta charset=\"UTF-8\"\u003e\u003ctitle\u003ePaperclip\u003c/title\u003e\u003c/head\u003e",
+          "-\u003cbody\u003e",
+          "-  \u003cp\u003eLoading Paperclip UI... If this persists, the Pages build may not be deployed yet.\u003c/p\u003e",
+          "-\u003c/body\u003e\u003c/html\u003e`,",
+          "-  ),",
+          "-);",
+          "+app.all(\"*\", (c) =\u003e c.env.ASSETS.fetch(c.req.raw));"
+        ],
+        "newLines": 9,
+        "newStart": 144,
+        "oldLines": 15,
+        "oldStart": 144
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "2400f6e9-1ee6-432a-899d-276bc5c3424a",
+  "version": "2.1.123"
+}

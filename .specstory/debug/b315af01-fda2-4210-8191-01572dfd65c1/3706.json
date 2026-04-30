@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "2395\t          ),\n2396\t        )\n2397\t        .returning();\n2398\t      return row ?? null;\n2399\t    },\n2400\t\n2401\t    getById: async (raw: string) =\u003e {\n2402\t      const id = raw.trim();\n2403\t      if (/^[A-Z]+-\\d+$/i.test(id)) {\n2404\t        return getIssueByIdentifier(id);\n2405\t      }\n2406\t      if (!isUuidLike(id)) {\n2407\t        return null;\n2408\t      }\n2409\t      return getIssueByUuid(id);\n2410\t    },\n2411\t\n2412\t    getByIdentifier: async (identifier: string) =\u003e {\n2413\t      return getIssueByIdentifier(identifier);\n2414\t    },\n2415\t\n2416\t    getRelationSummaries: async (issueId: string) =\u003e {\n2417\t      const issue = await db\n2418\t        .select({ id: issues.id, companyId: issues.companyId })\n2419\t        .from(issues)\n2420\t        .where(eq(issues.id, issueId))\n2421\t        .then((rows) =\u003e rows[0] ?? null);\n2422\t      if (!issue) throw notFound(\"Issue not found\");\n2423\t      const relations = await getIssueRelationSummaryMap(issue.companyId, [issueId], db);\n2424\t      return relations.get(issueId) ?? { blockedBy: [], blocks: [] };\n2425\t    },\n2426\t\n2427\t    getDependencyReadiness: async (issueId: string, dbOrTx: any = db) =\u003e {\n2428\t      const issue = await dbOrTx\n2429\t        .select({ id: issues.id, companyId: issues.companyId })\n2430\t        .from(issues)\n2431\t        .where(eq(issues.id, issueId))\n2432\t        .then((rows: Array\u003c{ id: string; companyId: string }\u003e) =\u003e rows[0] ?? null);\n2433\t      if (!issue) throw notFound(\"Issue not found\");\n2434\t      const readiness = await listIssueDependencyReadinessMap(dbOrTx, issue.companyId, [issueId]);\n2435\t      return readiness.get(issueId) ?? createIssueDependencyReadiness(issueId);\n2436\t    },\n2437\t\n2438\t    listDependencyReadiness: async (companyId: string, issueIds: string[], dbOrTx: any = db) =\u003e {\n2439\t      return listIssueDependencyReadinessMap(dbOrTx, companyId, issueIds);\n2440\t    },\n2441\t\n2442\t    listBlockerAttention: async (\n2443\t      companyId: string,\n2444\t      issueRows: IssueBlockerAttentionInputNode[],",
+        "tool_use_id": "toolu_015ZH8dAs8N5hv75QUUvFEX6",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "ea657af7-1b57-4995-b4a9-87dfab588fca",
+  "promptId": "e7cbb211-1d37-4345-b546-c3d4bd07be80",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "ea657af7-1b57-4995-b4a9-87dfab588fca",
+  "timestamp": "2026-04-30T22:56:16.409Z",
+  "toolUseResult": {
+    "file": {
+      "content": "          ),\n        )\n        .returning();\n      return row ?? null;\n    },\n\n    getById: async (raw: string) =\u003e {\n      const id = raw.trim();\n      if (/^[A-Z]+-\\d+$/i.test(id)) {\n        return getIssueByIdentifier(id);\n      }\n      if (!isUuidLike(id)) {\n        return null;\n      }\n      return getIssueByUuid(id);\n    },\n\n    getByIdentifier: async (identifier: string) =\u003e {\n      return getIssueByIdentifier(identifier);\n    },\n\n    getRelationSummaries: async (issueId: string) =\u003e {\n      const issue = await db\n        .select({ id: issues.id, companyId: issues.companyId })\n        .from(issues)\n        .where(eq(issues.id, issueId))\n        .then((rows) =\u003e rows[0] ?? null);\n      if (!issue) throw notFound(\"Issue not found\");\n      const relations = await getIssueRelationSummaryMap(issue.companyId, [issueId], db);\n      return relations.get(issueId) ?? { blockedBy: [], blocks: [] };\n    },\n\n    getDependencyReadiness: async (issueId: string, dbOrTx: any = db) =\u003e {\n      const issue = await dbOrTx\n        .select({ id: issues.id, companyId: issues.companyId })\n        .from(issues)\n        .where(eq(issues.id, issueId))\n        .then((rows: Array\u003c{ id: string; companyId: string }\u003e) =\u003e rows[0] ?? null);\n      if (!issue) throw notFound(\"Issue not found\");\n      const readiness = await listIssueDependencyReadinessMap(dbOrTx, issue.companyId, [issueId]);\n      return readiness.get(issueId) ?? createIssueDependencyReadiness(issueId);\n    },\n\n    listDependencyReadiness: async (companyId: string, issueIds: string[], dbOrTx: any = db) =\u003e {\n      return listIssueDependencyReadinessMap(dbOrTx, companyId, issueIds);\n    },\n\n    listBlockerAttention: async (\n      companyId: string,\n      issueRows: IssueBlockerAttentionInputNode[],",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/services/issues.ts",
+      "numLines": 50,
+      "startLine": 2395,
+      "totalLines": 3947
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "c7f6bdf2-3c6b-4643-bbff-c2a2142764e7",
+  "version": "2.1.123"
+}

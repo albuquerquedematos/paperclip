@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { createHash } from \"node:crypto\";\n2\timport type { IncomingMessage, Server as HttpServer } from \"node:http\";\n3\timport { createRequire } from \"node:module\";\n4\timport type { Duplex } from \"node:stream\";\n5\timport { and, eq, isNull } from \"drizzle-orm\";\n6\timport type { Db } from \"@paperclipai/db\";\n7\timport { agentApiKeys, companyMemberships, instanceUserRoles } from \"@paperclipai/db\";\n8\timport type { DeploymentMode } from \"@paperclipai/shared\";\n9\timport type { BetterAuthSessionResult } from \"../auth/better-auth.js\";\n10\timport { logger } from \"../middleware/logger.js\";\n11\timport { subscribeCompanyLiveEvents } from \"../services/live-events.js\";\n12\t\n13\tinterface WsSocket {\n14\t  readyState: number;\n15\t  ping(): void;\n16\t  send(data: string): void;\n17\t  terminate(): void;\n18\t  close(code?: number, reason?: string): void;\n19\t  on(event: \"pong\", listener: () =\u003e void): void;\n20\t  on(event: \"close\", listener: () =\u003e void): void;\n21\t  on(event: \"error\", listener: (err: Error) =\u003e void): void;\n22\t}\n23\t\n24\tinterface WsServer {\n25\t  clients: Set\u003cWsSocket\u003e;\n26\t  on(event: \"connection\", listener: (socket: WsSocket, req: IncomingMessage) =\u003e void): void;\n27\t  on(event: \"close\", listener: () =\u003e void): void;\n28\t  handleUpgrade(\n29\t    req: IncomingMessage,\n30\t    socket: Duplex,\n31\t    head: Buffer,\n32\t    callback: (ws: WsSocket) =\u003e void,\n33\t  ): void;\n34\t  emit(event: \"connection\", ws: WsSocket, req: IncomingMessage): boolean;\n35\t}\n36\t\n37\tconst require = createRequire(import.meta.url);\n38\tconst { WebSocket, WebSocketServer } = require(\"ws\") as {\n39\t  WebSocket: { OPEN: number };\n40\t  WebSocketServer: new (opts: { noServer: boolean }) =\u003e WsServer;\n41\t};\n42\t\n43\tinterface UpgradeContext {\n44\t  companyId: string;\n45\t  actorType: \"board\" | \"agent\";\n46\t  actorId: string;\n47\t}\n48\t\n49\tinterface IncomingMessageWithContext extends IncomingMessage {\n50\t  paperclipUpgradeContext?: UpgradeContext;\n51\t}\n52\t\n53\tfunction hashToken(token: string) {\n54\t  return createHash(\"sha256\").update(token).digest(\"hex\");\n55\t}\n56\t\n57\tfunction rejectUpgrade(socket: Duplex, statusLine: string, message: string) {\n58\t  const safe = message.replace(/[\\r\\n]+/g, \" \").trim();\n59\t  socket.write(`HTTP/1.1 ${statusLine}\\r\\nConnection: close\\r\\nContent-Type: text/plain\\r\\n\\r\\n${safe}`);\n60\t  socket.destroy();\n61\t}\n62\t\n63\tfunction parseCompanyId(pathname: string) {\n64\t  const match = pathname.match(/^\\/api\\/companies\\/([^/]+)\\/events\\/ws$/);\n65\t  if (!match) return null;\n66\t\n67\t  try {\n68\t    return decodeURIComponent(match[1] ?? \"\");\n69\t  } catch {\n70\t    return null;\n71\t  }\n72\t}\n73\t\n74\tfunction parseBearerToken(rawAuth: string | string[] | undefined) {\n75\t  const auth = Array.isArray(rawAuth) ? rawAuth[0] : rawAuth;\n76\t  if (!auth) return null;\n77\t  if (!auth.toLowerCase().startsWith(\"bearer \")) return null;\n78\t  const token = auth.slice(\"bearer \".length).trim();\n79\t  return token.length \u003e 0 ? token : null;\n80\t}",
+        "tool_use_id": "toolu_01GFTjajn7VtEUPBD9QRWVzU",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "5bff4b10-73f5-42c5-92b8-7f5a89e256c7",
+  "promptId": "9aae9721-e466-4259-b66e-e724bd2f2c66",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "5bff4b10-73f5-42c5-92b8-7f5a89e256c7",
+  "timestamp": "2026-04-30T18:17:38.217Z",
+  "toolUseResult": {
+    "file": {
+      "content": "import { createHash } from \"node:crypto\";\nimport type { IncomingMessage, Server as HttpServer } from \"node:http\";\nimport { createRequire } from \"node:module\";\nimport type { Duplex } from \"node:stream\";\nimport { and, eq, isNull } from \"drizzle-orm\";\nimport type { Db } from \"@paperclipai/db\";\nimport { agentApiKeys, companyMemberships, instanceUserRoles } from \"@paperclipai/db\";\nimport type { DeploymentMode } from \"@paperclipai/shared\";\nimport type { BetterAuthSessionResult } from \"../auth/better-auth.js\";\nimport { logger } from \"../middleware/logger.js\";\nimport { subscribeCompanyLiveEvents } from \"../services/live-events.js\";\n\ninterface WsSocket {\n  readyState: number;\n  ping(): void;\n  send(data: string): void;\n  terminate(): void;\n  close(code?: number, reason?: string): void;\n  on(event: \"pong\", listener: () =\u003e void): void;\n  on(event: \"close\", listener: () =\u003e void): void;\n  on(event: \"error\", listener: (err: Error) =\u003e void): void;\n}\n\ninterface WsServer {\n  clients: Set\u003cWsSocket\u003e;\n  on(event: \"connection\", listener: (socket: WsSocket, req: IncomingMessage) =\u003e void): void;\n  on(event: \"close\", listener: () =\u003e void): void;\n  handleUpgrade(\n    req: IncomingMessage,\n    socket: Duplex,\n    head: Buffer,\n    callback: (ws: WsSocket) =\u003e void,\n  ): void;\n  emit(event: \"connection\", ws: WsSocket, req: IncomingMessage): boolean;\n}\n\nconst require = createRequire(import.meta.url);\nconst { WebSocket, WebSocketServer } = require(\"ws\") as {\n  WebSocket: { OPEN: number };\n  WebSocketServer: new (opts: { noServer: boolean }) =\u003e WsServer;\n};\n\ninterface UpgradeContext {\n  companyId: string;\n  actorType: \"board\" | \"agent\";\n  actorId: string;\n}\n\ninterface IncomingMessageWithContext extends IncomingMessage {\n  paperclipUpgradeContext?: UpgradeContext;\n}\n\nfunction hashToken(token: string) {\n  return createHash(\"sha256\").update(token).digest(\"hex\");\n}\n\nfunction rejectUpgrade(socket: Duplex, statusLine: string, message: string) {\n  const safe = message.replace(/[\\r\\n]+/g, \" \").trim();\n  socket.write(`HTTP/1.1 ${statusLine}\\r\\nConnection: close\\r\\nContent-Type: text/plain\\r\\n\\r\\n${safe}`);\n  socket.destroy();\n}\n\nfunction parseCompanyId(pathname: string) {\n  const match = pathname.match(/^\\/api\\/companies\\/([^/]+)\\/events\\/ws$/);\n  if (!match) return null;\n\n  try {\n    return decodeURIComponent(match[1] ?? \"\");\n  } catch {\n    return null;\n  }\n}\n\nfunction parseBearerToken(rawAuth: string | string[] | undefined) {\n  const auth = Array.isArray(rawAuth) ? rawAuth[0] : rawAuth;\n  if (!auth) return null;\n  if (!auth.toLowerCase().startsWith(\"bearer \")) return null;\n  const token = auth.slice(\"bearer \".length).trim();\n  return token.length \u003e 0 ? token : null;\n}",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/realtime/live-events-ws.ts",
+      "numLines": 80,
+      "startLine": 1,
+      "totalLines": 274
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "b1fc7bb2-2fe0-4d95-9a32-cd18fd691103",
+  "version": "2.1.123"
+}

@@ -1,0 +1,27 @@
+{
+  "agentId": "a07aabe33abdc139f",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\t/**\n2\t * routes/company-access.ts\n3\t *\n4\t * CF-native handlers for company-scoped access/membership endpoints:\n5\t *   GET /api/companies/:companyId/join-requests\n6\t *   GET /api/companies/:companyId/user-directory\n7\t *   GET /api/companies/:companyId/members  (if applicable)\n8\t *\n9\t * The server-side accessRoutes() in access.ts uses raw Express handlers and\n10\t * reads bundled SKILL.md files from the host filesystem — neither works in CF.\n11\t * These handlers implement the same read-paths directly against the DB.\n12\t *\n13\t * Auth: requires an authenticated actor (board or agent). Unauthenticated\n14\t * requests receive 401. Company-scoped endpoints additionally verify that the\n15\t * actor has access to the requested company.\n16\t *\n17\t * CF-specific caveats:\n18\t *   - No filesystem access; all data comes from Hyperdrive/Postgres.\n19\t *   - claimSecretHash is always stripped from join-request responses.\n20\t */\n21\t\n22\timport type { Hono } from \"hono\";\n23\timport { and, asc, desc, eq, inArray } from \"drizzle-orm\";\n24\timport { authUsers, companyMemberships, invites, joinRequests } from \"@paperclipai/db\";\n25\timport { collapseDuplicatePendingHumanJoinRequests } from \"../../../../../server/src/lib/join-request-dedupe.js\";\n26\timport { resolveHumanInviteRole } from \"../../../../../server/src/services/company-member-roles.js\";\n27\timport { createHyperdriveDb } from \"../../db/hyperdrive.js\";\n28\timport { resolveActorFromRequest } from \"../../auth/resolve-actor.js\";\n29\timport { resolveDeploymentMode } from \"../env.js\";\n30\timport type { Env } from \"../env.js\";\n31\t\n32\t// ---------------------------------------------------------------------------\n33\t// Helpers (inlined from server/src/routes/access.ts — CF-safe subsets)\n34\t// ---------------------------------------------------------------------------\n35\t\n36\t/**\n37\t * Extracts the human-readable invite message from the invite's defaultsPayload,\n38\t * if present. Returns null when the payload does not contain a non-empty string\n39\t * at the `agentMessage` key.\n40\t */\n41\texport function extractInviteMessage(invite: {\n42\t  defaultsPayload: unknown;\n43\t}): string | null {\n44\t  const raw = invite.defaultsPayload;\n45\t  if (!raw || typeof raw !== \"object\" || Array.isArray(raw)) return null;\n46\t  const msg = (raw as Record\u003cstring, unknown\u003e).agentMessage;\n47\t  if (typeof msg !== \"string\") return null;\n48\t  const trimmed = msg.trim();\n49\t  return trimmed.length ? trimmed : null;\n50\t}\n51\t\n52\t// ---------------------------------------------------------------------------\n53\t// Route registration\n54\t// ---------------------------------------------------------------------------\n55\t\n56\texport function registerCompanyAccessRoutes(app: Hono\u003c{ Bindings: Env }\u003e): void {\n57\t  // -------------------------------------------------------------------------\n58\t  // GET /api/companies/:companyId/join-requests\n59\t  // -------------------------------------------------------------------------\n60\t  app.get(\"/api/companies/:companyId/join-requests\", async (c) =\u003e {\n61\t    const companyId = c.req.param(\"companyId\");\n62\t    const db = createHyperdriveDb(c.env.HYPERDRIVE);\n63\t    const actor = await resolveActorFromRequest(c.req.raw, db, {\n64\t      deploymentMode: resolveDeploymentMode(c.env),\n65\t    });\n66\t    if (!actor) return c.json({ error: \"Unauthorized\" }, 401);\n67\t\n68\t    const statusFilter = c.req.query(\"status\");\n69\t    const requestTypeFilter = c.req.query(\"requestType\");\n70\t\n71\t    const allRows = await db\n72\t      .select()\n73\t      .from(joinRequests)\n74\t      .where(eq(joinRequests.companyId, companyId))\n75\t      .orderBy(desc(joinRequests.createdAt));\n76\t\n77\t    const rows = collapseDuplicatePendingHumanJoinRequests(allRows);\n78\t\n79\t    const inviteIds = [...new Set(rows.map((r) =\u003e r.inviteId))];\n80\t    const inviteRows = inviteIds.length\n\n\u003csystem-reminder\u003e\nWhenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.\n\u003c/system-reminder\u003e\n",
+        "tool_use_id": "toolu_013cd7sUY6BYwfUV84drmAsq",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "4c0a0f85-95f9-47e9-b4b3-25b2e3a880a9",
+  "promptId": "ba04e90f-0d7c-4dcc-9bf9-971187295dfd",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "4c0a0f85-95f9-47e9-b4b3-25b2e3a880a9",
+  "timestamp": "2026-04-30T21:58:55.030Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "f6a4f5dc-068a-490d-afd4-502d220b9a86",
+  "version": "2.1.123"
+}

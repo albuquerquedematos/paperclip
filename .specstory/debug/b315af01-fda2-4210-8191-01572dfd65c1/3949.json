@@ -1,0 +1,53 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/tests/cf-smoke/cf-smoke.spec.ts has been updated successfully.",
+        "tool_use_id": "toolu_01By9kDQqSxwNCNTL7cDkV9b",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "7e2cb939-6b4f-4e17-9292-3d71baac46e5",
+  "promptId": "e7cbb211-1d37-4345-b546-c3d4bd07be80",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "7e2cb939-6b4f-4e17-9292-3d71baac46e5",
+  "timestamp": "2026-04-30T23:02:54.561Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/tests/cf-smoke/cf-smoke.spec.ts",
+    "newString": "describe(\"CF Worker smoke — project-scoped reads\", () =\u003e {\n  // Only routes that the server actually defines (server/src/routes/projects.ts).\n  const routes = [\"\", \"workspaces\"];\n  for (const tail of routes) {\n    it(`GET /api/projects/:id${tail ? \"/\" + tail : \"\"}`, async () =\u003e {\n      if (!project) return;\n      const path = `/api/projects/${project.id}${tail ? \"/\" + tail : \"\"}`;\n      const r = await get(path);\n      expectNoCrash(`GET ${path}`, r.status);\n    });\n  }\n});",
+    "oldString": "describe(\"CF Worker smoke — project-scoped reads\", () =\u003e {\n  const routes = [\"\", \"issues\", \"workspaces\", \"agents\"];\n  for (const tail of routes) {\n    it(`GET /api/projects/:id${tail ? \"/\" + tail : \"\"}`, async () =\u003e {\n      if (!project) return;\n      const path = `/api/projects/${project.id}${tail ? \"/\" + tail : \"\"}`;\n      const r = await get(path);\n      expectNoCrash(`GET ${path}`, r.status);\n    });\n  }\n});",
+    "originalFile": null,
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          " // ---------------------------------------------------------------------------",
+          " ",
+          " describe(\"CF Worker smoke — project-scoped reads\", () =\u003e {",
+          "-  const routes = [\"\", \"issues\", \"workspaces\", \"agents\"];",
+          "+  // Only routes that the server actually defines (server/src/routes/projects.ts).",
+          "+  const routes = [\"\", \"workspaces\"];",
+          "   for (const tail of routes) {",
+          "     it(`GET /api/projects/:id${tail ? \"/\" + tail : \"\"}`, async () =\u003e {",
+          "       if (!project) return;"
+        ],
+        "newLines": 8,
+        "newStart": 315,
+        "oldLines": 7,
+        "oldStart": 315
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "eac5c889-f1ff-47fc-a8c6-52c0adaa0c0c",
+  "version": "2.1.123"
+}

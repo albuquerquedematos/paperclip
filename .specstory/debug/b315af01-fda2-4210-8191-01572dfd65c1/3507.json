@@ -1,0 +1,52 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/package.json has been updated successfully.",
+        "tool_use_id": "toolu_016xnh4zCpopVAo86K1FyrGf",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "a598912c-2644-400c-9aa7-215570ae7108",
+  "promptId": "ba04e90f-0d7c-4dcc-9bf9-971187295dfd",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "a598912c-2644-400c-9aa7-215570ae7108",
+  "timestamp": "2026-04-30T22:01:06.105Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/package.json",
+    "newString": "    \"dev:cf\": \"cd packages/deploy-cloudflare \u0026\u0026 node build-worker.mjs \u0026\u0026 cd ../.. \u0026\u0026 concurrently --kill-others-on-fail --names \\\"server,esbuild,wrangler\\\" --prefix-colors \\\"blue,yellow,green\\\" \\\"pnpm --filter @paperclipai/server dev\\\" \\\"pnpm --filter @paperclipai/deploy-cloudflare build:watch\\\" \\\"pnpm --filter @paperclipai/deploy-cloudflare dev:wrangler-only\\\"\",",
+    "oldString": "    \"dev:cf\": \"concurrently --kill-others-on-fail --names \\\"server,worker\\\" --prefix-colors \\\"blue,green\\\" \\\"pnpm --filter @paperclipai/server dev\\\" \\\"cd packages/deploy-cloudflare \u0026\u0026 bun run dev\\\"\",",
+    "originalFile": "{\n  \"name\": \"paperclip\",\n  \"private\": true,\n  \"type\": \"module\",\n  \"scripts\": {\n    \"preflight:workspace-links\": \"node cli/node_modules/tsx/dist/cli.mjs scripts/ensure-workspace-package-links.ts\",\n    \"dev\": \"pnpm --filter @paperclipai/server exec tsx ../scripts/dev-runner.ts watch\",\n    \"dev:watch\": \"pnpm --filter @paperclipai/server exec tsx ../scripts/dev-runner.ts watch\",\n    \"dev:once\": \"pnpm --filter @paperclipai/server exec tsx ../scripts/dev-runner.ts dev\",\n    \"dev:list\": \"pnpm --filter @paperclipai/server exec tsx ../scripts/dev-service.ts list\",\n    \"dev:stop\": \"pnpm --filter @paperclipai/server exec tsx ../scripts/dev-service.ts stop\",\n    \"dev:server\": \"pnpm --filter @paperclipai/server dev\",\n    \"dev:cf\": \"concurrently --kill-others-on-fail --names \\\"server,worker\\\" --prefix-colors \\\"blue,green\\\" \\\"pnpm --filter @paperclipai/server dev\\\" \\\"cd packages/deploy-cloudflare \u0026\u0026 bun run dev\\\"\",\n    \"deploy:cf\": \"cd packages/deploy-cloudflare \u0026\u0026 bun run deploy\",\n    \"dev:ui\": \"pnpm --filter @paperclipai/ui dev\",\n    \"storybook\": \"pnpm --filter @paperclipai/ui storybook\",\n    \"build-storybook\": \"pnpm --filter @paperclipai/ui build-storybook\",\n    \"build\": \"pnpm run preflight:workspace-links \u0026\u0026 pnpm -r build\",\n    \"typecheck\": \"pnpm run preflight:workspace-links \u0026\u0026 pnpm -r typecheck\",\n    \"test\": \"pnpm run test:run\",\n    \"test:watch\": \"pnpm run preflight:workspace-links \u0026\u0026 vitest\",\n    \"test:run\": \"pnpm run preflight:workspace-links \u0026\u0026 node scripts/run-vitest-stable.mjs\",\n    \"db:generate\": \"pnpm --filter @paperclipai/db generate\",\n    \"db:migrate\": \"pnpm --filter @paperclipai/db migrate\",\n    \"issue-references:backfill\": \"pnpm run preflight:workspace-links \u0026\u0026 tsx scripts/backfill-issue-reference-mentions.ts\",\n    \"secrets:migrate-inline-env\": \"tsx scripts/migrate-inline-env-secrets.ts\",\n    \"db:backup\": \"./scripts/backup-db.sh\",\n    \"paperclipai\": \"node cli/node_modules/tsx/dist/cli.mjs cli/src/index.ts\",\n    \"build:npm\": \"./scripts/build-npm.sh\",\n    \"release\": \"./scripts/release.sh\",\n    \"release:canary\": \"./scripts/release.sh canary\",\n    \"release:stable\": \"./scripts/release.sh stable\",\n    \"release:github\": \"./scripts/create-github-release.sh\",\n    \"release:rollback\": \"./scripts/rollback-latest.sh\",\n    \"check:tokens\": \"node scripts/check-forbidden-tokens.mjs\",\n    \"docs:dev\": \"cd docs \u0026\u0026 npx mintlify dev\",\n    \"smoke:openclaw-join\": \"./scripts/smoke/openclaw-join.sh\",\n    \"smoke:openclaw-docker-ui\": \"./scripts/smoke/openclaw-docker-ui.sh\",\n    \"smoke:openclaw-sse-standalone\": \"./scripts/smoke/openclaw-sse-standalone.sh\",\n    \"test:release-registry\": \"node --test scripts/verify-release-registry-state.test.mjs\",\n    \"test:e2e\": \"npx playwright test --config tests/e2e/playwright.config.ts\",\n    \"test:e2e:headed\": \"npx playwright test --config tests/e2e/playwright.config.ts --headed\",\n    \"test:e2e:multiuser-authenticated\": \"npx playwright test --config tests/e2e/playwright-multiuser-authenticated.config.ts\",\n    \"evals:smoke\": \"cd evals/promptfoo \u0026\u0026 npx promptfoo@0.103.3 eval\",\n    \"test:release-smoke\": \"npx playwright test --config tests/release-smoke/playwright.config.ts\",\n    \"test:release-smoke:headed\": \"npx playwright test --config tests/release-smoke/playwright.config.ts --headed\",\n    \"metrics:paperclip-commits\": \"tsx scripts/paperclip-commit-metrics.ts\"\n  },\n  \"devDependencies\": {\n    \"@playwright/test\": \"^1.58.2\",\n    \"concurrently\": \"^9.2.1\",\n    \"cross-env\": \"^10.1.0\",\n    \"esbuild\": \"^0.27.3\",\n    \"typescript\": \"^5.7.3\",\n    \"vitest\": \"^3.0.5\"\n  },\n  \"engines\": {\n    \"node\": \"\u003e=20\"\n  },\n  \"packageManager\": \"pnpm@9.15.4\",\n  \"overrides\": {\n    \"rollup\": \"\u003e=4.59.0\"\n  },\n  \"patchedDependencies\": {\n    \"embedded-postgres@18.1.0-beta.16\": \"patches/embedded-postgres@18.1.0-beta.16.patch\"\n  },\n  \"workspaces\": [\n    \"packages/*\",\n    \"packages/adapters/*\",\n    \"packages/plugins/*\",\n    \"!packages/plugins/sandbox-providers/**\",\n    \"packages/plugins/examples/*\",\n    \"!packages/plugins/examples/plugin-orchestration-smoke-example\",\n    \"server\",\n    \"ui\",\n    \"cli\",\n    \"packages/deploy-cloudflare\"\n  ]\n}\n",
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          "     \"dev:list\": \"pnpm --filter @paperclipai/server exec tsx ../scripts/dev-service.ts list\",",
+          "     \"dev:stop\": \"pnpm --filter @paperclipai/server exec tsx ../scripts/dev-service.ts stop\",",
+          "     \"dev:server\": \"pnpm --filter @paperclipai/server dev\",",
+          "-    \"dev:cf\": \"concurrently --kill-others-on-fail --names \\\"server,worker\\\" --prefix-colors \\\"blue,green\\\" \\\"pnpm --filter @paperclipai/server dev\\\" \\\"cd packages/deploy-cloudflare \u0026\u0026 bun run dev\\\"\",",
+          "+    \"dev:cf\": \"cd packages/deploy-cloudflare \u0026\u0026 node build-worker.mjs \u0026\u0026 cd ../.. \u0026\u0026 concurrently --kill-others-on-fail --names \\\"server,esbuild,wrangler\\\" --prefix-colors \\\"blue,yellow,green\\\" \\\"pnpm --filter @paperclipai/server dev\\\" \\\"pnpm --filter @paperclipai/deploy-cloudflare build:watch\\\" \\\"pnpm --filter @paperclipai/deploy-cloudflare dev:wrangler-only\\\"\",",
+          "     \"deploy:cf\": \"cd packages/deploy-cloudflare \u0026\u0026 bun run deploy\",",
+          "     \"dev:ui\": \"pnpm --filter @paperclipai/ui dev\",",
+          "     \"storybook\": \"pnpm --filter @paperclipai/ui storybook\","
+        ],
+        "newLines": 7,
+        "newStart": 10,
+        "oldLines": 7,
+        "oldStart": 10
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "09251897-0b2d-494f-8af6-2c1c4f7e6d34",
+  "version": "2.1.123"
+}

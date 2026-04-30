@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "2535\t  const wakeupAgent: Handler = async (ctx) =\u003e {\n2536\t    const id = ctx.param(\"id\")!;\n2537\t    const agent = await svc.getById(id);\n2538\t    if (!agent) return Response.json({ error: \"Agent not found\" }, { status: 404 });\n2539\t    assertCompanyAccess(ctx, agent.companyId);\n2540\t\n2541\t    if (ctx.actor?.type === \"agent\") {\n2542\t      if (ctx.actor.agentId !== id) {\n2543\t        return Response.json({ error: \"Agent can only invoke itself\" }, { status: 403 });\n2544\t      }\n2545\t    } else {\n2546\t      await assertBoardCanManageAgentsForCompany(ctx, agent.companyId);\n2547\t    }\n2548\t\n2549\t    const body = await ctx.json\u003cRecord\u003cstring, unknown\u003e\u003e();\n2550\t    const run = await heartbeat.wakeup(id, {\n2551\t      source: body.source as \"timer\" | \"assignment\" | \"on_demand\" | \"automation\",\n2552\t      triggerDetail: ((body.triggerDetail as string | undefined) ?? \"manual\") as \"system\" | \"manual\" | \"ping\" | \"callback\",\n2553\t      reason: (body.reason as string | null) ?? null,\n2554\t      payload: (body.payload as Record\u003cstring, unknown\u003e | null) ?? null,\n2555\t      idempotencyKey: (body.idempotencyKey as string | null) ?? null,\n2556\t      requestedByActorType: ctx.actor?.type === \"agent\" ? \"agent\" : \"user\",\n2557\t      requestedByActorId: ctx.actor?.type === \"agent\" ? ctx.actor.agentId ?? null : (ctx.actor?.userId ?? null),\n2558\t      contextSnapshot: {\n2559\t        triggeredBy: ctx.actor?.type ?? \"none\",",
+        "tool_use_id": "toolu_01W9SK1VRWDKVzz8vm42jD1p",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "f259b1c8-d7bb-499c-a03f-29be0f97e650",
+  "promptId": "0c147d6f-915f-4b9e-a139-f26417e7157e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "f259b1c8-d7bb-499c-a03f-29be0f97e650",
+  "timestamp": "2026-04-30T23:08:18.847Z",
+  "toolUseResult": {
+    "file": {
+      "content": "  const wakeupAgent: Handler = async (ctx) =\u003e {\n    const id = ctx.param(\"id\")!;\n    const agent = await svc.getById(id);\n    if (!agent) return Response.json({ error: \"Agent not found\" }, { status: 404 });\n    assertCompanyAccess(ctx, agent.companyId);\n\n    if (ctx.actor?.type === \"agent\") {\n      if (ctx.actor.agentId !== id) {\n        return Response.json({ error: \"Agent can only invoke itself\" }, { status: 403 });\n      }\n    } else {\n      await assertBoardCanManageAgentsForCompany(ctx, agent.companyId);\n    }\n\n    const body = await ctx.json\u003cRecord\u003cstring, unknown\u003e\u003e();\n    const run = await heartbeat.wakeup(id, {\n      source: body.source as \"timer\" | \"assignment\" | \"on_demand\" | \"automation\",\n      triggerDetail: ((body.triggerDetail as string | undefined) ?? \"manual\") as \"system\" | \"manual\" | \"ping\" | \"callback\",\n      reason: (body.reason as string | null) ?? null,\n      payload: (body.payload as Record\u003cstring, unknown\u003e | null) ?? null,\n      idempotencyKey: (body.idempotencyKey as string | null) ?? null,\n      requestedByActorType: ctx.actor?.type === \"agent\" ? \"agent\" : \"user\",\n      requestedByActorId: ctx.actor?.type === \"agent\" ? ctx.actor.agentId ?? null : (ctx.actor?.userId ?? null),\n      contextSnapshot: {\n        triggeredBy: ctx.actor?.type ?? \"none\",",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/agents.ts",
+      "numLines": 25,
+      "startLine": 2535,
+      "totalLines": 2972
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "8c1da55d-99da-4179-b6fb-d240e40ade3a",
+  "version": "2.1.123"
+}

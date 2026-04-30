@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "30\t# ---------------------------------------------------------------------------\n31\t# Variables (non-secret; override secrets via `wrangler secret put`)\n32\t# ---------------------------------------------------------------------------\n33\t[vars]\n34\tDEPLOYMENT_PLATFORM = \"cloudflare\"\n35\tDEPLOYMENT_MODE = \"authenticated\"\n36\tDEPLOYMENT_EXPOSURE = \"public\"\n37\t\n38\t# ---------------------------------------------------------------------------\n39\t# R2 object storage — artifacts, skill bundles, attachments, DB backups\n40\t# ---------------------------------------------------------------------------\n41\t[[r2_buckets]]\n42\tbinding = \"PAPERCLIP_STORAGE\"\n43\tbucket_name = \"paperclip-storage\"\n44\t# preview_bucket_name = \"paperclip-storage-preview\"",
+        "tool_use_id": "toolu_01MBLFYnjLRrVrBFDZFRSh5t",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "01c44cf9-aaf5-44a5-8475-89405bb49f2e",
+  "promptId": "a2a67867-5b99-4833-a422-20ddd215983e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "01c44cf9-aaf5-44a5-8475-89405bb49f2e",
+  "timestamp": "2026-04-30T20:53:01.892Z",
+  "toolUseResult": {
+    "file": {
+      "content": "# ---------------------------------------------------------------------------\n# Variables (non-secret; override secrets via `wrangler secret put`)\n# ---------------------------------------------------------------------------\n[vars]\nDEPLOYMENT_PLATFORM = \"cloudflare\"\nDEPLOYMENT_MODE = \"authenticated\"\nDEPLOYMENT_EXPOSURE = \"public\"\n\n# ---------------------------------------------------------------------------\n# R2 object storage — artifacts, skill bundles, attachments, DB backups\n# ---------------------------------------------------------------------------\n[[r2_buckets]]\nbinding = \"PAPERCLIP_STORAGE\"\nbucket_name = \"paperclip-storage\"\n# preview_bucket_name = \"paperclip-storage-preview\"",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/wrangler.toml",
+      "numLines": 15,
+      "startLine": 30,
+      "totalLines": 164
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "a36af0a0-5a3f-4cb1-b282-d716aca2fdf2",
+  "version": "2.1.123"
+}

@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "667\texport function getPluginUiContributionMetadata(\n668\t  manifest: PaperclipPluginManifestV1,\n669\t): PluginUiContributionMetadata | null {\n670\t  const slots = manifest.ui?.slots ?? [];\n671\t  const launchers = [\n672\t    ...(manifest.launchers ?? []),\n673\t    ...(manifest.ui?.launchers ?? []),\n674\t  ];\n675\t\n676\t  if (slots.length === 0 \u0026\u0026 launchers.length === 0) {\n677\t    return null;\n678\t  }\n679\t\n680\t  return {\n681\t    uiEntryFile: \"index.js\",\n682\t    slots,\n683\t    launchers,\n684\t  };\n685\t}\n686\t\n687\t// ---------------------------------------------------------------------------\n688\t// Factory\n689\t// ---------------------------------------------------------------------------\n690\t\n691\t/**\n692\t * Create a PluginLoader service.\n693\t *\n694\t * The loader is responsible for plugin discovery, installation, and runtime\n695\t * activation.  It reads plugin packages from the local filesystem and npm,\n696\t * validates their manifests, registers them in the database, and — when\n697\t * runtime services are provided — initialises worker processes, event\n698\t * subscriptions, job schedules, webhook endpoints, and agent tools.\n699\t *\n700\t * Usage (discovery \u0026 install only):\n701\t * ```ts\n702\t * const loader = pluginLoader(db, { enableLocalFilesystem: true });\n703\t *\n704\t * // Discover all available plugins\n705\t * const result = await loader.discoverAll();\n706\t * for (const plugin of result.discovered) {",
+        "tool_use_id": "toolu_01WiusWiNkkABr6uLZM1Xykp",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "ccd4d488-9447-401b-97e5-807f6633259b",
+  "promptId": "8e37c333-7c8a-4b0c-ae99-027b99e1bf51",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "ccd4d488-9447-401b-97e5-807f6633259b",
+  "timestamp": "2026-04-30T19:25:37.565Z",
+  "toolUseResult": {
+    "file": {
+      "content": "export function getPluginUiContributionMetadata(\n  manifest: PaperclipPluginManifestV1,\n): PluginUiContributionMetadata | null {\n  const slots = manifest.ui?.slots ?? [];\n  const launchers = [\n    ...(manifest.launchers ?? []),\n    ...(manifest.ui?.launchers ?? []),\n  ];\n\n  if (slots.length === 0 \u0026\u0026 launchers.length === 0) {\n    return null;\n  }\n\n  return {\n    uiEntryFile: \"index.js\",\n    slots,\n    launchers,\n  };\n}\n\n// ---------------------------------------------------------------------------\n// Factory\n// ---------------------------------------------------------------------------\n\n/**\n * Create a PluginLoader service.\n *\n * The loader is responsible for plugin discovery, installation, and runtime\n * activation.  It reads plugin packages from the local filesystem and npm,\n * validates their manifests, registers them in the database, and — when\n * runtime services are provided — initialises worker processes, event\n * subscriptions, job schedules, webhook endpoints, and agent tools.\n *\n * Usage (discovery \u0026 install only):\n * ```ts\n * const loader = pluginLoader(db, { enableLocalFilesystem: true });\n *\n * // Discover all available plugins\n * const result = await loader.discoverAll();\n * for (const plugin of result.discovered) {",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/services/plugin-loader.ts",
+      "numLines": 40,
+      "startLine": 667,
+      "totalLines": 1999
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "f18a4241-8aee-4c79-8294-cac75791b6a0",
+  "version": "2.1.123"
+}

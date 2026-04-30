@@ -1,0 +1,61 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "text": "The adapter packages are already in the bundle via `agentRoutes`. Safe to import `registry.ts`. Now update `cf-extra-routes.ts`:",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01HwksLJJQuHHC2cuHEgVf8C",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 910
+      },
+      "cache_creation_input_tokens": 910,
+      "cache_read_input_tokens": 129428,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 910
+          },
+          "cache_creation_input_tokens": 910,
+          "cache_read_input_tokens": 129428,
+          "input_tokens": 1,
+          "output_tokens": 802,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 802,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "970b6373-b402-4287-8b25-e4854fb0477f",
+  "requestId": "req_011CaaWg7Q5Qg5d2pNXA2vGR",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T19:31:58.735Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "ad9f0a31-f0dc-493f-9b81-af81501bc116",
+  "version": "2.1.123"
+}

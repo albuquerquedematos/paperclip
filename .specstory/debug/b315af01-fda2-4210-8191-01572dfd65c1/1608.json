@@ -1,0 +1,62 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "signature": "ErICClsIDRgCKkAVeA+mo1pbx+YoOrPxfmkzm/LdPfvXphWZ8y3pbVFW7Zi4ITbWkPjSKk8Qstau0TgtCZE19bje/3F35Ti77LnTMhFjbGF1ZGUtc29ubmV0LTQtNjgAEgwqCwNobwT9U+IkK9gaDLj9zisSKVAa2WxNyiIwsO2Azj8mjiDWbmhlPUYm4GrgPpwGsBSx8KB1Fs06Lrt4EI2MrjxyyQb73CJNyDtnKoQBz7nUNZLe/zY/+z1Wthmj9K1gntZvEF6WyqGNr/cghXwsfN7K4bt+35JtwDqCcQDBILHcfXXHaQj7RAaIpCEr66o01DCstwDK29OxwCs5KR1ZS3Ipw7jG9/Unw7H3r2mO25VHjYzQdD4rFH38yQMzEOelu5Huwg02fBE5/jqFOJv251bAGAE=",
+        "thinking": "Let me navigate through all pages systematically and collect 501s, then do a proper audit of all the missing routes.",
+        "type": "thinking"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_019P5XZFMBk4CdQPp79K6hLy",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 280
+      },
+      "cache_creation_input_tokens": 280,
+      "cache_read_input_tokens": 98645,
+      "inference_geo": "",
+      "input_tokens": 3,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 280
+          },
+          "cache_creation_input_tokens": 280,
+          "cache_read_input_tokens": 98645,
+          "input_tokens": 3,
+          "output_tokens": 108,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 108,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "9273ca21-b1d5-44ec-9499-4e652218a277",
+  "requestId": "req_011CaaTknekUHrEEnfis5XCg",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T18:53:37.208Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "597fca24-8da6-4cc5-b301-a61d63f5b6c4",
+  "version": "2.1.123"
+}

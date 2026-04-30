@@ -1,0 +1,27 @@
+{
+  "agentId": "a8455dc48bdf97d68",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/.claude/worktrees/agent-a8455dc48bdf97d68",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "worktree-agent-a8455dc48bdf97d68",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\t// CF Workers replacement for multer.\n2\t// File uploads in CF Workers use Request.formData() instead of multer middleware.\n3\t// This shim provides the same API shape so the module loads without error;\n4\t// the actual upload routes will throw at request time if invoked.\n5\t\n6\tclass MulterError extends Error {\n7\t  code: string;\n8\t  field?: string;\n9\t  constructor(code: string, field?: string) {\n10\t    super(code);\n11\t    this.name = \"MulterError\";\n12\t    this.code = code;\n13\t    this.field = field;\n14\t  }\n15\t}\n16\t\n17\tconst noopMiddleware = (_req: unknown, _res: unknown, next: (err?: unknown) =\u003e void) =\u003e next();\n18\t\n19\tfunction multer(_opts?: unknown) {\n20\t  const middleware = {\n21\t    single: (_field?: string) =\u003e noopMiddleware,\n22\t    array: (_field?: string, _maxCount?: number) =\u003e noopMiddleware,\n23\t    fields: (_fields?: unknown) =\u003e noopMiddleware,\n24\t    none: () =\u003e noopMiddleware,\n25\t    any: () =\u003e noopMiddleware,\n26\t  };\n27\t  return middleware;\n28\t}\n29\t\n30\tmulter.memoryStorage = () =\u003e ({});\n31\tmulter.diskStorage = (_opts?: unknown) =\u003e ({});\n32\tmulter.MulterError = MulterError;\n33\t\n34\texport default multer;\n35\texport { MulterError };\n36\t",
+        "tool_use_id": "toolu_017DQVvM3jA8pksNR7RVEZBy",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "d3826841-5521-4790-9799-d1e14a5b23bf",
+  "promptId": "8a433599-d510-488c-a09f-2af6b1c28bcb",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "d3826841-5521-4790-9799-d1e14a5b23bf",
+  "timestamp": "2026-04-30T19:36:44.252Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "f7676bef-277d-4e8b-ad6d-b75317e7d637",
+  "version": "2.1.123"
+}

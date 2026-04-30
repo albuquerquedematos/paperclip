@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "import { forbidden } from \"../errors.js\";\nimport type { AuthzReq } from \"./authz.js\";\n\nfunction isRecord(value: unknown): value is Record\u003cstring, unknown\u003e {\n  return typeof value === \"object\" \u0026\u0026 value !== null \u0026\u0026 !Array.isArray(value);\nimport { and, eq, inArray, isNull, ne, or } from \"drizzle-orm\";\nimport type { Db } from \"@paperclipai/db\";\nimport { agents, issues } from \"@paperclipai/db\";\nimport { forbidden } from \"../errors.js\";\nimport { assertCompanyAccess, type AuthzReq } from \"./authz.js\";",
+        "is_error": false,
+        "tool_use_id": "toolu_01Foe6mfbb6PyBwHES1AQbME",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "fa15d58f-2374-48f0-91a5-7971cc216fd6",
+  "promptId": "6578f9d8-71c9-42ed-bd5d-4cac4f413d52",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "fa15d58f-2374-48f0-91a5-7971cc216fd6",
+  "timestamp": "2026-04-30T19:22:32.502Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "import { forbidden } from \"../errors.js\";\nimport type { AuthzReq } from \"./authz.js\";\n\nfunction isRecord(value: unknown): value is Record\u003cstring, unknown\u003e {\n  return typeof value === \"object\" \u0026\u0026 value !== null \u0026\u0026 !Array.isArray(value);\nimport { and, eq, inArray, isNull, ne, or } from \"drizzle-orm\";\nimport type { Db } from \"@paperclipai/db\";\nimport { agents, issues } from \"@paperclipai/db\";\nimport { forbidden } from \"../errors.js\";\nimport { assertCompanyAccess, type AuthzReq } from \"./authz.js\";"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "a6a8f0e1-88b0-4aa8-8675-79cb9d76e956",
+  "version": "2.1.123"
+}

@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01Ds4nriVTrodNnnpt3rCCw7",
+        "input": {
+          "command": "git add packages/adapters/claude-local/src/server/execute.ts \u0026\u0026 git commit -m \"$(cat \u003c\u003c'EOF'\nchore(claude-local): also write diagnostic to console.warn\n\nThe onLog-only diagnostic disappears when the run-log file 404s (which\nis what we're seeing — \\\"Run log not found\\\" in the UI). Mirror it to\nconsole.warn so it lands in the server's process stderr regardless,\nmaking it visible in the dev:cf terminal output.\n\nCo-Authored-By: Claude Sonnet 4.6 \u003cnoreply@anthropic.com\u003e\nEOF\n)\"",
+          "description": "Commit improved diagnostic"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01H4H5PaPwwaLPfbrDRsTdtK",
+    "model": "claude-opus-4-7",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1548,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 1548,
+      "cache_read_input_tokens": 496859,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 1548,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 1548,
+          "cache_read_input_tokens": 496859,
+          "input_tokens": 1,
+          "output_tokens": 289,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 289,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "ecb379e0-6758-4374-b391-af7d27ccc509",
+  "requestId": "req_011CaaqPmRJqEK5CcLJBh4JW",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T23:37:24.706Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "626c414a-fa69-44f0-a5ae-0f81e31b27fc",
+  "version": "2.1.123"
+}

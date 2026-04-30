@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "}\ninterface EventSourceEventSourceInit {\n  withCredentials?: boolean;\n  fetcher?: Fetcher;\n}\ninterface Container {\n  get running(): boolean;\n  start(options?: ContainerStartupOptions): void;\n  monitor(): Promise\u003cvoid\u003e;\n  destroy(error?: any): Promise\u003cvoid\u003e;\n  signal(signo: number): void;\n  getTcpPort(port: number): Fetcher;\n  setInactivityTimeout(durationMs: number | bigint): Promise\u003cvoid\u003e;\n  interceptOutboundHttp(addr: string, binding: Fetcher): Promise\u003cvoid\u003e;\n  interceptAllOutboundHttp(binding: Fetcher): Promise\u003cvoid\u003e;\n  snapshotDirectory(\n    options: ContainerDirectorySnapshotOptions,\n  ): Promise\u003cContainerDirectorySnapshot\u003e;\n  snapshotContainer(\n    options: ContainerSnapshotOptions,\n  ): Promise\u003cContainerSnapshot\u003e;\n  interceptOutboundHttps(addr: string, binding: Fetcher): Promise\u003cvoid\u003e;\n}\ninterface ContainerDirectorySnapshot {\n  id: string;\n  size: number;",
+        "is_error": false,
+        "tool_use_id": "toolu_012p6aw5x5KF3rCa6DireGtC",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "c954b173-96d6-48fc-b3e0-ecaca92a336d",
+  "promptId": "90af47bf-faac-4347-b1a7-d8ed0c820fb6",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "c954b173-96d6-48fc-b3e0-ecaca92a336d",
+  "timestamp": "2026-04-30T20:33:57.142Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "}\ninterface EventSourceEventSourceInit {\n  withCredentials?: boolean;\n  fetcher?: Fetcher;\n}\ninterface Container {\n  get running(): boolean;\n  start(options?: ContainerStartupOptions): void;\n  monitor(): Promise\u003cvoid\u003e;\n  destroy(error?: any): Promise\u003cvoid\u003e;\n  signal(signo: number): void;\n  getTcpPort(port: number): Fetcher;\n  setInactivityTimeout(durationMs: number | bigint): Promise\u003cvoid\u003e;\n  interceptOutboundHttp(addr: string, binding: Fetcher): Promise\u003cvoid\u003e;\n  interceptAllOutboundHttp(binding: Fetcher): Promise\u003cvoid\u003e;\n  snapshotDirectory(\n    options: ContainerDirectorySnapshotOptions,\n  ): Promise\u003cContainerDirectorySnapshot\u003e;\n  snapshotContainer(\n    options: ContainerSnapshotOptions,\n  ): Promise\u003cContainerSnapshot\u003e;\n  interceptOutboundHttps(addr: string, binding: Fetcher): Promise\u003cvoid\u003e;\n}\ninterface ContainerDirectorySnapshot {\n  id: string;\n  size: number;"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "dbb3b290-576d-4ee0-b444-1f5ea3d77fc6",
+  "version": "2.1.123"
+}

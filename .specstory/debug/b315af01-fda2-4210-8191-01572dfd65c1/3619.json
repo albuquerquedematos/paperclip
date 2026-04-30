@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "905:async function resolveCommandPath(command: string, cwd: string, env: NodeJS.ProcessEnv): Promise\u003cstring | null\u003e {\n945:  return (await resolveCommandPath(command, cwd, env)) ?? command;\n971:    const sshResolved = await resolveCommandPath(\"ssh\", process.cwd(), env);\n991:  const resolved = await resolveCommandPath(command, cwd, env);\n1436:export async function ensureCommandResolvable(\n1445:    const resolvedSsh = await resolveCommandPath(\"ssh\", process.cwd(), env);\n1449:  const resolved = await resolveCommandPath(command, cwd, env);",
+        "is_error": false,
+        "tool_use_id": "toolu_01Q25gxzoyka3UWwkZNCmSTV",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "ee0c0ff6-9be7-4796-b74b-8184ccffd668",
+  "promptId": "5c7fcb14-2109-49c6-a2dc-162793f2749d",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "ee0c0ff6-9be7-4796-b74b-8184ccffd668",
+  "timestamp": "2026-04-30T22:47:24.036Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "905:async function resolveCommandPath(command: string, cwd: string, env: NodeJS.ProcessEnv): Promise\u003cstring | null\u003e {\n945:  return (await resolveCommandPath(command, cwd, env)) ?? command;\n971:    const sshResolved = await resolveCommandPath(\"ssh\", process.cwd(), env);\n991:  const resolved = await resolveCommandPath(command, cwd, env);\n1436:export async function ensureCommandResolvable(\n1445:    const resolvedSsh = await resolveCommandPath(\"ssh\", process.cwd(), env);\n1449:  const resolved = await resolveCommandPath(command, cwd, env);"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "5b967db4-d335-475d-9bb7-6455a32b0601",
+  "version": "2.1.123"
+}

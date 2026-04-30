@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "1085:  router.get(\"/companies/:companyId/adapters/:type/models\", expressHandler(listAdapterModelsHandler, { db, storage: storageSentinel }));\n1086:  router.get(\"/companies/:companyId/adapters/:type/detect-model\", expressHandler(detectAdapterModelHandler, { db, storage: storageSentinel }));",
+        "is_error": false,
+        "tool_use_id": "toolu_01BophbPYsZUGKSRL2DCgibM",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "858b123b-3cd1-4e93-9926-fc096f550be6",
+  "promptId": "5c7fcb14-2109-49c6-a2dc-162793f2749d",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "858b123b-3cd1-4e93-9926-fc096f550be6",
+  "timestamp": "2026-04-30T22:48:47.457Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "1085:  router.get(\"/companies/:companyId/adapters/:type/models\", expressHandler(listAdapterModelsHandler, { db, storage: storageSentinel }));\n1086:  router.get(\"/companies/:companyId/adapters/:type/detect-model\", expressHandler(detectAdapterModelHandler, { db, storage: storageSentinel }));"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "d45c9232-ce1d-44f6-8663-b39eaa0685cd",
+  "version": "2.1.123"
+}

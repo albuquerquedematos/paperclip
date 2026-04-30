@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "30\texport function getUiParserSource(adapterType: string): string | undefined {\n31\t  return uiParserCache.get(adapterType);\n32\t}\n33\t\n34\t/**\n35\t * On cache miss, attempt on-demand extraction from the plugin store.\n36\t * Makes the ui-parser.js endpoint self-healing.\n37\t */\n38\texport function getOrExtractUiParserSource(adapterType: string): string | undefined {\n39\t  const cached = uiParserCache.get(adapterType);\n40\t  if (cached) return cached;\n41\t\n42\t  const record = getAdapterPluginByType(adapterType);\n43\t  if (!record) return undefined;\n44\t\n45\t  const packageDir = resolvePackageDir(record);\n46\t  const source = extractUiParserSource(packageDir, record.packageName);\n47\t  if (source) {\n48\t    uiParserCache.set(adapterType, source);\n49\t    logger.info(\n50\t      { type: adapterType, packageName: record.packageName, origin: \"lazy\" },\n51\t      \"UI parser extracted on-demand (cache miss)\",\n52\t    );\n53\t  }\n54\t  return source;\n55\t}\n56\t\n57\t// ---------------------------------------------------------------------------\n58\t// Shared helpers\n59\t// ---------------------------------------------------------------------------\n60\t\n61\tfunction resolvePackageDir(record: Pick\u003cAdapterPluginRecord, \"localPath\" | \"packageName\"\u003e): string {\n62\t  return record.localPath\n63\t    ? path.resolve(record.localPath)\n64\t    : path.resolve(getAdapterPluginsDir(), \"node_modules\", record.packageName);\n65\t}\n66\t\n67\tfunction resolvePackageEntryPoint(packageDir: string): string {\n68\t  const pkgJsonPath = path.join(packageDir, \"package.json\");\n69\t  const pkg = JSON.parse(fs.readFileSync(pkgJsonPath, \"utf-8\"));\n70\t\n71\t  if (pkg.exports \u0026\u0026 typeof pkg.exports === \"object\" \u0026\u0026 pkg.exports[\".\"]) {\n72\t    const exp = pkg.exports[\".\"];\n73\t    return typeof exp === \"string\" ? exp : (exp.import ?? exp.default ?? \"index.js\");\n74\t  }\n75\t  return pkg.main ?? \"index.js\";\n76\t}\n77\t\n78\t// ---------------------------------------------------------------------------\n79\t// UI parser extraction",
+        "tool_use_id": "toolu_01Kof4w6aoA21HdFvFjNJ2jZ",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "c8eb923f-4c60-4771-91ef-45db7db97829",
+  "promptId": "0d05d433-ef46-4bba-8105-f1d502a42e1e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "c8eb923f-4c60-4771-91ef-45db7db97829",
+  "timestamp": "2026-04-30T19:32:59.400Z",
+  "toolUseResult": {
+    "file": {
+      "content": "export function getUiParserSource(adapterType: string): string | undefined {\n  return uiParserCache.get(adapterType);\n}\n\n/**\n * On cache miss, attempt on-demand extraction from the plugin store.\n * Makes the ui-parser.js endpoint self-healing.\n */\nexport function getOrExtractUiParserSource(adapterType: string): string | undefined {\n  const cached = uiParserCache.get(adapterType);\n  if (cached) return cached;\n\n  const record = getAdapterPluginByType(adapterType);\n  if (!record) return undefined;\n\n  const packageDir = resolvePackageDir(record);\n  const source = extractUiParserSource(packageDir, record.packageName);\n  if (source) {\n    uiParserCache.set(adapterType, source);\n    logger.info(\n      { type: adapterType, packageName: record.packageName, origin: \"lazy\" },\n      \"UI parser extracted on-demand (cache miss)\",\n    );\n  }\n  return source;\n}\n\n// ---------------------------------------------------------------------------\n// Shared helpers\n// ---------------------------------------------------------------------------\n\nfunction resolvePackageDir(record: Pick\u003cAdapterPluginRecord, \"localPath\" | \"packageName\"\u003e): string {\n  return record.localPath\n    ? path.resolve(record.localPath)\n    : path.resolve(getAdapterPluginsDir(), \"node_modules\", record.packageName);\n}\n\nfunction resolvePackageEntryPoint(packageDir: string): string {\n  const pkgJsonPath = path.join(packageDir, \"package.json\");\n  const pkg = JSON.parse(fs.readFileSync(pkgJsonPath, \"utf-8\"));\n\n  if (pkg.exports \u0026\u0026 typeof pkg.exports === \"object\" \u0026\u0026 pkg.exports[\".\"]) {\n    const exp = pkg.exports[\".\"];\n    return typeof exp === \"string\" ? exp : (exp.import ?? exp.default ?? \"index.js\");\n  }\n  return pkg.main ?? \"index.js\";\n}\n\n// ---------------------------------------------------------------------------\n// UI parser extraction",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/adapters/plugin-loader.ts",
+      "numLines": 50,
+      "startLine": 30,
+      "totalLines": 278
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "56a5d0fe-c6f0-463e-81d0-d8dd3cf12bf6",
+  "version": "2.1.123"
+}

@@ -1,0 +1,27 @@
+{
+  "agentId": "ae240282fd51e7edd",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport fs from \"node:fs/promises\";\n2\timport path from \"node:path\";\n3\timport { fileURLToPath } from \"node:url\";\n4\timport type { AdapterExecutionContext, AdapterExecutionResult } from \"@paperclipai/adapter-utils\";\n5\timport type { RunProcessResult } from \"@paperclipai/adapter-utils/server-utils\";\n6\timport {\n7\t  adapterExecutionTargetIsRemote,\n8\t  adapterExecutionTargetPaperclipApiUrl,\n9\t  adapterExecutionTargetRemoteCwd,\n10\t  adapterExecutionTargetSessionIdentity,\n11\t  adapterExecutionTargetSessionMatches,\n12\t  adapterExecutionTargetUsesManagedHome,\n13\t  adapterExecutionTargetUsesPaperclipBridge,\n14\t  describeAdapterExecutionTarget,\n15\t  ensureAdapterExecutionTargetCommandResolvable,\n16\t  prepareAdapterExecutionTargetRuntime,\n17\t  readAdapterExecutionTarget,\n18\t  resolveAdapterExecutionTargetCommandForLogs,\n19\t  runAdapterExecutionTargetProcess,\n20\t  runAdapterExecutionTargetShellCommand,\n21\t  startAdapterExecutionTargetPaperclipBridge,\n22\t} from \"@paperclipai/adapter-utils/execution-target\";\n23\timport {\n24\t  asString,\n25\t  asNumber,\n26\t  asBoolean,\n27\t  asStringArray,\n28\t  parseObject,\n29\t  parseJson,\n30\t  applyPaperclipWorkspaceEnv,\n31\t  buildPaperclipEnv,\n32\t  readPaperclipRuntimeSkillEntries,\n33\t  joinPromptSections,\n34\t  buildInvocationEnvForLogs,\n35\t  ensureAbsoluteDirectory,\n36\t  ensurePathInEnv,\n37\t  renderTemplate,\n38\t  renderPaperclipWakePrompt,\n39\t  stringifyPaperclipWakePayload,\n40\t  DEFAULT_PAPERCLIP_AGENT_PROMPT_TEMPLATE,\n41\t} from \"@paperclipai/adapter-utils/server-utils\";\n42\timport { shellQuote } from \"@paperclipai/adapter-utils/ssh\";\n43\timport {\n44\t  parseClaudeStreamJson,\n45\t  describeClaudeFailure,\n46\t  detectClaudeLoginRequired,\n47\t  extractClaudeRetryNotBefore,\n48\t  isClaudeMaxTurnsResult,\n49\t  isClaudeTransientUpstreamError,\n50\t  isClaudeUnknownSessionError,\n51\t} from \"./parse.js\";\n52\timport { prepareClaudeConfigSeed } from \"./claude-config.js\";\n53\timport { resolveClaudeDesiredSkillNames } from \"./skills.js\";\n54\timport { isBedrockModelId } from \"./models.js\";\n55\timport { prepareClaudePromptBundle } from \"./prompt-cache.js\";\n56\t\n57\tconst __moduleDir = path.dirname(fileURLToPath(import.meta.url));\n58\t\n59\tinterface ClaudeExecutionInput {\n60\t  runId: string;\n\n\u003csystem-reminder\u003e\nWhenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.\n\u003c/system-reminder\u003e\n",
+        "tool_use_id": "toolu_01VSCbeaLtZVSxw7ggarmC5H",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "ef72a5ba-5b5a-44e7-b07f-3d98b06997c4",
+  "promptId": "0d05d433-ef46-4bba-8105-f1d502a42e1e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "ef72a5ba-5b5a-44e7-b07f-3d98b06997c4",
+  "timestamp": "2026-04-30T19:28:11.478Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "27e9dcec-bc34-423a-9e18-52309e1b568b",
+  "version": "2.1.123"
+}

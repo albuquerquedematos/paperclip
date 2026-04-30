@@ -1,0 +1,71 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01H3YWXNBPiuwFEWQsb4sPUf",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/runtime/workflows/plugin-dispatch.ts",
+          "new_string": "      const headers: Record\u003cstring, string\u003e = { \"Content-Type\": \"application/json\" };\n      if (bridgeApiKey) headers.Authorization = `Bearer ${bridgeApiKey}`;\n      return fetch(`${bridgeUrl}${path}`, { method: \"POST\", headers, body: JSON.stringify(body) });",
+          "old_string": "      const authHeaders = bridgeApiKey ? { Authorization: `Bearer ${bridgeApiKey}` } : {};\n      return fetch(`${bridgeUrl}${path}`, {\n        ...init,\n        headers: { ...init.headers as Record\u003cstring, string\u003e, ...authHeaders },\n      });",
+          "replace_all": false
+        },
+        "name": "Edit",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_015RQDucAgcSB8r5PkAvwYs1",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 379
+      },
+      "cache_creation_input_tokens": 379,
+      "cache_read_input_tokens": 73415,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 379
+          },
+          "cache_creation_input_tokens": 379,
+          "cache_read_input_tokens": 73415,
+          "input_tokens": 1,
+          "output_tokens": 288,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 288,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "75c03853-0deb-492a-b8d8-4d64da5aa1c5",
+  "requestId": "req_011Caaa41wsifBrtgjo2MPgt",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T20:16:12.683Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "505e3974-cec7-4596-a580-6cbcfabc60fc",
+  "version": "2.1.123"
+}

@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "1\tconst AGENT_URL_KEY_DELIM_RE = /[^a-z0-9]+/g;\n2\tconst AGENT_URL_KEY_TRIM_RE = /^-+|-+$/g;\n3\tconst UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;\n4\t\n5\texport function isUuidLike(value: string | null | undefined): boolean {\n6\t  if (typeof value !== \"string\") return false;\n7\t  return UUID_RE.test(value.trim());\n8\t}\n9\t\n10\texport function normalizeAgentUrlKey(value: string | null | undefined): string | null {\n11\t  if (typeof value !== \"string\") return null;\n12\t  const normalized = value\n13\t    .trim()\n14\t    .toLowerCase()\n15\t    .replace(AGENT_URL_KEY_DELIM_RE, \"-\")\n16\t    .replace(AGENT_URL_KEY_TRIM_RE, \"\");\n17\t  return normalized.length \u003e 0 ? normalized : null;\n18\t}\n19\t\n20\texport function deriveAgentUrlKey(name: string | null | undefined, fallback?: string | null): string {\n21\t  return normalizeAgentUrlKey(name) ?? normalizeAgentUrlKey(fallback) ?? \"agent\";\n22\t}\n23\t",
+        "tool_use_id": "toolu_011XxeLzuEXNZjxvPK196j3b",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "2ff36419-268a-46f8-be51-5c2d205bdc66",
+  "promptId": "0c147d6f-915f-4b9e-a139-f26417e7157e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "2ff36419-268a-46f8-be51-5c2d205bdc66",
+  "timestamp": "2026-04-30T23:06:05.563Z",
+  "toolUseResult": {
+    "file": {
+      "content": "const AGENT_URL_KEY_DELIM_RE = /[^a-z0-9]+/g;\nconst AGENT_URL_KEY_TRIM_RE = /^-+|-+$/g;\nconst UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;\n\nexport function isUuidLike(value: string | null | undefined): boolean {\n  if (typeof value !== \"string\") return false;\n  return UUID_RE.test(value.trim());\n}\n\nexport function normalizeAgentUrlKey(value: string | null | undefined): string | null {\n  if (typeof value !== \"string\") return null;\n  const normalized = value\n    .trim()\n    .toLowerCase()\n    .replace(AGENT_URL_KEY_DELIM_RE, \"-\")\n    .replace(AGENT_URL_KEY_TRIM_RE, \"\");\n  return normalized.length \u003e 0 ? normalized : null;\n}\n\nexport function deriveAgentUrlKey(name: string | null | undefined, fallback?: string | null): string {\n  return normalizeAgentUrlKey(name) ?? normalizeAgentUrlKey(fallback) ?? \"agent\";\n}\n",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/shared/src/agent-url-key.ts",
+      "numLines": 23,
+      "startLine": 1,
+      "totalLines": 23
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "ab0f9829-1ef8-481a-80a3-9ca7e10dfb25",
+  "version": "2.1.123"
+}

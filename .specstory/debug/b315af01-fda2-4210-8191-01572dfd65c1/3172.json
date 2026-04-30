@@ -1,0 +1,62 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "signature": "EowCClsIDRgCKkChURRK2/8CTC0QybcZgdx5/iSG7L9UN/55myIx+xtV8fV4h2PfBBgGUDHGrg8+H877hKWM5/FZ+IR6WDZfzGgcMhFjbGF1ZGUtc29ubmV0LTQtNjgAEgymCGoBXZrbC5F6Lb0aDLBa6yyqykjGrtnK9CIwzfRcQLINe2glhlOsS9LzQe4OWCONHUkrGmN2OnACB0BTyU9zLGyUKF6aii5ImumaKl98oDNzamlUsADYNcCX4QJZFGoSrv6G8NxLnA760Qye2G7/3dphiczoXpCqBlZHKbFGlxF3lQcIpFZc8efryT1UcCkyYrj94NXd3cx8P3+L7SYWO6iS9tD4PrNrX+MEdhgB",
+        "thinking": "Oh, there's already a `sidecar-client.ts` in the src directory! Let me read it.",
+        "type": "thinking"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_019TzzPhzRxRjPmGWFPfHej5",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 1141
+      },
+      "cache_creation_input_tokens": 1141,
+      "cache_read_input_tokens": 76554,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 1141
+          },
+          "cache_creation_input_tokens": 1141,
+          "cache_read_input_tokens": 76554,
+          "input_tokens": 1,
+          "output_tokens": 146,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 146,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "3169f6f9-68bd-465d-a853-13bc84d11462",
+  "requestId": "req_011Caag5MU6vNu3rR6xyjxrQ",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T21:35:10.260Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "e409dc2e-dd86-4afa-929f-4f93fa87dd2c",
+  "version": "2.1.123"
+}

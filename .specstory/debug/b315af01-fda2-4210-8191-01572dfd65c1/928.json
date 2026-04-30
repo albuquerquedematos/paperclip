@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "1\t// Stub for node:fs/promises — not available in CF Workers.\n2\tconst notAvailable = (name: string) =\u003e async () =\u003e { throw new Error(`node:fs/promises.${name} not available in CF Workers`); };\n3\texport const readFile = notAvailable(\"readFile\");\n4\texport const writeFile = notAvailable(\"writeFile\");\n5\texport const readdir = notAvailable(\"readdir\");\n6\texport const mkdir = notAvailable(\"mkdir\");\n7\texport const stat = notAvailable(\"stat\");\n8\texport const unlink = notAvailable(\"unlink\");\n9\texport const access = notAvailable(\"access\");\n10\texport const realpath = notAvailable(\"realpath\");\n11\texport const rm = notAvailable(\"rm\");\n12\texport const rename = notAvailable(\"rename\");\n13\texport const copyFile = notAvailable(\"copyFile\");\n14\texport const pipeline = notAvailable(\"pipeline\");\n15\texport const open = notAvailable(\"open\");\n16\texport const lstat = notAvailable(\"lstat\");\n17\texport const watch = notAvailable(\"watch\");\n18\texport default { readFile, writeFile, readdir, mkdir, stat, unlink, access, realpath, rm, rename, copyFile };\n19\t",
+        "tool_use_id": "toolu_01HF3fBEg9zjvf9aXGSHyQar",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "ff442f44-eb7d-415f-9a45-b72bf9099e04",
+  "promptId": "285fd922-5736-481c-a4fc-cf130aed3e81",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "ff442f44-eb7d-415f-9a45-b72bf9099e04",
+  "timestamp": "2026-04-30T17:54:09.040Z",
+  "toolUseResult": {
+    "file": {
+      "content": "// Stub for node:fs/promises — not available in CF Workers.\nconst notAvailable = (name: string) =\u003e async () =\u003e { throw new Error(`node:fs/promises.${name} not available in CF Workers`); };\nexport const readFile = notAvailable(\"readFile\");\nexport const writeFile = notAvailable(\"writeFile\");\nexport const readdir = notAvailable(\"readdir\");\nexport const mkdir = notAvailable(\"mkdir\");\nexport const stat = notAvailable(\"stat\");\nexport const unlink = notAvailable(\"unlink\");\nexport const access = notAvailable(\"access\");\nexport const realpath = notAvailable(\"realpath\");\nexport const rm = notAvailable(\"rm\");\nexport const rename = notAvailable(\"rename\");\nexport const copyFile = notAvailable(\"copyFile\");\nexport const pipeline = notAvailable(\"pipeline\");\nexport const open = notAvailable(\"open\");\nexport const lstat = notAvailable(\"lstat\");\nexport const watch = notAvailable(\"watch\");\nexport default { readFile, writeFile, readdir, mkdir, stat, unlink, access, realpath, rm, rename, copyFile };\n",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-fs-promises.ts",
+      "numLines": 19,
+      "startLine": 1,
+      "totalLines": 19
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "3e77c921-3b38-4938-9996-9c4d0c075784",
+  "version": "2.1.123"
+}

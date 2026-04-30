@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01PtnZRTNvcoY2Jai5ZgQ561",
+        "input": {
+          "command": "grep -n \"const listIssueComments\\|const listIssueInteractions\\|const listAttachments\\|const getFeedbackVotes\" /Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/issues.ts",
+          "description": "Find handler implementations"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_018ApbYZxLy53i6DXjFygPx8",
+    "model": "claude-opus-4-7",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1450,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 1450,
+      "cache_read_input_tokens": 316843,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 1450,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 1450,
+          "cache_read_input_tokens": 316843,
+          "input_tokens": 1,
+          "output_tokens": 343,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 343,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "eb51bc44-1d24-4d10-af7d-ee967f32742b",
+  "requestId": "req_011CaanGBvdRr9exibTG2111",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T22:56:22.098Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "36aa2cc4-6e63-4ad3-8339-a322456418f6",
+  "version": "2.1.123"
+}

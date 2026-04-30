@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "60\t\n61\t// Stream stubs\n62\texport class ReadStream { on() { return this; } pipe() { return this; } }\n63\texport class WriteStream { on() { return this; } write() {} end() {} }\n64\texport const createReadStream = notAvailable(\"createReadStream\");\n65\texport const createWriteStream = notAvailable(\"createWriteStream\");\n66\t\n67\t// promises namespace (re-export from separate stub)\n68\texport const promises = {\n69\t  readFile: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n70\t  writeFile: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n71\t  readdir: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n72\t  mkdir: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n73\t  stat: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n74\t  lstat: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n75\t  unlink: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n76\t  access: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n77\t  realpath: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n78\t  open: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n79\t  copyFile: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n80\t  rename: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n81\t  rm: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n82\t};\n83\t\n84\texport default {\n85\t  constants, readFileSync, writeFileSync, appendFileSync, existsSync,\n86\t  mkdirSync, rmdirSync, rmSync, readdirSync, statSync, lstatSync, fstatSync,\n87\t  unlinkSync, renameSync, copyFileSync, chmodSync, chownSync, truncateSync,\n88\t  openSync, closeSync, readSync, writeSync, realpathSync,\n89\t  readFile, writeFile, appendFile, readdir, mkdir, rmdir, rm,\n90\t  stat, lstat, fstat, unlink, rename, copyFile, chmod, realpath,\n91\t  open, close, access, watch, watchFile,\n92\t  ReadStream, WriteStream, createReadStream, createWriteStream,\n93\t  promises,\n94\t};\n95\t",
+        "tool_use_id": "toolu_01KtUUsA1VXMstj3q4NJgXGU",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "ea9c5863-0749-4a1f-8961-ffee04ef3497",
+  "promptId": "5c7fcb14-2109-49c6-a2dc-162793f2749d",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "ea9c5863-0749-4a1f-8961-ffee04ef3497",
+  "timestamp": "2026-04-30T22:47:56.985Z",
+  "toolUseResult": {
+    "file": {
+      "content": "\n// Stream stubs\nexport class ReadStream { on() { return this; } pipe() { return this; } }\nexport class WriteStream { on() { return this; } write() {} end() {} }\nexport const createReadStream = notAvailable(\"createReadStream\");\nexport const createWriteStream = notAvailable(\"createWriteStream\");\n\n// promises namespace (re-export from separate stub)\nexport const promises = {\n  readFile: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n  writeFile: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n  readdir: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n  mkdir: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n  stat: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n  lstat: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n  unlink: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n  access: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n  realpath: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n  open: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n  copyFile: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n  rename: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n  rm: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n};\n\nexport default {\n  constants, readFileSync, writeFileSync, appendFileSync, existsSync,\n  mkdirSync, rmdirSync, rmSync, readdirSync, statSync, lstatSync, fstatSync,\n  unlinkSync, renameSync, copyFileSync, chmodSync, chownSync, truncateSync,\n  openSync, closeSync, readSync, writeSync, realpathSync,\n  readFile, writeFile, appendFile, readdir, mkdir, rmdir, rm,\n  stat, lstat, fstat, unlink, rename, copyFile, chmod, realpath,\n  open, close, access, watch, watchFile,\n  ReadStream, WriteStream, createReadStream, createWriteStream,\n  promises,\n};\n",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-fs.ts",
+      "numLines": 36,
+      "startLine": 60,
+      "totalLines": 95
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "b9e06eb3-7b05-4546-9335-bba81ca2e11c",
+  "version": "2.1.123"
+}

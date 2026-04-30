@@ -1,0 +1,27 @@
+{
+  "agentId": "a3a306fc5d1924556",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1155\t      includeSystem: ctx.query(\"includeSystem\") === \"true\",\n1156\t    });\n1157\t    return Response.json(docs);\n1158\t  };\n1159\t\n1160\t  const getIssueDocument: Handler = async (ctx) =\u003e {\n1161\t    const id = ctx.param(\"id\")!;\n1162\t    const issue = await svc.getById(id);\n1163\t    if (!issue) return Response.json({ error: \"Issue not found\" }, { status: 404 });\n1164\t    assertCompanyAccess(ctx, issue.companyId);\n1165\t    const keyParsed = issueDocumentKeySchema.safeParse(String(ctx.param(\"key\") ?? \"\").trim().toLowerCase());\n1166\t    if (!keyParsed.success) {\n1167\t      return Response.json({ error: \"Invalid document key\", details: keyParsed.error.issues }, { status: 400 });\n1168\t    }\n1169\t    const doc = await documentsSvc.getIssueDocumentByKey(issue.id, keyParsed.data);\n1170\t    if (!doc) return Response.json({ error: \"Document not found\" }, { status: 404 });\n1171\t    return Response.json(doc);\n1172\t  };\n1173\t\n1174\t  router.get(\"/issues/:id/heartbeat-context\", expressHandler(getHeartbeatContext, deps));\n1175\t  router.get(\"/issues/:id\", expressHandler(getIssue, deps));\n1176\t  router.get(\"/issues/:id/work-products\", expressHandler(getIssueWorkProducts, deps));\n1177\t  router.get(\"/issues/:id/documents\", expressHandler(listIssueDocuments, deps));\n1178\t  router.get(\"/issues/:id/documents/:key\", expressHandler(getIssueDocument, deps));\n1179\t\n1180\t  const upsertIssueDocument: Handler = async (ctx) =\u003e {\n1181\t    const id = ctx.param(\"id\")!;\n1182\t    const issue = await svc.getById(id);\n1183\t    if (!issue) return Response.json({ error: \"Issue not found\" }, { status: 404 });\n1184\t    assertCompanyAccess(ctx, issue.companyId);\n1185\t    await assertAgentIssueMutationAllowed(ctx, issue);\n1186\t    const keyParsed = issueDocumentKeySchema.safeParse(String(ctx.param(\"key\") ?? \"\").trim().toLowerCase());\n1187\t    if (!keyParsed.success) {\n1188\t      return Response.json({ error: \"Invalid document key\", details: keyParsed.error.issues }, { status: 400 });\n1189\t    }\n\n\u003csystem-reminder\u003e\nWhenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.\n\u003c/system-reminder\u003e\n",
+        "tool_use_id": "toolu_014ZxWJFHepvgkPrJkgmvSPj",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "07049124-7923-4870-ba01-a78bf9be2d5b",
+  "promptId": "e7cbb211-1d37-4345-b546-c3d4bd07be80",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "07049124-7923-4870-ba01-a78bf9be2d5b",
+  "timestamp": "2026-04-30T22:57:35.346Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "5f67c911-6fd6-4170-b117-bb43e73f8eb6",
+  "version": "2.1.123"
+}

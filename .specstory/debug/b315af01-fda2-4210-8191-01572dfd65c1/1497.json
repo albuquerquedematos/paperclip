@@ -1,0 +1,61 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "text": "Zero console errors. The page loaded and navigated to the Dashboard on its own.\n\nAll 6 previously-501 endpoints are now live:\n\n| Endpoint | Status |\n|---|---|\n| `GET /api/adapters` | `[]` (no adapter registry in CF) |\n| `GET /api/plugins/ui-contributions` | `[]` (no plugin registry in CF) |\n| `GET /api/companies/:id/skills` | Direct DB query, proper source info |\n| `GET /api/companies/:id/join-requests` | Direct DB query with dedup + invite enrichment |\n| `GET /api/companies/:id/user-directory` | Direct DB query |\n| `GET /api/companies/:id/events/ws` | CF-native WebSocket (101 Switching Protocols) |\n\nThe implementation lives in [cf-extra-routes.ts](packages/deploy-cloudflare/src/worker/cf-extra-routes.ts), registered in [app.ts](packages/deploy-cloudflare/src/worker/app.ts) before the `/api/*` catch-all. The WebSocket connection stays open but emits no events — once you wire up a Durable Object pub/sub bus, it can be plumbed through that same endpoint.",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01TjsS1kkoKFBcELuco2DpPg",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 285
+      },
+      "cache_creation_input_tokens": 285,
+      "cache_read_input_tokens": 79007,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 285
+          },
+          "cache_creation_input_tokens": 285,
+          "cache_read_input_tokens": 79007,
+          "input_tokens": 1,
+          "output_tokens": 343,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 343,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "81a3c4e9-9f10-4257-a880-f647a9a0ee34",
+  "requestId": "req_011CaaS8yfuhzQZc3q4bLVgf",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T18:32:29.779Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "5ca3398b-cfd1-4eca-bd43-4a0ba472513f",
+  "version": "2.1.123"
+}

@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { pgTable, uuid, text, timestamp, jsonb, uniqueIndex } from \"drizzle-orm/pg-core\";\n2\timport { plugins } from \"./plugins.js\";\n3\t\n4\t/**\n5\t * `plugin_config` table — stores operator-provided instance configuration\n6\t * for each plugin (one row per plugin, enforced by a unique index on\n7\t * `plugin_id`).\n8\t *\n9\t * The `config_json` column holds the values that the operator enters in the\n10\t * plugin settings UI. These values are validated at runtime against the\n11\t * plugin's `instanceConfigSchema` from the manifest.\n12\t *\n13\t * @see PLUGIN_SPEC.md §21.3\n14\t */\n15\texport const pluginConfig = pgTable(\n16\t  \"plugin_config\",\n17\t  {\n18\t    id: uuid(\"id\").primaryKey().defaultRandom(),\n19\t    pluginId: uuid(\"plugin_id\")\n20\t      .notNull()\n21\t      .references(() =\u003e plugins.id, { onDelete: \"cascade\" }),\n22\t    configJson: jsonb(\"config_json\").$type\u003cRecord\u003cstring, unknown\u003e\u003e().notNull().default({}),\n23\t    lastError: text(\"last_error\"),\n24\t    createdAt: timestamp(\"created_at\", { withTimezone: true }).notNull().defaultNow(),\n25\t    updatedAt: timestamp(\"updated_at\", { withTimezone: true }).notNull().defaultNow(),\n26\t  },\n27\t  (table) =\u003e ({\n28\t    pluginIdIdx: uniqueIndex(\"plugin_config_plugin_id_idx\").on(table.pluginId),\n29\t  }),\n30\t);\n31\t",
+        "tool_use_id": "toolu_01SRBRPqm4TgbFJcz1D6grbZ",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "035a61e0-a4fe-4f4a-a54e-97c27c124709",
+  "promptId": "a0dd8f6d-e0d4-4f57-8650-1c60e1512696",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "035a61e0-a4fe-4f4a-a54e-97c27c124709",
+  "timestamp": "2026-04-30T21:50:07.673Z",
+  "toolUseResult": {
+    "file": {
+      "content": "import { pgTable, uuid, text, timestamp, jsonb, uniqueIndex } from \"drizzle-orm/pg-core\";\nimport { plugins } from \"./plugins.js\";\n\n/**\n * `plugin_config` table — stores operator-provided instance configuration\n * for each plugin (one row per plugin, enforced by a unique index on\n * `plugin_id`).\n *\n * The `config_json` column holds the values that the operator enters in the\n * plugin settings UI. These values are validated at runtime against the\n * plugin's `instanceConfigSchema` from the manifest.\n *\n * @see PLUGIN_SPEC.md §21.3\n */\nexport const pluginConfig = pgTable(\n  \"plugin_config\",\n  {\n    id: uuid(\"id\").primaryKey().defaultRandom(),\n    pluginId: uuid(\"plugin_id\")\n      .notNull()\n      .references(() =\u003e plugins.id, { onDelete: \"cascade\" }),\n    configJson: jsonb(\"config_json\").$type\u003cRecord\u003cstring, unknown\u003e\u003e().notNull().default({}),\n    lastError: text(\"last_error\"),\n    createdAt: timestamp(\"created_at\", { withTimezone: true }).notNull().defaultNow(),\n    updatedAt: timestamp(\"updated_at\", { withTimezone: true }).notNull().defaultNow(),\n  },\n  (table) =\u003e ({\n    pluginIdIdx: uniqueIndex(\"plugin_config_plugin_id_idx\").on(table.pluginId),\n  }),\n);\n",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/db/src/schema/plugin_config.ts",
+      "numLines": 31,
+      "startLine": 1,
+      "totalLines": 31
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "42564c63-8490-4dd9-af11-2aee50870b55",
+  "version": "2.1.123"
+}

@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { and, asc, desc, eq, inArray } from \"drizzle-orm\";\n2\timport type { Db } from \"@paperclipai/db\";\n3\timport { projects, projectGoals, goals, projectWorkspaces, workspaceRuntimeServices } from \"@paperclipai/db\";\n4\timport {\n5\t  PROJECT_COLORS,\n6\t  deriveProjectUrlKey,\n7\t  hasNonAsciiContent,\n8\t  isUuidLike,\n9\t  normalizeProjectUrlKey,\n10\t  type ProjectCodebase,\n11\t  type ProjectExecutionWorkspacePolicy,\n12\t  type ProjectGoalRef,\n13\t  type ProjectWorkspaceRuntimeConfig,\n14\t  type ProjectWorkspace,\n15\t  type WorkspaceRuntimeService,\n16\t} from \"@paperclipai/shared\";\n17\timport { listCurrentRuntimeServicesForProjectWorkspaces } from \"./workspace-runtime-read-model.js\";\n18\timport { parseProjectExecutionWorkspacePolicy } from \"./execution-workspace-policy.js\";\n19\timport { mergeProjectWorkspaceRuntimeConfig, readProjectWorkspaceRuntimeConfig } from \"./project-workspace-runtime-config.js\";\n20\timport { resolveManagedProjectWorkspaceDir } from \"../home-paths.js\";\n21\t\n22\ttype ProjectRow = typeof projects.$inferSelect;\n23\ttype ProjectWorkspaceRow = typeof projectWorkspaces.$inferSelect;\n24\ttype WorkspaceRuntimeServiceRow = typeof workspaceRuntimeServices.$inferSelect;\n25\tconst REPO_ONLY_CWD_SENTINEL = \"/__paperclip_repo_only__\";",
+        "tool_use_id": "toolu_01P9C8uhD6r494jV7yfhYVY3",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "d6e972b5-5817-4cda-ad0a-2cb833cf3c94",
+  "promptId": "a4189397-43e1-4afc-b7a6-218998e9917e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "d6e972b5-5817-4cda-ad0a-2cb833cf3c94",
+  "timestamp": "2026-04-30T23:12:47.528Z",
+  "toolUseResult": {
+    "file": {
+      "content": "import { and, asc, desc, eq, inArray } from \"drizzle-orm\";\nimport type { Db } from \"@paperclipai/db\";\nimport { projects, projectGoals, goals, projectWorkspaces, workspaceRuntimeServices } from \"@paperclipai/db\";\nimport {\n  PROJECT_COLORS,\n  deriveProjectUrlKey,\n  hasNonAsciiContent,\n  isUuidLike,\n  normalizeProjectUrlKey,\n  type ProjectCodebase,\n  type ProjectExecutionWorkspacePolicy,\n  type ProjectGoalRef,\n  type ProjectWorkspaceRuntimeConfig,\n  type ProjectWorkspace,\n  type WorkspaceRuntimeService,\n} from \"@paperclipai/shared\";\nimport { listCurrentRuntimeServicesForProjectWorkspaces } from \"./workspace-runtime-read-model.js\";\nimport { parseProjectExecutionWorkspacePolicy } from \"./execution-workspace-policy.js\";\nimport { mergeProjectWorkspaceRuntimeConfig, readProjectWorkspaceRuntimeConfig } from \"./project-workspace-runtime-config.js\";\nimport { resolveManagedProjectWorkspaceDir } from \"../home-paths.js\";\n\ntype ProjectRow = typeof projects.$inferSelect;\ntype ProjectWorkspaceRow = typeof projectWorkspaces.$inferSelect;\ntype WorkspaceRuntimeServiceRow = typeof workspaceRuntimeServices.$inferSelect;\nconst REPO_ONLY_CWD_SENTINEL = \"/__paperclip_repo_only__\";",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/services/projects.ts",
+      "numLines": 25,
+      "startLine": 1,
+      "totalLines": 913
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "b71bd619-1929-41a1-9856-8726601d0713",
+  "version": "2.1.123"
+}

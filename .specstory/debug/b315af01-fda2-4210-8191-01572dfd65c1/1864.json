@@ -1,0 +1,62 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "signature": "Es4CClsIDRgCKkDT9E+I42qgfrnnUWYLSsWbaAvtLS7ZEER5Ou5Nx9N2Sjzr/mbSOJZ/82EA67UURoLpLbZaXcNJnLGC+BwZC9bFMhFjbGF1ZGUtc29ubmV0LTQtNjgAEgw4Z0urWFzIePckx5QaDDkySFOYtb4DvK4XRSIwjIOsQTqfLXjmV/9AzcY2BmrKaTjpaT6lUbBQeqJr/FA8WIElAq26SdBLRWVmckelKqAB6tI+HvI0sTY+kAt1S6WYly5D2nu9V/3QQq2QGivVPHAH/4HkJKRbBXi2gWkcyo8mJiZmoqY2N9G9aQF1m3S6hR59HEjloGip2z7ZP7JeI9r2Rq4hkKHyiYaqjEWTrA+Vz/Y1fjnZOeV23PU/WjcCw6FyBuOWkNNIq7svwTbstbANdqZdcpfX6pyt5Cc4k3+R96JJxSyr+iE5d1kvZfne4hgB",
+        "thinking": "`pino-http` is already shimmed to `pino-shim.ts`. Let me also check if `config-file.js` is shimmed or if it uses Node-only APIs that would fail:",
+        "type": "thinking"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01KucLjjuS6iKRfVPg2BDrX5",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 384
+      },
+      "cache_creation_input_tokens": 384,
+      "cache_read_input_tokens": 153704,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 384
+          },
+          "cache_creation_input_tokens": 384,
+          "cache_read_input_tokens": 153704,
+          "input_tokens": 1,
+          "output_tokens": 172,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 172,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "f03b8ff4-5b04-4fd5-b522-8c5f8a2a8ee3",
+  "requestId": "req_011CaaUy2SAxL6m6F7kAdepx",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T19:09:30.094Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "442ec59b-7049-44a3-9cc2-e7b3135187c4",
+  "version": "2.1.123"
+}

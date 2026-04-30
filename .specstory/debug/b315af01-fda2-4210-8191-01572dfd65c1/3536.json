@@ -1,0 +1,66 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/cf-extra-routes.ts has been updated successfully.",
+        "tool_use_id": "toolu_01TKvfY9EBXSeyRjVP29Ekqs",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "2140561b-dbf6-4aca-8105-4d52e68c665c",
+  "promptId": "ba04e90f-0d7c-4dcc-9bf9-971187295dfd",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "2140561b-dbf6-4aca-8105-4d52e68c665c",
+  "timestamp": "2026-04-30T22:03:16.586Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/cf-extra-routes.ts",
+    "newString": " * Modules:\n *   routes/adapters.ts          — GET /api/adapters\n *   routes/plugins.ts           — full plugin REST surface (list, install,\n *                                  detail, dashboard, config, jobs, lifecycle)\n *   routes/plugin-ui-static.ts  — GET /_plugins/:pluginId/ui/* (proxies to\n *                                  sidecar; without this the SPA fallback\n *                                  serves index.html and breaks plugin UIs)\n *   routes/company-access.ts    — join-requests + user-directory\n *   routes/company-skills-cf.ts — skill list/detail (DB) + file ops (sidecar)\n *   routes/events.ts            — GET /api/companies/:id/events/ws\n *   routes/instance-backups.ts  — POST /api/instance/database-backups",
+    "oldString": " * Modules:\n *   routes/adapters.ts       — GET /api/adapters\n *   routes/plugins.ts        — GET /api/plugins, GET /api/plugins/ui-contributions\n *   routes/company-access.ts — GET /api/companies/:id/join-requests,\n *                               GET /api/companies/:id/user-directory\n *   routes/company-skills-cf.ts — GET /api/companies/:id/skills\n *   routes/events.ts         — GET /api/companies/:id/events/ws",
+    "originalFile": "/**\n * cf-extra-routes.ts — barrel for CF-native route modules.\n *\n * CF-native handlers for API endpoints that use raw Express handlers in the\n * server package (making them invisible to extractRoutesFromRouter) or depend\n * on runtime registries (adapters, plugins) that don't exist in a CF Worker.\n *\n * Registered in app.ts BEFORE the /api/* catch-all so they shadow the 501.\n *\n * Modules:\n *   routes/adapters.ts       — GET /api/adapters\n *   routes/plugins.ts        — GET /api/plugins, GET /api/plugins/ui-contributions\n *   routes/company-access.ts — GET /api/companies/:id/join-requests,\n *                               GET /api/companies/:id/user-directory\n *   routes/company-skills-cf.ts — GET /api/companies/:id/skills\n *   routes/events.ts         — GET /api/companies/:id/events/ws\n *\n * All routes in this barrel require an authenticated actor (board or agent key,\n * or local_trusted mode). Unauthenticated requests receive 401.\n */\n\nimport type { Hono } from \"hono\";\nimport type { Env } from \"./env.js\";\nimport { registerAdapterRoutes } from \"./routes/adapters.js\";\nimport { registerPluginRoutes } from \"./routes/plugins.js\";\nimport { registerPluginUiStaticRoutes } from \"./routes/plugin-ui-static.js\";\nimport { registerCompanyAccessRoutes } from \"./routes/company-access.js\";\nimport { registerCompanySkillRoutes } from \"./routes/company-skills-cf.js\";\nimport { registerEventRoutes } from \"./routes/events.js\";\nimport { registerInstanceBackupRoutes } from \"./routes/instance-backups.js\";\n\nexport function registerCfExtraRoutes(app: Hono\u003c{ Bindings: Env }\u003e): void {\n  registerAdapterRoutes(app);\n  registerPluginRoutes(app);\n  registerPluginUiStaticRoutes(app);\n  registerCompanyAccessRoutes(app);\n  registerCompanySkillRoutes(app);\n  registerEventRoutes(app);\n  registerInstanceBackupRoutes(app);\n}\n",
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          "  * Registered in app.ts BEFORE the /api/* catch-all so they shadow the 501.",
+          "  *",
+          "  * Modules:",
+          "- *   routes/adapters.ts       — GET /api/adapters",
+          "- *   routes/plugins.ts        — GET /api/plugins, GET /api/plugins/ui-contributions",
+          "- *   routes/company-access.ts — GET /api/companies/:id/join-requests,",
+          "- *                               GET /api/companies/:id/user-directory",
+          "- *   routes/company-skills-cf.ts — GET /api/companies/:id/skills",
+          "- *   routes/events.ts         — GET /api/companies/:id/events/ws",
+          "+ *   routes/adapters.ts          — GET /api/adapters",
+          "+ *   routes/plugins.ts           — full plugin REST surface (list, install,",
+          "+ *                                  detail, dashboard, config, jobs, lifecycle)",
+          "+ *   routes/plugin-ui-static.ts  — GET /_plugins/:pluginId/ui/* (proxies to",
+          "+ *                                  sidecar; without this the SPA fallback",
+          "+ *                                  serves index.html and breaks plugin UIs)",
+          "+ *   routes/company-access.ts    — join-requests + user-directory",
+          "+ *   routes/company-skills-cf.ts — skill list/detail (DB) + file ops (sidecar)",
+          "+ *   routes/events.ts            — GET /api/companies/:id/events/ws",
+          "+ *   routes/instance-backups.ts  — POST /api/instance/database-backups",
+          "  *",
+          "  * All routes in this barrel require an authenticated actor (board or agent key,",
+          "  * or local_trusted mode). Unauthenticated requests receive 401."
+        ],
+        "newLines": 16,
+        "newStart": 8,
+        "oldLines": 12,
+        "oldStart": 8
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "94bf17c7-72ef-4831-bafa-1a180ed1cd0b",
+  "version": "2.1.123"
+}

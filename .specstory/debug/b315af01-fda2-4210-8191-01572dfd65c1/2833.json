@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "140\t  \"x-request-id\",\n141\t]);\n142\t\n143\tconst __dirname = path.dirname(fileURLToPath(import.meta.url));\n144\tconst REPO_ROOT = path.resolve(__dirname, \"../../..\");\n145\t\n146\tconst BUNDLED_PLUGIN_EXAMPLES: AvailablePluginExample[] = [\n147\t  {\n148\t    packageName: \"@paperclipai/plugin-hello-world-example\",\n149\t    pluginKey: \"paperclip.hello-world-example\",\n150\t    displayName: \"Hello World Widget (Example)\",\n151\t    description: \"Reference UI plugin that adds a simple Hello World widget to the Paperclip dashboard.\",\n152\t    localPath: \"packages/plugins/examples/plugin-hello-world-example\",\n153\t    tag: \"example\",\n154\t  },\n155\t  {\n156\t    packageName: \"@paperclipai/plugin-file-browser-example\",\n157\t    pluginKey: \"paperclip-file-browser-example\",\n158\t    displayName: \"File Browser (Example)\",\n159\t    description: \"Example plugin that adds a Files link in project navigation plus a project detail file browser.\",\n160\t    localPath: \"packages/plugins/examples/plugin-file-browser-example\",\n161\t    tag: \"example\",\n162\t  },\n163\t  {\n164\t    packageName: \"@paperclipai/plugin-kitchen-sink-example\",\n165\t    pluginKey: \"paperclip-kitchen-sink-example\",\n166\t    displayName: \"Kitchen Sink (Example)\",\n167\t    description: \"Reference plugin that demonstrates the current Paperclip plugin API surface, bridge flows, UI extension surfaces, jobs, webhooks, tools, streams, and trusted local workspace/process demos.\",\n168\t    localPath: \"packages/plugins/examples/plugin-kitchen-sink-example\",\n169\t    tag: \"example\",\n170\t  },\n171\t  {\n172\t    packageName: \"@paperclipai/plugin-orchestration-smoke-example\",\n173\t    pluginKey: \"paperclipai.plugin-orchestration-smoke-example\",\n174\t    displayName: \"Orchestration Smoke (Example)\",\n175\t    description: \"Acceptance fixture for scoped plugin routes, restricted database namespaces, issue orchestration, documents, wakeups, summaries, and UI status surfaces.\",\n176\t    localPath: \"packages/plugins/examples/plugin-orchestration-smoke-example\",\n177\t    tag: \"example\",\n178\t  },\n179\t];\n180\t\n181\t// TODO(cloudflare): listBundledPluginExamples uses existsSync to probe\n182\t// local repo paths at request time. These are development-only fixtures that\n183\t// reference monorepo-relative paths and are incompatible with Workers where\n184\t// there is no persistent local filesystem. This function should either be\n185\t// disabled entirely for the Workers deployment or the examples list should be\n186\t// served from a static bundled asset.\n187\tfunction listBundledPluginExamples(): AvailablePluginExample[] {\n188\t  return BUNDLED_PLUGIN_EXAMPLES.flatMap((plugin) =\u003e {\n189\t    const absoluteLocalPath = path.resolve(REPO_ROOT, plugin.localPath);\n190\t    if (!existsSync(absoluteLocalPath)) return [];\n191\t    return [{ ...plugin, localPath: absoluteLocalPath }];\n192\t  });\n193\t}\n194\t\n195\t/**\n196\t * Resolve a plugin by either database ID or plugin key.\n197\t *\n198\t * Lookup order:\n199\t * - UUID-like IDs: getById first, then getByKey.",
+        "tool_use_id": "toolu_01U9vJBXbuWhJx61sFE4q6pu",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "84dcac7f-99b8-41b4-a7c4-adf4c269c6b2",
+  "promptId": "d76ba7a5-5a30-4e4c-b6f3-f994065a0bad",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "84dcac7f-99b8-41b4-a7c4-adf4c269c6b2",
+  "timestamp": "2026-04-30T20:54:35.250Z",
+  "toolUseResult": {
+    "file": {
+      "content": "  \"x-request-id\",\n]);\n\nconst __dirname = path.dirname(fileURLToPath(import.meta.url));\nconst REPO_ROOT = path.resolve(__dirname, \"../../..\");\n\nconst BUNDLED_PLUGIN_EXAMPLES: AvailablePluginExample[] = [\n  {\n    packageName: \"@paperclipai/plugin-hello-world-example\",\n    pluginKey: \"paperclip.hello-world-example\",\n    displayName: \"Hello World Widget (Example)\",\n    description: \"Reference UI plugin that adds a simple Hello World widget to the Paperclip dashboard.\",\n    localPath: \"packages/plugins/examples/plugin-hello-world-example\",\n    tag: \"example\",\n  },\n  {\n    packageName: \"@paperclipai/plugin-file-browser-example\",\n    pluginKey: \"paperclip-file-browser-example\",\n    displayName: \"File Browser (Example)\",\n    description: \"Example plugin that adds a Files link in project navigation plus a project detail file browser.\",\n    localPath: \"packages/plugins/examples/plugin-file-browser-example\",\n    tag: \"example\",\n  },\n  {\n    packageName: \"@paperclipai/plugin-kitchen-sink-example\",\n    pluginKey: \"paperclip-kitchen-sink-example\",\n    displayName: \"Kitchen Sink (Example)\",\n    description: \"Reference plugin that demonstrates the current Paperclip plugin API surface, bridge flows, UI extension surfaces, jobs, webhooks, tools, streams, and trusted local workspace/process demos.\",\n    localPath: \"packages/plugins/examples/plugin-kitchen-sink-example\",\n    tag: \"example\",\n  },\n  {\n    packageName: \"@paperclipai/plugin-orchestration-smoke-example\",\n    pluginKey: \"paperclipai.plugin-orchestration-smoke-example\",\n    displayName: \"Orchestration Smoke (Example)\",\n    description: \"Acceptance fixture for scoped plugin routes, restricted database namespaces, issue orchestration, documents, wakeups, summaries, and UI status surfaces.\",\n    localPath: \"packages/plugins/examples/plugin-orchestration-smoke-example\",\n    tag: \"example\",\n  },\n];\n\n// TODO(cloudflare): listBundledPluginExamples uses existsSync to probe\n// local repo paths at request time. These are development-only fixtures that\n// reference monorepo-relative paths and are incompatible with Workers where\n// there is no persistent local filesystem. This function should either be\n// disabled entirely for the Workers deployment or the examples list should be\n// served from a static bundled asset.\nfunction listBundledPluginExamples(): AvailablePluginExample[] {\n  return BUNDLED_PLUGIN_EXAMPLES.flatMap((plugin) =\u003e {\n    const absoluteLocalPath = path.resolve(REPO_ROOT, plugin.localPath);\n    if (!existsSync(absoluteLocalPath)) return [];\n    return [{ ...plugin, localPath: absoluteLocalPath }];\n  });\n}\n\n/**\n * Resolve a plugin by either database ID or plugin key.\n *\n * Lookup order:\n * - UUID-like IDs: getById first, then getByKey.",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/plugins.ts",
+      "numLines": 60,
+      "startLine": 140,
+      "totalLines": 2071
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "e2a95373-0723-4c8c-988c-ac1911332318",
+  "version": "2.1.123"
+}

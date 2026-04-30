@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "1\t{\n2\t  \"name\": \"@paperclipai/adapter-claude-local\",\n3\t  \"version\": \"0.3.1\",\n4\t  \"license\": \"MIT\",\n5\t  \"homepage\": \"https://github.com/paperclipai/paperclip\",\n6\t  \"bugs\": {\n7\t    \"url\": \"https://github.com/paperclipai/paperclip/issues\"\n8\t  },\n9\t  \"repository\": {\n10\t    \"type\": \"git\",\n11\t    \"url\": \"https://github.com/paperclipai/paperclip\",\n12\t    \"directory\": \"packages/adapters/claude-local\"\n13\t  },\n14\t  \"type\": \"module\",\n15\t  \"exports\": {\n16\t    \".\": \"./src/index.ts\",\n17\t    \"./server\": \"./src/server/index.ts\",\n18\t    \"./ui\": \"./src/ui/index.ts\",\n19\t    \"./cli\": \"./src/cli/index.ts\"\n20\t  },\n21\t  \"publishConfig\": {\n22\t    \"access\": \"public\",\n23\t    \"exports\": {\n24\t      \".\": {\n25\t        \"types\": \"./dist/index.d.ts\",\n26\t        \"import\": \"./dist/index.js\"\n27\t      },\n28\t      \"./server\": {\n29\t        \"types\": \"./dist/server/index.d.ts\",\n30\t        \"import\": \"./dist/server/index.js\"\n31\t      },\n32\t      \"./ui\": {\n33\t        \"types\": \"./dist/ui/index.d.ts\",\n34\t        \"import\": \"./dist/ui/index.js\"\n35\t      },\n36\t      \"./cli\": {\n37\t        \"types\": \"./dist/cli/index.d.ts\",\n38\t        \"import\": \"./dist/cli/index.js\"\n39\t      }\n40\t    },\n41\t    \"main\": \"./dist/index.js\",\n42\t    \"types\": \"./dist/index.d.ts\"\n43\t  },\n44\t  \"files\": [\n45\t    \"dist\",\n46\t    \"skills\"\n47\t  ],\n48\t  \"scripts\": {\n49\t    \"build\": \"tsc\",\n50\t    \"clean\": \"rm -rf dist\",\n51\t    \"typecheck\": \"tsc --noEmit\",\n52\t    \"probe:quota\": \"pnpm exec tsx src/cli/quota-probe.ts --json\",\n53\t    \"probe:quota:raw\": \"pnpm exec tsx src/cli/quota-probe.ts --json --raw-cli\"\n54\t  },\n55\t  \"dependencies\": {\n56\t    \"@paperclipai/adapter-utils\": \"workspace:*\",\n57\t    \"picocolors\": \"^1.1.1\"\n58\t  },\n59\t  \"devDependencies\": {\n60\t    \"@types/node\": \"^24.6.0\",\n61\t    \"typescript\": \"^5.7.3\"\n62\t  }\n63\t}\n64\t",
+        "tool_use_id": "toolu_01QF86wceRyG6XBsWExC4P33",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "460a64e7-50c6-4cb2-a473-2f95dfa3eaf1",
+  "promptId": "2cd98dd6-123f-4c8f-bde6-185a892545c9",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "460a64e7-50c6-4cb2-a473-2f95dfa3eaf1",
+  "timestamp": "2026-04-30T23:28:18.531Z",
+  "toolUseResult": {
+    "file": {
+      "content": "{\n  \"name\": \"@paperclipai/adapter-claude-local\",\n  \"version\": \"0.3.1\",\n  \"license\": \"MIT\",\n  \"homepage\": \"https://github.com/paperclipai/paperclip\",\n  \"bugs\": {\n    \"url\": \"https://github.com/paperclipai/paperclip/issues\"\n  },\n  \"repository\": {\n    \"type\": \"git\",\n    \"url\": \"https://github.com/paperclipai/paperclip\",\n    \"directory\": \"packages/adapters/claude-local\"\n  },\n  \"type\": \"module\",\n  \"exports\": {\n    \".\": \"./src/index.ts\",\n    \"./server\": \"./src/server/index.ts\",\n    \"./ui\": \"./src/ui/index.ts\",\n    \"./cli\": \"./src/cli/index.ts\"\n  },\n  \"publishConfig\": {\n    \"access\": \"public\",\n    \"exports\": {\n      \".\": {\n        \"types\": \"./dist/index.d.ts\",\n        \"import\": \"./dist/index.js\"\n      },\n      \"./server\": {\n        \"types\": \"./dist/server/index.d.ts\",\n        \"import\": \"./dist/server/index.js\"\n      },\n      \"./ui\": {\n        \"types\": \"./dist/ui/index.d.ts\",\n        \"import\": \"./dist/ui/index.js\"\n      },\n      \"./cli\": {\n        \"types\": \"./dist/cli/index.d.ts\",\n        \"import\": \"./dist/cli/index.js\"\n      }\n    },\n    \"main\": \"./dist/index.js\",\n    \"types\": \"./dist/index.d.ts\"\n  },\n  \"files\": [\n    \"dist\",\n    \"skills\"\n  ],\n  \"scripts\": {\n    \"build\": \"tsc\",\n    \"clean\": \"rm -rf dist\",\n    \"typecheck\": \"tsc --noEmit\",\n    \"probe:quota\": \"pnpm exec tsx src/cli/quota-probe.ts --json\",\n    \"probe:quota:raw\": \"pnpm exec tsx src/cli/quota-probe.ts --json --raw-cli\"\n  },\n  \"dependencies\": {\n    \"@paperclipai/adapter-utils\": \"workspace:*\",\n    \"picocolors\": \"^1.1.1\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"^24.6.0\",\n    \"typescript\": \"^5.7.3\"\n  }\n}\n",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/package.json",
+      "numLines": 64,
+      "startLine": 1,
+      "totalLines": 64
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "e015279f-b705-4652-85da-349ba9c47043",
+  "version": "2.1.123"
+}

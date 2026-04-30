@@ -1,0 +1,28 @@
+{
+  "agentId": "aee092c208138b302",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "215:  // In local_trusted mode the DB is already set up; skip the KV gate.\n216:  if (c.env.DEPLOYMENT_MODE === \"local_trusted\") {\n266:  const deploymentMode = env.DEPLOYMENT_MODE === \"local_trusted\" ? \"local_trusted\" as const : \"authenticated\" as const;\n267:  const actor = await resolveActorFromRequest(c.req.raw, db, { deploymentMode });\n302:  const deploymentMode = env.DEPLOYMENT_MODE === \"local_trusted\" ? \"local_trusted\" as const : \"authenticated\" as const;\n303:  const actor = await resolveActorFromRequest(c.req.raw, db, { deploymentMode });\n357:        deploymentMode: c.env.DEPLOYMENT_MODE === \"local_trusted\"\n358:          ? \"local_trusted\"",
+        "is_error": false,
+        "tool_use_id": "toolu_01MR55VoJv3MTzexPDZbnYMX",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "6232e4f7-ecbe-49b5-bbdf-7365a9dfb8c4",
+  "promptId": "285fd922-5736-481c-a4fc-cf130aed3e81",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "6232e4f7-ecbe-49b5-bbdf-7365a9dfb8c4",
+  "timestamp": "2026-04-30T17:51:11.554Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "0f93338d-40e4-4091-91d7-5074381c54cf",
+  "version": "2.1.123"
+}

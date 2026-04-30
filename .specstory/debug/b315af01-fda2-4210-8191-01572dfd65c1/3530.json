@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "File created successfully at: /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/routes/instance-backups.ts",
+        "tool_use_id": "toolu_01QuKyNBmRz88Gm2CaABKWtC",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "26388a23-0d33-4771-9222-614f984c2a48",
+  "promptId": "ba04e90f-0d7c-4dcc-9bf9-971187295dfd",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "26388a23-0d33-4771-9222-614f984c2a48",
+  "timestamp": "2026-04-30T22:02:57.237Z",
+  "toolUseResult": {
+    "content": "/**\n * routes/instance-backups.ts\n *\n * CF-native handler for POST /api/instance/database-backups.\n *\n * Database backups dump a snapshot of the embedded Postgres to disk via\n * pg_dump (a child process). Neither pg_dump nor a writable filesystem are\n * available in CF Workers, so we proxy to the sidecar — it runs the original\n * server handler against its local filesystem and uploads the resulting blob\n * to the configured StorageProvider (R2 in CF deployments).\n *\n * Auth: instance admin only (enforced server-side by the proxied handler).\n */\n\nimport type { Hono } from \"hono\";\nimport { createHyperdriveDb } from \"../../db/hyperdrive.js\";\nimport { resolveActorFromRequest } from \"../../auth/resolve-actor.js\";\nimport { resolveDeploymentMode } from \"../env.js\";\nimport type { Env } from \"../env.js\";\n\nexport function registerInstanceBackupRoutes(app: Hono\u003c{ Bindings: Env }\u003e): void {\n  app.post(\"/api/instance/database-backups\", async (c) =\u003e {\n    const db = createHyperdriveDb(c.env.HYPERDRIVE);\n    const actor = await resolveActorFromRequest(c.req.raw, db, {\n      deploymentMode: resolveDeploymentMode(c.env),\n    });\n    if (!actor) return c.json({ error: \"Unauthorized\" }, 401);\n\n    const ct = c.req.header(\"Content-Type\");\n    const headers = new Headers();\n    if (ct) headers.set(\"Content-Type\", ct);\n    const path = \"/api/instance/database-backups\";\n\n    if (c.env.SIDECAR_SERVICE) {\n      const stub = c.env.SIDECAR_SERVICE.get(c.env.SIDECAR_SERVICE.idFromName(\"sidecar\"));\n      return stub.fetch(`http://sidecar${path}`, {\n        method: \"POST\",\n        headers,\n        body: c.req.raw.body,\n      });\n    }\n    const baseUrl = c.env.SIDECAR_URL;\n    if (!baseUrl) {\n      return c.json(\n        { error: \"Database backup requires the sidecar: configure SIDECAR_URL or SIDECAR_SERVICE\" },\n        503,\n      );\n    }\n    if (c.env.SIDECAR_API_KEY) headers.set(\"Authorization\", `Bearer ${c.env.SIDECAR_API_KEY}`);\n    try {\n      return await fetch(`${baseUrl}${path}`, {\n        method: \"POST\",\n        headers,\n        body: c.req.raw.body,\n      });\n    } catch {\n      return c.json({ error: \"Sidecar unreachable\" }, 503);\n    }\n  });\n}\n",
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/routes/instance-backups.ts",
+    "originalFile": null,
+    "structuredPatch": [],
+    "type": "create",
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "6e680bf9-72a1-4493-bd58-43b0c4e57833",
+  "version": "2.1.123"
+}

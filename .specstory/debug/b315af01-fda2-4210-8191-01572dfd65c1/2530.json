@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "commit d0490dbdfc5bccab598d87b6f3e4a5c748a8d19b\nAuthor: migmac99 \u003cmigmacthegamer@gmail.com\u003e\nDate:   Thu Apr 30 20:41:15 2026 +0100\n\n    refactor(deploy-cloudflare): security hardening, modularity, and doc pass\n    \n    Security:\n    - Add auth guard (401) to all CF-extra routes that previously had none:\n      GET /api/adapters, GET /api/plugins, GET /api/plugins/ui-contributions,\n      GET /api/companies/:id/skills, GET /api/companies/:id/join-requests,\n      GET /api/companies/:id/user-directory, GET /api/companies/:id/events/ws\n    - WebSocket endpoint now authenticates before the 101 upgrade response\n    \n    Correctness:\n    - route-registry: add length-mismatch guard on compiledPathCache so a\n      route-count change invalidates and rebuilds the cache rather than\n      silently misaligning handlers with compiled path patterns\n    - cf-express-bridge/runChain: add per-slot single-use `boundNext` guard\n      so a buggy middleware that calls next() twice does not advance the\n      chain past the wrong handler\n    \n    Modularity — split cf-extra-routes.ts (~320 lines) into focused modules:\n      src/worker/routes/adapters.ts        — GET /api/adapters\n      src/worker/routes/plugins.ts         — GET /api/plugins + /ui-contributions\n      src/worker/routes/company-access.ts  — join-requests + user-directory\n      src/worker/routes/company-skills-cf.ts — skills + deriveSkillSource helper\n      src/worker/routes/events.ts          — WebSocket event stream\n      cf-extra-routes.ts is now a thin barrel that calls each register*() fn\n    \n    Documentation:\n    - cf-extra-routes barrel: lists all child modules and their auth contract\n    - route-registry: WHY comments for adapterRoutes (sentinel proxies) and\n      accessRoutes (extractAllRoutesFromRouter vs ext)\n    - cf-express-bridge: double-next() guard explained in runChain comment\n    - Each new route file has a module-level JSDoc with CF-specific caveats\n    \n    Co-Authored-By: Claude Sonnet 4.6 \u003cnoreply@anthropic.com\u003e\n\n .../src/http/cf-express-bridge.ts                  |  22 +-\n .../src/worker/cf-extra-routes.ts                  | 386 ++-------------------\n .../deploy-cloudflare/src/worker/route-registry.ts |  24 +-\n .../src/worker/routes/adapters.ts                  |  59 ++++\n .../src/worker/routes/company-access.ts            | 184 ++++++++++\n .../src/worker/routes/company-skills-cf.ts         | 167 +++++++++\n .../deploy-cloudflare/src/worker/routes/events.ts  |  56 +++\n .../deploy-cloudflare/src/worker/routes/plugins.ts |  82 +++++\n 8 files changed, 609 insertions(+), 371 deletions(-)",
+        "is_error": false,
+        "tool_use_id": "toolu_012362QQURAGsf4n7y7EzYc3",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "66f8c0ca-3e0f-4e64-b5f3-e8b6d12af014",
+  "promptId": "8a433599-d510-488c-a09f-2af6b1c28bcb",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "66f8c0ca-3e0f-4e64-b5f3-e8b6d12af014",
+  "timestamp": "2026-04-30T19:42:03.676Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "commit d0490dbdfc5bccab598d87b6f3e4a5c748a8d19b\nAuthor: migmac99 \u003cmigmacthegamer@gmail.com\u003e\nDate:   Thu Apr 30 20:41:15 2026 +0100\n\n    refactor(deploy-cloudflare): security hardening, modularity, and doc pass\n    \n    Security:\n    - Add auth guard (401) to all CF-extra routes that previously had none:\n      GET /api/adapters, GET /api/plugins, GET /api/plugins/ui-contributions,\n      GET /api/companies/:id/skills, GET /api/companies/:id/join-requests,\n      GET /api/companies/:id/user-directory, GET /api/companies/:id/events/ws\n    - WebSocket endpoint now authenticates before the 101 upgrade response\n    \n    Correctness:\n    - route-registry: add length-mismatch guard on compiledPathCache so a\n      route-count change invalidates and rebuilds the cache rather than\n      silently misaligning handlers with compiled path patterns\n    - cf-express-bridge/runChain: add per-slot single-use `boundNext` guard\n      so a buggy middleware that calls next() twice does not advance the\n      chain past the wrong handler\n    \n    Modularity — split cf-extra-routes.ts (~320 lines) into focused modules:\n      src/worker/routes/adapters.ts        — GET /api/adapters\n      src/worker/routes/plugins.ts         — GET /api/plugins + /ui-contributions\n      src/worker/routes/company-access.ts  — join-requests + user-directory\n      src/worker/routes/company-skills-cf.ts — skills + deriveSkillSource helper\n      src/worker/routes/events.ts          — WebSocket event stream\n      cf-extra-routes.ts is now a thin barrel that calls each register*() fn\n    \n    Documentation:\n    - cf-extra-routes barrel: lists all child modules and their auth contract\n    - route-registry: WHY comments for adapterRoutes (sentinel proxies) and\n      accessRoutes (extractAllRoutesFromRouter vs ext)\n    - cf-express-bridge: double-next() guard explained in runChain comment\n    - Each new route file has a module-level JSDoc with CF-specific caveats\n    \n    Co-Authored-By: Claude Sonnet 4.6 \u003cnoreply@anthropic.com\u003e\n\n .../src/http/cf-express-bridge.ts                  |  22 +-\n .../src/worker/cf-extra-routes.ts                  | 386 ++-------------------\n .../deploy-cloudflare/src/worker/route-registry.ts |  24 +-\n .../src/worker/routes/adapters.ts                  |  59 ++++\n .../src/worker/routes/company-access.ts            | 184 ++++++++++\n .../src/worker/routes/company-skills-cf.ts         | 167 +++++++++\n .../deploy-cloudflare/src/worker/routes/events.ts  |  56 +++\n .../deploy-cloudflare/src/worker/routes/plugins.ts |  82 +++++\n 8 files changed, 609 insertions(+), 371 deletions(-)"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "46e80c0f-9e0a-451c-b59b-130f9d676b00",
+  "version": "2.1.123"
+}

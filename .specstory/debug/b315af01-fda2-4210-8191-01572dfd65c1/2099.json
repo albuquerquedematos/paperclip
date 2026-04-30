@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport {\n2\t  pgTable,\n3\t  uuid,\n4\t  text,\n5\t  integer,\n6\t  timestamp,\n7\t  jsonb,\n8\t  index,\n9\t  uniqueIndex,\n10\t} from \"drizzle-orm/pg-core\";\n11\timport type { PluginCategory, PluginStatus, PaperclipPluginManifestV1 } from \"@paperclipai/shared\";\n12\t\n13\t/**\n14\t * `plugins` table — stores one row per installed plugin.\n15\t *\n16\t * Each plugin is uniquely identified by `plugin_key` (derived from\n17\t * the manifest `id`). The full manifest is persisted as JSONB in\n18\t * `manifest_json` so the host can reconstruct capability and UI\n19\t * slot information without loading the plugin package.\n20\t *\n21\t * @see PLUGIN_SPEC.md §21.3\n22\t */\n23\texport const plugins = pgTable(\n24\t  \"plugins\",\n25\t  {\n26\t    id: uuid(\"id\").primaryKey().defaultRandom(),\n27\t    pluginKey: text(\"plugin_key\").notNull(),\n28\t    packageName: text(\"package_name\").notNull(),\n29\t    version: text(\"version\").notNull(),\n30\t    apiVersion: integer(\"api_version\").notNull().default(1),\n31\t    categories: jsonb(\"categories\").$type\u003cPluginCategory[]\u003e().notNull().default([]),\n32\t    manifestJson: jsonb(\"manifest_json\").$type\u003cPaperclipPluginManifestV1\u003e().notNull(),\n33\t    status: text(\"status\").$type\u003cPluginStatus\u003e().notNull().default(\"installed\"),\n34\t    installOrder: integer(\"install_order\"),\n35\t    /** Resolved package path for local-path installs; used to find worker entrypoint. */\n36\t    packagePath: text(\"package_path\"),\n37\t    lastError: text(\"last_error\"),\n38\t    installedAt: timestamp(\"installed_at\", { withTimezone: true }).notNull().defaultNow(),\n39\t    updatedAt: timestamp(\"updated_at\", { withTimezone: true }).notNull().defaultNow(),\n40\t  },",
+        "tool_use_id": "toolu_0128kBvqBYeStDX3J5YqoVoM",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "eb2e9d0a-ac4e-4a5c-8a80-534dadca5494",
+  "promptId": "8e37c333-7c8a-4b0c-ae99-027b99e1bf51",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "eb2e9d0a-ac4e-4a5c-8a80-534dadca5494",
+  "timestamp": "2026-04-30T19:25:53.730Z",
+  "toolUseResult": {
+    "file": {
+      "content": "import {\n  pgTable,\n  uuid,\n  text,\n  integer,\n  timestamp,\n  jsonb,\n  index,\n  uniqueIndex,\n} from \"drizzle-orm/pg-core\";\nimport type { PluginCategory, PluginStatus, PaperclipPluginManifestV1 } from \"@paperclipai/shared\";\n\n/**\n * `plugins` table — stores one row per installed plugin.\n *\n * Each plugin is uniquely identified by `plugin_key` (derived from\n * the manifest `id`). The full manifest is persisted as JSONB in\n * `manifest_json` so the host can reconstruct capability and UI\n * slot information without loading the plugin package.\n *\n * @see PLUGIN_SPEC.md §21.3\n */\nexport const plugins = pgTable(\n  \"plugins\",\n  {\n    id: uuid(\"id\").primaryKey().defaultRandom(),\n    pluginKey: text(\"plugin_key\").notNull(),\n    packageName: text(\"package_name\").notNull(),\n    version: text(\"version\").notNull(),\n    apiVersion: integer(\"api_version\").notNull().default(1),\n    categories: jsonb(\"categories\").$type\u003cPluginCategory[]\u003e().notNull().default([]),\n    manifestJson: jsonb(\"manifest_json\").$type\u003cPaperclipPluginManifestV1\u003e().notNull(),\n    status: text(\"status\").$type\u003cPluginStatus\u003e().notNull().default(\"installed\"),\n    installOrder: integer(\"install_order\"),\n    /** Resolved package path for local-path installs; used to find worker entrypoint. */\n    packagePath: text(\"package_path\"),\n    lastError: text(\"last_error\"),\n    installedAt: timestamp(\"installed_at\", { withTimezone: true }).notNull().defaultNow(),\n    updatedAt: timestamp(\"updated_at\", { withTimezone: true }).notNull().defaultNow(),\n  },",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/db/src/schema/plugins.ts",
+      "numLines": 40,
+      "startLine": 1,
+      "totalLines": 46
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "b47e8712-edad-41be-bd71-6368b8266c95",
+  "version": "2.1.123"
+}

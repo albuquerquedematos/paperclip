@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "178\texport function getDisabledAdapterTypes(): string[] {\n179\t  return readSettings().disabledTypes;\n180\t}\n181\t\n182\texport function isAdapterDisabled(type: string): boolean {\n183\t  return readSettings().disabledTypes.includes(type);\n184\t}\n185\t\n186\texport function setAdapterDisabled(type: string, disabled: boolean): boolean {\n187\t  const settings = { ...readSettings(), disabledTypes: [...readSettings().disabledTypes] };\n188\t  const idx = settings.disabledTypes.indexOf(type);\n189\t\n190\t  if (disabled \u0026\u0026 idx \u003c 0) {\n191\t    settings.disabledTypes.push(type);\n192\t    writeSettings(settings);\n193\t    return true;\n194\t  }\n195\t  if (!disabled \u0026\u0026 idx \u003e= 0) {\n196\t    settings.disabledTypes.splice(idx, 1);\n197\t    writeSettings(settings);",
+        "tool_use_id": "toolu_01Gr9QopFh8eQ58SNCJS3St8",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "a0f54792-d633-4a6c-9aa2-5d2f2bb28d6c",
+  "promptId": "0d05d433-ef46-4bba-8105-f1d502a42e1e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "a0f54792-d633-4a6c-9aa2-5d2f2bb28d6c",
+  "timestamp": "2026-04-30T19:30:10.291Z",
+  "toolUseResult": {
+    "file": {
+      "content": "export function getDisabledAdapterTypes(): string[] {\n  return readSettings().disabledTypes;\n}\n\nexport function isAdapterDisabled(type: string): boolean {\n  return readSettings().disabledTypes.includes(type);\n}\n\nexport function setAdapterDisabled(type: string, disabled: boolean): boolean {\n  const settings = { ...readSettings(), disabledTypes: [...readSettings().disabledTypes] };\n  const idx = settings.disabledTypes.indexOf(type);\n\n  if (disabled \u0026\u0026 idx \u003c 0) {\n    settings.disabledTypes.push(type);\n    writeSettings(settings);\n    return true;\n  }\n  if (!disabled \u0026\u0026 idx \u003e= 0) {\n    settings.disabledTypes.splice(idx, 1);\n    writeSettings(settings);",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/services/adapter-plugin-store.ts",
+      "numLines": 20,
+      "startLine": 178,
+      "totalLines": 202
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "43fe9cc4-86a2-41a9-a754-d45878260427",
+  "version": "2.1.123"
+}

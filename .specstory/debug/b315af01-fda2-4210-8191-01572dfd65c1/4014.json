@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "20\t    expect(parseProjectMentionHref(href)).toEqual({\n21\t      projectId: \"project-123\",\n22\t      color: \"#336699\",\n23\t    });\n24\t    expect(extractProjectMentionIds(`[@Paperclip App](${href})`)).toEqual([\"project-123\"]);\n25\t  });\n26\t\n27\t  it(\"round-trips agent mentions with icon metadata\", () =\u003e {\n28\t    const href = buildAgentMentionHref(\"agent-123\", \"code\");\n29\t    expect(parseAgentMentionHref(href)).toEqual({\n30\t      agentId: \"agent-123\",\n31\t      icon: \"code\",\n32\t    });\n33\t    expect(extractAgentMentionIds(`[@CodexCoder](${href})`)).toEqual([\"agent-123\"]);\n34\t  });\n35\t\n36\t  it(\"round-trips user mentions\", () =\u003e {\n37\t    const href = buildUserMentionHref(\"user-123\");\n38\t    expect(parseUserMentionHref(href)).toEqual({\n39\t      userId: \"user-123\",\n40\t    });\n41\t    expect(extractUserMentionIds(`[@Taylor](${href})`)).toEqual([\"user-123\"]);\n42\t  });\n43\t\n44\t  it(\"round-trips skill mentions with slug metadata\", () =\u003e {\n45\t    const href = buildSkillMentionHref(\"skill-123\", \"release-changelog\");\n46\t    expect(parseSkillMentionHref(href)).toEqual({\n47\t      skillId: \"skill-123\",\n48\t      slug: \"release-changelog\",\n49\t    });",
+        "tool_use_id": "toolu_01TmsVx149pK6n6Mfg1gukHi",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "47f130a1-0d92-4e52-b944-eaeb02f5983e",
+  "promptId": "0c147d6f-915f-4b9e-a139-f26417e7157e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "47f130a1-0d92-4e52-b944-eaeb02f5983e",
+  "timestamp": "2026-04-30T23:05:30.613Z",
+  "toolUseResult": {
+    "file": {
+      "content": "    expect(parseProjectMentionHref(href)).toEqual({\n      projectId: \"project-123\",\n      color: \"#336699\",\n    });\n    expect(extractProjectMentionIds(`[@Paperclip App](${href})`)).toEqual([\"project-123\"]);\n  });\n\n  it(\"round-trips agent mentions with icon metadata\", () =\u003e {\n    const href = buildAgentMentionHref(\"agent-123\", \"code\");\n    expect(parseAgentMentionHref(href)).toEqual({\n      agentId: \"agent-123\",\n      icon: \"code\",\n    });\n    expect(extractAgentMentionIds(`[@CodexCoder](${href})`)).toEqual([\"agent-123\"]);\n  });\n\n  it(\"round-trips user mentions\", () =\u003e {\n    const href = buildUserMentionHref(\"user-123\");\n    expect(parseUserMentionHref(href)).toEqual({\n      userId: \"user-123\",\n    });\n    expect(extractUserMentionIds(`[@Taylor](${href})`)).toEqual([\"user-123\"]);\n  });\n\n  it(\"round-trips skill mentions with slug metadata\", () =\u003e {\n    const href = buildSkillMentionHref(\"skill-123\", \"release-changelog\");\n    expect(parseSkillMentionHref(href)).toEqual({\n      skillId: \"skill-123\",\n      slug: \"release-changelog\",\n    });",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/shared/src/project-mentions.test.ts",
+      "numLines": 30,
+      "startLine": 20,
+      "totalLines": 53
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "a424e0f7-d635-4e34-acc3-8c1bba3e6e8a",
+  "version": "2.1.123"
+}

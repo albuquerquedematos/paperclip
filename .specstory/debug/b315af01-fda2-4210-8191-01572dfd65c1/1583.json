@@ -1,0 +1,43 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": [
+          {
+            "tool_name": "mcp__playwright__browser_navigate",
+            "type": "tool_reference"
+          },
+          {
+            "tool_name": "mcp__playwright__browser_click",
+            "type": "tool_reference"
+          }
+        ],
+        "tool_use_id": "toolu_01NerNHucBYw3gJBACoyAxKh",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "e8eda611-aeee-45ee-8f9f-ccc5af586651",
+  "promptId": "6578f9d8-71c9-42ed-bd5d-4cac4f413d52",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "e8eda611-aeee-45ee-8f9f-ccc5af586651",
+  "timestamp": "2026-04-30T18:52:27.799Z",
+  "toolUseResult": {
+    "matches": [
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_click"
+    ],
+    "query": "select:mcp__playwright__browser_navigate,mcp__playwright__browser_click",
+    "total_deferred_tools": 157
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "a982ba62-b981-41e4-82b4-10f84b61234a",
+  "version": "2.1.123"
+}

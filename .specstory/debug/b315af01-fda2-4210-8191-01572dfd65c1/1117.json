@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "180:  api.use(boardMutationGuard());\n181:  api.use(\n190:  api.use(\"/companies\", companyRoutes(db, opts.storageService));\n191:  api.use(companySkillRoutes(db));\n192:  api.use(agentRoutes(db, { pluginWorkerManager: workerManager }));\n193:  api.use(assetRoutes(db, opts.storageService));\n194:  api.use(projectRoutes(db));\n195:  api.use(issueRoutes(db, opts.storageService, {\n199:  api.use(issueTreeControlRoutes(db));\n200:  api.use(routineRoutes(db, { pluginWorkerManager: workerManager }));\n201:  api.use(environmentRoutes(db, { pluginWorkerManager: workerManager }));\n202:  api.use(executionWorkspaceRoutes(db));\n203:  api.use(goalRoutes(db));\n204:  api.use(approvalRoutes(db, { pluginWorkerManager: workerManager }));\n205:  api.use(secretRoutes(db));\n206:  api.use(costRoutes(db, { pluginWorkerManager: workerManager }));\n207:  api.use(activityRoutes(db));\n208:  api.use(dashboardRoutes(db));\n209:  api.use(userProfileRoutes(db));\n210:  api.use(sidebarBadgeRoutes(db));\n211:  api.use(sidebarPreferenceRoutes(db));\n212:  api.use(inboxDismissalRoutes(db));\n213:  api.use(instanceSettingsRoutes(db));\n215:    api.use(instanceDatabaseBackupRoutes(opts.databaseBackupService));\n274:  api.use(\n284:  api.use(adapterRoutes());\n285:  api.use(",
+        "is_error": false,
+        "tool_use_id": "toolu_01Uq8oF8ZMueMzYnpv7DbpTK",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "acd782cf-8cfc-4717-b722-5dd113feeef3",
+  "promptId": "3b760618-5209-4d12-a1b8-2c9bc64e4fcd",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "acd782cf-8cfc-4717-b722-5dd113feeef3",
+  "timestamp": "2026-04-30T18:08:23.782Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "180:  api.use(boardMutationGuard());\n181:  api.use(\n190:  api.use(\"/companies\", companyRoutes(db, opts.storageService));\n191:  api.use(companySkillRoutes(db));\n192:  api.use(agentRoutes(db, { pluginWorkerManager: workerManager }));\n193:  api.use(assetRoutes(db, opts.storageService));\n194:  api.use(projectRoutes(db));\n195:  api.use(issueRoutes(db, opts.storageService, {\n199:  api.use(issueTreeControlRoutes(db));\n200:  api.use(routineRoutes(db, { pluginWorkerManager: workerManager }));\n201:  api.use(environmentRoutes(db, { pluginWorkerManager: workerManager }));\n202:  api.use(executionWorkspaceRoutes(db));\n203:  api.use(goalRoutes(db));\n204:  api.use(approvalRoutes(db, { pluginWorkerManager: workerManager }));\n205:  api.use(secretRoutes(db));\n206:  api.use(costRoutes(db, { pluginWorkerManager: workerManager }));\n207:  api.use(activityRoutes(db));\n208:  api.use(dashboardRoutes(db));\n209:  api.use(userProfileRoutes(db));\n210:  api.use(sidebarBadgeRoutes(db));\n211:  api.use(sidebarPreferenceRoutes(db));\n212:  api.use(inboxDismissalRoutes(db));\n213:  api.use(instanceSettingsRoutes(db));\n215:    api.use(instanceDatabaseBackupRoutes(opts.databaseBackupService));\n274:  api.use(\n284:  api.use(adapterRoutes());\n285:  api.use("
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "981d5564-e753-46ed-bd5b-b40df0b0824c",
+  "version": "2.1.123"
+}

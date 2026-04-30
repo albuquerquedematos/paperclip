@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/auth/resolve-actor.ts:78:export type DeploymentMode = \"local_trusted\" | \"authenticated\";\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/auth/resolve-actor.ts:99:  opts: { deploymentMode: DeploymentMode },\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/app.ts:18:import { resolveDeploymentMode } from \"./env.js\";\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/app.ts:114:      deploymentMode: resolveDeploymentMode(c.env),\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/upload-handlers.ts:16:import { resolveDeploymentMode } from \"./env.js\";\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/upload-handlers.ts:28:    const actor = await resolveActorFromRequest(c.req.raw, db, { deploymentMode: resolveDeploymentMode(env) });\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/upload-handlers.ts:68:    const actor = await resolveActorFromRequest(c.req.raw, db, { deploymentMode: resolveDeploymentMode(env) });\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/env.ts:55:export type DeploymentMode = \"local_trusted\" | \"authenticated\";\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/env.ts:61:export function resolveDeploymentMode(env: Env): DeploymentMode {",
+        "is_error": false,
+        "tool_use_id": "toolu_01AJeti6S3hqMj9hhBAQhKu6",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "503955de-ddd2-4c58-9cd9-e3f7f610b26c",
+  "promptId": "6578f9d8-71c9-42ed-bd5d-4cac4f413d52",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "503955de-ddd2-4c58-9cd9-e3f7f610b26c",
+  "timestamp": "2026-04-30T19:13:57.028Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/auth/resolve-actor.ts:78:export type DeploymentMode = \"local_trusted\" | \"authenticated\";\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/auth/resolve-actor.ts:99:  opts: { deploymentMode: DeploymentMode },\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/app.ts:18:import { resolveDeploymentMode } from \"./env.js\";\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/app.ts:114:      deploymentMode: resolveDeploymentMode(c.env),\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/upload-handlers.ts:16:import { resolveDeploymentMode } from \"./env.js\";\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/upload-handlers.ts:28:    const actor = await resolveActorFromRequest(c.req.raw, db, { deploymentMode: resolveDeploymentMode(env) });\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/upload-handlers.ts:68:    const actor = await resolveActorFromRequest(c.req.raw, db, { deploymentMode: resolveDeploymentMode(env) });\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/env.ts:55:export type DeploymentMode = \"local_trusted\" | \"authenticated\";\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/env.ts:61:export function resolveDeploymentMode(env: Env): DeploymentMode {"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "054f528d-10c6-4078-af51-73ac9acee2c7",
+  "version": "2.1.123"
+}

@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "695\t    if (!parsed) {\n696\t      const fallbackErrorMessage = parseFallbackErrorMessage(proc);\n697\t      const transientUpstream =\n698\t        !loginMeta.requiresLogin \u0026\u0026\n699\t        (proc.exitCode ?? 0) !== 0 \u0026\u0026\n700\t        isClaudeTransientUpstreamError({\n701\t          parsed: null,\n702\t          stdout: proc.stdout,\n703\t          stderr: proc.stderr,\n704\t          errorMessage: fallbackErrorMessage,\n705\t        });\n706\t      const transientRetryNotBefore = transientUpstream\n707\t        ? extractClaudeRetryNotBefore({\n708\t            parsed: null,\n709\t            stdout: proc.stdout,\n710\t            stderr: proc.stderr,\n711\t            errorMessage: fallbackErrorMessage,\n712\t          })\n713\t        : null;\n714\t      const errorCode = loginMeta.requiresLogin\n715\t        ? \"claude_auth_required\"\n716\t        : transientUpstream\n717\t        ? \"claude_transient_upstream\"\n718\t        : null;\n719\t      return {\n720\t        exitCode: proc.exitCode,\n721\t        signal: proc.signal,\n722\t        timedOut: false,\n723\t        errorMessage: fallbackErrorMessage,\n724\t        errorCode,\n725\t        errorFamily: transientUpstream ? \"transient_upstream\" : null,\n726\t        retryNotBefore: transientRetryNotBefore ? transientRetryNotBefore.toISOString() : null,\n727\t        errorMeta,\n728\t        resultJson: {\n729\t          stdout: proc.stdout,\n730\t          stderr: proc.stderr,\n731\t          ...(transientUpstream ? { errorFamily: \"transient_upstream\" } : {}),\n732\t          ...(transientRetryNotBefore\n733\t            ? { retryNotBefore: transientRetryNotBefore.toISOString() }\n734\t            : {}),\n735\t          ...(transientRetryNotBefore\n736\t            ? { transientRetryNotBefore: transientRetryNotBefore.toISOString() }\n737\t            : {}),\n738\t        },\n739\t        clearSession: Boolean(opts.clearSessionOnMissingSession),\n740\t      };\n741\t    }\n742\t\n743\t    const usage =\n744\t      parsedStream.usage ??",
+        "tool_use_id": "toolu_01VtFmX4ndWX5U9mr6cc5Pf2",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "d54051ed-b602-4125-89d2-5862614df6e3",
+  "promptId": "2cd98dd6-123f-4c8f-bde6-185a892545c9",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "d54051ed-b602-4125-89d2-5862614df6e3",
+  "timestamp": "2026-04-30T23:29:08.820Z",
+  "toolUseResult": {
+    "file": {
+      "content": "    if (!parsed) {\n      const fallbackErrorMessage = parseFallbackErrorMessage(proc);\n      const transientUpstream =\n        !loginMeta.requiresLogin \u0026\u0026\n        (proc.exitCode ?? 0) !== 0 \u0026\u0026\n        isClaudeTransientUpstreamError({\n          parsed: null,\n          stdout: proc.stdout,\n          stderr: proc.stderr,\n          errorMessage: fallbackErrorMessage,\n        });\n      const transientRetryNotBefore = transientUpstream\n        ? extractClaudeRetryNotBefore({\n            parsed: null,\n            stdout: proc.stdout,\n            stderr: proc.stderr,\n            errorMessage: fallbackErrorMessage,\n          })\n        : null;\n      const errorCode = loginMeta.requiresLogin\n        ? \"claude_auth_required\"\n        : transientUpstream\n        ? \"claude_transient_upstream\"\n        : null;\n      return {\n        exitCode: proc.exitCode,\n        signal: proc.signal,\n        timedOut: false,\n        errorMessage: fallbackErrorMessage,\n        errorCode,\n        errorFamily: transientUpstream ? \"transient_upstream\" : null,\n        retryNotBefore: transientRetryNotBefore ? transientRetryNotBefore.toISOString() : null,\n        errorMeta,\n        resultJson: {\n          stdout: proc.stdout,\n          stderr: proc.stderr,\n          ...(transientUpstream ? { errorFamily: \"transient_upstream\" } : {}),\n          ...(transientRetryNotBefore\n            ? { retryNotBefore: transientRetryNotBefore.toISOString() }\n            : {}),\n          ...(transientRetryNotBefore\n            ? { transientRetryNotBefore: transientRetryNotBefore.toISOString() }\n            : {}),\n        },\n        clearSession: Boolean(opts.clearSessionOnMissingSession),\n      };\n    }\n\n    const usage =\n      parsedStream.usage ??",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts",
+      "numLines": 50,
+      "startLine": 695,
+      "totalLines": 869
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "f9878553-acfa-425a-96b5-7c7f02cad5e2",
+  "version": "2.1.123"
+}

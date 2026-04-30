@@ -1,0 +1,71 @@
+{
+  "agentId": "a8455dc48bdf97d68",
+  "attributionAgent": "architect-reviewer",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/.claude/worktrees/agent-a8455dc48bdf97d68",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "worktree-agent-a8455dc48bdf97d68",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01BBdbwMbCYGGUN8933iR9UF",
+        "input": {
+          "command": "cd /Users/migmac/Documents/GitHub/_ABM/paperclip \u0026\u0026 git diff --stat",
+          "description": "Check changed files"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01HvH7adnp1PoN4EWm8WrLnb",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 135
+      },
+      "cache_creation_input_tokens": 135,
+      "cache_read_input_tokens": 77794,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 135
+          },
+          "cache_creation_input_tokens": 135,
+          "cache_read_input_tokens": 77794,
+          "input_tokens": 1,
+          "output_tokens": 186,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 186,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "f6ec4a96-65f5-403d-9bd7-b87d662be1b7",
+  "requestId": "req_011CaaXMyeNHWRXKo5xaUbHC",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T19:40:56.214Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "778be273-5a68-4582-b76f-9d1d6b5629ab",
+  "version": "2.1.123"
+}

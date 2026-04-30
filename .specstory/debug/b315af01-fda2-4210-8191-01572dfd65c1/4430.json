@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "import fs from \"node:fs\";\nimport path from \"node:path\";\n\nfunction toGlobstarPath(candidate: string): string {\n  return `${candidate.replaceAll(path.sep, \"/\")}/**`;\n}\n\nfunction addIgnorePath(target: Set\u003cstring\u003e, candidate: string): void {\n  target.add(candidate);\n  target.add(toGlobstarPath(candidate));\n  try {\n    const realPath = fs.realpathSync(candidate);\n    target.add(realPath);\n    target.add(toGlobstarPath(realPath));\n  } catch {\n    // Ignore paths that do not exist in the current checkout.\n  }\n}\n\nexport function resolveServerDevWatchIgnorePaths(serverRoot: string): string[] {\n  const ignorePaths = new Set\u003cstring\u003e([\n    \"**/{node_modules,bower_components,vendor}/**\",\n    \"**/.vite-temp/**\",\n  ]);\n\n  for (const relativePath of [\n    \"../ui/node_modules\",\n    \"../ui/node_modules/.vite-temp\",\n    \"../ui/.vite\",\n    \"../ui/dist\",",
+        "is_error": false,
+        "tool_use_id": "toolu_011CRcngjw5eYJR2t9fiGctF",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "e1a79d0e-c994-46bf-a6a4-6e82349c612b",
+  "promptId": "2cd98dd6-123f-4c8f-bde6-185a892545c9",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "e1a79d0e-c994-46bf-a6a4-6e82349c612b",
+  "timestamp": "2026-04-30T23:28:29.900Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "import fs from \"node:fs\";\nimport path from \"node:path\";\n\nfunction toGlobstarPath(candidate: string): string {\n  return `${candidate.replaceAll(path.sep, \"/\")}/**`;\n}\n\nfunction addIgnorePath(target: Set\u003cstring\u003e, candidate: string): void {\n  target.add(candidate);\n  target.add(toGlobstarPath(candidate));\n  try {\n    const realPath = fs.realpathSync(candidate);\n    target.add(realPath);\n    target.add(toGlobstarPath(realPath));\n  } catch {\n    // Ignore paths that do not exist in the current checkout.\n  }\n}\n\nexport function resolveServerDevWatchIgnorePaths(serverRoot: string): string[] {\n  const ignorePaths = new Set\u003cstring\u003e([\n    \"**/{node_modules,bower_components,vendor}/**\",\n    \"**/.vite-temp/**\",\n  ]);\n\n  for (const relativePath of [\n    \"../ui/node_modules\",\n    \"../ui/node_modules/.vite-temp\",\n    \"../ui/.vite\",\n    \"../ui/dist\","
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "82b4651f-0308-422f-b51c-a394e3e87d4d",
+  "version": "2.1.123"
+}

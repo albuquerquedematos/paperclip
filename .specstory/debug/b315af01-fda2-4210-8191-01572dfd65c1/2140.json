@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "91:    ctx \u0026\u0026 typeof ctx === \"object\" \u0026\u0026 \"config\" in ctx \u0026\u0026 ctx.config \u0026\u0026 typeof ctx.config === \"object\"\n95:    ctx \u0026\u0026 typeof ctx === \"object\" \u0026\u0026 \"agent\" in ctx \u0026\u0026 ctx.agent \u0026\u0026 typeof ctx.agent === \"object\"\n99:    agent?.adapterConfig \u0026\u0026 typeof agent.adapterConfig === \"object\"\n104:    typeof config?.command === \"string\" \u0026\u0026 config.command.length \u003e 0 ? config.command : undefined;\n106:    typeof agentAdapterConfig?.command === \"string\" \u0026\u0026 agentAdapterConfig.command.length \u003e 0\n247:      typeof existingConfig.env === \"object\" \u0026\u0026 existingConfig.env !== null \u0026\u0026 !Array.isArray(existingConfig.env)\n251:      typeof existingEnv.PAPERCLIP_API_KEY === \"string\" \u0026\u0026 existingEnv.PAPERCLIP_API_KEY.trim().length \u003e 0;\n253:      typeof existingConfig.promptTemplate === \"string\" \u0026\u0026 existingConfig.promptTemplate.trim().length \u003e 0\n325:    adaptersByType.set(adapter.type, adapter);\n395:      adaptersByType.set(\n422:  adaptersByType.set(adapter.type, adapter);\n426:  if (type === processAdapter.type || type === httpAdapter.type) return;\n431:      adaptersByType.set(type, fallback);",
+        "is_error": false,
+        "tool_use_id": "toolu_01Wtg8FUjA1tBsLPhSMbUVQF",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "baca8c78-fa15-4581-8f75-3259a9abde80",
+  "promptId": "8e37c333-7c8a-4b0c-ae99-027b99e1bf51",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "baca8c78-fa15-4581-8f75-3259a9abde80",
+  "timestamp": "2026-04-30T19:27:06.341Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "91:    ctx \u0026\u0026 typeof ctx === \"object\" \u0026\u0026 \"config\" in ctx \u0026\u0026 ctx.config \u0026\u0026 typeof ctx.config === \"object\"\n95:    ctx \u0026\u0026 typeof ctx === \"object\" \u0026\u0026 \"agent\" in ctx \u0026\u0026 ctx.agent \u0026\u0026 typeof ctx.agent === \"object\"\n99:    agent?.adapterConfig \u0026\u0026 typeof agent.adapterConfig === \"object\"\n104:    typeof config?.command === \"string\" \u0026\u0026 config.command.length \u003e 0 ? config.command : undefined;\n106:    typeof agentAdapterConfig?.command === \"string\" \u0026\u0026 agentAdapterConfig.command.length \u003e 0\n247:      typeof existingConfig.env === \"object\" \u0026\u0026 existingConfig.env !== null \u0026\u0026 !Array.isArray(existingConfig.env)\n251:      typeof existingEnv.PAPERCLIP_API_KEY === \"string\" \u0026\u0026 existingEnv.PAPERCLIP_API_KEY.trim().length \u003e 0;\n253:      typeof existingConfig.promptTemplate === \"string\" \u0026\u0026 existingConfig.promptTemplate.trim().length \u003e 0\n325:    adaptersByType.set(adapter.type, adapter);\n395:      adaptersByType.set(\n422:  adaptersByType.set(adapter.type, adapter);\n426:  if (type === processAdapter.type || type === httpAdapter.type) return;\n431:      adaptersByType.set(type, fallback);"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "7604e88f-512e-4987-bd7c-284abf861023",
+  "version": "2.1.123"
+}

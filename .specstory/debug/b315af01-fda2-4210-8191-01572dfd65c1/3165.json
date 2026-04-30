@@ -1,0 +1,61 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "text": "Let me check heartbeat.ts for the sidecar call pattern before doing the shared extraction:",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01V97N6SjmpfLMF3HxkJ3g8o",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 1952
+      },
+      "cache_creation_input_tokens": 1952,
+      "cache_read_input_tokens": 70783,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 1952
+          },
+          "cache_creation_input_tokens": 1952,
+          "cache_read_input_tokens": 70783,
+          "input_tokens": 1,
+          "output_tokens": 1367,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 1367,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "79be9383-b0ed-4a97-9dd6-20082ae6cf6a",
+  "requestId": "req_011Caag2RV7oUtdRePkemg6W",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T21:34:49.459Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "9294ae8f-235e-4259-9bcc-62662a011cfb",
+  "version": "2.1.123"
+}

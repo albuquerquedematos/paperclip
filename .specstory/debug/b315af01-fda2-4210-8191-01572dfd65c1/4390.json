@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "45\t  describeClaudeFailure,\n46\t  detectClaudeLoginRequired,\n47\t  extractClaudeRetryNotBefore,\n48\t  isClaudeMaxTurnsResult,\n49\t  isClaudeTransientUpstreamError,\n50\t  isClaudeUnknownSessionError,\n51\t} from \"./parse.js\";\n52\timport { prepareClaudeConfigSeed } from \"./claude-config.js\";\n53\timport { resolveClaudeDesiredSkillNames } from \"./skills.js\";\n54\timport { isBedrockModelId } from \"./models.js\";\n55\timport { prepareClaudePromptBundle } from \"./prompt-cache.js\";\n56\t\n57\tconst __moduleDir = path.dirname(fileURLToPath(import.meta.url));\n58\t\n59\tinterface ClaudeExecutionInput {",
+        "tool_use_id": "toolu_012uVnAAwHtqtsXxXqYzh6TN",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "00dde1d8-3e19-4edd-9e1d-d6b16ce24745",
+  "promptId": "bbb6be00-c456-48d1-b25a-d991686281be",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "00dde1d8-3e19-4edd-9e1d-d6b16ce24745",
+  "timestamp": "2026-04-30T23:22:58.691Z",
+  "toolUseResult": {
+    "file": {
+      "content": "  describeClaudeFailure,\n  detectClaudeLoginRequired,\n  extractClaudeRetryNotBefore,\n  isClaudeMaxTurnsResult,\n  isClaudeTransientUpstreamError,\n  isClaudeUnknownSessionError,\n} from \"./parse.js\";\nimport { prepareClaudeConfigSeed } from \"./claude-config.js\";\nimport { resolveClaudeDesiredSkillNames } from \"./skills.js\";\nimport { isBedrockModelId } from \"./models.js\";\nimport { prepareClaudePromptBundle } from \"./prompt-cache.js\";\n\nconst __moduleDir = path.dirname(fileURLToPath(import.meta.url));\n\ninterface ClaudeExecutionInput {",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts",
+      "numLines": 15,
+      "startLine": 45,
+      "totalLines": 861
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "ee29bc8e-4979-415a-990c-a98a8ebafb93",
+  "version": "2.1.123"
+}

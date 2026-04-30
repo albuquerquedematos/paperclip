@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "4:import { authUsers } from \"@paperclipai/db\";\n6:  authSessionSchema,\n10:import { unauthorized } from \"../errors.js\";\n15:async function loadCurrentUserProfile(db: Db, userId: string) {\n16:  const user = await db\n18:      id: authUsers.id,\n19:      email: authUsers.email,\n20:      name: authUsers.name,\n21:      image: authUsers.image,\n23:    .from(authUsers)\n24:    .where(eq(authUsers.id, userId))\n27:  if (!user) {\n28:    throw unauthorized(\"Signed-in user not found\");\n32:    id: user.id,\n33:    email: user.email ?? null,\n34:    name: user.name ?? null,\n35:    image: user.image ?? null,\n40:  // server/src/routes/auth.ts:40\n42:    if (ctx.actor?.type !== \"board\" || !ctx.actor.userId) {\n43:      throw unauthorized(\"Board authentication required\");\n46:    const user = await loadCurrentUserProfile(db, ctx.actor.userId);\n47:    return Response.json(authSessionSchema.parse({\n49:        id: `paperclip:${ctx.actor.source}:${ctx.actor.userId}`,\n50:        userId: ctx.actor.userId,\n52:      user,\n56:  // server/src/routes/auth.ts:55\n58:    if (ctx.actor?.type !== \"board\" || !ctx.actor.userId) {\n59:      throw unauthorized(\"Board authentication required\");\n62:    return Response.json(await loadCurrentUserProfile(db, ctx.actor.userId));\n65:  // server/src/routes/auth.ts:63",
+        "is_error": false,
+        "tool_use_id": "toolu_01V7AY8hwSfHpWPCKhX87r7S",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "cff9e76e-75b3-4a98-a3de-429005d1b8cb",
+  "promptId": "3b760618-5209-4d12-a1b8-2c9bc64e4fcd",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "cff9e76e-75b3-4a98-a3de-429005d1b8cb",
+  "timestamp": "2026-04-30T18:08:05.589Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "4:import { authUsers } from \"@paperclipai/db\";\n6:  authSessionSchema,\n10:import { unauthorized } from \"../errors.js\";\n15:async function loadCurrentUserProfile(db: Db, userId: string) {\n16:  const user = await db\n18:      id: authUsers.id,\n19:      email: authUsers.email,\n20:      name: authUsers.name,\n21:      image: authUsers.image,\n23:    .from(authUsers)\n24:    .where(eq(authUsers.id, userId))\n27:  if (!user) {\n28:    throw unauthorized(\"Signed-in user not found\");\n32:    id: user.id,\n33:    email: user.email ?? null,\n34:    name: user.name ?? null,\n35:    image: user.image ?? null,\n40:  // server/src/routes/auth.ts:40\n42:    if (ctx.actor?.type !== \"board\" || !ctx.actor.userId) {\n43:      throw unauthorized(\"Board authentication required\");\n46:    const user = await loadCurrentUserProfile(db, ctx.actor.userId);\n47:    return Response.json(authSessionSchema.parse({\n49:        id: `paperclip:${ctx.actor.source}:${ctx.actor.userId}`,\n50:        userId: ctx.actor.userId,\n52:      user,\n56:  // server/src/routes/auth.ts:55\n58:    if (ctx.actor?.type !== \"board\" || !ctx.actor.userId) {\n59:      throw unauthorized(\"Board authentication required\");\n62:    return Response.json(await loadCurrentUserProfile(db, ctx.actor.userId));\n65:  // server/src/routes/auth.ts:63"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "1e033437-bf5a-414d-b1b6-acd180cf89ea",
+  "version": "2.1.123"
+}

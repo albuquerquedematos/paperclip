@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "// Stub for node:http2 — not available in CF Workers.\nconst notAvailable = (name: string) =\u003e () =\u003e { throw new Error(`node:http2.${name} not available in CF Workers`); };\nexport class ClientHttp2Session { on() { return this; } request() { return {}; } destroy() {} }\nexport const connect = notAvailable(\"connect\");\nexport const createServer = notAvailable(\"createServer\");\nexport const createSecureServer = notAvailable(\"createSecureServer\");\nexport const constants = {};\nexport default { ClientHttp2Session, connect, createServer, createSecureServer, constants };\n===\n// Stub for node:tls — not available in CF Workers.\nexport class TLSSocket { on() { return this; } }\nexport class Server { on() { return this; } listen() { return this; } }\nexport function createServer() { return new Server(); }\nexport function connect() { return new TLSSocket(); }\nexport default { TLSSocket, Server, createServer, connect };\n===\n/**\n * CF Workers replacement for server/src/middleware/logger.ts\n *\n * The Node.js logger writes to a local file using pino-pretty + pino transports.\n * In CF Workers, file I/O is unavailable. This shim replaces it with a\n * console-backed logger that has the same export shape.\n */\n\nimport pino from \"./pino-shim.js\";\n\nexport const logger = pino({ level: \"info\" });\n\n// httpLogger is an Express middleware — never used in CF (we use Hono directly).\n// Export a no-op so any import of httpLogger doesn't crash at module load.\nexport const httpLogger = (_req: unknown, _res: unknown, next: () =\u003e void) =\u003e next?.();",
+        "is_error": false,
+        "tool_use_id": "toolu_01AkW5qyxTjcGFXgzFYt6QGz",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "f31afa08-a9a8-4fbf-926e-90694f774cf9",
+  "promptId": "285fd922-5736-481c-a4fc-cf130aed3e81",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "f31afa08-a9a8-4fbf-926e-90694f774cf9",
+  "timestamp": "2026-04-30T17:49:30.119Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "// Stub for node:http2 — not available in CF Workers.\nconst notAvailable = (name: string) =\u003e () =\u003e { throw new Error(`node:http2.${name} not available in CF Workers`); };\nexport class ClientHttp2Session { on() { return this; } request() { return {}; } destroy() {} }\nexport const connect = notAvailable(\"connect\");\nexport const createServer = notAvailable(\"createServer\");\nexport const createSecureServer = notAvailable(\"createSecureServer\");\nexport const constants = {};\nexport default { ClientHttp2Session, connect, createServer, createSecureServer, constants };\n===\n// Stub for node:tls — not available in CF Workers.\nexport class TLSSocket { on() { return this; } }\nexport class Server { on() { return this; } listen() { return this; } }\nexport function createServer() { return new Server(); }\nexport function connect() { return new TLSSocket(); }\nexport default { TLSSocket, Server, createServer, connect };\n===\n/**\n * CF Workers replacement for server/src/middleware/logger.ts\n *\n * The Node.js logger writes to a local file using pino-pretty + pino transports.\n * In CF Workers, file I/O is unavailable. This shim replaces it with a\n * console-backed logger that has the same export shape.\n */\n\nimport pino from \"./pino-shim.js\";\n\nexport const logger = pino({ level: \"info\" });\n\n// httpLogger is an Express middleware — never used in CF (we use Hono directly).\n// Export a no-op so any import of httpLogger doesn't crash at module load.\nexport const httpLogger = (_req: unknown, _res: unknown, next: () =\u003e void) =\u003e next?.();"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "06662a4a-336c-469c-8e8e-cf7d23b06036",
+  "version": "2.1.123"
+}

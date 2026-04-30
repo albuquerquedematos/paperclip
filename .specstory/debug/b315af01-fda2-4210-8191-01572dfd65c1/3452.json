@@ -1,0 +1,27 @@
+{
+  "agentId": "a07aabe33abdc139f",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\t/**\n2\t * routes/company-skills-cf.ts\n3\t *\n4\t * CF-native handler for GET /api/companies/:companyId/skills.\n5\t *\n6\t * The server-side companySkillService.list() calls ensureSkillInventoryCurrent()\n7\t * which reads SKILL.md files from the host filesystem — this is not available\n8\t * in a CF Worker. This handler mirrors the DB query portion of that service,\n9\t * returning the same shape but skipping filesystem-based inventory sync.\n10\t *\n11\t * Auth: requires an authenticated actor (board or agent). Unauthenticated\n12\t * requests receive 401.\n13\t *\n14\t * CF-specific caveats:\n15\t *   - No filesystem access; skill inventory is not refreshed in CF.\n16\t *   - sourcePath is always null (local paths are host-only).\n17\t *   - attachedAgentCount is computed via a direct adapterConfig scan rather\n18\t *     than resolveDesiredSkillKeys (which uses non-exported internals).\n19\t */\n20\t\n21\timport type { Hono } from \"hono\";\n22\timport { asc, eq } from \"drizzle-orm\";\n23\timport { agents, companySkills } from \"@paperclipai/db\";\n24\timport { createHyperdriveDb } from \"../../db/hyperdrive.js\";\n25\timport { resolveActorFromRequest } from \"../../auth/resolve-actor.js\";\n26\timport { resolveDeploymentMode } from \"../env.js\";\n27\timport type { Env } from \"../env.js\";\n28\t\n29\t// ---------------------------------------------------------------------------\n30\t// Skill source derivation (inlined from server — CF-safe subset)\n31\t// ---------------------------------------------------------------------------\n32\t\n33\texport type SkillSourceBadge = \"paperclip\" | \"skills_sh\" | \"github\" | \"url\" | \"local\" | \"catalog\";\n34\t\n35\t/**\n36\t * Derives display metadata for a skill's source.\n37\t *\n38\t * The `sourcePath` field is always null in CF Workers because local paths\n39\t * are host-side filesystem locations that do not exist in the worker sandbox.\n40\t */\n41\texport function deriveSkillSource(skill: {\n42\t  sourceType: string;\n43\t  sourceLocator: string | null;\n44\t  metadata: unknown;\n45\t}): {\n46\t  editable: boolean;\n47\t  editableReason: string | null;\n48\t  sourceLabel: string | null;\n49\t  sourceBadge: SkillSourceBadge;\n50\t  sourcePath: null;\n51\t} {\n52\t  const meta =\n53\t    skill.metadata \u0026\u0026 typeof skill.metadata === \"object\" \u0026\u0026 !Array.isArray(skill.metadata)\n54\t      ? (skill.metadata as Record\u003cstring, unknown\u003e)\n55\t      : {};\n56\t\n57\t  if (meta.sourceKind === \"paperclip_bundled\") {\n58\t    return { editable: false, editableReason: \"Bundled Paperclip skills are read-only.\", sourceLabel: \"Paperclip bundled\", sourceBadge: \"paperclip\", sourcePath: null };\n59\t  }\n60\t  if (skill.sourceType === \"skills_sh\") {\n61\t    return { editable: false, editableReason: \"Skills.sh-managed skills are read-only.\", sourceLabel: skill.sourceLocator, sourceBadge: \"skills_sh\", sourcePath: null };\n62\t  }\n63\t  if (skill.sourceType === \"github\") {\n64\t    const owner = typeof meta.owner === \"string\" ? meta.owner : null;\n65\t    const repo = typeof meta.repo === \"string\" ? meta.repo : null;\n66\t    return { editable: false, editableReason: \"Remote GitHub skills are read-only.\", sourceLabel: owner \u0026\u0026 repo ? `${owner}/${repo}` : skill.sourceLocator, sourceBadge: \"github\", sourcePath: null };\n67\t  }\n68\t  if (skill.sourceType === \"url\") {\n69\t    return { editable: false, editableReason: \"URL-based skills are read-only.\", sourceLabel: skill.sourceLocator, sourceBadge: \"url\", sourcePath: null };\n70\t  }\n71\t  if (skill.sourceType === \"local_path\") {\n72\t    return { editable: true, editableReason: null, sourceLabel: skill.sourceLocator, sourceBadge: \"local\", sourcePath: null };\n73\t  }\n74\t  return { editable: false, editableReason: \"This skill source is read-only.\", sourceLabel: skill.sourceLocator, sourceBadge: \"catalog\", sourcePath: null };\n75\t}\n76\t\n77\t// ---------------------------------------------------------------------------\n78\t// Route registration\n79\t// ---------------------------------------------------------------------------\n80\t\n\n\u003csystem-reminder\u003e\nWhenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.\n\u003c/system-reminder\u003e\n",
+        "tool_use_id": "toolu_014qkBMdiM3FCtvqTLZHDpdi",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "260229bc-b6c9-4abf-a078-386389da5362",
+  "promptId": "ba04e90f-0d7c-4dcc-9bf9-971187295dfd",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "260229bc-b6c9-4abf-a078-386389da5362",
+  "timestamp": "2026-04-30T21:58:57.502Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "26d5a1fa-b74f-4667-9361-5627592eea9e",
+  "version": "2.1.123"
+}

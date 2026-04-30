@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "1\t/**\n2\t * Cloudflare Worker environment bindings and deployment-mode helpers.\n3\t *\n4\t * Keeping `Env` in its own file lets every worker sub-module import it\n5\t * without pulling in the full Hono app or route registry.\n6\t */\n7\t\n8\t// ---------------------------------------------------------------------------\n9\t// Env -- Cloudflare bindings injected at runtime by the Workers runtime\n10\t// ---------------------------------------------------------------------------\n11\t\n12\texport interface Env {\n13\t  // Databases\n14\t  HYPERDRIVE: { connectionString: string };\n15\t\n16\t  // Object storage\n17\t  PAPERCLIP_STORAGE: R2Bucket;\n18\t\n19\t  // KV -- setup flags, hot config, session cache\n20\t  PAPERCLIP_KV: KVNamespace;\n21\t\n22\t  // Durable Object namespaces\n23\t  TASK_DO: DurableObjectNamespace;\n24\t  AGENT_RUN_DO: DurableObjectNamespace;\n25\t  SCHEDULER_DO: DurableObjectNamespace;\n26\t\n27\t  // Queues\n28\t  PAPERCLIP_QUEUE: Queue;\n29\t\n30\t  // Workflows\n31\t  HEARTBEAT_WORKFLOW: Workflow;\n32\t  PLUGIN_DISPATCH_WORKFLOW: Workflow;\n33\t\n34\t  // Vars (set in wrangler.toml [vars] or .dev.vars for local dev)\n35\t  DEPLOYMENT_PLATFORM: string;\n36\t  DEPLOYMENT_MODE: string;\n37\t  DEPLOYMENT_EXPOSURE: string;\n38\t  STORAGE_R2_BUCKET?: string;\n39\t  STORAGE_R2_PREFIX?: string;\n40\t\n41\t  // Sidecar -- the Node server running alongside the Workers deployment\n42\t  SIDECAR_URL: string;\n43\t  SIDECAR_API_KEY: string;\n44\t\n45\t  // Static assets binding — serves ui/dist alongside the Worker.\n46\t  // Use env.ASSETS.fetch(request) to serve static files or let CF fall\n47\t  // back to index.html for SPA routes (not_found_handling = \"single-page-application\").\n48\t  ASSETS: Fetcher;\n49\t}\n50\t\n51\t// ---------------------------------------------------------------------------\n52\t// Deployment mode\n53\t// ---------------------------------------------------------------------------\n54\t\n55\texport type DeploymentMode = \"local_trusted\" | \"authenticated\";\n56\t\n57\t/**\n58\t * Returns the deployment mode for the current request.\n59\t * `local_trusted` bypasses auth and the setup KV gate for local dev.\n60\t */\n61\texport function resolveDeploymentMode(env: Env): DeploymentMode {\n62\t  return env.DEPLOYMENT_MODE === \"local_trusted\" ? \"local_trusted\" : \"authenticated\";\n63\t}\n64\t",
+        "tool_use_id": "toolu_01RawfpGqC9bzMy7CEf1XpZr",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "645fcf1f-ce49-4b1e-b1c9-094754ef3699",
+  "promptId": "df103658-737d-408a-8a80-546db4a85d64",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "645fcf1f-ce49-4b1e-b1c9-094754ef3699",
+  "timestamp": "2026-04-30T20:07:18.301Z",
+  "toolUseResult": {
+    "file": {
+      "content": "/**\n * Cloudflare Worker environment bindings and deployment-mode helpers.\n *\n * Keeping `Env` in its own file lets every worker sub-module import it\n * without pulling in the full Hono app or route registry.\n */\n\n// ---------------------------------------------------------------------------\n// Env -- Cloudflare bindings injected at runtime by the Workers runtime\n// ---------------------------------------------------------------------------\n\nexport interface Env {\n  // Databases\n  HYPERDRIVE: { connectionString: string };\n\n  // Object storage\n  PAPERCLIP_STORAGE: R2Bucket;\n\n  // KV -- setup flags, hot config, session cache\n  PAPERCLIP_KV: KVNamespace;\n\n  // Durable Object namespaces\n  TASK_DO: DurableObjectNamespace;\n  AGENT_RUN_DO: DurableObjectNamespace;\n  SCHEDULER_DO: DurableObjectNamespace;\n\n  // Queues\n  PAPERCLIP_QUEUE: Queue;\n\n  // Workflows\n  HEARTBEAT_WORKFLOW: Workflow;\n  PLUGIN_DISPATCH_WORKFLOW: Workflow;\n\n  // Vars (set in wrangler.toml [vars] or .dev.vars for local dev)\n  DEPLOYMENT_PLATFORM: string;\n  DEPLOYMENT_MODE: string;\n  DEPLOYMENT_EXPOSURE: string;\n  STORAGE_R2_BUCKET?: string;\n  STORAGE_R2_PREFIX?: string;\n\n  // Sidecar -- the Node server running alongside the Workers deployment\n  SIDECAR_URL: string;\n  SIDECAR_API_KEY: string;\n\n  // Static assets binding — serves ui/dist alongside the Worker.\n  // Use env.ASSETS.fetch(request) to serve static files or let CF fall\n  // back to index.html for SPA routes (not_found_handling = \"single-page-application\").\n  ASSETS: Fetcher;\n}\n\n// ---------------------------------------------------------------------------\n// Deployment mode\n// ---------------------------------------------------------------------------\n\nexport type DeploymentMode = \"local_trusted\" | \"authenticated\";\n\n/**\n * Returns the deployment mode for the current request.\n * `local_trusted` bypasses auth and the setup KV gate for local dev.\n */\nexport function resolveDeploymentMode(env: Env): DeploymentMode {\n  return env.DEPLOYMENT_MODE === \"local_trusted\" ? \"local_trusted\" : \"authenticated\";\n}\n",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/env.ts",
+      "numLines": 64,
+      "startLine": 1,
+      "totalLines": 64
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "10bac58a-ab47-484b-bfaf-423c9b82c91a",
+  "version": "2.1.123"
+}

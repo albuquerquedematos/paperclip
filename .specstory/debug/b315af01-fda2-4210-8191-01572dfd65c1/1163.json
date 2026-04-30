@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "1\t{\n2\t  \"name\": \"@paperclipai/deploy-cloudflare\",\n3\t  \"version\": \"0.1.0\",\n4\t  \"private\": true,\n5\t  \"type\": \"module\",\n6\t  \"main\": \"./src/boot.ts\",\n7\t  \"scripts\": {\n8\t    \"build\": \"node build-worker.mjs\",\n9\t    \"dev\": \"node build-worker.mjs \u0026\u0026 wrangler dev --no-bundle --local\",\n10\t    \"deploy\": \"node build-worker.mjs \u0026\u0026 wrangler deploy --no-bundle\"\n11\t  },\n12\t  \"dependencies\": {\n13\t    \"@paperclipai/db\": \"workspace:*\",\n14\t    \"@paperclipai/shared\": \"workspace:*\",\n15\t    \"drizzle-orm\": \"^0.38.4\",\n16\t    \"hono\": \"^4.0.0\",\n17\t    \"postgres\": \"^3.4.5\"\n18\t  },\n19\t  \"devDependencies\": {\n20\t    \"@cloudflare/workers-types\": \"^4.0.0\",\n21\t    \"@types/express\": \"^5.0.0\",\n22\t    \"@types/node\": \"^25.6.0\",\n23\t    \"express\": \"^5.1.0\",\n24\t    \"typescript\": \"^5.0.0\",\n25\t    \"wrangler\": \"^3.0.0\"\n26\t  }\n27\t}\n28\t",
+        "tool_use_id": "toolu_01TtLdGs9LcKWrmLx6Hj9sMF",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "364f7156-5f5d-43df-93b5-05ec912ee05e",
+  "promptId": "9aae9721-e466-4259-b66e-e724bd2f2c66",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "364f7156-5f5d-43df-93b5-05ec912ee05e",
+  "timestamp": "2026-04-30T18:16:16.811Z",
+  "toolUseResult": {
+    "file": {
+      "content": "{\n  \"name\": \"@paperclipai/deploy-cloudflare\",\n  \"version\": \"0.1.0\",\n  \"private\": true,\n  \"type\": \"module\",\n  \"main\": \"./src/boot.ts\",\n  \"scripts\": {\n    \"build\": \"node build-worker.mjs\",\n    \"dev\": \"node build-worker.mjs \u0026\u0026 wrangler dev --no-bundle --local\",\n    \"deploy\": \"node build-worker.mjs \u0026\u0026 wrangler deploy --no-bundle\"\n  },\n  \"dependencies\": {\n    \"@paperclipai/db\": \"workspace:*\",\n    \"@paperclipai/shared\": \"workspace:*\",\n    \"drizzle-orm\": \"^0.38.4\",\n    \"hono\": \"^4.0.0\",\n    \"postgres\": \"^3.4.5\"\n  },\n  \"devDependencies\": {\n    \"@cloudflare/workers-types\": \"^4.0.0\",\n    \"@types/express\": \"^5.0.0\",\n    \"@types/node\": \"^25.6.0\",\n    \"express\": \"^5.1.0\",\n    \"typescript\": \"^5.0.0\",\n    \"wrangler\": \"^3.0.0\"\n  }\n}\n",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/package.json",
+      "numLines": 28,
+      "startLine": 1,
+      "totalLines": 28
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "de628414-9125-4b5b-8ef6-d2ff2b89683f",
+  "version": "2.1.123"
+}

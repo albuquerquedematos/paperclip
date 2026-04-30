@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "191:function pathToParamNames(path: string): { re: RegExp; paramNames: string[] } {\n219:  const { re, paramNames } = pathToParamNames(path);\n268:function extractPathFromLayerRegexp(layer: RouterLayer): string {\n313:      const nested = extractPathFromRegexp(layer);\n321:function extractPathFromRegexp(layer: RouterLayer): string {\n322:  return extractPathFromLayerRegexp(layer);",
+        "is_error": false,
+        "tool_use_id": "toolu_011bszWXNwEQRi8411Cr6Jgm",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "7b9e6d21-0473-4fab-a325-5bd9b1464c4e",
+  "promptId": "7323a41a-dd8a-4783-b590-aea4ab5316a7",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "7b9e6d21-0473-4fab-a325-5bd9b1464c4e",
+  "timestamp": "2026-04-30T21:34:24.498Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "191:function pathToParamNames(path: string): { re: RegExp; paramNames: string[] } {\n219:  const { re, paramNames } = pathToParamNames(path);\n268:function extractPathFromLayerRegexp(layer: RouterLayer): string {\n313:      const nested = extractPathFromRegexp(layer);\n321:function extractPathFromRegexp(layer: RouterLayer): string {\n322:  return extractPathFromLayerRegexp(layer);"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "cdb3afca-4b51-4cb9-9606-bdc918c7402d",
+  "version": "2.1.123"
+}

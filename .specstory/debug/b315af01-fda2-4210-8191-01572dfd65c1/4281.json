@@ -1,0 +1,61 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "text": "Now also update the smoke test to add project URL-key resolution as a regression case, then run:",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01Fx6wDTn3ivs1QxRJXYc7Pe",
+    "model": "claude-opus-4-7",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 382,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 382,
+      "cache_read_input_tokens": 431289,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 382,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 382,
+          "cache_read_input_tokens": 431289,
+          "input_tokens": 1,
+          "output_tokens": 248,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 248,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "2ddecf7e-bfd5-4968-a730-6f73e6f9a3c3",
+  "requestId": "req_011CaaogQM2bz3dAm9PgtEav",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T23:14:54.565Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "e16d59bb-31fa-4a6f-9442-27f84dc8baaa",
+  "version": "2.1.123"
+}

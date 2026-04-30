@@ -1,0 +1,63 @@
+{
+  "agentId": "a8455dc48bdf97d68",
+  "attributionAgent": "architect-reviewer",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/.claude/worktrees/agent-a8455dc48bdf97d68",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "worktree-agent-a8455dc48bdf97d68",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "text": "Commit created successfully. Here is the complete architectural review and change summary:\n\n---\n\n## Architectural Review \u0026 Refactor Complete\n\n### Build Status: PASS (4.9MB bundle, 252ms)\n\n---\n\n### Security Audit — Findings Fixed\n\n**Critical: All CF-extra routes lacked authentication** (impact: High)\n\nEvery route in the original `cf-extra-routes.ts` ran without checking the actor. A request to `GET /api/companies/:id/join-requests` would return full join-request data (including user emails, invite metadata) to any anonymous caller. Fixed in all five new route modules — each calls `resolveActorFromRequest` and returns 401 before touching the DB.\n\n**WebSocket endpoint authenticated before upgrade** (impact: Medium)\n\n`GET /api/companies/:id/events/ws` now checks auth before sending the 101 response. Once 101 is committed, there is no mechanism to reject the connection.\n\n**No other security issues found:**\n- `SIDECAR_API_KEY` / `PAPERCLIP_KV` are never included in responses\n- Stack traces are never leaked to clients (error responses use `\"Internal Server Error\"`)\n- `claimSecretHash` was already stripped from join-request responses (preserved)\n- CORS: none set — appropriate for a same-origin SPA deployment\n\n---\n\n### Correctness Fixes\n\n**`compiledPathCache` length-mismatch guard** — `/packages/deploy-cloudflare/src/worker/route-registry.ts`\n\nThe cache is now invalidated when `compiledPathCache.length !== routes.length`, preventing silent handler/pattern misalignment if route count ever changes.\n\n**`runChain` double-`next()` guard** — `/packages/deploy-cloudflare/src/http/cf-express-bridge.ts`\n\nEach handler slot now gets a single-use `boundNext` closure. A buggy middleware calling `next()` twice silently drops the second call instead of advancing the chain to the wrong handler.\n\n---\n\n### Modularity Changes\n\n`cf-extra-routes.ts` (was ~320 lines) is now a thin 37-line barrel. Logic moved to:\n\n- `/packages/deploy-cloudflare/src/worker/routes/adapters.ts`\n- `/packages/deploy-cloudflare/src/worker/routes/plugins.ts`\n- `/packages/deploy-cloudflare/src/worker/routes/company-access.ts` (includes `extractInviteMessage` helper)\n- `/packages/deploy-cloudflare/src/worker/routes/company-skills-cf.ts` (includes `deriveSkillSource` + `SkillSourceBadge`)\n- `/packages/deploy-cloudflare/src/worker/routes/events.ts`\n\n---\n\n### Logging Audit\n\n- `[CF Worker] Compiled N route patterns` — fires once per isolate cold start, not per request. Comment now makes this explicit.\n- No excessive logs found at module-load time in registry or extras.\n\n---\n\n### Pattern Compliance\n\n| Check | Status |\n|---|---|\n| Auth enforced before data access | Now fixed for all CF-extra routes |\n| Error responses never leak stack traces | Pass |\n| Secrets not reflected in responses | Pass |\n| Single responsibility per module | Now achieved by splitting |\n| Cache invalidation guarded | Now fixed |\n| Middleware chain correctness | Now fixed (double-next guard) |",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01RaaD1Le1RkAHfFMSQJSsA3",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 804
+      },
+      "cache_creation_input_tokens": 804,
+      "cache_read_input_tokens": 79879,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 804
+          },
+          "cache_creation_input_tokens": 804,
+          "cache_read_input_tokens": 79879,
+          "input_tokens": 1,
+          "output_tokens": 800,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 800,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "73f4cbf2-463d-415a-9b4f-55785dfd0fdf",
+  "requestId": "req_011CaaXPhbGovAHfrHD1mnnL",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T19:41:32.854Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "234fb09e-7b39-4c71-a9da-1b4fae26ac30",
+  "version": "2.1.123"
+}

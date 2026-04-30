@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "85\t  };\n86\t}\n87\t\n88\tfunction extractClaudeErrorMessages(parsed: Record\u003cstring, unknown\u003e): string[] {\n89\t  const raw = Array.isArray(parsed.errors) ? parsed.errors : [];\n90\t  const messages: string[] = [];\n91\t\n92\t  for (const entry of raw) {\n93\t    if (typeof entry === \"string\") {\n94\t      const msg = entry.trim();\n95\t      if (msg) messages.push(msg);\n96\t      continue;\n97\t    }\n98\t\n99\t    if (typeof entry !== \"object\" || entry === null || Array.isArray(entry)) {\n100\t      continue;\n101\t    }\n102\t\n103\t    const obj = entry as Record\u003cstring, unknown\u003e;\n104\t    const msg = asString(obj.message, \"\") || asString(obj.error, \"\") || asString(obj.code, \"\");\n105\t    if (msg) {\n106\t      messages.push(msg);\n107\t      continue;\n108\t    }\n109\t\n110\t    try {\n111\t      messages.push(JSON.stringify(obj));\n112\t    } catch {\n113\t      // skip non-serializable entry\n114\t    }\n115\t  }\n116\t\n117\t  return messages;\n118\t}\n119\t",
+        "tool_use_id": "toolu_017mmTNabGhiMtdvfesAghHd",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "7a78b70d-5a72-44e7-8ec2-a32f30adf1c0",
+  "promptId": "bbb6be00-c456-48d1-b25a-d991686281be",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "7a78b70d-5a72-44e7-8ec2-a32f30adf1c0",
+  "timestamp": "2026-04-30T23:22:24.690Z",
+  "toolUseResult": {
+    "file": {
+      "content": "  };\n}\n\nfunction extractClaudeErrorMessages(parsed: Record\u003cstring, unknown\u003e): string[] {\n  const raw = Array.isArray(parsed.errors) ? parsed.errors : [];\n  const messages: string[] = [];\n\n  for (const entry of raw) {\n    if (typeof entry === \"string\") {\n      const msg = entry.trim();\n      if (msg) messages.push(msg);\n      continue;\n    }\n\n    if (typeof entry !== \"object\" || entry === null || Array.isArray(entry)) {\n      continue;\n    }\n\n    const obj = entry as Record\u003cstring, unknown\u003e;\n    const msg = asString(obj.message, \"\") || asString(obj.error, \"\") || asString(obj.code, \"\");\n    if (msg) {\n      messages.push(msg);\n      continue;\n    }\n\n    try {\n      messages.push(JSON.stringify(obj));\n    } catch {\n      // skip non-serializable entry\n    }\n  }\n\n  return messages;\n}\n",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/parse.ts",
+      "numLines": 35,
+      "startLine": 85,
+      "totalLines": 384
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "6d753915-4192-4d24-9629-b57223d77077",
+  "version": "2.1.123"
+}

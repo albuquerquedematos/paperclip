@@ -1,0 +1,71 @@
+{
+  "agentId": "a8455dc48bdf97d68",
+  "attributionAgent": "architect-reviewer",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/.claude/worktrees/agent-a8455dc48bdf97d68",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "worktree-agent-a8455dc48bdf97d68",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_011GGDRBvv6dUgfRExoi846i",
+        "input": {
+          "command": "grep -c \"registerAdapterRoutes\\|registerPluginRoutes\\|registerCompanyAccessRoutes\\|registerCompanySkillRoutes\\|registerEventRoutes\" /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/dist/worker.js",
+          "description": "Verify all new route register functions are in the bundle"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01NWBiaYESrc3vTAGrMWiXWS",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 204
+      },
+      "cache_creation_input_tokens": 204,
+      "cache_read_input_tokens": 77138,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 204
+          },
+          "cache_creation_input_tokens": 204,
+          "cache_read_input_tokens": 77138,
+          "input_tokens": 1,
+          "output_tokens": 172,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 172,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "8a3c2af7-3b83-48ec-a928-593f09e4b2b5",
+  "requestId": "req_011CaaXMBAPDrnzz7qSxv1Zx",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T19:40:45.115Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "f81c1a83-c6ec-410c-8f1c-9970ccb96d04",
+  "version": "2.1.123"
+}

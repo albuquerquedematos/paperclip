@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "/**\n * Custom esbuild bundler for the Cloudflare Worker.\n *\n * Wrangler's built-in esbuild cannot mark specific packages as external or\n * alias individual modules, so we pre-bundle the worker here and point wrangler\n * to the output with --no-bundle.\n *\n * Two categories of problematic packages:\n *\n * 1. Available in CF Workers via nodejs_compat → mark as `external` so the CF\n *    runtime resolves them (node:crypto, node:stream, node:path, etc.)\n *\n * 2. NOT available in CF Workers (node:http, node:net, node:tls, node:fs, etc.)\n *    → alias to lightweight stubs bundled into the output. If the CF runtime tried\n *    to resolve these as externals it would crash on startup.\n *\n * Other stubs:\n *   - express → cf-express-shim (zero-dep Router that Express-router-bridge can walk)\n *   - embedded-postgres / @embedded-postgres/* → external (never called in CF)\n *   - jsdom → external (SVG sanitize path throws at runtime; acceptable for CF)\n */\n\nimport { build } from \"esbuild\";\nimport { fileURLToPath } from \"url\";\nimport path from \"path\";\n\nconst __dirname = path.dirname(fileURLToPath(import.meta.url));\nconst SHIMS = path.join(__dirname, \"src/shims\");\n\n// Node.js built-ins CF Workers DOES provide via nodejs_compat.",
+        "is_error": false,
+        "tool_use_id": "toolu_016aQNDhbNS6cnmA9xWPQW2d",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "ea4b36ae-1636-43d1-bdba-e1e38a3aa6f0",
+  "promptId": "8b0cf3ea-bcfa-4c9b-b8fd-5b950e170a95",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "ea4b36ae-1636-43d1-bdba-e1e38a3aa6f0",
+  "timestamp": "2026-04-30T21:56:15.183Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "/**\n * Custom esbuild bundler for the Cloudflare Worker.\n *\n * Wrangler's built-in esbuild cannot mark specific packages as external or\n * alias individual modules, so we pre-bundle the worker here and point wrangler\n * to the output with --no-bundle.\n *\n * Two categories of problematic packages:\n *\n * 1. Available in CF Workers via nodejs_compat → mark as `external` so the CF\n *    runtime resolves them (node:crypto, node:stream, node:path, etc.)\n *\n * 2. NOT available in CF Workers (node:http, node:net, node:tls, node:fs, etc.)\n *    → alias to lightweight stubs bundled into the output. If the CF runtime tried\n *    to resolve these as externals it would crash on startup.\n *\n * Other stubs:\n *   - express → cf-express-shim (zero-dep Router that Express-router-bridge can walk)\n *   - embedded-postgres / @embedded-postgres/* → external (never called in CF)\n *   - jsdom → external (SVG sanitize path throws at runtime; acceptable for CF)\n */\n\nimport { build } from \"esbuild\";\nimport { fileURLToPath } from \"url\";\nimport path from \"path\";\n\nconst __dirname = path.dirname(fileURLToPath(import.meta.url));\nconst SHIMS = path.join(__dirname, \"src/shims\");\n\n// Node.js built-ins CF Workers DOES provide via nodejs_compat."
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "24c50e59-d29c-4e6f-a891-c8b362b1435c",
+  "version": "2.1.123"
+}

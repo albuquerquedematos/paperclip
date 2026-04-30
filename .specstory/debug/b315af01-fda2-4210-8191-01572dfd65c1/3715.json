@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "3057\t  const getFeedbackVotes: Handler = async (ctx) =\u003e {\n3058\t    const id = ctx.param(\"id\")!;\n3059\t    const issue = await svc.getById(id);\n3060\t    if (!issue) {\n3061\t      return Response.json({ error: \"Issue not found\" }, { status: 404 });\n3062\t    }\n3063\t    assertCompanyAccess(ctx, issue.companyId);\n3064\t    if (ctx.actor?.type !== \"board\") {\n3065\t      return Response.json({ error: \"Only board users can view feedback votes\" }, { status: 403 });\n3066\t    }\n3067\t\n3068\t    const votes = await feedback.listIssueVotesForUser(id, ctx.actor.userId ?? \"local-board\");\n3069\t    return Response.json(votes);\n3070\t  };\n3071\t\n3072\t  const getFeedbackTraces: Handler = async (ctx) =\u003e {\n3073\t    const id = ctx.param(\"id\")!;\n3074\t    const issue = await svc.getById(id);\n3075\t    if (!issue) {\n3076\t      return Response.json({ error: \"Issue not found\" }, { status: 404 });\n3077\t    }\n3078\t    assertCompanyAccess(ctx, issue.companyId);\n3079\t    if (ctx.actor?.type !== \"board\") {\n3080\t      return Response.json({ error: \"Only board users can view feedback traces\" }, { status: 403 });\n3081\t    }",
+        "tool_use_id": "toolu_01P6eXEaqmWwP5SPasVTq9my",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "fc503cd3-4388-46e0-96a9-10a0f21c7a87",
+  "promptId": "e7cbb211-1d37-4345-b546-c3d4bd07be80",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "fc503cd3-4388-46e0-96a9-10a0f21c7a87",
+  "timestamp": "2026-04-30T22:56:30.527Z",
+  "toolUseResult": {
+    "file": {
+      "content": "  const getFeedbackVotes: Handler = async (ctx) =\u003e {\n    const id = ctx.param(\"id\")!;\n    const issue = await svc.getById(id);\n    if (!issue) {\n      return Response.json({ error: \"Issue not found\" }, { status: 404 });\n    }\n    assertCompanyAccess(ctx, issue.companyId);\n    if (ctx.actor?.type !== \"board\") {\n      return Response.json({ error: \"Only board users can view feedback votes\" }, { status: 403 });\n    }\n\n    const votes = await feedback.listIssueVotesForUser(id, ctx.actor.userId ?? \"local-board\");\n    return Response.json(votes);\n  };\n\n  const getFeedbackTraces: Handler = async (ctx) =\u003e {\n    const id = ctx.param(\"id\")!;\n    const issue = await svc.getById(id);\n    if (!issue) {\n      return Response.json({ error: \"Issue not found\" }, { status: 404 });\n    }\n    assertCompanyAccess(ctx, issue.companyId);\n    if (ctx.actor?.type !== \"board\") {\n      return Response.json({ error: \"Only board users can view feedback traces\" }, { status: 403 });\n    }",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/issues.ts",
+      "numLines": 25,
+      "startLine": 3057,
+      "totalLines": 3677
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "1b69a670-aa21-4545-9645-0bb3cfb57cbb",
+  "version": "2.1.123"
+}

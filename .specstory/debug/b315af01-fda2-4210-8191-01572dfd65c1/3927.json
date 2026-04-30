@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "38\t    \"smoke:openclaw-docker-ui\": \"./scripts/smoke/openclaw-docker-ui.sh\",\n39\t    \"smoke:openclaw-sse-standalone\": \"./scripts/smoke/openclaw-sse-standalone.sh\",\n40\t    \"test:release-registry\": \"node --test scripts/verify-release-registry-state.test.mjs\",\n41\t    \"test:e2e\": \"npx playwright test --config tests/e2e/playwright.config.ts\",\n42\t    \"test:e2e:headed\": \"npx playwright test --config tests/e2e/playwright.config.ts --headed\",\n43\t    \"test:e2e:multiuser-authenticated\": \"npx playwright test --config tests/e2e/playwright-multiuser-authenticated.config.ts\",\n44\t    \"evals:smoke\": \"cd evals/promptfoo \u0026\u0026 npx promptfoo@0.103.3 eval\",\n45\t    \"test:release-smoke\": \"npx playwright test --config tests/release-smoke/playwright.config.ts\",\n46\t    \"test:release-smoke:headed\": \"npx playwright test --config tests/release-smoke/playwright.config.ts --headed\",\n47\t    \"metrics:paperclip-commits\": \"tsx scripts/paperclip-commit-metrics.ts\"\n48\t  },\n49\t  \"devDependencies\": {",
+        "tool_use_id": "toolu_018kkqSu8JXjLCU39kZgnB6r",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "4d4881de-e62e-4529-81b7-cd7f8fdf277f",
+  "promptId": "e7cbb211-1d37-4345-b546-c3d4bd07be80",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "4d4881de-e62e-4529-81b7-cd7f8fdf277f",
+  "timestamp": "2026-04-30T23:01:58.555Z",
+  "toolUseResult": {
+    "file": {
+      "content": "    \"smoke:openclaw-docker-ui\": \"./scripts/smoke/openclaw-docker-ui.sh\",\n    \"smoke:openclaw-sse-standalone\": \"./scripts/smoke/openclaw-sse-standalone.sh\",\n    \"test:release-registry\": \"node --test scripts/verify-release-registry-state.test.mjs\",\n    \"test:e2e\": \"npx playwright test --config tests/e2e/playwright.config.ts\",\n    \"test:e2e:headed\": \"npx playwright test --config tests/e2e/playwright.config.ts --headed\",\n    \"test:e2e:multiuser-authenticated\": \"npx playwright test --config tests/e2e/playwright-multiuser-authenticated.config.ts\",\n    \"evals:smoke\": \"cd evals/promptfoo \u0026\u0026 npx promptfoo@0.103.3 eval\",\n    \"test:release-smoke\": \"npx playwright test --config tests/release-smoke/playwright.config.ts\",\n    \"test:release-smoke:headed\": \"npx playwright test --config tests/release-smoke/playwright.config.ts --headed\",\n    \"metrics:paperclip-commits\": \"tsx scripts/paperclip-commit-metrics.ts\"\n  },\n  \"devDependencies\": {",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/package.json",
+      "numLines": 12,
+      "startLine": 38,
+      "totalLines": 80
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "cc523e54-8a1e-4cc2-9f27-a2f54f029816",
+  "version": "2.1.123"
+}

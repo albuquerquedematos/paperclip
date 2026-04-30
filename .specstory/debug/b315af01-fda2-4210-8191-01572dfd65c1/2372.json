@@ -1,0 +1,71 @@
+{
+  "agentId": "a8455dc48bdf97d68",
+  "attributionAgent": "architect-reviewer",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/.claude/worktrees/agent-a8455dc48bdf97d68",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "worktree-agent-a8455dc48bdf97d68",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_017XFNNo1jXQuGoTyWKsCB1A",
+        "input": {
+          "command": "ls /Users/migmac/Documents/GitHub/_ABM/paperclip/.claude/worktrees/agent-a8455dc48bdf97d68/packages/",
+          "description": "List packages directory"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01JKDNf8brHozXrcg12uB6XY",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 194
+      },
+      "cache_creation_input_tokens": 194,
+      "cache_read_input_tokens": 15690,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 194
+          },
+          "cache_creation_input_tokens": 194,
+          "cache_read_input_tokens": 15690,
+          "input_tokens": 1,
+          "output_tokens": 110,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 110,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "65f57ad7-eb47-42b2-ba8c-b61c09b8dc7e",
+  "requestId": "req_011CaaX1SJf5PysihegEc7J5",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T19:36:16.168Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "72a9da73-ec46-4dc8-821a-d398788c6f98",
+  "version": "2.1.123"
+}

@@ -1,0 +1,27 @@
+{
+  "agentId": "a8455dc48bdf97d68",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/.claude/worktrees/agent-a8455dc48bdf97d68",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "worktree-agent-a8455dc48bdf97d68",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\t/**\n2\t * CF Workers-compatible pino shim.\n3\t *\n4\t * The real pino requires Node.js APIs (events, worker_threads, etc.) that are\n5\t * not available in the Workers runtime. This shim provides the same interface\n6\t * backed by console.log/warn/error so server code works without changes.\n7\t */\n8\t\n9\ttype LogLevel = \"trace\" | \"debug\" | \"info\" | \"warn\" | \"error\" | \"fatal\";\n10\ttype LogFn = (msg: string, context?: Record\u003cstring, unknown\u003e) =\u003e void;\n11\t\n12\tconst LEVELS: Record\u003cLogLevel, number\u003e = {\n13\t  trace: 10, debug: 20, info: 30, warn: 40, error: 50, fatal: 60,\n14\t};\n15\t\n16\tfunction makeLogger(bindings: Record\u003cstring, unknown\u003e = {}, minLevel: LogLevel = \"info\"): PinoLogger {\n17\t  const minNum = LEVELS[minLevel] ?? 30;\n18\t\n19\t  function logAt(level: LogLevel, ...args: unknown[]) {\n20\t    if ((LEVELS[level] ?? 0) \u003c minNum) return;\n21\t    const [msgOrObj, ...rest] = args;\n22\t    const context = { ...bindings };\n23\t    let msg: string;\n24\t    if (typeof msgOrObj === \"string\") {\n25\t      msg = msgOrObj;\n26\t    } else if (msgOrObj \u0026\u0026 typeof msgOrObj === \"object\") {\n27\t      Object.assign(context, msgOrObj);\n28\t      msg = (rest[0] as string) ?? \"\";\n29\t    } else {\n30\t      msg = String(msgOrObj ?? \"\");\n31\t    }\n32\t    const entry = JSON.stringify({ level: LEVELS[level], msg, ...context });\n33\t    if (level === \"error\" || level === \"fatal\") console.error(entry);\n34\t    else if (level === \"warn\") console.warn(entry);\n35\t    else console.log(entry);\n36\t  }\n37\t\n38\t  const logger: PinoLogger = {\n39\t    level: minLevel,\n40\t    trace: (...args: unknown[]) =\u003e logAt(\"trace\", ...args),\n41\t    debug: (...args: unknown[]) =\u003e logAt(\"debug\", ...args),\n42\t    info: (...args: unknown[]) =\u003e logAt(\"info\", ...args),\n43\t    warn: (...args: unknown[]) =\u003e logAt(\"warn\", ...args),\n44\t    error: (...args: unknown[]) =\u003e logAt(\"error\", ...args),\n45\t    fatal: (...args: unknown[]) =\u003e logAt(\"fatal\", ...args),\n46\t    child: (childBindings: Record\u003cstring, unknown\u003e) =\u003e\n47\t      makeLogger({ ...bindings, ...childBindings }, minLevel),\n48\t    isLevelEnabled: (level: string) =\u003e (LEVELS[level as LogLevel] ?? 0) \u003e= minNum,\n49\t    // pino compat properties\n50\t    bindings: () =\u003e ({ ...bindings }),\n51\t    flush: () =\u003e {},\n52\t    setBindings: (_: Record\u003cstring, unknown\u003e) =\u003e {},\n53\t    // pino v9 adds these\n54\t    silent: () =\u003e {},\n55\t  };\n56\t  return logger;\n57\t}\n58\t\n59\tinterface PinoLogger {\n60\t  level: string;\n61\t  trace: LogFn;\n62\t  debug: LogFn;\n63\t  info: LogFn;\n64\t  warn: LogFn;\n65\t  error: LogFn;\n66\t  fatal: LogFn;\n67\t  child: (bindings: Record\u003cstring, unknown\u003e) =\u003e PinoLogger;\n68\t  isLevelEnabled: (level: string) =\u003e boolean;\n69\t  bindings: () =\u003e Record\u003cstring, unknown\u003e;\n70\t  flush: () =\u003e void;\n71\t  setBindings: (bindings: Record\u003cstring, unknown\u003e) =\u003e void;\n72\t  silent: () =\u003e void;\n73\t}\n74\t\n75\t// pino(opts?) or pino(opts?, stream?)\n76\tfunction pino(opts?: Record\u003cstring, unknown\u003e | null): PinoLogger {\n77\t  const level = (opts?.level as LogLevel) ?? \"info\";\n78\t  return makeLogger({}, level);\n79\t}\n80\t\n81\t// pino.destination() stub\n82\tpino.destination = () =\u003e ({ write: () =\u003e {} });\n83\t// pino.transport() stub\n84\tpino.transport = () =\u003e ({ write: () =\u003e {} });\n85\t// pino.levels compat\n86\tpino.levels = { values: LEVELS };\n87\t// pino.stdSerializers\n88\tpino.stdSerializers = {\n89\t  err: (e: Error) =\u003e ({ type: e.name, msg: e.message, stack: e.stack }),\n90\t  req: (r: unknown) =\u003e r,\n91\t  res: (r: unknown) =\u003e r,\n92\t};\n93\t\n94\texport default pino;\n95\texport { pino };\n96\t",
+        "tool_use_id": "toolu_017UZkaEHMRGcoMaRVtYZTCg",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "711b5ad0-9dcc-4d82-8898-2318f4302c7a",
+  "promptId": "8a433599-d510-488c-a09f-2af6b1c28bcb",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "711b5ad0-9dcc-4d82-8898-2318f4302c7a",
+  "timestamp": "2026-04-30T19:36:44.393Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "dd7fcc1f-7b3d-4c9a-8ec6-f71386ab8650",
+  "version": "2.1.123"
+}

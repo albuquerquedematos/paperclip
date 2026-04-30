@@ -1,0 +1,62 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "signature": "EsALClsIDRgCKkDm/SJcqfMQcM3C/dGkb/5MDNgEdgfnzPlLUDKXaTKEEK4M40/0qx4L1g31LbpOEtxVqYQ8nyEKv5z7Fg7v4w2sMhFjbGF1ZGUtc29ubmV0LTQtNjgAEgzVB5+t7BMo8NPf/lcaDDMIVJU30ga/PMRsZyIw1WccOWLaHG/xF700wxV/VEp+4TO5WNpXfBPoiMHlfBJSGO7SwgYN7KJMA7cw6o+jKpIKyC4Kea3AVBx/MBEE6y2MOrpnHMK8cqpkyZoBRBXEmX5zuDT74z331CCiYYqAQIx+x9hH8FwaHTu9Q/pKvwqRZT/GG/1X/fpCIbz2V1eK3ggzYsUsYc5zlSomzZhQSbhcTLflW1rYhmvMBYGLMSsOpI3haSbLSKcpnUpn6XUX7AoY18Ord88BeZdLNHHYHHGJnWvMIPXVeWlKcAd4MLSs82zeG0EKVtzcWsvVuqAMI/p+A9u1IgAgGGuAIXxM3R6HZwvXt0u/6/TIGhQtHEKxEfiT8mKgPGtzRGn+HFgH2zWsevk2liUsQ+TajWpKgq6OmL/YdLguH7HzwOfoNCYJlGwRqHuLabF3bZtV+Bf8slEePn4mXjzVUjmoOEiTQsFe+ud9bsDv0eF5PX/f4owIayMnpGIveb+ae5IC9o/1x31kW/J1+R0IYrDNhxaCDIY8je5IhGDdRbMvmFIiouwn3XYR0Jcav1Rhq12vbm8DQtl63+JLi1Xd0yZfCEKYalcu9VmUBSM4d5qge9x4ESJBdPzwiCuTkXsd+Xy0ZVQ3pr8jVeL01RkpzgiY9cf7JAAE14PSyrmOq42qwFw6njTyO2c0RZ9F3JmP2BPpD8jagt1Fqy+7ey9hZNskvWXaQ8tEPT3OJ72qKAmGhnHBG918K5LX5o/0HTCPqoFFWWZgElIoPx7keH4HH6WhrBepBoSJ0GhWLvoHPDINTZ4KmU1XO0cVEA9Glen0SDQKL1xSuHuUqBC632h4VPefKGgmC5Ym5cxzv1nPlrnomI0reA+w4Z45L9cYvNlmTiGENhuVP1Rz/Vwr3l4v6P4YH2gCjav2wTAoQE+CEQZZy+HsvTh79POqW0rCHYgaumVRw2/VcTyWs1gIrtCVmMS48zqyv/clzFDO687oGcd9vXdENkhxCNmGYX+T5EByb4REXzjDxPVhzt7vvQC8fnPcHRjADRzpPQGNjtN/r2HhSIfWc7XRAiDjtEKT2H3RsSA9/totkHYvxLdZTPh0rP/TB7BJshgvSN0jlfAun/8FdnO+hodBpdNYaNGUgxDpiNHFrKn213CugFmkV7YQIc2SC+vDCmci8dnPXSIn5tP2kHMvCZOxzj4JnbaTmpOSl/27gpfl6E0kAdbI8j9nDRHmW8r0m8d2MzwNaEyXSq3h0QMtO7LBl3sW/X+KUUa06XjubvtN43fuYRpOqlU8I1MCTSyFOU6VvrXyZ4HQ3odQfsGeHCIGKJEXHgv7WVELINBEvK+85oWg2SkKF//RCeIFVfpD2orDKtIUJTovFJN7nHpqzwUSBND4htUvcpKT+Ptwi/mK65BCeEpMCWXG6Rhk8rABQZL413CxI0y4sOee/Qg+QsnA4kwresjB6Vh9YEn5qb1z5L1e4dO3b9gIn5+x/1tjFsZJK3cYeb7/cpod1B9oF1hbZ2pkgW+7F9JNEa3c0y59EL6pIMkP0B1mmaGkUWBtPIPeIPGqz97SOya91lzX9L1TgG4gQJv/6i9C1StriOFWAWd16sE4udarteBxizixBOrCc0TKvs7kJzT6mtcC+z1JpxYToHKzUujRtPitjqrLm9LJLFz1pGyQOcivOj5LxHefm3yv3SMkWK8rhm9EVgPFfFeZohnYfQhK0goxc0OrvggQgS3uDaC+NaawJKkMiKPEX8CfOWP/yrFTr4Wahvru8/r6RkrIY02J02qSmQr6u+3jHIzN8WiWUshQyYfW45TJzfwYAQ==",
+        "thinking": "`readFileSync` throws an error: `new Error(\"node:fs.readFileSync not available in CF Workers\")`.\n\nIn `readStore()` and `readSettings()`, these use `try { ... } catch { return default_value }`. So when `readFileSync` throws, the catch block returns the default value (`[]` or `{ disabledTypes: [] }`). \n\nThis means importing `registry.ts` in CF will:\n1. Register built-in adapters (via `registerBuiltInAdapters()`) - this works fine\n2. IIFE starts: calls `buildExternalAdapters()` → `listAdapterPlugins()` → `readStore()` → `readFileSync` throws → catch returns `[]` → no external adapters loaded\n\n\n3. IIFE completes with no external adapters loaded\n\nWhen `listServerAdapters()` runs, it returns all 10 built-in adapters. For `buildAdapterInfo`, the disabled types check fails gracefully and returns an empty list, so all adapters show as enabled with `source: \"builtin\"` and no version information since there's no external adapter record to read from disk.\n\nNow I need to check whether `isOverridePaused` also relies on filesystem operations.",
+        "type": "thinking"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01E97pDKypFohJXdD7RKEu8z",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 1935
+      },
+      "cache_creation_input_tokens": 1935,
+      "cache_read_input_tokens": 122094,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 1935
+          },
+          "cache_creation_input_tokens": 1935,
+          "cache_read_input_tokens": 122094,
+          "input_tokens": 1,
+          "output_tokens": 521,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 521,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "75d0944c-e582-48d4-85ff-c3239b5d8eda",
+  "requestId": "req_011CaaWaFhUgbWhdZNTR9WyF",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T19:30:41.969Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "35e2851b-0aae-491d-8f6f-84f10bfc6121",
+  "version": "2.1.123"
+}

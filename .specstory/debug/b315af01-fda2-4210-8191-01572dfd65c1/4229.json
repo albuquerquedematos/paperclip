@@ -1,0 +1,70 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01TGdkFVpHr4ZJPrgR9Xyozo",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/projects.ts",
+          "limit": 30,
+          "offset": 126
+        },
+        "name": "Read",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01DZAEjtpRnLSdntu8pETiCt",
+    "model": "claude-opus-4-7",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 293,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 293,
+      "cache_read_input_tokens": 415150,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 293,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 293,
+          "cache_read_input_tokens": 415150,
+          "input_tokens": 1,
+          "output_tokens": 146,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 146,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "8d93a3ce-7e22-483e-af24-36b6336c3cd2",
+  "requestId": "req_011CaaoWUcEfE4Hcb151FmnW",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T23:12:40.039Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "045697e9-6240-4784-8417-f2726a9efcc2",
+  "version": "2.1.123"
+}

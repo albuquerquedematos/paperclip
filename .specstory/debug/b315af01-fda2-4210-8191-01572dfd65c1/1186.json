@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "113:export function companyInviteExpiresAt(nowMs: number = Date.now()) {\n470:export function buildJoinDefaultsPayloadForAccept(input: {\n532:export function mergeJoinDefaultsPayloadForReplay(\n572:export function canReplayOpenClawGatewayInviteAccept(input: {\n650:export function normalizeAgentDefaultsForJoin(input: {\n1621:export function buildInviteOnboardingTextDocument(\n2053:export function agentJoinGrantsFromDefaults(\n2078:export function resolveJoinRequestAgentManagerId(\n2284:export function setInviteResolutionNetworkForTest(\n2441:export function accessRoutes(\n2867:  router.get(\"/skills/available\", (req, res) =\u003e {\n2872:  router.get(\"/skills/index\", (req, res) =\u003e {\n2893:  router.get(\"/skills/:skillName\", (req, res) =\u003e {\n3138:  router.get(\"/invites/:token/skills/index\", async (req, res) =\u003e {\n3160:  router.get(\"/invites/:token/skills/:skillName\", async (req, res) =\u003e {\n3706:  router.get(\"/companies/:companyId/join-requests\", async (req, res) =\u003e {\n4011:  router.get(\"/companies/:companyId/user-directory\", async (req, res) =\u003e {",
+        "is_error": false,
+        "tool_use_id": "toolu_01YDtjXn2oEstZX15yiKXgiG",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "d451c7ef-945e-4772-b8aa-eabd78733599",
+  "promptId": "9aae9721-e466-4259-b66e-e724bd2f2c66",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "d451c7ef-945e-4772-b8aa-eabd78733599",
+  "timestamp": "2026-04-30T18:17:03.696Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "113:export function companyInviteExpiresAt(nowMs: number = Date.now()) {\n470:export function buildJoinDefaultsPayloadForAccept(input: {\n532:export function mergeJoinDefaultsPayloadForReplay(\n572:export function canReplayOpenClawGatewayInviteAccept(input: {\n650:export function normalizeAgentDefaultsForJoin(input: {\n1621:export function buildInviteOnboardingTextDocument(\n2053:export function agentJoinGrantsFromDefaults(\n2078:export function resolveJoinRequestAgentManagerId(\n2284:export function setInviteResolutionNetworkForTest(\n2441:export function accessRoutes(\n2867:  router.get(\"/skills/available\", (req, res) =\u003e {\n2872:  router.get(\"/skills/index\", (req, res) =\u003e {\n2893:  router.get(\"/skills/:skillName\", (req, res) =\u003e {\n3138:  router.get(\"/invites/:token/skills/index\", async (req, res) =\u003e {\n3160:  router.get(\"/invites/:token/skills/:skillName\", async (req, res) =\u003e {\n3706:  router.get(\"/companies/:companyId/join-requests\", async (req, res) =\u003e {\n4011:  router.get(\"/companies/:companyId/user-directory\", async (req, res) =\u003e {"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "406de375-be50-4cfe-ae65-ed9b50dcc2fa",
+  "version": "2.1.123"
+}

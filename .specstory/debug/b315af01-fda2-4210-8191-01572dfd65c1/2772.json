@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "  \"scripts\": {\n    \"build\": \"node build-worker.mjs\",\n    \"dev\": \"node build-worker.mjs \u0026\u0026 bash -c 'source \\\"${NVM_DIR:-$HOME/.nvm}/nvm.sh\\\" \u0026\u0026 nvm use 22 \u0026\u0026 wrangler dev --no-bundle --local'\",\n    \"deploy\": \"node build-worker.mjs \u0026\u0026 bash -c 'source \\\"${NVM_DIR:-$HOME/.nvm}/nvm.sh\\\" \u0026\u0026 nvm use 22 \u0026\u0026 wrangler deploy --no-bundle'\"\n  },\n  \"dependencies\": {",
+        "is_error": false,
+        "tool_use_id": "toolu_01BagixpUuTrHv4bYQqBuBye",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "c946691d-8c44-4908-9f65-53adc8a658cc",
+  "promptId": "51152ddf-9e16-4d06-a49e-e8b5daee65d5",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "c946691d-8c44-4908-9f65-53adc8a658cc",
+  "timestamp": "2026-04-30T20:49:09.184Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "  \"scripts\": {\n    \"build\": \"node build-worker.mjs\",\n    \"dev\": \"node build-worker.mjs \u0026\u0026 bash -c 'source \\\"${NVM_DIR:-$HOME/.nvm}/nvm.sh\\\" \u0026\u0026 nvm use 22 \u0026\u0026 wrangler dev --no-bundle --local'\",\n    \"deploy\": \"node build-worker.mjs \u0026\u0026 bash -c 'source \\\"${NVM_DIR:-$HOME/.nvm}/nvm.sh\\\" \u0026\u0026 nvm use 22 \u0026\u0026 wrangler deploy --no-bundle'\"\n  },\n  \"dependencies\": {"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "85d55d05-3e6f-4652-9d16-64aaa314b84f",
+  "version": "2.1.123"
+}

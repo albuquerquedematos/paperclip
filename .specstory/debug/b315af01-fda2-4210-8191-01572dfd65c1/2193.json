@@ -1,0 +1,27 @@
+{
+  "agentId": "ae240282fd51e7edd",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport type { AdapterExecutionContext, AdapterExecutionResult } from \"../types.js\";\n2\timport {\n3\t  asString,\n4\t  asNumber,\n5\t  asStringArray,\n6\t  parseObject,\n7\t  buildPaperclipEnv,\n8\t  buildInvocationEnvForLogs,\n9\t  ensurePathInEnv,\n10\t  resolveCommandForLogs,\n11\t  runChildProcess,\n12\t} from \"../utils.js\";\n13\t\n14\texport async function execute(ctx: AdapterExecutionContext): Promise\u003cAdapterExecutionResult\u003e {\n15\t  const { runId, agent, config, onLog, onMeta } = ctx;\n16\t  const command = asString(config.command, \"\");\n17\t  if (!command) throw new Error(\"Process adapter missing command\");\n18\t\n19\t  const args = asStringArray(config.args);\n20\t  const cwd = asString(config.cwd, process.cwd());\n21\t  const envConfig = parseObject(config.env);\n22\t  const env: Record\u003cstring, string\u003e = { ...buildPaperclipEnv(agent) };\n23\t  for (const [k, v] of Object.entries(envConfig)) {\n24\t    if (typeof v === \"string\") env[k] = v;\n25\t  }\n26\t  const runtimeEnv = ensurePathInEnv({ ...process.env, ...env });\n27\t  const resolvedCommand = await resolveCommandForLogs(command, cwd, runtimeEnv);\n28\t  const loggedEnv = buildInvocationEnvForLogs(env, {\n29\t    runtimeEnv,\n30\t    includeRuntimeKeys: [\"HOME\"],\n31\t    resolvedCommand,\n32\t  });\n33\t\n34\t  const timeoutSec = asNumber(config.timeoutSec, 0);\n35\t  const graceSec = asNumber(config.graceSec, 15);\n36\t\n37\t  if (onMeta) {\n38\t    await onMeta({\n39\t      adapterType: \"process\",\n40\t      command: resolvedCommand,\n41\t      cwd,\n42\t      commandArgs: args,\n43\t      env: loggedEnv,\n44\t    });\n45\t  }\n46\t\n47\t  const proc = await runChildProcess(runId, command, args, {\n48\t    cwd,\n49\t    env,\n50\t    timeoutSec,\n51\t    graceSec,\n52\t    onLog,\n53\t  });\n54\t\n55\t  if (proc.timedOut) {\n56\t    return {\n57\t      exitCode: proc.exitCode,\n58\t      signal: proc.signal,\n59\t      timedOut: true,\n60\t      errorMessage: `Timed out after ${timeoutSec}s`,\n\n\u003csystem-reminder\u003e\nWhenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.\n\u003c/system-reminder\u003e\n",
+        "tool_use_id": "toolu_01QcrDuqc34LFkB68Kodcqss",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "5c743ea6-d978-4d94-a1c1-c081fb1aef6d",
+  "promptId": "0d05d433-ef46-4bba-8105-f1d502a42e1e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "5c743ea6-d978-4d94-a1c1-c081fb1aef6d",
+  "timestamp": "2026-04-30T19:28:12.532Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "e5db7c3d-296d-42c2-8f3d-a4840b9e2b5e",
+  "version": "2.1.123"
+}

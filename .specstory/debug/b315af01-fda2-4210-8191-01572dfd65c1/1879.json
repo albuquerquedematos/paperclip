@@ -1,0 +1,61 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "text": "Now create the CF Express bridge:",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01KuW93xMdYb9GkrNB87c6Ru",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 375
+      },
+      "cache_creation_input_tokens": 375,
+      "cache_read_input_tokens": 162967,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 375
+          },
+          "cache_creation_input_tokens": 375,
+          "cache_read_input_tokens": 162967,
+          "input_tokens": 1,
+          "output_tokens": 2937,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 2937,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "6ab9d608-6c5c-47f3-86aa-467a3311cfd1",
+  "requestId": "req_011CaaV6qU68VcpSvAWxFkj8",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T19:11:15.513Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "b14d9c5e-800e-4cf1-8b01-b32fac9d367a",
+  "version": "2.1.123"
+}

@@ -1,0 +1,27 @@
+{
+  "agentId": "a8455dc48bdf97d68",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/.claude/worktrees/agent-a8455dc48bdf97d68",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "worktree-agent-a8455dc48bdf97d68",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\t/**\n2\t * cf-extra-routes.ts — barrel for CF-native route modules.\n3\t *\n4\t * CF-native handlers for API endpoints that use raw Express handlers in the\n5\t * server package (making them invisible to extractRoutesFromRouter) or depend\n6\t * on runtime registries (adapters, plugins) that don't exist in a CF Worker.\n7\t *\n8\t * Registered in app.ts BEFORE the /api/* catch-all so they shadow the 501.\n9\t *\n10\t * Modules:\n11\t *   routes/adapters.ts       — GET /api/adapters\n12\t *   routes/plugins.ts        — GET /api/plugins, GET /api/plugins/ui-contributions\n13\t *   routes/company-access.ts — GET /api/companies/:id/join-requests,\n14\t *                               GET /api/companies/:id/user-directory\n15\t *   routes/company-skills-cf.ts — GET /api/companies/:id/skills\n16\t *   routes/events.ts         — GET /api/companies/:id/events/ws\n17\t *\n18\t * All routes in this barrel require an authenticated actor (board or agent key,\n19\t * or local_trusted mode). Unauthenticated requests receive 401.\n20\t */\n21\t\n22\timport type { Hono } from \"hono\";\n23\timport type { Env } from \"./env.js\";\n24\timport { registerAdapterRoutes } from \"./routes/adapters.js\";\n25\timport { registerPluginRoutes } from \"./routes/plugins.js\";\n26\timport { registerCompanyAccessRoutes } from \"./routes/company-access.js\";\n27\timport { registerCompanySkillRoutes } from \"./routes/company-skills-cf.js\";\n28\timport { registerEventRoutes } from \"./routes/events.js\";\n29\t\n30\texport function registerCfExtraRoutes(app: Hono\u003c{ Bindings: Env }\u003e): void {\n31\t  registerAdapterRoutes(app);\n32\t  registerPluginRoutes(app);\n33\t  registerCompanyAccessRoutes(app);\n34\t  registerCompanySkillRoutes(app);\n35\t  registerEventRoutes(app);\n36\t}\n37\t",
+        "tool_use_id": "toolu_01CEpFp7FbK889t1Q1HhXtmu",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "5212bff6-9425-454a-8edb-bf11bf9fb7dc",
+  "promptId": "8a433599-d510-488c-a09f-2af6b1c28bcb",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "5212bff6-9425-454a-8edb-bf11bf9fb7dc",
+  "timestamp": "2026-04-30T19:40:12.075Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "3eb08511-0da1-486b-a8c8-c36f102df41b",
+  "version": "2.1.123"
+}

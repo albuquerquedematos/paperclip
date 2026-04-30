@@ -1,0 +1,68 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/http/cf-express-bridge.ts has been updated successfully.",
+        "tool_use_id": "toolu_01JupRVwuoyTyuL8qfQCshrW",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "6baa85a1-06d5-4f76-97df-d86e78234cbc",
+  "promptId": "6578f9d8-71c9-42ed-bd5d-4cac4f413d52",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "6baa85a1-06d5-4f76-97df-d86e78234cbc",
+  "timestamp": "2026-04-30T19:21:12.328Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/http/cf-express-bridge.ts",
+    "newString": "interface MockRes {\n  _status: number;\n  _headers: Headers;\n  _settled: boolean;\n  _resolve: (r: Response) =\u003e void;\n  _reject: (e: unknown) =\u003e void;\n  promise: Promise\u003cResponse\u003e;\n  status(code: number): this;\n  json(data: unknown): this;\n  send(data: unknown): this;\n  sendStatus(code: number): this;\n  set(header: string, value: string): this;\n  end(): this;\n}\n\nfunction createMockRes(): MockRes {\n  let _resolve!: (r: Response) =\u003e void;\n  let _rejectInner!: (e: unknown) =\u003e void;\n  const promise = new Promise\u003cResponse\u003e((res, rej) =\u003e { _resolve = res; _rejectInner = rej; });",
+    "oldString": "interface MockRes {\n  _status: number;\n  _headers: Headers;\n  _settled: boolean;\n  _resolve: (r: Response) =\u003e void;\n  promise: Promise\u003cResponse\u003e;\n  status(code: number): this;\n  json(data: unknown): this;\n  send(data: unknown): this;\n  sendStatus(code: number): this;\n  set(header: string, value: string): this;\n  end(): this;\n}\n\nfunction createMockRes(): MockRes {\n  let _resolve!: (r: Response) =\u003e void;\n  const promise = new Promise\u003cResponse\u003e((r) =\u003e { _resolve = r; });",
+    "originalFile": null,
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          "   _headers: Headers;",
+          "   _settled: boolean;",
+          "   _resolve: (r: Response) =\u003e void;",
+          "+  _reject: (e: unknown) =\u003e void;",
+          "   promise: Promise\u003cResponse\u003e;",
+          "   status(code: number): this;",
+          "   json(data: unknown): this;"
+        ],
+        "newLines": 7,
+        "newStart": 80,
+        "oldLines": 6,
+        "oldStart": 80
+      },
+      {
+        "lines": [
+          " ",
+          " function createMockRes(): MockRes {",
+          "   let _resolve!: (r: Response) =\u003e void;",
+          "-  const promise = new Promise\u003cResponse\u003e((r) =\u003e { _resolve = r; });",
+          "+  let _rejectInner!: (e: unknown) =\u003e void;",
+          "+  const promise = new Promise\u003cResponse\u003e((res, rej) =\u003e { _resolve = res; _rejectInner = rej; });",
+          " ",
+          "   const res: MockRes = {",
+          "     _status: 200,"
+        ],
+        "newLines": 8,
+        "newStart": 92,
+        "oldLines": 7,
+        "oldStart": 91
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "33af3cd6-b607-402f-9e7d-ed6f5f607f1b",
+  "version": "2.1.123"
+}

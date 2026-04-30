@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "11: *    runtime resolves them (node:crypto, node:stream, node:path, etc.)\n20: *   - jsdom → external (SVG sanitize path throws at runtime; acceptable for CF)\n25:import path from \"path\";\n27:const __dirname = path.dirname(fileURLToPath(import.meta.url));\n28:const SHIMS = path.join(__dirname, \"src/shims\");\n35:  \"node:path\", \"node:perf_hooks\", \"node:process\", \"node:querystring\",\n42:  \"events\", \"module\", \"path\", \"perf_hooks\", \"querystring\",\n45:  // the CF runtime will reject it but that code path is never reached.\n47:  // Node-only packages not available in CF — never called in CF code paths\n54:  entryPoints: [path.join(__dirname, \"src/worker/api.ts\")],\n56:  outfile: path.join(__dirname, \"dist/worker.js\"),\n68:    \"express\": path.join(__dirname, \"src/http/cf-express-shim.ts\"),\n72:    // is acceptable since these paths are not exercised in CF).\n73:    \"node:http\":          path.join(SHIMS, \"node-http.ts\"),\n74:    \"http\":               path.join(SHIMS, \"node-http.ts\"),\n75:    \"node:https\":         path.join(SHIMS, \"node-https.ts\"),\n76:    \"https\":              path.join(SHIMS, \"node-https.ts\"),\n77:    \"node:net\":           path.join(SHIMS, \"node-net.ts\"),\n78:    \"net\":                path.join(SHIMS, \"node-net.ts\"),\n79:    \"node:tls\":           path.join(SHIMS, \"node-tls.ts\"),",
+        "is_error": false,
+        "tool_use_id": "toolu_01SioqGo6idEbwDczFicPRFV",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "7483fdf5-61b1-4fc9-b8f8-17edba1627e7",
+  "promptId": "9aae9721-e466-4259-b66e-e724bd2f2c66",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "7483fdf5-61b1-4fc9-b8f8-17edba1627e7",
+  "timestamp": "2026-04-30T18:26:19.812Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "11: *    runtime resolves them (node:crypto, node:stream, node:path, etc.)\n20: *   - jsdom → external (SVG sanitize path throws at runtime; acceptable for CF)\n25:import path from \"path\";\n27:const __dirname = path.dirname(fileURLToPath(import.meta.url));\n28:const SHIMS = path.join(__dirname, \"src/shims\");\n35:  \"node:path\", \"node:perf_hooks\", \"node:process\", \"node:querystring\",\n42:  \"events\", \"module\", \"path\", \"perf_hooks\", \"querystring\",\n45:  // the CF runtime will reject it but that code path is never reached.\n47:  // Node-only packages not available in CF — never called in CF code paths\n54:  entryPoints: [path.join(__dirname, \"src/worker/api.ts\")],\n56:  outfile: path.join(__dirname, \"dist/worker.js\"),\n68:    \"express\": path.join(__dirname, \"src/http/cf-express-shim.ts\"),\n72:    // is acceptable since these paths are not exercised in CF).\n73:    \"node:http\":          path.join(SHIMS, \"node-http.ts\"),\n74:    \"http\":               path.join(SHIMS, \"node-http.ts\"),\n75:    \"node:https\":         path.join(SHIMS, \"node-https.ts\"),\n76:    \"https\":              path.join(SHIMS, \"node-https.ts\"),\n77:    \"node:net\":           path.join(SHIMS, \"node-net.ts\"),\n78:    \"net\":                path.join(SHIMS, \"node-net.ts\"),\n79:    \"node:tls\":           path.join(SHIMS, \"node-tls.ts\"),"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "afebb868-2ff3-4a1d-bc21-7bc36079bfb3",
+  "version": "2.1.123"
+}

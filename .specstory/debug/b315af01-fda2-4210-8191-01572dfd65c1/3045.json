@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport type { PaperclipPluginManifestV1 } from \"@paperclipai/plugin-sdk\";\n2\t\n3\tconst PLUGIN_ID = \"paperclip-file-browser-example\";\n4\tconst FILES_SIDEBAR_SLOT_ID = \"files-link\";\n5\tconst FILES_TAB_SLOT_ID = \"files-tab\";\n6\tconst COMMENT_FILE_LINKS_SLOT_ID = \"comment-file-links\";\n7\tconst COMMENT_OPEN_FILES_SLOT_ID = \"comment-open-files\";\n8\t\n9\tconst manifest: PaperclipPluginManifestV1 = {\n10\t  id: PLUGIN_ID,\n11\t  apiVersion: 1,\n12\t  version: \"0.2.0\",\n13\t  displayName: \"File Browser (Example)\",\n14\t  description: \"Example plugin that adds a Files link under each project in the sidebar, a file browser + editor tab on the project detail page, and per-comment file link annotations with a context menu action to open referenced files.\",\n15\t  author: \"Paperclip\",\n16\t  categories: [\"workspace\", \"ui\"],\n17\t  capabilities: [\n18\t    \"ui.sidebar.register\",\n19\t    \"ui.detailTab.register\",\n20\t    \"ui.commentAnnotation.register\",\n21\t    \"ui.action.register\",\n22\t    \"projects.read\",\n23\t    \"project.workspaces.read\",\n24\t    \"issue.comments.read\",\n25\t    \"plugin.state.read\",\n26\t  ],\n27\t  instanceConfigSchema: {\n28\t    type: \"object\",\n29\t    properties: {\n30\t      showFilesInSidebar: {\n31\t        type: \"boolean\",\n32\t        title: \"Show Files in Sidebar\",\n33\t        default: false,\n34\t        description: \"Adds the Files link under each project in the sidebar.\",\n35\t      },\n36\t      commentAnnotationMode: {\n37\t        type: \"string\",\n38\t        title: \"Comment File Links\",\n39\t        enum: [\"annotation\", \"contextMenu\", \"both\", \"none\"],\n40\t        default: \"both\",\n41\t        description: \"Controls which comment extensions are active: 'annotation' shows file links below each comment, 'contextMenu' adds an \\\"Open in Files\\\" action to the comment menu, 'both' enables both, 'none' disables comment features.\",\n42\t      },\n43\t    },\n44\t  },\n45\t  entrypoints: {\n46\t    worker: \"./dist/worker.js\",\n47\t    ui: \"./dist/ui\",\n48\t  },\n49\t  ui: {\n50\t    slots: [\n51\t      {\n52\t        type: \"projectSidebarItem\",\n53\t        id: FILES_SIDEBAR_SLOT_ID,\n54\t        displayName: \"Files\",\n55\t        exportName: \"FilesLink\",\n56\t        entityTypes: [\"project\"],\n57\t        order: 10,\n58\t      },\n59\t      {\n60\t        type: \"detailTab\",\n61\t        id: FILES_TAB_SLOT_ID,\n62\t        displayName: \"Files\",\n63\t        exportName: \"FilesTab\",\n64\t        entityTypes: [\"project\"],\n65\t        order: 10,\n66\t      },\n67\t      {\n68\t        type: \"commentAnnotation\",\n69\t        id: COMMENT_FILE_LINKS_SLOT_ID,\n70\t        displayName: \"File Links\",\n71\t        exportName: \"CommentFileLinks\",\n72\t        entityTypes: [\"comment\"],\n73\t      },\n74\t      {\n75\t        type: \"commentContextMenuItem\",\n76\t        id: COMMENT_OPEN_FILES_SLOT_ID,\n77\t        displayName: \"Open in Files\",\n78\t        exportName: \"CommentOpenFiles\",\n79\t        entityTypes: [\"comment\"],\n80\t      },\n81\t    ],\n82\t  },\n83\t};\n84\t\n85\texport default manifest;\n86\t",
+        "tool_use_id": "toolu_018ZUXVb6AeaSc1GZGZdA21K",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "e27bd897-93ab-4d6f-abb8-e8e4139e78a8",
+  "promptId": "7323a41a-dd8a-4783-b590-aea4ab5316a7",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "e27bd897-93ab-4d6f-abb8-e8e4139e78a8",
+  "timestamp": "2026-04-30T21:30:30.664Z",
+  "toolUseResult": {
+    "file": {
+      "content": "import type { PaperclipPluginManifestV1 } from \"@paperclipai/plugin-sdk\";\n\nconst PLUGIN_ID = \"paperclip-file-browser-example\";\nconst FILES_SIDEBAR_SLOT_ID = \"files-link\";\nconst FILES_TAB_SLOT_ID = \"files-tab\";\nconst COMMENT_FILE_LINKS_SLOT_ID = \"comment-file-links\";\nconst COMMENT_OPEN_FILES_SLOT_ID = \"comment-open-files\";\n\nconst manifest: PaperclipPluginManifestV1 = {\n  id: PLUGIN_ID,\n  apiVersion: 1,\n  version: \"0.2.0\",\n  displayName: \"File Browser (Example)\",\n  description: \"Example plugin that adds a Files link under each project in the sidebar, a file browser + editor tab on the project detail page, and per-comment file link annotations with a context menu action to open referenced files.\",\n  author: \"Paperclip\",\n  categories: [\"workspace\", \"ui\"],\n  capabilities: [\n    \"ui.sidebar.register\",\n    \"ui.detailTab.register\",\n    \"ui.commentAnnotation.register\",\n    \"ui.action.register\",\n    \"projects.read\",\n    \"project.workspaces.read\",\n    \"issue.comments.read\",\n    \"plugin.state.read\",\n  ],\n  instanceConfigSchema: {\n    type: \"object\",\n    properties: {\n      showFilesInSidebar: {\n        type: \"boolean\",\n        title: \"Show Files in Sidebar\",\n        default: false,\n        description: \"Adds the Files link under each project in the sidebar.\",\n      },\n      commentAnnotationMode: {\n        type: \"string\",\n        title: \"Comment File Links\",\n        enum: [\"annotation\", \"contextMenu\", \"both\", \"none\"],\n        default: \"both\",\n        description: \"Controls which comment extensions are active: 'annotation' shows file links below each comment, 'contextMenu' adds an \\\"Open in Files\\\" action to the comment menu, 'both' enables both, 'none' disables comment features.\",\n      },\n    },\n  },\n  entrypoints: {\n    worker: \"./dist/worker.js\",\n    ui: \"./dist/ui\",\n  },\n  ui: {\n    slots: [\n      {\n        type: \"projectSidebarItem\",\n        id: FILES_SIDEBAR_SLOT_ID,\n        displayName: \"Files\",\n        exportName: \"FilesLink\",\n        entityTypes: [\"project\"],\n        order: 10,\n      },\n      {\n        type: \"detailTab\",\n        id: FILES_TAB_SLOT_ID,\n        displayName: \"Files\",\n        exportName: \"FilesTab\",\n        entityTypes: [\"project\"],\n        order: 10,\n      },\n      {\n        type: \"commentAnnotation\",\n        id: COMMENT_FILE_LINKS_SLOT_ID,\n        displayName: \"File Links\",\n        exportName: \"CommentFileLinks\",\n        entityTypes: [\"comment\"],\n      },\n      {\n        type: \"commentContextMenuItem\",\n        id: COMMENT_OPEN_FILES_SLOT_ID,\n        displayName: \"Open in Files\",\n        exportName: \"CommentOpenFiles\",\n        entityTypes: [\"comment\"],\n      },\n    ],\n  },\n};\n\nexport default manifest;\n",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/plugins/examples/plugin-file-browser-example/src/manifest.ts",
+      "numLines": 86,
+      "startLine": 1,
+      "totalLines": 86
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "70042f09-0597-4ab0-bd1e-af266619562e",
+  "version": "2.1.123"
+}

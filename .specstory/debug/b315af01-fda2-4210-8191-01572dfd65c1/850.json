@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "/**\n * resolve-actor.ts — Cloudflare Workers port of the Express actorMiddleware.\n *\n * Resolves the authenticated actor from a Web API `Request` object without\n * depending on any Node-only modules (`node:crypto`, Express types, etc.).\n *\n * SHA-256 hashing uses the Web Crypto API (`crypto.subtle`) which is available\n * in both the Workers runtime and modern Node.js (\u003e= 19 with global `crypto`).\n *\n * BetterAuth session lookup is skipped for the Workers deployment — the CF\n * Worker authenticates via Bearer tokens (agent JWTs, agent API keys, and\n * board API keys). UI sessions that rely on HTTP-only cookies must go through\n * BetterAuth's own `/api/auth/*` handler, which is mounted separately.\n */\n\nimport { and, eq, isNull } from \"drizzle-orm\";\nimport type { Db } from \"@paperclipai/db\";\nimport { agentApiKeys, agents, authUsers, boardApiKeys, companyMemberships, instanceUserRoles } from \"@paperclipai/db\";\nimport type { ActorContext } from \"../../../../server/src/http/types.js\";\nimport { verifyLocalAgentJwt } from \"../../../../server/src/agent-auth-jwt.js\";\n\n// ---------------------------------------------------------------------------\n// Internal helpers\n// ---------------------------------------------------------------------------\n\n/** SHA-256 hash a token using the Web Crypto API, returning a lowercase hex string. */\nasync function hashToken(token: string): Promise\u003cstring\u003e {\n  const buf = await crypto.subtle.digest(\"SHA-256\", new TextEncoder().encode(token));\n  return Array.from(new Uint8Array(buf))\n    .map((b) =\u003e b.toString(16).padStart(2, \"0\"))\n    .join(\"\");\n}\n\n/**\n * Resolve the board actor memberships for a given userId.\n * Queries `companyMemberships` and `instanceUserRoles` in parallel.\n */\nasync function resolveBoardAccess(db: Db, userId: string) {\n  const [user, memberships, adminRole] = await Promise.all([\n    db\n      .select({ id: authUsers.id, name: authUsers.name, email: authUsers.email })\n      .from(authUsers)\n      .where(eq(authUsers.id, userId))\n      .then((rows) =\u003e rows[0] ?? null),\n    db\n      .select({\n        companyId: companyMemberships.companyId,\n        membershipRole: companyMemberships.membershipRole,\n        status: companyMemberships.status,\n      })",
+        "is_error": false,
+        "tool_use_id": "toolu_013fz5ucHLRpGa8MihinCjQ4",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "671ed0d8-064b-46ed-bd95-98d7711e7a83",
+  "promptId": "285fd922-5736-481c-a4fc-cf130aed3e81",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "671ed0d8-064b-46ed-bd95-98d7711e7a83",
+  "timestamp": "2026-04-30T17:48:31.391Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "/**\n * resolve-actor.ts — Cloudflare Workers port of the Express actorMiddleware.\n *\n * Resolves the authenticated actor from a Web API `Request` object without\n * depending on any Node-only modules (`node:crypto`, Express types, etc.).\n *\n * SHA-256 hashing uses the Web Crypto API (`crypto.subtle`) which is available\n * in both the Workers runtime and modern Node.js (\u003e= 19 with global `crypto`).\n *\n * BetterAuth session lookup is skipped for the Workers deployment — the CF\n * Worker authenticates via Bearer tokens (agent JWTs, agent API keys, and\n * board API keys). UI sessions that rely on HTTP-only cookies must go through\n * BetterAuth's own `/api/auth/*` handler, which is mounted separately.\n */\n\nimport { and, eq, isNull } from \"drizzle-orm\";\nimport type { Db } from \"@paperclipai/db\";\nimport { agentApiKeys, agents, authUsers, boardApiKeys, companyMemberships, instanceUserRoles } from \"@paperclipai/db\";\nimport type { ActorContext } from \"../../../../server/src/http/types.js\";\nimport { verifyLocalAgentJwt } from \"../../../../server/src/agent-auth-jwt.js\";\n\n// ---------------------------------------------------------------------------\n// Internal helpers\n// ---------------------------------------------------------------------------\n\n/** SHA-256 hash a token using the Web Crypto API, returning a lowercase hex string. */\nasync function hashToken(token: string): Promise\u003cstring\u003e {\n  const buf = await crypto.subtle.digest(\"SHA-256\", new TextEncoder().encode(token));\n  return Array.from(new Uint8Array(buf))\n    .map((b) =\u003e b.toString(16).padStart(2, \"0\"))\n    .join(\"\");\n}\n\n/**\n * Resolve the board actor memberships for a given userId.\n * Queries `companyMemberships` and `instanceUserRoles` in parallel.\n */\nasync function resolveBoardAccess(db: Db, userId: string) {\n  const [user, memberships, adminRole] = await Promise.all([\n    db\n      .select({ id: authUsers.id, name: authUsers.name, email: authUsers.email })\n      .from(authUsers)\n      .where(eq(authUsers.id, userId))\n      .then((rows) =\u003e rows[0] ?? null),\n    db\n      .select({\n        companyId: companyMemberships.companyId,\n        membershipRole: companyMemberships.membershipRole,\n        status: companyMemberships.status,\n      })"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "2528aa1d-2348-4b79-a6b5-1023739ae8fb",
+  "version": "2.1.123"
+}

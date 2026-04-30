@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "    \"dev\": \"pnpm --filter @paperclipai/server exec tsx ../scripts/dev-runner.ts watch\",\n    \"dev:watch\": \"pnpm --filter @paperclipai/server exec tsx ../scripts/dev-runner.ts watch\",\n    \"dev:once\": \"pnpm --filter @paperclipai/server exec tsx ../scripts/dev-runner.ts dev\",\n    \"dev:list\": \"pnpm --filter @paperclipai/server exec tsx ../scripts/dev-service.ts list\",\n    \"dev:stop\": \"pnpm --filter @paperclipai/server exec tsx ../scripts/dev-service.ts stop\",\n    \"dev:server\": \"pnpm --filter @paperclipai/server dev\",\n    \"dev:cf\": \"pnpm --filter @paperclipai/deploy-cloudflare dev\",\n    \"dev:ui\": \"pnpm --filter @paperclipai/ui dev\",\n    \"docs:dev\": \"cd docs \u0026\u0026 npx mintlify dev\",\n  \"devDependencies\": {",
+        "is_error": false,
+        "tool_use_id": "toolu_01Nd7eFVtEXtuLmTtE4GV1ue",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "ca5889f4-6996-42b5-b286-e109399b34be",
+  "promptId": "d0b92455-a864-472b-b317-dad6488163c5",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "ca5889f4-6996-42b5-b286-e109399b34be",
+  "timestamp": "2026-04-30T18:02:19.620Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "    \"dev\": \"pnpm --filter @paperclipai/server exec tsx ../scripts/dev-runner.ts watch\",\n    \"dev:watch\": \"pnpm --filter @paperclipai/server exec tsx ../scripts/dev-runner.ts watch\",\n    \"dev:once\": \"pnpm --filter @paperclipai/server exec tsx ../scripts/dev-runner.ts dev\",\n    \"dev:list\": \"pnpm --filter @paperclipai/server exec tsx ../scripts/dev-service.ts list\",\n    \"dev:stop\": \"pnpm --filter @paperclipai/server exec tsx ../scripts/dev-service.ts stop\",\n    \"dev:server\": \"pnpm --filter @paperclipai/server dev\",\n    \"dev:cf\": \"pnpm --filter @paperclipai/deploy-cloudflare dev\",\n    \"dev:ui\": \"pnpm --filter @paperclipai/ui dev\",\n    \"docs:dev\": \"cd docs \u0026\u0026 npx mintlify dev\",\n  \"devDependencies\": {"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "a51e758d-943f-4cb3-ba39-ac1046b9bf13",
+  "version": "2.1.123"
+}

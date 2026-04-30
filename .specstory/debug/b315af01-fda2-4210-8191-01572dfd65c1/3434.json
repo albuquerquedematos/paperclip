@@ -1,0 +1,27 @@
+{
+  "agentId": "a07aabe33abdc139f",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport { Router } from \"express\";\n2\timport type { Db } from \"@paperclipai/db\";\n3\timport { AGENT_ICON_NAMES } from \"@paperclipai/shared\";\n4\timport { forbidden } from \"../errors.js\";\n5\timport { listServerAdapters } from \"../adapters/index.js\";\n6\timport { agentService } from \"../services/agents.js\";\n7\timport { expressHandler } from \"../http/express-adapter.js\";\n8\timport type { Handler, RequestCtx } from \"../http/types.js\";\n9\timport type { StorageService } from \"../storage/types.js\";\n10\t\n11\tfunction hasCreatePermission(agent: { role: string; permissions: Record\u003cstring, unknown\u003e | null | undefined }) {\n12\t  if (!agent.permissions || typeof agent.permissions !== \"object\") return false;\n13\t  return Boolean((agent.permissions as Record\u003cstring, unknown\u003e).canCreateAgents);\n14\t}\n15\t\n16\tfunction textPlain(body: string): Response {\n17\t  return new Response(body, { headers: { \"content-type\": \"text/plain; charset=utf-8\" } });\n18\t}\n19\t\n20\tfunction buildHandlers(db: Db) {\n21\t  const agentsSvc = agentService(db);\n22\t\n23\t  async function assertCanRead(ctx: RequestCtx) {\n24\t    if (ctx.actor?.type === \"board\") return;\n25\t    if (ctx.actor?.type !== \"agent\" || !ctx.actor.agentId) {\n26\t      throw forbidden(\"Board or permitted agent authentication required\");\n27\t    }\n28\t    const actorAgent = await agentsSvc.getById(ctx.actor.agentId);\n29\t    if (!actorAgent || !hasCreatePermission(actorAgent)) {\n30\t      throw forbidden(\"Missing permission to read agent configuration reflection\");\n31\t    }\n32\t  }\n33\t\n34\t  // server/src/routes/llms.ts:28\n35\t  const getAgentConfigurationIndex: Handler = async (ctx) =\u003e {\n36\t    await assertCanRead(ctx);\n37\t    const adapters = listServerAdapters().sort((a, b) =\u003e a.type.localeCompare(b.type));\n38\t    const lines = [\n39\t      \"# Paperclip Agent Configuration Index\",\n40\t      \"\",\n41\t      \"Installed adapters:\",\n42\t      ...adapters.map((adapter) =\u003e `- ${adapter.type}: /llms/agent-configuration/${adapter.type}.txt`),\n43\t      \"\",\n44\t      \"Related API endpoints:\",\n45\t      \"- GET /api/companies/:companyId/agent-configurations\",\n46\t      \"- GET /api/agents/:id/configuration\",\n47\t      \"- POST /api/companies/:companyId/agent-hires\",\n48\t      \"\",\n49\t      \"Agent identity references:\",\n50\t      \"- GET /llms/agent-icons.txt\",\n\n\u003csystem-reminder\u003e\nWhenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.\n\u003c/system-reminder\u003e\n",
+        "tool_use_id": "toolu_018Jx98jn3KsJ5yKVwyJUcV8",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "00155547-93d4-4725-a98a-312972b537ef",
+  "promptId": "ba04e90f-0d7c-4dcc-9bf9-971187295dfd",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "00155547-93d4-4725-a98a-312972b537ef",
+  "timestamp": "2026-04-30T21:58:35.380Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "4c42c0a3-0a4c-4806-bc13-696367b62d1f",
+  "version": "2.1.123"
+}

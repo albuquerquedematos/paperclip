@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "b76487e3 feat(deploy-cloudflare): close remaining 501 gaps; add esbuild watch in dev\ne16a35be feat(deploy-cloudflare): implement full plugin REST API surface\na9edf933 fix(deploy-cloudflare): remove dynamic import in adapters route; clarify wrangler.toml comments\neef8d3fe refactor(deploy-cloudflare): extract shared sidecar routing and deduplicate pathToRegex\n9d2018c4 fix(deploy-cloudflare): security, correctness, and noise hardening\ne8aca7c4 chore: run Node server and CF worker together in dev:cf\n51a5c260 fix(deploy-cloudflare): handle sidecar unreachable for examples and install\ne02d0147 fix(deploy-cloudflare): proxy GET /api/plugins/examples to sidecar\n296133bb fix(deploy-cloudflare): rewrite isLocalPath:true to npm install for CF plugin installs\n3ce3b496 feat(deploy-cloudflare): implement GET /api/plugins/examples and POST /api/plugins/install",
+        "is_error": false,
+        "tool_use_id": "toolu_019KzVBaT34yvigWQQ2FGUYe",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "734c1698-e73c-45b0-a6cc-6779c0280550",
+  "promptId": "ba04e90f-0d7c-4dcc-9bf9-971187295dfd",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "734c1698-e73c-45b0-a6cc-6779c0280550",
+  "timestamp": "2026-04-30T22:03:45.900Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "b76487e3 feat(deploy-cloudflare): close remaining 501 gaps; add esbuild watch in dev\ne16a35be feat(deploy-cloudflare): implement full plugin REST API surface\na9edf933 fix(deploy-cloudflare): remove dynamic import in adapters route; clarify wrangler.toml comments\neef8d3fe refactor(deploy-cloudflare): extract shared sidecar routing and deduplicate pathToRegex\n9d2018c4 fix(deploy-cloudflare): security, correctness, and noise hardening\ne8aca7c4 chore: run Node server and CF worker together in dev:cf\n51a5c260 fix(deploy-cloudflare): handle sidecar unreachable for examples and install\ne02d0147 fix(deploy-cloudflare): proxy GET /api/plugins/examples to sidecar\n296133bb fix(deploy-cloudflare): rewrite isLocalPath:true to npm install for CF plugin installs\n3ce3b496 feat(deploy-cloudflare): implement GET /api/plugins/examples and POST /api/plugins/install"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "626340ac-bd9a-4160-af21-ff75873a8f55",
+  "version": "2.1.123"
+}

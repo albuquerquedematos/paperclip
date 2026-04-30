@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "  const listPlugins: Handler = async (ctx) =\u003e {\n    assertBoardOrgAccess(ctx);\n    const rawStatus = ctx.query(\"status\");\n    if (rawStatus !== undefined) {\n      if (!(PLUGIN_STATUSES as readonly string[]).includes(rawStatus)) {\n        return Response.json({\n          error: `Invalid status '${rawStatus}'. Must be one of: ${PLUGIN_STATUSES.join(\", \")}`,\n        }, { status: 400 });\n      }\n    }\n    const status = rawStatus as PluginStatus | undefined;\n    const plugins = status\n      ? await registry.listByStatus(status)\n      : await registry.listInstalled();\n    return Response.json(plugins);\n  };\n\n  /**\n   * GET /api/plugins/examples\n   */\n  const listPluginExamples: Handler = async (ctx) =\u003e {\n    assertBoardOrgAccess(ctx);\n    return Response.json(listBundledPluginExamples());\n  };\n\n  /**\n   * GET /api/plugins/ui-contributions\n   */\n  const listUiContributions: Handler = async (ctx) =\u003e {\n    assertBoardOrgAccess(ctx);\n    const plugins = await registry.listByStatus(\"ready\");",
+        "is_error": false,
+        "tool_use_id": "toolu_014Nzjp2HMxruxQeV4tPS844",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "af0735e3-c642-4162-8b66-4a0e59d2588c",
+  "promptId": "d55b1191-6053-4462-b18a-ea1b69fa27ee",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "af0735e3-c642-4162-8b66-4a0e59d2588c",
+  "timestamp": "2026-04-30T18:48:59.532Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "  const listPlugins: Handler = async (ctx) =\u003e {\n    assertBoardOrgAccess(ctx);\n    const rawStatus = ctx.query(\"status\");\n    if (rawStatus !== undefined) {\n      if (!(PLUGIN_STATUSES as readonly string[]).includes(rawStatus)) {\n        return Response.json({\n          error: `Invalid status '${rawStatus}'. Must be one of: ${PLUGIN_STATUSES.join(\", \")}`,\n        }, { status: 400 });\n      }\n    }\n    const status = rawStatus as PluginStatus | undefined;\n    const plugins = status\n      ? await registry.listByStatus(status)\n      : await registry.listInstalled();\n    return Response.json(plugins);\n  };\n\n  /**\n   * GET /api/plugins/examples\n   */\n  const listPluginExamples: Handler = async (ctx) =\u003e {\n    assertBoardOrgAccess(ctx);\n    return Response.json(listBundledPluginExamples());\n  };\n\n  /**\n   * GET /api/plugins/ui-contributions\n   */\n  const listUiContributions: Handler = async (ctx) =\u003e {\n    assertBoardOrgAccess(ctx);\n    const plugins = await registry.listByStatus(\"ready\");"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "e097feca-27d0-4ad8-b606-8a1bea1f6d74",
+  "version": "2.1.123"
+}

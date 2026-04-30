@@ -1,0 +1,62 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "signature": "EpEDClsIDRgCKkDh4FjSZNf9Syg6xagKEe0Ifxx7P/JqdJdGvRpmaSE9DlPpQdAO9lugaYmWZ1jAHl7GgjHi6Eq8XhfItDgl7bmYMhFjbGF1ZGUtc29ubmV0LTQtNjgAEgwguU1OUMaCh4DWUYAaDAE1GrTZbEQIkmgR5CIwttdMmNQSqU3jLiRUI2xdYyFfTWk+1nM01RzauyAH/S9juWkbt9W9oDBxPij5/RanKuMBvs0jftFAIgKEIQCCkKoq6m7V6OhiZ9iOCcztpAlentA3AxBUKULTu8zAQZS2kJAutpvLY2oiPvtvIYxfI363SlLZdXSHtMu91LaJU/kAa+aa0f+2kRALZquoh1N/cMSw8R1urro5KulEqd0FVz+BjJT13cOS9pHRleXfBNJFBzI1RFXAN+0tHRLFnOOyofmRWZZ4ghwDU184R+wNqNZAT1Y3givS9H727h7+ekvhF9V5Pr1lQWvpp2dmlep7CVndbH5S/fL93IFCLXu7+uZChrIkUv3u5ZPTT5BgVa4jXScSszUYAQ==",
+        "thinking": "Ah ha! So these routes ARE being handled but returning a `NOT_IMPLEMENTED` error with a 501 status code... but wait, the response shows 200 in the wrangler log. Let me check what status code these are returning:",
+        "type": "thinking"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01P1nE2qDoVnp5fEJ2b2EJe5",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 684
+      },
+      "cache_creation_input_tokens": 684,
+      "cache_read_input_tokens": 123138,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 684
+          },
+          "cache_creation_input_tokens": 684,
+          "cache_read_input_tokens": 123138,
+          "input_tokens": 1,
+          "output_tokens": 269,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 269,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "9bcbe537-4f30-443d-812b-fa001cfb1691",
+  "requestId": "req_011CaaU8bsiPnZgtYAA45hqk",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T18:58:33.371Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "25a8cbde-dd53-4137-b8c0-4b75ba907aa3",
+  "version": "2.1.123"
+}

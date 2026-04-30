@@ -1,0 +1,61 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "text": "Now I'll add the shared `callSidecarService` helper to `sidecar-client.ts` and update all three callers:",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01Br9e2jB2cocFfTpaeTDfL9",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 2359
+      },
+      "cache_creation_input_tokens": 2359,
+      "cache_read_input_tokens": 80060,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 2359
+          },
+          "cache_creation_input_tokens": 2359,
+          "cache_read_input_tokens": 80060,
+          "input_tokens": 1,
+          "output_tokens": 653,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 653,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "a7e1ca98-df33-4d35-8af3-66cbe8e403cd",
+  "requestId": "req_011Caag7PoJszGdRAo8ANCXB",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T21:35:38.315Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "72ced956-05a0-4e61-b8c3-e9fab2dd948a",
+  "version": "2.1.123"
+}

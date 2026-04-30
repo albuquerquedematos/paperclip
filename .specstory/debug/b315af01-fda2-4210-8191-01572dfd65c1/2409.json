@@ -1,0 +1,27 @@
+{
+  "agentId": "a8455dc48bdf97d68",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/.claude/worktrees/agent-a8455dc48bdf97d68",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "worktree-agent-a8455dc48bdf97d68",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\t/**\n2\t * node-dns.ts — stub shim for node:dns and node:dns/promises.\n3\t *\n4\t * CF Workers has no DNS resolution API; the only code that hits this in the\n5\t * server package is the invite test-resolution handler, which is intentionally\n6\t * not ported to the CF deployment. All other route handlers in access.ts can\n7\t * be safely imported without triggering these stubs.\n8\t */\n9\t\n10\tconst notAvailable = (): Promise\u003cnever\u003e =\u003e\n11\t  Promise.reject(\n12\t    Object.assign(new Error(\"node:dns not available in Cloudflare Workers\"), { code: \"ENOTAVAIL\" }),\n13\t  );\n14\t\n15\texport const lookup = notAvailable;\n16\texport const resolve = notAvailable;\n17\texport const resolve4 = notAvailable;\n18\texport const resolve6 = notAvailable;\n19\t\n20\texport const promises = { lookup };\n21\t\n22\texport default { lookup, resolve, resolve4, resolve6, promises };\n23\t",
+        "tool_use_id": "toolu_01MfMMXndWqte36Yf4h7NUGd",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "31fc4872-d0fa-48da-8e91-f6f7f530baa7",
+  "promptId": "8a433599-d510-488c-a09f-2af6b1c28bcb",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "31fc4872-d0fa-48da-8e91-f6f7f530baa7",
+  "timestamp": "2026-04-30T19:36:43.194Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "b85d9b71-1b82-49a3-b226-7ebda43e7915",
+  "version": "2.1.123"
+}

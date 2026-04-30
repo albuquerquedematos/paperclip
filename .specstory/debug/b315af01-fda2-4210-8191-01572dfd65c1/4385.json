@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "180\texport function isClaudeUnknownSessionError(parsed: Record\u003cstring, unknown\u003e): boolean {\n181\t  const resultText = asString(parsed.result, \"\").trim();\n182\t  const allMessages = [resultText, ...extractClaudeErrorMessages(parsed)]\n183\t    .map((msg) =\u003e msg.trim())\n184\t    .filter(Boolean);\n185\t\n186\t  return allMessages.some((msg) =\u003e\n187\t    /no conversation found with session id|unknown session|session .* not found/i.test(msg),\n188\t  );\n189\t}\n190\t\n191\tfunction buildClaudeTransientHaystack(input: {\n192\t  parsed?: Record\u003cstring, unknown\u003e | null;\n193\t  stdout?: string | null;\n194\t  stderr?: string | null;",
+        "tool_use_id": "toolu_01LLBGR3P2yaQog2ByPhKMux",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "e1d3d187-c7cf-4bc9-a206-f975d6e9ad05",
+  "promptId": "bbb6be00-c456-48d1-b25a-d991686281be",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "e1d3d187-c7cf-4bc9-a206-f975d6e9ad05",
+  "timestamp": "2026-04-30T23:22:44.337Z",
+  "toolUseResult": {
+    "file": {
+      "content": "export function isClaudeUnknownSessionError(parsed: Record\u003cstring, unknown\u003e): boolean {\n  const resultText = asString(parsed.result, \"\").trim();\n  const allMessages = [resultText, ...extractClaudeErrorMessages(parsed)]\n    .map((msg) =\u003e msg.trim())\n    .filter(Boolean);\n\n  return allMessages.some((msg) =\u003e\n    /no conversation found with session id|unknown session|session .* not found/i.test(msg),\n  );\n}\n\nfunction buildClaudeTransientHaystack(input: {\n  parsed?: Record\u003cstring, unknown\u003e | null;\n  stdout?: string | null;\n  stderr?: string | null;",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/parse.ts",
+      "numLines": 15,
+      "startLine": 180,
+      "totalLines": 384
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "e0b45d22-e77c-468d-94b5-01a55ffd5ffa",
+  "version": "2.1.123"
+}

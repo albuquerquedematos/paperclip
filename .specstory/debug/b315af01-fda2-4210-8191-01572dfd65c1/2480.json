@@ -1,0 +1,27 @@
+{
+  "agentId": "a8455dc48bdf97d68",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/.claude/worktrees/agent-a8455dc48bdf97d68",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "worktree-agent-a8455dc48bdf97d68",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "150\tfunction runChain(\n151\t  req: Record\u003cstring, unknown\u003e,\n152\t  res: MockRes,\n153\t  handlers: HandlerLayer[],\n154\t): void {\n155\t  let i = 0;\n156\t  // next is synchronous: each handler is fired as a fire-and-forget Promise,\n157\t  // with errors redirected to res._reject so res.promise always settles.\n158\t  //\n159\t  // Double-next() guard: a buggy middleware that calls next() more than once\n160\t  // would normally advance `i` twice, invoking the wrong handler.  We defend\n161\t  // against this by capturing the value of `i` that was current when next()\n162\t  // was called and only advancing from that slot.  Subsequent calls to the\n163\t  // same next() closure are silently ignored (the first call already fired\n164\t  // its handler).\n165\t  const next = (err?: unknown): void =\u003e {\n166\t    if (err) {\n167\t      res._reject(err instanceof Error ? err : new Error(String(err)));\n168\t      return;\n169\t    }\n170\t    if (i \u003e= handlers.length) return;\n171\t    const slot = i++;\n172\t    const fn = handlers[slot]!.handle;\n173\t    Promise.resolve(\n174\t      (fn as (req: unknown, res: unknown, next: unknown) =\u003e unknown)(req, res, next),\n175\t    ).catch((e: unknown) =\u003e res._reject(e));\n176\t  };\n177\t  next();\n178\t}\n179\t",
+        "tool_use_id": "toolu_01TSAKoKRZZVY5hYYamExkz2",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "d8418ef3-40be-4b26-a37c-b113b1a783fb",
+  "promptId": "8a433599-d510-488c-a09f-2af6b1c28bcb",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "d8418ef3-40be-4b26-a37c-b113b1a783fb",
+  "timestamp": "2026-04-30T19:40:18.558Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "a1db121a-c93b-4ef0-89fd-70616b31134c",
+  "version": "2.1.123"
+}

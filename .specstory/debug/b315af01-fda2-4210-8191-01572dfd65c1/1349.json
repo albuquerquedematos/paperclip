@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "239:  const listAdapters: Handler = async (ctx) =\u003e {\n662:  router.get(\"/adapters\", expressHandler(listAdapters, adapterDeps));",
+        "is_error": false,
+        "tool_use_id": "toolu_01TMzqJkzhzN4mv1fDkVwc4C",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "cbc25606-58e8-49a5-9a21-84716da3eb42",
+  "promptId": "9aae9721-e466-4259-b66e-e724bd2f2c66",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "cbc25606-58e8-49a5-9a21-84716da3eb42",
+  "timestamp": "2026-04-30T18:24:51.683Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "239:  const listAdapters: Handler = async (ctx) =\u003e {\n662:  router.get(\"/adapters\", expressHandler(listAdapters, adapterDeps));"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "944d9b4f-bccc-4d2f-9431-9f7543c0aa6e",
+  "version": "2.1.123"
+}

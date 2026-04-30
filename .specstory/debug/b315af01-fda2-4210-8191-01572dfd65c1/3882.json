@@ -1,0 +1,52 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/issues.ts has been updated successfully.",
+        "tool_use_id": "toolu_01Hy5aDyHNJFzjUkYeAPLbys",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "52fcb4a8-0a1c-457b-a72d-5b050e5c1955",
+  "promptId": "e7cbb211-1d37-4345-b546-c3d4bd07be80",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "52fcb4a8-0a1c-457b-a72d-5b050e5c1955",
+  "timestamp": "2026-04-30T22:59:30.113Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/issues.ts",
+    "newString": "    await issueApprovalsSvc.unlink(issue.id, approvalId);",
+    "oldString": "    await issueApprovalsSvc.unlink(id, approvalId);",
+    "originalFile": null,
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          "     assertCompanyAccess(ctx, issue.companyId);",
+          "     await assertAgentIssueMutationAllowed(ctx, issue);",
+          "     await assertCanManageIssueApprovalLinks(ctx, issue.companyId);",
+          "-    await issueApprovalsSvc.unlink(id, approvalId);",
+          "+    await issueApprovalsSvc.unlink(issue.id, approvalId);",
+          "     const actor = getActorInfo(ctx);",
+          "     await logActivity(db, {",
+          "       companyId: issue.companyId,"
+        ],
+        "newLines": 7,
+        "newStart": 1586,
+        "oldLines": 7,
+        "oldStart": 1586
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "941ada5e-9d7e-4f2c-885e-25c530237481",
+  "version": "2.1.123"
+}

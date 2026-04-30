@@ -1,0 +1,27 @@
+{
+  "agentId": "a7e75688fdce3dc53",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "2350\t  const pauseAgent: Handler = async (ctx) =\u003e {\n2351\t    assertBoard(ctx);\n2352\t    const id = ctx.param(\"id\")!;\n2353\t    if (!(await getAccessibleAgent(ctx, id))) {\n2354\t      return Response.json({ error: \"Agent not found\" }, { status: 404 });\n2355\t    }\n2356\t    const agent = await svc.pause(id);\n2357\t    if (!agent) return Response.json({ error: \"Agent not found\" }, { status: 404 });\n2358\t\n2359\t    await heartbeat.cancelActiveForAgent(id);\n2360\t\n2361\t    await logActivity(db, {\n2362\t      companyId: agent.companyId,\n2363\t      actorType: \"user\",\n2364\t      actorId: ctx.actor?.type === \"board\" ? (ctx.actor.userId ?? \"board\") : \"board\",\n2365\t      action: \"agent.paused\",\n2366\t      entityType: \"agent\",\n2367\t      entityId: agent.id,\n2368\t    });\n2369\t\n2370\t    return Response.json(agent);\n2371\t  };\n2372\t\n2373\t  const resumeAgent: Handler = async (ctx) =\u003e {\n2374\t    assertBoard(ctx);\n2375\t    const id = ctx.param(\"id\")!;\n2376\t    if (!(await getAccessibleAgent(ctx, id))) {\n2377\t      return Response.json({ error: \"Agent not found\" }, { status: 404 });\n2378\t    }\n2379\t    const agent = await svc.resume(id);\n\n\u003csystem-reminder\u003e\nWhenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.\n\u003c/system-reminder\u003e\n",
+        "tool_use_id": "toolu_01PbL6xb7U9PamDRBTcuowhs",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "13930daa-0830-42ce-86b2-58ff46e28913",
+  "promptId": "0c147d6f-915f-4b9e-a139-f26417e7157e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "13930daa-0830-42ce-86b2-58ff46e28913",
+  "timestamp": "2026-04-30T23:07:20.515Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "110643c8-58bb-4cd1-b476-10b561663f1d",
+  "version": "2.1.123"
+}

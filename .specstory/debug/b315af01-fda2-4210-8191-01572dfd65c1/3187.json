@@ -1,0 +1,71 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01Y4sSW9uotUWLMo3VCfZupe",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/runtime/workflows/heartbeat.ts",
+          "new_string": "        const bridgeUrl = this.env.SIDECAR_SERVICE\n          ? null\n          : ((await this.env.PAPERCLIP_KV.get(\"SANDBOX_BRIDGE_URL\")) ?? \"http://localhost:8788\");\n        const apiKey = this.env.SIDECAR_SERVICE\n          ? null\n          : await this.env.PAPERCLIP_KV.get(\"SANDBOX_BRIDGE_API_KEY\");\n\n        const resp = await callSidecarService(\n          { service: this.env.SIDECAR_SERVICE, url: bridgeUrl, apiKey },\n          \"/internal/heartbeat\",\n          \"POST\",\n          { agentId, companyId, runId, taskId },\n        );\n        if (!resp) throw new Error(\"No sidecar route available: configure SIDECAR_SERVICE or SANDBOX_BRIDGE_URL\");\n        if (!resp.ok) {\n          const text = await resp.text().catch(() =\u003e \"(unreadable)\");\n          throw new Error(`Heartbeat execution failed: HTTP ${resp.status}: ${text}`);\n        }",
+          "old_string": "        const body = JSON.stringify({ agentId, companyId, runId, taskId });\n        const headers = { \"Content-Type\": \"application/json\" };\n\n        let resp: Response;\n        if (this.env.SIDECAR_SERVICE) {\n          // CF-native path: SidecarContainer DO proxies to the Docker container.\n          // The DO handles container start/lifecycle; we just call fetch().\n          const id = this.env.SIDECAR_SERVICE.idFromName(\"sidecar\");\n          const stub = this.env.SIDECAR_SERVICE.get(id);\n          resp = await stub.fetch(\n            \"http://sidecar/internal/heartbeat\",\n            { method: \"POST\", headers, body },\n          );\n        } else {\n          // Fallback: read bridge URL + key from KV and call via fetch().\n          const bridgeUrl =\n            (await this.env.PAPERCLIP_KV.get(\"SANDBOX_BRIDGE_URL\")) ??\n            \"http://localhost:8788\";\n          const apiKey = await this.env.PAPERCLIP_KV.get(\"SANDBOX_BRIDGE_API_KEY\");\n          resp = await fetch(`${bridgeUrl}/internal/heartbeat`, {\n            method: \"POST\",\n            headers: {\n              ...headers,\n              ...(apiKey ? { Authorization: `Bearer ${apiKey}` } : {}),\n            },\n            body,\n          });\n        }\n\n        if (!resp.ok) {\n          const text = await resp.text().catch(() =\u003e \"(unreadable)\");\n          throw new Error(`Heartbeat execution failed: HTTP ${resp.status}: ${text}`);\n        }",
+          "replace_all": false
+        },
+        "name": "Edit",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01CTeBceWyxC8iE2AAkv17qf",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 293
+      },
+      "cache_creation_input_tokens": 293,
+      "cache_read_input_tokens": 83125,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 293
+          },
+          "cache_creation_input_tokens": 293,
+          "cache_read_input_tokens": 83125,
+          "input_tokens": 1,
+          "output_tokens": 806,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 806,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "cd6d6c82-63d6-4a98-98c8-abaa7328239a",
+  "requestId": "req_011Caag8SDBtSzTdPsuPw9HJ",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T21:35:58.721Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "3813cab4-c62d-4323-852b-d4cedc70e8cc",
+  "version": "2.1.123"
+}

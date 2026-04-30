@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "366:export function pluginRoutes(\n1803:  router.get(\"/plugins\", expressHandler(listPlugins, adapterDeps));\n1804:  router.get(\"/plugins/examples\", expressHandler(listPluginExamples, adapterDeps));\n1805:  router.get(\"/plugins/ui-contributions\", expressHandler(listUiContributions, adapterDeps));\n1806:  router.get(\"/plugins/tools\", expressHandler(listPluginTools, adapterDeps));\n1807:  router.post(\"/plugins/tools/execute\", expressHandler(executePluginTool, adapterDeps));\n1809:  router.post(\"/plugins/install\", expressHandler(installPlugin, adapterDeps));\n1812:  router.post(\"/plugins/:pluginId/bridge/data\", async (req, _res, next) =\u003e {\n1825:  router.post(\"/plugins/:pluginId/bridge/action\", async (req, _res, next) =\u003e {\n1838:  router.post(\"/plugins/:pluginId/data/:key\", async (req, _res, next) =\u003e {\n1851:  router.post(\"/plugins/:pluginId/actions/:key\", async (req, _res, next) =\u003e {\n1871:  router.get(\"/plugins/:pluginId/bridge/stream/:channel\", async (req, res) =\u003e {\n1935:   * router.use /plugins/:pluginId/api\n1943:  router.use(\"/plugins/:pluginId/api\", async (req, res) =\u003e {\n2051:  router.get(\"/plugins/:pluginId\", expressHandler(getPlugin, adapterDeps));\n2053:  router.delete(\"/plugins/:pluginId\", expressHandler(deletePlugin, adapterDeps));\n2054:  router.post(\"/plugins/:pluginId/enable\", expressHandler(enablePlugin, adapterDeps));\n2055:  router.post(\"/plugins/:pluginId/disable\", expressHandler(disablePlugin, adapterDeps));\n2056:  router.get(\"/plugins/:pluginId/health\", expressHandler(getPluginHealth, adapterDeps));\n2057:  router.get(\"/plugins/:pluginId/logs\", expressHandler(getPluginLogs, adapterDeps));",
+        "is_error": false,
+        "tool_use_id": "toolu_019sE49Hn97LRvB4jSeQoi4Y",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "638bcfcf-cfa7-425f-bef5-7d8784cf907e",
+  "promptId": "9aae9721-e466-4259-b66e-e724bd2f2c66",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "638bcfcf-cfa7-425f-bef5-7d8784cf907e",
+  "timestamp": "2026-04-30T18:17:07.110Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "366:export function pluginRoutes(\n1803:  router.get(\"/plugins\", expressHandler(listPlugins, adapterDeps));\n1804:  router.get(\"/plugins/examples\", expressHandler(listPluginExamples, adapterDeps));\n1805:  router.get(\"/plugins/ui-contributions\", expressHandler(listUiContributions, adapterDeps));\n1806:  router.get(\"/plugins/tools\", expressHandler(listPluginTools, adapterDeps));\n1807:  router.post(\"/plugins/tools/execute\", expressHandler(executePluginTool, adapterDeps));\n1809:  router.post(\"/plugins/install\", expressHandler(installPlugin, adapterDeps));\n1812:  router.post(\"/plugins/:pluginId/bridge/data\", async (req, _res, next) =\u003e {\n1825:  router.post(\"/plugins/:pluginId/bridge/action\", async (req, _res, next) =\u003e {\n1838:  router.post(\"/plugins/:pluginId/data/:key\", async (req, _res, next) =\u003e {\n1851:  router.post(\"/plugins/:pluginId/actions/:key\", async (req, _res, next) =\u003e {\n1871:  router.get(\"/plugins/:pluginId/bridge/stream/:channel\", async (req, res) =\u003e {\n1935:   * router.use /plugins/:pluginId/api\n1943:  router.use(\"/plugins/:pluginId/api\", async (req, res) =\u003e {\n2051:  router.get(\"/plugins/:pluginId\", expressHandler(getPlugin, adapterDeps));\n2053:  router.delete(\"/plugins/:pluginId\", expressHandler(deletePlugin, adapterDeps));\n2054:  router.post(\"/plugins/:pluginId/enable\", expressHandler(enablePlugin, adapterDeps));\n2055:  router.post(\"/plugins/:pluginId/disable\", expressHandler(disablePlugin, adapterDeps));\n2056:  router.get(\"/plugins/:pluginId/health\", expressHandler(getPluginHealth, adapterDeps));\n2057:  router.get(\"/plugins/:pluginId/logs\", expressHandler(getPluginLogs, adapterDeps));"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "9b0c000f-5dd8-43f2-96e6-68d05d5cb2db",
+  "version": "2.1.123"
+}

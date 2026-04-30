@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "1\t/**\n2\t * cf-extra-routes.ts\n3\t *\n4\t * CF-native handlers for API endpoints that use raw Express handlers in the\n5\t * server package (making them invisible to extractRoutesFromRouter) or depend\n6\t * on runtime registries (adapters, plugins) that don't exist in a CF Worker.\n7\t *\n8\t * Registered in app.ts BEFORE the /api/* catch-all so they shadow the 501.\n9\t */\n10\t\n11\timport type { Hono } from \"hono\";\n12\timport { and, asc, desc, eq, inArray } from \"drizzle-orm\";\n13\timport {\n14\t  agents,\n15\t  authUsers,\n16\t  companyMemberships,\n17\t  companySkills,\n18\t  invites,\n19\t  joinRequests,\n20\t} from \"@paperclipai/db\";\n21\timport { collapseDuplicatePendingHumanJoinRequests } from \"../../../../server/src/lib/join-request-dedupe.js\";\n22\timport { resolveHumanInviteRole } from \"../../../../server/src/services/company-member-roles.js\";\n23\timport { createHyperdriveDb } from \"../db/hyperdrive.js\";\n24\timport type { Env } from \"./env.js\";\n25\t\n26\t// ---------------------------------------------------------------------------\n27\t// Helpers (inlined from server/src/routes/access.ts — CF-safe subsets)\n28\t// ---------------------------------------------------------------------------\n29\t\n30\tfunction extractInviteMessage(invite: {",
+        "tool_use_id": "toolu_01G92UxivWSFycwq68tccV9f",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "db88d60c-2fea-465c-a991-c16ef2a61c0d",
+  "promptId": "8e37c333-7c8a-4b0c-ae99-027b99e1bf51",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "db88d60c-2fea-465c-a991-c16ef2a61c0d",
+  "timestamp": "2026-04-30T19:25:56.783Z",
+  "toolUseResult": {
+    "file": {
+      "content": "/**\n * cf-extra-routes.ts\n *\n * CF-native handlers for API endpoints that use raw Express handlers in the\n * server package (making them invisible to extractRoutesFromRouter) or depend\n * on runtime registries (adapters, plugins) that don't exist in a CF Worker.\n *\n * Registered in app.ts BEFORE the /api/* catch-all so they shadow the 501.\n */\n\nimport type { Hono } from \"hono\";\nimport { and, asc, desc, eq, inArray } from \"drizzle-orm\";\nimport {\n  agents,\n  authUsers,\n  companyMemberships,\n  companySkills,\n  invites,\n  joinRequests,\n} from \"@paperclipai/db\";\nimport { collapseDuplicatePendingHumanJoinRequests } from \"../../../../server/src/lib/join-request-dedupe.js\";\nimport { resolveHumanInviteRole } from \"../../../../server/src/services/company-member-roles.js\";\nimport { createHyperdriveDb } from \"../db/hyperdrive.js\";\nimport type { Env } from \"./env.js\";\n\n// ---------------------------------------------------------------------------\n// Helpers (inlined from server/src/routes/access.ts — CF-safe subsets)\n// ---------------------------------------------------------------------------\n\nfunction extractInviteMessage(invite: {",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/cf-extra-routes.ts",
+      "numLines": 30,
+      "startLine": 1,
+      "totalLines": 315
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "5b348024-f778-47bd-8524-50714ac45a07",
+  "version": "2.1.123"
+}

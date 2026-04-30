@@ -1,0 +1,52 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/issues.ts has been updated successfully.",
+        "tool_use_id": "toolu_01F7SztW5dcHy6EMgy9GZXL5",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "d987add2-6efa-45d6-b1bf-ff60bcca1c10",
+  "promptId": "e7cbb211-1d37-4345-b546-c3d4bd07be80",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "d987add2-6efa-45d6-b1bf-ff60bcca1c10",
+  "timestamp": "2026-04-30T22:59:15.902Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/issues.ts",
+    "newString": "    assertCompanyAccess(ctx, issue.companyId);\n    const approvals = await issueApprovalsSvc.listApprovalsForIssue(issue.id);\n    return Response.json(approvals);\n  };\n\n  const linkIssueApproval: Handler = async (ctx) =\u003e {",
+    "oldString": "    assertCompanyAccess(ctx, issue.companyId);\n    const approvals = await issueApprovalsSvc.listApprovalsForIssue(id);\n    return Response.json(approvals);\n  };\n\n  const linkIssueApproval: Handler = async (ctx) =\u003e {",
+    "originalFile": null,
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          "     const issue = await svc.getById(id);",
+          "     if (!issue) return Response.json({ error: \"Issue not found\" }, { status: 404 });",
+          "     assertCompanyAccess(ctx, issue.companyId);",
+          "-    const approvals = await issueApprovalsSvc.listApprovalsForIssue(id);",
+          "+    const approvals = await issueApprovalsSvc.listApprovalsForIssue(issue.id);",
+          "     return Response.json(approvals);",
+          "   };",
+          " "
+        ],
+        "newLines": 7,
+        "newStart": 1546,
+        "oldLines": 7,
+        "oldStart": 1546
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "3c7d0857-4151-44fe-a3ad-5fdf7cd74e76",
+  "version": "2.1.123"
+}

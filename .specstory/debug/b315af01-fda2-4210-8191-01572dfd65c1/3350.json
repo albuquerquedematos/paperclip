@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/app.ts:150:    501,\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/cf-extra-routes.ts:8: * Registered in app.ts BEFORE the /api/* catch-all so they shadow the 501.",
+        "is_error": false,
+        "tool_use_id": "toolu_01UVTShsTnmwVhD2pNqExR8n",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "a091b3b3-825d-4093-81e8-66a4c694916d",
+  "promptId": "a0dd8f6d-e0d4-4f57-8650-1c60e1512696",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "a091b3b3-825d-4093-81e8-66a4c694916d",
+  "timestamp": "2026-04-30T21:52:22.102Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/app.ts:150:    501,\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/cf-extra-routes.ts:8: * Registered in app.ts BEFORE the /api/* catch-all so they shadow the 501."
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "9b07c9d3-1384-4640-ae84-2dfbfc534ce8",
+  "version": "2.1.123"
+}

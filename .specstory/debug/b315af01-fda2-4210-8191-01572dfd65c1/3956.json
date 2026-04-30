@@ -1,0 +1,61 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "text": "Done. Where things stand:\n\n**This turn fixed two distinct bug classes + delivered the test suite you asked for.**\n\n1. **Server-side bug**: 11 issue handlers were resolving `svc.getById(id)` correctly but then passing the *raw* param (which can be a human key like `ALM-1`) into downstream UUID column queries. Fixed all 11 — same code would have failed on Node too, just less visibly.\n\n2. **CF auto-fallback**: when an auto-bridged handler hits a Node-only API (`fs`, `child_process`), the worker now transparently retries against the sidecar instead of returning 500. No more whack-a-mole on `agent-hires`-style errors — anything similar will just work via fallback.\n\n3. **`pnpm test:cf-smoke`**: 61 tests covering health, company fan-out, issue routes (UUID + human key for regression), agent routes, plugin routes (with explicit 501 guards on `/:pluginId` and `/:pluginId/dashboard`), `/_plugins/:id/ui/index.js` MIME-type guard, and a mutation lifecycle. **All passing.** Run against your live `dev:cf`.\n\n**The honest limits, restated:**\n\n- The smoke suite catches the **regression class you've been hitting** (worker crash, missing routes, human-key resolution). It does *not* validate response shapes, doesn't exercise Workflow steps, and doesn't test multi-tenancy/auth edge cases.\n- The suite needs a seeded DB and a running `dev:cf`. Wiring it into CI requires those — that's a separate piece of work I haven't done.\n- \"All possible paths should work\" is unbounded. What I can claim: the routes the UI calls in the flows I tested no longer crash, and any regression in those exact routes will be caught next time you run `pnpm test:cf-smoke`.\n\nIf you hit a *new* error tomorrow, the right move is to add it as an explicit assertion in `cf-smoke.spec.ts` — that file is now the regression boundary. Want me to /schedule a weekly run that posts the result somewhere, or leave it manual?",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01NPJh3C37UtMXTsNKwvVpzt",
+    "model": "claude-opus-4-7",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1351,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 1351,
+      "cache_read_input_tokens": 353782,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 1351,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 1351,
+          "cache_read_input_tokens": 353782,
+          "input_tokens": 1,
+          "output_tokens": 708,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 708,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "ea46327a-b318-475f-894a-8b469e33b34d",
+  "requestId": "req_011CaannsvmZvQ1qeLD4SBXz",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T23:03:28.317Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "da3fd276-439b-451e-be27-0d2252d3e084",
+  "version": "2.1.123"
+}

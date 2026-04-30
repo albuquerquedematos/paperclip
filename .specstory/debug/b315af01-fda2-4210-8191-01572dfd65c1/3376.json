@@ -1,0 +1,70 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01QYWCGbEo6KpvbMNRjxNqXV",
+        "input": {
+          "description": "CF worker route gap audit",
+          "prompt": "Audit which server-side API routes are missing from the Cloudflare Workers deployment.\n\nWorking directory: /Users/migmac/Documents/GitHub/_ABM/paperclip\n\nGoal: produce a precise list of every API endpoint defined in `server/src/routes/*.ts` and indicate, for each, whether it's available in the CF Worker. The CF Worker mounts routes through TWO mechanisms:\n\n1. **Auto-bridged from server routes** via `route-registry.ts` at packages/deploy-cloudflare/src/worker/route-registry.ts — it imports route factories like `companyRoutes`, `agentRoutes`, etc. and uses `extractRoutesFromRouter`/`extractAllRoutesFromRouter` to expose them. Anything imported here is automatically available in the worker (assuming the handler doesn't crash on Workers).\n\n2. **CF-native handlers** in packages/deploy-cloudflare/src/worker/routes/*.ts and packages/deploy-cloudflare/src/worker/cf-extra-routes.ts — adapters, plugins, company-access, company-skills-cf, events. These shadow or replace the server versions.\n\nFor each route module in `server/src/routes/` (companies.ts, access.ts, adapters.ts, agents.ts, assets.ts, projects.ts, issues.ts, issue-tree-control.ts, routines.ts, environments.ts, execution-workspaces.ts, goals.ts, approvals.ts, secrets.ts, costs.ts, activity.ts, dashboard.ts, user-profiles.ts, sidebar-badges.ts, sidebar-preferences.ts, inbox-dismissals.ts, instance-settings.ts, llms.ts, auth.ts, plus any others I missed):\n\n- List each `router.get/post/put/delete/patch(...)` line\n- Mark whether it's wired into route-registry.ts (i.e. its parent factory is imported there)\n- Mark whether a CF-native handler shadows it\n- Flag routes that the server exposes but the CF worker has NO handler for (these will hit the 501 catch-all)\n\nAlso check these other route registration sites:\n- server/src/routes/plugins.ts is NOT auto-bridged — only the cf-native plugins.ts handles it (just verified)\n- check server/src/index.ts and server/src/app.ts for any other route mounts (e.g. /api/files, /api/health, /api/auth/*, MCP, etc.)\n\nReport format: a punch list of routes that will return 501 today (path + method + which server file defines it). Skip routes that are already handled either via auto-bridge or CF-native shim. Cap output at ~300 lines — collapse routes from the same file under a single heading when all are covered.",
+          "subagent_type": "Explore"
+        },
+        "name": "Agent",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01GVEk4rvygWjok1MNN5cwB7",
+    "model": "claude-opus-4-7",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 315,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 315,
+      "cache_read_input_tokens": 209988,
+      "inference_geo": "",
+      "input_tokens": 6,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 315,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 315,
+          "cache_read_input_tokens": 209988,
+          "input_tokens": 6,
+          "output_tokens": 1470,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 1470,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "794cac5f-b32f-407b-849f-16f6b5c5feb1",
+  "requestId": "req_011CaahkdcuRpVRNZdgbjmRA",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T21:57:29.352Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "10eab48d-31ca-40ca-95d3-d1c09fc18872",
+  "version": "2.1.123"
+}

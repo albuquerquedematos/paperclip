@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "heartbeat.ts\nplugin-dispatch.ts\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/runtime/workflows/heartbeat.ts:112:        // the HTTP adapter migration (PR #6/#7) lands. For now we call a\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/runtime/workflows/heartbeat.ts:130:          throw new Error(`Heartbeat execution failed: HTTP ${resp.status}: ${body}`);\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/runtime/workflows/plugin-dispatch.ts:37: *   2. Dispatches execution to the configured executor (sandbox bridge or\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/runtime/workflows/plugin-dispatch.ts:56:      // adapter migration (PR #6/#7) lands.\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/runtime/workflows/plugin-dispatch.ts:89:    const executionResult = await step.do(\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/runtime/workflows/plugin-dispatch.ts:101:        let executionEndpoint: string;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/runtime/workflows/plugin-dispatch.ts:104:          // executionEndpoint = `http://container/plugin-jobs/${pluginJobId}/execute`;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/runtime/workflows/plugin-dispatch.ts:105:          executionEndpoint = `${bridgeUrl}/internal/plugin-jobs/${pluginJobId}/execute`;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/runtime/workflows/plugin-dispatch.ts:107:          executionEndpoint = `${bridgeUrl}/internal/plugin-jobs/${pluginJobId}/execute`;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/runtime/workflows/plugin-dispatch.ts:110:        const resp = await fetch(executionEndpoint, {\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/runtime/workflows/plugin-dispatch.ts:121:          throw new Error(`Plugin job execution failed: HTTP ${resp.status}: ${body}`);\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/runtime/workflows/plugin-dispatch.ts:137:      const succeeded = executionResult?.status !== \"failed\";\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/runtime/workflows/plugin-dispatch.ts:147:          exitCode: executionResult?.exitCode,",
+        "is_error": false,
+        "tool_use_id": "toolu_011TJM6rFoU9uz5KDB14Z7dE",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "258f268a-5648-4c86-a3f4-bc6b62216999",
+  "promptId": "0d05d433-ef46-4bba-8105-f1d502a42e1e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "258f268a-5648-4c86-a3f4-bc6b62216999",
+  "timestamp": "2026-04-30T19:29:47.943Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "heartbeat.ts\nplugin-dispatch.ts\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/runtime/workflows/heartbeat.ts:112:        // the HTTP adapter migration (PR #6/#7) lands. For now we call a\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/runtime/workflows/heartbeat.ts:130:          throw new Error(`Heartbeat execution failed: HTTP ${resp.status}: ${body}`);\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/runtime/workflows/plugin-dispatch.ts:37: *   2. Dispatches execution to the configured executor (sandbox bridge or\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/runtime/workflows/plugin-dispatch.ts:56:      // adapter migration (PR #6/#7) lands.\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/runtime/workflows/plugin-dispatch.ts:89:    const executionResult = await step.do(\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/runtime/workflows/plugin-dispatch.ts:101:        let executionEndpoint: string;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/runtime/workflows/plugin-dispatch.ts:104:          // executionEndpoint = `http://container/plugin-jobs/${pluginJobId}/execute`;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/runtime/workflows/plugin-dispatch.ts:105:          executionEndpoint = `${bridgeUrl}/internal/plugin-jobs/${pluginJobId}/execute`;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/runtime/workflows/plugin-dispatch.ts:107:          executionEndpoint = `${bridgeUrl}/internal/plugin-jobs/${pluginJobId}/execute`;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/runtime/workflows/plugin-dispatch.ts:110:        const resp = await fetch(executionEndpoint, {\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/runtime/workflows/plugin-dispatch.ts:121:          throw new Error(`Plugin job execution failed: HTTP ${resp.status}: ${body}`);\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/runtime/workflows/plugin-dispatch.ts:137:      const succeeded = executionResult?.status !== \"failed\";\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/runtime/workflows/plugin-dispatch.ts:147:          exitCode: executionResult?.exitCode,"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "149a4ec5-612b-41c7-82bf-35052fca2bba",
+  "version": "2.1.123"
+}

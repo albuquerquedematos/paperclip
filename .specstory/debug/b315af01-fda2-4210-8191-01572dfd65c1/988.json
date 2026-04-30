@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "File created successfully at: /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/.dev.vars.example",
+        "tool_use_id": "toolu_013a1VmHRS9LGXh5wXyPEN2e",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "95db1eda-09ba-48a0-9e73-718ea4417c94",
+  "promptId": "285fd922-5736-481c-a4fc-cf130aed3e81",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "95db1eda-09ba-48a0-9e73-718ea4417c94",
+  "timestamp": "2026-04-30T18:00:10.240Z",
+  "toolUseResult": {
+    "content": "# Copy this file to .dev.vars and fill in values for local CF Workers dev.\n# .dev.vars is gitignored — never commit real credentials.\n#\n# Run: pnpm dev:cf  (from repo root)\n# Wrangler reads .dev.vars automatically when running `wrangler dev`.\n\n# Bypasses auth resolution and the setup KV gate so you can hit API routes\n# without a real session. Set to \"authenticated\" in staging/production.\nDEPLOYMENT_MODE=local_trusted\n\n# Set by wrangler.toml [vars] — override here only if needed.\nDEPLOYMENT_PLATFORM=cloudflare\nDEPLOYMENT_EXPOSURE=private\n\n# Sidecar Node.js server (runs alongside CF Worker for Node-only operations).\n# Leave blank if you haven't configured a sidecar for local dev.\nSIDECAR_URL=http://127.0.0.1:3101\nSIDECAR_API_KEY=dev-local\n",
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/.dev.vars.example",
+    "originalFile": null,
+    "structuredPatch": [],
+    "type": "create",
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "091d0cde-2e6b-4139-bf41-dffc08be2b0b",
+  "version": "2.1.123"
+}

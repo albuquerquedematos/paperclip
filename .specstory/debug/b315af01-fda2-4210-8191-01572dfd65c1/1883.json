@@ -1,0 +1,29 @@
+{
+  "attachment": {
+    "content": {
+      "file": {
+        "content": "/**\n * node-dns.ts — stub shim for node:dns and node:dns/promises.\n *\n * CF Workers has no DNS resolution API; the only code that hits this in the\n * server package is the invite test-resolution handler, which is intentionally\n * not ported to the CF deployment. All other route handlers in access.ts can\n * be safely imported without triggering these stubs.\n */\n\nconst notAvailable = (): Promise\u003cnever\u003e =\u003e\n  Promise.reject(\n    Object.assign(new Error(\"node:dns not available in Cloudflare Workers\"), { code: \"ENOTAVAIL\" }),\n  );\n\nexport const lookup = notAvailable;\nexport const resolve = notAvailable;\nexport const resolve4 = notAvailable;\nexport const resolve6 = notAvailable;\n\nexport const promises = { lookup };\n\nexport default { lookup, resolve, resolve4, resolve6, promises };\n",
+        "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-dns.ts",
+        "numLines": 23,
+        "startLine": 1,
+        "totalLines": 23
+      },
+      "type": "text"
+    },
+    "displayPath": "src/shims/node-dns.ts",
+    "filename": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-dns.ts",
+    "type": "file"
+  },
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "parentUuid": "35f8648c-f0a1-466d-ac0b-322c3f598ed7",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T19:13:41.150Z",
+  "type": "attachment",
+  "userType": "external",
+  "uuid": "7ac91e9e-5bdf-451f-8733-6a4b194ca973",
+  "version": "2.1.123"
+}

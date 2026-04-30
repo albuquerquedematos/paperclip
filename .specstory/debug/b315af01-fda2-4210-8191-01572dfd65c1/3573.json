@@ -1,0 +1,68 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/cf-extra-routes.ts has been updated successfully.",
+        "tool_use_id": "toolu_01Pup5cjrg8DTopXtWPEv1GA",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "76ae52ff-934d-486b-b8fe-9d1e4f126f90",
+  "promptId": "d5c23de2-96c1-4514-bfd5-8fcbb53cc021",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "76ae52ff-934d-486b-b8fe-9d1e4f126f90",
+  "timestamp": "2026-04-30T22:43:02.689Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/cf-extra-routes.ts",
+    "newString": "import { registerAdapterRoutes } from \"./routes/adapters.js\";\nimport { registerAgentCfRoutes } from \"./routes/agents-cf.js\";\nimport { registerPluginRoutes } from \"./routes/plugins.js\";\nimport { registerPluginUiStaticRoutes } from \"./routes/plugin-ui-static.js\";\nimport { registerCompanyAccessRoutes } from \"./routes/company-access.js\";\nimport { registerCompanySkillRoutes } from \"./routes/company-skills-cf.js\";\nimport { registerEventRoutes } from \"./routes/events.js\";\nimport { registerInstanceBackupRoutes } from \"./routes/instance-backups.js\";\n\nexport function registerCfExtraRoutes(app: Hono\u003c{ Bindings: Env }\u003e): void {\n  registerAdapterRoutes(app);\n  // CF shadows for agent routes that spawn `claude` or use node:fs.\n  // Must register BEFORE the auto-bridge catch-all so they take precedence.\n  registerAgentCfRoutes(app);\n  registerPluginRoutes(app);\n  registerPluginUiStaticRoutes(app);\n  registerCompanyAccessRoutes(app);\n  registerCompanySkillRoutes(app);\n  registerEventRoutes(app);\n  registerInstanceBackupRoutes(app);\n}",
+    "oldString": "import { registerAdapterRoutes } from \"./routes/adapters.js\";\nimport { registerPluginRoutes } from \"./routes/plugins.js\";\nimport { registerPluginUiStaticRoutes } from \"./routes/plugin-ui-static.js\";\nimport { registerCompanyAccessRoutes } from \"./routes/company-access.js\";\nimport { registerCompanySkillRoutes } from \"./routes/company-skills-cf.js\";\nimport { registerEventRoutes } from \"./routes/events.js\";\nimport { registerInstanceBackupRoutes } from \"./routes/instance-backups.js\";\n\nexport function registerCfExtraRoutes(app: Hono\u003c{ Bindings: Env }\u003e): void {\n  registerAdapterRoutes(app);\n  registerPluginRoutes(app);\n  registerPluginUiStaticRoutes(app);\n  registerCompanyAccessRoutes(app);\n  registerCompanySkillRoutes(app);\n  registerEventRoutes(app);\n  registerInstanceBackupRoutes(app);\n}",
+    "originalFile": "/**\n * cf-extra-routes.ts — barrel for CF-native route modules.\n *\n * CF-native handlers for API endpoints that use raw Express handlers in the\n * server package (making them invisible to extractRoutesFromRouter) or depend\n * on runtime registries (adapters, plugins) that don't exist in a CF Worker.\n *\n * Registered in app.ts BEFORE the /api/* catch-all so they shadow the 501.\n *\n * Modules:\n *   routes/adapters.ts          — GET /api/adapters\n *   routes/plugins.ts           — full plugin REST surface (list, install,\n *                                  detail, dashboard, config, jobs, lifecycle)\n *   routes/plugin-ui-static.ts  — GET /_plugins/:pluginId/ui/* (proxies to\n *                                  sidecar; without this the SPA fallback\n *                                  serves index.html and breaks plugin UIs)\n *   routes/company-access.ts    — join-requests + user-directory\n *   routes/company-skills-cf.ts — skill list/detail (DB) + file ops (sidecar)\n *   routes/events.ts            — GET /api/companies/:id/events/ws\n *   routes/instance-backups.ts  — POST /api/instance/database-backups\n *\n * All routes in this barrel require an authenticated actor (board or agent key,\n * or local_trusted mode). Unauthenticated requests receive 401.\n */\n\nimport type { Hono } from \"hono\";\nimport type { Env } from \"./env.js\";\nimport { registerAdapterRoutes } from \"./routes/adapters.js\";\nimport { registerPluginRoutes } from \"./routes/plugins.js\";\nimport { registerPluginUiStaticRoutes } from \"./routes/plugin-ui-static.js\";\nimport { registerCompanyAccessRoutes } from \"./routes/company-access.js\";\nimport { registerCompanySkillRoutes } from \"./routes/company-skills-cf.js\";\nimport { registerEventRoutes } from \"./routes/events.js\";\nimport { registerInstanceBackupRoutes } from \"./routes/instance-backups.js\";\n\nexport function registerCfExtraRoutes(app: Hono\u003c{ Bindings: Env }\u003e): void {\n  registerAdapterRoutes(app);\n  registerPluginRoutes(app);\n  registerPluginUiStaticRoutes(app);\n  registerCompanyAccessRoutes(app);\n  registerCompanySkillRoutes(app);\n  registerEventRoutes(app);\n  registerInstanceBackupRoutes(app);\n}\n",
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          " import type { Hono } from \"hono\";",
+          " import type { Env } from \"./env.js\";",
+          " import { registerAdapterRoutes } from \"./routes/adapters.js\";",
+          "+import { registerAgentCfRoutes } from \"./routes/agents-cf.js\";",
+          " import { registerPluginRoutes } from \"./routes/plugins.js\";",
+          " import { registerPluginUiStaticRoutes } from \"./routes/plugin-ui-static.js\";",
+          " import { registerCompanyAccessRoutes } from \"./routes/company-access.js\";"
+        ],
+        "newLines": 7,
+        "newStart": 26,
+        "oldLines": 6,
+        "oldStart": 26
+      },
+      {
+        "lines": [
+          " ",
+          " export function registerCfExtraRoutes(app: Hono\u003c{ Bindings: Env }\u003e): void {",
+          "   registerAdapterRoutes(app);",
+          "+  // CF shadows for agent routes that spawn `claude` or use node:fs.",
+          "+  // Must register BEFORE the auto-bridge catch-all so they take precedence.",
+          "+  registerAgentCfRoutes(app);",
+          "   registerPluginRoutes(app);",
+          "   registerPluginUiStaticRoutes(app);",
+          "   registerCompanyAccessRoutes(app);"
+        ],
+        "newLines": 9,
+        "newStart": 36,
+        "oldLines": 6,
+        "oldStart": 35
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "8dba536d-8e31-42ed-9fc4-f8b204da6f6e",
+  "version": "2.1.123"
+}

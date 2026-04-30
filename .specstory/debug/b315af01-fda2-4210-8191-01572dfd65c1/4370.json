@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "820\t      biller: isBedrockAuth(effectiveEnv) ? \"aws_bedrock\" : \"anthropic\",\n821\t      model: parsedStream.model || asString(parsed.model, model),\n822\t      billingType,\n823\t      costUsd: parsedStream.costUsd ?? asNumber(parsed.total_cost_usd, 0),\n824\t      resultJson: mergedResultJson,\n825\t      summary: parsedStream.summary || asString(parsed.result, \"\"),\n826\t      clearSession: clearSessionForMaxTurns || Boolean(opts.clearSessionOnMissingSession \u0026\u0026 !resolvedSessionId),\n827\t    };\n828\t  };\n829\t\n830\t  try {\n831\t    const initial = await runAttempt(sessionId ?? null);\n832\t    if (\n833\t      sessionId \u0026\u0026\n834\t      !initial.proc.timedOut \u0026\u0026\n835\t      (initial.proc.exitCode ?? 0) !== 0 \u0026\u0026\n836\t      initial.parsed \u0026\u0026\n837\t      isClaudeUnknownSessionError(initial.parsed)\n838\t    ) {\n839\t      await onLog(\n840\t        \"stdout\",\n841\t        `[paperclip] Claude resume session \"${sessionId}\" is unavailable; retrying with a fresh session.\\n`,\n842\t      );\n843\t      const retry = await runAttempt(null);\n844\t      return toAdapterResult(retry, { fallbackSessionId: null, clearSessionOnMissingSession: true });\n845\t    }\n846\t\n847\t    return toAdapterResult(initial, { fallbackSessionId: runtimeSessionId || runtime.sessionId });\n848\t  } finally {\n849\t    if (paperclipBridge) {\n850\t      await paperclipBridge.stop();\n851\t    }\n852\t    if (restoreRemoteWorkspace) {\n853\t      await onLog(\n854\t        \"stdout\",",
+        "tool_use_id": "toolu_011F7j5xBmaXSkqbs3T7CTqG",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "892fdea0-9f33-488c-b68b-afe1e9022280",
+  "promptId": "bbb6be00-c456-48d1-b25a-d991686281be",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "892fdea0-9f33-488c-b68b-afe1e9022280",
+  "timestamp": "2026-04-30T23:21:54.442Z",
+  "toolUseResult": {
+    "file": {
+      "content": "      biller: isBedrockAuth(effectiveEnv) ? \"aws_bedrock\" : \"anthropic\",\n      model: parsedStream.model || asString(parsed.model, model),\n      billingType,\n      costUsd: parsedStream.costUsd ?? asNumber(parsed.total_cost_usd, 0),\n      resultJson: mergedResultJson,\n      summary: parsedStream.summary || asString(parsed.result, \"\"),\n      clearSession: clearSessionForMaxTurns || Boolean(opts.clearSessionOnMissingSession \u0026\u0026 !resolvedSessionId),\n    };\n  };\n\n  try {\n    const initial = await runAttempt(sessionId ?? null);\n    if (\n      sessionId \u0026\u0026\n      !initial.proc.timedOut \u0026\u0026\n      (initial.proc.exitCode ?? 0) !== 0 \u0026\u0026\n      initial.parsed \u0026\u0026\n      isClaudeUnknownSessionError(initial.parsed)\n    ) {\n      await onLog(\n        \"stdout\",\n        `[paperclip] Claude resume session \"${sessionId}\" is unavailable; retrying with a fresh session.\\n`,\n      );\n      const retry = await runAttempt(null);\n      return toAdapterResult(retry, { fallbackSessionId: null, clearSessionOnMissingSession: true });\n    }\n\n    return toAdapterResult(initial, { fallbackSessionId: runtimeSessionId || runtime.sessionId });\n  } finally {\n    if (paperclipBridge) {\n      await paperclipBridge.stop();\n    }\n    if (restoreRemoteWorkspace) {\n      await onLog(\n        \"stdout\",",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts",
+      "numLines": 35,
+      "startLine": 820,
+      "totalLines": 861
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "911e81a9-1c2d-4a41-853e-c69fa5841405",
+  "version": "2.1.123"
+}

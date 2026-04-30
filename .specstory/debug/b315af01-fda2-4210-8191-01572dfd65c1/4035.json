@@ -1,0 +1,70 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01TNj4WWKzcnd9v2frowAzxY",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/services/agents.ts",
+          "limit": 50,
+          "offset": 180
+        },
+        "name": "Read",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01PMhGhk7utgej45GfR9k4xN",
+    "model": "claude-opus-4-7",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1112,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 1112,
+      "cache_read_input_tokens": 377273,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 1112,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 1112,
+          "cache_read_input_tokens": 377273,
+          "input_tokens": 1,
+          "output_tokens": 145,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 145,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "fb01f361-36de-48f8-aa79-43f801430b02",
+  "requestId": "req_011Caao25Vu62EUURDhpjuBJ",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T23:06:14.820Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "8b2262cb-fac7-40a5-8423-f6d4ab781a4f",
+  "version": "2.1.123"
+}

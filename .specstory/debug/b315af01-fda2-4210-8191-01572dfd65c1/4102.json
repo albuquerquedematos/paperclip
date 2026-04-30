@@ -1,0 +1,27 @@
+{
+  "agentId": "a7e75688fdce3dc53",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "2530\t\n2531\t  router.get(\"/agents/:id/keys\", expressHandler(listAgentKeys, { db, storage: storageSentinel }));\n2532\t  router.post(\"/agents/:id/keys\", validate(createAgentKeySchema), expressHandler(createAgentKey, { db, storage: storageSentinel }));\n2533\t  router.delete(\"/agents/:id/keys/:keyId\", expressHandler(revokeAgentKey, { db, storage: storageSentinel }));\n2534\t\n2535\t  const wakeupAgent: Handler = async (ctx) =\u003e {\n2536\t    const id = ctx.param(\"id\")!;\n2537\t    const agent = await svc.getById(id);\n2538\t    if (!agent) return Response.json({ error: \"Agent not found\" }, { status: 404 });\n2539\t    assertCompanyAccess(ctx, agent.companyId);\n2540\t\n2541\t    if (ctx.actor?.type === \"agent\") {\n2542\t      if (ctx.actor.agentId !== id) {\n2543\t        return Response.json({ error: \"Agent can only invoke itself\" }, { status: 403 });\n2544\t      }\n2545\t    } else {\n2546\t      await assertBoardCanManageAgentsForCompany(ctx, agent.companyId);\n2547\t    }\n2548\t\n2549\t    const body = await ctx.json\u003cRecord\u003cstring, unknown\u003e\u003e();\n2550\t    const run = await heartbeat.wakeup(id, {\n2551\t      source: body.source as \"timer\" | \"assignment\" | \"on_demand\" | \"automation\",\n2552\t      triggerDetail: ((body.triggerDetail as string | undefined) ?? \"manual\") as \"system\" | \"manual\" | \"ping\" | \"callback\",\n2553\t      reason: (body.reason as string | null) ?? null,\n2554\t      payload: (body.payload as Record\u003cstring, unknown\u003e | null) ?? null,\n2555\t      idempotencyKey: (body.idempotencyKey as string | null) ?? null,\n2556\t      requestedByActorType: ctx.actor?.type === \"agent\" ? \"agent\" : \"user\",\n2557\t      requestedByActorId: ctx.actor?.type === \"agent\" ? ctx.actor.agentId ?? null : (ctx.actor?.userId ?? null),\n2558\t      contextSnapshot: {\n2559\t        triggeredBy: ctx.actor?.type ?? \"none\",\n2560\t        actorId: ctx.actor?.type === \"agent\" ? ctx.actor.agentId : ctx.actor?.userId,\n2561\t        forceFreshSession: body.forceFreshSession === true,\n2562\t      },\n2563\t    });\n2564\t\n2565\t    if (!run) {\n2566\t      return Response.json(await buildSkippedWakeupResponse(agent, (body.payload as Record\u003cstring, unknown\u003e | null) ?? null), { status: 202 });\n2567\t    }\n2568\t\n2569\t    const actor = getActorInfo(ctx);\n2570\t    await logActivity(db, {\n2571\t      companyId: agent.companyId,\n2572\t      actorType: actor.actorType,\n2573\t      actorId: actor.actorId,\n2574\t      agentId: actor.agentId,\n2575\t      runId: actor.runId,\n2576\t      action: \"heartbeat.invoked\",\n2577\t      entityType: \"heartbeat_run\",\n2578\t      entityId: run.id,\n2579\t      details: { agentId: id },\n\n\u003csystem-reminder\u003e\nWhenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.\n\u003c/system-reminder\u003e\n",
+        "tool_use_id": "toolu_01Kk3kw2i3LVp9XdBSW97T7Z",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "081af913-37a6-491e-9e0a-b3a099481e86",
+  "promptId": "0c147d6f-915f-4b9e-a139-f26417e7157e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "081af913-37a6-491e-9e0a-b3a099481e86",
+  "timestamp": "2026-04-30T23:07:23.872Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "2dfee1f9-4f8e-47fd-af85-6b65ff0d69d7",
+  "version": "2.1.123"
+}

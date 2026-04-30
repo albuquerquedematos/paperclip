@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "30\t    \"dist\",\n31\t    \"ui-dist\",\n32\t    \"skills\"\n33\t  ],\n34\t  \"scripts\": {\n35\t    \"dev\": \"tsx src/index.ts\",\n36\t    \"dev:watch\": \"cross-env PAPERCLIP_MIGRATION_PROMPT=never PAPERCLIP_MIGRATION_AUTO_APPLY=true tsx ./scripts/dev-watch.ts\",\n37\t    \"prepare:ui-dist\": \"bash ../scripts/prepare-server-ui-dist.sh\",\n38\t    \"build\": \"tsc \u0026\u0026 mkdir -p dist/onboarding-assets \u0026\u0026 cp -R src/onboarding-assets/. dist/onboarding-assets/\",\n39\t    \"prepack\": \"pnpm run prepare:ui-dist\",\n40\t    \"postpack\": \"rm -rf ui-dist\",\n41\t    \"clean\": \"rm -rf dist\",\n42\t    \"start\": \"node dist/index.js\",\n43\t    \"typecheck\": \"pnpm --filter @paperclipai/plugin-sdk ensure-build-deps \u0026\u0026 tsc --noEmit\"\n44\t  },",
+        "tool_use_id": "toolu_01MYmqMPtnR47bcwkdVjR5Jg",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "02f27dfa-613f-4b86-8ccb-5b730404543c",
+  "promptId": "0c147d6f-915f-4b9e-a139-f26417e7157e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "02f27dfa-613f-4b86-8ccb-5b730404543c",
+  "timestamp": "2026-04-30T23:10:53.417Z",
+  "toolUseResult": {
+    "file": {
+      "content": "    \"dist\",\n    \"ui-dist\",\n    \"skills\"\n  ],\n  \"scripts\": {\n    \"dev\": \"tsx src/index.ts\",\n    \"dev:watch\": \"cross-env PAPERCLIP_MIGRATION_PROMPT=never PAPERCLIP_MIGRATION_AUTO_APPLY=true tsx ./scripts/dev-watch.ts\",\n    \"prepare:ui-dist\": \"bash ../scripts/prepare-server-ui-dist.sh\",\n    \"build\": \"tsc \u0026\u0026 mkdir -p dist/onboarding-assets \u0026\u0026 cp -R src/onboarding-assets/. dist/onboarding-assets/\",\n    \"prepack\": \"pnpm run prepare:ui-dist\",\n    \"postpack\": \"rm -rf ui-dist\",\n    \"clean\": \"rm -rf dist\",\n    \"start\": \"node dist/index.js\",\n    \"typecheck\": \"pnpm --filter @paperclipai/plugin-sdk ensure-build-deps \u0026\u0026 tsc --noEmit\"\n  },",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/package.json",
+      "numLines": 15,
+      "startLine": 30,
+      "totalLines": 96
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "9c11c166-d5b9-44fb-b168-82997d4de5de",
+  "version": "2.1.123"
+}

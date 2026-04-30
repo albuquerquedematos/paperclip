@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "  \"node:assert\", \"node:async_hooks\", \"node:buffer\", \"node:crypto\",\n  \"node:diagnostics_channel\", \"node:events\", \"node:module\",\n  \"node:path\", \"node:perf_hooks\", \"node:process\", \"node:querystring\",\n  \"node:stream\", \"node:stream/consumers\", \"node:stream/promises\",\n  \"node:stream/web\", \"node:string_decoder\", \"node:timers\",\n  \"node:timers/promises\", \"node:url\", \"node:util\", \"node:util/types\",\n  \"node:worker_threads\", \"node:zlib\",\n  // Without \"node:\" prefix (legacy imports resolved by CF runtime too)\n  \"assert\", \"async_hooks\", \"buffer\", \"crypto\", \"diagnostics_channel\",\n  \"events\", \"module\", \"path\", \"perf_hooks\", \"querystring\",\n  \"stream\", \"string_decoder\", \"timers\", \"url\", \"util\", \"worker_threads\", \"zlib\",\n  // node:sqlite (Node 22.5+) — only referenced in try/catch inside undici@7;\n  // the CF runtime will reject it but that code path is never reached.\n  \"node:sqlite\",\n  // Node-only packages not available in CF — never called in CF code paths\n  \"embedded-postgres\",\n  \"@embedded-postgres/*\",\n  \"jsdom\",\n];\n\nawait build({\n  entryPoints: [path.join(__dirname, \"src/worker/api.ts\")],\n  bundle: true,",
+        "is_error": false,
+        "tool_use_id": "toolu_013esymYz1GPFMJUsgjej9Av",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "b92c786f-7ca5-4107-a680-ca7e3f95da03",
+  "promptId": "9aae9721-e466-4259-b66e-e724bd2f2c66",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "b92c786f-7ca5-4107-a680-ca7e3f95da03",
+  "timestamp": "2026-04-30T18:26:22.712Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "  \"node:assert\", \"node:async_hooks\", \"node:buffer\", \"node:crypto\",\n  \"node:diagnostics_channel\", \"node:events\", \"node:module\",\n  \"node:path\", \"node:perf_hooks\", \"node:process\", \"node:querystring\",\n  \"node:stream\", \"node:stream/consumers\", \"node:stream/promises\",\n  \"node:stream/web\", \"node:string_decoder\", \"node:timers\",\n  \"node:timers/promises\", \"node:url\", \"node:util\", \"node:util/types\",\n  \"node:worker_threads\", \"node:zlib\",\n  // Without \"node:\" prefix (legacy imports resolved by CF runtime too)\n  \"assert\", \"async_hooks\", \"buffer\", \"crypto\", \"diagnostics_channel\",\n  \"events\", \"module\", \"path\", \"perf_hooks\", \"querystring\",\n  \"stream\", \"string_decoder\", \"timers\", \"url\", \"util\", \"worker_threads\", \"zlib\",\n  // node:sqlite (Node 22.5+) — only referenced in try/catch inside undici@7;\n  // the CF runtime will reject it but that code path is never reached.\n  \"node:sqlite\",\n  // Node-only packages not available in CF — never called in CF code paths\n  \"embedded-postgres\",\n  \"@embedded-postgres/*\",\n  \"jsdom\",\n];\n\nawait build({\n  entryPoints: [path.join(__dirname, \"src/worker/api.ts\")],\n  bundle: true,"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "54d48ad5-1a99-49f1-a6f5-13f139b64540",
+  "version": "2.1.123"
+}

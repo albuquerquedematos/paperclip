@@ -1,0 +1,48 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": [
+          {
+            "tool_name": "mcp__playwright__browser_navigate",
+            "type": "tool_reference"
+          },
+          {
+            "tool_name": "mcp__playwright__browser_console_messages",
+            "type": "tool_reference"
+          },
+          {
+            "tool_name": "mcp__playwright__browser_snapshot",
+            "type": "tool_reference"
+          }
+        ],
+        "tool_use_id": "toolu_01JqYyrv5yxGxaSCKViihyJG",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "23dff416-c683-409e-b599-5344e6d134b7",
+  "promptId": "9aae9721-e466-4259-b66e-e724bd2f2c66",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "23dff416-c683-409e-b599-5344e6d134b7",
+  "timestamp": "2026-04-30T18:32:17.511Z",
+  "toolUseResult": {
+    "matches": [
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_console_messages",
+      "mcp__playwright__browser_snapshot"
+    ],
+    "query": "select:mcp__playwright__browser_navigate,mcp__playwright__browser_console_messages,mcp__playwright__browser_snapshot",
+    "total_deferred_tools": 157
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "6654bb53-5833-4af7-83be-ca900b46b6ca",
+  "version": "2.1.123"
+}

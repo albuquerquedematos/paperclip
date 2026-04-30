@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "100\t\n101\t    // ------------------------------------------------------------------\n102\t    // Step 2: Execute the heartbeat via the sandbox bridge\n103\t    // ------------------------------------------------------------------\n104\t    const executeResult = await step.do(\n105\t      \"execute\",\n106\t      {\n107\t        timeout: \"5 minutes\",\n108\t        retries: { limit: 2, delay: \"5 seconds\", backoff: \"linear\" },\n109\t      },\n110\t      async () =\u003e {\n111\t        // TODO: replace with the actual internal heartbeat API URL once\n112\t        // the HTTP adapter migration (PR #6/#7) lands. For now we call a\n113\t        // placeholder endpoint on the main Worker.\n114\t        const bridgeUrl =\n115\t          (await this.env.PAPERCLIP_KV.get(\"SANDBOX_BRIDGE_URL\")) ??\n116\t          \"http://localhost:8788\";\n117\t        const apiKey = await this.env.PAPERCLIP_KV.get(\"SANDBOX_BRIDGE_API_KEY\");\n118\t\n119\t        const resp = await fetch(`${bridgeUrl}/internal/heartbeat`, {\n120\t          method: \"POST\",\n121\t          headers: {\n122\t            \"Content-Type\": \"application/json\",\n123\t            ...(apiKey ? { Authorization: `Bearer ${apiKey}` } : {}),\n124\t          },\n125\t          body: JSON.stringify({ agentId, companyId, runId, taskId }),\n126\t        });\n127\t\n128\t        if (!resp.ok) {\n129\t          const body = await resp.text().catch(() =\u003e \"(unreadable)\");\n130\t          throw new Error(`Heartbeat execution failed: HTTP ${resp.status}: ${body}`);\n131\t        }\n132\t\n133\t        return (await resp.json()) as { status: string; liveness?: string };\n134\t      },\n135\t    );\n136\t\n137\t    // ------------------------------------------------------------------\n138\t    // Step 3: Record the result in AgentRunDO and notify TaskDO\n139\t    // ------------------------------------------------------------------\n140\t    await step.do(\"record-result\", async () =\u003e {\n141\t      const id = this.env.AGENT_RUN_DO.idFromName(runId);\n142\t      const stub = this.env.AGENT_RUN_DO.get(id);\n143\t\n144\t      const succeeded = executeResult?.status !== \"failed\";\n145\t      await stub.fetch(\"http://internal/state\", {\n146\t        method: \"POST\",\n147\t        headers: { \"Content-Type\": \"application/json\" },\n148\t        body: JSON.stringify({\n149\t          status: succeeded ? \"succeeded\" : \"failed\",",
+        "tool_use_id": "toolu_01EjUFDYnFayGz3a6KU5na8B",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "0fea090d-b2d9-4f64-b041-7f9dff424dec",
+  "promptId": "0d05d433-ef46-4bba-8105-f1d502a42e1e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "0fea090d-b2d9-4f64-b041-7f9dff424dec",
+  "timestamp": "2026-04-30T19:29:50.669Z",
+  "toolUseResult": {
+    "file": {
+      "content": "\n    // ------------------------------------------------------------------\n    // Step 2: Execute the heartbeat via the sandbox bridge\n    // ------------------------------------------------------------------\n    const executeResult = await step.do(\n      \"execute\",\n      {\n        timeout: \"5 minutes\",\n        retries: { limit: 2, delay: \"5 seconds\", backoff: \"linear\" },\n      },\n      async () =\u003e {\n        // TODO: replace with the actual internal heartbeat API URL once\n        // the HTTP adapter migration (PR #6/#7) lands. For now we call a\n        // placeholder endpoint on the main Worker.\n        const bridgeUrl =\n          (await this.env.PAPERCLIP_KV.get(\"SANDBOX_BRIDGE_URL\")) ??\n          \"http://localhost:8788\";\n        const apiKey = await this.env.PAPERCLIP_KV.get(\"SANDBOX_BRIDGE_API_KEY\");\n\n        const resp = await fetch(`${bridgeUrl}/internal/heartbeat`, {\n          method: \"POST\",\n          headers: {\n            \"Content-Type\": \"application/json\",\n            ...(apiKey ? { Authorization: `Bearer ${apiKey}` } : {}),\n          },\n          body: JSON.stringify({ agentId, companyId, runId, taskId }),\n        });\n\n        if (!resp.ok) {\n          const body = await resp.text().catch(() =\u003e \"(unreadable)\");\n          throw new Error(`Heartbeat execution failed: HTTP ${resp.status}: ${body}`);\n        }\n\n        return (await resp.json()) as { status: string; liveness?: string };\n      },\n    );\n\n    // ------------------------------------------------------------------\n    // Step 3: Record the result in AgentRunDO and notify TaskDO\n    // ------------------------------------------------------------------\n    await step.do(\"record-result\", async () =\u003e {\n      const id = this.env.AGENT_RUN_DO.idFromName(runId);\n      const stub = this.env.AGENT_RUN_DO.get(id);\n\n      const succeeded = executeResult?.status !== \"failed\";\n      await stub.fetch(\"http://internal/state\", {\n        method: \"POST\",\n        headers: { \"Content-Type\": \"application/json\" },\n        body: JSON.stringify({\n          status: succeeded ? \"succeeded\" : \"failed\",",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/runtime/workflows/heartbeat.ts",
+      "numLines": 50,
+      "startLine": 100,
+      "totalLines": 172
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "7d889713-aa6d-4cc5-80b5-35506a9a99bd",
+  "version": "2.1.123"
+}

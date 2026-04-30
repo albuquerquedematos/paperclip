@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01RgcHphYjuonu9cEbxyxK4i",
+        "input": {
+          "command": "git add server/src/routes/issues.ts \u0026\u0026 git commit -m \"$(cat \u003c\u003c'EOF'\nfix(server): pass resolved issue.id to downstream calls in issue routes\n\n11 handlers in server/src/routes/issues.ts were resolving the issue via\nsvc.getById(id) (which accepts both UUIDs and human keys like \\\"ALM-1\\\")\nand then passing the *raw* id to downstream services that expect a UUID.\nWhen the UI hit any of these endpoints with a human key, Postgres threw\n\\\"invalid input syntax for type uuid: ALM-1\\\" and the request 500'd.\n\nFixed handlers (use issue.id / existing.id instead of raw param):\n\n  GET    /api/issues/:id/comments           — listIssueComments\n  GET    /api/issues/:id/interactions       — listIssueInteractions\n  GET    /api/issues/:id/attachments        — listAttachments\n  GET    /api/issues/:id/feedback-votes     — getFeedbackVotes\n  POST   /api/issues/:id/feedback-votes     — saveFeedbackVote\n  GET    /api/issues/:id/approvals          — listIssueApprovals\n  POST   /api/issues/:id/approvals          — linkIssueApproval (2 calls)\n  DELETE /api/issues/:id/approvals/:approvalId — unlinkIssueApproval\n  POST   /api/issues/:id/checkout           — checkoutIssue\n  POST   /api/issues/:id/release            — releaseIssue\n  POST   /api/issues/:id/admin-force-release — adminForceRelease\n\nBug applies equally on Node and CF deployments; surfaces more on CF\nbecause the worker's logs are more visible.\n\nCo-Authored-By: Claude Sonnet 4.6 \u003cnoreply@anthropic.com\u003e\nEOF\n)\"",
+          "description": "Commit issue ID resolution fixes"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01B8mdJc8fczkZKFkHm77rde",
+    "model": "claude-opus-4-7",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 313,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 313,
+      "cache_read_input_tokens": 334405,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 313,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 313,
+          "cache_read_input_tokens": 334405,
+          "input_tokens": 1,
+          "output_tokens": 762,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 762,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "66e40c01-0ca8-4434-9d30-3cf770ad3231",
+  "requestId": "req_011CaanYbty73CTHuMHPRfuN",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T23:00:10.264Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "9f259a35-9f58-49be-9b19-a187d84cca33",
+  "version": "2.1.123"
+}

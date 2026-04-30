@@ -1,0 +1,61 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "text": "Everything is clean and the build passes. Here's what the audit found and fixed:\n\n**Security (critical):**\n- Every CF-extra route was missing auth entirely — anyone could hit `/api/companies/:id/join-requests`, `/api/adapters`, etc. without a session. All five new route modules now call `resolveActorFromRequest` and return 401 before touching the DB or registry. The WebSocket endpoint authenticates before committing the 101 upgrade.\n\n**Correctness:**\n- `compiledPathCache` now has a length-mismatch guard — if the route count ever changes between requests (shouldn't happen, but defensive), the cache is invalidated and rebuilt rather than silently mapping handlers to the wrong paths.\n- `runChain` in the bridge now issues each handler a single-use `boundNext` — a buggy middleware that calls `next()` twice no longer advances the chain twice.\n\n**Modularity:**\n- `cf-extra-routes.ts` went from ~320 lines to a 37-line barrel. Logic lives in `src/worker/routes/adapters.ts`, `plugins.ts`, `company-access.ts`, `company-skills-cf.ts`, and `events.ts` — each with a focused scope and module-level JSDoc explaining CF-specific caveats.\n\n**Documentation:**\n- Route-registry comments explain *why* `adapterRoutes()` uses sentinel proxies and *why* `accessRoutes` needs `extractAllRoutesFromRouter` instead of `ext`.",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01GjhyLXCK8bwn7817XN8MSL",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 931
+      },
+      "cache_creation_input_tokens": 931,
+      "cache_read_input_tokens": 149544,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 931
+          },
+          "cache_creation_input_tokens": 931,
+          "cache_read_input_tokens": 149544,
+          "input_tokens": 1,
+          "output_tokens": 347,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 347,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "46e80c0f-9e0a-451c-b59b-130f9d676b00",
+  "requestId": "req_011CaaXTDNFcqJNXuJSQy4cp",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T19:42:11.094Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "31fb280d-e9c5-44dd-91af-ce34993b0d56",
+  "version": "2.1.123"
+}

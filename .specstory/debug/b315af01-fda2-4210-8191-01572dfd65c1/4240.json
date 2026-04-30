@@ -1,0 +1,20 @@
+{
+  "agentId": "a9877c5b7d080d3a4",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": "In /Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/projects.ts, find every Handler that:\n1. Calls `const project = await svc.getById(id);` (or similar; resolves a possibly-non-UUID :id param into the full project), AND\n2. Then in the same handler body, passes the raw `id` (or `projectId`, etc.) — NOT `project.id` — to a downstream service/db call that expects a UUID.\n\nBackground: the `:id` URL param can be either a UUID or a project URL key (e.g. `\"onboarding\"` for project named \"Onboarding\"). Raw key passed downstream to UUID-only code throws Postgres `invalid input syntax for type uuid`.\n\nFor each bug found, report:\n- Handler name\n- Line number\n- The raw line passing `id` to a downstream call\n- Fix (replace with `project.id`)\n\nSkip handlers where:\n- Raw id is only used in error messages / log payloads\n- The function being called accepts both keys (assume `svc.getById` does; everything else doesn't unless its name suggests otherwise like `getByKey`/`getBySlug`)\n- `project.id` is already used downstream\n\nThe file is around 700 lines. Walk it. Report under 200 lines, precise line numbers.",
+    "role": "user"
+  },
+  "parentUuid": null,
+  "promptId": "a4189397-43e1-4afc-b7a6-218998e9917e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T23:13:09.524Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "da7a6056-ca9e-427a-b389-25b65dbee805",
+  "version": "2.1.123"
+}

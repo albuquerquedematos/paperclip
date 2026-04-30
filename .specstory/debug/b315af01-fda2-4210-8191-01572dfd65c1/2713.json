@@ -1,0 +1,67 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/env.ts has been updated successfully.",
+        "tool_use_id": "toolu_011Y9CCHir5jjuGzFHnXEyn1",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "0d987630-1e83-4c4d-adb2-8a8a34ee86d7",
+  "promptId": "90af47bf-faac-4347-b1a7-d8ed0c820fb6",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "0d987630-1e83-4c4d-adb2-8a8a34ee86d7",
+  "timestamp": "2026-04-30T20:36:08.976Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/env.ts",
+    "newString": "  // Container DO namespaces — each wraps a CF Container that starts a Docker\n  // image and proxies HTTP to it.  Absent in local dev (no Docker); the DO\n  // transparently falls back to SANDBOX_BRIDGE_URL read from KV.\n  SIDECAR_SERVICE?: DurableObjectNamespace;   // companion Node server\n  PLUGIN_CONTAINER?: DurableObjectNamespace;  // isolated command executor",
+    "oldString": "  // Sidecar — companion server for agent heartbeat execution and plugin jobs.\n  // CF-native: use SIDECAR_SERVICE (Fetcher to a CF Container).\n  // Fallback: set SIDECAR_URL + SIDECAR_API_KEY to point at an external server.\n  SIDECAR_SERVICE?: Fetcher;\n  SIDECAR_URL?: string;\n  SIDECAR_API_KEY?: string;\n\n  // Plugin sandbox — isolated command execution for adapter plugins.\n  // CF-native: PLUGIN_CONTAINER is a Fetcher to a CF Container that exposes\n  // POST /execute and POST /cancel/:runId (same interface as the sandbox bridge).\n  PLUGIN_CONTAINER?: Fetcher;",
+    "originalFile": "/**\n * Cloudflare Worker environment bindings and deployment-mode helpers.\n *\n * Keeping `Env` in its own file lets every worker sub-module import it\n * without pulling in the full Hono app or route registry.\n */\n\n// ---------------------------------------------------------------------------\n// Env -- Cloudflare bindings injected at runtime by the Workers runtime\n// ---------------------------------------------------------------------------\n\nexport interface Env {\n  // Databases\n  HYPERDRIVE: { connectionString: string };\n\n  // Object storage\n  PAPERCLIP_STORAGE: R2Bucket;\n\n  // KV -- setup flags, hot config, session cache\n  PAPERCLIP_KV: KVNamespace;\n\n  // Durable Object namespaces\n  TASK_DO: DurableObjectNamespace;\n  AGENT_RUN_DO: DurableObjectNamespace;\n  SCHEDULER_DO: DurableObjectNamespace;\n\n  // Queues\n  PAPERCLIP_QUEUE: Queue;\n\n  // Workflows\n  HEARTBEAT_WORKFLOW: Workflow;\n  PLUGIN_DISPATCH_WORKFLOW: Workflow;\n\n  // Vars (set in wrangler.toml [vars] or .dev.vars for local dev)\n  DEPLOYMENT_PLATFORM: string;\n  DEPLOYMENT_MODE: string;\n  DEPLOYMENT_EXPOSURE: string;\n  STORAGE_R2_BUCKET?: string;\n  STORAGE_R2_PREFIX?: string;\n\n  // Sidecar — companion server for agent heartbeat execution and plugin jobs.\n  // CF-native: use SIDECAR_SERVICE (Fetcher to a CF Container).\n  // Fallback: set SIDECAR_URL + SIDECAR_API_KEY to point at an external server.\n  SIDECAR_SERVICE?: Fetcher;\n  SIDECAR_URL?: string;\n  SIDECAR_API_KEY?: string;\n\n  // Plugin sandbox — isolated command execution for adapter plugins.\n  // CF-native: PLUGIN_CONTAINER is a Fetcher to a CF Container that exposes\n  // POST /execute and POST /cancel/:runId (same interface as the sandbox bridge).\n  PLUGIN_CONTAINER?: Fetcher;\n\n  // Static assets binding — serves ui/dist alongside the Worker.\n  // Use env.ASSETS.fetch(request) to serve static files or let CF fall\n  // back to index.html for SPA routes (not_found_handling = \"single-page-application\").\n  ASSETS: Fetcher;\n}\n\n// ---------------------------------------------------------------------------\n// Deployment mode\n// ---------------------------------------------------------------------------\n\nexport type DeploymentMode = \"local_trusted\" | \"authenticated\";\n\n/**\n * Returns the deployment mode for the current request.\n * `local_trusted` bypasses auth and the setup KV gate for local dev.\n */\nexport function resolveDeploymentMode(env: Env): DeploymentMode {\n  return env.DEPLOYMENT_MODE === \"local_trusted\" ? \"local_trusted\" : \"authenticated\";\n}\n",
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          "   STORAGE_R2_BUCKET?: string;",
+          "   STORAGE_R2_PREFIX?: string;",
+          " ",
+          "-  // Sidecar — companion server for agent heartbeat execution and plugin jobs.",
+          "-  // CF-native: use SIDECAR_SERVICE (Fetcher to a CF Container).",
+          "-  // Fallback: set SIDECAR_URL + SIDECAR_API_KEY to point at an external server.",
+          "-  SIDECAR_SERVICE?: Fetcher;",
+          "-  SIDECAR_URL?: string;",
+          "-  SIDECAR_API_KEY?: string;",
+          "+  // Container DO namespaces — each wraps a CF Container that starts a Docker",
+          "+  // image and proxies HTTP to it.  Absent in local dev (no Docker); the DO",
+          "+  // transparently falls back to SANDBOX_BRIDGE_URL read from KV.",
+          "+  SIDECAR_SERVICE?: DurableObjectNamespace;   // companion Node server",
+          "+  PLUGIN_CONTAINER?: DurableObjectNamespace;  // isolated command executor",
+          " ",
+          "-  // Plugin sandbox — isolated command execution for adapter plugins.",
+          "-  // CF-native: PLUGIN_CONTAINER is a Fetcher to a CF Container that exposes",
+          "-  // POST /execute and POST /cancel/:runId (same interface as the sandbox bridge).",
+          "-  PLUGIN_CONTAINER?: Fetcher;",
+          "-",
+          "   // Static assets binding — serves ui/dist alongside the Worker.",
+          "   // Use env.ASSETS.fetch(request) to serve static files or let CF fall",
+          "   // back to index.html for SPA routes (not_found_handling = \"single-page-application\")."
+        ],
+        "newLines": 12,
+        "newStart": 38,
+        "oldLines": 18,
+        "oldStart": 38
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "daf77c66-1585-48c8-9123-2b44d2ae0efe",
+  "version": "2.1.123"
+}

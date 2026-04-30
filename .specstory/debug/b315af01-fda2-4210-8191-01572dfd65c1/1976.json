@@ -1,0 +1,70 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_011MrPekn53bMBdrwYBY8cd5",
+        "input": {
+          "command": "node packages/deploy-cloudflare/build-worker.mjs 2\u003e\u00261 | tail -50",
+          "description": "Rebuild CF worker bundle",
+          "timeout": 120000
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01RqYpFdxub2coh3YDTA2eqU",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 733
+      },
+      "cache_creation_input_tokens": 733,
+      "cache_read_input_tokens": 61448,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 733
+          },
+          "cache_creation_input_tokens": 733,
+          "cache_read_input_tokens": 61448,
+          "input_tokens": 1,
+          "output_tokens": 133,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 133,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "8019f77b-1c3d-4c93-bf72-f640246f96ea",
+  "requestId": "req_011CaaVbwjRq5pbQ8CJrSp7V",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T19:17:51.112Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "38dc5cfd-3f9e-4828-a15c-752504dab90f",
+  "version": "2.1.123"
+}

@@ -1,0 +1,27 @@
+{
+  "agentId": "a3a306fc5d1924556",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1251\t    const revisions = await documentsSvc.listIssueDocumentRevisions(issue.id, keyParsed.data);\n1252\t    return Response.json(revisions);\n1253\t  };\n1254\t\n1255\t  const restoreDocumentRevision: Handler = async (ctx) =\u003e {\n1256\t    const id = ctx.param(\"id\")!;\n1257\t    const revisionId = ctx.param(\"revisionId\")!;\n1258\t    const issue = await svc.getById(id);\n1259\t    if (!issue) return Response.json({ error: \"Issue not found\" }, { status: 404 });\n1260\t    assertCompanyAccess(ctx, issue.companyId);\n1261\t    await assertAgentIssueMutationAllowed(ctx, issue);\n1262\t    const keyParsed = issueDocumentKeySchema.safeParse(String(ctx.param(\"key\") ?? \"\").trim().toLowerCase());\n1263\t    if (!keyParsed.success) {\n1264\t      return Response.json({ error: \"Invalid document key\", details: keyParsed.error.issues }, { status: 400 });\n1265\t    }\n1266\t    const actor = getActorInfo(ctx);\n1267\t    const referenceSummaryBefore = await issueReferencesSvc.listIssueReferenceSummary(issue.id);\n1268\t    const result = await documentsSvc.restoreIssueDocumentRevision({\n1269\t      issueId: issue.id,\n1270\t      key: keyParsed.data,\n1271\t      revisionId,\n1272\t      createdByAgentId: actor.agentId ?? null,\n1273\t      createdByUserId: actor.actorType === \"user\" ? actor.actorId : null,\n1274\t    });\n1275\t    await issueReferencesSvc.syncDocument(result.document.id);\n1276\t    const referenceSummaryAfter = await issueReferencesSvc.listIssueReferenceSummary(issue.id);\n1277\t    const referenceDiff = issueReferencesSvc.diffIssueReferenceSummary(referenceSummaryBefore, referenceSummaryAfter);\n1278\t    await logActivity(db, {\n1279\t      companyId: issue.companyId,\n1280\t      actorType: actor.actorType,\n1281\t      actorId: actor.actorId,\n1282\t      agentId: actor.agentId,\n1283\t      runId: actor.runId,\n1284\t      action: \"issue.document_restored\",\n1285\t      entityType: \"issue\",\n1286\t      entityId: issue.id,\n1287\t      details: {\n1288\t        key: result.document.key,\n1289\t        documentId: result.document.id,\n1290\t        title: result.document.title,\n\n\u003csystem-reminder\u003e\nWhenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.\n\u003c/system-reminder\u003e\n",
+        "tool_use_id": "toolu_01XF5DZptrALjTW38Z7QyXnY",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "523ad670-ffad-4bf9-9eab-d90f0d61c012",
+  "promptId": "e7cbb211-1d37-4345-b546-c3d4bd07be80",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "523ad670-ffad-4bf9-9eab-d90f0d61c012",
+  "timestamp": "2026-04-30T22:57:38.934Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "ab536fa8-8070-4bbb-a0ae-67f461c9da1c",
+  "version": "2.1.123"
+}

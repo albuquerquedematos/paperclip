@@ -1,0 +1,96 @@
+- generic [ref=e3]:
+  - link "Skip to Main Content" [ref=e4] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e5]:
+    - generic [ref=e6]:
+      - generic [ref=e7]:
+        - generic [ref=e8]:
+          - img [ref=e10]
+          - status [ref=e13]
+          - button "Add company" [ref=e16]:
+            - img [ref=e17]
+        - complementary [ref=e19]:
+          - generic [ref=e20]:
+            - button "Open company menu" [disabled]:
+              - generic:
+                - generic: Select company
+              - img
+            - button [ref=e21]:
+              - img
+          - navigation [ref=e22]:
+            - generic [ref=e23]:
+              - button "New Issue" [ref=e24]:
+                - img [ref=e25]
+                - generic [ref=e28]: New Issue
+              - link "Dashboard" [ref=e29] [cursor=pointer]:
+                - /url: /ALM/dashboard
+                - img [ref=e31]
+                - generic [ref=e36]: Dashboard
+              - link "Inbox" [ref=e37] [cursor=pointer]:
+                - /url: /ALM/inbox
+                - img [ref=e39]
+                - generic [ref=e42]: Inbox
+            - generic [ref=e43]:
+              - generic [ref=e44]: Work
+              - generic [ref=e45]:
+                - link "Issues" [ref=e46] [cursor=pointer]:
+                  - /url: /ALM/issues
+                  - img [ref=e48]
+                  - generic [ref=e51]: Issues
+                - link "Routines" [ref=e52] [cursor=pointer]:
+                  - /url: /ALM/routines
+                  - img [ref=e54]
+                  - generic [ref=e59]: Routines
+                - link "Goals" [ref=e60] [cursor=pointer]:
+                  - /url: /ALM/goals
+                  - img [ref=e62]
+                  - generic [ref=e66]: Goals
+            - generic [ref=e67]:
+              - generic [ref=e69]:
+                - button "Projects" [expanded] [ref=e70]:
+                  - img [ref=e71]
+                  - generic [ref=e73]: Projects
+                - button "New project" [ref=e74]:
+                  - img [ref=e75]
+              - status [ref=e76]
+            - generic [ref=e79]:
+              - button "Agents" [expanded] [ref=e80]:
+                - img [ref=e81]
+                - generic [ref=e83]: Agents
+              - button "New agent" [ref=e84]:
+                - img [ref=e85]
+            - generic [ref=e86]:
+              - generic [ref=e87]: Company
+              - generic [ref=e88]:
+                - link "Org" [ref=e89] [cursor=pointer]:
+                  - /url: /ALM/org
+                  - img [ref=e91]
+                  - generic [ref=e96]: Org
+                - link "Skills" [ref=e97] [cursor=pointer]:
+                  - /url: /ALM/skills
+                  - img [ref=e99]
+                  - generic [ref=e109]: Skills
+                - link "Costs" [ref=e110] [cursor=pointer]:
+                  - /url: /ALM/costs
+                  - img [ref=e112]
+                  - generic [ref=e114]: Costs
+                - link "Activity" [ref=e115] [cursor=pointer]:
+                  - /url: /ALM/activity
+                  - img [ref=e117]
+                  - generic [ref=e121]: Activity
+                - link "Settings" [ref=e122] [cursor=pointer]:
+                  - /url: /ALM/company/settings
+                  - img [ref=e124]
+                  - generic [ref=e127]: Settings
+      - button "Open account menu" [ref=e129]:
+        - generic [ref=e131]: BO
+        - generic [ref=e132]: Board
+    - generic [ref=e133]:
+      - heading "Issues" [level=1] [ref=e137]
+      - main [active] [ref=e139]:
+        - generic [ref=e140]:
+          - img [ref=e142]
+          - paragraph [ref=e145]: Select a company to view issues.
+  - generic [ref=e146]:
+    - heading "Command Palette" [level=2] [ref=e147]
+    - paragraph [ref=e148]: Search for a command to run...

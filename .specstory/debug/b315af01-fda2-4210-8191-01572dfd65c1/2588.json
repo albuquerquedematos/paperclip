@@ -1,0 +1,68 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01Hg9gb8XFzCZYdxYQR268Q3",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/adapter-executor/sandbox-bridge.ts"
+        },
+        "name": "Read",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_018znyayhiqFdb9xRwDMWkRT",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 2898
+      },
+      "cache_creation_input_tokens": 2898,
+      "cache_read_input_tokens": 43746,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 2898
+          },
+          "cache_creation_input_tokens": 2898,
+          "cache_read_input_tokens": 43746,
+          "input_tokens": 1,
+          "output_tokens": 418,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 418,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "6d14b99b-7033-478f-accd-0ef132a79a8b",
+  "requestId": "req_011CaaZPLH75xFkaVRToxwsx",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T20:07:33.177Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "f4e3589f-7244-426f-b15e-41d04364375c",
+  "version": "2.1.123"
+}

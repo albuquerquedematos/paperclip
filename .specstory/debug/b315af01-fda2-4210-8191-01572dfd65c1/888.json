@@ -1,0 +1,27 @@
+{
+  "agentId": "aee092c208138b302",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\t// Stub for node:fs/promises — not available in CF Workers.\n2\tconst notAvailable = (name: string) =\u003e async () =\u003e { throw new Error(`node:fs/promises.${name} not available in CF Workers`); };\n3\texport const readFile = notAvailable(\"readFile\");\n4\texport const writeFile = notAvailable(\"writeFile\");\n5\texport const readdir = notAvailable(\"readdir\");\n6\texport const mkdir = notAvailable(\"mkdir\");\n7\texport const stat = notAvailable(\"stat\");\n8\texport const unlink = notAvailable(\"unlink\");\n9\texport const access = notAvailable(\"access\");\n10\texport const realpath = notAvailable(\"realpath\");\n11\texport const rm = notAvailable(\"rm\");\n12\texport const rename = notAvailable(\"rename\");\n13\texport const copyFile = notAvailable(\"copyFile\");\n14\texport const pipeline = notAvailable(\"pipeline\");\n15\texport const open = notAvailable(\"open\");\n16\texport const lstat = notAvailable(\"lstat\");\n17\texport const watch = notAvailable(\"watch\");\n18\texport default { readFile, writeFile, readdir, mkdir, stat, unlink, access, realpath, rm, rename, copyFile };\n19\t",
+        "tool_use_id": "toolu_01FRAr54vDL6DP3ngStVBrwE",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "732749b8-f90d-4ee9-b260-c0988798b4c1",
+  "promptId": "285fd922-5736-481c-a4fc-cf130aed3e81",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "732749b8-f90d-4ee9-b260-c0988798b4c1",
+  "timestamp": "2026-04-30T17:51:03.282Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "9b3574ec-8100-4727-b842-27b97750c2c1",
+  "version": "2.1.123"
+}

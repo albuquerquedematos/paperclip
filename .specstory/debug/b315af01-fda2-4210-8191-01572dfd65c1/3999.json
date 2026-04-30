@@ -1,0 +1,70 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01Rw1pqDLcaxJjMH8bQAbptW",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/lib/mention-chips.ts",
+          "limit": 75,
+          "offset": 40
+        },
+        "name": "Read",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_014xbAd2fmKCQPNuPuW18yQe",
+    "model": "claude-opus-4-7",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 256,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 256,
+      "cache_read_input_tokens": 368253,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 256,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 256,
+          "cache_read_input_tokens": 368253,
+          "input_tokens": 1,
+          "output_tokens": 150,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 150,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "b3122b94-ca4e-431d-9665-6eb094d056c3",
+  "requestId": "req_011Caanw65jYuyWajkX8p3C8",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T23:05:07.296Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "c304f0d8-10ca-4e51-9327-d9a03ae9ce32",
+  "version": "2.1.123"
+}

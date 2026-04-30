@@ -1,0 +1,52 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/issues.ts has been updated successfully.",
+        "tool_use_id": "toolu_013korCV7GwC8WaUuUtB6hp3",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "0295e0c1-c675-44c6-9e6c-a895283421a5",
+  "promptId": "e7cbb211-1d37-4345-b546-c3d4bd07be80",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "0295e0c1-c675-44c6-9e6c-a895283421a5",
+  "timestamp": "2026-04-30T22:56:43.126Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/issues.ts",
+    "newString": "    const interactions = await issueThreadInteractionService(db).listForIssue(issue.id);\n    return Response.json(interactions);\n  };",
+    "oldString": "    const interactions = await issueThreadInteractionService(db).listForIssue(id);\n    return Response.json(interactions);\n  };",
+    "originalFile": null,
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          "       return Response.json({ error: \"Issue not found\" }, { status: 404 });",
+          "     }",
+          "     assertCompanyAccess(ctx, issue.companyId);",
+          "-    const interactions = await issueThreadInteractionService(db).listForIssue(id);",
+          "+    const interactions = await issueThreadInteractionService(db).listForIssue(issue.id);",
+          "     return Response.json(interactions);",
+          "   };",
+          " "
+        ],
+        "newLines": 7,
+        "newStart": 2730,
+        "oldLines": 7,
+        "oldStart": 2730
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "8fe9f237-9fc6-4aea-96d6-c55e29f7995c",
+  "version": "2.1.123"
+}

@@ -1,0 +1,20 @@
+{
+  "agentId": "a7e75688fdce3dc53",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": "In /Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/agents.ts, find every Handler function that:\n1. Calls `const agent = await svc.getById(id);` (or similar variable name like `existing`, `current`), AND\n2. Then in the same handler body, passes the raw `id` (or `agentId`, etc.) — NOT `agent.id` — to a downstream service/db call that expects a UUID.\n\nBackground: the `:id` URL param can be either a UUID or a URL key (e.g. `ceo-3`). The service `svc.getById(id)` resolves both, but raw `id` passed downstream to UUID-only queries throws Postgres error `invalid input syntax for type uuid`.\n\nFor each bug found, report:\n- The handler name (e.g. `getAgentConfiguration`)\n- Line number\n- The line passing the raw id\n- The fix (replace `id` with `agent.id` or whatever the resolved variable name is)\n\nSkip handlers where:\n- The raw `id` is only used in error messages (not a bug)\n- The downstream function is documented to accept both UUIDs and URL keys\n- `agent.id` (the resolved UUID) is already used downstream\n\nThe file is around 2700 lines. Walk it thoroughly. Be precise about line numbers and exact diffs.\n\nReport under 300 lines.",
+    "role": "user"
+  },
+  "parentUuid": null,
+  "promptId": "0c147d6f-915f-4b9e-a139-f26417e7157e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T23:06:52.093Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "8880e782-f689-41b2-a620-b2d595d4f845",
+  "version": "2.1.123"
+}

@@ -1,0 +1,27 @@
+{
+  "agentId": "a8455dc48bdf97d68",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/.claude/worktrees/agent-a8455dc48bdf97d68",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "worktree-agent-a8455dc48bdf97d68",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\t// Stub for node:net — not available in CF Workers.\n2\texport class Socket { on() { return this; } connect() { return this; } end() { return this; } }\n3\texport class Server { on() { return this; } listen() { return this; } }\n4\texport function createServer() { return new Server(); }\n5\texport function createConnection() { return new Socket(); }\n6\texport function connect() { return new Socket(); }\n7\t\n8\tconst IPV4_RE = /^(\\d{1,3}\\.){3}\\d{1,3}$/;\n9\tconst IPV6_RE = /^[\\da-f:]+$/i;\n10\texport function isIP(input: string): 0 | 4 | 6 {\n11\t  if (IPV4_RE.test(input)) return 4;\n12\t  if (IPV6_RE.test(input) \u0026\u0026 input.includes(\":\")) return 6;\n13\t  return 0;\n14\t}\n15\texport function isIPv4(input: string): boolean { return isIP(input) === 4; }\n16\texport function isIPv6(input: string): boolean { return isIP(input) === 6; }\n17\t\n18\texport default { Socket, Server, createServer, createConnection, connect, isIP, isIPv4, isIPv6 };\n19\t",
+        "tool_use_id": "toolu_011VUMRyy19XXZPVkHJt71vT",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "339b393e-447e-43fc-aaa1-8b6fbe1bb52f",
+  "promptId": "8a433599-d510-488c-a09f-2af6b1c28bcb",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "339b393e-447e-43fc-aaa1-8b6fbe1bb52f",
+  "timestamp": "2026-04-30T19:36:42.782Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "49c560c7-604c-45d7-8ef7-854fa31223c0",
+  "version": "2.1.123"
+}

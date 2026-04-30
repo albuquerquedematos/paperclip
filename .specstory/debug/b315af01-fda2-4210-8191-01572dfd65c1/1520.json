@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01QXs5NopkEu6a5rymGriqwn",
+        "input": {
+          "command": "lsof -ti :8787 | xargs kill -9 2\u003e/dev/null; echo \"cleared\"",
+          "description": "Kill any running wrangler"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01HCQSnPcM1JJhUTGNaAyPjy",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 388
+      },
+      "cache_creation_input_tokens": 388,
+      "cache_read_input_tokens": 82497,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 388
+          },
+          "cache_creation_input_tokens": 388,
+          "cache_read_input_tokens": 82497,
+          "input_tokens": 1,
+          "output_tokens": 167,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 167,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "5a7c1382-ffa4-4eb3-a923-700536f4797c",
+  "requestId": "req_011CaaT9nrRyiDbXnAeKjp65",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T18:45:43.921Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "a51d0f7b-1df6-4179-b65e-8f50ae4948a4",
+  "version": "2.1.123"
+}

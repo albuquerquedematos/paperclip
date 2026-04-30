@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "1181:async function loadCompanyUserDirectory(db: Db, companyId: string) {\n1301:async function loadJoinRequestRecords(db: Db, companyId: string) {\n3710:    const all = await loadJoinRequestRecords(db, companyId);\n4014:    const users = await loadCompanyUserDirectory(db, companyId);",
+        "is_error": false,
+        "tool_use_id": "toolu_01VZTp7fpH1diw6RfBJGbq2W",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "a3ad6fd2-1c6e-4e62-bd5d-c4de7d81db6f",
+  "promptId": "9aae9721-e466-4259-b66e-e724bd2f2c66",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "a3ad6fd2-1c6e-4e62-bd5d-c4de7d81db6f",
+  "timestamp": "2026-04-30T18:25:12.512Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "1181:async function loadCompanyUserDirectory(db: Db, companyId: string) {\n1301:async function loadJoinRequestRecords(db: Db, companyId: string) {\n3710:    const all = await loadJoinRequestRecords(db, companyId);\n4014:    const users = await loadCompanyUserDirectory(db, companyId);"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "55b6edb9-7271-43b4-b884-411b184b310c",
+  "version": "2.1.123"
+}

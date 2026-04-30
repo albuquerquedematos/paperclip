@@ -1,0 +1,27 @@
+{
+  "agentId": "ae240282fd51e7edd",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport type {\n2\t  AdapterExecutionContext,\n3\t  AdapterExecutionResult,\n4\t  AdapterRuntimeServiceReport,\n5\t} from \"@paperclipai/adapter-utils\";\n6\timport {\n7\t  asNumber,\n8\t  asString,\n9\t  buildPaperclipEnv,\n10\t  parseObject,\n11\t  renderPaperclipWakePrompt,\n12\t  stringifyPaperclipWakePayload,\n13\t} from \"@paperclipai/adapter-utils/server-utils\";\n14\timport crypto, { randomUUID } from \"node:crypto\";\n15\timport { WebSocket } from \"ws\";\n16\t\n17\ttype SessionKeyStrategy = \"fixed\" | \"issue\" | \"run\";\n18\t\n19\ttype WakePayload = {\n20\t  runId: string;\n21\t  agentId: string;\n22\t  companyId: string;\n23\t  taskId: string | null;\n24\t  issueId: string | null;\n25\t  wakeReason: string | null;\n26\t  wakeCommentId: string | null;\n27\t  approvalId: string | null;\n28\t  approvalStatus: string | null;\n29\t  issueIds: string[];\n30\t};\n31\t\n32\ttype GatewayDeviceIdentity = {\n33\t  deviceId: string;\n34\t  publicKeyRawBase64Url: string;\n35\t  privateKeyPem: string;\n36\t  source: \"configured\" | \"ephemeral\";\n37\t};\n38\t\n39\ttype GatewayRequestFrame = {\n40\t  type: \"req\";\n41\t  id: string;\n42\t  method: string;\n43\t  params?: unknown;\n44\t};\n45\t\n46\ttype GatewayResponseFrame = {\n47\t  type: \"res\";\n48\t  id: string;\n49\t  ok: boolean;\n50\t  payload?: unknown;\n51\t  error?: {\n52\t    code?: unknown;\n53\t    message?: unknown;\n54\t  };\n55\t};\n56\t\n57\ttype GatewayEventFrame = {\n58\t  type: \"event\";\n59\t  event: string;\n60\t  payload?: unknown;\n\n\u003csystem-reminder\u003e\nWhenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.\n\u003c/system-reminder\u003e\n",
+        "tool_use_id": "toolu_01JJ3WQTZxUjMNegAu1gLqht",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "a4aade8b-3e9f-4aff-bf92-5fd2396db1e7",
+  "promptId": "0d05d433-ef46-4bba-8105-f1d502a42e1e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "a4aade8b-3e9f-4aff-bf92-5fd2396db1e7",
+  "timestamp": "2026-04-30T19:28:12.109Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "5eef341b-251f-4979-b7e6-ce93d151fbba",
+  "version": "2.1.123"
+}

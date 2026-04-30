@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "6c21058d4 feat(deploy-cloudflare): register adapterRoutes in route-registry for config-schema and management endpoints\ne1829b138 fix(deploy-cloudflare): serve real adapter and plugin data from DB/registry instead of []\n935ea2ba8 fix(deploy-cloudflare): query plugins and ui-contributions from DB instead of returning []\n6f99479b9 fix(deploy-cloudflare): prevent unhandled rejections from async handlers called via synchronous next()\n0bade81ee feat(deploy-cloudflare): bridge raw Express handlers from access.ts into CF Workers\n6bbe293f4 fix(deploy-cloudflare): add CF-native handlers for all 501 routes and fix Node 22 requirement\n1832fb082 chore(deploy-cloudflare): upgrade wrangler to 4.87.0\n247caf0ca fix(deploy-cloudflare): wire Workers Assets binding and fix authRoutes prefix\nb6144b74e refactor(deploy-cloudflare): split api.ts into focused modules and fix connection pool\na7eccf955 chore(deploy-cloudflare): add .dev.vars for local trusted mode and wrangler KV state files\n791873f05 feat(deploy-cloudflare): add dev/deploy scripts and wrangler config\n1541cfa57 fix(deploy-cloudflare): resolve CF Workers runtime errors for multi-request operation\nf6b9b8499 feat(deploy-cloudflare): CF Workers shims and custom esbuild bundler\n43147d3b2 specstory\nc526738ee fix: resolve all TypeScript errors in deploy-cloudflare package\n377487835 fix: correct heartbeat sweep policy path and refactor api.ts route cache\n2c760660f feat: complete agents/projects route migration and Cloudflare adapter wiring\n02b387275 feat: migrate all server routes to transport-agnostic Handler shape\n359b88099 feat: add Cloudflare deployment target (foundational seams + deploy-cloudflare package)",
+        "is_error": false,
+        "tool_use_id": "toolu_01PTNvrsDrNRHjoaTsPe9H7X",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "0edf2146-4d2a-45ff-926d-7a9172d3feac",
+  "promptId": "0d05d433-ef46-4bba-8105-f1d502a42e1e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "0edf2146-4d2a-45ff-926d-7a9172d3feac",
+  "timestamp": "2026-04-30T19:33:49.212Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "6c21058d4 feat(deploy-cloudflare): register adapterRoutes in route-registry for config-schema and management endpoints\ne1829b138 fix(deploy-cloudflare): serve real adapter and plugin data from DB/registry instead of []\n935ea2ba8 fix(deploy-cloudflare): query plugins and ui-contributions from DB instead of returning []\n6f99479b9 fix(deploy-cloudflare): prevent unhandled rejections from async handlers called via synchronous next()\n0bade81ee feat(deploy-cloudflare): bridge raw Express handlers from access.ts into CF Workers\n6bbe293f4 fix(deploy-cloudflare): add CF-native handlers for all 501 routes and fix Node 22 requirement\n1832fb082 chore(deploy-cloudflare): upgrade wrangler to 4.87.0\n247caf0ca fix(deploy-cloudflare): wire Workers Assets binding and fix authRoutes prefix\nb6144b74e refactor(deploy-cloudflare): split api.ts into focused modules and fix connection pool\na7eccf955 chore(deploy-cloudflare): add .dev.vars for local trusted mode and wrangler KV state files\n791873f05 feat(deploy-cloudflare): add dev/deploy scripts and wrangler config\n1541cfa57 fix(deploy-cloudflare): resolve CF Workers runtime errors for multi-request operation\nf6b9b8499 feat(deploy-cloudflare): CF Workers shims and custom esbuild bundler\n43147d3b2 specstory\nc526738ee fix: resolve all TypeScript errors in deploy-cloudflare package\n377487835 fix: correct heartbeat sweep policy path and refactor api.ts route cache\n2c760660f feat: complete agents/projects route migration and Cloudflare adapter wiring\n02b387275 feat: migrate all server routes to transport-agnostic Handler shape\n359b88099 feat: add Cloudflare deployment target (foundational seams + deploy-cloudflare package)"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "4d886a5f-1352-4d25-861e-f40e4ffbd8ea",
+  "version": "2.1.123"
+}

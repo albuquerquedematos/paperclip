@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "3395\t    }\n3396\t    assertCompanyAccess(ctx, issue.companyId);\n3397\t    if (ctx.actor?.type !== \"board\") {\n3398\t      return Response.json({ error: \"Only board users can vote on AI feedback\" }, { status: 403 });\n3399\t    }\n3400\t\n3401\t    const body = await ctx.json\u003cRecord\u003cstring, unknown\u003e\u003e();\n3402\t    const actor = getActorInfo(ctx);\n3403\t    const result = await feedback.saveIssueVote({\n3404\t      issueId: id,\n3405\t      targetType: body.targetType as string,\n3406\t      targetId: body.targetId as string,\n3407\t      vote: body.vote as string,\n3408\t      reason: body.reason as string | undefined,\n3409\t      authorUserId: ctx.actor.userId ?? \"local-board\",\n3410\t      allowSharing: body.allowSharing === true,\n3411\t    });\n3412\t\n3413\t    await logActivity(db, {\n3414\t      companyId: issue.companyId,",
+        "tool_use_id": "toolu_016APoJQKMsYJBDe8WymkFmY",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "a07be342-d044-4f32-a1bf-7b93554be8b4",
+  "promptId": "e7cbb211-1d37-4345-b546-c3d4bd07be80",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "a07be342-d044-4f32-a1bf-7b93554be8b4",
+  "timestamp": "2026-04-30T22:59:54.235Z",
+  "toolUseResult": {
+    "file": {
+      "content": "    }\n    assertCompanyAccess(ctx, issue.companyId);\n    if (ctx.actor?.type !== \"board\") {\n      return Response.json({ error: \"Only board users can vote on AI feedback\" }, { status: 403 });\n    }\n\n    const body = await ctx.json\u003cRecord\u003cstring, unknown\u003e\u003e();\n    const actor = getActorInfo(ctx);\n    const result = await feedback.saveIssueVote({\n      issueId: id,\n      targetType: body.targetType as string,\n      targetId: body.targetId as string,\n      vote: body.vote as string,\n      reason: body.reason as string | undefined,\n      authorUserId: ctx.actor.userId ?? \"local-board\",\n      allowSharing: body.allowSharing === true,\n    });\n\n    await logActivity(db, {\n      companyId: issue.companyId,",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/issues.ts",
+      "numLines": 20,
+      "startLine": 3395,
+      "totalLines": 3677
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "6daab11b-76c4-459f-8eb0-42accce8a4df",
+  "version": "2.1.123"
+}

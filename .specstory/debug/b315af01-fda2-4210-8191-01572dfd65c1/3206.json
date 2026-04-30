@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "77\t  fingerprint: string;\n78\t  patterns: Array\u003c{ re: RegExp; paramNames: string[] }\u003e;\n79\t} | null = null;\n80\t\n81\t/** Converts an Express-style path (with :param segments) to a RegExp + param names. */\n82\tfunction pathToRegex(path: string): { re: RegExp; paramNames: string[] } {\n83\t  const paramNames: string[] = [];\n84\t  const pattern = path\n85\t    .replace(/[$()*+.?[\\\\\\]^{|}]/g, \"\\\\$\u0026\")\n86\t    .replace(/:([a-zA-Z_][a-zA-Z0-9_]*)/g, (_match, name: string) =\u003e {\n87\t      paramNames.push(name);\n88\t      return \"([^/]+)\";\n89\t    });\n90\t  return { re: new RegExp(`^${pattern}$`), paramNames };\n91\t}",
+        "tool_use_id": "toolu_01Hw4PyjzpQF8dkzenkSymy7",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "50f2e733-f79b-44cf-a389-56922b68228f",
+  "promptId": "7323a41a-dd8a-4783-b590-aea4ab5316a7",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "50f2e733-f79b-44cf-a389-56922b68228f",
+  "timestamp": "2026-04-30T21:36:52.333Z",
+  "toolUseResult": {
+    "file": {
+      "content": "  fingerprint: string;\n  patterns: Array\u003c{ re: RegExp; paramNames: string[] }\u003e;\n} | null = null;\n\n/** Converts an Express-style path (with :param segments) to a RegExp + param names. */\nfunction pathToRegex(path: string): { re: RegExp; paramNames: string[] } {\n  const paramNames: string[] = [];\n  const pattern = path\n    .replace(/[$()*+.?[\\\\\\]^{|}]/g, \"\\\\$\u0026\")\n    .replace(/:([a-zA-Z_][a-zA-Z0-9_]*)/g, (_match, name: string) =\u003e {\n      paramNames.push(name);\n      return \"([^/]+)\";\n    });\n  return { re: new RegExp(`^${pattern}$`), paramNames };\n}",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/route-registry.ts",
+      "numLines": 15,
+      "startLine": 77,
+      "totalLines": 187
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "681b7e3c-83a4-4b41-9838-d8a7cfcbacbe",
+  "version": "2.1.123"
+}

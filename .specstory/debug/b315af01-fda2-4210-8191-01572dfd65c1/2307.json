@@ -1,0 +1,62 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "signature": "EsoIClsIDRgCKkDzaul9mC+iplfBsD2UvbRaST3ZbGcj9YnkUwA/1LDDcZhnuI9UjbgIlF1z5Al/DsSmCpdh8mwg8ojeZv8xirA6MhFjbGF1ZGUtc29ubmV0LTQtNjgAEgxDXlHJkd1qCv/mBPwaDIZ5ykf9Z94MOCuyOiIwjtq/O8a9D1s0zyEL8/IJFYIJSboOL6wnEwlYEZ3R7V9eLo8Fa0NuPd7ZVsQB/4tvKpwHRW4uBAkJVJWsCOa/bVCTtO9vamTM32f37bTPp9DUnl+R0nTBdq6RK8Chg7JtF/Jp7nf1oUHDG0S2F0DA7o9tGJ2gzbUJejbGteVH5DHQCox5tyTkNqyrke6/APQbInq/6pF/y2ZEyHICtZ82aa5Ana6gvHaFMmObap4JC+6vygFZs0Y5g/JQuRD17ueZKoa76a0yvMTyOxRikF5qnbNnWZVz8sVjNzlBuJRQKKNWCL2vkq+PnCEzEKSmY8nsTxdUHECkEHsDD5tcePHxRBoSaYARynndD9sTh/Rfphq9jnP1mfihLgm8vmeRKF2SlY5XkN3u8MF+kXL0Oi5y03dgjNqxD+7nXFPOA7C/2C5j+YhzV0oSa/0nS7Y5ykeywrxQj8WQuoL/p8Vee4MLtP8O3nabOpXB07vAoodZytAUgRLqa6ngDRrkPSFZVvT9YptNaFVnBIq+1e/EmgFqSULlEpvOgwsQ3GYWfdRZUSYptJS2z1d7zAjy9lEIyIUsGf9i7C8jYeMC08Dyza7CdKEgAh1U+qgRJPkSWuNNoUeOhxH391ZXpCmkWf2c74/CBJxigVAoOwbDVIxKA9Afm+7DfLtvU0j2imh9jZVee14tq0ChA7lb3zA8gU0yAWDPoc0CGQM2mt/pqzjfWa81MgQEpvS8bF3lMgSWlIqjRT0vnRi+hsUqRUz+OVv7LWYgxUgKhGAAdOv+HmE7hlfnR1T1jkqIKRmNIvzsaP8rGJfwpPfYSKwGl8DktWknUNRi2FlLd/yLTucxPX1/RE+MCP7/vxbJjDXLuqAeDcBg39gI/5ChXESJAJ2po7ZkM8fdn3EocyUsXmOQWZb5+Sh96uXR4mWgD5ERTRhpgHh5TnPk7MdZ/tB8KnVwgBRyT5Pe1L4zJxsD7vBFZLSdXZsYl17r5gVwJn8FxrUirZK3nI0D8k2uo69cS3Hj9X3KYkdOi00NeaDibE8xzPbGGFPwZMfJ/4qWuFWmtbqVNOQFN2s0kMPnEj80RGfCX+lV1WKKqGMTmcw89/ESaDO06vTnp/CJyKLSqxu8Y1XhXaquJRK1F8wm/YmzAwIkPmp/BqFUUtvHuEdnCa3hSyFCfb7C7dMtmO77SjUM4BA/G1FCG2oXlQTmlOIh1t2AhGJGoNQV+QfcHf1Cw5YhQZ74emxxPnSIz9rKW2Q4VVxnhBjTRGjs2J7qvdryYeWj/WHSVfA//1oG2Z7klJuDWCO4kBoOGAE=",
+        "thinking": "`agents.ts` already imports from `@paperclipai/adapter-claude-local`. Since `agentRoutes` is in `route-registry.ts`, the adapter packages are already in the bundle. Adding `registry.ts` to the imports won't significantly increase bundle size.\n\nLet me proceed with the implementation. I'll import `listServerAdapters`, `isOverridePaused` from `registry.ts`, `BUILTIN_ADAPTER_TYPES` from `builtin-adapter-types.ts`, and `getDisabledAdapterTypes` from `adapter-plugin-store.ts`.\n\n\nNow I'm setting up the `GET /api/adapters` handler to fetch all registered adapters, filter out disabled ones, and return them in the same format as the Node.js server would, sorted by type. Then I'll update `cf-extra-routes.ts` with this new endpoint.",
+        "type": "thinking"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01HwksLJJQuHHC2cuHEgVf8C",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 910
+      },
+      "cache_creation_input_tokens": 910,
+      "cache_read_input_tokens": 129428,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 910
+          },
+          "cache_creation_input_tokens": 910,
+          "cache_read_input_tokens": 129428,
+          "input_tokens": 1,
+          "output_tokens": 802,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 802,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "3643ca34-e1b8-4862-ab3e-ba6729064261",
+  "requestId": "req_011CaaWg7Q5Qg5d2pNXA2vGR",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T19:31:58.731Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "970b6373-b402-4287-8b25-e4854fb0477f",
+  "version": "2.1.123"
+}

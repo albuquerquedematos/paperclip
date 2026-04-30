@@ -1,0 +1,27 @@
+{
+  "agentId": "ae240282fd51e7edd",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\t/**\n2\t * Server-side execution logic for the Hermes Agent adapter.\n3\t *\n4\t * Spawns `hermes chat -q \"...\" -Q` as a child process, streams output,\n5\t * and returns structured results to Paperclip.\n6\t *\n7\t * Verified CLI flags (hermes chat):\n8\t *   -q/--query         single query (non-interactive)\n9\t *   -Q/--quiet         quiet mode (no banner/spinner, only response + session_id)\n10\t *   -m/--model         model name (e.g. anthropic/claude-sonnet-4)\n11\t *   -t/--toolsets      comma-separated toolsets to enable\n12\t *   --provider         inference provider (auto, openrouter, nous, etc.)\n13\t *   -r/--resume        resume session by ID\n14\t *   -w/--worktree      isolated git worktree\n15\t *   -v/--verbose       verbose output\n16\t *   --checkpoints      filesystem checkpoints\n17\t */\n18\timport { runChildProcess, buildPaperclipEnv, renderTemplate, ensureAbsoluteDirectory, } from \"@paperclipai/adapter-utils/server-utils\";\n19\timport { HERMES_CLI, DEFAULT_TIMEOUT_SEC, DEFAULT_GRACE_SEC, VALID_PROVIDERS, } from \"../shared/constants.js\";\n20\t// ---------------------------------------------------------------------------\n21\t// Config helpers\n22\t// ---------------------------------------------------------------------------\n23\tfunction cfgString(v) {\n24\t    return typeof v === \"string\" \u0026\u0026 v.length \u003e 0 ? v : undefined;\n25\t}\n26\tfunction cfgNumber(v) {\n27\t    return typeof v === \"number\" ? v : undefined;\n28\t}\n29\tfunction cfgBoolean(v) {\n30\t    return typeof v === \"boolean\" ? v : undefined;\n31\t}\n32\tfunction cfgStringArray(v) {\n33\t    return Array.isArray(v) \u0026\u0026 v.every((i) =\u003e typeof i === \"string\")\n34\t        ? v\n35\t        : undefined;\n36\t}\n37\t// ---------------------------------------------------------------------------\n38\t// Wake-up prompt builder\n39\t// ---------------------------------------------------------------------------\n40\tconst DEFAULT_PROMPT_TEMPLATE = `You are \"{{agentName}}\", an AI agent employee in a Paperclip-managed company.\n41\t\n42\tIMPORTANT: Use \\`terminal\\` tool with \\`curl\\` for ALL Paperclip API calls (web_extract and browser cannot access localhost).\n43\t\n44\tYour Paperclip identity:\n45\t  Agent ID: {{agentId}}\n46\t  Company ID: {{companyId}}\n47\t  API Base: {{paperclipApiUrl}}\n48\t\n49\t{{#taskId}}\n50\t## Assigned Task\n51\t\n52\tIssue ID: {{taskId}}\n53\tTitle: {{taskTitle}}\n54\t\n55\t{{taskBody}}\n56\t\n57\t## Workflow\n58\t\n59\t1. Work on the task using your tools\n60\t2. When done, mark the issue as completed:\n\n\u003csystem-reminder\u003e\nWhenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.\n\u003c/system-reminder\u003e\n",
+        "tool_use_id": "toolu_019s98e8ghaxwSYDHDptdLW7",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "5d3ee5f5-cf6d-43fd-b688-5a248d77ac49",
+  "promptId": "0d05d433-ef46-4bba-8105-f1d502a42e1e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "5d3ee5f5-cf6d-43fd-b688-5a248d77ac49",
+  "timestamp": "2026-04-30T19:28:19.994Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "0ab1ec16-5757-463f-8d0c-00ce125c1a11",
+  "version": "2.1.123"
+}

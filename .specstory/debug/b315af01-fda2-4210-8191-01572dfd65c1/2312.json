@@ -1,0 +1,79 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/cf-extra-routes.ts has been updated successfully.",
+        "tool_use_id": "toolu_01NcD6nJmmDDVquTU8GzaKCE",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "9bd285fd-7943-4ed7-8c7e-eefd69b661c2",
+  "promptId": "0d05d433-ef46-4bba-8105-f1d502a42e1e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "9bd285fd-7943-4ed7-8c7e-eefd69b661c2",
+  "timestamp": "2026-04-30T19:32:11.823Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/cf-extra-routes.ts",
+    "newString": "  // -------------------------------------------------------------------------\n  // GET /api/adapters — built-in adapters from registry (external adapters\n  // require FS-backed plugin store not available in CF; built-ins always load)\n  // -------------------------------------------------------------------------\n  app.get(\"/api/adapters\", (c) =\u003e {\n    const adapters = listServerAdapters();\n    const disabledSet = new Set(getDisabledAdapterTypes());\n    const result = adapters\n      .map((adapter) =\u003e ({\n        type: adapter.type,\n        label: adapter.type,\n        source: \"builtin\" as const,\n        modelsCount: (adapter.models ?? []).length,\n        loaded: true,\n        disabled: disabledSet.has(adapter.type),\n        capabilities: {\n          supportsInstructionsBundle: adapter.supportsInstructionsBundle ?? false,\n          supportsSkills: Boolean(adapter.listSkills || adapter.syncSkills),\n          supportsLocalAgentJwt: adapter.supportsLocalAgentJwt ?? false,\n          requiresMaterializedRuntimeSkills: adapter.requiresMaterializedRuntimeSkills ?? false,\n        },\n        overridePaused: BUILTIN_ADAPTER_TYPES.has(adapter.type)\n          ? isOverridePaused(adapter.type)\n          : undefined,\n      }))\n      .sort((a, b) =\u003e a.type.localeCompare(b.type));\n    return c.json(result);\n  });",
+    "oldString": "  // -------------------------------------------------------------------------\n  // GET /api/adapters — no adapter registry in CF Workers\n  // -------------------------------------------------------------------------\n  app.get(\"/api/adapters\", (c) =\u003e c.json([]));",
+    "originalFile": null,
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          " ",
+          " export function registerCfExtraRoutes(app: Hono\u003c{ Bindings: Env }\u003e): void {",
+          "   // -------------------------------------------------------------------------",
+          "-  // GET /api/adapters — no adapter registry in CF Workers",
+          "+  // GET /api/adapters — built-in adapters from registry (external adapters",
+          "+  // require FS-backed plugin store not available in CF; built-ins always load)",
+          "   // -------------------------------------------------------------------------",
+          "-  app.get(\"/api/adapters\", (c) =\u003e c.json([]));",
+          "+  app.get(\"/api/adapters\", (c) =\u003e {",
+          "+    const adapters = listServerAdapters();",
+          "+    const disabledSet = new Set(getDisabledAdapterTypes());",
+          "+    const result = adapters",
+          "+      .map((adapter) =\u003e ({",
+          "+        type: adapter.type,",
+          "+        label: adapter.type,",
+          "+        source: \"builtin\" as const,",
+          "+        modelsCount: (adapter.models ?? []).length,",
+          "+        loaded: true,",
+          "+        disabled: disabledSet.has(adapter.type),",
+          "+        capabilities: {",
+          "+          supportsInstructionsBundle: adapter.supportsInstructionsBundle ?? false,",
+          "+          supportsSkills: Boolean(adapter.listSkills || adapter.syncSkills),",
+          "+          supportsLocalAgentJwt: adapter.supportsLocalAgentJwt ?? false,",
+          "+          requiresMaterializedRuntimeSkills: adapter.requiresMaterializedRuntimeSkills ?? false,",
+          "+        },",
+          "+        overridePaused: BUILTIN_ADAPTER_TYPES.has(adapter.type)",
+          "+          ? isOverridePaused(adapter.type)",
+          "+          : undefined,",
+          "+      }))",
+          "+      .sort((a, b) =\u003e a.type.localeCompare(b.type));",
+          "+    return c.json(result);",
+          "+  });",
+          " ",
+          "   // -------------------------------------------------------------------------",
+          "   // GET /api/plugins — list installed plugins from DB (registry state comes"
+        ],
+        "newLines": 33,
+        "newStart": 87,
+        "oldLines": 9,
+        "oldStart": 87
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "df6adb91-a461-4e26-9991-6eb7c2947219",
+  "version": "2.1.123"
+}

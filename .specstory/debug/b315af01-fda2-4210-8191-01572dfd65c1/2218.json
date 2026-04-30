@@ -1,0 +1,85 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": [
+          {
+            "text": "Excellent! Now I have all the information I need. Let me compile the comprehensive report:\n\n## Summary: AI Model Adapters - HTTP/Fetch Compatibility Analysis\n\nBased on my analysis of the Paperclip adapter codebase, here's the breakdown of each adapter by type and Cloudflare Workers compatibility:\n\n### HTTP/Fetch-Compatible Adapters (Can run in Cloudflare Workers)\n\n**1. httpAdapter**\n- **Type string:** `\"http\"`\n- **Package:** Built-in (`server/src/adapters/http/`)\n- **Mechanism:** Uses native `fetch()` API with `AbortController` for timeouts\n- **CF Workers compatible:** **YES** - Pure HTTP/fetch implementation\n- **Details:** Simple HTTP POST/GET wrapper that makes HTTP requests to external endpoints\n\n**2. openclawGatewayAdapter** \n- **Type string:** `\"openclaw_gateway\"`\n- **Package:** `@paperclipai/adapter-openclaw-gateway`\n- **Mechanism:** Uses `WebSocket` from `ws` module for gateway communication (via remote WebSocket connection)\n- **CF Workers compatible:** **MAYBE** - WebSocket protocol is supported in CF Workers, but the `ws` module would need to work in the Workers runtime (likely needs `npm:ws` compatible import)\n- **Details:** Connects to OpenClaw gateway via WebSocket, sends/receives JSON frames, handles encryption/authentication\n\n### Subprocess-Only Adapters (Require node:child_process, cannot run in CF Workers)\n\n**3. claudeLocalAdapter**\n- **Type string:** `\"claude_local\"`\n- **Package:** `@paperclipai/adapter-claude-local`\n- **Mechanism:** Spawns local Claude process using `runAdapterExecutionTargetProcess()` from execution-target utilities\n- **CF Workers compatible:** **NO** - Requires subprocess spawning\n\n**4. codexLocalAdapter**\n- **Type string:** `\"codex_local\"`\n- **Package:** `@paperclipai/adapter-codex-local`\n- **Mechanism:** Spawns local Codex process, uses `runAdapterExecutionTargetProcess()` and shell commands\n- **CF Workers compatible:** **NO** - Requires subprocess spawning\n\n**5. geminiLocalAdapter**\n- **Type string:** `\"gemini_local\"`\n- **Package:** `@paperclipai/adapter-gemini-local`\n- **Mechanism:** Spawns local Gemini process using `runAdapterExecutionTargetProcess()` and `runChildProcess()`\n- **CF Workers compatible:** **NO** - Requires subprocess spawning\n\n**6. openCodeLocalAdapter**\n- **Type string:** `\"opencode_local\"`\n- **Package:** `@paperclipai/adapter-opencode-local`\n- **Mechanism:** Spawns local OpenCode process, uses `runChildProcess()` and execution-target utilities\n- **CF Workers compatible:** **NO** - Requires subprocess spawning\n\n**7. piLocalAdapter**\n- **Type string:** `\"pi_local\"`\n- **Package:** `@paperclipai/adapter-pi-local`\n- **Mechanism:** Spawns local Pi process using `runAdapterExecutionTargetProcess()` and execution-target utilities\n- **CF Workers compatible:** **NO** - Requires subprocess spawning\n\n**8. cursorLocalAdapter**\n- **Type string:** `\"cursor\"`\n- **Package:** `@paperclipai/adapter-cursor-local`\n- **Mechanism:** Spawns local Cursor process using `runAdapterExecutionTargetProcess()` and execution-target utilities\n- **CF Workers compatible:** **NO** - Requires subprocess spawning\n\n**9. hermesLocalAdapter**\n- **Type string:** `\"hermes_local\"`\n- **Package:** `hermes-paperclip-adapter` (external)\n- **Mechanism:** Spawns `hermes chat` CLI as child process using `runChildProcess()` - explicitly documented in source as \"Spawns `hermes chat -q \"...\" -Q` as a child process\"\n- **CF Workers compatible:** **NO** - Requires subprocess spawning\n\n**10. processAdapter**\n- **Type string:** `\"process\"`\n- **Package:** Built-in (`server/src/adapters/process/`)\n- **Mechanism:** Generic subprocess spawner using `runChildProcess()` - directly executes arbitrary commands\n- **CF Workers compatible:** **NO** - Requires subprocess spawning\n\n---\n\n### Key Findings\n\n**For Cloudflare Workers Deployment:**\n- Only **2 adapters** are CF Workers-compatible out-of-the-box: `http` and potentially `openclaw_gateway`\n- All \"local\" variants require spawning processes on the host machine, making them incompatible with serverless/worker environments\n- The `process` adapter is a pure subprocess executor, definitively incompatible\n\n**Execution Pattern Summary:**\n- **HTTP/Network-based:** `httpAdapter`, `openclawGatewayAdapter` (WebSocket)\n- **Subprocess-based:** All other 8 adapters use `runAdapterExecutionTargetProcess()`, `runChildProcess()`, or `runAdapterExecutionTargetShellCommand()` from `@paperclipai/adapter-utils/execution-target` and `@paperclipai/adapter-utils/server-utils`",
+            "type": "text"
+          }
+        ],
+        "tool_use_id": "toolu_01Tqz3ys3Y7xmowf6wYGYbwS",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "a3796949-9533-40cc-97f9-63f97f5a6831",
+  "promptId": "0d05d433-ef46-4bba-8105-f1d502a42e1e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "a3796949-9533-40cc-97f9-63f97f5a6831",
+  "timestamp": "2026-04-30T19:28:33.230Z",
+  "toolUseResult": {
+    "agentId": "ae240282fd51e7edd",
+    "agentType": "Explore",
+    "content": [
+      {
+        "text": "Excellent! Now I have all the information I need. Let me compile the comprehensive report:\n\n## Summary: AI Model Adapters - HTTP/Fetch Compatibility Analysis\n\nBased on my analysis of the Paperclip adapter codebase, here's the breakdown of each adapter by type and Cloudflare Workers compatibility:\n\n### HTTP/Fetch-Compatible Adapters (Can run in Cloudflare Workers)\n\n**1. httpAdapter**\n- **Type string:** `\"http\"`\n- **Package:** Built-in (`server/src/adapters/http/`)\n- **Mechanism:** Uses native `fetch()` API with `AbortController` for timeouts\n- **CF Workers compatible:** **YES** - Pure HTTP/fetch implementation\n- **Details:** Simple HTTP POST/GET wrapper that makes HTTP requests to external endpoints\n\n**2. openclawGatewayAdapter** \n- **Type string:** `\"openclaw_gateway\"`\n- **Package:** `@paperclipai/adapter-openclaw-gateway`\n- **Mechanism:** Uses `WebSocket` from `ws` module for gateway communication (via remote WebSocket connection)\n- **CF Workers compatible:** **MAYBE** - WebSocket protocol is supported in CF Workers, but the `ws` module would need to work in the Workers runtime (likely needs `npm:ws` compatible import)\n- **Details:** Connects to OpenClaw gateway via WebSocket, sends/receives JSON frames, handles encryption/authentication\n\n### Subprocess-Only Adapters (Require node:child_process, cannot run in CF Workers)\n\n**3. claudeLocalAdapter**\n- **Type string:** `\"claude_local\"`\n- **Package:** `@paperclipai/adapter-claude-local`\n- **Mechanism:** Spawns local Claude process using `runAdapterExecutionTargetProcess()` from execution-target utilities\n- **CF Workers compatible:** **NO** - Requires subprocess spawning\n\n**4. codexLocalAdapter**\n- **Type string:** `\"codex_local\"`\n- **Package:** `@paperclipai/adapter-codex-local`\n- **Mechanism:** Spawns local Codex process, uses `runAdapterExecutionTargetProcess()` and shell commands\n- **CF Workers compatible:** **NO** - Requires subprocess spawning\n\n**5. geminiLocalAdapter**\n- **Type string:** `\"gemini_local\"`\n- **Package:** `@paperclipai/adapter-gemini-local`\n- **Mechanism:** Spawns local Gemini process using `runAdapterExecutionTargetProcess()` and `runChildProcess()`\n- **CF Workers compatible:** **NO** - Requires subprocess spawning\n\n**6. openCodeLocalAdapter**\n- **Type string:** `\"opencode_local\"`\n- **Package:** `@paperclipai/adapter-opencode-local`\n- **Mechanism:** Spawns local OpenCode process, uses `runChildProcess()` and execution-target utilities\n- **CF Workers compatible:** **NO** - Requires subprocess spawning\n\n**7. piLocalAdapter**\n- **Type string:** `\"pi_local\"`\n- **Package:** `@paperclipai/adapter-pi-local`\n- **Mechanism:** Spawns local Pi process using `runAdapterExecutionTargetProcess()` and execution-target utilities\n- **CF Workers compatible:** **NO** - Requires subprocess spawning\n\n**8. cursorLocalAdapter**\n- **Type string:** `\"cursor\"`\n- **Package:** `@paperclipai/adapter-cursor-local`\n- **Mechanism:** Spawns local Cursor process using `runAdapterExecutionTargetProcess()` and execution-target utilities\n- **CF Workers compatible:** **NO** - Requires subprocess spawning\n\n**9. hermesLocalAdapter**\n- **Type string:** `\"hermes_local\"`\n- **Package:** `hermes-paperclip-adapter` (external)\n- **Mechanism:** Spawns `hermes chat` CLI as child process using `runChildProcess()` - explicitly documented in source as \"Spawns `hermes chat -q \"...\" -Q` as a child process\"\n- **CF Workers compatible:** **NO** - Requires subprocess spawning\n\n**10. processAdapter**\n- **Type string:** `\"process\"`\n- **Package:** Built-in (`server/src/adapters/process/`)\n- **Mechanism:** Generic subprocess spawner using `runChildProcess()` - directly executes arbitrary commands\n- **CF Workers compatible:** **NO** - Requires subprocess spawning\n\n---\n\n### Key Findings\n\n**For Cloudflare Workers Deployment:**\n- Only **2 adapters** are CF Workers-compatible out-of-the-box: `http` and potentially `openclaw_gateway`\n- All \"local\" variants require spawning processes on the host machine, making them incompatible with serverless/worker environments\n- The `process` adapter is a pure subprocess executor, definitively incompatible\n\n**Execution Pattern Summary:**\n- **HTTP/Network-based:** `httpAdapter`, `openclawGatewayAdapter` (WebSocket)\n- **Subprocess-based:** All other 8 adapters use `runAdapterExecutionTargetProcess()`, `runChildProcess()`, or `runAdapterExecutionTargetShellCommand()` from `@paperclipai/adapter-utils/execution-target` and `@paperclipai/adapter-utils/server-utils`",
+        "type": "text"
+      }
+    ],
+    "prompt": "In the repo at /Users/migmac/Documents/GitHub/_ABM/paperclip, I need to understand which AI model adapters are HTTP/fetch-compatible (can run in Cloudflare Workers) vs subprocess-only (require node:child_process to spawn a local process).\n\nRelevant files:\n- server/src/adapters/registry.ts — registers: claudeLocalAdapter, codexLocalAdapter, openCodeLocalAdapter, piLocalAdapter, cursorLocalAdapter, geminiLocalAdapter, openclawGatewayAdapter, hermesLocalAdapter, processAdapter, httpAdapter\n\nFor each of these adapters, I need to know:\n1. What package it imports from (e.g. @paperclipai/adapter-claude-local)\n2. Whether it spawns a subprocess (uses node:child_process, execa, or similar) or makes HTTP/fetch calls to an external API\n3. What the adapter `type` string is\n\nPlease read:\n- server/src/adapters/registry.ts (lines 1-100 to see imports and type assignments)\n- The first ~40 lines of each adapter package's main file to determine if it's subprocess or HTTP based\n\nFocus on these packages in packages/ or node_modules under packages/:\n- @paperclipai/adapter-claude-local\n- @paperclipai/adapter-gemini-local  \n- @paperclipai/adapter-openclaw-gateway (openclawGatewayAdapter)\n- httpAdapter source\n- processAdapter source\n\nReport: for each adapter, its type string and whether it's HTTP-compatible in CF Workers (yes/no/maybe).\n",
+    "status": "completed",
+    "toolStats": {
+      "bashCount": 10,
+      "editFileCount": 0,
+      "linesAdded": 0,
+      "linesRemoved": 0,
+      "otherToolCount": 0,
+      "readCount": 16,
+      "searchCount": 0
+    },
+    "totalDurationMs": 39237,
+    "totalTokens": 73703,
+    "totalToolUseCount": 26,
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 1265
+      },
+      "cache_creation_input_tokens": 1265,
+      "cache_read_input_tokens": 71179,
+      "inference_geo": "",
+      "input_tokens": 5,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 1265
+          },
+          "cache_creation_input_tokens": 1265,
+          "cache_read_input_tokens": 71179,
+          "input_tokens": 5,
+          "output_tokens": 1254,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 1254,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "b467258f-4e12-4a92-ac17-9866176f4072",
+  "version": "2.1.123"
+}

@@ -1,0 +1,71 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01R7PWYiun4VYKMQi4sXiUNZ",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/routes/agents-cf.ts",
+          "new_string": " * Routes covered:\n *   POST   /api/agents/:id/wakeup                       — heartbeatService.wakeup\n *   POST   /api/agents/:id/heartbeat/invoke             — heartbeatService.invoke\n *   POST   /api/agents/:id/claude-login                 — claude OAuth flow\n *   GET    /api/agents/:id/instructions-bundle          — fs read of bundle dir\n *   GET    /api/agents/:id/instructions-bundle/file     — fs read of one file\n *   PUT    /api/agents/:id/instructions-bundle/file     — fs write\n *   DELETE /api/agents/:id/instructions-bundle/file     — fs unlink\n *   POST   /api/companies/:companyId/adapters/:type/test-environment\n *                                                       — adapter preflight: spawns claude,\n *                                                         calls fs.access on cwd\n *   GET    /api/companies/:companyId/adapters/:type/detect-model\n *                                                       — runs claude to query model\n *   GET    /api/heartbeat-runs/:runId/log               — fs read of run log\n *                                                         (fs.stat .catch swallows the\n *                                                         CF shim error and returns 404,\n *                                                         so we have to route this by path\n *                                                         instead of relying on auto-fallback)\n *   GET    /api/workspace-operations/:operationId/log   — same: fs read of op log",
+          "old_string": " * Routes covered:\n *   POST   /api/agents/:id/wakeup                       — heartbeatService.wakeup\n *   POST   /api/agents/:id/heartbeat/invoke             — heartbeatService.invoke\n *   POST   /api/agents/:id/claude-login                 — claude OAuth flow\n *   GET    /api/agents/:id/instructions-bundle          — fs read of bundle dir\n *   GET    /api/agents/:id/instructions-bundle/file     — fs read of one file\n *   PUT    /api/agents/:id/instructions-bundle/file     — fs write\n *   DELETE /api/agents/:id/instructions-bundle/file     — fs unlink\n *   POST   /api/companies/:companyId/adapters/:type/test-environment\n *                                                       — adapter preflight: spawns claude,\n *                                                         calls fs.access on cwd\n *   GET    /api/companies/:companyId/adapters/:type/detect-model\n *                                                       — runs claude to query model",
+          "replace_all": false
+        },
+        "name": "Edit",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_012PNFUfed6sQ9EVcwY4N1ZG",
+    "model": "claude-opus-4-7",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 637,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 637,
+      "cache_read_input_tokens": 523042,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 637,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 637,
+          "cache_read_input_tokens": 523042,
+          "input_tokens": 1,
+          "output_tokens": 1030,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 1030,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "6ef2a30d-873f-4d0f-9231-100942989004",
+  "requestId": "req_011Caar9dQprbaRctTKc76sV",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T23:47:27.703Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "cdd38dc2-97c4-4e4e-82da-7866e0ef0677",
+  "version": "2.1.123"
+}

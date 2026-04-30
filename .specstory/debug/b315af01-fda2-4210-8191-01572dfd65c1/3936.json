@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "\u003e paperclip@ test:cf-smoke /Users/migmac/Documents/GitHub/_ABM/paperclip\n\u003e vitest run --config tests/cf-smoke/vitest.config.ts\n\n\n RUN  v3.2.4 /Users/migmac/Documents/GitHub/_ABM/paperclip\n\n\n⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  tests/cf-smoke/cf-smoke.spec.ts [ tests/cf-smoke/cf-smoke.spec.ts ]\nTSConfckParseError: parsing /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/droid-local/tsconfig.json failed: Error: ENOENT: no such file or directory, open '/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/droid-local/tsconfig.json'\n  Plugin: vite:esbuild\n  File: /Users/migmac/Documents/GitHub/_ABM/paperclip/tests/cf-smoke/cf-smoke.spec.ts\n ❯ node_modules/.pnpm/vite@7.3.1_@types+node@25.6.0_jiti@2.6.1_lightningcss@1.30.2_tsx@4.21.0/node_modules/vite/dist/node/chunks/config.js:5719:9\n\nCaused by: Error: ENOENT: no such file or directory, open '/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/droid-local/tsconfig.json'\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\n\n Test Files  1 failed (1)\n      Tests  no tests\n   Start at  00:02:13\n   Duration  146ms (transform 9ms, setup 0ms, collect 0ms, tests 0ms, environment 0ms, prepare 42ms)\n\n ELIFECYCLE  Command failed with exit code 1.",
+        "is_error": false,
+        "tool_use_id": "toolu_01KMaspCdYj3oaTSxgC2F8Sc",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "0cfd5054-23d7-4ca4-98b1-a5e102f5f06e",
+  "promptId": "e7cbb211-1d37-4345-b546-c3d4bd07be80",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "0cfd5054-23d7-4ca4-98b1-a5e102f5f06e",
+  "timestamp": "2026-04-30T23:02:13.461Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "\u003e paperclip@ test:cf-smoke /Users/migmac/Documents/GitHub/_ABM/paperclip\n\u003e vitest run --config tests/cf-smoke/vitest.config.ts\n\n\n RUN  v3.2.4 /Users/migmac/Documents/GitHub/_ABM/paperclip\n\n\n⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  tests/cf-smoke/cf-smoke.spec.ts [ tests/cf-smoke/cf-smoke.spec.ts ]\nTSConfckParseError: parsing /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/droid-local/tsconfig.json failed: Error: ENOENT: no such file or directory, open '/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/droid-local/tsconfig.json'\n  Plugin: vite:esbuild\n  File: /Users/migmac/Documents/GitHub/_ABM/paperclip/tests/cf-smoke/cf-smoke.spec.ts\n ❯ node_modules/.pnpm/vite@7.3.1_@types+node@25.6.0_jiti@2.6.1_lightningcss@1.30.2_tsx@4.21.0/node_modules/vite/dist/node/chunks/config.js:5719:9\n\nCaused by: Error: ENOENT: no such file or directory, open '/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/droid-local/tsconfig.json'\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\n\n Test Files  1 failed (1)\n      Tests  no tests\n   Start at  00:02:13\n   Duration  146ms (transform 9ms, setup 0ms, collect 0ms, tests 0ms, environment 0ms, prepare 42ms)\n\n ELIFECYCLE  Command failed with exit code 1."
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "119f5347-9765-4870-ae8b-2765fecb8948",
+  "version": "2.1.123"
+}

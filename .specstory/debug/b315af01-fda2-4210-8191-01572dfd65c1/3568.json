@@ -1,0 +1,61 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "text": "Need to proxy `wakeup`, `heartbeat/invoke`, `claude-login`, and `instructions-bundle/*` (all spawn `claude` or use `fs`). Let me create that handler:",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01BtTTiUkg8HqFSFg4WdgnJJ",
+    "model": "claude-opus-4-7",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 4120,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 4120,
+      "cache_read_input_tokens": 254285,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 4120,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 4120,
+          "cache_read_input_tokens": 254285,
+          "input_tokens": 1,
+          "output_tokens": 2555,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 2555,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "ecf4c275-9932-4a57-ba02-955e3d4a4edf",
+  "requestId": "req_011CaamCLjERnjPkbPqr2MyQ",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T22:42:29.774Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "ab9881c4-f9e0-4afa-8994-21e7ac5ae5ba",
+  "version": "2.1.123"
+}

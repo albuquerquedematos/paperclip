@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "1642\t  const getPluginDashboard: Handler = async (ctx) =\u003e {\n1643\t    assertBoardOrgAccess(ctx);\n1644\t    const pluginId = ctx.param(\"pluginId\");\n1645\t    if (!pluginId) return Response.json({ error: \"Missing pluginId\" }, { status: 400 });\n1646\t\n1647\t    const plugin = await resolvePlugin(registry, pluginId);\n1648\t    if (!plugin) {\n1649\t      return Response.json({ error: \"Plugin not found\" }, { status: 404 });\n1650\t    }\n1651\t\n1652\t    let worker: {\n1653\t      status: string;\n1654\t      pid: number | null;\n1655\t      uptime: number | null;\n1656\t      consecutiveCrashes: number;\n1657\t      totalCrashes: number;\n1658\t      pendingRequests: number;\n1659\t      lastCrashAt: number | null;\n1660\t      nextRestartAt: number | null;\n1661\t    } | null = null;\n1662\t\n1663\t    const wm = bridgeDeps?.workerManager ?? webhookDeps?.workerManager ?? null;\n1664\t    if (wm) {\n1665\t      const handle = wm.getWorker(plugin.id);\n1666\t      if (handle) {\n1667\t        const diag = handle.diagnostics();\n1668\t        worker = {\n1669\t          status: diag.status,\n1670\t          pid: diag.pid,\n1671\t          uptime: diag.uptime,\n1672\t          consecutiveCrashes: diag.consecutiveCrashes,\n1673\t          totalCrashes: diag.totalCrashes,\n1674\t          pendingRequests: diag.pendingRequests,\n1675\t          lastCrashAt: diag.lastCrashAt,\n1676\t          nextRestartAt: diag.nextRestartAt,\n1677\t        };\n1678\t      }\n1679\t    }\n1680\t\n1681\t    let recentJobRuns: Array\u003c{\n1682\t      id: string;\n1683\t      jobId: string;\n1684\t      jobKey?: string;\n1685\t      trigger: string;\n1686\t      status: string;\n1687\t      durationMs: number | null;\n1688\t      error: string | null;\n1689\t      startedAt: string | null;\n1690\t      finishedAt: string | null;\n1691\t      createdAt: string;\n1692\t    }\u003e = [];\n1693\t\n1694\t    if (jobDeps) {\n1695\t      try {\n1696\t        const runs = await jobDeps.jobStore.listRunsByPlugin(plugin.id, undefined, 10);\n1697\t        const jobs = await jobDeps.jobStore.listJobs(plugin.id);\n1698\t        const jobKeyMap = new Map(jobs.map((j) =\u003e [j.id, j.jobKey]));\n1699\t\n1700\t        recentJobRuns = runs\n1701\t          .sort((a, b) =\u003e new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())\n1702\t          .map((r) =\u003e ({\n1703\t            id: r.id,\n1704\t            jobId: r.jobId,\n1705\t            jobKey: jobKeyMap.get(r.jobId) ?? undefined,\n1706\t            trigger: r.trigger,",
+        "tool_use_id": "toolu_01AE8ArFq3UyHy9FDnbJ69KC",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "4eb137ee-3854-4bcc-b185-e1b682e7ffb8",
+  "promptId": "a0dd8f6d-e0d4-4f57-8650-1c60e1512696",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "4eb137ee-3854-4bcc-b185-e1b682e7ffb8",
+  "timestamp": "2026-04-30T21:49:02.982Z",
+  "toolUseResult": {
+    "file": {
+      "content": "  const getPluginDashboard: Handler = async (ctx) =\u003e {\n    assertBoardOrgAccess(ctx);\n    const pluginId = ctx.param(\"pluginId\");\n    if (!pluginId) return Response.json({ error: \"Missing pluginId\" }, { status: 400 });\n\n    const plugin = await resolvePlugin(registry, pluginId);\n    if (!plugin) {\n      return Response.json({ error: \"Plugin not found\" }, { status: 404 });\n    }\n\n    let worker: {\n      status: string;\n      pid: number | null;\n      uptime: number | null;\n      consecutiveCrashes: number;\n      totalCrashes: number;\n      pendingRequests: number;\n      lastCrashAt: number | null;\n      nextRestartAt: number | null;\n    } | null = null;\n\n    const wm = bridgeDeps?.workerManager ?? webhookDeps?.workerManager ?? null;\n    if (wm) {\n      const handle = wm.getWorker(plugin.id);\n      if (handle) {\n        const diag = handle.diagnostics();\n        worker = {\n          status: diag.status,\n          pid: diag.pid,\n          uptime: diag.uptime,\n          consecutiveCrashes: diag.consecutiveCrashes,\n          totalCrashes: diag.totalCrashes,\n          pendingRequests: diag.pendingRequests,\n          lastCrashAt: diag.lastCrashAt,\n          nextRestartAt: diag.nextRestartAt,\n        };\n      }\n    }\n\n    let recentJobRuns: Array\u003c{\n      id: string;\n      jobId: string;\n      jobKey?: string;\n      trigger: string;\n      status: string;\n      durationMs: number | null;\n      error: string | null;\n      startedAt: string | null;\n      finishedAt: string | null;\n      createdAt: string;\n    }\u003e = [];\n\n    if (jobDeps) {\n      try {\n        const runs = await jobDeps.jobStore.listRunsByPlugin(plugin.id, undefined, 10);\n        const jobs = await jobDeps.jobStore.listJobs(plugin.id);\n        const jobKeyMap = new Map(jobs.map((j) =\u003e [j.id, j.jobKey]));\n\n        recentJobRuns = runs\n          .sort((a, b) =\u003e new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())\n          .map((r) =\u003e ({\n            id: r.id,\n            jobId: r.jobId,\n            jobKey: jobKeyMap.get(r.jobId) ?? undefined,\n            trigger: r.trigger,",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/plugins.ts",
+      "numLines": 65,
+      "startLine": 1642,
+      "totalLines": 2071
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "68fe583a-35da-4fb9-8dc9-23a7f591cc80",
+  "version": "2.1.123"
+}

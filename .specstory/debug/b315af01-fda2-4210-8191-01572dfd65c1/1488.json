@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "* Host localhost:8787 was resolved.\n* IPv6: ::1\n* IPv4: 127.0.0.1\n  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current\n                                 Dload  Upload   Total   Spent    Left  Speed\n\r  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying [::1]:8787...\n* Connected to localhost (::1) port 8787\n\u003e GET /api/companies/9a7cf1f3-02a7-4751-9cdb-671c9c68edb5/events/ws HTTP/1.1\r\n\u003e Host: localhost:8787\r\n\u003e User-Agent: curl/8.7.1\r\n\u003e Accept: */*\r\n\u003e Upgrade: websocket\r\n\u003e Connection: Upgrade\r\n\u003e Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==\r\n\u003e Sec-WebSocket-Version: 13\r\n\u003e \r\n* Request completely sent off\n\u003c HTTP/1.1 101 Switching Protocols\r\n\u003c Connection: Upgrade\r\n\u003c Upgrade: websocket",
+        "is_error": false,
+        "tool_use_id": "toolu_015nXcs9FAd12962gYJcNTTJ",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "c87e70aa-4fe9-46c9-b99a-dcc042d1244b",
+  "promptId": "9aae9721-e466-4259-b66e-e724bd2f2c66",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "c87e70aa-4fe9-46c9-b99a-dcc042d1244b",
+  "timestamp": "2026-04-30T18:32:13.157Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "* Host localhost:8787 was resolved.\n* IPv6: ::1\n* IPv4: 127.0.0.1\n  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current\n                                 Dload  Upload   Total   Spent    Left  Speed\n\r  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying [::1]:8787...\n* Connected to localhost (::1) port 8787\n\u003e GET /api/companies/9a7cf1f3-02a7-4751-9cdb-671c9c68edb5/events/ws HTTP/1.1\r\n\u003e Host: localhost:8787\r\n\u003e User-Agent: curl/8.7.1\r\n\u003e Accept: */*\r\n\u003e Upgrade: websocket\r\n\u003e Connection: Upgrade\r\n\u003e Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==\r\n\u003e Sec-WebSocket-Version: 13\r\n\u003e \r\n* Request completely sent off\n\u003c HTTP/1.1 101 Switching Protocols\r\n\u003c Connection: Upgrade\r\n\u003c Upgrade: websocket"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "e3cc37be-c332-4d94-aaea-f44d47971fe9",
+  "version": "2.1.123"
+}

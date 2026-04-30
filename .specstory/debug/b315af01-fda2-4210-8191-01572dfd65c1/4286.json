@@ -1,0 +1,68 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/tests/cf-smoke/cf-smoke.spec.ts has been updated successfully.",
+        "tool_use_id": "toolu_012LUiwd7BShnmKgKNYoJVgn",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "2102c783-68bc-4d0a-8414-40c3ca510314",
+  "promptId": "a4189397-43e1-4afc-b7a6-218998e9917e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "2102c783-68bc-4d0a-8414-40c3ca510314",
+  "timestamp": "2026-04-30T23:15:07.310Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/tests/cf-smoke/cf-smoke.spec.ts",
+    "newString": "describe(\"CF Worker smoke — project-scoped reads (regression: URL-key resolution)\", () =\u003e {\n  // Only routes that the server actually defines (server/src/routes/projects.ts).\n  const routes = [\"\", \"workspaces\"];\n  for (const tail of routes) {\n    it(`GET /api/projects/:uuid${tail ? \"/\" + tail : \"\"}`, async () =\u003e {\n      if (!project) return;\n      const path = `/api/projects/${project.id}${tail ? \"/\" + tail : \"\"}`;\n      const r = await get(path);\n      expectNoCrash(`GET ${path}`, r.status);\n    });\n\n    it(`GET /api/projects/:urlKey${tail ? \"/\" + tail : \"\"} (regression)`, async () =\u003e {\n      if (!project?.urlKey) return;\n      const path = `/api/projects/${project.urlKey}${tail ? \"/\" + tail : \"\"}`;\n      const r = await get(path);\n      expectNoCrash(`GET ${path}`, r.status);\n    });\n  }\n});",
+    "oldString": "describe(\"CF Worker smoke — project-scoped reads\", () =\u003e {\n  // Only routes that the server actually defines (server/src/routes/projects.ts).\n  const routes = [\"\", \"workspaces\"];\n  for (const tail of routes) {\n    it(`GET /api/projects/:id${tail ? \"/\" + tail : \"\"}`, async () =\u003e {\n      if (!project) return;\n      const path = `/api/projects/${project.id}${tail ? \"/\" + tail : \"\"}`;\n      const r = await get(path);\n      expectNoCrash(`GET ${path}`, r.status);\n    });\n  }\n});",
+    "originalFile": null,
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          " // 7. Project-scoped reads",
+          " // ---------------------------------------------------------------------------",
+          " ",
+          "-describe(\"CF Worker smoke — project-scoped reads\", () =\u003e {",
+          "+describe(\"CF Worker smoke — project-scoped reads (regression: URL-key resolution)\", () =\u003e {",
+          "   // Only routes that the server actually defines (server/src/routes/projects.ts).",
+          "   const routes = [\"\", \"workspaces\"];",
+          "   for (const tail of routes) {",
+          "-    it(`GET /api/projects/:id${tail ? \"/\" + tail : \"\"}`, async () =\u003e {",
+          "+    it(`GET /api/projects/:uuid${tail ? \"/\" + tail : \"\"}`, async () =\u003e {",
+          "       if (!project) return;",
+          "       const path = `/api/projects/${project.id}${tail ? \"/\" + tail : \"\"}`;",
+          "       const r = await get(path);",
+          "       expectNoCrash(`GET ${path}`, r.status);",
+          "     });",
+          "+",
+          "+    it(`GET /api/projects/:urlKey${tail ? \"/\" + tail : \"\"} (regression)`, async () =\u003e {",
+          "+      if (!project?.urlKey) return;",
+          "+      const path = `/api/projects/${project.urlKey}${tail ? \"/\" + tail : \"\"}`;",
+          "+      const r = await get(path);",
+          "+      expectNoCrash(`GET ${path}`, r.status);",
+          "+    });",
+          "   }",
+          " });"
+        ],
+        "newLines": 22,
+        "newStart": 321,
+        "oldLines": 15,
+        "oldStart": 321
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "a8ea81b8-ac60-4cf3-a235-96259cae0096",
+  "version": "2.1.123"
+}

@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "/**\n * boot.ts — Cloudflare deployment boot sequence.\n *\n * Registers all Cloudflare-specific service implementations into the shared\n * provider registries. Called once on first Worker request (or on every cold\n * start — all registrations are idempotent Map.set calls).\n *\n * This is the only file in `packages/deploy-cloudflare/` that touches the\n * server package's registry. Every other file in this package is self-contained.\n *\n * The import of `provider-registry` uses a workspace-relative path. Wrangler\n * (esbuild) resolves it through the workspace symlink at bundle time, so no\n * runtime module resolution occurs.\n *\n * NOTE: `server/src/storage/provider-registry.ts` must be free of Node-only\n * imports (it currently is — it only imports types). If that changes, this\n * import path will need to move to a standalone `@paperclipai/storage-core`\n * package (tracked as an optional follow-up to PR #2).\n */\n\nimport { registerStorageProvider } from \"../../../server/src/storage/provider-registry.js\";\nimport { R2Provider } from \"./storage/r2-provider.js\";\n\n/**\n * Environment bindings required at boot time.\n */\nexport interface BootEnv {\n  /** R2 bucket binding — declared as `PAPERCLIP_STORAGE` in wrangler.toml. */\n  PAPERCLIP_STORAGE: R2Bucket;\n  /**\n===\nheartbeat-sweep.ts\n===\n/*\n * heartbeat-sweep.ts -- Cloudflare Cron Trigger handler for the heartbeat sweep.\n *\n * Fired every 5 minutes by the every-5-minutes cron trigger in wrangler.toml.\n *\n * Design: instead of running the full Node-based heartbeatService.tickTimers()\n * (which depends on node:fs, node:child_process, and other Worker-incompatible\n * APIs to provision workspace directories), we perform only the scheduling query:\n *\n * 1. Select all active agents that have a heartbeat policy enabled and whose\n *    last heartbeat is older than policy.intervalSec seconds.\n * 2. For each due agent, enqueue a heartbeat_dispatch message to the\n *    PAPERCLIP_QUEUE which the queue consumer handles by starting a\n *    HeartbeatWorkflow Durable Object instance.\n *\n * The actual heartbeat execution (adapter invocation, workspace provisioning)\n * happens inside the HeartbeatWorkflow, which can delegate Node-only operations\n * to the sidecar process via HTTP.\n */\n\nimport { eq } from \"drizzle-orm\";\nimport type { Db } from \"@paperclipai/db\";\nimport { agents, heartbeatRuns } from \"@paperclipai/db\";\nimport type { Env } from \"../worker/api.js\";\n\n/** Minimal heartbeat policy shape read from agent.runtimeConfig.heartbeat JSON. */\ninterface HeartbeatPolicy {\n  enabled: boolean;\n  intervalSec: number;\n}",
+        "is_error": false,
+        "tool_use_id": "toolu_01RDebYL56YdS4ARzh8ieLWr",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "ff99eeb2-81fc-46ab-b01a-d6de78ca5be9",
+  "promptId": "285fd922-5736-481c-a4fc-cf130aed3e81",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "ff99eeb2-81fc-46ab-b01a-d6de78ca5be9",
+  "timestamp": "2026-04-30T17:49:33.893Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "/**\n * boot.ts — Cloudflare deployment boot sequence.\n *\n * Registers all Cloudflare-specific service implementations into the shared\n * provider registries. Called once on first Worker request (or on every cold\n * start — all registrations are idempotent Map.set calls).\n *\n * This is the only file in `packages/deploy-cloudflare/` that touches the\n * server package's registry. Every other file in this package is self-contained.\n *\n * The import of `provider-registry` uses a workspace-relative path. Wrangler\n * (esbuild) resolves it through the workspace symlink at bundle time, so no\n * runtime module resolution occurs.\n *\n * NOTE: `server/src/storage/provider-registry.ts` must be free of Node-only\n * imports (it currently is — it only imports types). If that changes, this\n * import path will need to move to a standalone `@paperclipai/storage-core`\n * package (tracked as an optional follow-up to PR #2).\n */\n\nimport { registerStorageProvider } from \"../../../server/src/storage/provider-registry.js\";\nimport { R2Provider } from \"./storage/r2-provider.js\";\n\n/**\n * Environment bindings required at boot time.\n */\nexport interface BootEnv {\n  /** R2 bucket binding — declared as `PAPERCLIP_STORAGE` in wrangler.toml. */\n  PAPERCLIP_STORAGE: R2Bucket;\n  /**\n===\nheartbeat-sweep.ts\n===\n/*\n * heartbeat-sweep.ts -- Cloudflare Cron Trigger handler for the heartbeat sweep.\n *\n * Fired every 5 minutes by the every-5-minutes cron trigger in wrangler.toml.\n *\n * Design: instead of running the full Node-based heartbeatService.tickTimers()\n * (which depends on node:fs, node:child_process, and other Worker-incompatible\n * APIs to provision workspace directories), we perform only the scheduling query:\n *\n * 1. Select all active agents that have a heartbeat policy enabled and whose\n *    last heartbeat is older than policy.intervalSec seconds.\n * 2. For each due agent, enqueue a heartbeat_dispatch message to the\n *    PAPERCLIP_QUEUE which the queue consumer handles by starting a\n *    HeartbeatWorkflow Durable Object instance.\n *\n * The actual heartbeat execution (adapter invocation, workspace provisioning)\n * happens inside the HeartbeatWorkflow, which can delegate Node-only operations\n * to the sidecar process via HTTP.\n */\n\nimport { eq } from \"drizzle-orm\";\nimport type { Db } from \"@paperclipai/db\";\nimport { agents, heartbeatRuns } from \"@paperclipai/db\";\nimport type { Env } from \"../worker/api.js\";\n\n/** Minimal heartbeat policy shape read from agent.runtimeConfig.heartbeat JSON. */\ninterface HeartbeatPolicy {\n  enabled: boolean;\n  intervalSec: number;\n}"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "54622fec-a1cf-4c83-85d8-6d6af1149688",
+  "version": "2.1.123"
+}

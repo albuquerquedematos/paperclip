@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01Lg9tPXLmDSJLuWuPYpUcT3",
+        "input": {
+          "command": "source ~/.nvm/nvm.sh \u0026\u0026 nvm use 22 \u0026\u0026 node --version",
+          "description": "Switch to Node 22"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01CHZKLSgK487zkfYmMBdKUg",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 129
+      },
+      "cache_creation_input_tokens": 129,
+      "cache_read_input_tokens": 159555,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 129
+          },
+          "cache_creation_input_tokens": 129,
+          "cache_read_input_tokens": 159555,
+          "input_tokens": 1,
+          "output_tokens": 92,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 92,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "33dc3daf-62ef-48cf-92a7-5239428f7e47",
+  "requestId": "req_011CaaRJPynKSG1bRYmUcASm",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T18:21:25.388Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "fdae728e-1115-4f18-ae17-6f917ee03fbc",
+  "version": "2.1.123"
+}

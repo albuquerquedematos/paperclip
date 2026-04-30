@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "79\t  loaded: boolean;\n80\t  disabled: boolean;\n81\t  capabilities: AdapterCapabilities;\n82\t  /** True when an external plugin has replaced a built-in adapter of the same type. */\n83\t  overriddenBuiltin?: boolean;\n84\t  /** True when the external override for a builtin type is currently paused. */\n85\t  overridePaused?: boolean;\n86\t  version?: string;\n87\t  packageName?: string;\n88\t  isLocalPath?: boolean;\n89\t}\n90\t\n91\t// ---------------------------------------------------------------------------\n92\t// Helpers\n93\t// ---------------------------------------------------------------------------\n94\t\n95\t/**\n96\t * Resolve the adapter package directory (same rules as plugin-loader).\n97\t */\n98\tfunction resolveAdapterPackageDir(record: AdapterPluginRecord): string {\n99\t  return record.localPath\n100\t    ? path.resolve(record.localPath)\n101\t    : path.resolve(getAdapterPluginsDir(), \"node_modules\", record.packageName);\n102\t}\n103\t\n104\t/**\n105\t * Read `version` from the adapter's package.json on disk.\n106\t * This is the source of truth for what is actually installed (npm or local path).\n107\t *\n108\t * TODO(cloudflare): readAdapterPackageVersionFromDisk uses fs.readFileSync to\n109\t * read package.json from a locally installed npm package directory. The entire\n110\t * concept of locally installed adapter packages assumes a persistent filesystem\n111\t * and a Node-compatible module loader. For Workers compatibility the installed\n112\t * version should be persisted to the database at install time and read from\n113\t * there instead of from disk at request time.\n114\t */\n115\tfunction readAdapterPackageVersionFromDisk(record: AdapterPluginRecord): string | undefined {\n116\t  try {\n117\t    const pkgDir = resolveAdapterPackageDir(record);\n118\t    const raw = fs.readFileSync(path.join(pkgDir, \"package.json\"), \"utf-8\");\n119\t    const v = JSON.parse(raw).version;\n120\t    return typeof v === \"string\" \u0026\u0026 v.trim().length \u003e 0 ? v.trim() : undefined;\n121\t  } catch {\n122\t    return undefined;\n123\t  }\n124\t}\n125\t\n126\tfunction buildAdapterCapabilities(adapter: ServerAdapterModule): AdapterCapabilities {\n127\t  return {\n128\t    supportsInstructionsBundle: adapter.supportsInstructionsBundle ?? false,\n129\t    supportsSkills: Boolean(adapter.listSkills || adapter.syncSkills),\n130\t    supportsLocalAgentJwt: adapter.supportsLocalAgentJwt ?? false,\n131\t    requiresMaterializedRuntimeSkills: adapter.requiresMaterializedRuntimeSkills ?? false,\n132\t  };\n133\t}\n134\t\n135\tfunction buildAdapterInfo(adapter: ServerAdapterModule, externalRecord: AdapterPluginRecord | undefined, disabledSet: Set\u003cstring\u003e): AdapterInfo {\n136\t  const fromDisk = externalRecord ? readAdapterPackageVersionFromDisk(externalRecord) : undefined;\n137\t  return {\n138\t    type: adapter.type,",
+        "tool_use_id": "toolu_0165sYX13r4HRcNCAXucQiWt",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "536202d8-dc64-4f51-b7d9-600feaa3988b",
+  "promptId": "0d05d433-ef46-4bba-8105-f1d502a42e1e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "536202d8-dc64-4f51-b7d9-600feaa3988b",
+  "timestamp": "2026-04-30T19:30:55.544Z",
+  "toolUseResult": {
+    "file": {
+      "content": "  loaded: boolean;\n  disabled: boolean;\n  capabilities: AdapterCapabilities;\n  /** True when an external plugin has replaced a built-in adapter of the same type. */\n  overriddenBuiltin?: boolean;\n  /** True when the external override for a builtin type is currently paused. */\n  overridePaused?: boolean;\n  version?: string;\n  packageName?: string;\n  isLocalPath?: boolean;\n}\n\n// ---------------------------------------------------------------------------\n// Helpers\n// ---------------------------------------------------------------------------\n\n/**\n * Resolve the adapter package directory (same rules as plugin-loader).\n */\nfunction resolveAdapterPackageDir(record: AdapterPluginRecord): string {\n  return record.localPath\n    ? path.resolve(record.localPath)\n    : path.resolve(getAdapterPluginsDir(), \"node_modules\", record.packageName);\n}\n\n/**\n * Read `version` from the adapter's package.json on disk.\n * This is the source of truth for what is actually installed (npm or local path).\n *\n * TODO(cloudflare): readAdapterPackageVersionFromDisk uses fs.readFileSync to\n * read package.json from a locally installed npm package directory. The entire\n * concept of locally installed adapter packages assumes a persistent filesystem\n * and a Node-compatible module loader. For Workers compatibility the installed\n * version should be persisted to the database at install time and read from\n * there instead of from disk at request time.\n */\nfunction readAdapterPackageVersionFromDisk(record: AdapterPluginRecord): string | undefined {\n  try {\n    const pkgDir = resolveAdapterPackageDir(record);\n    const raw = fs.readFileSync(path.join(pkgDir, \"package.json\"), \"utf-8\");\n    const v = JSON.parse(raw).version;\n    return typeof v === \"string\" \u0026\u0026 v.trim().length \u003e 0 ? v.trim() : undefined;\n  } catch {\n    return undefined;\n  }\n}\n\nfunction buildAdapterCapabilities(adapter: ServerAdapterModule): AdapterCapabilities {\n  return {\n    supportsInstructionsBundle: adapter.supportsInstructionsBundle ?? false,\n    supportsSkills: Boolean(adapter.listSkills || adapter.syncSkills),\n    supportsLocalAgentJwt: adapter.supportsLocalAgentJwt ?? false,\n    requiresMaterializedRuntimeSkills: adapter.requiresMaterializedRuntimeSkills ?? false,\n  };\n}\n\nfunction buildAdapterInfo(adapter: ServerAdapterModule, externalRecord: AdapterPluginRecord | undefined, disabledSet: Set\u003cstring\u003e): AdapterInfo {\n  const fromDisk = externalRecord ? readAdapterPackageVersionFromDisk(externalRecord) : undefined;\n  return {\n    type: adapter.type,",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/adapters.ts",
+      "numLines": 60,
+      "startLine": 79,
+      "totalLines": 674
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "e5d5055d-2953-4778-8f6a-b0e82a935ee6",
+  "version": "2.1.123"
+}

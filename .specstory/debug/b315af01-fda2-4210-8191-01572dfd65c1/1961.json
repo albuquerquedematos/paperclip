@@ -1,0 +1,52 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/route-registry.ts has been updated successfully.",
+        "tool_use_id": "toolu_013zMQLB7auWVUC1nK1EyGko",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "89e49d1b-783f-482a-93ca-22b93155d73c",
+  "promptId": "6578f9d8-71c9-42ed-bd5d-4cac4f413d52",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "89e49d1b-783f-482a-93ca-22b93155d73c",
+  "timestamp": "2026-04-30T19:17:15.163Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/route-registry.ts",
+    "newString": "  ];",
+    "oldString": "    // Company skill routes also use raw Express handlers\n    ...extractAllRoutesFromRouter(companySkillRoutes(db), \"/api\"),\n  ];",
+    "originalFile": "/**\n * route-registry.ts\n *\n * Builds the full set of compiled route definitions for every request.\n *\n * Because CF Workers prohibits reusing TCP sockets (and therefore postgres\n * connections) across requests, we rebuild the Drizzle DB instance, all\n * service instances, and all route handler closures on every request.\n *\n * Route path patterns (regexp + paramNames) are purely static and are\n * cached at the module level so they survive across requests in the same\n * isolate — only the handler closures (which capture the DB) are rebuilt.\n */\n\nimport { createHyperdriveDb } from \"../db/hyperdrive.js\";\nimport { R2Provider } from \"../storage/r2-provider.js\";\nimport { createCfStorageService } from \"../storage/cf-storage-service.js\";\nimport { extractRoutesFromRouter } from \"../http/express-router-bridge.js\";\nimport { extractAllRoutesFromRouter } from \"../http/cf-express-bridge.js\";\nimport { resolveDeploymentMode } from \"./env.js\";\nimport type { Env } from \"./env.js\";\nimport type { RouteDefinition } from \"../../../../server/src/http/types.js\";\nimport type { StorageService } from \"../../../../server/src/storage/types.js\";\nimport type { Db } from \"@paperclipai/db\";\n\n// Route factory imports\nimport { companyRoutes } from \"../../../../server/src/routes/companies.js\";\nimport { accessRoutes } from \"../../../../server/src/routes/access.js\";\nimport { agentRoutes } from \"../../../../server/src/routes/agents.js\";\nimport { assetRoutes } from \"../../../../server/src/routes/assets.js\";\nimport { projectRoutes } from \"../../../../server/src/routes/projects.js\";\nimport { issueRoutes } from \"../../../../server/src/routes/issues.js\";\nimport { issueTreeControlRoutes } from \"../../../../server/src/routes/issue-tree-control.js\";\nimport { routineRoutes } from \"../../../../server/src/routes/routines.js\";\nimport { environmentRoutes } from \"../../../../server/src/routes/environments.js\";\nimport { executionWorkspaceRoutes } from \"../../../../server/src/routes/execution-workspaces.js\";\nimport { goalRoutes } from \"../../../../server/src/routes/goals.js\";\nimport { approvalRoutes } from \"../../../../server/src/routes/approvals.js\";\nimport { secretRoutes } from \"../../../../server/src/routes/secrets.js\";\nimport { costRoutes } from \"../../../../server/src/routes/costs.js\";\nimport { activityRoutes } from \"../../../../server/src/routes/activity.js\";\nimport { dashboardRoutes } from \"../../../../server/src/routes/dashboard.js\";\nimport { userProfileRoutes } from \"../../../../server/src/routes/user-profiles.js\";\nimport { sidebarBadgeRoutes } from \"../../../../server/src/routes/sidebar-badges.js\";\nimport { sidebarPreferenceRoutes } from \"../../../../server/src/routes/sidebar-preferences.js\";\nimport { inboxDismissalRoutes } from \"../../../../server/src/routes/inbox-dismissals.js\";\nimport { instanceSettingsRoutes } from \"../../../../server/src/routes/instance-settings.js\";\nimport { llmRoutes } from \"../../../../server/src/routes/llms.js\";\nimport { authRoutes } from \"../../../../server/src/routes/auth.js\";\n\n// ---------------------------------------------------------------------------\n// Types\n// ---------------------------------------------------------------------------\n\nexport interface CompiledRoute {\n  route: RouteDefinition;\n  re: RegExp;\n  paramNames: string[];\n}\n\nexport interface RequestResources {\n  compiled: CompiledRoute[];\n  db: Db;\n  storage: StorageService;\n}\n\n// ---------------------------------------------------------------------------\n// Path pattern compilation\n// ---------------------------------------------------------------------------\n\n// Cached route path patterns. These are stateless (no DB reference) and safe\n// to reuse across requests within the same isolate.\nlet compiledPathCache: Array\u003c{ re: RegExp; paramNames: string[] }\u003e | null = null;\n\n/** Converts an Express-style path (with :param segments) to a RegExp + param names. */\nfunction pathToRegex(path: string): { re: RegExp; paramNames: string[] } {\n  const paramNames: string[] = [];\n  const pattern = path\n    .replace(/[$()*+.?[\\\\\\]^{|}]/g, \"\\\\$\u0026\")\n    .replace(/:([a-zA-Z_][a-zA-Z0-9_]*)/g, (_match, name: string) =\u003e {\n      paramNames.push(name);\n      return \"([^/]+)\";\n    });\n  return { re: new RegExp(`^${pattern}$`), paramNames };\n}\n\nfunction ext(router: unknown, prefix: string): RouteDefinition[] {\n  return extractRoutesFromRouter(router, prefix);\n}\n\n// ---------------------------------------------------------------------------\n// Per-request resource builder\n// ---------------------------------------------------------------------------\n\n/**\n * Builds a fresh DB instance, storage provider, and route handler closures\n * for the current request.\n *\n * Call once per request (not at module load time) because:\n *   - The Drizzle DB wraps a postgres-js pool backed by a Hyperdrive TCP\n *     connection that CF Workers prohibits reusing across requests.\n *   - Route handler closures capture `db` and `storage`, so they must be\n *     rebuilt whenever the DB instance is replaced.\n *\n * Route path regexps are compiled once and reused via `compiledPathCache`.\n */\nexport function buildRequestResources(env: Env): RequestResources {\n  const db = createHyperdriveDb(env.HYPERDRIVE);\n  const r2Provider = new R2Provider(env.PAPERCLIP_STORAGE, {\n    bucket: env.STORAGE_R2_BUCKET ?? \"paperclip-storage\",\n    prefix: env.STORAGE_R2_PREFIX ?? \"\",\n  });\n  const storage = createCfStorageService(r2Provider) as unknown as StorageService;\n\n  const routes: RouteDefinition[] = [\n    ...ext(companyRoutes(db, storage), \"/api/companies\"),\n    ...ext(agentRoutes(db, {}), \"/api\"),\n    ...ext(assetRoutes(db, storage), \"/api\"),\n    ...ext(projectRoutes(db), \"/api\"),\n    ...ext(issueRoutes(db, storage, {}), \"/api\"),\n    ...ext(issueTreeControlRoutes(db), \"/api\"),\n    ...ext(routineRoutes(db, {}), \"/api\"),\n    ...ext(environmentRoutes(db, {}), \"/api\"),\n    ...ext(executionWorkspaceRoutes(db), \"/api\"),\n    ...ext(goalRoutes(db), \"/api\"),\n    ...ext(approvalRoutes(db, {}), \"/api\"),\n    ...ext(secretRoutes(db), \"/api\"),\n    ...ext(costRoutes(db, {}), \"/api\"),\n    ...ext(activityRoutes(db), \"/api\"),\n    ...ext(dashboardRoutes(db), \"/api\"),\n    ...ext(userProfileRoutes(db), \"/api\"),\n    ...ext(sidebarBadgeRoutes(db), \"/api\"),\n    ...ext(sidebarPreferenceRoutes(db), \"/api\"),\n    ...ext(inboxDismissalRoutes(db), \"/api\"),\n    ...ext(instanceSettingsRoutes(db), \"/api\"),\n    ...ext(llmRoutes(db), \"/api\"),\n    ...ext(authRoutes(db), \"/api/auth\"),\n    // Access routes use raw Express handlers — use the CF bridge to capture all of them\n    ...extractAllRoutesFromRouter(\n      accessRoutes(db, {\n        deploymentMode: resolveDeploymentMode(env),\n        deploymentExposure: (env.DEPLOYMENT_EXPOSURE ?? \"private\") as \"private\" | \"public\",\n        bindHost: \"\",\n        allowedHostnames: [],\n      }),\n      \"/api\",\n    ),\n    // Company skill routes also use raw Express handlers\n    ...extractAllRoutesFromRouter(companySkillRoutes(db), \"/api\"),\n  ];\n\n  if (!compiledPathCache) {\n    compiledPathCache = routes.map((r) =\u003e pathToRegex(r.path));\n    console.log(`[CF Worker] Compiled ${compiledPathCache.length} route patterns`);\n  }\n\n  const compiled: CompiledRoute[] = routes.map((route, i) =\u003e ({\n    route,\n    re: compiledPathCache![i]!.re,\n    paramNames: compiledPathCache![i]!.paramNames,\n  }));\n\n  return { compiled, db, storage };\n}\n",
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          "       }),",
+          "       \"/api\",",
+          "     ),",
+          "-    // Company skill routes also use raw Express handlers",
+          "-    ...extractAllRoutesFromRouter(companySkillRoutes(db), \"/api\"),",
+          "   ];",
+          " ",
+          "   if (!compiledPathCache) {"
+        ],
+        "newLines": 6,
+        "newStart": 145,
+        "oldLines": 8,
+        "oldStart": 145
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "4bb7e21d-a2ed-4bbf-8876-97fb57a3b5c0",
+  "version": "2.1.123"
+}

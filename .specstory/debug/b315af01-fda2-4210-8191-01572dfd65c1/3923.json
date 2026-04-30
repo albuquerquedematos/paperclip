@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01BNFs852bTc1b3YwfVkhJqN",
+        "input": {
+          "content": "# CF Worker smoke tests\n\nA vitest suite that exercises the live Cloudflare Worker (`http://localhost:8787` by default) and asserts no route returns a worker-internal crash (status \u003e= 500).\n\n## Prerequisites\n\n1. `pnpm dev:cf` running (worker + Node sidecar in parallel).\n2. `DEPLOYMENT_MODE=local_trusted` set in `packages/deploy-cloudflare/.dev.vars` so requests bypass auth.\n3. At least one company in the dev DB (the suite picks the first one).\n\n## Run\n\n```bash\npnpm test:cf-smoke\n```\n\nOverride the target URL:\n\n```bash\nCF_SMOKE_BASE_URL=https://my-paperclip-instance.workers.dev pnpm test:cf-smoke\n```\n\n## What it covers\n\n- **Health + adapter/plugin meta routes** — quick liveness check.\n- **Company-scoped reads** — every `GET /api/companies/:id/*` the UI calls.\n- **Issue-scoped reads (regression guard)** — every `GET /api/issues/:id/*`,\n  hit twice when possible: once with the UUID, once with the human key (e.g.\n  `ALM-1`). Specifically catches the `invalid input syntax for type uuid`\n  bug class.\n- **Agent-scoped reads** — agent detail, configuration, runtime-state, etc.\n- **Plugin-scoped reads** — detail, dashboard, health, config, jobs. Asserts\n  these never return 501 (regression guard for the missing-routes bug).\n- **`/_plugins/:id/ui/index.js`** — asserts the response is NOT silently HTML\n  (regression for the SPA fallback bug that broke plugin UI loading).\n- **Issue lifecycle mutation** — creates a synthetic issue, then re-runs the\n  comments/attachments reads against the new UUID to prove the mutation flow\n  works end-to-end.\n- **Project-scoped reads** — basic detail + child-list routes.\n\n## What it does NOT cover\n\n- UI behaviour, race conditions, Workflow execution paths, queue consumer\n  paths, cron triggers — these need separate harnesses.\n- Authorization/multi-tenancy — runs as `local_trusted` board user.\n- Mutation correctness — only checks status codes, not response shapes.\n- Deployed-only paths (R2, Hyperdrive, container DOs in production mode) —\n  the local fallback serves those, so tests pass on `wrangler dev` but\n  the production paths are not exercised.\n\nIf the suite passes locally, you have ~80% confidence that the routes you\ntouched didn't regress on CF. CI integration is a follow-up — the suite\nneeds a seeded DB + a wrapper that boots `dev:cf` before running.\n",
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/tests/cf-smoke/README.md"
+        },
+        "name": "Write",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01YXGRTqWs7EN6vgaSoene44",
+    "model": "claude-opus-4-7",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 422,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 422,
+      "cache_read_input_tokens": 342943,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 422,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 422,
+          "cache_read_input_tokens": 342943,
+          "input_tokens": 1,
+          "output_tokens": 1059,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 1059,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "2e6f1edf-49f4-49af-aea9-271c9e762e96",
+  "requestId": "req_011CaanfjTqPEgcKkdv3ke2p",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T23:01:54.198Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "e9500dc5-c5dc-4fa8-921e-ada1231f93a5",
+  "version": "2.1.123"
+}

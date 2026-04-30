@@ -1,0 +1,70 @@
+{
+  "agentId": "a8455dc48bdf97d68",
+  "attributionAgent": "architect-reviewer",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/.claude/worktrees/agent-a8455dc48bdf97d68",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "worktree-agent-a8455dc48bdf97d68",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_013z3AMh9kpemCDHdtQvNtM6",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/.claude/worktrees/agent-a8455dc48bdf97d68/packages/deploy-cloudflare/src/worker/route-registry.ts"
+        },
+        "name": "Read",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01Y7kCJBTRnHmvjKkYhry1xU",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 11227
+      },
+      "cache_creation_input_tokens": 11227,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "",
+      "input_tokens": 2,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 11227
+          },
+          "cache_creation_input_tokens": 11227,
+          "cache_read_input_tokens": 0,
+          "input_tokens": 2,
+          "output_tokens": 208,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 208,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "bd65d3e3-4a7f-45b7-9f4a-dbbe1ff7ed47",
+  "requestId": "req_011CaaWzeMRAtCrytH6Et8o1",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T19:36:06.878Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "a0341a38-f7d7-43ed-9fc4-797494150950",
+  "version": "2.1.123"
+}

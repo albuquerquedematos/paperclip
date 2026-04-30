@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "36\t// ---------------------------------------------------------------------------\n37\t\n38\texport default {\n39\t  fetch(request: Request, env: Env, ctx: ExecutionContext): Promise\u003cResponse\u003e {\n40\t    // Boot CF implementations (idempotent — safe to call on every request).\n41\t    bootCloudflare(env);\n42\t    return app.fetch(request, env, ctx);\n43\t  },\n44\t\n45\t  // -------------------------------------------------------------------------",
+        "tool_use_id": "toolu_01RjM4wbYHvKPaef8QAZsuq4",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "f67bd2a1-ba1a-46f8-81d3-1c9291f7a180",
+  "promptId": "40300358-f678-4595-930e-40794ab9bf23",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "f67bd2a1-ba1a-46f8-81d3-1c9291f7a180",
+  "timestamp": "2026-04-30T20:15:58.935Z",
+  "toolUseResult": {
+    "file": {
+      "content": "// ---------------------------------------------------------------------------\n\nexport default {\n  fetch(request: Request, env: Env, ctx: ExecutionContext): Promise\u003cResponse\u003e {\n    // Boot CF implementations (idempotent — safe to call on every request).\n    bootCloudflare(env);\n    return app.fetch(request, env, ctx);\n  },\n\n  // -------------------------------------------------------------------------",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/api.ts",
+      "numLines": 10,
+      "startLine": 36,
+      "totalLines": 118
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "61247401-bbff-44f8-b023-57d111ab77b9",
+  "version": "2.1.123"
+}

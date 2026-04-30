@@ -1,0 +1,61 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "text": "`get-session` is gone from the errors. Remaining 501s are all expected: plugins, adapters, WebSocket events, and skills — all Node.js-specific features intentionally not in CF. The app is working. Let me navigate a few more pages:",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_012ZCwJirk65K9H5yTP1NQBR",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 3799
+      },
+      "cache_creation_input_tokens": 3799,
+      "cache_read_input_tokens": 116557,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 3799
+          },
+          "cache_creation_input_tokens": 3799,
+          "cache_read_input_tokens": 116557,
+          "input_tokens": 1,
+          "output_tokens": 418,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 418,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "d62bb2bb-f4ad-4d4d-9a24-54d868f9b422",
+  "requestId": "req_011CaaQQYT4q5zm9xgFUhWTs",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T18:09:49.424Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "de452c60-b239-4a53-871e-8cf6084284b7",
+  "version": "2.1.123"
+}

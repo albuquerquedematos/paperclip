@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "28\t  PAPERCLIP_KV: KVNamespace;\n29\t  // CF-native: Fetcher binding to the sidecar CF Container.\n30\t  // If absent, falls back to SANDBOX_BRIDGE_URL stored in KV.\n31\t  SIDECAR_SERVICE?: Fetcher;\n32\t}\n33\t\n34\t/**\n35\t * HeartbeatWorkflow — Cloudflare Workflow that executes one agent heartbeat.\n36\t *\n37\t * A heartbeat is the fundamental unit of agent work in Paperclip: the agent\n38\t * is woken up, runs an LLM turn (potentially using tools), and records the\n39\t * outcome. The Workflow wraps this in durable, checkpointed steps so that a",
+        "tool_use_id": "toolu_019Z5HmxB67ter8JVomdgCmC",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "a3e6b489-7082-4f23-935e-b29ba78a4c48",
+  "promptId": "90af47bf-faac-4347-b1a7-d8ed0c820fb6",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "a3e6b489-7082-4f23-935e-b29ba78a4c48",
+  "timestamp": "2026-04-30T20:36:31.011Z",
+  "toolUseResult": {
+    "file": {
+      "content": "  PAPERCLIP_KV: KVNamespace;\n  // CF-native: Fetcher binding to the sidecar CF Container.\n  // If absent, falls back to SANDBOX_BRIDGE_URL stored in KV.\n  SIDECAR_SERVICE?: Fetcher;\n}\n\n/**\n * HeartbeatWorkflow — Cloudflare Workflow that executes one agent heartbeat.\n *\n * A heartbeat is the fundamental unit of agent work in Paperclip: the agent\n * is woken up, runs an LLM turn (potentially using tools), and records the\n * outcome. The Workflow wraps this in durable, checkpointed steps so that a",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/runtime/workflows/heartbeat.ts",
+      "numLines": 12,
+      "startLine": 28,
+      "totalLines": 184
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "7ad76f27-4f74-4f4a-bf19-b97e96a47333",
+  "version": "2.1.123"
+}

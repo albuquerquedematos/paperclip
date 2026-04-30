@@ -1,0 +1,28 @@
+{
+  "agentId": "a3a306fc5d1924556",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1:    const issue = await svc.getById(id);\n9:      ? executionWorkspacesSvc.getById(issue.executionWorkspaceId)\n24:      svc.getAncestors(issue.id),\n25:      svc.getCommentCursor(issue.id),\n26:      wakeCommentId ? svc.getComment(wakeCommentId) : null,\n27:      svc.getRelationSummaries(issue.id),\n28:      svc.listBlockerAttention(issue.companyId, [issue]).then((map) =\u003e map.get(issue.id) ?? null),\n29:      svc.listProductivityReviews(issue.companyId, [issue.id]).then((map) =\u003e map.get(issue.id) ?? null),\n30:      svc.listAttachments(issue.id),\n31:      documentsSvc.getIssueDocumentByKey(issue.id, ISSUE_CONTINUATION_SUMMARY_DOCUMENT_KEY),\n94:    const issue = await svc.getById(id);\n108:      svc.getAncestors(issue.id),\n109:      svc.findMentionedProjectIds(issue.id, { includeCommentBodies: false }),\n110:      documentsSvc.getIssueDocumentPayload(issue),\n111:      svc.getRelationSummaries(issue.id),\n112:      svc.listBlockerAttention(issue.companyId, [issue]).then((map) =\u003e map.get(issue.id) ?? null),\n113:      svc.listProductivityReviews(issue.companyId, [issue.id]).then((map) =\u003e map.get(issue.id) ?? null),\n114:      issueReferencesSvc.listIssueReferenceSummary(issue.id),\n117:      ? await projectsSvc.listByIds(issue.companyId, mentionedProjectIds)\n120:      ? await executionWorkspacesSvc.getById(issue.executionWorkspaceId)\n122:    const workProducts = await workProductsSvc.listForIssue(issue.id);\n143:    const issue = await svc.getById(id);\n146:    const workProducts = await workProductsSvc.listForIssue(issue.id);\n151:    const issue = await svc.getById(id);\n154:    const docs = await documentsSvc.listIssueDocuments(issue.id, {\n161:    const issue = await svc.getById(id);\n168:    const doc = await documentsSvc.getIssueDocumentByKey(issue.id, keyParsed.data);\n174:    const issue = await svc.getById(id);\n184:    const referenceSummaryBefore = await issueReferencesSvc.listIssueReferenceSummary(issue.id);\n185:    const result = await documentsSvc.upsertIssueDocument({\n198:    await issueReferencesSvc.syncDocument(doc.id);\n199:    const referenceSummaryAfter = await issueReferencesSvc.listIssueReferenceSummary(issue.id);\n200:    const referenceDiff = issueReferencesSvc.diffIssueReferenceSummary(referenceSummaryBefore, referenceSummaryAfter);\n235:    const issue = await svc.getById(id);\n242:    const revisions = await documentsSvc.listIssueDocumentRevisions(issue.id, keyParsed.data);\n247:    const issue = await svc.getById(id);\n256:    const referenceSummaryBefore = await issueReferencesSvc.listIssueReferenceSummary(issue.id);\n257:    const result = await documentsSvc.restoreIssueDocumentRevision({\n264:    await issueReferencesSvc.syncDocument(result.document.id);\n265:    const referenceSummaryAfter = await issueReferencesSvc.listIssueReferenceSummary(issue.id);\n266:    const referenceDiff = issueReferencesSvc.diffIssueReferenceSummary(referenceSummaryBefore, referenceSummaryAfter);\n301:    const issue = await svc.getById(id);\n311:    const referenceSummaryBefore = await issueReferencesSvc.listIssueReferenceSummary(issue.id);\n312:    const removed = await documentsSvc.deleteIssueDocument(issue.id, keyParsed.data);\n314:    await issueReferencesSvc.deleteDocumentSource(removed.id);\n315:    const referenceSummaryAfter = await issueReferencesSvc.listIssueReferenceSummary(issue.id);\n316:    const referenceDiff = issueReferencesSvc.diffIssueReferenceSummary(referenceSummaryBefore, referenceSummaryAfter);\n348:    const issue = await svc.getById(id);\n353:    const product = await workProductsSvc.createForIssue(issue.id, issue.companyId, {\n374:    const issue = await svc.getById(id);\n380:    const readState = await svc.markRead(issue.companyId, issue.id, userId, new Date());\n397:    const issue = await svc.getById(id);\n403:    const removed = await svc.markUnread(issue.companyId, issue.id, userId);\n420:    const issue = await svc.getById(id);\n426:    const archiveState = await svc.archiveInbox(issue.companyId, issue.id, userId, new Date());\n443:    const issue = await svc.getById(id);\n449:    const removed = await svc.unarchiveInbox(issue.companyId, issue.id, userId);\n466:    const issue = await svc.getById(id);\n469:    const approvals = await issueApprovalsSvc.listApprovalsForIssue(id);\n474:    const issue = await svc.getById(id);",
+        "is_error": false,
+        "tool_use_id": "toolu_01NJGCpz86ZdRMsJRuFJsHKN",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "7a574886-341d-4537-b8e8-d67267664add",
+  "promptId": "e7cbb211-1d37-4345-b546-c3d4bd07be80",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "7a574886-341d-4537-b8e8-d67267664add",
+  "timestamp": "2026-04-30T22:57:42.716Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "da3eaf4a-e956-40d6-be91-312213ac5842",
+  "version": "2.1.123"
+}

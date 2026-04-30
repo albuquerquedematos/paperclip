@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "831\t  try {\n832\t    const initial = await runAttempt(sessionId ?? null);\n833\t    // Claude may report an unknown-session failure either in parsed JSON\n834\t    // (exit 0 + result text) or by exiting non-zero with the error in\n835\t    // stderr — detect both so the retry-with-fresh-session fallback fires.\n836\t    const unknownSessionFailure =\n837\t      sessionId \u0026\u0026\n838\t      !initial.proc.timedOut \u0026\u0026\n839\t      (initial.proc.exitCode ?? 0) !== 0 \u0026\u0026\n840\t      detectClaudeUnknownSession({\n841\t        parsed: initial.parsed,\n842\t        stdout: initial.proc.stdout,\n843\t        stderr: initial.proc.stderr,\n844\t      });\n845\t\n846\t    if (unknownSessionFailure) {\n847\t      await onLog(\n848\t        \"stdout\",\n849\t        `[paperclip] Claude resume session \"${sessionId}\" is unavailable; retrying with a fresh session.\\n`,\n850\t      );\n851\t      const retry = await runAttempt(null);\n852\t      return toAdapterResult(retry, { fallbackSessionId: null, clearSessionOnMissingSession: true });\n853\t    }\n854\t\n855\t    return toAdapterResult(initial, { fallbackSessionId: runtimeSessionId || runtime.sessionId });",
+        "tool_use_id": "toolu_01CMGo9CRL2hEDReKtPDiZWg",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "63adaa8f-f6f3-47a4-9116-419c93d4944a",
+  "promptId": "2cd98dd6-123f-4c8f-bde6-185a892545c9",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "63adaa8f-f6f3-47a4-9116-419c93d4944a",
+  "timestamp": "2026-04-30T23:30:15.564Z",
+  "toolUseResult": {
+    "file": {
+      "content": "  try {\n    const initial = await runAttempt(sessionId ?? null);\n    // Claude may report an unknown-session failure either in parsed JSON\n    // (exit 0 + result text) or by exiting non-zero with the error in\n    // stderr — detect both so the retry-with-fresh-session fallback fires.\n    const unknownSessionFailure =\n      sessionId \u0026\u0026\n      !initial.proc.timedOut \u0026\u0026\n      (initial.proc.exitCode ?? 0) !== 0 \u0026\u0026\n      detectClaudeUnknownSession({\n        parsed: initial.parsed,\n        stdout: initial.proc.stdout,\n        stderr: initial.proc.stderr,\n      });\n\n    if (unknownSessionFailure) {\n      await onLog(\n        \"stdout\",\n        `[paperclip] Claude resume session \"${sessionId}\" is unavailable; retrying with a fresh session.\\n`,\n      );\n      const retry = await runAttempt(null);\n      return toAdapterResult(retry, { fallbackSessionId: null, clearSessionOnMissingSession: true });\n    }\n\n    return toAdapterResult(initial, { fallbackSessionId: runtimeSessionId || runtime.sessionId });",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts",
+      "numLines": 25,
+      "startLine": 831,
+      "totalLines": 869
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "ed37e90d-ba4b-43b6-8d96-33c6621ea5c6",
+  "version": "2.1.123"
+}

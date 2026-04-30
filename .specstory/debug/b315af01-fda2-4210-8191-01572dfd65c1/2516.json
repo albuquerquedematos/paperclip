@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "d0490dbd refactor(deploy-cloudflare): security hardening, modularity, and doc pass\n6c21058d feat(deploy-cloudflare): register adapterRoutes in route-registry for config-schema and management endpoints\ne1829b13 fix(deploy-cloudflare): serve real adapter and plugin data from DB/registry instead of []\n935ea2ba fix(deploy-cloudflare): query plugins and ui-contributions from DB instead of returning []\n6f99479b fix(deploy-cloudflare): prevent unhandled rejections from async handlers called via synchronous next()\n0bade81e feat(deploy-cloudflare): bridge raw Express handlers from access.ts into CF Workers\n6bbe293f fix(deploy-cloudflare): add CF-native handlers for all 501 routes and fix Node 22 requirement\n1832fb08 chore(deploy-cloudflare): upgrade wrangler to 4.87.0\n---\n* feat/cloudflare-deployment\n  master\n  remotes/origin/feat/cloudflare-deployment\n  remotes/origin/master\n  remotes/paperclipai/PAP-1019-make-a-plan-for-first-class-blockers-wake-on-subtasks-done\n  remotes/paperclipai/PAP-1132-assistant-ui-pap-1131-make-issues-comments-be-like-a-chat\n  remotes/paperclipai/PAP-1139-consider-a-signoff-required-execution-policy\n  remotes/paperclipai/PAP-1280-detailed-ux-and-technical-plan-for-deliverables-work-product-feature\n  remotes/paperclipai/PAP-1293-technical-plan-memory-service-implementation-blueprint\n  remotes/paperclipai/PAP-1355-right-now-when-agents-boot-they-re-instructed-to-call-the-api-to-checkout-the-issue-so-that-they-have-exclusive",
+        "is_error": false,
+        "tool_use_id": "toolu_01Y52tZgAns46Jtp9R63zCEn",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "2ff18f14-627e-4153-b59e-2392a66f0dd8",
+  "promptId": "8a433599-d510-488c-a09f-2af6b1c28bcb",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "2ff18f14-627e-4153-b59e-2392a66f0dd8",
+  "timestamp": "2026-04-30T19:41:43.684Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "d0490dbd refactor(deploy-cloudflare): security hardening, modularity, and doc pass\n6c21058d feat(deploy-cloudflare): register adapterRoutes in route-registry for config-schema and management endpoints\ne1829b13 fix(deploy-cloudflare): serve real adapter and plugin data from DB/registry instead of []\n935ea2ba fix(deploy-cloudflare): query plugins and ui-contributions from DB instead of returning []\n6f99479b fix(deploy-cloudflare): prevent unhandled rejections from async handlers called via synchronous next()\n0bade81e feat(deploy-cloudflare): bridge raw Express handlers from access.ts into CF Workers\n6bbe293f fix(deploy-cloudflare): add CF-native handlers for all 501 routes and fix Node 22 requirement\n1832fb08 chore(deploy-cloudflare): upgrade wrangler to 4.87.0\n---\n* feat/cloudflare-deployment\n  master\n  remotes/origin/feat/cloudflare-deployment\n  remotes/origin/master\n  remotes/paperclipai/PAP-1019-make-a-plan-for-first-class-blockers-wake-on-subtasks-done\n  remotes/paperclipai/PAP-1132-assistant-ui-pap-1131-make-issues-comments-be-like-a-chat\n  remotes/paperclipai/PAP-1139-consider-a-signoff-required-execution-policy\n  remotes/paperclipai/PAP-1280-detailed-ux-and-technical-plan-for-deliverables-work-product-feature\n  remotes/paperclipai/PAP-1293-technical-plan-memory-service-implementation-blueprint\n  remotes/paperclipai/PAP-1355-right-now-when-agents-boot-they-re-instructed-to-call-the-api-to-checkout-the-issue-so-that-they-have-exclusive"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "352ebf5b-b982-45db-b783-9c9866edbcef",
+  "version": "2.1.123"
+}

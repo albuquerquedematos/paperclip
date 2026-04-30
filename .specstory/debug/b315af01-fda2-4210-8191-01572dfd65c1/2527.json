@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "74:let compiledPathCache: Array\u003c{ re: RegExp; paramNames: string[] }\u003e | null = null;\n106: * Route path regexps are compiled once and reused via `compiledPathCache`.\n169:  if (compiledPathCache \u0026\u0026 compiledPathCache.length !== routes.length) {\n170:    compiledPathCache = null;\n172:  if (!compiledPathCache) {\n173:    compiledPathCache = routes.map((r) =\u003e pathToRegex(r.path));\n175:    console.log(`[CF Worker] Compiled ${compiledPathCache.length} route patterns`);\n180:    re: compiledPathCache![i]!.re,\n181:    paramNames: compiledPathCache![i]!.paramNames,",
+        "is_error": false,
+        "tool_use_id": "toolu_01YG9kPxfgmTMm2syz9zwmci",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "9a09379b-09e2-4317-9954-2ac5af53f023",
+  "promptId": "8a433599-d510-488c-a09f-2af6b1c28bcb",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "9a09379b-09e2-4317-9954-2ac5af53f023",
+  "timestamp": "2026-04-30T19:42:00.339Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "74:let compiledPathCache: Array\u003c{ re: RegExp; paramNames: string[] }\u003e | null = null;\n106: * Route path regexps are compiled once and reused via `compiledPathCache`.\n169:  if (compiledPathCache \u0026\u0026 compiledPathCache.length !== routes.length) {\n170:    compiledPathCache = null;\n172:  if (!compiledPathCache) {\n173:    compiledPathCache = routes.map((r) =\u003e pathToRegex(r.path));\n175:    console.log(`[CF Worker] Compiled ${compiledPathCache.length} route patterns`);\n180:    re: compiledPathCache![i]!.re,\n181:    paramNames: compiledPathCache![i]!.paramNames,"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "e719bafd-c67d-4661-be25-6fbe40dc34f2",
+  "version": "2.1.123"
+}

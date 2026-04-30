@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "  accessService,\n  agentService,\n  boardAuthService,\n  deduplicateAgentName,\n  logActivity,\n  notifyHireApproved\n} from \"../services/index.js\";\nimport {\n  grantsForHumanRole,\n  normalizeHumanRole,\n  resolveHumanInviteRole,\n} from \"../services/company-member-roles.js\";\nimport { humanJoinGrantsFromDefaults } from \"../services/invite-grants.js\";\nimport {\n  collapseDuplicatePendingHumanJoinRequests,\n  findReusableHumanJoinRequest,\n} from \"../lib/join-request-dedupe.js\";\nimport { assertAuthenticated, assertCompanyAccess } from \"./authz.js\";\nimport {\n  claimBoardOwnership,\n  inspectBoardClaimChallenge\n} from \"../board-claim.js\";\nimport { getStorageService } from \"../storage/index.js\";\n\nfunction hashToken(token: string) {\n  return createHash(\"sha256\").update(token).digest(\"hex\");\n}\n\nconst INVITE_TOKEN_PREFIX = \"pcp_invite_\";\nconst INVITE_TOKEN_ALPHABET = \"abcdefghijklmnopqrstuvwxyz0123456789\";\nconst INVITE_TOKEN_SUFFIX_LENGTH = 8;",
+        "is_error": false,
+        "tool_use_id": "toolu_01BwLfJyWVsWvLTGzDPzFtMK",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "2adb9b00-1d4a-41e3-a8e3-bb12fc9416f1",
+  "promptId": "9aae9721-e466-4259-b66e-e724bd2f2c66",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "2adb9b00-1d4a-41e3-a8e3-bb12fc9416f1",
+  "timestamp": "2026-04-30T18:20:27.200Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "  accessService,\n  agentService,\n  boardAuthService,\n  deduplicateAgentName,\n  logActivity,\n  notifyHireApproved\n} from \"../services/index.js\";\nimport {\n  grantsForHumanRole,\n  normalizeHumanRole,\n  resolveHumanInviteRole,\n} from \"../services/company-member-roles.js\";\nimport { humanJoinGrantsFromDefaults } from \"../services/invite-grants.js\";\nimport {\n  collapseDuplicatePendingHumanJoinRequests,\n  findReusableHumanJoinRequest,\n} from \"../lib/join-request-dedupe.js\";\nimport { assertAuthenticated, assertCompanyAccess } from \"./authz.js\";\nimport {\n  claimBoardOwnership,\n  inspectBoardClaimChallenge\n} from \"../board-claim.js\";\nimport { getStorageService } from \"../storage/index.js\";\n\nfunction hashToken(token: string) {\n  return createHash(\"sha256\").update(token).digest(\"hex\");\n}\n\nconst INVITE_TOKEN_PREFIX = \"pcp_invite_\";\nconst INVITE_TOKEN_ALPHABET = \"abcdefghijklmnopqrstuvwxyz0123456789\";\nconst INVITE_TOKEN_SUFFIX_LENGTH = 8;"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "5cec7514-a635-493a-be9b-2a24cf103b91",
+  "version": "2.1.123"
+}

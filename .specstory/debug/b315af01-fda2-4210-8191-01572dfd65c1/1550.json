@@ -1,0 +1,70 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01DcQCyfqyCzf8NNtD5JDNwJ",
+        "input": {
+          "command": "cd /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare \u0026\u0026 source ~/.nvm/nvm.sh \u0026\u0026 nvm use 22 2\u003e/dev/null \u0026\u0026 node build-worker.mjs 2\u003e\u00261 | tail -5",
+          "description": "Rebuild worker",
+          "timeout": 60000
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01XcdnnGdT8a3wS5Fc5EE4DU",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 459
+      },
+      "cache_creation_input_tokens": 459,
+      "cache_read_input_tokens": 85707,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 459
+          },
+          "cache_creation_input_tokens": 459,
+          "cache_read_input_tokens": 85707,
+          "input_tokens": 1,
+          "output_tokens": 161,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 161,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "92dcaffd-fa3b-44af-9886-f613dae18cf2",
+  "requestId": "req_011CaaTQz7WXNyuhoCniCVvt",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T18:49:08.912Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "b1630859-4f72-40b5-90db-16e64488e931",
+  "version": "2.1.123"
+}

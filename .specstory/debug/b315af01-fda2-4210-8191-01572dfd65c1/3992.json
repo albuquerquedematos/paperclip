@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "300\t          \u003cMarkdownIssueLink issuePathId={issueRef.issuePathId}\u003e\n301\t            {linkChildren}\n302\t          \u003c/MarkdownIssueLink\u003e\n303\t        );\n304\t      }\n305\t\n306\t      const parsed = href ? parseMentionChipHref(href) : null;\n307\t      if (parsed) {\n308\t        const targetHref = parsed.kind === \"project\"\n309\t          ? `/projects/${parsed.projectId}`\n310\t          : parsed.kind === \"issue\"\n311\t            ? `/issues/${parsed.identifier}`\n312\t          : parsed.kind === \"skill\"\n313\t            ? `/skills/${parsed.skillId}`\n314\t            : parsed.kind === \"user\"\n315\t              ? \"/company/settings/access\"\n316\t            : `/agents/${parsed.agentId}`;\n317\t        return (\n318\t          \u003ca\n319\t            href={targetHref}\n320\t            className={cn(\n321\t              \"paperclip-mention-chip\",\n322\t              `paperclip-mention-chip--${parsed.kind}`,\n323\t              parsed.kind === \"project\" \u0026\u0026 \"paperclip-project-mention-chip\",\n324\t            )}",
+        "tool_use_id": "toolu_01Jr7DVsTc8vGZH4ouh7UFPJ",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "43edabc3-0a06-473e-ac67-10e9ea0ff27f",
+  "promptId": "0c147d6f-915f-4b9e-a139-f26417e7157e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "43edabc3-0a06-473e-ac67-10e9ea0ff27f",
+  "timestamp": "2026-04-30T23:04:53.007Z",
+  "toolUseResult": {
+    "file": {
+      "content": "          \u003cMarkdownIssueLink issuePathId={issueRef.issuePathId}\u003e\n            {linkChildren}\n          \u003c/MarkdownIssueLink\u003e\n        );\n      }\n\n      const parsed = href ? parseMentionChipHref(href) : null;\n      if (parsed) {\n        const targetHref = parsed.kind === \"project\"\n          ? `/projects/${parsed.projectId}`\n          : parsed.kind === \"issue\"\n            ? `/issues/${parsed.identifier}`\n          : parsed.kind === \"skill\"\n            ? `/skills/${parsed.skillId}`\n            : parsed.kind === \"user\"\n              ? \"/company/settings/access\"\n            : `/agents/${parsed.agentId}`;\n        return (\n          \u003ca\n            href={targetHref}\n            className={cn(\n              \"paperclip-mention-chip\",\n              `paperclip-mention-chip--${parsed.kind}`,\n              parsed.kind === \"project\" \u0026\u0026 \"paperclip-project-mention-chip\",\n            )}",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/components/MarkdownBody.tsx",
+      "numLines": 25,
+      "startLine": 300,
+      "totalLines": 388
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "597a93ba-2821-43a1-bc94-37f1322bc651",
+  "version": "2.1.123"
+}

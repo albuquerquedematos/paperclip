@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "33\t[dev]\n34\t# Containers require Docker; disable in local dev so wrangler dev starts without it.\n35\t# The SidecarContainer / PluginContainer DOs fall back to SANDBOX_BRIDGE_URL from KV.\n36\tenable_containers = false\n37\t\n38\t# ---------------------------------------------------------------------------\n39\t# Variables (non-secret; override secrets via `wrangler secret put`)\n40\t# ---------------------------------------------------------------------------\n41\t[vars]\n42\tDEPLOYMENT_PLATFORM = \"cloudflare\"\n43\tDEPLOYMENT_MODE = \"authenticated\"\n44\tDEPLOYMENT_EXPOSURE = \"public\"",
+        "tool_use_id": "toolu_01Fc2TrQ4h354f558yQ2NVRK",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "fedf6905-c574-4a1f-a8fa-b6efe246b7fb",
+  "promptId": "7323a41a-dd8a-4783-b590-aea4ab5316a7",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "fedf6905-c574-4a1f-a8fa-b6efe246b7fb",
+  "timestamp": "2026-04-30T21:38:28.342Z",
+  "toolUseResult": {
+    "file": {
+      "content": "[dev]\n# Containers require Docker; disable in local dev so wrangler dev starts without it.\n# The SidecarContainer / PluginContainer DOs fall back to SANDBOX_BRIDGE_URL from KV.\nenable_containers = false\n\n# ---------------------------------------------------------------------------\n# Variables (non-secret; override secrets via `wrangler secret put`)\n# ---------------------------------------------------------------------------\n[vars]\nDEPLOYMENT_PLATFORM = \"cloudflare\"\nDEPLOYMENT_MODE = \"authenticated\"\nDEPLOYMENT_EXPOSURE = \"public\"",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/wrangler.toml",
+      "numLines": 12,
+      "startLine": 33,
+      "totalLines": 172
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "35e6ac01-ff95-495a-8c5a-4ec8e8fa7e8e",
+  "version": "2.1.123"
+}

@@ -1,0 +1,71 @@
+{
+  "agentId": "a8455dc48bdf97d68",
+  "attributionAgent": "architect-reviewer",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/.claude/worktrees/agent-a8455dc48bdf97d68",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "worktree-agent-a8455dc48bdf97d68",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_014Nz6WD9nRxixtM34QeXsdH",
+        "input": {
+          "content": "/**\n * cf-extra-routes.ts — barrel for CF-native route modules.\n *\n * CF-native handlers for API endpoints that use raw Express handlers in the\n * server package (making them invisible to extractRoutesFromRouter) or depend\n * on runtime registries (adapters, plugins) that don't exist in a CF Worker.\n *\n * Registered in app.ts BEFORE the /api/* catch-all so they shadow the 501.\n *\n * Modules:\n *   routes/adapters.ts       — GET /api/adapters\n *   routes/plugins.ts        — GET /api/plugins, GET /api/plugins/ui-contributions\n *   routes/company-access.ts — GET /api/companies/:id/join-requests,\n *                               GET /api/companies/:id/user-directory\n *   routes/company-skills-cf.ts — GET /api/companies/:id/skills\n *   routes/events.ts         — GET /api/companies/:id/events/ws\n *\n * All routes in this barrel require an authenticated actor (board or agent key,\n * or local_trusted mode). Unauthenticated requests receive 401.\n */\n\nimport type { Hono } from \"hono\";\nimport type { Env } from \"./env.js\";\nimport { registerAdapterRoutes } from \"./routes/adapters.js\";\nimport { registerPluginRoutes } from \"./routes/plugins.js\";\nimport { registerCompanyAccessRoutes } from \"./routes/company-access.js\";\nimport { registerCompanySkillRoutes } from \"./routes/company-skills-cf.js\";\nimport { registerEventRoutes } from \"./routes/events.js\";\n\nexport function registerCfExtraRoutes(app: Hono\u003c{ Bindings: Env }\u003e): void {\n  registerAdapterRoutes(app);\n  registerPluginRoutes(app);\n  registerCompanyAccessRoutes(app);\n  registerCompanySkillRoutes(app);\n  registerEventRoutes(app);\n}\n",
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/cf-extra-routes.ts"
+        },
+        "name": "Write",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01Ncx16FxtZbbXyupmqyoHtG",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 893
+      },
+      "cache_creation_input_tokens": 893,
+      "cache_read_input_tokens": 66593,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 893
+          },
+          "cache_creation_input_tokens": 893,
+          "cache_read_input_tokens": 66593,
+          "input_tokens": 1,
+          "output_tokens": 624,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 624,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "babe8c08-5cbf-4146-9707-d27e71b7aa20",
+  "requestId": "req_011CaaXDu7npm3JtR4CiFSbR",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T19:39:13.140Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "e82d3aa1-fe22-470f-9f9a-616fe164edf1",
+  "version": "2.1.123"
+}

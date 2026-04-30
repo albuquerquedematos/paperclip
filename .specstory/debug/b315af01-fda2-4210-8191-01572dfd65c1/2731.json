@@ -1,0 +1,58 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/runtime/workflows/heartbeat.ts has been updated successfully.",
+        "tool_use_id": "toolu_01FjZU9jwvj9s6QyrUXmuq7X",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "ca0a0d33-ecc1-4a50-893f-b0d83175bd2b",
+  "promptId": "90af47bf-faac-4347-b1a7-d8ed0c820fb6",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "ca0a0d33-ecc1-4a50-893f-b0d83175bd2b",
+  "timestamp": "2026-04-30T20:36:44.249Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/runtime/workflows/heartbeat.ts",
+    "newString": "        let resp: Response;\n        if (this.env.SIDECAR_SERVICE) {\n          // CF-native path: SidecarContainer DO proxies to the Docker container.\n          // The DO handles container start/lifecycle; we just call fetch().\n          const id = this.env.SIDECAR_SERVICE.idFromName(\"sidecar\");\n          const stub = this.env.SIDECAR_SERVICE.get(id);\n          resp = await stub.fetch(\n            \"http://sidecar/internal/heartbeat\",\n            { method: \"POST\", headers, body },\n          );",
+    "oldString": "        let resp: Response;\n        if (this.env.SIDECAR_SERVICE) {\n          // CF-native path: call the sidecar container directly via the\n          // service binding. No network egress, no external server needed.\n          resp = await this.env.SIDECAR_SERVICE.fetch(\n            \"http://sidecar/internal/heartbeat\",\n            { method: \"POST\", headers, body },\n          );",
+    "originalFile": "import { WorkflowEntrypoint, type WorkflowStep, type WorkflowEvent } from \"cloudflare:workers\";\n\n/**\n * Parameters passed when triggering the HeartbeatWorkflow.\n */\nexport interface HeartbeatParams {\n  /** The agent whose heartbeat is being executed. */\n  agentId: string;\n  /** Company the agent belongs to (used for scoped DB queries). */\n  companyId: string;\n  /** Unique identifier for this specific heartbeat run. */\n  runId: string;\n  /**\n   * Optional task (issue) the agent is currently working on.\n   * May be absent if the agent has no active checkout.\n   */\n  taskId?: string;\n}\n\n/**\n * Env bindings required by the HeartbeatWorkflow.\n * Keep in sync with `src/worker/env.ts`.\n */\ninterface Env {\n  AGENT_RUN_DO: DurableObjectNamespace;\n  TASK_DO: DurableObjectNamespace;\n  HYPERDRIVE: { connectionString: string };\n  PAPERCLIP_KV: KVNamespace;\n  // CF-native: DO namespace for the SidecarContainer (proxies to Docker).\n  // Local dev: absent → falls back to SANDBOX_BRIDGE_URL stored in KV.\n  SIDECAR_SERVICE?: DurableObjectNamespace;\n}\n\n/**\n * HeartbeatWorkflow — Cloudflare Workflow that executes one agent heartbeat.\n *\n * A heartbeat is the fundamental unit of agent work in Paperclip: the agent\n * is woken up, runs an LLM turn (potentially using tools), and records the\n * outcome. The Workflow wraps this in durable, checkpointed steps so that a\n * Worker crash or timeout does not lose progress.\n *\n * Steps:\n *   1. init-run      — Create the AgentRunDO record; mark run as \"running\".\n *   2. execute       — Call the sidecar to run the actual heartbeat.\n *                      Retries up to 2 times with a 5-second delay on failure.\n *   3. record-result — Update the AgentRunDO with the final outcome; notify\n *                      the TaskDO so connected UIs receive a state update.\n *\n * Execution routing (step 2):\n *   - CF-native (preferred): SIDECAR_SERVICE Fetcher binding → CF Container.\n *   - Fallback: SANDBOX_BRIDGE_URL / SANDBOX_BRIDGE_API_KEY read from KV.\n *\n * The Workflow is triggered by the SchedulerDO alarm handler or the\n * `POST /api/agents/:agentId/wakeup` endpoint.\n *\n * Idempotency: `runId` is unique per invocation. Cloudflare Workflows\n * guarantee each step runs at most once per `runId`; duplicate triggers\n * are deduplicated by the Workflow engine using the instance ID.\n */\nexport class HeartbeatWorkflow extends WorkflowEntrypoint\u003cEnv, HeartbeatParams\u003e {\n  async run(event: WorkflowEvent\u003cHeartbeatParams\u003e, step: WorkflowStep): Promise\u003cvoid\u003e {\n    const { agentId, companyId, runId, taskId } = event.payload;\n\n    // ------------------------------------------------------------------\n    // Step 1: Initialise the run record and mark it as running\n    // ------------------------------------------------------------------\n    await step.do(\"init-run\", async () =\u003e {\n      const id = this.env.AGENT_RUN_DO.idFromName(runId);\n      const stub = this.env.AGENT_RUN_DO.get(id);\n\n      const initResp = await stub.fetch(\"http://internal/init\", {\n        method: \"POST\",\n        headers: { \"Content-Type\": \"application/json\" },\n        body: JSON.stringify({\n          runId,\n          agentId,\n          companyId,\n          taskId,\n          status: \"running\",\n          startedAt: new Date().toISOString(),\n          logCount: 0,\n        }),\n      });\n      if (!initResp.ok) {\n        throw new Error(`AgentRunDO init failed: HTTP ${initResp.status}`);\n      }\n\n      if (taskId) {\n        const taskId_ = this.env.TASK_DO.idFromName(taskId);\n        const taskStub = this.env.TASK_DO.get(taskId_);\n        await taskStub.fetch(\"http://internal/state\", {\n          method: \"POST\",\n          headers: { \"Content-Type\": \"application/json\" },\n          body: JSON.stringify({\n            taskId,\n            status: \"running\",\n            currentStep: \"heartbeat\",\n            updatedAt: new Date().toISOString(),\n          }),\n        });\n      }\n    });\n\n    // ------------------------------------------------------------------\n    // Step 2: Execute the heartbeat via sidecar (CF Container or bridge)\n    // ------------------------------------------------------------------\n    const executeResult = await step.do(\n      \"execute\",\n      {\n        timeout: \"5 minutes\",\n        retries: { limit: 2, delay: \"5 seconds\", backoff: \"linear\" },\n      },\n      async () =\u003e {\n        const body = JSON.stringify({ agentId, companyId, runId, taskId });\n        const headers = { \"Content-Type\": \"application/json\" };\n\n        let resp: Response;\n        if (this.env.SIDECAR_SERVICE) {\n          // CF-native path: call the sidecar container directly via the\n          // service binding. No network egress, no external server needed.\n          resp = await this.env.SIDECAR_SERVICE.fetch(\n            \"http://sidecar/internal/heartbeat\",\n            { method: \"POST\", headers, body },\n          );\n        } else {\n          // Fallback: read bridge URL + key from KV and call via fetch().\n          const bridgeUrl =\n            (await this.env.PAPERCLIP_KV.get(\"SANDBOX_BRIDGE_URL\")) ??\n            \"http://localhost:8788\";\n          const apiKey = await this.env.PAPERCLIP_KV.get(\"SANDBOX_BRIDGE_API_KEY\");\n          resp = await fetch(`${bridgeUrl}/internal/heartbeat`, {\n            method: \"POST\",\n            headers: {\n              ...headers,\n              ...(apiKey ? { Authorization: `Bearer ${apiKey}` } : {}),\n            },\n            body,\n          });\n        }\n\n        if (!resp.ok) {\n          const text = await resp.text().catch(() =\u003e \"(unreadable)\");\n          throw new Error(`Heartbeat execution failed: HTTP ${resp.status}: ${text}`);\n        }\n\n        return (await resp.json()) as { status: string; liveness?: string };\n      },\n    );\n\n    // ------------------------------------------------------------------\n    // Step 3: Record the result in AgentRunDO and notify TaskDO\n    // ------------------------------------------------------------------\n    await step.do(\"record-result\", async () =\u003e {\n      const id = this.env.AGENT_RUN_DO.idFromName(runId);\n      const stub = this.env.AGENT_RUN_DO.get(id);\n\n      const succeeded = executeResult?.status !== \"failed\";\n      await stub.fetch(\"http://internal/state\", {\n        method: \"POST\",\n        headers: { \"Content-Type\": \"application/json\" },\n        body: JSON.stringify({\n          status: succeeded ? \"succeeded\" : \"failed\",\n          completedAt: new Date().toISOString(),\n        }),\n      });\n\n      if (taskId) {\n        const taskId_ = this.env.TASK_DO.idFromName(taskId);\n        const taskStub = this.env.TASK_DO.get(taskId_);\n        await taskStub.fetch(\"http://internal/state\", {\n          method: \"POST\",\n          headers: { \"Content-Type\": \"application/json\" },\n          body: JSON.stringify({\n            taskId,\n            status: succeeded ? \"running\" : \"failed\",\n            currentStep: \"idle\",\n            updatedAt: new Date().toISOString(),\n          }),\n        });\n      }\n    });\n  }\n}\n",
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          " ",
+          "         let resp: Response;",
+          "         if (this.env.SIDECAR_SERVICE) {",
+          "-          // CF-native path: call the sidecar container directly via the",
+          "-          // service binding. No network egress, no external server needed.",
+          "-          resp = await this.env.SIDECAR_SERVICE.fetch(",
+          "+          // CF-native path: SidecarContainer DO proxies to the Docker container.",
+          "+          // The DO handles container start/lifecycle; we just call fetch().",
+          "+          const id = this.env.SIDECAR_SERVICE.idFromName(\"sidecar\");",
+          "+          const stub = this.env.SIDECAR_SERVICE.get(id);",
+          "+          resp = await stub.fetch(",
+          "             \"http://sidecar/internal/heartbeat\",",
+          "             { method: \"POST\", headers, body },",
+          "           );"
+        ],
+        "newLines": 11,
+        "newStart": 116,
+        "oldLines": 9,
+        "oldStart": 116
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "a18cf998-8d47-4155-9f6f-484a6bc64b77",
+  "version": "2.1.123"
+}

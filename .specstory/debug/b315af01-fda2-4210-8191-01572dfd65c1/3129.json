@@ -1,0 +1,55 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/http/cf-express-bridge.ts has been updated successfully.",
+        "tool_use_id": "toolu_01AH6XqgTvKVbDv2sLZ9Abuu",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "3cb46d62-d86b-4c36-b204-30a983f1e77a",
+  "promptId": "7323a41a-dd8a-4783-b590-aea4ab5316a7",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "3cb46d62-d86b-4c36-b204-30a983f1e77a",
+  "timestamp": "2026-04-30T21:33:31.199Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/http/cf-express-bridge.ts",
+    "newString": "    _reject(e: unknown) {\n      if (!this._settled) { this._settled = true; _rejectInner(e); }\n      else console.error(\"[CF Worker] Handler error after response settled:\", e);\n    },",
+    "oldString": "    _reject(e: unknown) { if (!this._settled) { this._settled = true; _rejectInner(e); } },",
+    "originalFile": null,
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          "     _headers: new Headers(),",
+          "     _settled: false,",
+          "     _resolve,",
+          "-    _reject(e: unknown) { if (!this._settled) { this._settled = true; _rejectInner(e); } },",
+          "+    _reject(e: unknown) {",
+          "+      if (!this._settled) { this._settled = true; _rejectInner(e); }",
+          "+      else console.error(\"[CF Worker] Handler error after response settled:\", e);",
+          "+    },",
+          "     promise,",
+          "     status(code) { this._status = code; return this; },",
+          "     json(data) {"
+        ],
+        "newLines": 10,
+        "newStart": 100,
+        "oldLines": 7,
+        "oldStart": 100
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "fcde79c5-75f9-4024-8552-bf351c68f984",
+  "version": "2.1.123"
+}

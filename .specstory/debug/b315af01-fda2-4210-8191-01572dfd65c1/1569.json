@@ -1,0 +1,61 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "text": "Committed. `GET /api/plugins` now returns `[]` and the full set of previously-501 endpoints are all resolved — zero 501 errors remain in the wrangler log.",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01Y3sEKnornJKPbqa7WYzoZX",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 434
+      },
+      "cache_creation_input_tokens": 434,
+      "cache_read_input_tokens": 90060,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 434
+          },
+          "cache_creation_input_tokens": 434,
+          "cache_read_input_tokens": 90060,
+          "input_tokens": 1,
+          "output_tokens": 45,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 45,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "6e7ba1e2-c069-404b-bfc6-7a43009bea0f",
+  "requestId": "req_011CaaTTYVybwhyGkkff5SeE",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T18:49:43.407Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "ce668fef-facf-4767-8596-af64151ab578",
+  "version": "2.1.123"
+}

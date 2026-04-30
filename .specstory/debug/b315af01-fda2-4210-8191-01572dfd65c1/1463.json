@@ -1,0 +1,57 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/app.ts has been updated successfully.",
+        "tool_use_id": "toolu_011uBcuc8Y7FWvRXUFnYZNSD",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "0f2e66cd-1b2c-4fda-ac1d-366cb00213d5",
+  "promptId": "9aae9721-e466-4259-b66e-e724bd2f2c66",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "0f2e66cd-1b2c-4fda-ac1d-366cb00213d5",
+  "timestamp": "2026-04-30T18:29:20.306Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/app.ts",
+    "newString": "// ---------------------------------------------------------------------------\n// R2-native upload endpoints (registered before the /api/* catch-all)\n// ---------------------------------------------------------------------------\n\nregisterUploadHandlers(app);\n\n// ---------------------------------------------------------------------------\n// CF-native implementations of routes that use raw Express handlers or depend\n// on runtime registries not present in CF Workers (adapters, plugins, access)\n// ---------------------------------------------------------------------------\n\nregisterCfExtraRoutes(app);\n\n// ---------------------------------------------------------------------------\n// Main API catch-all",
+    "oldString": "// ---------------------------------------------------------------------------\n// R2-native upload endpoints (registered before the /api/* catch-all)\n// ---------------------------------------------------------------------------\n\nregisterUploadHandlers(app);\n\n// ---------------------------------------------------------------------------\n// Main API catch-all",
+    "originalFile": "/**\n * app.ts\n *\n * Hono application: middleware, setup gate, upload endpoints, and the\n * main `/api/*` catch-all that dispatches to transport-agnostic handlers.\n *\n * Exported as `app` so the thin `api.ts` entry point can call `app.fetch()`.\n */\n\nimport { Hono } from \"hono\";\nimport { createSetupApp } from \"./setup.js\";\nimport { buildRequestResources } from \"./route-registry.js\";\nimport { resolveActorFromRequest } from \"../auth/resolve-actor.js\";\nimport { registerUploadHandlers } from \"./upload-handlers.js\";\nimport { registerCfExtraRoutes } from \"./cf-extra-routes.js\";\nimport { HttpError } from \"../../../../server/src/errors.js\";\nimport type { Env } from \"./env.js\";\nimport { resolveDeploymentMode } from \"./env.js\";\n\nexport const app = new Hono\u003c{ Bindings: Env }\u003e();\n\n// ---------------------------------------------------------------------------\n// Health check — always reachable, no auth, no setup gate\n// ---------------------------------------------------------------------------\n\napp.get(\"/api/health\", (c) =\u003e\n  c.json({\n    status: \"ok\",\n    platform: c.env.DEPLOYMENT_PLATFORM ?? \"cloudflare\",\n    mode: c.env.DEPLOYMENT_MODE ?? \"authenticated\",\n    ts: new Date().toISOString(),\n  }),\n);\n\n// ---------------------------------------------------------------------------\n// First-run setup gate\n//\n// Redirects all non-health, non-setup traffic to /setup until the operator\n// completes first-run configuration. Bypassed in `local_trusted` mode.\n// ---------------------------------------------------------------------------\n\napp.use(\"*\", async (c, next) =\u003e {\n  if (c.req.path === \"/api/health\" || c.req.path.startsWith(\"/setup\")) {\n    return next();\n  }\n  if (c.env.DEPLOYMENT_MODE === \"local_trusted\") {\n    return next();\n  }\n  const setupCompleted = await c.env.PAPERCLIP_KV.get(\"SETUP_COMPLETED\");\n  if (setupCompleted !== \"true\") {\n    return c.redirect(\"/setup\");\n  }\n  return next();\n});\n\n// ---------------------------------------------------------------------------\n// Setup sub-app (strips /setup prefix and forwards to the setup Hono app)\n// ---------------------------------------------------------------------------\n\napp.all(\"/setup/*\", async (c) =\u003e {\n  const setupSub = createSetupApp(c.env);\n  const url = new URL(c.req.url);\n  url.pathname = url.pathname.replace(/^\\/setup/, \"\") || \"/\";\n  return setupSub.fetch(new Request(url.toString(), c.req.raw));\n});\n\napp.all(\"/setup\", async (c) =\u003e {\n  const setupSub = createSetupApp(c.env);\n  const url = new URL(c.req.url);\n  url.pathname = \"/\";\n  return setupSub.fetch(new Request(url.toString(), c.req.raw));\n});\n\n// ---------------------------------------------------------------------------\n// R2-native upload endpoints (registered before the /api/* catch-all)\n// ---------------------------------------------------------------------------\n\nregisterUploadHandlers(app);\n\n// ---------------------------------------------------------------------------\n// Main API catch-all\n//\n// Manual routing: iterate compiled route definitions, match method + path,\n// and invoke the transport-agnostic Handler. Using a single wildcard route\n// avoids blowing Hono's internal route trie limit (229+ routes).\n// ---------------------------------------------------------------------------\n\napp.all(\"/api/*\", async (c) =\u003e {\n  const { compiled, db, storage } = buildRequestResources(c.env);\n\n  // Normalize trailing slash so /api/companies/ matches /api/companies routes.\n  const rawPathname = new URL(c.req.url).pathname;\n  const pathname = rawPathname.length \u003e 1 ? rawPathname.replace(/\\/$/, \"\") : rawPathname;\n  const method = c.req.method.toUpperCase();\n\n  for (const { route, re, paramNames } of compiled) {\n    if (route.method !== method) continue;\n    const match = re.exec(pathname);\n    if (!match) continue;\n\n    const params: Record\u003cstring, string\u003e = {};\n    for (let i = 0; i \u003c paramNames.length; i++) {\n      params[paramNames[i]!] = match[i + 1]!;\n    }\n\n    const actor = await resolveActorFromRequest(c.req.raw, db, {\n      deploymentMode: resolveDeploymentMode(c.env),\n    });\n\n    const ctx: import(\"../../../../server/src/http/types.js\").RequestCtx = {\n      method: c.req.method,\n      url: new URL(c.req.url),\n      headers: new Headers(c.req.raw.headers),\n      json\u003cT\u003e(): Promise\u003cT\u003e { return c.req.json\u003cT\u003e(); },\n      text(): Promise\u003cstring\u003e { return c.req.text(); },\n      param(name: string): string | undefined { return params[name]; },\n      query(name: string): string | undefined { return c.req.query(name); },\n      actor,\n      db,\n      storage,\n    };\n\n    try {\n      return await route.handler(ctx);\n    } catch (err) {\n      if (err instanceof HttpError) {\n        return Response.json(\n          { error: err.message, ...(err.details !== undefined ? { details: err.details } : {}) },\n          { status: err.status },\n        );\n      }\n      console.error(\n        `[CF Worker] Unhandled error in ${route.method} ${route.path}: ${\n          err instanceof Error ? (err.stack ?? err.message) : String(err)\n        }`,\n      );\n      return Response.json({ error: \"Internal Server Error\" }, { status: 500 });\n    }\n  }\n\n  return c.json(\n    { error: \"This API route is not available in the Cloudflare Workers deployment.\", code: \"NOT_IMPLEMENTED\" },\n    501,\n  );\n});\n\n// ---------------------------------------------------------------------------\n// SPA fallback — delegates to the ASSETS binding (Workers Static Assets).\n// CF serves the matching file from ui/dist, or index.html for unknown paths\n// (not_found_handling = \"single-page-application\" in wrangler.toml).\n// ---------------------------------------------------------------------------\n\napp.all(\"*\", (c) =\u003e c.env.ASSETS.fetch(c.req.raw));\n",
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          " registerUploadHandlers(app);",
+          " ",
+          " // ---------------------------------------------------------------------------",
+          "+// CF-native implementations of routes that use raw Express handlers or depend",
+          "+// on runtime registries not present in CF Workers (adapters, plugins, access)",
+          "+// ---------------------------------------------------------------------------",
+          "+",
+          "+registerCfExtraRoutes(app);",
+          "+",
+          "+// ---------------------------------------------------------------------------",
+          " // Main API catch-all",
+          " //",
+          " // Manual routing: iterate compiled route definitions, match method + path,"
+        ],
+        "newLines": 13,
+        "newStart": 78,
+        "oldLines": 6,
+        "oldStart": 78
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "6cd8f6d7-885e-480c-8b92-cb701d04f4ca",
+  "version": "2.1.123"
+}

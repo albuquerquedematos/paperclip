@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "File created successfully at: /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/upload-handlers.ts",
+        "tool_use_id": "toolu_017C8HsiTf9yzYTwLHjzB731",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "0fa43e83-e769-49e2-be3d-c561c84728a0",
+  "promptId": "285fd922-5736-481c-a4fc-cf130aed3e81",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "0fa43e83-e769-49e2-be3d-c561c84728a0",
+  "timestamp": "2026-04-30T17:58:03.466Z",
+  "toolUseResult": {
+    "content": "/**\n * upload-handlers.ts\n *\n * R2-native file upload endpoints.\n *\n * These are registered on the Hono app BEFORE the generic `/api/*` catch-all\n * so they take priority. They write directly to R2 rather than going through\n * the multer-based Express middleware (which is shimmed as a no-op in CF).\n */\n\nimport type { Hono } from \"hono\";\nimport { buildRequestResources } from \"./route-registry.js\";\nimport { resolveActorFromRequest } from \"../auth/resolve-actor.js\";\nimport { HttpError } from \"../../../../server/src/errors.js\";\nimport type { Env } from \"./env.js\";\nimport { resolveDeploymentMode } from \"./env.js\";\n\nexport function registerUploadHandlers(app: Hono\u003c{ Bindings: Env }\u003e): void {\n  // PUT /api/assets/:assetId/upload\n  // Streams the request body directly into R2 under assets/\u003ccompanyId\u003e/\u003cassetId\u003e.\n  app.put(\"/api/assets/:assetId/upload\", async (c) =\u003e {\n    const { assets } = await import(\"../../../db/src/schema/index.js\");\n    const { eq } = await import(\"drizzle-orm\");\n    const { forbidden, notFound, badRequest } = await import(\"../../../../server/src/errors.js\");\n\n    const env = c.env;\n    const { db } = buildRequestResources(env);\n    const actor = await resolveActorFromRequest(c.req.raw, db, { deploymentMode: resolveDeploymentMode(env) });\n\n    try {\n      const assetId = c.req.param(\"assetId\");\n      if (!assetId) return c.json({ error: \"Missing assetId\" }, 400);\n\n      const assetRow = await db.select().from(assets).where(eq(assets.id, assetId)).then((rows) =\u003e rows[0] ?? null);\n      if (!assetRow) throw notFound(\"Asset not found\");\n\n      if (!actor) throw forbidden(\"Authentication required\");\n      if (actor.type === \"board\" \u0026\u0026 !actor.isInstanceAdmin \u0026\u0026 !actor.companyIds?.includes(assetRow.companyId)) {\n        throw forbidden(\"No access to this company\");\n      }\n      if (actor.type === \"agent\" \u0026\u0026 actor.companyId !== assetRow.companyId) {\n        throw forbidden(\"No access to this company\");\n      }\n\n      const body = c.req.raw.body;\n      if (!body) throw badRequest(\"Empty request body\");\n      const key = `assets/${assetRow.companyId}/${assetId}`;\n      await env.PAPERCLIP_STORAGE.put(key, body, {\n        httpMetadata: { contentType: c.req.header(\"content-type\") ?? \"application/octet-stream\" },\n      });\n      return c.json({ ok: true, key });\n    } catch (err) {\n      if (err instanceof HttpError) return c.json({ error: err.message }, err.status as 400 | 403 | 404);\n      console.error(\"[CF Worker] PUT /api/assets/:assetId/upload\", err);\n      return c.json({ error: \"Internal Server Error\" }, 500);\n    }\n  });\n\n  // POST /api/issues/:issueId/attachments/upload\n  // Streams the request body into R2 under issues/\u003ccompanyId\u003e/\u003cissueId\u003e/attachments/\u003cfilename\u003e.\n  app.post(\"/api/issues/:issueId/attachments/upload\", async (c) =\u003e {\n    const { issues } = await import(\"../../../db/src/schema/index.js\");\n    const { eq } = await import(\"drizzle-orm\");\n    const { forbidden, notFound, badRequest } = await import(\"../../../../server/src/errors.js\");\n\n    const env = c.env;\n    const { db } = buildRequestResources(env);\n    const actor = await resolveActorFromRequest(c.req.raw, db, { deploymentMode: resolveDeploymentMode(env) });\n\n    try {\n      const issueId = c.req.param(\"issueId\");\n      if (!issueId) return c.json({ error: \"Missing issueId\" }, 400);\n\n      const issueRow = await db\n        .select({ id: issues.id, companyId: issues.companyId })\n        .from(issues)\n        .where(eq(issues.id, issueId))\n        .then((rows) =\u003e rows[0] ?? null);\n      if (!issueRow) throw notFound(\"Issue not found\");\n\n      if (!actor) throw forbidden(\"Authentication required\");\n      if (actor.type === \"board\" \u0026\u0026 !actor.isInstanceAdmin \u0026\u0026 !actor.companyIds?.includes(issueRow.companyId)) {\n        throw forbidden(\"No access to this company\");\n      }\n      if (actor.type === \"agent\" \u0026\u0026 actor.companyId !== issueRow.companyId) {\n        throw forbidden(\"No access to this company\");\n      }\n\n      const body = c.req.raw.body;\n      if (!body) throw badRequest(\"Empty request body\");\n      const filename = (c.req.header(\"x-filename\") ?? \"attachment\").replace(/[^a-zA-Z0-9._-]/g, \"_\");\n      const key = `issues/${issueRow.companyId}/${issueId}/attachments/${filename}`;\n      await env.PAPERCLIP_STORAGE.put(key, body, {\n        httpMetadata: { contentType: c.req.header(\"content-type\") ?? \"application/octet-stream\" },\n      });\n      return c.json({ ok: true, key, filename });\n    } catch (err) {\n      if (err instanceof HttpError) return c.json({ error: err.message }, err.status as 400 | 403 | 404);\n      console.error(\"[CF Worker] POST /api/issues/:issueId/attachments/upload\", err);\n      return c.json({ error: \"Internal Server Error\" }, 500);\n    }\n  });\n}\n",
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/upload-handlers.ts",
+    "originalFile": null,
+    "structuredPatch": [],
+    "type": "create",
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "2ac8961c-965e-42b7-9eba-048bed882ab6",
+  "version": "2.1.123"
+}

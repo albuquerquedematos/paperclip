@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01DXpxkqxBnhLJdHq9KidFqE",
+        "input": {
+          "command": "cd /Users/migmac/Documents/GitHub/_ABM/paperclip \u0026\u0026 git add packages/deploy-cloudflare/src/worker/app.ts \u0026\u0026 git commit -m \"$(cat \u003c\u003c'EOF'\nfeat(deploy-cloudflare): auto-fallback to sidecar on CF-shim errors\n\nAuto-bridged server handlers may call Node-only APIs at runtime that the CF\nshim throws on (node:fs, child_process, command resolution). Previously each\nsuch handler returned 500 to the user and required a per-route CF-native\nshadow to fix.\n\nThis generalizes: when the auto-bridge handler throws an error matching a\nknown CF-shim message (\"not available in CF Workers\", \"Command not found in\nPATH\", \"Command is not executable\"), we transparently retry the same request\nagainst the sidecar. The sidecar runs the original handler with full host\ncapabilities and returns the result.\n\nTriggered the change: POST /api/companies/:companyId/agent-hires →\nmaterializeDefaultInstructionsBundleForNewAgent → fs.readFile → 500. This\nfix turns it into a successful sidecar-served response without any per-route\nshadow needed.\n\nThe request body is now buffered once at the top of the catch-all so it can\nbe replayed to the sidecar on fallback (handlers consume it via ctx.json /\nctx.text, which now read from the same buffer).\n\nCo-Authored-By: Claude Sonnet 4.6 \u003cnoreply@anthropic.com\u003e\nEOF\n)\"",
+          "description": "Commit auto-fallback to sidecar"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_0196ZQvUV7Fo9SRCCfHBcRBN",
+    "model": "claude-opus-4-7",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 593,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 593,
+      "cache_read_input_tokens": 303042,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 593,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 593,
+          "cache_read_input_tokens": 303042,
+          "input_tokens": 1,
+          "output_tokens": 589,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 589,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "2fcf640e-eb57-41cb-8b97-e43fe1e3f6c3",
+  "requestId": "req_011Caan2wLRZSZz9zv4qFLwZ",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T22:53:27.956Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "53e446e7-690a-4a29-9e6f-dc9013ebf0a6",
+  "version": "2.1.123"
+}

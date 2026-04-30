@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01QUhaCmTKdf3epcBXkFaFvF",
+        "input": {
+          "command": "git status --short | head -30",
+          "description": "Check uncommitted changes"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_014d5eQ7Zo9Ghmuu9XSdArdd",
+    "model": "claude-opus-4-7",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 642,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 642,
+      "cache_read_input_tokens": 448421,
+      "inference_geo": "",
+      "input_tokens": 6,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 642,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 642,
+          "cache_read_input_tokens": 448421,
+          "input_tokens": 6,
+          "output_tokens": 178,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 178,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "7b1ce207-2775-4276-847c-4bf436a98e7a",
+  "requestId": "req_011Caap1fcpqwh7jKP4dHi4P",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T23:19:16.875Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "a8e5e57e-be78-4277-975e-60bf8a64b247",
+  "version": "2.1.123"
+}

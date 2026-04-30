@@ -1,0 +1,61 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "text": "Found it. The `router.param(\"id\")` middleware on the sidecar throws if it can't resolve a non-UUID. CF auto-fallback proxies to sidecar, sidecar's middleware throws → 500. Let me make the middleware permissive (just leave rawId; let handler's `getById` resolve via URL key):",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01KGWMGbj5xBRsRhN4VDjufW",
+    "model": "claude-opus-4-7",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 465,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 465,
+      "cache_read_input_tokens": 442760,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 465,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 465,
+          "cache_read_input_tokens": 442760,
+          "input_tokens": 1,
+          "output_tokens": 2204,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 2204,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "9f840194-4300-4f2d-8fcc-309423026085",
+  "requestId": "req_011Caaoq6QHWDeaiy9T8At4p",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T23:17:12.585Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "071d668d-f3e1-49ee-997f-c9d3cb8057b2",
+  "version": "2.1.123"
+}

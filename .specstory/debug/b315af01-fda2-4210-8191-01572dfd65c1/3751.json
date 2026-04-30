@@ -1,0 +1,27 @@
+{
+  "agentId": "a3a306fc5d1924556",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1085\t        : null,\n1086\t      currentExecutionWorkspace,\n1087\t    });\n1088\t  };\n1089\t\n1090\t  const getIssue: Handler = async (ctx) =\u003e {\n1091\t    const id = ctx.param(\"id\")!;\n1092\t    const issue = await svc.getById(id);\n1093\t    if (!issue) return Response.json({ error: \"Issue not found\" }, { status: 404 });\n1094\t    assertCompanyAccess(ctx, issue.companyId);\n1095\t    const [\n1096\t      { project, goal },\n1097\t      ancestors,\n1098\t      mentionedProjectIds,\n1099\t      documentPayload,\n1100\t      relations,\n1101\t      blockerAttention,\n1102\t      productivityReview,\n1103\t      referenceSummary,\n1104\t    ] = await Promise.all([\n1105\t      resolveIssueProjectAndGoal(issue),\n1106\t      svc.getAncestors(issue.id),\n1107\t      svc.findMentionedProjectIds(issue.id, { includeCommentBodies: false }),\n1108\t      documentsSvc.getIssueDocumentPayload(issue),\n1109\t      svc.getRelationSummaries(issue.id),\n1110\t      svc.listBlockerAttention(issue.companyId, [issue]).then((map) =\u003e map.get(issue.id) ?? null),\n1111\t      svc.listProductivityReviews(issue.companyId, [issue.id]).then((map) =\u003e map.get(issue.id) ?? null),\n1112\t      issueReferencesSvc.listIssueReferenceSummary(issue.id),\n1113\t    ]);\n1114\t    const mentionedProjects = mentionedProjectIds.length \u003e 0\n\n\u003csystem-reminder\u003e\nWhenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.\n\u003c/system-reminder\u003e\n",
+        "tool_use_id": "toolu_01CUhXU9inwT9SCxtg899YbF",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "8d0459c1-0237-41fa-ae4e-593dee3fceee",
+  "promptId": "e7cbb211-1d37-4345-b546-c3d4bd07be80",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "8d0459c1-0237-41fa-ae4e-593dee3fceee",
+  "timestamp": "2026-04-30T22:57:34.596Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "5df99994-036b-4de5-9972-ddae7e6eb0d2",
+  "version": "2.1.123"
+}

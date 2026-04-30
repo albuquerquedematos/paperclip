@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "14:import { createHash } from \"node:crypto\";\n15:import { promises as fs } from \"node:fs\";\n16:import path from \"node:path\";\n17:import { fileURLToPath } from \"node:url\";\n18:import { and, asc, eq } from \"drizzle-orm\";\n19:import type { Db } from \"@paperclipai/db\";\n20:import { companies, companySkills } from \"@paperclipai/db\";\n21:import { readPaperclipSkillSyncPreference } from \"@paperclipai/adapter-utils/server-utils\";\n22:import type { PaperclipSkillEntry } from \"@paperclipai/adapter-utils/server-utils\";\n23:import type {\n42:import { normalizeAgentUrlKey } from \"@paperclipai/shared\";\n43:import { resolvePaperclipInstanceRoot } from \"../home-paths.js\";\n44:import { notFound, unprocessable } from \"../errors.js\";\n45:import { ghFetch, gitHubApiBase, resolveRawGitHubUrl } from \"./github-fetch.js\";\n46:import { agentService } from \"./agents.js\";\n47:import { projectService } from \"./projects.js\";",
+        "is_error": false,
+        "tool_use_id": "toolu_01CT4N7Q8MHLqUuXiCcdZqwp",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "3c7efa34-7e34-4ec2-a9d8-9f2fdf01cd07",
+  "promptId": "6578f9d8-71c9-42ed-bd5d-4cac4f413d52",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "3c7efa34-7e34-4ec2-a9d8-9f2fdf01cd07",
+  "timestamp": "2026-04-30T19:05:22.143Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "14:import { createHash } from \"node:crypto\";\n15:import { promises as fs } from \"node:fs\";\n16:import path from \"node:path\";\n17:import { fileURLToPath } from \"node:url\";\n18:import { and, asc, eq } from \"drizzle-orm\";\n19:import type { Db } from \"@paperclipai/db\";\n20:import { companies, companySkills } from \"@paperclipai/db\";\n21:import { readPaperclipSkillSyncPreference } from \"@paperclipai/adapter-utils/server-utils\";\n22:import type { PaperclipSkillEntry } from \"@paperclipai/adapter-utils/server-utils\";\n23:import type {\n42:import { normalizeAgentUrlKey } from \"@paperclipai/shared\";\n43:import { resolvePaperclipInstanceRoot } from \"../home-paths.js\";\n44:import { notFound, unprocessable } from \"../errors.js\";\n45:import { ghFetch, gitHubApiBase, resolveRawGitHubUrl } from \"./github-fetch.js\";\n46:import { agentService } from \"./agents.js\";\n47:import { projectService } from \"./projects.js\";"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "08f43a60-425d-4789-94db-c3b438404e87",
+  "version": "2.1.123"
+}

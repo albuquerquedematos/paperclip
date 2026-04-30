@@ -1,0 +1,80 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/tests/cf-smoke/cf-smoke.spec.ts has been updated successfully.",
+        "tool_use_id": "toolu_01AUGykfT2uHnFMioFCnSWkT",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "9f367581-66f9-4c2f-b2c8-9b800ea4f834",
+  "promptId": "0c147d6f-915f-4b9e-a139-f26417e7157e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "9f367581-66f9-4c2f-b2c8-9b800ea4f834",
+  "timestamp": "2026-04-30T23:08:42.482Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/tests/cf-smoke/cf-smoke.spec.ts",
+    "newString": "describe(\"CF Worker smoke — agent-scoped reads (regression: URL-key resolution)\", () =\u003e {\n  const routes = [\n    \"\",\n    \"configuration\",\n    \"config-revisions\",\n    \"runtime-state\",\n    \"task-sessions\",\n    \"skills\",\n    \"instructions-bundle\",\n    \"keys\",\n  ];\n\n  for (const tail of routes) {\n    it(`GET /api/agents/:uuid${tail ? \"/\" + tail : \"\"}`, async () =\u003e {\n      if (!agent) return;\n      const path = `/api/agents/${agent.id}${tail ? \"/\" + tail : \"\"}`;\n      const r = await get(path);\n      expectNoCrash(`GET ${path}`, r.status);\n    });\n\n    it(`GET /api/agents/:urlKey${tail ? \"/\" + tail : \"\"} (regression)`, async () =\u003e {\n      if (!agent?.urlKey) return;\n      const path = `/api/agents/${agent.urlKey}${tail ? \"/\" + tail : \"\"}`;\n      const r = await get(path);\n      expectNoCrash(`GET ${path}`, r.status);\n    });\n  }\n});",
+    "oldString": "describe(\"CF Worker smoke — agent-scoped reads\", () =\u003e {\n  const routes = [\n    \"\",\n    \"configuration\",\n    \"config-revisions\",\n    \"runtime-state\",\n    \"task-sessions\",\n    \"skills\",\n    \"instructions-bundle\",\n    \"keys\",\n  ];\n\n  for (const tail of routes) {\n    it(`GET /api/agents/:id${tail ? \"/\" + tail : \"\"}`, async () =\u003e {\n      if (!agent) return;\n      const path = `/api/agents/${agent.id}${tail ? \"/\" + tail : \"\"}`;\n      const r = await get(path);\n      expectNoCrash(`GET ${path}`, r.status);\n    });\n  }\n});",
+    "originalFile": null,
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          " // 4. Agent-scoped routes",
+          " // ---------------------------------------------------------------------------",
+          " ",
+          "-describe(\"CF Worker smoke — agent-scoped reads\", () =\u003e {",
+          "+describe(\"CF Worker smoke — agent-scoped reads (regression: URL-key resolution)\", () =\u003e {",
+          "   const routes = [",
+          "     \"\",",
+          "     \"configuration\","
+        ],
+        "newLines": 7,
+        "newStart": 217,
+        "oldLines": 7,
+        "oldStart": 217
+      },
+      {
+        "lines": [
+          "   ];",
+          " ",
+          "   for (const tail of routes) {",
+          "-    it(`GET /api/agents/:id${tail ? \"/\" + tail : \"\"}`, async () =\u003e {",
+          "+    it(`GET /api/agents/:uuid${tail ? \"/\" + tail : \"\"}`, async () =\u003e {",
+          "       if (!agent) return;",
+          "       const path = `/api/agents/${agent.id}${tail ? \"/\" + tail : \"\"}`;",
+          "       const r = await get(path);",
+          "       expectNoCrash(`GET ${path}`, r.status);",
+          "     });",
+          "+",
+          "+    it(`GET /api/agents/:urlKey${tail ? \"/\" + tail : \"\"} (regression)`, async () =\u003e {",
+          "+      if (!agent?.urlKey) return;",
+          "+      const path = `/api/agents/${agent.urlKey}${tail ? \"/\" + tail : \"\"}`;",
+          "+      const r = await get(path);",
+          "+      expectNoCrash(`GET ${path}`, r.status);",
+          "+    });",
+          "   }",
+          " });",
+          " "
+        ],
+        "newLines": 19,
+        "newStart": 230,
+        "oldLines": 12,
+        "oldStart": 230
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "3b809267-5d25-4105-abb2-7bcaae89368b",
+  "version": "2.1.123"
+}

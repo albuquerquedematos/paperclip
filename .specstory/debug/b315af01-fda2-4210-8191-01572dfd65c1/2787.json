@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "# Local dev overrides — loaded by `wrangler dev` automatically\n# Override authenticated mode so requests don't require login tokens\nDEPLOYMENT_MODE=local_trusted\nDEPLOYMENT_PLATFORM=cloudflare\nDEPLOYMENT_EXPOSURE=private\n\n# Sidecar = the local Node server (runs plugin jobs, etc.)\n# Set to the running dev server; leave blank if not needed locally\nSIDECAR_URL=http://127.0.0.1:3101\nSIDECAR_API_KEY=dev-local",
+        "is_error": false,
+        "tool_use_id": "toolu_01Utz7bC5jZvRgpmWFHgzcFX",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "8d379220-e066-42e3-9217-f1eb8a79cdc8",
+  "promptId": "bc159bd2-fb14-4f40-9622-b5316aa15ab4",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "8d379220-e066-42e3-9217-f1eb8a79cdc8",
+  "timestamp": "2026-04-30T20:50:21.608Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "# Local dev overrides — loaded by `wrangler dev` automatically\n# Override authenticated mode so requests don't require login tokens\nDEPLOYMENT_MODE=local_trusted\nDEPLOYMENT_PLATFORM=cloudflare\nDEPLOYMENT_EXPOSURE=private\n\n# Sidecar = the local Node server (runs plugin jobs, etc.)\n# Set to the running dev server; leave blank if not needed locally\nSIDECAR_URL=http://127.0.0.1:3101\nSIDECAR_API_KEY=dev-local"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "0f44556a-2381-43ac-9ac8-27e7ac8a3f3a",
+  "version": "2.1.123"
+}

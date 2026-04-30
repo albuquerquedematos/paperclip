@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.remote.test.ts:198:    expect(call?.[2]).not.toContain(\"--resume\");\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.remote.test.ts:258:    expect(call?.[2]).toContain(\"--resume\");\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/parse.test.ts:83:          result: \"No conversation found with session id abc-123\",\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/parse.test.ts:84:          errors: [{ message: \"No conversation found with session id abc-123\" }],\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:574:    resumeSessionId: string | null,\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:578:    if (resumeSessionId) args.push(\"--resume\", resumeSessionId);\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:592:    if (attemptInstructionsFilePath \u0026\u0026 !resumeSessionId) {\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:616:  const runAttempt = async (resumeSessionId: string | null) =\u003e {\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:617:    const attemptInstructionsFilePath = resumeSessionId ? undefined : effectiveInstructionsFilePath;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:618:    const args = buildClaudeArgs(resumeSessionId, attemptInstructionsFilePath);",
+        "is_error": false,
+        "tool_use_id": "toolu_013KU5kqg7Hv41Zutc8BFXTM",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "edefbec2-dd08-403e-ac19-75ca5068071f",
+  "promptId": "bbb6be00-c456-48d1-b25a-d991686281be",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "edefbec2-dd08-403e-ac19-75ca5068071f",
+  "timestamp": "2026-04-30T23:21:41.538Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.remote.test.ts:198:    expect(call?.[2]).not.toContain(\"--resume\");\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.remote.test.ts:258:    expect(call?.[2]).toContain(\"--resume\");\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/parse.test.ts:83:          result: \"No conversation found with session id abc-123\",\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/parse.test.ts:84:          errors: [{ message: \"No conversation found with session id abc-123\" }],\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:574:    resumeSessionId: string | null,\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:578:    if (resumeSessionId) args.push(\"--resume\", resumeSessionId);\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:592:    if (attemptInstructionsFilePath \u0026\u0026 !resumeSessionId) {\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:616:  const runAttempt = async (resumeSessionId: string | null) =\u003e {\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:617:    const attemptInstructionsFilePath = resumeSessionId ? undefined : effectiveInstructionsFilePath;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts:618:    const args = buildClaudeArgs(resumeSessionId, attemptInstructionsFilePath);"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "24718e9b-67a0-4c9e-bb19-1d82d3dd304e",
+  "version": "2.1.123"
+}

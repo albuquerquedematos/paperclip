@@ -1,0 +1,61 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "text": "Now collect all 501s seen so far, then do a proper codebase audit in parallel:",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01DgN9qUjsYv37SDicLzwGJi",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 180
+      },
+      "cache_creation_input_tokens": 180,
+      "cache_read_input_tokens": 100487,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 180
+          },
+          "cache_creation_input_tokens": 180,
+          "cache_read_input_tokens": 100487,
+          "input_tokens": 1,
+          "output_tokens": 144,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 144,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "21ee9e4c-6e31-4c34-b55c-e7c6a1d6adff",
+  "requestId": "req_011CaaTnYxYBML7b3uJ8SvuC",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T18:54:01.694Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "a5e9aeeb-5053-4178-a349-e8037ec00519",
+  "version": "2.1.123"
+}

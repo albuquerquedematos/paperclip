@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/context/LiveUpdatesProvider.tsx:567:    action: { label: \"View agent\", href: `/agents/${agentId}` },\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/context/LiveUpdatesProvider.tsx:604:    action: { label: \"View run\", href: `/agents/${agentId}/runs/${runId}` },\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/components/CommentThread.tsx:362:          \u003cLink to={`/agents/${comment.authorAgentId}`} className=\"hover:underline\"\u003e\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/components/CommentThread.tsx:440:                to={`/agents/${comment.runAgentId}/runs/${comment.runId}`}\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/components/CommentThread.tsx:457:              to={`/agents/${comment.runAgentId}/runs/${comment.runId}`}\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/components/CommentThread.tsx:628:                  \u003cLink to={`/agents/${run.agentId}`} className=\"font-medium text-foreground transition-colors hover:underline\"\u003e\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/components/CommentThread.tsx:633:                    to={`/agents/${run.agentId}/runs/${run.runId}`}\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/components/ActiveAgentsPanel.tsx:163:            to={`/agents/${run.agentId}/runs/${run.id}`}\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/components/MarkdownBody.tsx:316:            : `/agents/${parsed.agentId}`;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/components/IssueProperties.tsx:1083:              to={`/agents/${issue.assigneeAgentId}`}\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/components/IssueProperties.tsx:1324:                to={`/agents/${issue.createdByAgentId}`}\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/components/IssueRunLedger.tsx:598:                    to={`/agents/${run.agentId}/runs/${run.runId}`}\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/components/IssueRunLedger.tsx:674:                          to={`/agents/${run.agentId}/runs/${retryState.retryOfRunId}`}\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/components/ActivityRow.tsx:13:    case \"agent\": return `/agents/${entityId}`;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/components/ActivityRow.tsx:45:    ? `/agents/${heartbeatAgentId}/runs/${event.entityId}`",
+        "is_error": false,
+        "tool_use_id": "toolu_01DNBJbny4B7gFJVc6zXUYiZ",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "922378db-5349-4b9e-ad14-f004c50c983f",
+  "promptId": "0c147d6f-915f-4b9e-a139-f26417e7157e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "922378db-5349-4b9e-ad14-f004c50c983f",
+  "timestamp": "2026-04-30T23:04:48.361Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/context/LiveUpdatesProvider.tsx:567:    action: { label: \"View agent\", href: `/agents/${agentId}` },\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/context/LiveUpdatesProvider.tsx:604:    action: { label: \"View run\", href: `/agents/${agentId}/runs/${runId}` },\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/components/CommentThread.tsx:362:          \u003cLink to={`/agents/${comment.authorAgentId}`} className=\"hover:underline\"\u003e\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/components/CommentThread.tsx:440:                to={`/agents/${comment.runAgentId}/runs/${comment.runId}`}\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/components/CommentThread.tsx:457:              to={`/agents/${comment.runAgentId}/runs/${comment.runId}`}\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/components/CommentThread.tsx:628:                  \u003cLink to={`/agents/${run.agentId}`} className=\"font-medium text-foreground transition-colors hover:underline\"\u003e\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/components/CommentThread.tsx:633:                    to={`/agents/${run.agentId}/runs/${run.runId}`}\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/components/ActiveAgentsPanel.tsx:163:            to={`/agents/${run.agentId}/runs/${run.id}`}\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/components/MarkdownBody.tsx:316:            : `/agents/${parsed.agentId}`;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/components/IssueProperties.tsx:1083:              to={`/agents/${issue.assigneeAgentId}`}\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/components/IssueProperties.tsx:1324:                to={`/agents/${issue.createdByAgentId}`}\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/components/IssueRunLedger.tsx:598:                    to={`/agents/${run.agentId}/runs/${run.runId}`}\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/components/IssueRunLedger.tsx:674:                          to={`/agents/${run.agentId}/runs/${retryState.retryOfRunId}`}\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/components/ActivityRow.tsx:13:    case \"agent\": return `/agents/${entityId}`;\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/components/ActivityRow.tsx:45:    ? `/agents/${heartbeatAgentId}/runs/${event.entityId}`"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "8084ff0c-c97b-461e-9d0a-722ef34209d0",
+  "version": "2.1.123"
+}

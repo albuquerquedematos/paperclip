@@ -1,0 +1,27 @@
+{
+  "agentId": "ae240282fd51e7edd",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport fs from \"node:fs/promises\";\n2\timport path from \"node:path\";\n3\timport { fileURLToPath } from \"node:url\";\n4\timport { inferOpenAiCompatibleBiller, type AdapterExecutionContext, type AdapterExecutionResult } from \"@paperclipai/adapter-utils\";\n5\timport {\n6\t  adapterExecutionTargetIsRemote,\n7\t  adapterExecutionTargetPaperclipApiUrl,\n8\t  adapterExecutionTargetRemoteCwd,\n9\t  adapterExecutionTargetSessionIdentity,\n10\t  adapterExecutionTargetSessionMatches,\n11\t  adapterExecutionTargetUsesPaperclipBridge,\n12\t  describeAdapterExecutionTarget,\n13\t  ensureAdapterExecutionTargetCommandResolvable,\n14\t  prepareAdapterExecutionTargetRuntime,\n15\t  readAdapterExecutionTarget,\n16\t  resolveAdapterExecutionTargetCommandForLogs,\n17\t  runAdapterExecutionTargetProcess,\n18\t  startAdapterExecutionTargetPaperclipBridge,\n19\t} from \"@paperclipai/adapter-utils/execution-target\";\n20\timport {\n21\t  asString,\n22\t  asNumber,\n23\t  parseObject,\n24\t  applyPaperclipWorkspaceEnv,\n25\t  buildPaperclipEnv,\n26\t  buildInvocationEnvForLogs,\n27\t  ensureAbsoluteDirectory,\n28\t  ensurePaperclipSkillSymlink,\n29\t  ensurePathInEnv,\n30\t  readPaperclipRuntimeSkillEntries,\n31\t  resolvePaperclipDesiredSkillNames,\n32\t  renderTemplate,\n33\t  renderPaperclipWakePrompt,\n34\t  stringifyPaperclipWakePayload,\n35\t  DEFAULT_PAPERCLIP_AGENT_PROMPT_TEMPLATE,\n36\t  joinPromptSections,\n37\t} from \"@paperclipai/adapter-utils/server-utils\";\n38\timport {\n39\t  parseCodexJsonl,\n40\t  extractCodexRetryNotBefore,\n41\t  isCodexTransientUpstreamError,\n42\t  isCodexUnknownSessionError,\n43\t} from \"./parse.js\";\n44\timport { pathExists, prepareManagedCodexHome, resolveManagedCodexHomeDir, resolveSharedCodexHomeDir } from \"./codex-home.js\";\n45\timport { resolveCodexDesiredSkillNames } from \"./skills.js\";\n46\timport { buildCodexExecArgs } from \"./codex-args.js\";\n47\t\n48\tconst __moduleDir = path.dirname(fileURLToPath(import.meta.url));\n49\tconst CODEX_ROLLOUT_NOISE_RE =\n50\t  /^\\d{4}-\\d{2}-\\d{2}T[^\\s]+\\s+ERROR\\s+codex_core::rollout::list:\\s+state db missing rollout path for thread\\s+[a-z0-9-]+$/i;\n51\t\n52\tfunction stripCodexRolloutNoise(text: string): string {\n53\t  const parts = text.split(/\\r?\\n/);\n54\t  const kept: string[] = [];\n55\t  for (const part of parts) {\n56\t    const trimmed = part.trim();\n57\t    if (!trimmed) {\n58\t      kept.push(part);\n59\t      continue;\n60\t    }\n\n\u003csystem-reminder\u003e\nWhenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.\n\u003c/system-reminder\u003e\n",
+        "tool_use_id": "toolu_014bTPjpugXXqr397GvqRxCW",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "4c95ea58-ae6d-46c3-a312-7dfc4b27f469",
+  "promptId": "0d05d433-ef46-4bba-8105-f1d502a42e1e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "4c95ea58-ae6d-46c3-a312-7dfc4b27f469",
+  "timestamp": "2026-04-30T19:28:15.065Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "1bf9a720-c719-4844-bb36-0d6ad7df6dfe",
+  "version": "2.1.123"
+}

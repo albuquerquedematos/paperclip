@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-fs.ts:69:  readFile: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-fs.ts:70:  writeFile: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-fs.ts:71:  readdir: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-fs.ts:72:  mkdir: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-fs.ts:73:  stat: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-fs.ts:74:  lstat: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-fs.ts:75:  unlink: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-fs.ts:76:  access: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-fs.ts:77:  realpath: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-fs.ts:78:  open: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-fs.ts:79:  copyFile: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-fs.ts:80:  rename: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-fs.ts:81:  rm: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },",
+        "is_error": false,
+        "tool_use_id": "toolu_0185cz96zkHVtfxV3KGKXtc7",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "951f2cb0-1917-4577-852e-66a2be7a56ab",
+  "promptId": "3d1771d1-cfa0-436a-995c-faf39c690179",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "951f2cb0-1917-4577-852e-66a2be7a56ab",
+  "timestamp": "2026-04-30T22:40:51.289Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-fs.ts:69:  readFile: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-fs.ts:70:  writeFile: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-fs.ts:71:  readdir: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-fs.ts:72:  mkdir: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-fs.ts:73:  stat: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-fs.ts:74:  lstat: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-fs.ts:75:  unlink: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-fs.ts:76:  access: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-fs.ts:77:  realpath: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-fs.ts:78:  open: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-fs.ts:79:  copyFile: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-fs.ts:80:  rename: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-fs.ts:81:  rm: async () =\u003e { throw new Error(\"node:fs/promises not available in CF Workers\"); },"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "25c10250-de2a-4547-b0d6-ea54968ff7cb",
+  "version": "2.1.123"
+}

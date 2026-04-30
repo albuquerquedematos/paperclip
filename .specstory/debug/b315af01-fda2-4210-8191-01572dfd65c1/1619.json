@@ -1,0 +1,62 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "signature": "EtMCClsIDRgCKkBvlI2pj/kDTzFkAffSX69V0dpUMwxaJt0t9sldo+saXQkrTWH4b4bxWIb43laeGJPLHk4h4tGg7rSRbzZUh89lMhFjbGF1ZGUtc29ubmV0LTQtNjgAEgw4G4vqecqhDrZfxlMaDBfGGKXUQ4btYU4TvCIwx/z01ncIX3fn4mVHE6qVp3GbiG/H47wKcuUytxSUEP/HKFjI/NX7mSzEYdk2HmtFKqUBlScDzu9pff1yOenspk3DtbAfeFSXDpsjEgJRwH+Rp6L7DeAYfigcFulfdTByDInNIRyuPvB+s3LKR8jI33f/j7TNjyIBqDvldQy4mMzaVKJ0T5WY4mGRrUcqg9pSRgH4N5eva9vj0JMjhp5WIVPcxxulaj2ndnbcoKShW+hqizGRkZQVObER1S8cUsIFcMnBXS91TzZQnYolsVmDj2ZXFpxFOPntGAE=",
+        "thinking": "The settings pages seem to be redirecting to instance settings. Let me look at the sidebar to find the correct company-specific settings URL pattern.",
+        "type": "thinking"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01DFnphNBWZUG9GBceG4NaZX",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 182
+      },
+      "cache_creation_input_tokens": 182,
+      "cache_read_input_tokens": 99728,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 182
+          },
+          "cache_creation_input_tokens": 182,
+          "cache_read_input_tokens": 99728,
+          "input_tokens": 1,
+          "output_tokens": 113,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 113,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "fa9bedcd-1f87-4a45-9763-194ead34d5c5",
+  "requestId": "req_011CaaTmmGgEGabMn5fCyqTi",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T18:53:50.758Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "2039917a-d15c-49b3-a703-4b4626553699",
+  "version": "2.1.123"
+}

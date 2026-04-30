@@ -1,0 +1,71 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01AabvrQVeWT7Njbah44e3cy",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/routes/plugins.ts",
+          "new_string": "/**\n * routes/plugins.ts\n *\n * CF-native handlers for:\n *   GET /api/plugins\n *   GET /api/plugins/ui-contributions\n *   GET /api/plugins/examples\n *   POST /api/plugins/install\n *\n * The server-side pluginRoutes() relies on an in-process plugin registry\n * (worker processes, SSE, child_process) that does not exist in a CF Worker.\n * These handlers derive the same data from the `plugins` DB table, which is\n * populated at install time and is always available via Hyperdrive.\n *\n * install / examples notes:\n *   Plugin installation requires npm access and is delegated to the sidecar\n *   companion server (SidecarContainer DO or SIDECAR_URL env var).\n *   Examples are returned with localPath = packageName so the UI issues an\n *   npm install rather than a local-filesystem install.\n *\n * Auth: requires an authenticated actor (board or agent). Unauthenticated\n * requests receive 401.\n */\n\nimport type { Hono } from \"hono\";\nimport { asc, ne } from \"drizzle-orm\";\nimport { plugins } from \"@paperclipai/db\";\nimport { getPluginUiContributionMetadata } from \"../../../../../server/src/services/plugin-loader.js\";\nimport { createHyperdriveDb } from \"../../db/hyperdrive.js\";\nimport { resolveActorFromRequest } from \"../../auth/resolve-actor.js\";\nimport { resolveDeploymentMode } from \"../env.js\";\nimport type { Env } from \"../env.js\";\n\n// ---------------------------------------------------------------------------\n// Static plugin examples catalogue (mirrors server/src/routes/plugins.ts).\n// In CF Workers there is no local filesystem, so localPath is set to the npm\n// package name — the UI uses this field as the install identifier.\n// ---------------------------------------------------------------------------\nconst BUNDLED_PLUGIN_EXAMPLES = [\n  {\n    packageName: \"@paperclipai/plugin-hello-world-example\",\n    pluginKey: \"paperclip.hello-world-example\",\n    displayName: \"Hello World Widget (Example)\",\n    description: \"Reference UI plugin that adds a simple Hello World widget to the Paperclip dashboard.\",\n    localPath: \"@paperclipai/plugin-hello-world-example\",\n    tag: \"example\" as const,\n  },\n  {\n    packageName: \"@paperclipai/plugin-file-browser-example\",\n    pluginKey: \"paperclip-file-browser-example\",\n    displayName: \"File Browser (Example)\",\n    description: \"Example plugin that adds a Files link in project navigation plus a project detail file browser.\",\n    localPath: \"@paperclipai/plugin-file-browser-example\",\n    tag: \"example\" as const,\n  },\n  {\n    packageName: \"@paperclipai/plugin-kitchen-sink-example\",\n    pluginKey: \"paperclip-kitchen-sink-example\",\n    displayName: \"Kitchen Sink (Example)\",\n    description: \"Reference plugin that demonstrates the current Paperclip plugin API surface.\",\n    localPath: \"@paperclipai/plugin-kitchen-sink-example\",\n    tag: \"example\" as const,\n  },\n];",
+          "old_string": "/**\n * routes/plugins.ts\n *\n * CF-native handlers for:\n *   GET /api/plugins\n *   GET /api/plugins/ui-contributions\n *\n * The server-side pluginRoutes() relies on an in-process plugin registry\n * (worker processes, SSE, child_process) that does not exist in a CF Worker.\n * These handlers derive the same data from the `plugins` DB table, which is\n * populated at install time and is always available via Hyperdrive.\n *\n * Auth: requires an authenticated actor (board or agent). Unauthenticated\n * requests receive 401.\n */\n\nimport type { Hono } from \"hono\";\nimport { asc, ne } from \"drizzle-orm\";\nimport { plugins } from \"@paperclipai/db\";\nimport { getPluginUiContributionMetadata } from \"../../../../../server/src/services/plugin-loader.js\";\nimport { createHyperdriveDb } from \"../../db/hyperdrive.js\";\nimport { resolveActorFromRequest } from \"../../auth/resolve-actor.js\";\nimport { resolveDeploymentMode } from \"../env.js\";\nimport type { Env } from \"../env.js\";",
+          "replace_all": false
+        },
+        "name": "Edit",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_014PjyPePMR8oDeUoy9NZMZR",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 1700
+      },
+      "cache_creation_input_tokens": 1700,
+      "cache_read_input_tokens": 129674,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 1700
+          },
+          "cache_creation_input_tokens": 1700,
+          "cache_read_input_tokens": 129674,
+          "input_tokens": 1,
+          "output_tokens": 1291,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 1291,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "fd1d62d6-7e94-482c-b08b-f0c851b85242",
+  "requestId": "req_011CaadAS1F34Wf8tW93zKDQ",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T20:57:15.124Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "4801f282-3078-4535-84fb-85ce74d1b635",
+  "version": "2.1.123"
+}

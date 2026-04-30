@@ -1,0 +1,28 @@
+{
+  "agentId": "ae240282fd51e7edd",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "/**\n * Server-side execution logic for the Hermes Agent adapter.\n *\n * Spawns `hermes chat -q \"...\" -Q` as a child process, streams output,\n * and returns structured results to Paperclip.\n *\n * Verified CLI flags (hermes chat):\n *   -q/--query         single query (non-interactive)\n *   -Q/--quiet         quiet mode (no banner/spinner, only response + session_id)\n *   -m/--model         model name (e.g. anthropic/claude-sonnet-4)\n *   -t/--toolsets      comma-separated toolsets to enable\n *   --provider         inference provider (auto, openrouter, nous, etc.)\n *   -r/--resume        resume session by ID\n *   -w/--worktree      isolated git worktree\n *   -v/--verbose       verbose output\n *   --checkpoints      filesystem checkpoints\n */\nimport type { AdapterExecutionContext, AdapterExecutionResult } from \"@paperclipai/adapter-utils\";\nexport declare function execute(ctx: AdapterExecutionContext): Promise\u003cAdapterExecutionResult\u003e;\n//# sourceMappingURL=execute.d.ts.map",
+        "is_error": false,
+        "tool_use_id": "toolu_012iUDquBjRvnFUQjpVuDncu",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "c01d4e76-34ab-4471-b2f3-58b038887c0e",
+  "promptId": "0d05d433-ef46-4bba-8105-f1d502a42e1e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "c01d4e76-34ab-4471-b2f3-58b038887c0e",
+  "timestamp": "2026-04-30T19:28:20.296Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "d0f86f72-f823-4c7e-bf8e-8ae6fd31eb78",
+  "version": "2.1.123"
+}

@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "130\t    (considerHostEnv \u0026\u0026 process.env.CLAUDE_CODE_USE_BEDROCK === \"true\") ||\n131\t    isNonEmpty(env.ANTHROPIC_BEDROCK_BASE_URL) ||\n132\t    (considerHostEnv \u0026\u0026 isNonEmpty(process.env.ANTHROPIC_BEDROCK_BASE_URL));\n133\t\n134\t  const configApiKey = env.ANTHROPIC_API_KEY;\n135\t  const hostApiKey = considerHostEnv ? process.env.ANTHROPIC_API_KEY : undefined;\n136\t  if (hasBedrock) {\n137\t    const source =\n138\t      env.CLAUDE_CODE_USE_BEDROCK === \"1\" ||\n139\t      env.CLAUDE_CODE_USE_BEDROCK === \"true\" ||\n140\t      isNonEmpty(env.ANTHROPIC_BEDROCK_BASE_URL)\n141\t        ? \"adapter config env\"\n142\t        : \"server environment\";\n143\t    checks.push({\n144\t      code: \"claude_bedrock_auth\",\n145\t      level: \"info\",\n146\t      message: \"AWS Bedrock auth detected. Claude will use Bedrock for inference.\",\n147\t      detail: `Detected in ${source}.`,\n148\t      hint: \"Ensure AWS credentials (AWS_ACCESS_KEY_ID/AWS_SECRET_ACCESS_KEY or AWS_PROFILE) and AWS_REGION are configured.\",\n149\t    });\n150\t  } else if (isNonEmpty(configApiKey) || isNonEmpty(hostApiKey)) {\n151\t    const source = isNonEmpty(configApiKey) ? \"adapter config env\" : \"server environment\";\n152\t    checks.push({\n153\t      code: \"claude_anthropic_api_key_overrides_subscription\",\n154\t      level: \"warn\",\n155\t      message:\n156\t        \"ANTHROPIC_API_KEY is set. Claude will use API-key auth instead of subscription credentials.\",\n157\t      detail: `Detected in ${source}.`,\n158\t      hint: \"Unset ANTHROPIC_API_KEY if you want subscription-based Claude login behavior.\",\n159\t    });\n160\t  } else if (!targetIsRemote) {\n161\t    checks.push({\n162\t      code: \"claude_subscription_mode_possible\",\n163\t      level: \"info\",\n164\t      message: \"ANTHROPIC_API_KEY is not set; subscription-based auth can be used if Claude is logged in.\",\n165\t    });\n166\t  }\n167\t\n168\t  const canRunProbe =\n169\t    checks.every((check) =\u003e check.code !== \"claude_cwd_invalid\" \u0026\u0026 check.code !== \"claude_command_unresolvable\");\n170\t  if (canRunProbe) {\n171\t    if (!commandLooksLike(command, \"claude\")) {\n172\t      checks.push({\n173\t        code: \"claude_hello_probe_skipped_custom_command\",\n174\t        level: \"info\",\n175\t        message: \"Skipped hello probe because command is not `claude`.\",\n176\t        detail: command,\n177\t        hint: \"Use the `claude` CLI command to run the automatic login and installation probe.\",\n178\t      });\n179\t    } else {\n180\t      const model = asString(config.model, \"\").trim();\n181\t      const effort = asString(config.effort, \"\").trim();\n182\t      const chrome = asBoolean(config.chrome, false);\n183\t      const maxTurns = asNumber(config.maxTurnsPerRun, 0);\n184\t      const dangerouslySkipPermissions = asBoolean(config.dangerouslySkipPermissions, true);\n185\t      const extraArgs = (() =\u003e {\n186\t        const fromExtraArgs = asStringArray(config.extraArgs);\n187\t        if (fromExtraArgs.length \u003e 0) return fromExtraArgs;\n188\t        return asStringArray(config.args);\n189\t      })();",
+        "tool_use_id": "toolu_012j6QuzPmx3KzyGNrw1f6hL",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "c884642e-5179-4a7d-ad94-c947b3410c05",
+  "promptId": "5c7fcb14-2109-49c6-a2dc-162793f2749d",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "c884642e-5179-4a7d-ad94-c947b3410c05",
+  "timestamp": "2026-04-30T22:48:26.160Z",
+  "toolUseResult": {
+    "file": {
+      "content": "    (considerHostEnv \u0026\u0026 process.env.CLAUDE_CODE_USE_BEDROCK === \"true\") ||\n    isNonEmpty(env.ANTHROPIC_BEDROCK_BASE_URL) ||\n    (considerHostEnv \u0026\u0026 isNonEmpty(process.env.ANTHROPIC_BEDROCK_BASE_URL));\n\n  const configApiKey = env.ANTHROPIC_API_KEY;\n  const hostApiKey = considerHostEnv ? process.env.ANTHROPIC_API_KEY : undefined;\n  if (hasBedrock) {\n    const source =\n      env.CLAUDE_CODE_USE_BEDROCK === \"1\" ||\n      env.CLAUDE_CODE_USE_BEDROCK === \"true\" ||\n      isNonEmpty(env.ANTHROPIC_BEDROCK_BASE_URL)\n        ? \"adapter config env\"\n        : \"server environment\";\n    checks.push({\n      code: \"claude_bedrock_auth\",\n      level: \"info\",\n      message: \"AWS Bedrock auth detected. Claude will use Bedrock for inference.\",\n      detail: `Detected in ${source}.`,\n      hint: \"Ensure AWS credentials (AWS_ACCESS_KEY_ID/AWS_SECRET_ACCESS_KEY or AWS_PROFILE) and AWS_REGION are configured.\",\n    });\n  } else if (isNonEmpty(configApiKey) || isNonEmpty(hostApiKey)) {\n    const source = isNonEmpty(configApiKey) ? \"adapter config env\" : \"server environment\";\n    checks.push({\n      code: \"claude_anthropic_api_key_overrides_subscription\",\n      level: \"warn\",\n      message:\n        \"ANTHROPIC_API_KEY is set. Claude will use API-key auth instead of subscription credentials.\",\n      detail: `Detected in ${source}.`,\n      hint: \"Unset ANTHROPIC_API_KEY if you want subscription-based Claude login behavior.\",\n    });\n  } else if (!targetIsRemote) {\n    checks.push({\n      code: \"claude_subscription_mode_possible\",\n      level: \"info\",\n      message: \"ANTHROPIC_API_KEY is not set; subscription-based auth can be used if Claude is logged in.\",\n    });\n  }\n\n  const canRunProbe =\n    checks.every((check) =\u003e check.code !== \"claude_cwd_invalid\" \u0026\u0026 check.code !== \"claude_command_unresolvable\");\n  if (canRunProbe) {\n    if (!commandLooksLike(command, \"claude\")) {\n      checks.push({\n        code: \"claude_hello_probe_skipped_custom_command\",\n        level: \"info\",\n        message: \"Skipped hello probe because command is not `claude`.\",\n        detail: command,\n        hint: \"Use the `claude` CLI command to run the automatic login and installation probe.\",\n      });\n    } else {\n      const model = asString(config.model, \"\").trim();\n      const effort = asString(config.effort, \"\").trim();\n      const chrome = asBoolean(config.chrome, false);\n      const maxTurns = asNumber(config.maxTurnsPerRun, 0);\n      const dangerouslySkipPermissions = asBoolean(config.dangerouslySkipPermissions, true);\n      const extraArgs = (() =\u003e {\n        const fromExtraArgs = asStringArray(config.extraArgs);\n        if (fromExtraArgs.length \u003e 0) return fromExtraArgs;\n        return asStringArray(config.args);\n      })();",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/test.ts",
+      "numLines": 60,
+      "startLine": 130,
+      "totalLines": 278
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "885ae8e7-6da5-4b0c-bc82-f17b842b87db",
+  "version": "2.1.123"
+}

@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "825\t      resultJson: mergedResultJson,\n826\t      summary: parsedStream.summary || asString(parsed.result, \"\"),\n827\t      clearSession: clearSessionForMaxTurns || Boolean(opts.clearSessionOnMissingSession \u0026\u0026 !resolvedSessionId),\n828\t    };\n829\t  };\n830\t\n831\t  try {\n832\t    const initial = await runAttempt(sessionId ?? null);\n833\t    // Claude may report an unknown-session failure either in parsed JSON\n834\t    // (exit 0 + result text) or by exiting non-zero with the error in\n835\t    // stderr — detect both so the retry-with-fresh-session fallback fires.\n836\t    const unknownSessionFailure =\n837\t      sessionId \u0026\u0026\n838\t      !initial.proc.timedOut \u0026\u0026\n839\t      (initial.proc.exitCode ?? 0) !== 0 \u0026\u0026\n840\t      detectClaudeUnknownSession({\n841\t        parsed: initial.parsed,\n842\t        stdout: initial.proc.stdout,\n843\t        stderr: initial.proc.stderr,\n844\t      });\n845\t\n846\t    if (unknownSessionFailure) {\n847\t      await onLog(\n848\t        \"stdout\",\n849\t        `[paperclip] Claude resume session \"${sessionId}\" is unavailable; retrying with a fresh session.\\n`,\n850\t      );\n851\t      const retry = await runAttempt(null);\n852\t      return toAdapterResult(retry, { fallbackSessionId: null, clearSessionOnMissingSession: true });\n853\t    }\n854\t\n855\t    return toAdapterResult(initial, { fallbackSessionId: runtimeSessionId || runtime.sessionId });\n856\t  } finally {\n857\t    if (paperclipBridge) {\n858\t      await paperclipBridge.stop();\n859\t    }\n860\t    if (restoreRemoteWorkspace) {\n861\t      await onLog(\n862\t        \"stdout\",\n863\t        `[paperclip] Restoring workspace changes from ${describeAdapterExecutionTarget(executionTarget)}.\\n`,\n864\t      );",
+        "tool_use_id": "toolu_01462zLox56LtmSTpvyebFpJ",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "98d86e5e-ca07-4d36-ba22-e43cfc9a7bfb",
+  "promptId": "2cd98dd6-123f-4c8f-bde6-185a892545c9",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "98d86e5e-ca07-4d36-ba22-e43cfc9a7bfb",
+  "timestamp": "2026-04-30T23:27:55.775Z",
+  "toolUseResult": {
+    "file": {
+      "content": "      resultJson: mergedResultJson,\n      summary: parsedStream.summary || asString(parsed.result, \"\"),\n      clearSession: clearSessionForMaxTurns || Boolean(opts.clearSessionOnMissingSession \u0026\u0026 !resolvedSessionId),\n    };\n  };\n\n  try {\n    const initial = await runAttempt(sessionId ?? null);\n    // Claude may report an unknown-session failure either in parsed JSON\n    // (exit 0 + result text) or by exiting non-zero with the error in\n    // stderr — detect both so the retry-with-fresh-session fallback fires.\n    const unknownSessionFailure =\n      sessionId \u0026\u0026\n      !initial.proc.timedOut \u0026\u0026\n      (initial.proc.exitCode ?? 0) !== 0 \u0026\u0026\n      detectClaudeUnknownSession({\n        parsed: initial.parsed,\n        stdout: initial.proc.stdout,\n        stderr: initial.proc.stderr,\n      });\n\n    if (unknownSessionFailure) {\n      await onLog(\n        \"stdout\",\n        `[paperclip] Claude resume session \"${sessionId}\" is unavailable; retrying with a fresh session.\\n`,\n      );\n      const retry = await runAttempt(null);\n      return toAdapterResult(retry, { fallbackSessionId: null, clearSessionOnMissingSession: true });\n    }\n\n    return toAdapterResult(initial, { fallbackSessionId: runtimeSessionId || runtime.sessionId });\n  } finally {\n    if (paperclipBridge) {\n      await paperclipBridge.stop();\n    }\n    if (restoreRemoteWorkspace) {\n      await onLog(\n        \"stdout\",\n        `[paperclip] Restoring workspace changes from ${describeAdapterExecutionTarget(executionTarget)}.\\n`,\n      );",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts",
+      "numLines": 40,
+      "startLine": 825,
+      "totalLines": 869
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "5e996179-5fb3-484a-b742-3e75abb3faf9",
+  "version": "2.1.123"
+}

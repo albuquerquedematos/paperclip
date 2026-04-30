@@ -1,0 +1,27 @@
+{
+  "agentId": "ae240282fd51e7edd",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport type { ServerAdapterModule } from \"../types.js\";\n2\timport { execute } from \"./execute.js\";\n3\timport { testEnvironment } from \"./test.js\";\n4\t\n5\texport const httpAdapter: ServerAdapterModule = {\n6\t  type: \"http\",\n7\t  execute,\n8\t  testEnvironment,\n9\t  models: [],\n10\t  agentConfigurationDoc: `# http agent configuration\n11\t\n12\tAdapter: http\n13\t\n14\tCore fields:\n15\t- url (string, required): endpoint to invoke\n16\t- method (string, optional): HTTP method, default POST\n17\t- headers (object, optional): request headers\n18\t- payloadTemplate (object, optional): JSON payload template\n19\t- timeoutSec (number, optional): request timeout in seconds\n20\t`,\n21\t};\n22\t\n\n\u003csystem-reminder\u003e\nWhenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.\n\u003c/system-reminder\u003e\n",
+        "tool_use_id": "toolu_01PiD1xpfK8p9GtaGaybimYE",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "7c186610-01b8-4b3b-b7e3-3e13471bbe0b",
+  "promptId": "0d05d433-ef46-4bba-8105-f1d502a42e1e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "7c186610-01b8-4b3b-b7e3-3e13471bbe0b",
+  "timestamp": "2026-04-30T19:28:06.753Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "12aa3819-6343-43fb-9ed5-e5e12e9bcc72",
+  "version": "2.1.123"
+}

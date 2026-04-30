@@ -1,0 +1,70 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_019oeMiPv9aFkjALHT6CD3xY",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/adapters/plugin-loader.ts",
+          "limit": 30,
+          "offset": 258
+        },
+        "name": "Read",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_013QGZYenVpTa7ujzWeRMufo",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 452
+      },
+      "cache_creation_input_tokens": 452,
+      "cache_read_input_tokens": 110720,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 452
+          },
+          "cache_creation_input_tokens": 452,
+          "cache_read_input_tokens": 110720,
+          "input_tokens": 1,
+          "output_tokens": 116,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 116,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "ee7c3941-35b2-4826-aee9-66531b7d42a2",
+  "requestId": "req_011CaaWTEy8UeJT5KbabbMha",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T19:28:59.591Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "37e83eeb-6ae4-4724-8dc6-f935d12bb35c",
+  "version": "2.1.123"
+}

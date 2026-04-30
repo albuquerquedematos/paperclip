@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "90\tfunction readStore(): AdapterPluginRecord[] {\n91\t  const { adapterPluginsStorePath } = adapterPluginPaths();\n92\t  if (storeCache?.path === adapterPluginsStorePath) return storeCache.records;\n93\t  try {\n94\t    const raw = fs.readFileSync(adapterPluginsStorePath, \"utf-8\");\n95\t    const parsed = JSON.parse(raw);\n96\t    storeCache = {\n97\t      path: adapterPluginsStorePath,\n98\t      records: Array.isArray(parsed) ? (parsed as AdapterPluginRecord[]) : [],\n99\t    };\n100\t  } catch {\n101\t    storeCache = { path: adapterPluginsStorePath, records: [] };\n102\t  }\n103\t  return storeCache.records;\n104\t}\n105\t\n106\tfunction writeStore(records: AdapterPluginRecord[]): void {\n107\t  ensureDirs();\n108\t  const { adapterPluginsStorePath } = adapterPluginPaths();\n109\t  fs.writeFileSync(adapterPluginsStorePath, JSON.stringify(records, null, 2), \"utf-8\");\n110\t  storeCache = { path: adapterPluginsStorePath, records };\n111\t}\n112\t\n113\tfunction readSettings(): AdapterSettings {\n114\t  const { adapterSettingsPath } = adapterPluginPaths();",
+        "tool_use_id": "toolu_018HZSg2kdQdcGwBped1AZsL",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "812d25e5-56db-4f4e-bfa7-d25256371aef",
+  "promptId": "0d05d433-ef46-4bba-8105-f1d502a42e1e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "812d25e5-56db-4f4e-bfa7-d25256371aef",
+  "timestamp": "2026-04-30T19:30:27.712Z",
+  "toolUseResult": {
+    "file": {
+      "content": "function readStore(): AdapterPluginRecord[] {\n  const { adapterPluginsStorePath } = adapterPluginPaths();\n  if (storeCache?.path === adapterPluginsStorePath) return storeCache.records;\n  try {\n    const raw = fs.readFileSync(adapterPluginsStorePath, \"utf-8\");\n    const parsed = JSON.parse(raw);\n    storeCache = {\n      path: adapterPluginsStorePath,\n      records: Array.isArray(parsed) ? (parsed as AdapterPluginRecord[]) : [],\n    };\n  } catch {\n    storeCache = { path: adapterPluginsStorePath, records: [] };\n  }\n  return storeCache.records;\n}\n\nfunction writeStore(records: AdapterPluginRecord[]): void {\n  ensureDirs();\n  const { adapterPluginsStorePath } = adapterPluginPaths();\n  fs.writeFileSync(adapterPluginsStorePath, JSON.stringify(records, null, 2), \"utf-8\");\n  storeCache = { path: adapterPluginsStorePath, records };\n}\n\nfunction readSettings(): AdapterSettings {\n  const { adapterSettingsPath } = adapterPluginPaths();",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/services/adapter-plugin-store.ts",
+      "numLines": 25,
+      "startLine": 90,
+      "totalLines": 202
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "504f2269-f9a7-41f6-9a98-1879940facca",
+  "version": "2.1.123"
+}

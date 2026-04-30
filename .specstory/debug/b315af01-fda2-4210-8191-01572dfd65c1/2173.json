@@ -1,0 +1,27 @@
+{
+  "agentId": "ae240282fd51e7edd",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport type { ServerAdapterModule } from \"../types.js\";\n2\timport { execute } from \"./execute.js\";\n3\timport { testEnvironment } from \"./test.js\";\n4\t\n5\texport const processAdapter: ServerAdapterModule = {\n6\t  type: \"process\",\n7\t  execute,\n8\t  testEnvironment,\n9\t  models: [],\n10\t  agentConfigurationDoc: `# process agent configuration\n11\t\n12\tAdapter: process\n13\t\n14\tCore fields:\n15\t- command (string, required): command to execute\n16\t- args (string[] | string, optional): command arguments\n17\t- cwd (string, optional): absolute working directory\n18\t- env (object, optional): KEY=VALUE environment variables\n19\t\n20\tOperational fields:\n21\t- timeoutSec (number, optional): run timeout in seconds\n22\t- graceSec (number, optional): SIGTERM grace period in seconds\n23\t`,\n24\t};\n25\t\n\n\u003csystem-reminder\u003e\nWhenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.\n\u003c/system-reminder\u003e\n",
+        "tool_use_id": "toolu_011H1kL1NTU99HaiwzfBRT2X",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "22f33fba-52d2-4edd-aa23-d188a206bc7f",
+  "promptId": "0d05d433-ef46-4bba-8105-f1d502a42e1e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "22f33fba-52d2-4edd-aa23-d188a206bc7f",
+  "timestamp": "2026-04-30T19:28:06.514Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "c7bf818d-2954-4a8b-82f3-b2ca5276871d",
+  "version": "2.1.123"
+}

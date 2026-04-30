@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "109:interface AvailablePluginExample {\n114:  localPath: string;\n146:const BUNDLED_PLUGIN_EXAMPLES: AvailablePluginExample[] = [\n152:    localPath: \"packages/plugins/examples/plugin-hello-world-example\",\n160:    localPath: \"packages/plugins/examples/plugin-file-browser-example\",\n168:    localPath: \"packages/plugins/examples/plugin-kitchen-sink-example\",\n176:    localPath: \"packages/plugins/examples/plugin-orchestration-smoke-example\",\n187:function listBundledPluginExamples(): AvailablePluginExample[] {\n189:    const absoluteLocalPath = path.resolve(REPO_ROOT, plugin.localPath);\n191:    return [{ ...plugin, localPath: absoluteLocalPath }];\n836:        ? { localPath: trimmedPackage }",
+        "is_error": false,
+        "tool_use_id": "toolu_01HgfkiGV9o29sxP4peqkgQE",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "b5ed26f1-9cfc-42cd-9ca6-3a7e5ac8b4e0",
+  "promptId": "d76ba7a5-5a30-4e4c-b6f3-f994065a0bad",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "b5ed26f1-9cfc-42cd-9ca6-3a7e5ac8b4e0",
+  "timestamp": "2026-04-30T20:55:08.392Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "109:interface AvailablePluginExample {\n114:  localPath: string;\n146:const BUNDLED_PLUGIN_EXAMPLES: AvailablePluginExample[] = [\n152:    localPath: \"packages/plugins/examples/plugin-hello-world-example\",\n160:    localPath: \"packages/plugins/examples/plugin-file-browser-example\",\n168:    localPath: \"packages/plugins/examples/plugin-kitchen-sink-example\",\n176:    localPath: \"packages/plugins/examples/plugin-orchestration-smoke-example\",\n187:function listBundledPluginExamples(): AvailablePluginExample[] {\n189:    const absoluteLocalPath = path.resolve(REPO_ROOT, plugin.localPath);\n191:    return [{ ...plugin, localPath: absoluteLocalPath }];\n836:        ? { localPath: trimmedPackage }"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "c5d6fdc6-c2b7-46ee-9d6f-db889d38f4b8",
+  "version": "2.1.123"
+}

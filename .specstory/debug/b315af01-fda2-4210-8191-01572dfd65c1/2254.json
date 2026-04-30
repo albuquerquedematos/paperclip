@@ -1,0 +1,62 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "signature": "EusEClsIDRgCKkA+AwRUPYzByMhwy/mpi8efiYQHxCAShrgllOl3n3hB9V3ztg3l+LVKKyjFETcgGK1yJC8eCJYgbMsuezzVnh/iMhFjbGF1ZGUtc29ubmV0LTQtNjgAEgy+PcgMSN2neAfUpAUaDCIXYL+wBTbP46yrviIwBxIVuJAkJc7T30yV51ZGOgBS6empKJ38KvKo5Yqg5yLojvZ8Y6/OVRPZ31k0WrWzKr0DzzY6p0ka5gpWmvzUArE8aDjitaBJgQdaKaO0iNAVK3LnV3KyDpIzXUFkWNG5JR4IRk3kcdP5jPD3w4n0Yb0IoYh+Q4EHnSOEZgr5ppULLpm9jAseEWzQMCy8Yd4mCq/9EJAIz4VRvTYQLrm+YDLxXQ8mKSv0oatVu+p3zy67ZlxTME4fdgQqSC81VPmOQ6POBYQsgYbA2YQOT/f32pu0JNZls55BJ7lGeLfoT/y1P9EmrvzKtcZSEXbCzzkH2fX7IPHXuNnY2uVH7YE73pdmM/V4IHfkuD8suBU1XL9evHI14312PQZ0QH3oQk7grBmyLFYRlNHrlRlxjwNxmOrdClo0pXhxrOzlASXa00qoIX53vChhHS0bZx0/qYehqTxHoo6c+nC9UaFIdFPb0/2hiUgmKqjqdzlBLrR9KBSSrF6CiCtfDqt7acb1wVZYWA5yp2QFkwICbggucWn9hXZHP7lENlAmQ+MbPtJijJV4dZMuiwGd+oEhajYnMWJQrF6KAwq7d4kMHIwS6KcsBRQfajHR7Uo7zonItIr6yG0Hv0YWRinw90E22iDpOVaAtjXZ4KH/heR/3EJmQv3CTxgB",
+        "thinking": "I see that `buildAdapterInfo` calls `readAdapterPackageVersionFromDisk(externalRecord)` only for external records. For built-in adapters, `externalRecord` is undefined, so it won't try to read from disk. Also, `getDisabledAdapterTypes()` reads from a JSON store file. Let me check what that returns when the file doesn't exist.\n\nFor built-in adapters, the only FS call is `getDisabledAdapterTypes()`. Let me check what that does.",
+        "type": "thinking"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_013d8xdADJNzxysNKNnPACcf",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 1796
+      },
+      "cache_creation_input_tokens": 1796,
+      "cache_read_input_tokens": 117643,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 1796
+          },
+          "cache_creation_input_tokens": 1796,
+          "cache_read_input_tokens": 117643,
+          "input_tokens": 1,
+          "output_tokens": 264,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 264,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "09034fe0-caf6-4ea8-8c90-2436aa4808ce",
+  "requestId": "req_011CaaWY8JvWTLPcEr7wvy1V",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T19:30:06.661Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "0702e383-703b-4bcd-8e09-9f3276bf79e7",
+  "version": "2.1.123"
+}

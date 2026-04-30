@@ -1,0 +1,51 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts has been updated successfully.",
+        "tool_use_id": "toolu_018Zp1nYWw5yVXx5wA3qShwJ",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "b1fc7ea1-1b8f-4690-a291-7da4da19c88b",
+  "promptId": "bbb6be00-c456-48d1-b25a-d991686281be",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "b1fc7ea1-1b8f-4690-a291-7da4da19c88b",
+  "timestamp": "2026-04-30T23:23:05.979Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/execute.ts",
+    "newString": "  describeClaudeFailure,\n  detectClaudeLoginRequired,\n  detectClaudeUnknownSession,\n  extractClaudeRetryNotBefore,\n  isClaudeMaxTurnsResult,\n  isClaudeTransientUpstreamError,\n  isClaudeUnknownSessionError,\n} from \"./parse.js\";",
+    "oldString": "  describeClaudeFailure,\n  detectClaudeLoginRequired,\n  extractClaudeRetryNotBefore,\n  isClaudeMaxTurnsResult,\n  isClaudeTransientUpstreamError,\n  isClaudeUnknownSessionError,\n} from \"./parse.js\";",
+    "originalFile": null,
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          "   parseClaudeStreamJson,",
+          "   describeClaudeFailure,",
+          "   detectClaudeLoginRequired,",
+          "+  detectClaudeUnknownSession,",
+          "   extractClaudeRetryNotBefore,",
+          "   isClaudeMaxTurnsResult,",
+          "   isClaudeTransientUpstreamError,"
+        ],
+        "newLines": 7,
+        "newStart": 44,
+        "oldLines": 6,
+        "oldStart": 44
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "e37a7d15-6654-4980-a68d-29a92c20039d",
+  "version": "2.1.123"
+}

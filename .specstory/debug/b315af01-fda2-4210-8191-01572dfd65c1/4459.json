@@ -1,0 +1,25 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "text": "Same thing, it was running until I tabbed out and came back to it? Perhaps it lost something in the process? But i had it running a while until it failed? But now it says it only took 6s to fail? Perhaps something here is not updating as it should? Have a look at the error and the updating thing right?\n\n[wrangler] [wrangler:info] GET /api/companies/9a7cf1f3-02a7-4751-9cdb-671c9c68edb5/budgets/overview 200 OK (40ms)\n[wrangler] [wrangler:info] GET /api/instance/settings/general 200 OK (56ms)\n[wrangler] [wrangler:info] GET /api/heartbeat-runs/45251498-064b-4733-9cd3-6cee21bdc423/issues 200 OK (58ms)\n[wrangler] [wrangler:info] GET /api/heartbeat-runs/45251498-064b-4733-9cd3-6cee21bdc423/events 200 OK (61ms)\n[wrangler] [wrangler:info] GET /api/heartbeat-runs/45251498-064b-4733-9cd3-6cee21bdc423/log 404 Not Found (60ms)\n[wrangler] [wrangler:info] GET /api/heartbeat-runs/45251498-064b-4733-9cd3-6cee21bdc423/workspace-operations 200 OK (65ms)\n[wrangler] [wrangler:info] GET /api/heartbeat-runs/45251498-064b-4733-9cd3-6cee21bdc423 200 OK (63ms)\n[wrangler] [wrangler:info] GET /api/companies/9a7cf1f3-02a7-4751-9cdb-671c9c68edb5/events/ws 101 Switching Protocols (7ms)\n[wrangler] [wrangler:info] GET /api/heartbeat-runs/82cb59ca-409a-4f02-a058-474f7ed51ac4/log 404 Not Found (50ms)\n[wrangler] [wrangler:info] GET /api/heartbeat-runs/82cb59ca-409a-4f02-a058-474f7ed51ac4/events 200 OK (52ms)\n[wrangler] [wrangler:info] GET /api/heartbeat-runs/82cb59ca-409a-4f02-a058-474f7ed51ac4/issues 200 OK (54ms)\n[wrangler] [wrangler:info] GET /api/heartbeat-runs/82cb59ca-409a-4f02-a058-474f7ed51ac4 200 OK (58ms)\n[wrangler] [wrangler:info] GET /api/heartbeat-runs/82cb59ca-409a-4f02-a058-474f7ed51ac4/log 404 Not Found (28ms)\n[wrangler] [wrangler:info] GET /api/companies/9a7cf1f3-02a7-4751-9cdb-671c9c68edb5/live-runs 200 OK (41ms)\n[wrangler] [wrangler:info] GET /api/companies/9a7cf1f3-02a7-4751-9cdb-671c9c68edb5/sidebar-badges 200 OK (55ms)\n[wrangler] [wrangler:info] GET /api/companies/9a7cf1f3-02a7-4751-9cdb-671c9c68edb5/live-runs 200 OK (78ms)\n\nfailed\nRetry\nclaude local\nclaude-opus-4-7\n00:30:50 → 00:30:56\n4m ago → 4m ago\nDuration: 6s\nClaude exited with code 1: No conversation found with session ID: 94dcbc9a-e732-4874-bdf6-8c61ff134383(adapter_failed)\nExit code 1\nSession\nstderr\nNo conversation found with session ID: 94dcbc9a-e732-4874-bdf6-8c61ff134383\nInvocation\nAdapter: claude_local\nWorking dir: /Users/migmac/.paperclip/instances/default/workspaces/c5ee3b85-bcc5-495b-aad7-cf9c53a62ba8\nDetails\nTranscript (0)\nnice\nraw\nWaiting for transcript...\nRun log not found\nFailure details\nError: Claude exited with code 1: No conversation found with session ID: 94dcbc9a-e732-4874-bdf6-8c61ff134383\nstderr excerpt\nNo conversation found with session ID: 94dcbc9a-e732-4874-bdf6-8c61ff134383\nadapter result JSON\n{\n  \"stderr\": \"No conversation found with session ID: 94dcbc9a-e732-4874-bdf6-8c61ff134383\\n\",\n  \"stdout\": \"\",\n  \"stopReason\": \"adapter_failed\",\n  \"timeoutFired\": false,\n  \"timeoutSource\": \"config\",\n  \"timeoutConfigured\": false,\n  \"effectiveTimeoutSec\": 0\n}\nEvents (3)\n[system]\nrun started\n[system]\nadapter invocation\n[system]\nrun failed",
+        "type": "text"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "5694cea5-df6c-4baa-a5e5-ec05cca21c69",
+  "permissionMode": "bypassPermissions",
+  "promptId": "1792d932-1170-4ea3-9e17-78bf93c2b55e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T23:36:05.416Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "ac0cb3fd-c47c-4294-b6fc-80d4b47ddc7b",
+  "version": "2.1.123"
+}

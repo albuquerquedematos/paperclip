@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_018f7rhP8NHCp4dxMRHLVVHe",
+        "input": {
+          "command": "cat /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/http/express-router-bridge.ts",
+          "description": "Read the express router bridge to understand extraction logic"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_016XwdvYzzV5zPqAfwhPtF2V",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 3700
+      },
+      "cache_creation_input_tokens": 3700,
+      "cache_read_input_tokens": 112683,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 3700
+          },
+          "cache_creation_input_tokens": 3700,
+          "cache_read_input_tokens": 112683,
+          "input_tokens": 1,
+          "output_tokens": 1682,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 1682,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "2fe859b9-9135-476c-8f6f-c77a75388f38",
+  "requestId": "req_011CaaU31MgAxf5aB9UqWnVw",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T18:57:41.984Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "3ee4c2ca-d107-48cd-9686-2cd9af05ecf3",
+  "version": "2.1.123"
+}

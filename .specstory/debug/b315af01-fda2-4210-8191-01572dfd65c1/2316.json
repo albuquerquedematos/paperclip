@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01LoaXzdLgMuJR8QnHPBPHSw",
+        "input": {
+          "command": "git add packages/deploy-cloudflare/src/worker/cf-extra-routes.ts \u0026\u0026 git commit -m \"$(cat \u003c\u003c'EOF'\nfix(deploy-cloudflare): serve real adapter and plugin data from DB/registry instead of []\n\nGET /api/adapters: was returning [] — now queries the built-in adapter\nregistry (listServerAdapters). All 10 built-in adapters (claude_local,\ncodex_local, http, openclaw_gateway, etc.) are registered at module init\nfrom their packages; external adapters silently skip (FS store returns []\nvia try-catch). getDisabledAdapterTypes() also falls back to [] in CF.\nAdapter execution routes through the sandbox bridge (sidecar), so listing\nthe full set is correct even for subprocess-based adapters.\n\nGET /api/plugins: was returning [] — now queries the plugins table\n(ne(status, \"uninstalled\")).\n\nGET /api/plugins/ui-contributions: was returning [] — now derives\ncontributions from manifestJson stored in the plugins table at install time.\n\nCo-Authored-By: Claude Sonnet 4.6 \u003cnoreply@anthropic.com\u003e\nEOF\n)\"",
+          "description": "Commit adapters and plugins fix"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01Ta7aTJQqYD83EKPu5nDyDf",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 170
+      },
+      "cache_creation_input_tokens": 170,
+      "cache_read_input_tokens": 131799,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 170
+          },
+          "cache_creation_input_tokens": 170,
+          "cache_read_input_tokens": 131799,
+          "input_tokens": 1,
+          "output_tokens": 373,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 373,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "ca81bfd5-519c-4698-a06b-8ef9266d0ed4",
+  "requestId": "req_011CaaWhqTSPqRTiyCivpFLt",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T19:32:23.506Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "f187e456-7308-4c73-94d4-80daf2b981a4",
+  "version": "2.1.123"
+}

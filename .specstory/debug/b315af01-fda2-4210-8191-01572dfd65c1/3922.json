@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "File created successfully at: /Users/migmac/Documents/GitHub/_ABM/paperclip/tests/cf-smoke/vitest.config.ts",
+        "tool_use_id": "toolu_01SzAMFfWRFY1AGvLDwVg867",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "7478ea9d-71b8-4114-8c90-7942e03bb66b",
+  "promptId": "e7cbb211-1d37-4345-b546-c3d4bd07be80",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "7478ea9d-71b8-4114-8c90-7942e03bb66b",
+  "timestamp": "2026-04-30T23:01:35.818Z",
+  "toolUseResult": {
+    "content": "import { defineConfig } from \"vitest/config\";\n\n/**\n * CF Worker smoke suite config.\n *\n * Runs against a live `pnpm dev:cf` instance — never against ephemeral state.\n * Tests are sequential to avoid hammering the dev DB and to make failure\n * output easier to read.\n */\nexport default defineConfig({\n  test: {\n    include: [\"tests/cf-smoke/**/*.spec.ts\"],\n    testTimeout: 15000,\n    hookTimeout: 15000,\n    fileParallelism: false,\n    sequence: { concurrent: false },\n    reporters: [\"default\"],\n  },\n});\n",
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/tests/cf-smoke/vitest.config.ts",
+    "originalFile": null,
+    "structuredPatch": [],
+    "type": "create",
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "2e6f1edf-49f4-49af-aea9-271c9e762e96",
+  "version": "2.1.123"
+}

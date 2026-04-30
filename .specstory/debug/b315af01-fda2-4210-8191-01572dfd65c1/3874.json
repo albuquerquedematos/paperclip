@@ -1,0 +1,71 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01F7SztW5dcHy6EMgy9GZXL5",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/issues.ts",
+          "new_string": "    assertCompanyAccess(ctx, issue.companyId);\n    const approvals = await issueApprovalsSvc.listApprovalsForIssue(issue.id);\n    return Response.json(approvals);\n  };\n\n  const linkIssueApproval: Handler = async (ctx) =\u003e {",
+          "old_string": "    assertCompanyAccess(ctx, issue.companyId);\n    const approvals = await issueApprovalsSvc.listApprovalsForIssue(id);\n    return Response.json(approvals);\n  };\n\n  const linkIssueApproval: Handler = async (ctx) =\u003e {",
+          "replace_all": false
+        },
+        "name": "Edit",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01HsgsnWxwHiuSr5XDYSUuB5",
+    "model": "claude-opus-4-7",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1347,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 1347,
+      "cache_read_input_tokens": 327386,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 1347,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 1347,
+          "cache_read_input_tokens": 327386,
+          "input_tokens": 1,
+          "output_tokens": 376,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 376,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "1dad07c4-55b5-4977-b0c8-4b6c85c50ea8",
+  "requestId": "req_011CaanUyqDaX2wv4mcm9wLj",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T22:59:14.814Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "d987add2-6efa-45d6-b1bf-ff60bcca1c10",
+  "version": "2.1.123"
+}

@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "275\t        .returning()\n276\t        .then((rows) =\u003e rows[0] ?? null);\n277\t    },\n278\t\n279\t    // ----- Config ---------------------------------------------------------\n280\t\n281\t    /** Retrieve a plugin's instance configuration. */\n282\t    getConfig: (pluginId: string) =\u003e\n283\t      db\n284\t        .select()\n285\t        .from(pluginConfig)\n286\t        .where(eq(pluginConfig.pluginId, pluginId))\n287\t        .then((rows) =\u003e rows[0] ?? null),\n288\t\n289\t    /**\n290\t     * Create or fully replace a plugin's instance configuration.\n291\t     * If a config row already exists for the plugin it is replaced;\n292\t     * otherwise a new row is inserted.\n293\t     */\n294\t    upsertConfig: async (pluginId: string, input: UpsertPluginConfig) =\u003e {\n295\t      const plugin = await getById(pluginId);\n296\t      if (!plugin) throw notFound(\"Plugin not found\");\n297\t\n298\t      const existing = await db\n299\t        .select()\n300\t        .from(pluginConfig)\n301\t        .where(eq(pluginConfig.pluginId, pluginId))\n302\t        .then((rows) =\u003e rows[0] ?? null);\n303\t\n304\t      if (existing) {\n305\t        return db\n306\t          .update(pluginConfig)\n307\t          .set({\n308\t            configJson: input.configJson,\n309\t            lastError: null,\n310\t            updatedAt: new Date(),\n311\t          })\n312\t          .where(eq(pluginConfig.pluginId, pluginId))\n313\t          .returning()\n314\t          .then((rows) =\u003e rows[0]);",
+        "tool_use_id": "toolu_0129gauL2q6PGbfUGhoGwzgH",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "f2a29495-2d84-477b-962b-3d31c6c04901",
+  "promptId": "a0dd8f6d-e0d4-4f57-8650-1c60e1512696",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "f2a29495-2d84-477b-962b-3d31c6c04901",
+  "timestamp": "2026-04-30T21:49:33.481Z",
+  "toolUseResult": {
+    "file": {
+      "content": "        .returning()\n        .then((rows) =\u003e rows[0] ?? null);\n    },\n\n    // ----- Config ---------------------------------------------------------\n\n    /** Retrieve a plugin's instance configuration. */\n    getConfig: (pluginId: string) =\u003e\n      db\n        .select()\n        .from(pluginConfig)\n        .where(eq(pluginConfig.pluginId, pluginId))\n        .then((rows) =\u003e rows[0] ?? null),\n\n    /**\n     * Create or fully replace a plugin's instance configuration.\n     * If a config row already exists for the plugin it is replaced;\n     * otherwise a new row is inserted.\n     */\n    upsertConfig: async (pluginId: string, input: UpsertPluginConfig) =\u003e {\n      const plugin = await getById(pluginId);\n      if (!plugin) throw notFound(\"Plugin not found\");\n\n      const existing = await db\n        .select()\n        .from(pluginConfig)\n        .where(eq(pluginConfig.pluginId, pluginId))\n        .then((rows) =\u003e rows[0] ?? null);\n\n      if (existing) {\n        return db\n          .update(pluginConfig)\n          .set({\n            configJson: input.configJson,\n            lastError: null,\n            updatedAt: new Date(),\n          })\n          .where(eq(pluginConfig.pluginId, pluginId))\n          .returning()\n          .then((rows) =\u003e rows[0]);",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/services/plugin-registry.ts",
+      "numLines": 40,
+      "startLine": 275,
+      "totalLines": 683
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "7f505cad-a143-4b5b-95f9-808063e7747d",
+  "version": "2.1.123"
+}

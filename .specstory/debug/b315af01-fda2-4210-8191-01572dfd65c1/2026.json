@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "=== environment-selection ===\nimport { unprocessable } from \"../errors.js\";\n\nexport async function assertEnvironmentSelectionForCompany(\n  environmentsSvc: {\n    getById(environmentId: string): Promise\u003c{\n=== issues-checkout-wakeup ===\ntype CheckoutWakeInput = {\n  actorType: \"board\" | \"agent\" | \"none\";\n  actorAgentId: string | null;\n  checkoutAgentId: string;\n  checkoutRunId: string | null;\n=== instance-database-backups ===\nimport { Router } from \"express\";\nimport type { BackupRetentionPolicy, RunDatabaseBackupResult } from \"@paperclipai/db\";\nimport { assertInstanceAdmin } from \"./authz.js\";\n\nexport type InstanceDatabaseBackupTrigger = \"manual\" | \"scheduled\";\n=== org-chart-svg ===\n/**\n * Server-side SVG renderer for Paperclip org charts.\n * Supports 5 visual styles: monochrome, nebula, circuit, warmth, schematic.\n * Pure SVG output — no browser/Playwright needed. PNG via sharp.\n */",
+        "is_error": false,
+        "tool_use_id": "toolu_017v1tfQiRV83XeTXEi89fCL",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "7072d238-a053-4fd6-870d-40766b687f1c",
+  "promptId": "6578f9d8-71c9-42ed-bd5d-4cac4f413d52",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "7072d238-a053-4fd6-870d-40766b687f1c",
+  "timestamp": "2026-04-30T19:21:56.669Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "=== environment-selection ===\nimport { unprocessable } from \"../errors.js\";\n\nexport async function assertEnvironmentSelectionForCompany(\n  environmentsSvc: {\n    getById(environmentId: string): Promise\u003c{\n=== issues-checkout-wakeup ===\ntype CheckoutWakeInput = {\n  actorType: \"board\" | \"agent\" | \"none\";\n  actorAgentId: string | null;\n  checkoutAgentId: string;\n  checkoutRunId: string | null;\n=== instance-database-backups ===\nimport { Router } from \"express\";\nimport type { BackupRetentionPolicy, RunDatabaseBackupResult } from \"@paperclipai/db\";\nimport { assertInstanceAdmin } from \"./authz.js\";\n\nexport type InstanceDatabaseBackupTrigger = \"manual\" | \"scheduled\";\n=== org-chart-svg ===\n/**\n * Server-side SVG renderer for Paperclip org charts.\n * Supports 5 visual styles: monochrome, nebula, circuit, warmth, schematic.\n * Pure SVG output — no browser/Playwright needed. PNG via sharp.\n */"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "b3cf5472-ace0-4978-af2c-bcee57eedbfb",
+  "version": "2.1.123"
+}

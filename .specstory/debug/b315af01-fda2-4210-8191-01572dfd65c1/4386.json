@@ -1,0 +1,71 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01VWTXB1hLXCusSSA3sMvBCi",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/adapters/claude-local/src/server/parse.ts",
+          "new_string": "const UNKNOWN_SESSION_RE =\n  /no conversation found with session id|unknown session|session .* not found/i;\n\nexport function isClaudeUnknownSessionError(parsed: Record\u003cstring, unknown\u003e): boolean {\n  const resultText = asString(parsed.result, \"\").trim();\n  const allMessages = [resultText, ...extractClaudeErrorMessages(parsed)]\n    .map((msg) =\u003e msg.trim())\n    .filter(Boolean);\n\n  return allMessages.some((msg) =\u003e UNKNOWN_SESSION_RE.test(msg));\n}\n\n/**\n * Detect the unknown-session error from any signal claude produced.\n *\n * Use this when the parsed JSON may be absent — claude often exits with\n * code 1 and writes the error to stderr without producing stream JSON.\n * Checking parsed alone misses those cases and the retry-with-fresh-session\n * fallback never fires.\n */\nexport function detectClaudeUnknownSession(input: {\n  parsed?: Record\u003cstring, unknown\u003e | null;\n  stdout?: string | null;\n  stderr?: string | null;\n}): boolean {\n  const messages: string[] = [];\n  if (input.parsed) {\n    const resultText = asString(input.parsed.result, \"\").trim();\n    if (resultText) messages.push(resultText);\n    messages.push(...extractClaudeErrorMessages(input.parsed));\n  }\n  if (input.stderr) messages.push(input.stderr);\n  if (input.stdout) messages.push(input.stdout);\n  return messages.some((msg) =\u003e UNKNOWN_SESSION_RE.test(msg));\n}",
+          "old_string": "export function isClaudeUnknownSessionError(parsed: Record\u003cstring, unknown\u003e): boolean {\n  const resultText = asString(parsed.result, \"\").trim();\n  const allMessages = [resultText, ...extractClaudeErrorMessages(parsed)]\n    .map((msg) =\u003e msg.trim())\n    .filter(Boolean);\n\n  return allMessages.some((msg) =\u003e\n    /no conversation found with session id|unknown session|session .* not found/i.test(msg),\n  );\n}",
+          "replace_all": false
+        },
+        "name": "Edit",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01Dn66Vhpc2kky4BgxNxXu4L",
+    "model": "claude-opus-4-7",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1864,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 1864,
+      "cache_read_input_tokens": 461060,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 1864,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 1864,
+          "cache_read_input_tokens": 461060,
+          "input_tokens": 1,
+          "output_tokens": 894,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 894,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "e0b45d22-e77c-468d-94b5-01a55ffd5ffa",
+  "requestId": "req_011CaapHEtjZKNwVhsjnPTTP",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T23:22:53.186Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "535ba781-41a1-4ffe-b3ab-50e7a23d2b06",
+  "version": "2.1.123"
+}

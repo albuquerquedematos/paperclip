@@ -1,0 +1,27 @@
+{
+  "agentId": "ae240282fd51e7edd",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport fs from \"node:fs/promises\";\n2\timport type { Dirent } from \"node:fs\";\n3\timport os from \"node:os\";\n4\timport path from \"node:path\";\n5\timport { fileURLToPath } from \"node:url\";\n6\timport type { AdapterExecutionContext, AdapterExecutionResult } from \"@paperclipai/adapter-utils\";\n7\timport {\n8\t  adapterExecutionTargetIsRemote,\n9\t  adapterExecutionTargetPaperclipApiUrl,\n10\t  adapterExecutionTargetRemoteCwd,\n11\t  adapterExecutionTargetSessionIdentity,\n12\t  adapterExecutionTargetSessionMatches,\n13\t  adapterExecutionTargetUsesManagedHome,\n14\t  adapterExecutionTargetUsesPaperclipBridge,\n15\t  describeAdapterExecutionTarget,\n16\t  ensureAdapterExecutionTargetCommandResolvable,\n17\t  prepareAdapterExecutionTargetRuntime,\n18\t  readAdapterExecutionTarget,\n19\t  readAdapterExecutionTargetHomeDir,\n20\t  resolveAdapterExecutionTargetCommandForLogs,\n21\t  runAdapterExecutionTargetProcess,\n22\t  runAdapterExecutionTargetShellCommand,\n23\t  startAdapterExecutionTargetPaperclipBridge,\n24\t} from \"@paperclipai/adapter-utils/execution-target\";\n25\timport {\n26\t  asBoolean,\n27\t  asNumber,\n28\t  asString,\n29\t  asStringArray,\n30\t  applyPaperclipWorkspaceEnv,\n31\t  buildPaperclipEnv,\n32\t  buildInvocationEnvForLogs,\n33\t  ensureAbsoluteDirectory,\n34\t  ensurePaperclipSkillSymlink,\n35\t  joinPromptSections,\n36\t  ensurePathInEnv,\n37\t  readPaperclipRuntimeSkillEntries,\n38\t  resolvePaperclipDesiredSkillNames,\n39\t  removeMaintainerOnlySkillSymlinks,\n40\t  parseObject,\n41\t  renderTemplate,\n42\t  renderPaperclipWakePrompt,\n43\t  stringifyPaperclipWakePayload,\n44\t  DEFAULT_PAPERCLIP_AGENT_PROMPT_TEMPLATE,\n45\t  runChildProcess,\n46\t} from \"@paperclipai/adapter-utils/server-utils\";\n47\timport { DEFAULT_GEMINI_LOCAL_MODEL } from \"../index.js\";\n48\timport {\n49\t  describeGeminiFailure,\n50\t  detectGeminiAuthRequired,\n51\t  isGeminiTurnLimitResult,\n52\t  isGeminiUnknownSessionError,\n53\t  parseGeminiJsonl,\n54\t} from \"./parse.js\";\n55\timport { firstNonEmptyLine } from \"./utils.js\";\n56\t\n57\tconst __moduleDir = path.dirname(fileURLToPath(import.meta.url));\n58\t\n59\tfunction hasNonEmptyEnvValue(env: Record\u003cstring, string\u003e, key: string): boolean {\n60\t  const raw = env[key];\n\n\u003csystem-reminder\u003e\nWhenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.\n\u003c/system-reminder\u003e\n",
+        "tool_use_id": "toolu_01NAXenAgdYZn3FyhS5p7Uyo",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "a1880b25-fee4-470b-988b-5da61264a801",
+  "promptId": "0d05d433-ef46-4bba-8105-f1d502a42e1e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "a1880b25-fee4-470b-988b-5da61264a801",
+  "timestamp": "2026-04-30T19:28:11.890Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "18bca726-ac78-42d7-9bf8-46cabd5c8a30",
+  "version": "2.1.123"
+}

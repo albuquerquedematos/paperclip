@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01QMKjNMWNbf7GcggDaADh4R",
+        "input": {
+          "command": "grep -n \"async list\\|list(\" /Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/services/company-skills.ts | head -10",
+          "description": "Find list method in company-skills service"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_015SbkKEPs1TcPZAPLBcmANp",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 955
+      },
+      "cache_creation_input_tokens": 955,
+      "cache_read_input_tokens": 51138,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 955
+          },
+          "cache_creation_input_tokens": 955,
+          "cache_read_input_tokens": 51138,
+          "input_tokens": 1,
+          "output_tokens": 200,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 200,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "f1761301-9c67-4e8b-8038-ec718ab417a4",
+  "requestId": "req_011CaaRdR1KmhCsQqnnDFsTH",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T18:25:46.829Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "3f4cdf0d-a782-42fc-9da0-8b1b4ae5904b",
+  "version": "2.1.123"
+}

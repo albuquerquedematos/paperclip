@@ -1,0 +1,27 @@
+{
+  "agentId": "ae240282fd51e7edd",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport fs from \"node:fs/promises\";\n2\timport os from \"node:os\";\n3\timport path from \"node:path\";\n4\timport { fileURLToPath } from \"node:url\";\n5\timport { inferOpenAiCompatibleBiller, type AdapterExecutionContext, type AdapterExecutionResult } from \"@paperclipai/adapter-utils\";\n6\timport {\n7\t  adapterExecutionTargetIsRemote,\n8\t  adapterExecutionTargetPaperclipApiUrl,\n9\t  adapterExecutionTargetRemoteCwd,\n10\t  adapterExecutionTargetSessionIdentity,\n11\t  adapterExecutionTargetSessionMatches,\n12\t  adapterExecutionTargetUsesManagedHome,\n13\t  adapterExecutionTargetUsesPaperclipBridge,\n14\t  describeAdapterExecutionTarget,\n15\t  ensureAdapterExecutionTargetCommandResolvable,\n16\t  prepareAdapterExecutionTargetRuntime,\n17\t  readAdapterExecutionTarget,\n18\t  readAdapterExecutionTargetHomeDir,\n19\t  resolveAdapterExecutionTargetCommandForLogs,\n20\t  runAdapterExecutionTargetProcess,\n21\t  runAdapterExecutionTargetShellCommand,\n22\t  startAdapterExecutionTargetPaperclipBridge,\n23\t} from \"@paperclipai/adapter-utils/execution-target\";\n24\timport {\n25\t  asString,\n26\t  asNumber,\n27\t  asStringArray,\n28\t  parseObject,\n29\t  applyPaperclipWorkspaceEnv,\n30\t  buildPaperclipEnv,\n31\t  joinPromptSections,\n32\t  buildInvocationEnvForLogs,\n33\t  ensureAbsoluteDirectory,\n34\t  ensurePaperclipSkillSymlink,\n35\t  ensurePathInEnv,\n36\t  renderTemplate,\n37\t  renderPaperclipWakePrompt,\n38\t  stringifyPaperclipWakePayload,\n39\t  DEFAULT_PAPERCLIP_AGENT_PROMPT_TEMPLATE,\n40\t  runChildProcess,\n41\t  readPaperclipRuntimeSkillEntries,\n42\t  resolvePaperclipDesiredSkillNames,\n43\t} from \"@paperclipai/adapter-utils/server-utils\";\n44\timport { isOpenCodeUnknownSessionError, parseOpenCodeJsonl } from \"./parse.js\";\n45\timport { ensureOpenCodeModelConfiguredAndAvailable } from \"./models.js\";\n46\timport { removeMaintainerOnlySkillSymlinks } from \"@paperclipai/adapter-utils/server-utils\";\n47\timport { prepareOpenCodeRuntimeConfig } from \"./runtime-config.js\";\n48\t\n49\tconst __moduleDir = path.dirname(fileURLToPath(import.meta.url));\n50\t\n51\tfunction firstNonEmptyLine(text: string): string {\n52\t  return (\n53\t    text\n54\t      .split(/\\r?\\n/)\n55\t      .map((line) =\u003e line.trim())\n56\t      .find(Boolean) ?? \"\"\n57\t  );\n58\t}\n59\t\n60\tfunction parseModelProvider(model: string | null): string | null {\n\n\u003csystem-reminder\u003e\nWhenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.\n\u003c/system-reminder\u003e\n",
+        "tool_use_id": "toolu_01QgrdQHXDURLaPBoVcZpv7x",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "99b9aeef-a2a8-40fe-9f2c-e6eae6847fcd",
+  "promptId": "0d05d433-ef46-4bba-8105-f1d502a42e1e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "99b9aeef-a2a8-40fe-9f2c-e6eae6847fcd",
+  "timestamp": "2026-04-30T19:28:15.303Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "7f9f2497-ceaf-4aa1-8e91-85373734ec22",
+  "version": "2.1.123"
+}

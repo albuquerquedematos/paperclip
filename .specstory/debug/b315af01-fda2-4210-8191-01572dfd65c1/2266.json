@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "142\texport function listAdapterPlugins(): AdapterPluginRecord[] {\n143\t  return readStore();\n144\t}\n145\t\n146\texport function addAdapterPlugin(record: AdapterPluginRecord): void {\n147\t  const store = [...readStore()];\n148\t  const idx = store.findIndex((r) =\u003e r.type === record.type);\n149\t  if (idx \u003e= 0) {\n150\t    store[idx] = record;\n151\t  } else {\n152\t    store.push(record);\n153\t  }\n154\t  writeStore(store);\n155\t}\n156\t\n157\texport function removeAdapterPlugin(type: string): boolean {\n158\t  const store = [...readStore()];\n159\t  const idx = store.findIndex((r) =\u003e r.type === type);\n160\t  if (idx \u003c 0) return false;\n161\t  store.splice(idx, 1);\n162\t  writeStore(store);\n163\t  return true;\n164\t}\n165\t\n166\texport function getAdapterPluginByType(type: string): AdapterPluginRecord | undefined {\n167\t  return readStore().find((r) =\u003e r.type === type);\n168\t}\n169\t\n170\texport function getAdapterPluginsDir(): string {\n171\t  return ensureDirs();",
+        "tool_use_id": "toolu_01XSqdtSLWFp4oiJH6NAunjh",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "52c097dc-f036-4aa4-8781-d875019e4c18",
+  "promptId": "0d05d433-ef46-4bba-8105-f1d502a42e1e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "52c097dc-f036-4aa4-8781-d875019e4c18",
+  "timestamp": "2026-04-30T19:30:19.861Z",
+  "toolUseResult": {
+    "file": {
+      "content": "export function listAdapterPlugins(): AdapterPluginRecord[] {\n  return readStore();\n}\n\nexport function addAdapterPlugin(record: AdapterPluginRecord): void {\n  const store = [...readStore()];\n  const idx = store.findIndex((r) =\u003e r.type === record.type);\n  if (idx \u003e= 0) {\n    store[idx] = record;\n  } else {\n    store.push(record);\n  }\n  writeStore(store);\n}\n\nexport function removeAdapterPlugin(type: string): boolean {\n  const store = [...readStore()];\n  const idx = store.findIndex((r) =\u003e r.type === type);\n  if (idx \u003c 0) return false;\n  store.splice(idx, 1);\n  writeStore(store);\n  return true;\n}\n\nexport function getAdapterPluginByType(type: string): AdapterPluginRecord | undefined {\n  return readStore().find((r) =\u003e r.type === type);\n}\n\nexport function getAdapterPluginsDir(): string {\n  return ensureDirs();",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/services/adapter-plugin-store.ts",
+      "numLines": 30,
+      "startLine": 142,
+      "totalLines": 202
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "b7ee79a9-c39f-4439-a965-066a17d4b213",
+  "version": "2.1.123"
+}

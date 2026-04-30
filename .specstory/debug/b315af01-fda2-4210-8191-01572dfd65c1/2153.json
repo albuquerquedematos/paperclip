@@ -1,0 +1,62 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "signature": "EvwDClsIDRgCKkBO8EbVMRU+GouxOvdW4dseRuDtRmjsYG0+Kppzsuyfh0MA9wC215wGFs8gdwANjLZvIkI9oQ1323y93Fqjsg+fMhFjbGF1ZGUtc29ubmV0LTQtNjgAEgyCqoDHmnADySLBHnUaDBUXvwULMbWL/kdMQiIwlJbQ1cVxnkmr1BHkl8hLxpyzDN9Y1GD25PsHP6zYt09ROeKKqko30QBfz313uUNWKs4CDW0aD6ncgXKX9BSg2S22kEW8Wed1Q+0n82UMH91UKG855uVo5B44LlKSdskn4X3TUrbJBWwbNgWcgNM6meRIXj5O8ZaqZW097M+3TvHOHHcSczuM5ULbb6PmGwZ9HwG0ZzEkWevCLg8+KKdzk4K9EJai9TkKLA1//d2vhcYOBgMEpZt/TvAbwuIrRfilowd/aS5W/aMn9I+lRaor+covHe0M5MxWJPYX0yGF3Gf/16FCWroMechL7UGm1yQQQfMBh52geVqDFpZ+wQYILR++6u8PBEYmIW8yRYb/SNA1/jHSirnWFyCGKgOjhZ3zVKMpOxolXnLHbPMcxDcZf3LdaPl8ri9AJmSgxwN5EOvne4pR8+Tvj852lkvI8oe6HRQv7ht3rvRCjpxHxzAc76X+UhrTGP0dJrYXoaSIQ++i3Sx+yo7JYVmqft0AdS+eqxgB",
+        "thinking": "The user wants me to build the CF adapter registry for HTTP-compatible providers and commit as I go. Let me figure out which adapters work in CF via HTTP and implement a CF-specific adapter registry.\n\nLet me look at the existing adapters more carefully to understand which ones are HTTP-compatible vs subprocess-based.",
+        "type": "thinking"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_017EjQJcQVzfsoiKhNJGkHrm",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 1267
+      },
+      "cache_creation_input_tokens": 1267,
+      "cache_read_input_tokens": 105915,
+      "inference_geo": "",
+      "input_tokens": 3,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 1267
+          },
+          "cache_creation_input_tokens": 1267,
+          "cache_read_input_tokens": 105915,
+          "input_tokens": 3,
+          "output_tokens": 565,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 565,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "414a37e7-4869-4102-906d-2b82e2cc2e92",
+  "requestId": "req_011CaaWMqVrtNGJDe5D2awgU",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T19:27:46.462Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "a1993f9a-a51c-4080-bccb-29ba79c7a4f8",
+  "version": "2.1.123"
+}

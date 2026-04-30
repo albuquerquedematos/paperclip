@@ -1,0 +1,29 @@
+{
+  "attachment": {
+    "content": {
+      "file": {
+        "content": "/**\n * cf-extra-routes.ts — barrel for CF-native route modules.\n *\n * CF-native handlers for API endpoints that use raw Express handlers in the\n * server package (making them invisible to extractRoutesFromRouter) or depend\n * on runtime registries (adapters, plugins) that don't exist in a CF Worker.\n *\n * Registered in app.ts BEFORE the /api/* catch-all so they shadow the 501.\n *\n * Modules:\n *   routes/adapters.ts       — GET /api/adapters\n *   routes/plugins.ts        — GET /api/plugins, GET /api/plugins/ui-contributions\n *   routes/company-access.ts — GET /api/companies/:id/join-requests,\n *                               GET /api/companies/:id/user-directory\n *   routes/company-skills-cf.ts — GET /api/companies/:id/skills\n *   routes/events.ts         — GET /api/companies/:id/events/ws\n *\n * All routes in this barrel require an authenticated actor (board or agent key,\n * or local_trusted mode). Unauthenticated requests receive 401.\n */\n\nimport type { Hono } from \"hono\";\nimport type { Env } from \"./env.js\";\nimport { registerAdapterRoutes } from \"./routes/adapters.js\";\nimport { registerPluginRoutes } from \"./routes/plugins.js\";\nimport { registerCompanyAccessRoutes } from \"./routes/company-access.js\";\nimport { registerCompanySkillRoutes } from \"./routes/company-skills-cf.js\";\nimport { registerEventRoutes } from \"./routes/events.js\";\n\nexport function registerCfExtraRoutes(app: Hono\u003c{ Bindings: Env }\u003e): void {\n  registerAdapterRoutes(app);\n  registerPluginRoutes(app);\n  registerCompanyAccessRoutes(app);\n  registerCompanySkillRoutes(app);\n  registerEventRoutes(app);\n}\n",
+        "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/cf-extra-routes.ts",
+        "numLines": 37,
+        "startLine": 1,
+        "totalLines": 37
+      },
+      "type": "text"
+    },
+    "displayPath": "packages/deploy-cloudflare/src/worker/cf-extra-routes.ts",
+    "filename": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/cf-extra-routes.ts",
+    "type": "file"
+  },
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "parentUuid": "8b9dc7d3-6704-4bc3-9913-8166a8549841",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T20:07:13.835Z",
+  "type": "attachment",
+  "userType": "external",
+  "uuid": "8fcc6767-de1b-439f-b40e-3cc1d2e733a1",
+  "version": "2.1.123"
+}

@@ -1,0 +1,27 @@
+{
+  "agentId": "adb2819bd480f8bbe",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\t/**\n2\t * routes/events.ts\n3\t *\n4\t * CF-native handler for GET /api/companies/:companyId/events/ws.\n5\t *\n6\t * The server-side WebSocket event bus relies on an in-process pub/sub\n7\t * mechanism that does not exist in a CF Worker. This handler accepts the\n8\t * WebSocket upgrade so the frontend does not receive a hard error, but the\n9\t * connection stays silent (no server-sent events) until a Durable Object\n10\t * pub/sub bus is wired up.\n11\t *\n12\t * Auth: the WebSocket protocol does not support request headers once the\n13\t * upgrade completes, so auth is checked before the upgrade response is sent.\n14\t * Unauthenticated requests receive 401 (plain HTTP, before the upgrade).\n15\t *\n16\t * CF-specific caveats:\n17\t *   - WebSocketPair is a CF Workers global; not available in Node.js.\n18\t *   - The connection is accepted but sends no events (stub behaviour).\n19\t *   - TODO: Wire up a Durable Object pub/sub bus for real-time events.\n20\t */\n21\t\n22\timport type { Hono } from \"hono\";\n23\timport { createHyperdriveDb } from \"../../db/hyperdrive.js\";\n24\timport { resolveActorFromRequest } from \"../../auth/resolve-actor.js\";\n25\timport { resolveDeploymentMode } from \"../env.js\";\n26\timport type { Env } from \"../env.js\";\n27\t\n28\texport function registerEventRoutes(app: Hono\u003c{ Bindings: Env }\u003e): void {\n29\t  // -------------------------------------------------------------------------\n30\t  // GET /api/companies/:companyId/events/ws\n31\t  //\n32\t  // CF-native WebSocket upgrade. Without a Durable Object pub/sub bus, the\n33\t  // connection stays open but receives no server-sent events. The frontend\n34\t  // treats this as a connected (but silent) event stream, which is better\n35\t  // than a hard error.\n36\t  // -------------------------------------------------------------------------\n37\t  app.get(\"/api/companies/:companyId/events/ws\", async (c) =\u003e {\n38\t    const upgrade = c.req.header(\"Upgrade\");\n39\t    if (!upgrade || upgrade.toLowerCase() !== \"websocket\") {\n40\t      return c.text(\"Expected WebSocket upgrade\", 426);\n41\t    }\n42\t\n43\t    // Authenticate before accepting the upgrade. Once the 101 is sent the\n44\t    // response is committed, so we must reject unauthenticated callers here.\n45\t    const db = createHyperdriveDb(c.env.HYPERDRIVE);\n46\t    const actor = await resolveActorFromRequest(c.req.raw, db, {\n47\t      deploymentMode: resolveDeploymentMode(c.env),\n48\t    });\n49\t    if (!actor) return new Response(\"Unauthorized\", { status: 401 });\n50\t\n51\t    const { 0: client, 1: server } = new WebSocketPair();\n52\t    server.accept();\n53\t    server.addEventListener(\"message\", () =\u003e { /* no-op: no pub/sub wired yet */ });\n54\t    return new Response(null, { status: 101, webSocket: client });\n55\t  });\n56\t}\n57\t",
+        "tool_use_id": "toolu_01FXVXiJfeaM8usPGnaGfGPt",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "0bdcb35c-ff80-4858-bec4-d121610b67be",
+  "promptId": "7323a41a-dd8a-4783-b590-aea4ab5316a7",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "0bdcb35c-ff80-4858-bec4-d121610b67be",
+  "timestamp": "2026-04-30T21:25:52.262Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "fdb0a4fc-718a-420d-a73e-6ef9115ba5cd",
+  "version": "2.1.123"
+}

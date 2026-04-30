@@ -1,0 +1,27 @@
+{
+  "agentId": "ae240282fd51e7edd",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport type { AdapterExecutionContext, AdapterExecutionResult } from \"../types.js\";\n2\timport { asString, asNumber, parseObject } from \"../utils.js\";\n3\t\n4\texport async function execute(ctx: AdapterExecutionContext): Promise\u003cAdapterExecutionResult\u003e {\n5\t  const { config, runId, agent, context } = ctx;\n6\t  const url = asString(config.url, \"\");\n7\t  if (!url) throw new Error(\"HTTP adapter missing url\");\n8\t\n9\t  const method = asString(config.method, \"POST\");\n10\t  const timeoutMs = asNumber(config.timeoutMs, 0);\n11\t  const headers = parseObject(config.headers) as Record\u003cstring, string\u003e;\n12\t  const payloadTemplate = parseObject(config.payloadTemplate);\n13\t  const body = { ...payloadTemplate, agentId: agent.id, runId, context };\n14\t\n15\t  const controller = new AbortController();\n16\t  const timer = timeoutMs \u003e 0 ? setTimeout(() =\u003e controller.abort(), timeoutMs) : null;\n17\t\n18\t  try {\n19\t    const res = await fetch(url, {\n20\t      method,\n21\t      headers: {\n22\t        \"content-type\": \"application/json\",\n23\t        ...headers,\n24\t      },\n25\t      body: JSON.stringify(body),\n26\t      ...(timer ? { signal: controller.signal } : {}),\n27\t    });\n28\t\n29\t    if (!res.ok) {\n30\t      throw new Error(`HTTP invoke failed with status ${res.status}`);\n31\t    }\n32\t\n33\t    return {\n34\t      exitCode: 0,\n35\t      signal: null,\n36\t      timedOut: false,\n37\t      summary: `HTTP ${method} ${url}`,\n38\t    };\n39\t  } catch (err) {\n40\t    if (timer \u0026\u0026 err instanceof Error \u0026\u0026 err.name === \"AbortError\") {\n41\t      return {\n42\t        exitCode: null,\n43\t        signal: null,\n44\t        timedOut: true,\n45\t        errorMessage: `HTTP ${method} ${url} timed out after ${timeoutMs}ms`,\n46\t        errorCode: \"timeout\",\n47\t      };\n48\t    }\n49\t    throw err;\n50\t  } finally {\n51\t    if (timer) clearTimeout(timer);\n52\t  }\n53\t}\n54\t\n\n\u003csystem-reminder\u003e\nWhenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.\n\u003c/system-reminder\u003e\n",
+        "tool_use_id": "toolu_016e9wMXGTpRTHWrrFcAdg2E",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "9aa14985-eaa2-46cf-ae93-e3b691759053",
+  "promptId": "0d05d433-ef46-4bba-8105-f1d502a42e1e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "9aa14985-eaa2-46cf-ae93-e3b691759053",
+  "timestamp": "2026-04-30T19:28:12.762Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "41d69474-86d8-4ff8-9eb2-62ff209ebac0",
+  "version": "2.1.123"
+}

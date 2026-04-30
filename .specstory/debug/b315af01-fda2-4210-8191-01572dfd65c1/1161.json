@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "    \"dev\": \"node build-worker.mjs \u0026\u0026 wrangler dev --no-bundle --local\",\n    \"deploy\": \"node build-worker.mjs \u0026\u0026 wrangler deploy --no-bundle\"\n    \"wrangler\": \"^3.0.0\"",
+        "is_error": false,
+        "tool_use_id": "toolu_01SVeKymRdQDhBQ2MLJqnwdy",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "4829497d-1e9a-4d99-ab98-8acbdeaa3e2b",
+  "promptId": "9aae9721-e466-4259-b66e-e724bd2f2c66",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "4829497d-1e9a-4d99-ab98-8acbdeaa3e2b",
+  "timestamp": "2026-04-30T18:16:14.312Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "    \"dev\": \"node build-worker.mjs \u0026\u0026 wrangler dev --no-bundle --local\",\n    \"deploy\": \"node build-worker.mjs \u0026\u0026 wrangler deploy --no-bundle\"\n    \"wrangler\": \"^3.0.0\""
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "2ddbd9ae-0a10-4a3f-a5fe-9cf2a379963f",
+  "version": "2.1.123"
+}

@@ -1,0 +1,49 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/runtime/workflows/plugin-dispatch.ts has been updated successfully.",
+        "tool_use_id": "toolu_01PnPV3ZaNJhFgJM7fVBYeL6",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "9614008a-da30-49c3-baa8-06b7ef745b6c",
+  "promptId": "7323a41a-dd8a-4783-b590-aea4ab5316a7",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "9614008a-da30-49c3-baa8-06b7ef745b6c",
+  "timestamp": "2026-04-30T21:36:03.708Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/runtime/workflows/plugin-dispatch.ts",
+    "newString": "import { WorkflowEntrypoint, type WorkflowStep, type WorkflowEvent } from \"cloudflare:workers\";\nimport { callSidecarService } from \"../../sidecar-client.js\";",
+    "oldString": "import { WorkflowEntrypoint, type WorkflowStep, type WorkflowEvent } from \"cloudflare:workers\";",
+    "originalFile": "import { WorkflowEntrypoint, type WorkflowStep, type WorkflowEvent } from \"cloudflare:workers\";\n\n/**\n * Parameters for the PluginDispatchWorkflow.\n */\nexport interface PluginDispatchParams {\n  /** The `plugin_jobs.id` primary key of the job to execute. */\n  pluginJobId: string;\n  /** Plugin slug — used for routing to the correct executor config. */\n  pluginSlug: string;\n  /** Company context. */\n  companyId: string;\n  /**\n   * Executor mode: `sandbox_bridge` (default) routes to the existing E2B/SSH\n   * sandbox bridge; `container` uses the PLUGIN_CONTAINER CF Container binding.\n   */\n  executorMode: \"sandbox_bridge\" | \"container\";\n}\n\n/**\n * Env bindings required by the PluginDispatchWorkflow.\n * Keep in sync with `src/worker/env.ts`.\n */\ninterface Env {\n  AGENT_RUN_DO: DurableObjectNamespace;\n  PAPERCLIP_KV: KVNamespace;\n  // CF-native: Container DO namespaces (proxy to Docker containers).\n  // Absent in local dev → falls back to SANDBOX_BRIDGE_URL from KV.\n  SIDECAR_SERVICE?: DurableObjectNamespace;   // plugin job lifecycle (claim/complete)\n  PLUGIN_CONTAINER?: DurableObjectNamespace;  // command execution (POST /execute)\n}\n\n/**\n * PluginDispatchWorkflow — Cloudflare Workflow that executes one plugin job.\n *\n * Plugin jobs are discrete units of work enqueued by the plugin job scheduler\n * (replaced by a Cloudflare Queue consumer on CF deployments). Each job has a\n * `plugin_jobs` record in the database. The Workflow:\n *\n *   1. Marks the job as \"running\" via the sidecar internal API.\n *   2. Dispatches execution to the configured executor:\n *        - `container`     → PLUGIN_CONTAINER CF Container binding (CF-native)\n *        - `sandbox_bridge` → external sandbox bridge via HTTP (fallback)\n *      Falls back to SIDECAR_SERVICE or the KV-stored bridge URL when the\n *      preferred binding is absent.\n *   3. Records the outcome (success or failure) via the sidecar internal API.\n *\n * Retries up to 2 times on transient executor failures before marking the\n * job as permanently failed.\n *\n * Triggered by the Cloudflare Queue consumer in `api.ts` when a\n * `plugin_job_dispatch` message arrives on `paperclip-jobs`.\n */\nexport class PluginDispatchWorkflow extends WorkflowEntrypoint\u003cEnv, PluginDispatchParams\u003e {\n  async run(event: WorkflowEvent\u003cPluginDispatchParams\u003e, step: WorkflowStep): Promise\u003cvoid\u003e {\n    const { pluginJobId, pluginSlug, companyId, executorMode } = event.payload;\n\n    // Read fallback bridge config once per run (outside steps so it doesn't\n    // count against step retry limits; fast KV reads are acceptable here).\n    // Only performed when no CF Container binding is available.\n    let bridgeUrl: string | null = null;\n    let bridgeApiKey: string | null = null;\n    if (!this.env.SIDECAR_SERVICE) {\n      bridgeUrl = (await this.env.PAPERCLIP_KV.get(\"SANDBOX_BRIDGE_URL\")) ?? \"http://localhost:8788\";\n      bridgeApiKey = await this.env.PAPERCLIP_KV.get(\"SANDBOX_BRIDGE_API_KEY\");\n    }\n\n    /** Call the sidecar internal API — SidecarContainer DO preferred, fallback to bridge. */\n    const sidecarPost = async (path: string, body: unknown): Promise\u003cResponse\u003e =\u003e {\n      if (this.env.SIDECAR_SERVICE) {\n        // SidecarContainer DO proxies to the Docker sidecar (or KV bridge in local dev).\n        const id = this.env.SIDECAR_SERVICE.idFromName(\"sidecar\");\n        const stub = this.env.SIDECAR_SERVICE.get(id);\n        return stub.fetch(`http://sidecar${path}`, {\n          method: \"POST\",\n          headers: { \"Content-Type\": \"application/json\" },\n          body: JSON.stringify(body),\n        });\n      }\n      const headers: Record\u003cstring, string\u003e = { \"Content-Type\": \"application/json\" };\n      if (bridgeApiKey) headers.Authorization = `Bearer ${bridgeApiKey}`;\n      return fetch(`${bridgeUrl}${path}`, { method: \"POST\", headers, body: JSON.stringify(body) });\n    };\n\n    // ------------------------------------------------------------------\n    // Step 1: Claim the job — mark it as running to prevent duplicate dispatch\n    // ------------------------------------------------------------------\n    const claimed = await step.do(\"claim-job\", async () =\u003e {\n      const resp = await sidecarPost(`/internal/plugin-jobs/${pluginJobId}/claim`, { companyId });\n\n      if (resp.status === 409) {\n        return { claimed: false };\n      }\n      if (!resp.ok) {\n        throw new Error(`Claim failed: HTTP ${resp.status}`);\n      }\n      return { claimed: true };\n    });\n\n    if (!claimed.claimed) {\n      return;\n    }\n\n    // ------------------------------------------------------------------\n    // Step 2: Execute the plugin job\n    // ------------------------------------------------------------------\n    const executionResult = await step.do(\n      \"execute-job\",\n      {\n        timeout: \"10 minutes\",\n        retries: { limit: 2, delay: \"10 seconds\", backoff: \"exponential\" },\n      },\n      async () =\u003e {\n        const body = { pluginJobId, pluginSlug, companyId };\n        let resp: Response;\n\n        if (executorMode === \"container\" \u0026\u0026 this.env.PLUGIN_CONTAINER) {\n          // CF-native path: PluginContainer DO proxies command execution to\n          // the Docker sandbox container.\n          const id = this.env.PLUGIN_CONTAINER.idFromName(pluginJobId);\n          const stub = this.env.PLUGIN_CONTAINER.get(id);\n          resp = await stub.fetch(\n            `http://plugin-container/internal/plugin-jobs/${pluginJobId}/execute`,\n            {\n              method: \"POST\",\n              headers: { \"Content-Type\": \"application/json\" },\n              body: JSON.stringify(body),\n            },\n          );\n        } else {\n          // Fallback: sidecar internal API (CF Container or external bridge).\n          resp = await sidecarPost(`/internal/plugin-jobs/${pluginJobId}/execute`, body);\n        }\n\n        if (!resp.ok) {\n          const text = await resp.text().catch(() =\u003e \"(unreadable)\");\n          throw new Error(`Plugin job execution failed: HTTP ${resp.status}: ${text}`);\n        }\n\n        return (await resp.json()) as { status: string; exitCode?: number };\n      },\n    );\n\n    // ------------------------------------------------------------------\n    // Step 3: Record the result\n    // ------------------------------------------------------------------\n    await step.do(\"record-result\", async () =\u003e {\n      const succeeded = executionResult?.status !== \"failed\";\n      const resp = await sidecarPost(`/internal/plugin-jobs/${pluginJobId}/complete`, {\n        companyId,\n        status: succeeded ? \"succeeded\" : \"failed\",\n        exitCode: executionResult?.exitCode,\n        completedAt: new Date().toISOString(),\n      });\n      if (!resp.ok) {\n        const text = await resp.text().catch(() =\u003e \"(unreadable)\");\n        throw new Error(`Record result failed: HTTP ${resp.status}: ${text}`);\n      }\n    });\n  }\n}\n",
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          " import { WorkflowEntrypoint, type WorkflowStep, type WorkflowEvent } from \"cloudflare:workers\";",
+          "+import { callSidecarService } from \"../../sidecar-client.js\";",
+          " ",
+          " /**",
+          "  * Parameters for the PluginDispatchWorkflow."
+        ],
+        "newLines": 5,
+        "newStart": 1,
+        "oldLines": 4,
+        "oldStart": 1
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "e487d25b-8ad1-4bb1-b29f-1d61db137b8d",
+  "version": "2.1.123"
+}

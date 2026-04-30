@@ -1,0 +1,75 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_0172FvsFDd2QGRKSVZABjQx6",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/api.ts",
+          "new_string": "export { TaskDO } from \"../runtime/task-do.js\";\nexport { AgentRunDO } from \"../runtime/agent-run-do.js\";\nexport { SchedulerDO } from \"../scheduler/scheduler-do.js\";\nexport { HeartbeatWorkflow } from \"../runtime/workflows/heartbeat.js\";\nexport { PluginDispatchWorkflow } from \"../runtime/workflows/plugin-dispatch.js\";\nexport { SidecarContainer, PluginContainer } from \"./containers.js\";",
+          "old_string": "export { TaskDO } from \"../runtime/task-do.js\";\nexport { AgentRunDO } from \"../runtime/agent-run-do.js\";\nexport { SchedulerDO } from \"../scheduler/scheduler-do.js\";\nexport { HeartbeatWorkflow } from \"../runtime/workflows/heartbeat.js\";\nexport { PluginDispatchWorkflow } from \"../runtime/workflows/plugin-dispatch.js\";",
+          "replace_all": false
+        },
+        "name": "Edit",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": {
+      "cache_miss_reason": {
+        "type": "unavailable"
+      }
+    },
+    "id": "msg_01AY9gP6eKa8DaU7fR5QEBUe",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 497
+      },
+      "cache_creation_input_tokens": 497,
+      "cache_read_input_tokens": 99722,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 497
+          },
+          "cache_creation_input_tokens": 497,
+          "cache_read_input_tokens": 99722,
+          "input_tokens": 1,
+          "output_tokens": 371,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 371,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "93bca143-437e-4237-98c4-46ec275f831c",
+  "requestId": "req_011CaabewY49yWUj7aRWyBio",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T20:37:17.362Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "dc3aef93-6e05-4c46-ad64-67bea3817e98",
+  "version": "2.1.123"
+}

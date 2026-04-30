@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01JonXBbyB1qoCVGVDEv2K5t",
+        "input": {
+          "command": "cd /Users/migmac/Documents/GitHub/_ABM/paperclip \u0026\u0026 git add packages/deploy-cloudflare/src/worker/routes/agents-cf.ts \u0026\u0026 git commit -m \"$(cat \u003c\u003c'EOF'\nfix(deploy-cloudflare): proxy adapter test-environment + detect-model to sidecar\n\nClicking \"Test environment\" in the adapter config UI was failing with\n\\\"node:fs/promises not available in CF Workers\\\" + \\\"Command not found in\nPATH: claude\\\". The handler runs adapter preflight checks\n(resolveCommandPath, fs.access on cwd, claude --version probe) which all\nneed the host. Add CF-native shadows that proxy to the sidecar:\n\n  POST /api/companies/:companyId/adapters/:type/test-environment\n  GET  /api/companies/:companyId/adapters/:type/detect-model\n\nCo-Authored-By: Claude Sonnet 4.6 \u003cnoreply@anthropic.com\u003e\nEOF\n)\"",
+          "description": "Commit adapter test-environment proxy"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01EQuuTsG34n8Ws5Ba397rxN",
+    "model": "claude-opus-4-7",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 659,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 659,
+      "cache_read_input_tokens": 293449,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 659,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 659,
+          "cache_read_input_tokens": 293449,
+          "input_tokens": 1,
+          "output_tokens": 429,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 429,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "30bbd050-1926-47b8-9a91-e7097366ad36",
+  "requestId": "req_011CaamjXyWywn17t7vuwLaY",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T22:49:27.652Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "bc697de3-3703-4925-9409-ced4b3006043",
+  "version": "2.1.123"
+}

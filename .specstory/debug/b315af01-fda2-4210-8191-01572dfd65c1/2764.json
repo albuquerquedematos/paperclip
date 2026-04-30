@@ -1,0 +1,62 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "signature": "EpwFClsIDRgCKkDuPmO8NHoAAH1IPrKSsBd915BRVs4bgvJ53Sj/ovbvvG2Ih4WjTkb1FlDiaZvh1NZNVf1iVZpyIXJK6y9setfaMhFjbGF1ZGUtc29ubmV0LTQtNjgAEgz5X58OEstG1D6GiYwaDD1MZ81t1PT6r6kZAiIw7F5yC3vTXpPlHOf+vsLa5CKLdxqE0eSJK1xfDIvLE1pIMdfHQbPfWU6orHUOIuekKu4DXrlRoWSZ3E2psmVDJ/gBzcMI25EhNIL7YzWfFIWcUnj3BnGE/rXvvg1/6joMmOli7habjfvqRAo51waw93o1B87r9O6kVAPbzjBO2f8RuxXROPT+murg+BiPn0QUfC4hHWc7Ou9VbbgceAb9GO4rJyNtP9inBCcM4BqyYneQO0RxxMHptqW0GrnZ+d6H7WNK4irgwcJ076uFqdL+4SIq5Mdg/LJwhAYptMbUKNias/3e9WyuBbg0jSxYEcXqmWem+/MJjsKVvuZSOrg1Fp0Y4IKY+tvlc7QDeg02Dj/nXBTtiHC+VOTYvkB6LAMxlK0Fp2lQUYTkMBU/h8ugLC/o6ow4RBo9itVkSXxQJqd0be/jSKF/qZfWNitCYj22aLw21ItrwCsHkaG4mSX0g4NSv0gaB1/iJQnK88sj+yETBImzP3I04LUTbl/1ddTOb8ZPvuf5E/EOcXVQA++gnmBwO2NDJJoH8sN3Ji0Lm60jGxWXqkQ1h7XcjdP0ytJLvcXHvV1ieTovweKRg9ux/YkanlmtWWHwqaUSsLAk56UZjcWgsJ7RUKvirbwu4nwbUL3+tYJI6zPbbdzpd3LHvvnc+PJjhZgmmdvthxUqEyVdres8AUw7p/Vu9lXuF+T83Nc492g14CZJ2JiBzQQH2nwYAQ==",
+        "thinking": "Excellent! Wrangler starts cleanly now. I can see:\n- `SIDECAR_SERVICE (SidecarContainer)` — Durable Object — local ✓\n- `PLUGIN_CONTAINER (PluginContainer)` — Durable Object — local ✓\n- Containers listed at the bottom\n\nAnd the environment variables `SIDECAR_URL` and `SIDECAR_API_KEY` are there from `.dev.vars` (they'll be used as fallback by the SidecarContainer DO when `this.ctx.container` is undefined locally).\n\nThis is perfect. \n\nNow I'll commit these changes.",
+        "type": "thinking"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01BsFaKucBZNt7ynqE9pRrgJ",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 1365
+      },
+      "cache_creation_input_tokens": 1365,
+      "cache_read_input_tokens": 101711,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 1365
+          },
+          "cache_creation_input_tokens": 1365,
+          "cache_read_input_tokens": 101711,
+          "input_tokens": 1,
+          "output_tokens": 662,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 662,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "2e70b9e8-fa7a-4b39-99d2-72ae6dbabe05",
+  "requestId": "req_011CaabiavgPPGbxY4Ee4mmE",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T20:38:03.688Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "4314aaaf-add7-4c41-8194-3b3bb09df4c0",
+  "version": "2.1.123"
+}

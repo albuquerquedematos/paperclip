@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "    \"dev:cf\": \"pnpm --filter @paperclipai/deploy-cloudflare dev\",\n    \"dev:ui\": \"pnpm --filter @paperclipai/ui dev\",\n    \"storybook\": \"pnpm --filter @paperclipai/ui storybook\",\n    \"build-storybook\": \"pnpm --filter @paperclipai/ui build-storybook\",\n    \"build\": \"pnpm run preflight:workspace-links \u0026\u0026 pnpm -r build\",\n    \"typecheck\": \"pnpm run preflight:workspace-links \u0026\u0026 pnpm -r typecheck\",",
+        "is_error": false,
+        "tool_use_id": "toolu_013AKoQ4Ph67QmB5n2HSPf5b",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "d8a0264f-febe-47d8-9f4a-1d185152f541",
+  "promptId": "1b384992-7bf0-4117-b43d-35657ad43bbf",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "d8a0264f-febe-47d8-9f4a-1d185152f541",
+  "timestamp": "2026-04-30T18:45:10.184Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "    \"dev:cf\": \"pnpm --filter @paperclipai/deploy-cloudflare dev\",\n    \"dev:ui\": \"pnpm --filter @paperclipai/ui dev\",\n    \"storybook\": \"pnpm --filter @paperclipai/ui storybook\",\n    \"build-storybook\": \"pnpm --filter @paperclipai/ui build-storybook\",\n    \"build\": \"pnpm run preflight:workspace-links \u0026\u0026 pnpm -r build\",\n    \"typecheck\": \"pnpm run preflight:workspace-links \u0026\u0026 pnpm -r typecheck\","
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "0845581c-0185-4b94-8ee8-a7973cfa4648",
+  "version": "2.1.123"
+}

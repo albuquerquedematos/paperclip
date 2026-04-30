@@ -1,0 +1,28 @@
+{
+  "agentId": "aee092c208138b302",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "node_modules\nnode_modules/\n**/node_modules\n**/node_modules/\ndist/\nui/storybook-static/\n.env\n*.tsbuildinfo\ndrizzle/meta/\n.vite/\ncoverage/\n.DS_Store\ndata/\n.paperclip/\n.pnpm-store/\ntmp-*\ncli/tmp/\n\n# Scratch/seed scripts (but not scripts/ dir)\ncheck-*.mjs\n!scripts/check-*.mjs\nnew-agent*.json\nnewcompany.json\nseed-*.mjs\nserver/check-*.mjs\nserver/seed-*.mjs\npackages/db/seed-*.mjs\n\n# npm publish build artifacts\ncli/package.dev.json\n\n# Build artifacts in src directories\nserver/src/**/*.js\nserver/src/**/*.js.map\nserver/src/**/*.d.ts\nserver/src/**/*.d.ts.map\ntmp/\nfeedback-export-*\ndiagnostics/\n\n# Editor / tool temp files\n*.tmp\n.vscode/\n.claude/settings.local.json\n.paperclip-local/\n/.idea/\n/.agents/\n\n# Doc maintenance cursor\n.doc-review-cursor\n\n# Playwright\ntests/e2e/test-results/\ntests/e2e/playwright-report/\ntests/release-smoke/test-results/\ntests/release-smoke/playwright-report/\n.superset/\n.claude/worktrees/",
+        "is_error": false,
+        "tool_use_id": "toolu_01HvehR1WQvcoA641mRnfpsH",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "0b6b8f1f-55ad-4672-809b-7593c3f174e8",
+  "promptId": "285fd922-5736-481c-a4fc-cf130aed3e81",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "0b6b8f1f-55ad-4672-809b-7593c3f174e8",
+  "timestamp": "2026-04-30T17:51:15.062Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "25517e4c-99fd-47c2-8c38-509e7fbd3135",
+  "version": "2.1.123"
+}

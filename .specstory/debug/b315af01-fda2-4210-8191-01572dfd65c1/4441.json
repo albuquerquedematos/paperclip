@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "5663\t            ? null\n5664\t            : redactCurrentUserText(\n5665\t                adapterResult.errorMessage ?? (outcome === \"timed_out\" ? \"Timed out\" : \"Adapter failed\"),\n5666\t                currentUserRedactionOptions,\n5667\t              );\n5668\t      const runErrorCode =\n5669\t        outcome === \"timed_out\"\n5670\t          ? \"timeout\"\n5671\t          : outcome === \"cancelled\"\n5672\t            ? (latestRun?.errorCode ?? \"cancelled\")\n5673\t            : outcome === \"failed\"\n5674\t              ? (adapterResult.errorCode ?? \"adapter_failed\")\n5675\t              : null;\n5676\t\n5677\t      let logSummary: { bytes: number; sha256?: string; compressed: boolean } | null = null;\n5678\t      if (handle) {\n5679\t        logSummary = await runLogStore.finalize(handle);\n5680\t      }\n5681\t      const finalLogBytes = logSummary?.bytes;\n5682\t      if (outputProgressState.pending \u0026\u0026 typeof finalLogBytes === \"number\") {\n5683\t        outputProgressState.pending.bytes = finalLogBytes;\n5684\t      }\n5685\t      await flushOutputProgress({ force: true });\n5686\t\n5687\t      const status =",
+        "tool_use_id": "toolu_01UgtoXbV5jWqxG9YVzxftSo",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "594a8bae-450a-41d1-b331-524d34d7574f",
+  "promptId": "2cd98dd6-123f-4c8f-bde6-185a892545c9",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "594a8bae-450a-41d1-b331-524d34d7574f",
+  "timestamp": "2026-04-30T23:29:28.823Z",
+  "toolUseResult": {
+    "file": {
+      "content": "            ? null\n            : redactCurrentUserText(\n                adapterResult.errorMessage ?? (outcome === \"timed_out\" ? \"Timed out\" : \"Adapter failed\"),\n                currentUserRedactionOptions,\n              );\n      const runErrorCode =\n        outcome === \"timed_out\"\n          ? \"timeout\"\n          : outcome === \"cancelled\"\n            ? (latestRun?.errorCode ?? \"cancelled\")\n            : outcome === \"failed\"\n              ? (adapterResult.errorCode ?? \"adapter_failed\")\n              : null;\n\n      let logSummary: { bytes: number; sha256?: string; compressed: boolean } | null = null;\n      if (handle) {\n        logSummary = await runLogStore.finalize(handle);\n      }\n      const finalLogBytes = logSummary?.bytes;\n      if (outputProgressState.pending \u0026\u0026 typeof finalLogBytes === \"number\") {\n        outputProgressState.pending.bytes = finalLogBytes;\n      }\n      await flushOutputProgress({ force: true });\n\n      const status =",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/services/heartbeat.ts",
+      "numLines": 25,
+      "startLine": 5663,
+      "totalLines": 7650
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "7171f9e2-d985-4033-b7d9-351c00c65328",
+  "version": "2.1.123"
+}

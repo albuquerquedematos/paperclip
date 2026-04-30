@@ -1,0 +1,71 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01KkqfDiTx9PGe699rxyByHR",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/routes/plugins.ts",
+          "new_string": "\n",
+          "old_string": "// ---------------------------------------------------------------------------\n// Static plugin examples catalogue (mirrors server/src/routes/plugins.ts).\n// In CF Workers there is no local filesystem, so localPath is set to the npm\n// package name — the UI uses this field as the install identifier.\n// ---------------------------------------------------------------------------\nconst BUNDLED_PLUGIN_EXAMPLES = [\n  {\n    packageName: \"@paperclipai/plugin-hello-world-example\",\n    pluginKey: \"paperclip.hello-world-example\",\n    displayName: \"Hello World Widget (Example)\",\n    description: \"Reference UI plugin that adds a simple Hello World widget to the Paperclip dashboard.\",\n    localPath: \"@paperclipai/plugin-hello-world-example\",\n    tag: \"example\" as const,\n  },\n  {\n    packageName: \"@paperclipai/plugin-file-browser-example\",\n    pluginKey: \"paperclip-file-browser-example\",\n    displayName: \"File Browser (Example)\",\n    description: \"Example plugin that adds a Files link in project navigation plus a project detail file browser.\",\n    localPath: \"@paperclipai/plugin-file-browser-example\",\n    tag: \"example\" as const,\n  },\n  {\n    packageName: \"@paperclipai/plugin-kitchen-sink-example\",\n    pluginKey: \"paperclip-kitchen-sink-example\",\n    displayName: \"Kitchen Sink (Example)\",\n    description: \"Reference plugin that demonstrates the current Paperclip plugin API surface.\",\n    localPath: \"@paperclipai/plugin-kitchen-sink-example\",\n    tag: \"example\" as const,\n  },\n];\n\n",
+          "replace_all": false
+        },
+        "name": "Edit",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_019DMwGpJXt42oWtxduX3eKi",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 2144
+      },
+      "cache_creation_input_tokens": 2144,
+      "cache_read_input_tokens": 143259,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 2144
+          },
+          "cache_creation_input_tokens": 2144,
+          "cache_read_input_tokens": 143259,
+          "input_tokens": 1,
+          "output_tokens": 554,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 554,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "b9570865-5911-44e4-8f50-fbe662a33130",
+  "requestId": "req_011Caaeo5fmnzBjLsSiAPvkc",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T21:18:28.529Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "9ded69d4-411c-436d-a244-7faee5966eac",
+  "version": "2.1.123"
+}

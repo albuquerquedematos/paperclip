@@ -1,0 +1,51 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/routes/adapters.ts has been updated successfully.",
+        "tool_use_id": "toolu_01Ck8LZGjz2VvgKTLJwNRiSz",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "8d196e34-561b-40b6-9814-1461ae6e1490",
+  "promptId": "7323a41a-dd8a-4783-b590-aea4ab5316a7",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "8d196e34-561b-40b6-9814-1461ae6e1490",
+  "timestamp": "2026-04-30T21:38:04.870Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/routes/adapters.ts",
+    "newString": "import type { Hono } from \"hono\";\nimport { listServerAdapters, isOverridePaused } from \"../../../../../server/src/adapters/registry.js\";\nimport { BUILTIN_ADAPTER_TYPES } from \"../../../../../server/src/adapters/builtin-adapter-types.js\";\nimport { getDisabledAdapterTypes } from \"../../../../../server/src/services/adapter-plugin-store.js\";\nimport { createHyperdriveDb } from \"../../db/hyperdrive.js\";\nimport { resolveActorFromRequest } from \"../../auth/resolve-actor.js\";\nimport { resolveDeploymentMode } from \"../env.js\";\nimport type { Env } from \"../env.js\";",
+    "oldString": "import type { Hono } from \"hono\";\nimport { listServerAdapters, isOverridePaused } from \"../../../../../server/src/adapters/registry.js\";\nimport { BUILTIN_ADAPTER_TYPES } from \"../../../../../server/src/adapters/builtin-adapter-types.js\";\nimport { getDisabledAdapterTypes } from \"../../../../../server/src/services/adapter-plugin-store.js\";\nimport { resolveActorFromRequest } from \"../../auth/resolve-actor.js\";\nimport { resolveDeploymentMode } from \"../env.js\";\nimport type { Env } from \"../env.js\";",
+    "originalFile": "/**\n * routes/adapters.ts\n *\n * CF-native handler for GET /api/adapters.\n *\n * The server-side adapterRoutes() reads plugin manifests from disk and\n * maintains an in-process registry — neither is available in a CF Worker.\n * This handler reads the built-in adapter registry (always available) and\n * the disabled-adapter set from the DB-backed adapter-plugin-store shim.\n *\n * Auth: requires an authenticated actor (board or agent). Unauthenticated\n * requests receive 401.\n */\n\nimport type { Hono } from \"hono\";\nimport { listServerAdapters, isOverridePaused } from \"../../../../../server/src/adapters/registry.js\";\nimport { BUILTIN_ADAPTER_TYPES } from \"../../../../../server/src/adapters/builtin-adapter-types.js\";\nimport { getDisabledAdapterTypes } from \"../../../../../server/src/services/adapter-plugin-store.js\";\nimport { resolveActorFromRequest } from \"../../auth/resolve-actor.js\";\nimport { resolveDeploymentMode } from \"../env.js\";\nimport type { Env } from \"../env.js\";\n\nexport function registerAdapterRoutes(app: Hono\u003c{ Bindings: Env }\u003e): void {\n  // -------------------------------------------------------------------------\n  // GET /api/adapters — built-in adapters from registry (external adapters\n  // require FS-backed plugin store not available in CF; built-ins always load)\n  // -------------------------------------------------------------------------\n  app.get(\"/api/adapters\", async (c) =\u003e {\n    const { createHyperdriveDb } = await import(\"../../db/hyperdrive.js\");\n    const db = createHyperdriveDb(c.env.HYPERDRIVE);\n    const actor = await resolveActorFromRequest(c.req.raw, db, {\n      deploymentMode: resolveDeploymentMode(c.env),\n    });\n    if (!actor) return c.json({ error: \"Unauthorized\" }, 401);\n\n    const adapters = listServerAdapters();\n    const disabledSet = new Set(getDisabledAdapterTypes());\n    const result = adapters\n      .map((adapter) =\u003e ({\n        type: adapter.type,\n        label: adapter.type,\n        source: \"builtin\" as const,\n        modelsCount: (adapter.models ?? []).length,\n        loaded: true,\n        disabled: disabledSet.has(adapter.type),\n        capabilities: {\n          supportsInstructionsBundle: adapter.supportsInstructionsBundle ?? false,\n          supportsSkills: Boolean(adapter.listSkills || adapter.syncSkills),\n          supportsLocalAgentJwt: adapter.supportsLocalAgentJwt ?? false,\n          requiresMaterializedRuntimeSkills: adapter.requiresMaterializedRuntimeSkills ?? false,\n        },\n        overridePaused: BUILTIN_ADAPTER_TYPES.has(adapter.type)\n          ? isOverridePaused(adapter.type)\n          : undefined,\n      }))\n      .sort((a, b) =\u003e a.type.localeCompare(b.type));\n    return c.json(result);\n  });\n}\n",
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          " import { listServerAdapters, isOverridePaused } from \"../../../../../server/src/adapters/registry.js\";",
+          " import { BUILTIN_ADAPTER_TYPES } from \"../../../../../server/src/adapters/builtin-adapter-types.js\";",
+          " import { getDisabledAdapterTypes } from \"../../../../../server/src/services/adapter-plugin-store.js\";",
+          "+import { createHyperdriveDb } from \"../../db/hyperdrive.js\";",
+          " import { resolveActorFromRequest } from \"../../auth/resolve-actor.js\";",
+          " import { resolveDeploymentMode } from \"../env.js\";",
+          " import type { Env } from \"../env.js\";"
+        ],
+        "newLines": 7,
+        "newStart": 16,
+        "oldLines": 6,
+        "oldStart": 16
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "9b5e4109-8ab0-4aab-96c5-f29e2a877ce6",
+  "version": "2.1.123"
+}

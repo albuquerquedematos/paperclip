@@ -1,0 +1,62 @@
+- generic [ref=e3]:
+  - link "Skip to Main Content" [ref=e4] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e5]:
+    - generic [ref=e6]:
+      - generic [ref=e7]:
+        - generic [ref=e8]:
+          - img [ref=e10]
+          - status [ref=e13]
+          - button "Add company" [ref=e16]:
+            - img [ref=e17]
+        - complementary [ref=e19]:
+          - generic [ref=e20]:
+            - img [ref=e21]
+            - generic [ref=e24]: Instance Settings
+          - navigation [ref=e25]:
+            - generic [ref=e26]:
+              - link "Profile" [ref=e27] [cursor=pointer]:
+                - /url: /instance/settings/profile
+                - img [ref=e29]
+                - generic [ref=e33]: Profile
+              - link "General" [ref=e34] [cursor=pointer]:
+                - /url: /instance/settings/general
+                - img [ref=e36]
+                - generic [ref=e37]: General
+              - link "Access" [ref=e38] [cursor=pointer]:
+                - /url: /instance/settings/access
+                - img [ref=e40]
+                - generic [ref=e42]: Access
+              - link "Heartbeats" [ref=e43] [cursor=pointer]:
+                - /url: /instance/settings/heartbeats
+                - img [ref=e45]
+                - generic [ref=e48]: Heartbeats
+              - link "Experimental" [ref=e49] [cursor=pointer]:
+                - /url: /instance/settings/experimental
+                - img [ref=e51]
+                - generic [ref=e53]: Experimental
+              - link "Plugins" [ref=e54] [cursor=pointer]:
+                - /url: /instance/settings/plugins
+                - img [ref=e56]
+                - generic [ref=e58]: Plugins
+              - link "Adapters" [ref=e59] [cursor=pointer]:
+                - /url: /instance/settings/adapters
+                - img [ref=e61]
+                - generic [ref=e64]: Adapters
+      - button "Open account menu" [ref=e66]:
+        - generic [ref=e68]: BO
+        - generic [ref=e69]: Board
+    - generic [ref=e70]:
+      - navigation "breadcrumb" [ref=e74]:
+        - list [ref=e75]:
+          - listitem [ref=e76]:
+            - link "Instance Settings" [disabled] [ref=e77]
+          - listitem [ref=e78]:
+            - img [ref=e79]
+          - listitem [ref=e81]:
+            - link "General" [disabled] [ref=e82]
+      - main [active] [ref=e84]:
+        - generic [ref=e85]: Loading general settings...
+  - generic [ref=e86]:
+    - heading "Command Palette" [level=2] [ref=e87]
+    - paragraph [ref=e88]: Search for a command to run...

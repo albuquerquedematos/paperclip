@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "32:} from \"../adapters/registry.js\";\n41:} from \"../services/adapter-plugin-store.js\";\n42:import type { AdapterPluginRecord } from \"../services/adapter-plugin-store.js\";\n43:import type { ServerAdapterModule, AdapterConfigSchema } from \"../adapters/types.js\";\n44:import { loadExternalAdapterPackage, getUiParserSource, getOrExtractUiParserSource, reloadExternalAdapter } from \"../adapters/plugin-loader.js\";\n47:import { BUILTIN_ADAPTER_TYPES } from \"../adapters/builtin-adapter-types.js\";\n48:import { expressHandler } from \"../http/express-adapter.js\";\n105: * Read `version` from the adapter's package.json on disk.\n318:        // TODO(cloudflare): reading package.json from a local-path adapter",
+        "is_error": false,
+        "tool_use_id": "toolu_01VkyPfPpdeTcjYPTfpnUa2D",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "20a3c238-224f-4724-a51f-4670aebdddc5",
+  "promptId": "8e37c333-7c8a-4b0c-ae99-027b99e1bf51",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "20a3c238-224f-4724-a51f-4670aebdddc5",
+  "timestamp": "2026-04-30T19:26:33.263Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "32:} from \"../adapters/registry.js\";\n41:} from \"../services/adapter-plugin-store.js\";\n42:import type { AdapterPluginRecord } from \"../services/adapter-plugin-store.js\";\n43:import type { ServerAdapterModule, AdapterConfigSchema } from \"../adapters/types.js\";\n44:import { loadExternalAdapterPackage, getUiParserSource, getOrExtractUiParserSource, reloadExternalAdapter } from \"../adapters/plugin-loader.js\";\n47:import { BUILTIN_ADAPTER_TYPES } from \"../adapters/builtin-adapter-types.js\";\n48:import { expressHandler } from \"../http/express-adapter.js\";\n105: * Read `version` from the adapter's package.json on disk.\n318:        // TODO(cloudflare): reading package.json from a local-path adapter"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "1094ee50-6fe7-4eaa-8077-9643d7a33cf1",
+  "version": "2.1.123"
+}

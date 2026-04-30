@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "146\t# ---------------------------------------------------------------------------\n147\t# Cloudflare Containers — run execution services natively on Cloudflare.\n148\t#\n149\t# CF Containers (beta) let Workers communicate with Docker containers via\n150\t# a Fetcher service binding. No external servers needed.\n151\t#\n152\t# Required secrets (set via `wrangler secret put`):\n153\t#   - none for containers (authentication is implicit via the binding)\n154\t#\n155\t# For external sidecar fallback (optional, for non-CF deployments):\n156\t#   wrangler secret put SIDECAR_URL\n157\t#   wrangler secret put SIDECAR_API_KEY\n158\t# ---------------------------------------------------------------------------\n159\t\n160\t# Sidecar — companion Node.js server for agent heartbeat execution, plugin job\n161\t# lifecycle (claim/execute/complete), filesystem and git operations.\n162\t# The SidecarContainer DO class wraps this image (see src/worker/containers.ts).\n163\t[[containers]]\n164\tclass_name = \"SidecarContainer\"\n165\timage = \"ghcr.io/paperclipai/paperclip-sidecar:latest\"\n166\t\n167\t# Plugin sandbox — isolated command execution environment for adapter plugins.\n168\t# Exposes POST /execute and POST /cancel/:runId.\n169\t[[containers]]\n170\tclass_name = \"PluginContainer\"\n171\timage = \"ghcr.io/paperclipai/plugin-sandbox:latest\"\n172\t",
+        "tool_use_id": "toolu_01Ley4foWELP8ns6ZHZrx6TB",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "227abd39-4105-4c8d-a7eb-44d72d3ce20e",
+  "promptId": "7323a41a-dd8a-4783-b590-aea4ab5316a7",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "227abd39-4105-4c8d-a7eb-44d72d3ce20e",
+  "timestamp": "2026-04-30T21:38:28.794Z",
+  "toolUseResult": {
+    "file": {
+      "content": "# ---------------------------------------------------------------------------\n# Cloudflare Containers — run execution services natively on Cloudflare.\n#\n# CF Containers (beta) let Workers communicate with Docker containers via\n# a Fetcher service binding. No external servers needed.\n#\n# Required secrets (set via `wrangler secret put`):\n#   - none for containers (authentication is implicit via the binding)\n#\n# For external sidecar fallback (optional, for non-CF deployments):\n#   wrangler secret put SIDECAR_URL\n#   wrangler secret put SIDECAR_API_KEY\n# ---------------------------------------------------------------------------\n\n# Sidecar — companion Node.js server for agent heartbeat execution, plugin job\n# lifecycle (claim/execute/complete), filesystem and git operations.\n# The SidecarContainer DO class wraps this image (see src/worker/containers.ts).\n[[containers]]\nclass_name = \"SidecarContainer\"\nimage = \"ghcr.io/paperclipai/paperclip-sidecar:latest\"\n\n# Plugin sandbox — isolated command execution environment for adapter plugins.\n# Exposes POST /execute and POST /cancel/:runId.\n[[containers]]\nclass_name = \"PluginContainer\"\nimage = \"ghcr.io/paperclipai/plugin-sandbox:latest\"\n",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/wrangler.toml",
+      "numLines": 27,
+      "startLine": 146,
+      "totalLines": 172
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "461a2181-be9d-44ba-9505-50ed0714f6d9",
+  "version": "2.1.123"
+}

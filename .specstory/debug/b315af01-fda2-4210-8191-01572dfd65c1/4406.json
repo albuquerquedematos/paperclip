@@ -1,0 +1,61 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "text": "Done. This is a different bug class than everything before — agent runtime, not routing.\n\n**What was happening:** Paperclip remembered a Claude session ID. When Claude couldn't find that session locally (e.g. session storage was wiped, machine changed), it exited code 1 and wrote `No conversation found with session ID: ...` to stderr. The existing retry-with-fresh-session fallback only checked `parsed.result` — but exit-1 produces no JSON, so `parsed` is null, the check returns false, and the retry never fired. Now it checks `parsed` + `stdout` + `stderr`.\n\n**What this means going forward:** Stale Claude session IDs will self-heal — the adapter retries with a fresh session and the run continues. You'll see `[paperclip] Claude resume session \"...\" is unavailable; retrying with a fresh session.` in the run logs the first time it happens after this fix.\n\nIf the agent fails again with a *different* error after restart, that's a new bug class. Send the next error excerpt.",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01JA15uxB9sDrHfNSuC77Mrd",
+    "model": "claude-opus-4-7",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 602,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 602,
+      "cache_read_input_tokens": 468588,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 602,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 602,
+          "cache_read_input_tokens": 468588,
+          "input_tokens": 1,
+          "output_tokens": 333,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 333,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "5ba73ab3-dc55-458c-9a79-86268ea0533e",
+  "requestId": "req_011CaapMdUQNR4K7EufNs6X2",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T23:23:52.374Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "a6316578-c29c-4bb8-a9a3-c5c3602dbefe",
+  "version": "2.1.123"
+}

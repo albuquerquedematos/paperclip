@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/lib/queryKeys.ts:165:    examples: [\"plugins\", \"examples\"] as const,\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/api/plugins.ts:134:export interface AvailablePluginExample {\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/api/plugins.ts:172:    api.get\u003cAvailablePluginExample[]\u003e(\"/plugins/examples\"),\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/PluginManager.tsx:88:  const examplesQuery = useQuery({\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/PluginManager.tsx:89:    queryKey: queryKeys.plugins.examples,\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/PluginManager.tsx:95:    queryClient.invalidateQueries({ queryKey: queryKeys.plugins.examples });\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/PluginManager.tsx:147:  const examples = examplesQuery.data ?? [];\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/PluginManager.tsx:149:  const examplePackageNames = new Set(examples.map((example) =\u003e example.packageName));\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/PluginManager.tsx:226:        {examplesQuery.isLoading ? (\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/PluginManager.tsx:227:          \u003cdiv className=\"text-sm text-muted-foreground\"\u003eLoading bundled examples...\u003c/div\u003e\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/PluginManager.tsx:228:        ) : examplesQuery.error ? (\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/PluginManager.tsx:229:          \u003cdiv className=\"text-sm text-destructive\"\u003eFailed to load bundled examples.\u003c/div\u003e\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/PluginManager.tsx:230:        ) : examples.length === 0 ? (\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/PluginManager.tsx:236:            {examples.map((example) =\u003e {",
+        "is_error": false,
+        "tool_use_id": "toolu_01KZpdp1dSg9o6EBaZhEVxZq",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "95022294-d836-44eb-80f0-51daf747d90c",
+  "promptId": "d76ba7a5-5a30-4e4c-b6f3-f994065a0bad",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "95022294-d836-44eb-80f0-51daf747d90c",
+  "timestamp": "2026-04-30T20:55:11.259Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/lib/queryKeys.ts:165:    examples: [\"plugins\", \"examples\"] as const,\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/api/plugins.ts:134:export interface AvailablePluginExample {\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/api/plugins.ts:172:    api.get\u003cAvailablePluginExample[]\u003e(\"/plugins/examples\"),\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/PluginManager.tsx:88:  const examplesQuery = useQuery({\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/PluginManager.tsx:89:    queryKey: queryKeys.plugins.examples,\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/PluginManager.tsx:95:    queryClient.invalidateQueries({ queryKey: queryKeys.plugins.examples });\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/PluginManager.tsx:147:  const examples = examplesQuery.data ?? [];\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/PluginManager.tsx:149:  const examplePackageNames = new Set(examples.map((example) =\u003e example.packageName));\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/PluginManager.tsx:226:        {examplesQuery.isLoading ? (\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/PluginManager.tsx:227:          \u003cdiv className=\"text-sm text-muted-foreground\"\u003eLoading bundled examples...\u003c/div\u003e\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/PluginManager.tsx:228:        ) : examplesQuery.error ? (\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/PluginManager.tsx:229:          \u003cdiv className=\"text-sm text-destructive\"\u003eFailed to load bundled examples.\u003c/div\u003e\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/PluginManager.tsx:230:        ) : examples.length === 0 ? (\n/Users/migmac/Documents/GitHub/_ABM/paperclip/ui/src/pages/PluginManager.tsx:236:            {examples.map((example) =\u003e {"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "de990f1e-782e-4058-a8ab-429eac891808",
+  "version": "2.1.123"
+}

@@ -1,0 +1,62 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "signature": "EsQCClsIDRgCKkC5XljSX2Q33iocc/oqB+AWl5edkgpzh/anhgpyfHbK3bArmRMZxYVFEOO6OHWFolS4bEF9I7D277rMNrXAINyWMhFjbGF1ZGUtc29ubmV0LTQtNjgAEgybCRYipvQe2fmr0zIaDD6WbN3AQEI412r56iIwLJD8EcmZF1BVNxkRDMxfLFUIzpgyIdTYFvg1TktQKpSUJAoiM3+5WV7IkHnNfNMHKpYBA4UPg0V9wsime9FsFc4FhHY8MRWvRkzwxoZCtw57wRJ83tzKR6KsC54ZhzEllOzCoIbD0d2h1akfyWTe2eGsx+CAOtj1dcwx7nu4pg8qintI8X6V2zyZGXcjjIyY9S0xaRZRlM+GLSa47finKi1e/JbFxVfoh64ANPIPZhwJA2q0afIOEMVrfI95N+V1w1kPI3x+SkC+GAE=",
+        "thinking": "The user is asking about the command to run the local CF dev mode. Let me check what's in the root package.json for the dev:cf script.",
+        "type": "thinking"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_012E26nPt43s7uGGqmnrCSL2",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 684
+      },
+      "cache_creation_input_tokens": 684,
+      "cache_read_input_tokens": 88280,
+      "inference_geo": "",
+      "input_tokens": 3,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 684
+          },
+          "cache_creation_input_tokens": 684,
+          "cache_read_input_tokens": 88280,
+          "input_tokens": 3,
+          "output_tokens": 160,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 160,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "f5676dbe-2202-4afc-ae1b-e8107b6c6d7c",
+  "requestId": "req_011CaaPqrYprYnr6eqhXpN5Q",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T18:02:18.489Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "a94a9d2a-4a98-43d9-8c7b-930f34e94710",
+  "version": "2.1.123"
+}

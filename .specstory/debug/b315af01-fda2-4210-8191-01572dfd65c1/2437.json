@@ -1,0 +1,71 @@
+{
+  "agentId": "a8455dc48bdf97d68",
+  "attributionAgent": "architect-reviewer",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/.claude/worktrees/agent-a8455dc48bdf97d68",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "worktree-agent-a8455dc48bdf97d68",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01VtjBYinVhtYiKmHyTZcyCZ",
+        "input": {
+          "content": "/**\n * routes/adapters.ts\n *\n * CF-native handler for GET /api/adapters.\n *\n * The server-side adapterRoutes() reads plugin manifests from disk and\n * maintains an in-process registry — neither is available in a CF Worker.\n * This handler reads the built-in adapter registry (always available) and\n * the disabled-adapter set from the DB-backed adapter-plugin-store shim.\n *\n * Auth: requires an authenticated actor (board or agent). Unauthenticated\n * requests receive 401.\n */\n\nimport type { Hono } from \"hono\";\nimport { listServerAdapters, isOverridePaused } from \"../../../../../server/src/adapters/registry.js\";\nimport { BUILTIN_ADAPTER_TYPES } from \"../../../../../server/src/adapters/builtin-adapter-types.js\";\nimport { getDisabledAdapterTypes } from \"../../../../../server/src/services/adapter-plugin-store.js\";\nimport { resolveActorFromRequest } from \"../../auth/resolve-actor.js\";\nimport { resolveDeploymentMode } from \"../env.js\";\nimport type { Env } from \"../env.js\";\n\nexport function registerAdapterRoutes(app: Hono\u003c{ Bindings: Env }\u003e): void {\n  // -------------------------------------------------------------------------\n  // GET /api/adapters — built-in adapters from registry (external adapters\n  // require FS-backed plugin store not available in CF; built-ins always load)\n  // -------------------------------------------------------------------------\n  app.get(\"/api/adapters\", async (c) =\u003e {\n    const { createHyperdriveDb } = await import(\"../../db/hyperdrive.js\");\n    const db = createHyperdriveDb(c.env.HYPERDRIVE);\n    const actor = await resolveActorFromRequest(c.req.raw, db, {\n      deploymentMode: resolveDeploymentMode(c.env),\n    });\n    if (!actor) return c.json({ error: \"Unauthorized\" }, 401);\n\n    const adapters = listServerAdapters();\n    const disabledSet = new Set(getDisabledAdapterTypes());\n    const result = adapters\n      .map((adapter) =\u003e ({\n        type: adapter.type,\n        label: adapter.type,\n        source: \"builtin\" as const,\n        modelsCount: (adapter.models ?? []).length,\n        loaded: true,\n        disabled: disabledSet.has(adapter.type),\n        capabilities: {\n          supportsInstructionsBundle: adapter.supportsInstructionsBundle ?? false,\n          supportsSkills: Boolean(adapter.listSkills || adapter.syncSkills),\n          supportsLocalAgentJwt: adapter.supportsLocalAgentJwt ?? false,\n          requiresMaterializedRuntimeSkills: adapter.requiresMaterializedRuntimeSkills ?? false,\n        },\n        overridePaused: BUILTIN_ADAPTER_TYPES.has(adapter.type)\n          ? isOverridePaused(adapter.type)\n          : undefined,\n      }))\n      .sort((a, b) =\u003e a.type.localeCompare(b.type));\n    return c.json(result);\n  });\n}\n",
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/routes/adapters.ts"
+        },
+        "name": "Write",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01UbnXi31wqYMhBCWPH1MEnt",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 457
+      },
+      "cache_creation_input_tokens": 457,
+      "cache_read_input_tokens": 59461,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 457
+          },
+          "cache_creation_input_tokens": 457,
+          "cache_read_input_tokens": 59461,
+          "input_tokens": 1,
+          "output_tokens": 918,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 918,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "81e5f837-91fe-4b9f-a494-77579ccd885e",
+  "requestId": "req_011CaaX5cwyMqnrxyzqFdLqo",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T19:37:30.266Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "a6d15383-c009-41ef-a28e-d4635035acbe",
+  "version": "2.1.123"
+}

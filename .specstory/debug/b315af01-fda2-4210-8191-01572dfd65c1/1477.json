@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01QCCe1ypocsBofRbPtz1zNH",
+        "input": {
+          "command": "curl -s http://localhost:8787/api/adapters \u0026\u0026 echo\ncurl -s http://localhost:8787/api/plugins/ui-contributions \u0026\u0026 echo\ncurl -s \"http://localhost:8787/api/companies/9a7cf1f3-02a7-4751-9cdb-671c9c68edb5/user-directory\" \u0026\u0026 echo\ncurl -s \"http://localhost:8787/api/companies/9a7cf1f3-02a7-4751-9cdb-671c9c68edb5/join-requests?status=pending_approval\" \u0026\u0026 echo\ncurl -s \"http://localhost:8787/api/companies/9a7cf1f3-02a7-4751-9cdb-671c9c68edb5/skills\" \u0026\u0026 echo",
+          "description": "Test all previously 501-returning endpoints"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01BFsadTh3jwUaPttwuw1mpQ",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 146
+      },
+      "cache_creation_input_tokens": 146,
+      "cache_read_input_tokens": 74504,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 146
+          },
+          "cache_creation_input_tokens": 146,
+          "cache_read_input_tokens": 74504,
+          "input_tokens": 1,
+          "output_tokens": 281,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 281,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "48cf02fd-5abb-44bd-b7af-16c2e2d32627",
+  "requestId": "req_011CaaRvv52uK6M89zggHoJE",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T18:29:43.553Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "56dee3b1-5de6-424d-a9dc-fed2eb932504",
+  "version": "2.1.123"
+}

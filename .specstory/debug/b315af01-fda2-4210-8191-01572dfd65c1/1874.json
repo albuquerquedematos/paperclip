@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "File created successfully at: /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-dns.ts",
+        "tool_use_id": "toolu_01FGPpRhsyDNTeDs7R1hfrWb",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "5e829237-c06b-438e-980f-07f61c462554",
+  "promptId": "6578f9d8-71c9-42ed-bd5d-4cac4f413d52",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "5e829237-c06b-438e-980f-07f61c462554",
+  "timestamp": "2026-04-30T19:11:01.797Z",
+  "toolUseResult": {
+    "content": "/**\n * node-dns.ts — stub shim for node:dns and node:dns/promises.\n *\n * CF Workers has no DNS resolution API; the only code that hits this in the\n * server package is the invite test-resolution handler, which is intentionally\n * not ported to the CF deployment. All other route handlers in access.ts can\n * be safely imported without triggering these stubs.\n */\n\nconst notAvailable = (): Promise\u003cnever\u003e =\u003e\n  Promise.reject(\n    Object.assign(new Error(\"node:dns not available in Cloudflare Workers\"), { code: \"ENOTAVAIL\" }),\n  );\n\nexport const lookup = notAvailable;\nexport const resolve = notAvailable;\nexport const resolve4 = notAvailable;\nexport const resolve6 = notAvailable;\n\nexport const promises = { lookup };\n\nexport default { lookup, resolve, resolve4, resolve6, promises };\n",
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-dns.ts",
+    "originalFile": null,
+    "structuredPatch": [],
+    "type": "create",
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "4e890fd0-5c7f-44f8-8a44-e5797ef5a61e",
+  "version": "2.1.123"
+}

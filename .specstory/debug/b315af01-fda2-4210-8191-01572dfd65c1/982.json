@@ -1,0 +1,49 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-fs-promises.ts has been updated successfully.",
+        "tool_use_id": "toolu_01HF2CyhYAw6GYqguMGJoaht",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "b5b3ce1a-7608-4dcb-96a2-93b5fe1abef0",
+  "promptId": "285fd922-5736-481c-a4fc-cf130aed3e81",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "b5b3ce1a-7608-4dcb-96a2-93b5fe1abef0",
+  "timestamp": "2026-04-30T17:59:54.394Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/shims/node-fs-promises.ts",
+    "newString": "export default { readFile, writeFile, readdir, mkdir, stat, lstat, unlink, access, realpath, rm, rename, copyFile, pipeline, open, watch };",
+    "oldString": "export default { readFile, writeFile, readdir, mkdir, stat, unlink, access, realpath, rm, rename, copyFile };",
+    "originalFile": "// Stub for node:fs/promises — not available in CF Workers.\nconst notAvailable = (name: string) =\u003e async () =\u003e { throw new Error(`node:fs/promises.${name} not available in CF Workers`); };\nexport const readFile = notAvailable(\"readFile\");\nexport const writeFile = notAvailable(\"writeFile\");\nexport const readdir = notAvailable(\"readdir\");\nexport const mkdir = notAvailable(\"mkdir\");\nexport const stat = notAvailable(\"stat\");\nexport const unlink = notAvailable(\"unlink\");\nexport const access = notAvailable(\"access\");\nexport const realpath = notAvailable(\"realpath\");\nexport const rm = notAvailable(\"rm\");\nexport const rename = notAvailable(\"rename\");\nexport const copyFile = notAvailable(\"copyFile\");\nexport const pipeline = notAvailable(\"pipeline\");\nexport const open = notAvailable(\"open\");\nexport const lstat = notAvailable(\"lstat\");\nexport const watch = notAvailable(\"watch\");\nexport default { readFile, writeFile, readdir, mkdir, stat, unlink, access, realpath, rm, rename, copyFile };\n",
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          " export const open = notAvailable(\"open\");",
+          " export const lstat = notAvailable(\"lstat\");",
+          " export const watch = notAvailable(\"watch\");",
+          "-export default { readFile, writeFile, readdir, mkdir, stat, unlink, access, realpath, rm, rename, copyFile };",
+          "+export default { readFile, writeFile, readdir, mkdir, stat, lstat, unlink, access, realpath, rm, rename, copyFile, pipeline, open, watch };"
+        ],
+        "newLines": 4,
+        "newStart": 15,
+        "oldLines": 4,
+        "oldStart": 15
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "1a2f55e9-7225-434f-9cd8-c3eb9d5df002",
+  "version": "2.1.123"
+}

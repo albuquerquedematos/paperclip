@@ -1,0 +1,52 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/tests/cf-smoke/cf-smoke.spec.ts has been updated successfully.",
+        "tool_use_id": "toolu_01WwEasAZcM7Q1FR3tgCrrHs",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "d203311b-47af-4250-b117-9c4a21f82883",
+  "promptId": "0c147d6f-915f-4b9e-a139-f26417e7157e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "d203311b-47af-4250-b117-9c4a21f82883",
+  "timestamp": "2026-04-30T23:08:32.452Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/tests/cf-smoke/cf-smoke.spec.ts",
+    "newString": "interface Agent { id: string; companyId: string; urlKey?: string; name?: string }",
+    "oldString": "interface Agent { id: string; companyId: string }",
+    "originalFile": null,
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          " ",
+          " interface Company { id: string; name: string }",
+          " interface Issue { id: string; humanKey?: string; companyId: string }",
+          "-interface Agent { id: string; companyId: string }",
+          "+interface Agent { id: string; companyId: string; urlKey?: string; name?: string }",
+          " interface Project { id: string; companyId: string }",
+          " ",
+          " let company: Company | null = null;"
+        ],
+        "newLines": 7,
+        "newStart": 34,
+        "oldLines": 7,
+        "oldStart": 34
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "3c198ee9-6549-4765-8e0b-502feb65ed1a",
+  "version": "2.1.123"
+}

@@ -1,0 +1,25 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "text": "⛅️ wrangler 4.87.0\n───────────────────\n▲ [WARNING] Processing wrangler.toml configuration:\n\n    - Unexpected fields found in containers field: \"binding\"\n    - Unexpected fields found in containers field: \"binding\"\n\n\n\n✘ [ERROR] Processing wrangler.toml configuration:\n\n    - \"containers.class_name\" is a required field.\n    - \"containers.class_name\" is a required field.\n\n\n🪵  Logs were written to \"/Users/migmac/Library/Preferences/.wrangler/logs/wrangler-2026-04-30_20-32-39_263.log\"\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare:\n ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  @paperclipai/deploy-cloudflare@0.1.0 dev: `node build-worker.mjs \u0026\u0026 bash -c 'source \"${NVM_DIR:-$HOME/.nvm}/nvm.sh\" \u0026\u0026 nvm use 22 \u0026\u0026 wrangler dev --no-bundle --local'`\nExit status 1\nerror: script \"dev:cf\" exited with code 1\nmigmac ~/Documents/GitHub/_ABM/paperclip",
+        "type": "text"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "141b7260-bad8-45ab-9053-1cd888b6e500",
+  "permissionMode": "bypassPermissions",
+  "promptId": "90af47bf-faac-4347-b1a7-d8ed0c820fb6",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T20:32:45.348Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "fd95de68-1328-4190-abd5-b8ef42dfd02c",
+  "version": "2.1.123"
+}

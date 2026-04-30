@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "100\t        .from(plugins)\n101\t        .orderBy(asc(plugins.installOrder)),\n102\t\n103\t    /**\n104\t     * List installed plugins (excludes soft-deleted/uninstalled).\n105\t     * Use for Plugin Manager and default API list so uninstalled plugins do not appear.\n106\t     */\n107\t    listInstalled: () =\u003e\n108\t      db\n109\t        .select()\n110\t        .from(plugins)\n111\t        .where(ne(plugins.status, \"uninstalled\"))\n112\t        .orderBy(asc(plugins.installOrder)),\n113\t\n114\t    /** List plugins filtered by status. */\n115\t    listByStatus: (status: PluginStatus) =\u003e\n116\t      db\n117\t        .select()\n118\t        .from(plugins)\n119\t        .where(eq(plugins.status, status))\n120\t        .orderBy(asc(plugins.installOrder)),\n121\t\n122\t    /** Get a single plugin by primary key. */\n123\t    getById,\n124\t\n125\t    /** Get a single plugin by its unique `pluginKey`. */\n126\t    getByKey,\n127\t\n128\t    // ----- Install / Register --------------------------------------------\n129\t",
+        "tool_use_id": "toolu_01WwZTs71bFsqLGpa4sYSkRt",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "6e9aa69d-df46-4b3c-bcbd-c7bbf91eb6ce",
+  "promptId": "8e37c333-7c8a-4b0c-ae99-027b99e1bf51",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "6e9aa69d-df46-4b3c-bcbd-c7bbf91eb6ce",
+  "timestamp": "2026-04-30T19:25:18.444Z",
+  "toolUseResult": {
+    "file": {
+      "content": "        .from(plugins)\n        .orderBy(asc(plugins.installOrder)),\n\n    /**\n     * List installed plugins (excludes soft-deleted/uninstalled).\n     * Use for Plugin Manager and default API list so uninstalled plugins do not appear.\n     */\n    listInstalled: () =\u003e\n      db\n        .select()\n        .from(plugins)\n        .where(ne(plugins.status, \"uninstalled\"))\n        .orderBy(asc(plugins.installOrder)),\n\n    /** List plugins filtered by status. */\n    listByStatus: (status: PluginStatus) =\u003e\n      db\n        .select()\n        .from(plugins)\n        .where(eq(plugins.status, status))\n        .orderBy(asc(plugins.installOrder)),\n\n    /** Get a single plugin by primary key. */\n    getById,\n\n    /** Get a single plugin by its unique `pluginKey`. */\n    getByKey,\n\n    // ----- Install / Register --------------------------------------------\n",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/services/plugin-registry.ts",
+      "numLines": 30,
+      "startLine": 100,
+      "totalLines": 683
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "2694c69d-e392-417f-81fa-12367634ea37",
+  "version": "2.1.123"
+}

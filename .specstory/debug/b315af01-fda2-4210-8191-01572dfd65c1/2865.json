@@ -1,0 +1,97 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/containers.ts has been updated successfully.",
+        "tool_use_id": "toolu_01RSc3keBbqZRJkcFCTGvyis",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "79bbdeae-7183-4e8a-b30d-da1198bd1e5b",
+  "promptId": "d76ba7a5-5a30-4e4c-b6f3-f994065a0bad",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "79bbdeae-7183-4e8a-b30d-da1198bd1e5b",
+  "timestamp": "2026-04-30T20:56:56.849Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/containers.ts",
+    "newString": "    // Local-dev fallback: try SIDECAR_URL env var first (set in .dev.vars),\n    // then fall back to SANDBOX_BRIDGE_URL from KV.\n    const baseUrl =\n      this.env.SIDECAR_URL ??\n      (await this.env.PAPERCLIP_KV.get(\"SANDBOX_BRIDGE_URL\")) ??\n      \"http://localhost:8788\";\n    const apiKey =\n      this.env.SIDECAR_API_KEY ??\n      await this.env.PAPERCLIP_KV.get(\"SANDBOX_BRIDGE_API_KEY\");\n\n    const url = new URL(request.url);\n    const proxyUrl = `${baseUrl}${url.pathname}${url.search}`;\n    const headers = new Headers(request.headers);\n    if (apiKey) headers.set(\"Authorization\", `Bearer ${apiKey}`);\n\n    return fetch(proxyUrl, {\n      method: request.method,\n      headers,\n      body: request.body,\n      // @ts-expect-error CF-specific option — prevents Request.body stream from being consumed twice\n      duplex: \"half\",\n    });\n  }\n}\n\n// ---------------------------------------------------------------------------\n// PluginContainer — isolated command executor for adapter plugins\n// ---------------------------------------------------------------------------\n\n/**\n * Proxy DO for the plugin sandbox container.\n *\n * Exposes the same wire format as the sandbox bridge command executor:\n *   POST /execute\n *   POST /cancel/:runId\n *\n * The container image must serve these endpoints on port 8080 (default).\n */\nexport class PluginContainer implements DurableObject {\n  private readonly ctx: DurableObjectState;\n  private readonly env: Env;\n\n  constructor(ctx: DurableObjectState, env: Env) {\n    this.ctx = ctx;\n    this.env = env;\n  }\n\n  async fetch(request: Request): Promise\u003cResponse\u003e {\n    const container = this.ctx.container;\n\n    if (container) {\n      if (!container.running) {\n        container.start();\n      }\n      const fetcher = container.getTcpPort(SIDECAR_PORT);\n      return fetcher.fetch(request);\n    }\n\n    // Fallback: SIDECAR_URL env var → KV SANDBOX_BRIDGE_URL (same service hosts both).\n    const baseUrl =\n      this.env.SIDECAR_URL ??\n      (await this.env.PAPERCLIP_KV.get(\"SANDBOX_BRIDGE_URL\")) ??\n      \"http://localhost:8788\";\n    const apiKey =\n      this.env.SIDECAR_API_KEY ??\n      await this.env.PAPERCLIP_KV.get(\"SANDBOX_BRIDGE_API_KEY\");\n\n    const url = new URL(request.url);\n    const proxyUrl = `${baseUrl}${url.pathname}${url.search}`;\n    const headers = new Headers(request.headers);\n    if (apiKey) headers.set(\"Authorization\", `Bearer ${apiKey}`);\n\n    return fetch(proxyUrl, {\n      method: request.method,\n      headers,\n      body: request.body,\n      // @ts-expect-error CF-specific option\n      duplex: \"half\",\n    });\n  }\n}",
+    "oldString": "    // Local-dev fallback: forward to an external bridge server.\n    const bridgeUrl =\n      (await this.env.PAPERCLIP_KV.get(\"SANDBOX_BRIDGE_URL\")) ?? \"http://localhost:8788\";\n    const apiKey = await this.env.PAPERCLIP_KV.get(\"SANDBOX_BRIDGE_API_KEY\");\n\n    const url = new URL(request.url);\n    const proxyUrl = `${bridgeUrl}${url.pathname}${url.search}`;\n    const headers = new Headers(request.headers);\n    if (apiKey) headers.set(\"Authorization\", `Bearer ${apiKey}`);\n\n    return fetch(proxyUrl, {\n      method: request.method,\n      headers,\n      body: request.body,\n      // @ts-expect-error CF-specific option — prevents Request.body stream from being consumed twice\n      duplex: \"half\",\n    });\n  }\n}\n\n// ---------------------------------------------------------------------------\n// PluginContainer — isolated command executor for adapter plugins\n// ---------------------------------------------------------------------------\n\n/**\n * Proxy DO for the plugin sandbox container.\n *\n * Exposes the same wire format as the sandbox bridge command executor:\n *   POST /execute\n *   POST /cancel/:runId\n *\n * The container image must serve these endpoints on port 8080 (default).\n */\nexport class PluginContainer implements DurableObject {\n  private readonly ctx: DurableObjectState;\n  private readonly env: Env;\n\n  constructor(ctx: DurableObjectState, env: Env) {\n    this.ctx = ctx;\n    this.env = env;\n  }\n\n  async fetch(request: Request): Promise\u003cResponse\u003e {\n    const container = this.ctx.container;\n\n    if (container) {\n      if (!container.running) {\n        container.start();\n      }\n      const fetcher = container.getTcpPort(SIDECAR_PORT);\n      return fetcher.fetch(request);\n    }\n\n    // Local-dev fallback: forward to the sandbox bridge.\n    const bridgeUrl =\n      (await this.env.PAPERCLIP_KV.get(\"SANDBOX_BRIDGE_URL\")) ?? \"http://localhost:8788\";\n    const apiKey = await this.env.PAPERCLIP_KV.get(\"SANDBOX_BRIDGE_API_KEY\");\n\n    const url = new URL(request.url);\n    const proxyUrl = `${bridgeUrl}${url.pathname}${url.search}`;\n    const headers = new Headers(request.headers);\n    if (apiKey) headers.set(\"Authorization\", `Bearer ${apiKey}`);\n\n    return fetch(proxyUrl, {\n      method: request.method,\n      headers,\n      body: request.body,\n      // @ts-expect-error CF-specific option\n      duplex: \"half\",\n    });\n  }\n}",
+    "originalFile": "/**\n * containers.ts — Durable Object wrappers for Cloudflare Containers.\n *\n * CF Containers (2025) run Docker images alongside Workers. Each container\n * must be exposed via a Durable Object class: the DO acts as a per-container\n * controller that starts the container, monitors its lifecycle, and proxies\n * HTTP requests to it via `this.ctx.container.getTcpPort(port)`.\n *\n * Architecture:\n *   Worker / Workflow\n *     └─ DurableObjectNamespace.idFromName(\"sidecar\").get().fetch(url, init)\n *          └─ SidecarContainer.fetch(request)\n *               ├─ [production] proxies to Docker container on port 8080\n *               └─ [local dev]  proxies to SANDBOX_BRIDGE_URL from KV\n *\n * Local dev fallback:\n *   `this.ctx.container` is undefined in `wrangler dev` (no Docker available).\n *   When absent, the DO reads SANDBOX_BRIDGE_URL + SANDBOX_BRIDGE_API_KEY from\n *   KV and proxies the request to the external bridge server.\n *\n * wrangler.toml requirements (already added):\n *   [[durable_objects.bindings]]   name = \"SIDECAR_SERVICE\"   class_name = \"SidecarContainer\"\n *   [[durable_objects.bindings]]   name = \"PLUGIN_CONTAINER\"  class_name = \"PluginContainer\"\n *   [[containers]]  class_name = \"SidecarContainer\"  image = \"...\"\n *   [[containers]]  class_name = \"PluginContainer\"   image = \"...\"\n */\n\nimport type { Env } from \"./env.js\";\n\n// ---------------------------------------------------------------------------\n// Shared helper\n// ---------------------------------------------------------------------------\n\nconst SIDECAR_PORT = 8080;\n\n/** Build fallback headers, appending auth if an API key is available. */\nfunction bridgeHeaders(apiKey: string | null, extra?: Record\u003cstring, string\u003e): Record\u003cstring, string\u003e {\n  const h: Record\u003cstring, string\u003e = { ...extra };\n  if (apiKey) h.Authorization = `Bearer ${apiKey}`;\n  return h;\n}\n\n// ---------------------------------------------------------------------------\n// SidecarContainer — companion Node.js server\n// ---------------------------------------------------------------------------\n\n/**\n * Proxy DO for the sidecar companion server container.\n *\n * Exposes the same internal API as the external sidecar HTTP server:\n *   POST /internal/heartbeat\n *   POST /internal/plugin-jobs/:id/claim\n *   POST /internal/plugin-jobs/:id/execute\n *   POST /internal/plugin-jobs/:id/complete\n */\nexport class SidecarContainer implements DurableObject {\n  private readonly ctx: DurableObjectState;\n  private readonly env: Env;\n\n  constructor(ctx: DurableObjectState, env: Env) {\n    this.ctx = ctx;\n    this.env = env;\n  }\n\n  async fetch(request: Request): Promise\u003cResponse\u003e {\n    const container = this.ctx.container;\n\n    if (container) {\n      // Production path: start the container if it isn't running yet, then\n      // proxy the request to its HTTP port. getTcpPort returns a Fetcher that\n      // speaks to that port.\n      if (!container.running) {\n        container.start();\n      }\n      const fetcher = container.getTcpPort(SIDECAR_PORT);\n      return fetcher.fetch(request);\n    }\n\n    // Local-dev fallback: forward to an external bridge server.\n    const bridgeUrl =\n      (await this.env.PAPERCLIP_KV.get(\"SANDBOX_BRIDGE_URL\")) ?? \"http://localhost:8788\";\n    const apiKey = await this.env.PAPERCLIP_KV.get(\"SANDBOX_BRIDGE_API_KEY\");\n\n    const url = new URL(request.url);\n    const proxyUrl = `${bridgeUrl}${url.pathname}${url.search}`;\n    const headers = new Headers(request.headers);\n    if (apiKey) headers.set(\"Authorization\", `Bearer ${apiKey}`);\n\n    return fetch(proxyUrl, {\n      method: request.method,\n      headers,\n      body: request.body,\n      // @ts-expect-error CF-specific option — prevents Request.body stream from being consumed twice\n      duplex: \"half\",\n    });\n  }\n}\n\n// ---------------------------------------------------------------------------\n// PluginContainer — isolated command executor for adapter plugins\n// ---------------------------------------------------------------------------\n\n/**\n * Proxy DO for the plugin sandbox container.\n *\n * Exposes the same wire format as the sandbox bridge command executor:\n *   POST /execute\n *   POST /cancel/:runId\n *\n * The container image must serve these endpoints on port 8080 (default).\n */\nexport class PluginContainer implements DurableObject {\n  private readonly ctx: DurableObjectState;\n  private readonly env: Env;\n\n  constructor(ctx: DurableObjectState, env: Env) {\n    this.ctx = ctx;\n    this.env = env;\n  }\n\n  async fetch(request: Request): Promise\u003cResponse\u003e {\n    const container = this.ctx.container;\n\n    if (container) {\n      if (!container.running) {\n        container.start();\n      }\n      const fetcher = container.getTcpPort(SIDECAR_PORT);\n      return fetcher.fetch(request);\n    }\n\n    // Local-dev fallback: forward to the sandbox bridge.\n    const bridgeUrl =\n      (await this.env.PAPERCLIP_KV.get(\"SANDBOX_BRIDGE_URL\")) ?? \"http://localhost:8788\";\n    const apiKey = await this.env.PAPERCLIP_KV.get(\"SANDBOX_BRIDGE_API_KEY\");\n\n    const url = new URL(request.url);\n    const proxyUrl = `${bridgeUrl}${url.pathname}${url.search}`;\n    const headers = new Headers(request.headers);\n    if (apiKey) headers.set(\"Authorization\", `Bearer ${apiKey}`);\n\n    return fetch(proxyUrl, {\n      method: request.method,\n      headers,\n      body: request.body,\n      // @ts-expect-error CF-specific option\n      duplex: \"half\",\n    });\n  }\n}\n",
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          "       return fetcher.fetch(request);",
+          "     }",
+          " ",
+          "-    // Local-dev fallback: forward to an external bridge server.",
+          "-    const bridgeUrl =",
+          "-      (await this.env.PAPERCLIP_KV.get(\"SANDBOX_BRIDGE_URL\")) ?? \"http://localhost:8788\";",
+          "-    const apiKey = await this.env.PAPERCLIP_KV.get(\"SANDBOX_BRIDGE_API_KEY\");",
+          "+    // Local-dev fallback: try SIDECAR_URL env var first (set in .dev.vars),",
+          "+    // then fall back to SANDBOX_BRIDGE_URL from KV.",
+          "+    const baseUrl =",
+          "+      this.env.SIDECAR_URL ??",
+          "+      (await this.env.PAPERCLIP_KV.get(\"SANDBOX_BRIDGE_URL\")) ??",
+          "+      \"http://localhost:8788\";",
+          "+    const apiKey =",
+          "+      this.env.SIDECAR_API_KEY ??",
+          "+      await this.env.PAPERCLIP_KV.get(\"SANDBOX_BRIDGE_API_KEY\");",
+          " ",
+          "     const url = new URL(request.url);",
+          "-    const proxyUrl = `${bridgeUrl}${url.pathname}${url.search}`;",
+          "+    const proxyUrl = `${baseUrl}${url.pathname}${url.search}`;",
+          "     const headers = new Headers(request.headers);",
+          "     if (apiKey) headers.set(\"Authorization\", `Bearer ${apiKey}`);",
+          " "
+        ],
+        "newLines": 18,
+        "newStart": 76,
+        "oldLines": 13,
+        "oldStart": 76
+      },
+      {
+        "lines": [
+          "       return fetcher.fetch(request);",
+          "     }",
+          " ",
+          "-    // Local-dev fallback: forward to the sandbox bridge.",
+          "-    const bridgeUrl =",
+          "-      (await this.env.PAPERCLIP_KV.get(\"SANDBOX_BRIDGE_URL\")) ?? \"http://localhost:8788\";",
+          "-    const apiKey = await this.env.PAPERCLIP_KV.get(\"SANDBOX_BRIDGE_API_KEY\");",
+          "+    // Fallback: SIDECAR_URL env var → KV SANDBOX_BRIDGE_URL (same service hosts both).",
+          "+    const baseUrl =",
+          "+      this.env.SIDECAR_URL ??",
+          "+      (await this.env.PAPERCLIP_KV.get(\"SANDBOX_BRIDGE_URL\")) ??",
+          "+      \"http://localhost:8788\";",
+          "+    const apiKey =",
+          "+      this.env.SIDECAR_API_KEY ??",
+          "+      await this.env.PAPERCLIP_KV.get(\"SANDBOX_BRIDGE_API_KEY\");",
+          " ",
+          "     const url = new URL(request.url);",
+          "-    const proxyUrl = `${bridgeUrl}${url.pathname}${url.search}`;",
+          "+    const proxyUrl = `${baseUrl}${url.pathname}${url.search}`;",
+          "     const headers = new Headers(request.headers);",
+          "     if (apiKey) headers.set(\"Authorization\", `Bearer ${apiKey}`);",
+          " "
+        ],
+        "newLines": 17,
+        "newStart": 134,
+        "oldLines": 13,
+        "oldStart": 129
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "a1ee88c7-2111-471e-b8a4-4cb741054b30",
+  "version": "2.1.123"
+}

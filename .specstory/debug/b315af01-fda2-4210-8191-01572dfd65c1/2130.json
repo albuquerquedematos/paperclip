@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "1:import type { ServerAdapterModule } from \"./types.js\";\n2:import { getAdapterSessionManagement } from \"@paperclipai/adapter-utils\";\n3:import {\n12:import { agentConfigurationDoc as claudeAgentConfigurationDoc, models as claudeModels } from \"@paperclipai/adapter-claude-local\";\n13:import {\n21:import { agentConfigurationDoc as codexAgentConfigurationDoc, models as codexModels } from \"@paperclipai/adapter-codex-local\";\n22:import {\n29:import { agentConfigurationDoc as cursorAgentConfigurationDoc, models as cursorModels } from \"@paperclipai/adapter-cursor-local\";\n30:import {\n37:import { agentConfigurationDoc as geminiAgentConfigurationDoc, models as geminiModels } from \"@paperclipai/adapter-gemini-local\";\n38:import {\n46:import {\n50:import {\n54:import {\n58:import { listCodexModels, refreshCodexModels } from \"./codex-models.js\";\n59:import { listCursorModels } from \"./cursor-models.js\";\n60:import {\n68:import {\n71:import {\n79:import {",
+        "is_error": false,
+        "tool_use_id": "toolu_01PfKxc2UegS2nQWmoCeMZ2D",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "8f5ab556-5af6-4f70-99d5-a8e4211933a9",
+  "promptId": "8e37c333-7c8a-4b0c-ae99-027b99e1bf51",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "8f5ab556-5af6-4f70-99d5-a8e4211933a9",
+  "timestamp": "2026-04-30T19:26:42.312Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "1:import type { ServerAdapterModule } from \"./types.js\";\n2:import { getAdapterSessionManagement } from \"@paperclipai/adapter-utils\";\n3:import {\n12:import { agentConfigurationDoc as claudeAgentConfigurationDoc, models as claudeModels } from \"@paperclipai/adapter-claude-local\";\n13:import {\n21:import { agentConfigurationDoc as codexAgentConfigurationDoc, models as codexModels } from \"@paperclipai/adapter-codex-local\";\n22:import {\n29:import { agentConfigurationDoc as cursorAgentConfigurationDoc, models as cursorModels } from \"@paperclipai/adapter-cursor-local\";\n30:import {\n37:import { agentConfigurationDoc as geminiAgentConfigurationDoc, models as geminiModels } from \"@paperclipai/adapter-gemini-local\";\n38:import {\n46:import {\n50:import {\n54:import {\n58:import { listCodexModels, refreshCodexModels } from \"./codex-models.js\";\n59:import { listCursorModels } from \"./cursor-models.js\";\n60:import {\n68:import {\n71:import {\n79:import {"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "9adae935-b676-4c4d-812a-1c04814cf7e0",
+  "version": "2.1.123"
+}

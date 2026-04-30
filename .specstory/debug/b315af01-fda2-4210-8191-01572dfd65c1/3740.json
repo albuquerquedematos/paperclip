@@ -1,0 +1,20 @@
+{
+  "agentId": "a3a306fc5d1924556",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": "In /Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/issues.ts, find every Handler function that:\n1. Calls `const issue = await svc.getById(id);` (or any equivalent that takes a possibly-human-key id and resolves it to the full issue), AND\n2. Then in the same handler body, passes the raw `id` (or `issueId` etc.) — NOT `issue.id` — to a downstream service/db call.\n\nThis is a bug because `id` may be a human key like `\"ALM-1\"` (not a UUID). The downstream call usually expects a UUID and Postgres throws `invalid input syntax for type uuid: \"ALM-1\"`.\n\nFor each bug found, report:\n- The handler name (e.g. `listIssueComments`)\n- Line number\n- The exact line passing the raw id (e.g. `const x = await svc.listComments(id, ...)`)\n- The fix (replace `id` with `issue.id`)\n\nSkip handlers where:\n- The raw id is only used in `Response.json` for error messages (not a bug)\n- The raw id is passed to a function that itself accepts both human keys and UUIDs (assume `svc.getById`, `svc.getByIdentifier`, `getIssueByIdentifier` accept both; assume any other function expects UUID unless its name suggests otherwise)\n- `issue.id` is used downstream (already correct)\n\nI've already fixed: listIssueComments, listIssueInteractions, listAttachments, getFeedbackVotes (all at the lines with `svc.listComments(id`, `listForIssue(id)`, `svc.listAttachments(issueId)`, `feedback.listIssueVotesForUser(id, ...)` — these are now `issue.id`).\n\nWalk the entire issues.ts (~3700 lines). I need a complete list of remaining bugs. Report under 300 lines. Be precise about line numbers and the exact diff.",
+    "role": "user"
+  },
+  "parentUuid": null,
+  "promptId": "e7cbb211-1d37-4345-b546-c3d4bd07be80",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T22:57:25.611Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "faf41ba7-84e4-4e17-9b9f-8434027bb898",
+  "version": "2.1.123"
+}

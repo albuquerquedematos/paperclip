@@ -1,0 +1,27 @@
+{
+  "agentId": "a7e75688fdce3dc53",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "2060\t    });\n2061\t  };\n2062\t\n2063\t  router.patch(\"/agents/:id/instructions-path\", validate(updateAgentInstructionsPathSchema), expressHandler(updateAgentInstructionsPath, { db, storage: storageSentinel }));\n2064\t\n2065\t  const getAgentInstructionsBundle: Handler = async (ctx) =\u003e {\n2066\t    const id = ctx.param(\"id\")!;\n2067\t    const existing = await svc.getById(id);\n2068\t    if (!existing) return Response.json({ error: \"Agent not found\" }, { status: 404 });\n2069\t    await assertCanReadAgent(ctx, existing);\n2070\t    return Response.json(await instructions.getBundle(existing));\n2071\t  };\n2072\t\n2073\t  const updateAgentInstructionsBundle: Handler = async (ctx) =\u003e {\n2074\t    const id = ctx.param(\"id\")!;\n2075\t    const existing = await svc.getById(id);\n2076\t    if (!existing) return Response.json({ error: \"Agent not found\" }, { status: 404 });\n2077\t    await assertCanManageInstructionsPath(ctx, existing);\n2078\t\n2079\t    const body = await ctx.json\u003cRecord\u003cstring, unknown\u003e\u003e();\n2080\t    const actor = getActorInfo(ctx);\n2081\t    const { bundle, adapterConfig } = await instructions.updateBundle(existing, body);\n2082\t    const normalizedAdapterConfig = await secretsSvc.normalizeAdapterConfigForPersistence(\n2083\t      existing.companyId,\n2084\t      adapterConfig,\n2085\t      { strictMode: strictSecretsMode },\n2086\t    );\n2087\t    await svc.update(\n2088\t      id,\n2089\t      { adapterConfig: normalizedAdapterConfig },\n2090\t      {\n2091\t        recordRevision: {\n2092\t          createdByAgentId: actor.agentId,\n2093\t          createdByUserId: actor.actorType === \"user\" ? actor.actorId : null,\n2094\t          source: \"instructions_bundle_patch\",\n2095\t        },\n2096\t      },\n2097\t    );\n2098\t\n2099\t    await logActivity(db, {\n2100\t      companyId: existing.companyId,\n2101\t      actorType: actor.actorType,\n2102\t      actorId: actor.actorId,\n2103\t      agentId: actor.agentId,\n2104\t      runId: actor.runId,\n2105\t      action: \"agent.instructions_bundle_updated\",\n2106\t      entityType: \"agent\",\n2107\t      entityId: existing.id,\n2108\t      details: {\n2109\t        mode: bundle.mode,\n\n\u003csystem-reminder\u003e\nWhenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.\n\u003c/system-reminder\u003e\n",
+        "tool_use_id": "toolu_01VJm6zfUzgo75gy7NjqUKbv",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "921555be-7880-47b0-90e0-32fa2aaa85aa",
+  "promptId": "0c147d6f-915f-4b9e-a139-f26417e7157e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "921555be-7880-47b0-90e0-32fa2aaa85aa",
+  "timestamp": "2026-04-30T23:07:11.701Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "0e4f60b7-3bc9-48db-9cb2-a011f077f316",
+  "version": "2.1.123"
+}

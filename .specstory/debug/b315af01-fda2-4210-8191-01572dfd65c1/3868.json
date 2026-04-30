@@ -1,0 +1,85 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": [
+          {
+            "text": "Based on my analysis of the code, let me compile my findings. I've identified all the bugs by examining the code patterns. Here's my complete report:\n\n## Complete Bug Report: Raw ID Passed to Downstream Service Calls\n\nBased on my comprehensive analysis of `/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/issues.ts`, I found **6 remaining bugs** where raw `id`/`issueId` parameters (which may be human keys like \"ALM-1\") are passed to downstream service calls instead of the resolved UUID from `issue.id`:\n\n### Bug #1: `listIssueApprovals`\n- **Line:** 1549\n- **Code:** `const approvals = await issueApprovalsSvc.listApprovalsForIssue(id);`\n- **Fix:** Replace `id` with `issue.id`\n\n### Bug #2: `linkIssueApproval` (two occurrences)\n- **Lines:** 1562, 1577\n- **Code:** \n  - Line 1562: `await issueApprovalsSvc.link(id, body.approvalId, {`\n  - Line 1577: `const approvals = await issueApprovalsSvc.listApprovalsForIssue(id);`\n- **Fix:** Replace `id` with `issue.id` on both lines\n\n### Bug #3: `unlinkIssueApproval`\n- **Line:** 1589\n- **Code:** `await issueApprovalsSvc.unlink(id, approvalId);`\n- **Fix:** Replace `id` with `issue.id`\n\n### Bug #4: `checkoutIssue`\n- **Line:** 2568\n- **Code:** `const updated = await svc.checkout(id, body.agentId as string, body.expectedStatuses as string[] | undefined, checkoutRunId);`\n- **Fix:** Replace `id` with `issue.id`\n\n### Bug #5: `releaseIssue`\n- **Line:** 2618 (within the `svc.release()` call)\n- **Code:** `const released = await svc.release(id, ...)`\n- **Fix:** Replace `id` with `issue.id`\n\n### Bug #6: `adminForceRelease`\n- **Line:** 2657\n- **Code:** `const result = await svc.adminForceRelease(id, { clearAssignee });`\n- **Fix:** Replace `id` with `issue.id`\n\n### Bug #7: `saveFeedbackVote`\n- **Line:** 3404\n- **Code:** `issueId: id,` (within `feedback.saveIssueVote()` call)\n- **Fix:** Replace `id` with `issue.id`\n\n**Total: 7 bugs** (6 handlers with 1 having 2 instances in the same call span)",
+            "type": "text"
+          }
+        ],
+        "tool_use_id": "toolu_01Qytdahjr5WhBhW8CtW2w6m",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "8474b9be-07c0-426a-b68b-17357c58f464",
+  "promptId": "e7cbb211-1d37-4345-b546-c3d4bd07be80",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "8474b9be-07c0-426a-b68b-17357c58f464",
+  "timestamp": "2026-04-30T22:59:05.595Z",
+  "toolUseResult": {
+    "agentId": "a3a306fc5d1924556",
+    "agentType": "Explore",
+    "content": [
+      {
+        "text": "Based on my analysis of the code, let me compile my findings. I've identified all the bugs by examining the code patterns. Here's my complete report:\n\n## Complete Bug Report: Raw ID Passed to Downstream Service Calls\n\nBased on my comprehensive analysis of `/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/issues.ts`, I found **6 remaining bugs** where raw `id`/`issueId` parameters (which may be human keys like \"ALM-1\") are passed to downstream service calls instead of the resolved UUID from `issue.id`:\n\n### Bug #1: `listIssueApprovals`\n- **Line:** 1549\n- **Code:** `const approvals = await issueApprovalsSvc.listApprovalsForIssue(id);`\n- **Fix:** Replace `id` with `issue.id`\n\n### Bug #2: `linkIssueApproval` (two occurrences)\n- **Lines:** 1562, 1577\n- **Code:** \n  - Line 1562: `await issueApprovalsSvc.link(id, body.approvalId, {`\n  - Line 1577: `const approvals = await issueApprovalsSvc.listApprovalsForIssue(id);`\n- **Fix:** Replace `id` with `issue.id` on both lines\n\n### Bug #3: `unlinkIssueApproval`\n- **Line:** 1589\n- **Code:** `await issueApprovalsSvc.unlink(id, approvalId);`\n- **Fix:** Replace `id` with `issue.id`\n\n### Bug #4: `checkoutIssue`\n- **Line:** 2568\n- **Code:** `const updated = await svc.checkout(id, body.agentId as string, body.expectedStatuses as string[] | undefined, checkoutRunId);`\n- **Fix:** Replace `id` with `issue.id`\n\n### Bug #5: `releaseIssue`\n- **Line:** 2618 (within the `svc.release()` call)\n- **Code:** `const released = await svc.release(id, ...)`\n- **Fix:** Replace `id` with `issue.id`\n\n### Bug #6: `adminForceRelease`\n- **Line:** 2657\n- **Code:** `const result = await svc.adminForceRelease(id, { clearAssignee });`\n- **Fix:** Replace `id` with `issue.id`\n\n### Bug #7: `saveFeedbackVote`\n- **Line:** 3404\n- **Code:** `issueId: id,` (within `feedback.saveIssueVote()` call)\n- **Fix:** Replace `id` with `issue.id`\n\n**Total: 7 bugs** (6 handlers with 1 having 2 instances in the same call span)",
+        "type": "text"
+      }
+    ],
+    "prompt": "In /Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/issues.ts, find every Handler function that:\n1. Calls `const issue = await svc.getById(id);` (or any equivalent that takes a possibly-human-key id and resolves it to the full issue), AND\n2. Then in the same handler body, passes the raw `id` (or `issueId` etc.) — NOT `issue.id` — to a downstream service/db call.\n\nThis is a bug because `id` may be a human key like `\"ALM-1\"` (not a UUID). The downstream call usually expects a UUID and Postgres throws `invalid input syntax for type uuid: \"ALM-1\"`.\n\nFor each bug found, report:\n- The handler name (e.g. `listIssueComments`)\n- Line number\n- The exact line passing the raw id (e.g. `const x = await svc.listComments(id, ...)`)\n- The fix (replace `id` with `issue.id`)\n\nSkip handlers where:\n- The raw id is only used in `Response.json` for error messages (not a bug)\n- The raw id is passed to a function that itself accepts both human keys and UUIDs (assume `svc.getById`, `svc.getByIdentifier`, `getIssueByIdentifier` accept both; assume any other function expects UUID unless its name suggests otherwise)\n- `issue.id` is used downstream (already correct)\n\nI've already fixed: listIssueComments, listIssueInteractions, listAttachments, getFeedbackVotes (all at the lines with `svc.listComments(id`, `listForIssue(id)`, `svc.listAttachments(issueId)`, `feedback.listIssueVotesForUser(id, ...)` — these are now `issue.id`).\n\nWalk the entire issues.ts (~3700 lines). I need a complete list of remaining bugs. Report under 300 lines. Be precise about line numbers and the exact diff.",
+    "status": "completed",
+    "toolStats": {
+      "bashCount": 17,
+      "editFileCount": 0,
+      "linesAdded": 0,
+      "linesRemoved": 0,
+      "otherToolCount": 0,
+      "readCount": 35,
+      "searchCount": 0
+    },
+    "totalDurationMs": 99913,
+    "totalTokens": 86395,
+    "totalToolUseCount": 52,
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 164
+      },
+      "cache_creation_input_tokens": 164,
+      "cache_read_input_tokens": 85537,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 164
+          },
+          "cache_creation_input_tokens": 164,
+          "cache_read_input_tokens": 85537,
+          "input_tokens": 1,
+          "output_tokens": 693,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 693,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "cc0996e0-c28b-409a-9edd-ed2c57347eca",
+  "version": "2.1.123"
+}

@@ -1,0 +1,27 @@
+{
+  "agentId": "a8455dc48bdf97d68",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/.claude/worktrees/agent-a8455dc48bdf97d68",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "worktree-agent-a8455dc48bdf97d68",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport type { Db } from \"@paperclipai/db\";\n2\timport type { StorageService } from \"../storage/types.js\";\n3\t\n4\texport interface ActorMembership {\n5\t  companyId: string;\n6\t  membershipRole: string;\n7\t  status: string;\n8\t}\n9\t\n10\texport type ActorSource =\n11\t  | \"local_implicit\"\n12\t  | \"session\"\n13\t  | \"board_key\"\n14\t  | \"agent_jwt\"\n15\t  | \"agent_key\"\n16\t  | \"none\";\n17\t\n18\texport interface BoardActor {\n19\t  type: \"board\";\n20\t  source: ActorSource;\n21\t  userId: string;\n22\t  userName: string | null;\n23\t  userEmail: string | null;\n24\t  isInstanceAdmin: boolean;\n25\t  companyIds?: string[];\n26\t  memberships?: ActorMembership[];\n27\t  keyId?: string;\n28\t  runId?: string;\n29\t}\n30\t\n31\texport interface AgentActor {\n32\t  type: \"agent\";\n33\t  source: ActorSource;\n34\t  agentId: string;\n35\t  companyId: string;\n36\t  keyId?: string;\n37\t  runId?: string;\n38\t}\n39\t\n40\t/** Full actor — mirrors the shape set by actorMiddleware. null when unauthenticated (\"none\"). */\n41\texport type ActorContext = BoardActor | AgentActor;\n42\t\n43\t/** Minimal normalized request passed to every handler. */\n44\texport interface RequestCtx {\n45\t  method: string;\n46\t  url: URL;\n47\t  headers: Headers;\n48\t  json\u003cT = unknown\u003e(): Promise\u003cT\u003e;\n49\t  text(): Promise\u003cstring\u003e;\n50\t  /** Path param: e.g. ctx.param(\"companyId\") */\n51\t  param(name: string): string | undefined;\n52\t  /** Query param */\n53\t  query(name: string): string | undefined;\n54\t  actor: ActorContext | null;\n55\t  db: Db;\n56\t  storage: StorageService;\n57\t}\n58\t\n59\texport type Handler = (ctx: RequestCtx) =\u003e Promise\u003cResponse\u003e;\n60\t\n61\texport interface RouteDefinition {\n62\t  method: \"GET\" | \"POST\" | \"PUT\" | \"PATCH\" | \"DELETE\";\n63\t  /** Express-style path, e.g. /api/companies/:companyId */\n64\t  path: string;\n65\t  handler: Handler;\n66\t}\n67\t",
+        "tool_use_id": "toolu_018akyLWDF35UevUqjtWDxTf",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "ca56ff5c-2562-410b-ac45-06369c9149a6",
+  "promptId": "8a433599-d510-488c-a09f-2af6b1c28bcb",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "ca56ff5c-2562-410b-ac45-06369c9149a6",
+  "timestamp": "2026-04-30T19:36:54.602Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "46ade417-03cd-4687-8518-cf6e6902b644",
+  "version": "2.1.123"
+}

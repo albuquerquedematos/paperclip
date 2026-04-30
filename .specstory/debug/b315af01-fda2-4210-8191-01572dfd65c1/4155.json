@@ -1,0 +1,61 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "text": "Let me check what the actual error is by hitting the route:",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01EcXgKaukk1ES9kTQC4zqxj",
+    "model": "claude-opus-4-7",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1791,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 1791,
+      "cache_read_input_tokens": 394256,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 1791,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 1791,
+          "cache_read_input_tokens": 394256,
+          "input_tokens": 1,
+          "output_tokens": 583,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 583,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "4610c3c7-a110-4f2e-a2da-f4c23d7663a2",
+  "requestId": "req_011CaaoFnEDbJdZtndKesriC",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T23:09:25.252Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "b8d6169c-bec1-42eb-ab48-e95c1e671b13",
+  "version": "2.1.123"
+}

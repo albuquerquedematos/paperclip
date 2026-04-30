@@ -1,0 +1,71 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01AUGykfT2uHnFMioFCnSWkT",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/tests/cf-smoke/cf-smoke.spec.ts",
+          "new_string": "describe(\"CF Worker smoke — agent-scoped reads (regression: URL-key resolution)\", () =\u003e {\n  const routes = [\n    \"\",\n    \"configuration\",\n    \"config-revisions\",\n    \"runtime-state\",\n    \"task-sessions\",\n    \"skills\",\n    \"instructions-bundle\",\n    \"keys\",\n  ];\n\n  for (const tail of routes) {\n    it(`GET /api/agents/:uuid${tail ? \"/\" + tail : \"\"}`, async () =\u003e {\n      if (!agent) return;\n      const path = `/api/agents/${agent.id}${tail ? \"/\" + tail : \"\"}`;\n      const r = await get(path);\n      expectNoCrash(`GET ${path}`, r.status);\n    });\n\n    it(`GET /api/agents/:urlKey${tail ? \"/\" + tail : \"\"} (regression)`, async () =\u003e {\n      if (!agent?.urlKey) return;\n      const path = `/api/agents/${agent.urlKey}${tail ? \"/\" + tail : \"\"}`;\n      const r = await get(path);\n      expectNoCrash(`GET ${path}`, r.status);\n    });\n  }\n});",
+          "old_string": "describe(\"CF Worker smoke — agent-scoped reads\", () =\u003e {\n  const routes = [\n    \"\",\n    \"configuration\",\n    \"config-revisions\",\n    \"runtime-state\",\n    \"task-sessions\",\n    \"skills\",\n    \"instructions-bundle\",\n    \"keys\",\n  ];\n\n  for (const tail of routes) {\n    it(`GET /api/agents/:id${tail ? \"/\" + tail : \"\"}`, async () =\u003e {\n      if (!agent) return;\n      const path = `/api/agents/${agent.id}${tail ? \"/\" + tail : \"\"}`;\n      const r = await get(path);\n      expectNoCrash(`GET ${path}`, r.status);\n    });\n  }\n});",
+          "replace_all": false
+        },
+        "name": "Edit",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01LemGHb8Qe5EcHj2jaYqKzQ",
+    "model": "claude-opus-4-7",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 328,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 328,
+      "cache_read_input_tokens": 389644,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 328,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 328,
+          "cache_read_input_tokens": 389644,
+          "input_tokens": 1,
+          "output_tokens": 788,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 788,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "3c198ee9-6549-4765-8e0b-502feb65ed1a",
+  "requestId": "req_011CaaoCSXy6aqyYMAn6qax5",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T23:08:41.327Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "9f367581-66f9-4c2f-b2c8-9b800ea4f834",
+  "version": "2.1.123"
+}

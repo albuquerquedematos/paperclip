@@ -1,0 +1,27 @@
+{
+  "agentId": "a07aabe33abdc139f",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\t/**\n2\t * cf-extra-routes.ts — barrel for CF-native route modules.\n3\t *\n4\t * CF-native handlers for API endpoints that use raw Express handlers in the\n5\t * server package (making them invisible to extractRoutesFromRouter) or depend\n6\t * on runtime registries (adapters, plugins) that don't exist in a CF Worker.\n7\t *\n8\t * Registered in app.ts BEFORE the /api/* catch-all so they shadow the 501.\n9\t *\n10\t * Modules:\n11\t *   routes/adapters.ts       — GET /api/adapters\n12\t *   routes/plugins.ts        — GET /api/plugins, GET /api/plugins/ui-contributions\n13\t *   routes/company-access.ts — GET /api/companies/:id/join-requests,\n14\t *                               GET /api/companies/:id/user-directory\n15\t *   routes/company-skills-cf.ts — GET /api/companies/:id/skills\n16\t *   routes/events.ts         — GET /api/companies/:id/events/ws\n17\t *\n18\t * All routes in this barrel require an authenticated actor (board or agent key,\n19\t * or local_trusted mode). Unauthenticated requests receive 401.\n20\t */\n21\t\n22\timport type { Hono } from \"hono\";\n23\timport type { Env } from \"./env.js\";\n24\timport { registerAdapterRoutes } from \"./routes/adapters.js\";\n25\timport { registerPluginRoutes } from \"./routes/plugins.js\";\n26\timport { registerCompanyAccessRoutes } from \"./routes/company-access.js\";\n27\timport { registerCompanySkillRoutes } from \"./routes/company-skills-cf.js\";\n28\timport { registerEventRoutes } from \"./routes/events.js\";\n29\t\n30\texport function registerCfExtraRoutes(app: Hono\u003c{ Bindings: Env }\u003e): void {\n31\t  registerAdapterRoutes(app);\n32\t  registerPluginRoutes(app);\n33\t  registerCompanyAccessRoutes(app);\n34\t  registerCompanySkillRoutes(app);\n35\t  registerEventRoutes(app);\n36\t}\n37\t\n\n\u003csystem-reminder\u003e\nWhenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.\n\u003c/system-reminder\u003e\n",
+        "tool_use_id": "toolu_013d7SiYNHstPNZJob6LuDhR",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "7e0faf9d-c86f-427c-a71d-5235e7f5a81e",
+  "promptId": "ba04e90f-0d7c-4dcc-9bf9-971187295dfd",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "7e0faf9d-c86f-427c-a71d-5235e7f5a81e",
+  "timestamp": "2026-04-30T21:57:51.065Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "0564d1a9-37e1-447a-a65d-2d755a102ca7",
+  "version": "2.1.123"
+}

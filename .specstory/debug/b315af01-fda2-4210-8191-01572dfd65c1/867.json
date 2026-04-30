@@ -1,0 +1,71 @@
+{
+  "agentId": "aee092c208138b302",
+  "attributionAgent": "architect-reviewer",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01AJgkx8WPEUhFR37Cy7UEfS",
+        "input": {
+          "command": "ls /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/",
+          "description": "List deploy-cloudflare source structure"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_012KzqJZHCpkQf6nFVQ1Vmog",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 9882
+      },
+      "cache_creation_input_tokens": 9882,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "",
+      "input_tokens": 2,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 9882
+          },
+          "cache_creation_input_tokens": 9882,
+          "cache_read_input_tokens": 0,
+          "input_tokens": 2,
+          "output_tokens": 183,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 183,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "042a3553-7aec-47ce-8fe5-e91af90cf42c",
+  "requestId": "req_011CaaNxextYVixjfqyRYnRY",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T17:50:45.134Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "337b19ff-0a1c-48fd-82ba-622da091f19d",
+  "version": "2.1.123"
+}

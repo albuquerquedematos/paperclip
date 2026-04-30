@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "611\t  const getAdapterConfigSchema: Handler = async (ctx) =\u003e {\n612\t    assertBoardOrgAccess(ctx);\n613\t    const type = ctx.param(\"type\");\n614\t    if (!type) return Response.json({ error: \"Adapter type is required.\" }, { status: 400 });\n615\t\n616\t    const adapter = findActiveServerAdapter(type);\n617\t    if (!adapter) {\n618\t      return Response.json({ error: `Adapter \"${type}\" is not registered.` }, { status: 404 });\n619\t    }\n620\t    if (!adapter.getConfigSchema) {\n621\t      return Response.json({ error: `Adapter \"${type}\" does not provide a config schema.` }, { status: 404 });\n622\t    }\n623\t\n624\t    const cached = configSchemaCache.get(type);\n625\t    if (cached \u0026\u0026 cached.adapter === adapter \u0026\u0026 Date.now() - cached.fetchedAt \u003c CONFIG_SCHEMA_TTL_MS) {\n626\t      return Response.json(cached.schema);\n627\t    }\n628\t\n629\t    try {\n630\t      const schema = await adapter.getConfigSchema();\n631\t      configSchemaCache.set(type, { adapter, schema, fetchedAt: Date.now() });\n632\t      return Response.json(schema);\n633\t    } catch (err) {\n634\t      const message = err instanceof Error ? err.message : String(err);\n635\t      logger.error({ err, type }, \"Failed to resolve config schema\");\n636\t      return Response.json({ error: `Failed to resolve config schema: ${message}` }, { status: 500 });\n637\t    }\n638\t  };\n639\t\n640\t  /**\n641\t   * GET /api/adapters/:type/ui-parser.js\n642\t   *\n643\t   * Serve the self-contained UI parser JS for an adapter type.\n644\t   */\n645\t  const getAdapterUiParser: Handler = async (ctx) =\u003e {\n646\t    assertBoardOrgAccess(ctx);\n647\t    const type = ctx.param(\"type\");\n648\t    if (!type) return Response.json({ error: \"Adapter type is required.\" }, { status: 400 });\n649\t    const source = getOrExtractUiParserSource(type);\n650\t    if (!source) {\n651\t      return Response.json({ error: `No UI parser available for adapter \"${type}\".` }, { status: 404 });\n652\t    }\n653\t    return new Response(source, {\n654\t      headers: { \"Content-Type\": \"application/javascript\" },\n655\t    });",
+        "tool_use_id": "toolu_01PrG9zAX1R6WApzVuDcSV4d",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "e97fb381-973b-44b5-823d-467b6589501e",
+  "promptId": "0d05d433-ef46-4bba-8105-f1d502a42e1e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "e97fb381-973b-44b5-823d-467b6589501e",
+  "timestamp": "2026-04-30T19:32:34.217Z",
+  "toolUseResult": {
+    "file": {
+      "content": "  const getAdapterConfigSchema: Handler = async (ctx) =\u003e {\n    assertBoardOrgAccess(ctx);\n    const type = ctx.param(\"type\");\n    if (!type) return Response.json({ error: \"Adapter type is required.\" }, { status: 400 });\n\n    const adapter = findActiveServerAdapter(type);\n    if (!adapter) {\n      return Response.json({ error: `Adapter \"${type}\" is not registered.` }, { status: 404 });\n    }\n    if (!adapter.getConfigSchema) {\n      return Response.json({ error: `Adapter \"${type}\" does not provide a config schema.` }, { status: 404 });\n    }\n\n    const cached = configSchemaCache.get(type);\n    if (cached \u0026\u0026 cached.adapter === adapter \u0026\u0026 Date.now() - cached.fetchedAt \u003c CONFIG_SCHEMA_TTL_MS) {\n      return Response.json(cached.schema);\n    }\n\n    try {\n      const schema = await adapter.getConfigSchema();\n      configSchemaCache.set(type, { adapter, schema, fetchedAt: Date.now() });\n      return Response.json(schema);\n    } catch (err) {\n      const message = err instanceof Error ? err.message : String(err);\n      logger.error({ err, type }, \"Failed to resolve config schema\");\n      return Response.json({ error: `Failed to resolve config schema: ${message}` }, { status: 500 });\n    }\n  };\n\n  /**\n   * GET /api/adapters/:type/ui-parser.js\n   *\n   * Serve the self-contained UI parser JS for an adapter type.\n   */\n  const getAdapterUiParser: Handler = async (ctx) =\u003e {\n    assertBoardOrgAccess(ctx);\n    const type = ctx.param(\"type\");\n    if (!type) return Response.json({ error: \"Adapter type is required.\" }, { status: 400 });\n    const source = getOrExtractUiParserSource(type);\n    if (!source) {\n      return Response.json({ error: `No UI parser available for adapter \"${type}\".` }, { status: 404 });\n    }\n    return new Response(source, {\n      headers: { \"Content-Type\": \"application/javascript\" },\n    });",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/routes/adapters.ts",
+      "numLines": 45,
+      "startLine": 611,
+      "totalLines": 674
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "00ed73a6-ce9b-4d1a-ab9a-4def5b960ac7",
+  "version": "2.1.123"
+}

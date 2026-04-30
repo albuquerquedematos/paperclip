@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01KWTacXtbEps6a3wJzCJjFT",
+        "input": {
+          "command": "grep -rn \"3101\\|sidecar.*port\\|port.*sidecar\" /Users/migmac/Documents/GitHub/_ABM/paperclip/server/src --include=\"*.ts\" | head -10",
+          "description": "Find sidecar server port definition"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01M7xMD862gH7pRNRR8Bt7oX",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 2260
+      },
+      "cache_creation_input_tokens": 2260,
+      "cache_read_input_tokens": 146897,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 2260
+          },
+          "cache_creation_input_tokens": 2260,
+          "cache_read_input_tokens": 146897,
+          "input_tokens": 1,
+          "output_tokens": 127,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 127,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "b5f7fc52-207d-48aa-aa81-6f1d530da8f2",
+  "requestId": "req_011Caaf12uAtv9y5zNABdMUR",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T21:21:05.671Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "13c68fb0-53f3-418a-a963-676bc35fc6a6",
+  "version": "2.1.123"
+}

@@ -1,0 +1,25 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "text": "\u003e node build-worker.mjs \u0026\u0026 wrangler dev --no-bundle --local\n\n\n  dist/worker.js  4.7mb ⚠️\n\n⚡ Done in 291ms\nWorker bundle written to dist/worker.js\nWrangler requires at least Node.js v22.0.0. You are using v20.13.1. Please update your version of Node.js.\n\nConsider using a Node.js version manager such as https://volta.sh/ or https://github.com/nvm-sh/nvm.\n/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare:\n ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  @paperclipai/deploy-cloudflare@0.1.0 dev: `node build-worker.mjs \u0026\u0026 wrangler dev --no-bundle --local`\nExit status 1\nerror: script \"dev:cf\" exited with code 1",
+        "type": "text"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "5ca3398b-cfd1-4eca-bd43-4a0ba472513f",
+  "permissionMode": "bypassPermissions",
+  "promptId": "1b384992-7bf0-4117-b43d-35657ad43bbf",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T18:44:52.623Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "02dbbfd7-9d17-44a2-99bd-679d2d5177aa",
+  "version": "2.1.123"
+}

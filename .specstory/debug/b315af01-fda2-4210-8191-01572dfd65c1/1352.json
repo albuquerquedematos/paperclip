@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "  const listAdapters: Handler = async (ctx) =\u003e {\n    assertBoardOrgAccess(ctx);\n\n    const registeredAdapters = listServerAdapters();\n    const externalRecords = new Map(\n      listAdapterPlugins().map((r) =\u003e [r.type, r]),\n    );\n    const disabledSet = new Set(getDisabledAdapterTypes());\n\n    const result: AdapterInfo[] = registeredAdapters.map((adapter) =\u003e\n      buildAdapterInfo(adapter, externalRecords.get(adapter.type), disabledSet),\n    ).sort((a, b) =\u003e a.type.localeCompare(b.type));\n\n    return Response.json(result);\n  };\n\n  /**\n   * POST /api/adapters/install\n   *\n   * Install an external adapter from an npm package or local path.\n   *\n   * Request body:\n   * - packageName: string (required) — npm package name or local path\n   * - isLocalPath?: boolean (default false)\n   * - version?: string — target version for npm packages\n   */\n  const installAdapter: Handler = async (ctx) =\u003e {\n    assertInstanceAdmin(ctx);\n    const body = await ctx.json\u003cAdapterInstallRequest\u003e();\n    const { packageName, isLocalPath = false, version } = body;\n\n    if (!packageName || typeof packageName !== \"string\") {",
+        "is_error": false,
+        "tool_use_id": "toolu_01Qy8ZVdELi8WbVfU75Ctjm1",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "94235f27-dd54-4e25-9087-5c08336822f8",
+  "promptId": "9aae9721-e466-4259-b66e-e724bd2f2c66",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "94235f27-dd54-4e25-9087-5c08336822f8",
+  "timestamp": "2026-04-30T18:24:54.227Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "  const listAdapters: Handler = async (ctx) =\u003e {\n    assertBoardOrgAccess(ctx);\n\n    const registeredAdapters = listServerAdapters();\n    const externalRecords = new Map(\n      listAdapterPlugins().map((r) =\u003e [r.type, r]),\n    );\n    const disabledSet = new Set(getDisabledAdapterTypes());\n\n    const result: AdapterInfo[] = registeredAdapters.map((adapter) =\u003e\n      buildAdapterInfo(adapter, externalRecords.get(adapter.type), disabledSet),\n    ).sort((a, b) =\u003e a.type.localeCompare(b.type));\n\n    return Response.json(result);\n  };\n\n  /**\n   * POST /api/adapters/install\n   *\n   * Install an external adapter from an npm package or local path.\n   *\n   * Request body:\n   * - packageName: string (required) — npm package name or local path\n   * - isLocalPath?: boolean (default false)\n   * - version?: string — target version for npm packages\n   */\n  const installAdapter: Handler = async (ctx) =\u003e {\n    assertInstanceAdmin(ctx);\n    const body = await ctx.json\u003cAdapterInstallRequest\u003e();\n    const { packageName, isLocalPath = false, version } = body;\n\n    if (!packageName || typeof packageName !== \"string\") {"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "2744f971-6122-4d37-82eb-2d7b5670a35d",
+  "version": "2.1.123"
+}

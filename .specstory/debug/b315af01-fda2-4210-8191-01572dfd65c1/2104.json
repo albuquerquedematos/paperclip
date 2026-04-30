@@ -1,0 +1,71 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/cf-extra-routes.ts has been updated successfully.",
+        "tool_use_id": "toolu_01WVaBS7Q7soBWTbCdpCRERX",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "aa1f98b4-008d-45d3-a039-ee03ec93e23c",
+  "promptId": "8e37c333-7c8a-4b0c-ae99-027b99e1bf51",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "aa1f98b4-008d-45d3-a039-ee03ec93e23c",
+  "timestamp": "2026-04-30T19:26:03.051Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/worker/cf-extra-routes.ts",
+    "newString": "import type { Hono } from \"hono\";\nimport { and, asc, desc, eq, inArray, ne } from \"drizzle-orm\";\nimport {\n  agents,\n  authUsers,\n  companyMemberships,\n  companySkills,\n  invites,\n  joinRequests,\n  plugins,\n} from \"@paperclipai/db\";\nimport { collapseDuplicatePendingHumanJoinRequests } from \"../../../../server/src/lib/join-request-dedupe.js\";\nimport { resolveHumanInviteRole } from \"../../../../server/src/services/company-member-roles.js\";\nimport { getPluginUiContributionMetadata } from \"../../../../server/src/services/plugin-loader.js\";\nimport { createHyperdriveDb } from \"../db/hyperdrive.js\";\nimport type { Env } from \"./env.js\";",
+    "oldString": "import type { Hono } from \"hono\";\nimport { and, asc, desc, eq, inArray } from \"drizzle-orm\";\nimport {\n  agents,\n  authUsers,\n  companyMemberships,\n  companySkills,\n  invites,\n  joinRequests,\n} from \"@paperclipai/db\";\nimport { collapseDuplicatePendingHumanJoinRequests } from \"../../../../server/src/lib/join-request-dedupe.js\";\nimport { resolveHumanInviteRole } from \"../../../../server/src/services/company-member-roles.js\";\nimport { createHyperdriveDb } from \"../db/hyperdrive.js\";\nimport type { Env } from \"./env.js\";",
+    "originalFile": null,
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          "  */",
+          " ",
+          " import type { Hono } from \"hono\";",
+          "-import { and, asc, desc, eq, inArray } from \"drizzle-orm\";",
+          "+import { and, asc, desc, eq, inArray, ne } from \"drizzle-orm\";",
+          " import {",
+          "   agents,",
+          "   authUsers,"
+        ],
+        "newLines": 7,
+        "newStart": 9,
+        "oldLines": 7,
+        "oldStart": 9
+      },
+      {
+        "lines": [
+          "   companySkills,",
+          "   invites,",
+          "   joinRequests,",
+          "+  plugins,",
+          " } from \"@paperclipai/db\";",
+          " import { collapseDuplicatePendingHumanJoinRequests } from \"../../../../server/src/lib/join-request-dedupe.js\";",
+          " import { resolveHumanInviteRole } from \"../../../../server/src/services/company-member-roles.js\";",
+          "+import { getPluginUiContributionMetadata } from \"../../../../server/src/services/plugin-loader.js\";",
+          " import { createHyperdriveDb } from \"../db/hyperdrive.js\";",
+          " import type { Env } from \"./env.js\";",
+          " "
+        ],
+        "newLines": 11,
+        "newStart": 17,
+        "oldLines": 9,
+        "oldStart": 17
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "b68a61a8-cd8b-413a-8f6a-2737921fdb85",
+  "version": "2.1.123"
+}

@@ -1,0 +1,52 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/package.json has been updated successfully.",
+        "tool_use_id": "toolu_0162BNZPtKW7joHV4gR8cqCc",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "49deddaa-5fce-4a4d-95d5-3233862e5e10",
+  "promptId": "ba04e90f-0d7c-4dcc-9bf9-971187295dfd",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "49deddaa-5fce-4a4d-95d5-3233862e5e10",
+  "timestamp": "2026-04-30T22:00:32.949Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/package.json",
+    "newString": "    \"build\": \"node build-worker.mjs\",\n    \"dev\": \"node build-worker.mjs \u0026\u0026 concurrently --kill-others --names \\\"esbuild,wrangler\\\" --prefix-colors \\\"yellow,green\\\" \\\"node build-worker.mjs --watch\\\" \\\"bash -c 'source \\\\\\\"${NVM_DIR:-$HOME/.nvm}/nvm.sh\\\\\\\" \u0026\u0026 nvm use 22 \u0026\u0026 wrangler dev --no-bundle --local'\\\"\",\n    \"deploy\": \"node build-worker.mjs \u0026\u0026 bash -c 'source \\\"${NVM_DIR:-$HOME/.nvm}/nvm.sh\\\" \u0026\u0026 nvm use 22 \u0026\u0026 wrangler deploy --no-bundle'\"",
+    "oldString": "    \"build\": \"node build-worker.mjs\",\n    \"dev\": \"node build-worker.mjs \u0026\u0026 bash -c 'source \\\"${NVM_DIR:-$HOME/.nvm}/nvm.sh\\\" \u0026\u0026 nvm use 22 \u0026\u0026 wrangler dev --no-bundle --local'\",\n    \"deploy\": \"node build-worker.mjs \u0026\u0026 bash -c 'source \\\"${NVM_DIR:-$HOME/.nvm}/nvm.sh\\\" \u0026\u0026 nvm use 22 \u0026\u0026 wrangler deploy --no-bundle'\"",
+    "originalFile": "{\n  \"name\": \"@paperclipai/deploy-cloudflare\",\n  \"version\": \"0.1.0\",\n  \"private\": true,\n  \"type\": \"module\",\n  \"main\": \"./src/boot.ts\",\n  \"scripts\": {\n    \"build\": \"node build-worker.mjs\",\n    \"dev\": \"node build-worker.mjs \u0026\u0026 bash -c 'source \\\"${NVM_DIR:-$HOME/.nvm}/nvm.sh\\\" \u0026\u0026 nvm use 22 \u0026\u0026 wrangler dev --no-bundle --local'\",\n    \"deploy\": \"node build-worker.mjs \u0026\u0026 bash -c 'source \\\"${NVM_DIR:-$HOME/.nvm}/nvm.sh\\\" \u0026\u0026 nvm use 22 \u0026\u0026 wrangler deploy --no-bundle'\"\n  },\n  \"dependencies\": {\n    \"@paperclipai/db\": \"workspace:*\",\n    \"@paperclipai/shared\": \"workspace:*\",\n    \"drizzle-orm\": \"^0.38.4\",\n    \"hono\": \"^4.0.0\",\n    \"postgres\": \"^3.4.5\"\n  },\n  \"devDependencies\": {\n    \"@cloudflare/workers-types\": \"^4.0.0\",\n    \"@types/express\": \"^5.0.0\",\n    \"@types/node\": \"^25.6.0\",\n    \"express\": \"^5.1.0\",\n    \"typescript\": \"^5.0.0\",\n    \"wrangler\": \"^4.87.0\"\n  }\n}\n",
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          "   \"main\": \"./src/boot.ts\",",
+          "   \"scripts\": {",
+          "     \"build\": \"node build-worker.mjs\",",
+          "-    \"dev\": \"node build-worker.mjs \u0026\u0026 bash -c 'source \\\"${NVM_DIR:-$HOME/.nvm}/nvm.sh\\\" \u0026\u0026 nvm use 22 \u0026\u0026 wrangler dev --no-bundle --local'\",",
+          "+    \"dev\": \"node build-worker.mjs \u0026\u0026 concurrently --kill-others --names \\\"esbuild,wrangler\\\" --prefix-colors \\\"yellow,green\\\" \\\"node build-worker.mjs --watch\\\" \\\"bash -c 'source \\\\\\\"${NVM_DIR:-$HOME/.nvm}/nvm.sh\\\\\\\" \u0026\u0026 nvm use 22 \u0026\u0026 wrangler dev --no-bundle --local'\\\"\",",
+          "     \"deploy\": \"node build-worker.mjs \u0026\u0026 bash -c 'source \\\"${NVM_DIR:-$HOME/.nvm}/nvm.sh\\\" \u0026\u0026 nvm use 22 \u0026\u0026 wrangler deploy --no-bundle'\"",
+          "   },",
+          "   \"dependencies\": {"
+        ],
+        "newLines": 7,
+        "newStart": 6,
+        "oldLines": 7,
+        "oldStart": 6
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "89e24130-3f26-45d5-9af2-ad2908a42f11",
+  "version": "2.1.123"
+}

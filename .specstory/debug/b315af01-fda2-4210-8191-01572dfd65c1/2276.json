@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "310:const pausedOverrides = new Set\u003cstring\u003e();\n428:    pausedOverrides.delete(type);\n528:  const wasPaused = pausedOverrides.has(type);\n530:    pausedOverrides.add(type);\n535:    pausedOverrides.delete(type);",
+        "is_error": false,
+        "tool_use_id": "toolu_01PdCGeha2GRmua7fdE8tkrK",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "c9b6a771-8369-4482-b06a-203936356fed",
+  "promptId": "0d05d433-ef46-4bba-8105-f1d502a42e1e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "c9b6a771-8369-4482-b06a-203936356fed",
+  "timestamp": "2026-04-30T19:30:42.360Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "310:const pausedOverrides = new Set\u003cstring\u003e();\n428:    pausedOverrides.delete(type);\n528:  const wasPaused = pausedOverrides.has(type);\n530:    pausedOverrides.add(type);\n535:    pausedOverrides.delete(type);"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "24500023-32e9-49d7-b822-d100821e6362",
+  "version": "2.1.123"
+}

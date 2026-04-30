@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "249:      buildAdapterInfo(adapter, externalRecords.get(adapter.type), disabledSet),\n524:      configSchemaCache.delete(type);\n585:      configSchemaCache.delete(type);\n620:    if (!adapter.getConfigSchema) {\n624:    const cached = configSchemaCache.get(type);\n630:      const schema = await adapter.getConfigSchema();\n662:  router.get(\"/adapters\", expressHandler(listAdapters, adapterDeps));\n663:  router.post(\"/adapters/install\", expressHandler(installAdapter, adapterDeps));\n664:  router.patch(\"/adapters/:type\", expressHandler(patchAdapter, adapterDeps));\n665:  router.patch(\"/adapters/:type/override\", expressHandler(patchAdapterOverride, adapterDeps));\n666:  router.delete(\"/adapters/:type\", expressHandler(deleteAdapter, adapterDeps));\n667:  router.post(\"/adapters/:type/reload\", expressHandler(reloadAdapter, adapterDeps));\n668:  router.post(\"/adapters/:type/reinstall\", expressHandler(reinstallAdapter, adapterDeps));\n669:  router.get(\"/adapters/:type/config-schema\", expressHandler(getAdapterConfigSchema, adapterDeps));\n670:  router.get(\"/adapters/:type/ui-parser.js\", expressHandler(getAdapterUiParser, adapterDeps));",
+        "is_error": false,
+        "tool_use_id": "toolu_01PFmc39Q7em3y2AnMnxM4EG",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "8e58dba9-1fbb-41f0-87bd-a921e3a6e96e",
+  "promptId": "9aae9721-e466-4259-b66e-e724bd2f2c66",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "8e58dba9-1fbb-41f0-87bd-a921e3a6e96e",
+  "timestamp": "2026-04-30T18:24:47.525Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "249:      buildAdapterInfo(adapter, externalRecords.get(adapter.type), disabledSet),\n524:      configSchemaCache.delete(type);\n585:      configSchemaCache.delete(type);\n620:    if (!adapter.getConfigSchema) {\n624:    const cached = configSchemaCache.get(type);\n630:      const schema = await adapter.getConfigSchema();\n662:  router.get(\"/adapters\", expressHandler(listAdapters, adapterDeps));\n663:  router.post(\"/adapters/install\", expressHandler(installAdapter, adapterDeps));\n664:  router.patch(\"/adapters/:type\", expressHandler(patchAdapter, adapterDeps));\n665:  router.patch(\"/adapters/:type/override\", expressHandler(patchAdapterOverride, adapterDeps));\n666:  router.delete(\"/adapters/:type\", expressHandler(deleteAdapter, adapterDeps));\n667:  router.post(\"/adapters/:type/reload\", expressHandler(reloadAdapter, adapterDeps));\n668:  router.post(\"/adapters/:type/reinstall\", expressHandler(reinstallAdapter, adapterDeps));\n669:  router.get(\"/adapters/:type/config-schema\", expressHandler(getAdapterConfigSchema, adapterDeps));\n670:  router.get(\"/adapters/:type/ui-parser.js\", expressHandler(getAdapterUiParser, adapterDeps));"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "55b374ce-9460-4e48-95de-12cbb54070b7",
+  "version": "2.1.123"
+}

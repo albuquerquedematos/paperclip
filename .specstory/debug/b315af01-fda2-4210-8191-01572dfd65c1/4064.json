@@ -1,0 +1,27 @@
+{
+  "agentId": "a7e75688fdce3dc53",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1504\t  const listAgentConfigRevisions: Handler = async (ctx) =\u003e {\n1505\t    const id = ctx.param(\"id\")!;\n1506\t    const agent = await svc.getById(id);\n1507\t    if (!agent) {\n1508\t      return Response.json({ error: \"Agent not found\" }, { status: 404 });\n1509\t    }\n1510\t    await assertCanReadConfigurations(ctx, agent.companyId);\n1511\t    const revisions = await svc.listConfigRevisions(id);\n1512\t    return Response.json(revisions.map((revision) =\u003e redactConfigRevision(revision)));\n1513\t  };\n1514\t\n1515\t  const getAgentConfigRevision: Handler = async (ctx) =\u003e {\n1516\t    const id = ctx.param(\"id\")!;\n1517\t    const revisionId = ctx.param(\"revisionId\")!;\n1518\t    const agent = await svc.getById(id);\n\n\u003csystem-reminder\u003e\nWhenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.\n\u003c/system-reminder\u003e\n",
+        "tool_use_id": "toolu_01TQquwWEEB935PjsMxWDUgG",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "d1f2de99-8468-4bcd-856c-bdeedc6edbf5",
+  "promptId": "0c147d6f-915f-4b9e-a139-f26417e7157e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "d1f2de99-8468-4bcd-856c-bdeedc6edbf5",
+  "timestamp": "2026-04-30T23:07:05.431Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "6e436422-0201-4fe5-82dd-acd07575e2a4",
+  "version": "2.1.123"
+}

@@ -1,0 +1,28 @@
+{
+  "agentId": "a3a306fc5d1924556",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1549:    const approvals = await issueApprovalsSvc.listApprovalsForIssue(id);\n1562:    await issueApprovalsSvc.link(id, body.approvalId, {\n1577:    const approvals = await issueApprovalsSvc.listApprovalsForIssue(id);\n1589:    await issueApprovalsSvc.unlink(id, approvalId);\n2568:    const updated = await svc.checkout(id, body.agentId as string, body.expectedStatuses as string[] | undefined, checkoutRunId);\n2617:    const released = await svc.release(\n2657:    const result = await svc.adminForceRelease(id, { clearAssignee });\n3403:    const result = await feedback.saveIssueVote({",
+        "is_error": false,
+        "tool_use_id": "toolu_01BuxMqR4mhwBzFnU8obb8cY",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "fb4ecb6e-3b8d-42cd-9a96-6ceff2406aaf",
+  "promptId": "e7cbb211-1d37-4345-b546-c3d4bd07be80",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "fb4ecb6e-3b8d-42cd-9a96-6ceff2406aaf",
+  "timestamp": "2026-04-30T22:58:39.609Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "1c1d53ce-a0b4-402c-ae9b-13f28949ab4d",
+  "version": "2.1.123"
+}

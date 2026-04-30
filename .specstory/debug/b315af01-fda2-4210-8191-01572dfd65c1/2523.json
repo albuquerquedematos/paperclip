@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "13: * Auth: requires an authenticated actor (board or agent). Unauthenticated\n14: * requests receive 401. Company-scoped endpoints additionally verify that the\n24:import { authUsers, companyMemberships, invites, joinRequests } from \"@paperclipai/db\";\n28:import { resolveActorFromRequest } from \"../../auth/resolve-actor.js\";\n63:    const actor = await resolveActorFromRequest(c.req.raw, db, {\n66:    if (!actor) return c.json({ error: \"Unauthorized\" }, 401);\n97:          .select({ id: authUsers.id, email: authUsers.email, name: authUsers.name, image: authUsers.image })\n98:          .from(authUsers)\n99:          .where(inArray(authUsers.id, userIds))\n148:    const actor = await resolveActorFromRequest(c.req.raw, db, {\n151:    if (!actor) return c.json({ error: \"Unauthorized\" }, 401);\n168:          .select({ id: authUsers.id, email: authUsers.email, name: authUsers.name, image: authUsers.image })\n169:          .from(authUsers)\n170:          .where(inArray(authUsers.id, userIds))",
+        "is_error": false,
+        "tool_use_id": "toolu_01DNFoahqaieeYWUZmFh8yKr",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "15b8c3a4-5112-423d-8b2e-96976cd481f0",
+  "promptId": "8a433599-d510-488c-a09f-2af6b1c28bcb",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "15b8c3a4-5112-423d-8b2e-96976cd481f0",
+  "timestamp": "2026-04-30T19:41:52.359Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "13: * Auth: requires an authenticated actor (board or agent). Unauthenticated\n14: * requests receive 401. Company-scoped endpoints additionally verify that the\n24:import { authUsers, companyMemberships, invites, joinRequests } from \"@paperclipai/db\";\n28:import { resolveActorFromRequest } from \"../../auth/resolve-actor.js\";\n63:    const actor = await resolveActorFromRequest(c.req.raw, db, {\n66:    if (!actor) return c.json({ error: \"Unauthorized\" }, 401);\n97:          .select({ id: authUsers.id, email: authUsers.email, name: authUsers.name, image: authUsers.image })\n98:          .from(authUsers)\n99:          .where(inArray(authUsers.id, userIds))\n148:    const actor = await resolveActorFromRequest(c.req.raw, db, {\n151:    if (!actor) return c.json({ error: \"Unauthorized\" }, 401);\n168:          .select({ id: authUsers.id, email: authUsers.email, name: authUsers.name, image: authUsers.image })\n169:          .from(authUsers)\n170:          .where(inArray(authUsers.id, userIds))"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "95b0d4b9-a7c2-488c-afad-b33a3afb1735",
+  "version": "2.1.123"
+}

@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_015MSXEWwH9qw1GCy8F3isrj",
+        "input": {
+          "command": "git add packages/deploy-cloudflare/src/http/cf-express-bridge.ts packages/deploy-cloudflare/src/worker/api.ts packages/deploy-cloudflare/src/runtime/workflows/plugin-dispatch.ts \u0026\u0026 git commit -m \"$(cat \u003c\u003c'EOF'\nfix(deploy-cloudflare): resolve TypeScript errors introduced by CF-native wiring\n\n- cf-express-bridge.ts: cast Uint8Array to ArrayBuffer for Response BodyInit\n- api.ts: wrap app.fetch() in Promise.resolve() to match return type annotation\n- plugin-dispatch.ts: build fallback headers as Record\u003cstring,string\u003e to satisfy\n  CF Workers fetch overload (avoids optional-key union type mismatch)\n\nCo-Authored-By: Claude Sonnet 4.6 \u003cnoreply@anthropic.com\u003e\nEOF\n)\"",
+          "description": "Commit TS error fixes"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01JjhpgVBjjuSySLQdmqvP8Y",
+    "model": "claude-sonnet-4-6",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 254
+      },
+      "cache_creation_input_tokens": 254,
+      "cache_read_input_tokens": 75846,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 254
+          },
+          "cache_creation_input_tokens": 254,
+          "cache_read_input_tokens": 75846,
+          "input_tokens": 1,
+          "output_tokens": 285,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 285,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "361dc04c-d532-4f81-adb8-84d3c8e626ed",
+  "requestId": "req_011Caaa5hfb74vExqDms6oUb",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T20:16:37.566Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "f02b0182-e526-489d-a258-d73f55600592",
+  "version": "2.1.123"
+}

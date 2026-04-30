@@ -1,0 +1,27 @@
+{
+  "agentId": "a8455dc48bdf97d68",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/.claude/worktrees/agent-a8455dc48bdf97d68",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "worktree-agent-a8455dc48bdf97d68",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\t{\n2\t  \"name\": \"@paperclipai/deploy-cloudflare\",\n3\t  \"version\": \"0.1.0\",\n4\t  \"private\": true,\n5\t  \"type\": \"module\",\n6\t  \"main\": \"./src/boot.ts\",\n7\t  \"scripts\": {\n8\t    \"build\": \"node build-worker.mjs\",\n9\t    \"dev\": \"node build-worker.mjs \u0026\u0026 bash -c 'source \\\"${NVM_DIR:-$HOME/.nvm}/nvm.sh\\\" \u0026\u0026 nvm use 22 \u0026\u0026 wrangler dev --no-bundle --local'\",\n10\t    \"deploy\": \"node build-worker.mjs \u0026\u0026 bash -c 'source \\\"${NVM_DIR:-$HOME/.nvm}/nvm.sh\\\" \u0026\u0026 nvm use 22 \u0026\u0026 wrangler deploy --no-bundle'\"\n11\t  },\n12\t  \"dependencies\": {\n13\t    \"@paperclipai/db\": \"workspace:*\",\n14\t    \"@paperclipai/shared\": \"workspace:*\",\n15\t    \"drizzle-orm\": \"^0.38.4\",\n16\t    \"hono\": \"^4.0.0\",\n17\t    \"postgres\": \"^3.4.5\"\n18\t  },\n19\t  \"devDependencies\": {\n20\t    \"@cloudflare/workers-types\": \"^4.0.0\",\n21\t    \"@types/express\": \"^5.0.0\",\n22\t    \"@types/node\": \"^25.6.0\",\n23\t    \"express\": \"^5.1.0\",\n24\t    \"typescript\": \"^5.0.0\",\n25\t    \"wrangler\": \"^4.87.0\"\n26\t  }\n27\t}\n28\t",
+        "tool_use_id": "toolu_01JNRdxLuK3MFjdRLRSEQE9Y",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "a2c64cf2-c018-4002-a2e6-35632947b4ed",
+  "promptId": "8a433599-d510-488c-a09f-2af6b1c28bcb",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "a2c64cf2-c018-4002-a2e6-35632947b4ed",
+  "timestamp": "2026-04-30T19:36:50.160Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "c7472049-1639-4ee5-bf0b-fb51eea3b7e0",
+  "version": "2.1.123"
+}

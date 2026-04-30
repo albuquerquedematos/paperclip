@@ -1,0 +1,69 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_017cEYYXNhWSSLDVsn8zeFPT",
+        "input": {
+          "command": "cd /Users/migmac/Documents/GitHub/_ABM/paperclip \u0026\u0026 git add packages/deploy-cloudflare/build-worker.mjs packages/deploy-cloudflare/package.json package.json packages/deploy-cloudflare/src/worker/routes/plugin-ui-static.ts packages/deploy-cloudflare/src/worker/routes/instance-backups.ts packages/deploy-cloudflare/src/worker/routes/company-skills-cf.ts packages/deploy-cloudflare/src/worker/cf-extra-routes.ts \u0026\u0026 git commit -m \"$(cat \u003c\u003c'EOF'\nfeat(deploy-cloudflare): close remaining 501 gaps; add esbuild watch in dev\n\nDX:\n- build-worker.mjs --watch flag; rebuilds dist/worker.js on source changes.\n  Wrangler runs with --no-bundle and watches the bundle, so it reloads\n  automatically. Previously CF code edits required restarting dev:cf to\n  rebuild the bundle.\n- dev:cf now runs three processes: server, esbuild --watch, wrangler dev.\n\nNew CF-native routes (close gaps from server↔CF audit):\n- GET /_plugins/:pluginId/ui/* — proxy to sidecar. Without this the SPA\n  fallback returned ui/dist/index.html for plugin UI script requests,\n  silently breaking plugin UIs in the browser.\n- GET /api/companies/:companyId/skills/:skillId — DB-only skill detail\n  (mirrors server svc.detail() without filesystem inventory sync).\n- GET /api/companies/:companyId/skills/:skillId/{update-status,files} —\n  proxy to sidecar (filesystem reads).\n- POST /api/companies/:companyId/skills — proxy to sidecar (creates files).\n- PATCH /api/companies/:companyId/skills/:skillId/files — proxy to sidecar.\n- DELETE /api/companies/:companyId/skills/:skillId — proxy to sidecar.\n- POST /api/companies/:companyId/skills/:skillId/install-update — proxy.\n- POST /api/instance/database-backups — proxy to sidecar (pg_dump host-only).\n\nCo-Authored-By: Claude Sonnet 4.6 \u003cnoreply@anthropic.com\u003e\nEOF\n)\"",
+          "description": "Commit watch mode and missing routes"
+        },
+        "name": "Bash",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01G2wr7AYCg3YyPcViFoeJWw",
+    "model": "claude-opus-4-7",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 196,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 196,
+      "cache_read_input_tokens": 246417,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 196,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 196,
+          "cache_read_input_tokens": 246417,
+          "input_tokens": 1,
+          "output_tokens": 886,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 886,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "33a8e00f-0f4c-4871-a4eb-ff48ae2eef25",
+  "requestId": "req_011CaaiEnSm4LwZTGUnkkp3e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T22:03:42.309Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "fa8fcd44-395b-46b9-a1f9-f75fe909acc3",
+  "version": "2.1.123"
+}

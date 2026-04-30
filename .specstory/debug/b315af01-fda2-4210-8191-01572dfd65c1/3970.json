@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport {\n2\t  type AnyPgColumn,\n3\t  pgTable,\n4\t  uuid,\n5\t  text,\n6\t  integer,\n7\t  timestamp,\n8\t  jsonb,\n9\t  index,\n10\t} from \"drizzle-orm/pg-core\";\n11\timport { companies } from \"./companies.js\";\n12\timport { environments } from \"./environments.js\";\n13\t\n14\texport const agents = pgTable(\n15\t  \"agents\",\n16\t  {\n17\t    id: uuid(\"id\").primaryKey().defaultRandom(),\n18\t    companyId: uuid(\"company_id\").notNull().references(() =\u003e companies.id),\n19\t    name: text(\"name\").notNull(),\n20\t    role: text(\"role\").notNull().default(\"general\"),\n21\t    title: text(\"title\"),\n22\t    icon: text(\"icon\"),\n23\t    status: text(\"status\").notNull().default(\"idle\"),\n24\t    reportsTo: uuid(\"reports_to\").references((): AnyPgColumn =\u003e agents.id),\n25\t    capabilities: text(\"capabilities\"),\n26\t    adapterType: text(\"adapter_type\").notNull().default(\"process\"),\n27\t    adapterConfig: jsonb(\"adapter_config\").$type\u003cRecord\u003cstring, unknown\u003e\u003e().notNull().default({}),\n28\t    runtimeConfig: jsonb(\"runtime_config\").$type\u003cRecord\u003cstring, unknown\u003e\u003e().notNull().default({}),\n29\t    defaultEnvironmentId: uuid(\"default_environment_id\").references(() =\u003e environments.id, { onDelete: \"set null\" }),\n30\t    budgetMonthlyCents: integer(\"budget_monthly_cents\").notNull().default(0),\n31\t    spentMonthlyCents: integer(\"spent_monthly_cents\").notNull().default(0),\n32\t    pauseReason: text(\"pause_reason\"),\n33\t    pausedAt: timestamp(\"paused_at\", { withTimezone: true }),\n34\t    permissions: jsonb(\"permissions\").$type\u003cRecord\u003cstring, unknown\u003e\u003e().notNull().default({}),\n35\t    lastHeartbeatAt: timestamp(\"last_heartbeat_at\", { withTimezone: true }),\n36\t    metadata: jsonb(\"metadata\").$type\u003cRecord\u003cstring, unknown\u003e\u003e(),\n37\t    createdAt: timestamp(\"created_at\", { withTimezone: true }).notNull().defaultNow(),\n38\t    updatedAt: timestamp(\"updated_at\", { withTimezone: true }).notNull().defaultNow(),\n39\t  },\n40\t  (table) =\u003e ({\n41\t    companyStatusIdx: index(\"agents_company_status_idx\").on(table.companyId, table.status),\n42\t    companyReportsToIdx: index(\"agents_company_reports_to_idx\").on(table.companyId, table.reportsTo),\n43\t    companyDefaultEnvironmentIdx: index(\"agents_company_default_environment_idx\").on(table.companyId, table.defaultEnvironmentId),\n44\t  }),\n45\t);\n46\t",
+        "tool_use_id": "toolu_01Lk7xtLnPaeF3oyJjEWJsuj",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "4877e182-5006-40db-988f-0264d606767e",
+  "promptId": "0c147d6f-915f-4b9e-a139-f26417e7157e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "4877e182-5006-40db-988f-0264d606767e",
+  "timestamp": "2026-04-30T23:04:07.750Z",
+  "toolUseResult": {
+    "file": {
+      "content": "import {\n  type AnyPgColumn,\n  pgTable,\n  uuid,\n  text,\n  integer,\n  timestamp,\n  jsonb,\n  index,\n} from \"drizzle-orm/pg-core\";\nimport { companies } from \"./companies.js\";\nimport { environments } from \"./environments.js\";\n\nexport const agents = pgTable(\n  \"agents\",\n  {\n    id: uuid(\"id\").primaryKey().defaultRandom(),\n    companyId: uuid(\"company_id\").notNull().references(() =\u003e companies.id),\n    name: text(\"name\").notNull(),\n    role: text(\"role\").notNull().default(\"general\"),\n    title: text(\"title\"),\n    icon: text(\"icon\"),\n    status: text(\"status\").notNull().default(\"idle\"),\n    reportsTo: uuid(\"reports_to\").references((): AnyPgColumn =\u003e agents.id),\n    capabilities: text(\"capabilities\"),\n    adapterType: text(\"adapter_type\").notNull().default(\"process\"),\n    adapterConfig: jsonb(\"adapter_config\").$type\u003cRecord\u003cstring, unknown\u003e\u003e().notNull().default({}),\n    runtimeConfig: jsonb(\"runtime_config\").$type\u003cRecord\u003cstring, unknown\u003e\u003e().notNull().default({}),\n    defaultEnvironmentId: uuid(\"default_environment_id\").references(() =\u003e environments.id, { onDelete: \"set null\" }),\n    budgetMonthlyCents: integer(\"budget_monthly_cents\").notNull().default(0),\n    spentMonthlyCents: integer(\"spent_monthly_cents\").notNull().default(0),\n    pauseReason: text(\"pause_reason\"),\n    pausedAt: timestamp(\"paused_at\", { withTimezone: true }),\n    permissions: jsonb(\"permissions\").$type\u003cRecord\u003cstring, unknown\u003e\u003e().notNull().default({}),\n    lastHeartbeatAt: timestamp(\"last_heartbeat_at\", { withTimezone: true }),\n    metadata: jsonb(\"metadata\").$type\u003cRecord\u003cstring, unknown\u003e\u003e(),\n    createdAt: timestamp(\"created_at\", { withTimezone: true }).notNull().defaultNow(),\n    updatedAt: timestamp(\"updated_at\", { withTimezone: true }).notNull().defaultNow(),\n  },\n  (table) =\u003e ({\n    companyStatusIdx: index(\"agents_company_status_idx\").on(table.companyId, table.status),\n    companyReportsToIdx: index(\"agents_company_reports_to_idx\").on(table.companyId, table.reportsTo),\n    companyDefaultEnvironmentIdx: index(\"agents_company_default_environment_idx\").on(table.companyId, table.defaultEnvironmentId),\n  }),\n);\n",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/db/src/schema/agents.ts",
+      "numLines": 46,
+      "startLine": 1,
+      "totalLines": 46
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "cbf8117e-90f9-42b6-ae59-01dac754b21c",
+  "version": "2.1.123"
+}

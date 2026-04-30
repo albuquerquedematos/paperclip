@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "70\t      const init: RequestInit = {\n71\t        method: \"POST\",\n72\t        headers: { \"Content-Type\": \"application/json\" },\n73\t        body: JSON.stringify(body),\n74\t      };\n75\t      if (this.env.SIDECAR_SERVICE) {\n76\t        return this.env.SIDECAR_SERVICE.fetch(`http://sidecar${path}`, init);\n77\t      }\n78\t      const authHeaders = bridgeApiKey ? { Authorization: `Bearer ${bridgeApiKey}` } : {};\n79\t      return fetch(`${bridgeUrl}${path}`, {\n80\t        ...init,\n81\t        headers: { ...init.headers as Record\u003cstring, string\u003e, ...authHeaders },\n82\t      });\n83\t    };\n84\t\n85\t    // ------------------------------------------------------------------\n86\t    // Step 1: Claim the job — mark it as running to prevent duplicate dispatch\n87\t    // ------------------------------------------------------------------",
+        "tool_use_id": "toolu_017GTyAVZfosPneVtjwxao8o",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "25afe732-2998-4572-902e-a418fd48721a",
+  "promptId": "40300358-f678-4595-930e-40794ab9bf23",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "25afe732-2998-4572-902e-a418fd48721a",
+  "timestamp": "2026-04-30T20:16:09.413Z",
+  "toolUseResult": {
+    "file": {
+      "content": "      const init: RequestInit = {\n        method: \"POST\",\n        headers: { \"Content-Type\": \"application/json\" },\n        body: JSON.stringify(body),\n      };\n      if (this.env.SIDECAR_SERVICE) {\n        return this.env.SIDECAR_SERVICE.fetch(`http://sidecar${path}`, init);\n      }\n      const authHeaders = bridgeApiKey ? { Authorization: `Bearer ${bridgeApiKey}` } : {};\n      return fetch(`${bridgeUrl}${path}`, {\n        ...init,\n        headers: { ...init.headers as Record\u003cstring, string\u003e, ...authHeaders },\n      });\n    };\n\n    // ------------------------------------------------------------------\n    // Step 1: Claim the job — mark it as running to prevent duplicate dispatch\n    // ------------------------------------------------------------------",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/runtime/workflows/plugin-dispatch.ts",
+      "numLines": 18,
+      "startLine": 70,
+      "totalLines": 160
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "75c03853-0deb-492a-b8d8-4d64da5aa1c5",
+  "version": "2.1.123"
+}

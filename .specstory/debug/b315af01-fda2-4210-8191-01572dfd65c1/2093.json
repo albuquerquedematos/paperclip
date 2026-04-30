@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "37:import { existsSync } from \"node:fs\";\n38:import { readdir, readFile, rm, stat } from \"node:fs/promises\";\n39:import { execFile } from \"node:child_process\";\n40:import os from \"node:os\";\n41:import path from \"node:path\";\n42:import { fileURLToPath } from \"node:url\";\n43:import { promisify } from \"node:util\";\n44:import type { Db } from \"@paperclipai/db\";\n45:import type {\n51:import { logger } from \"../middleware/logger.js\";\n52:import { pluginManifestValidator } from \"./plugin-manifest-validator.js\";\n53:import { pluginCapabilityValidator } from \"./plugin-capability-validator.js\";\n54:import { pluginRegistryService } from \"./plugin-registry.js\";\n55:import type { PluginWorkerManager, WorkerStartOptions, WorkerToHostHandlers } from \"./plugin-worker-manager.js\";\n56:import type { PluginEventBus } from \"./plugin-event-bus.js\";\n57:import type { PluginJobScheduler } from \"./plugin-job-scheduler.js\";\n58:import type { PluginJobStore } from \"./plugin-job-store.js\";\n59:import type { PluginToolDispatcher } from \"./plugin-tool-dispatcher.js\";\n60:import type { PluginLifecycleManager } from \"./plugin-lifecycle.js\";\n61:import { pluginDatabaseService } from \"./plugin-database.js\";",
+        "is_error": false,
+        "tool_use_id": "toolu_014sM8epX58z7vu4eTJAz29B",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "6d276e81-9a1e-4ee4-b9c0-41690fad3d45",
+  "promptId": "8e37c333-7c8a-4b0c-ae99-027b99e1bf51",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "6d276e81-9a1e-4ee4-b9c0-41690fad3d45",
+  "timestamp": "2026-04-30T19:25:42.059Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "37:import { existsSync } from \"node:fs\";\n38:import { readdir, readFile, rm, stat } from \"node:fs/promises\";\n39:import { execFile } from \"node:child_process\";\n40:import os from \"node:os\";\n41:import path from \"node:path\";\n42:import { fileURLToPath } from \"node:url\";\n43:import { promisify } from \"node:util\";\n44:import type { Db } from \"@paperclipai/db\";\n45:import type {\n51:import { logger } from \"../middleware/logger.js\";\n52:import { pluginManifestValidator } from \"./plugin-manifest-validator.js\";\n53:import { pluginCapabilityValidator } from \"./plugin-capability-validator.js\";\n54:import { pluginRegistryService } from \"./plugin-registry.js\";\n55:import type { PluginWorkerManager, WorkerStartOptions, WorkerToHostHandlers } from \"./plugin-worker-manager.js\";\n56:import type { PluginEventBus } from \"./plugin-event-bus.js\";\n57:import type { PluginJobScheduler } from \"./plugin-job-scheduler.js\";\n58:import type { PluginJobStore } from \"./plugin-job-store.js\";\n59:import type { PluginToolDispatcher } from \"./plugin-tool-dispatcher.js\";\n60:import type { PluginLifecycleManager } from \"./plugin-lifecycle.js\";\n61:import { pluginDatabaseService } from \"./plugin-database.js\";"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "8c2d7bf3-ea77-45f0-b080-2c4d1fc5be43",
+  "version": "2.1.123"
+}

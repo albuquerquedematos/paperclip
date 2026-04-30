@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "1\t/**\n2\t * SidecarClient — HTTP client used by the Cloudflare Worker to delegate\n3\t * operations that require Node.js capabilities (filesystem access, child\n4\t * processes, plugin loading) to the Paperclip Node server running alongside\n5\t * the Workers deployment.\n6\t *\n7\t * Background:\n8\t *   - The Node server (heartbeat.ts) provisions git checkout directories and\n9\t *     workspace paths via node:fs/promises and node:child_process, which are\n10\t *     not available in the Workers runtime.\n11\t *   - company-skills.ts reads and writes skill Markdown files on the local\n12\t *     host filesystem; R2 replaces long-term storage but live validation and\n13\t *     execution still need a process.\n14\t *   - agent-instructions.ts manages a per-agent directory tree of Markdown\n15\t *     files through node:fs/promises; R2 replaces storage but some operations\n16\t *     require filesystem materialisation.\n17\t *\n18\t * The Worker authenticates every request to the sidecar with a shared secret\n19\t * (Bearer token) so that only Workers traffic is accepted.\n20\t *\n21\t * All code here is Web-API-only — no Node imports.\n22\t */\n23\t\n24\t// ---------------------------------------------------------------------------\n25\t// Configuration\n26\t// ---------------------------------------------------------------------------\n27\t\n28\texport interface SidecarConfig {\n29\t  /** Base URL of the sidecar process, e.g. https://sidecar.internal */\n30\t  baseUrl: string;\n31\t  /** Shared secret for Worker → sidecar authentication (Bearer token). */\n32\t  apiKey: string;\n33\t}\n34\t\n35\t// ---------------------------------------------------------------------------\n36\t// Response shapes returned by the sidecar\n37\t// ---------------------------------------------------------------------------\n38\t\n39\texport interface WorkspaceProvisionResult {\n40\t  workspacePath: string;\n41\t  leaseId: string;\n42\t}\n43\t\n44\texport interface SkillBundleResult {\n45\t  /** Map of relative file path to file content string. */\n46\t  files: Record\u003cstring, string\u003e;\n47\t}\n48\t\n49\texport interface AgentInstructionsResult {\n50\t  content: string;",
+        "tool_use_id": "toolu_01JZnmpCY1rs6xxFcGy8E2FH",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "24d6f0a3-2bb5-4b6a-bd19-13c9cd65d67d",
+  "promptId": "0d05d433-ef46-4bba-8105-f1d502a42e1e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "24d6f0a3-2bb5-4b6a-bd19-13c9cd65d67d",
+  "timestamp": "2026-04-30T19:29:23.259Z",
+  "toolUseResult": {
+    "file": {
+      "content": "/**\n * SidecarClient — HTTP client used by the Cloudflare Worker to delegate\n * operations that require Node.js capabilities (filesystem access, child\n * processes, plugin loading) to the Paperclip Node server running alongside\n * the Workers deployment.\n *\n * Background:\n *   - The Node server (heartbeat.ts) provisions git checkout directories and\n *     workspace paths via node:fs/promises and node:child_process, which are\n *     not available in the Workers runtime.\n *   - company-skills.ts reads and writes skill Markdown files on the local\n *     host filesystem; R2 replaces long-term storage but live validation and\n *     execution still need a process.\n *   - agent-instructions.ts manages a per-agent directory tree of Markdown\n *     files through node:fs/promises; R2 replaces storage but some operations\n *     require filesystem materialisation.\n *\n * The Worker authenticates every request to the sidecar with a shared secret\n * (Bearer token) so that only Workers traffic is accepted.\n *\n * All code here is Web-API-only — no Node imports.\n */\n\n// ---------------------------------------------------------------------------\n// Configuration\n// ---------------------------------------------------------------------------\n\nexport interface SidecarConfig {\n  /** Base URL of the sidecar process, e.g. https://sidecar.internal */\n  baseUrl: string;\n  /** Shared secret for Worker → sidecar authentication (Bearer token). */\n  apiKey: string;\n}\n\n// ---------------------------------------------------------------------------\n// Response shapes returned by the sidecar\n// ---------------------------------------------------------------------------\n\nexport interface WorkspaceProvisionResult {\n  workspacePath: string;\n  leaseId: string;\n}\n\nexport interface SkillBundleResult {\n  /** Map of relative file path to file content string. */\n  files: Record\u003cstring, string\u003e;\n}\n\nexport interface AgentInstructionsResult {\n  content: string;",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/sidecar-client.ts",
+      "numLines": 50,
+      "startLine": 1,
+      "totalLines": 163
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "f4441bac-29ee-435e-b87e-a4b4baa386dc",
+  "version": "2.1.123"
+}

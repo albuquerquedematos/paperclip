@@ -1,0 +1,72 @@
+{
+  "agentId": "a07aabe33abdc139f",
+  "attributionAgent": "Explore",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "caller": {
+          "type": "direct"
+        },
+        "id": "toolu_01S8Jk3Kr2Cnkv5f1Zgfd7Rt",
+        "input": {
+          "file_path": "/Users/migmac/Documents/GitHub/_ABM/paperclip/server/src/app.ts",
+          "limit": 200,
+          "offset": 150
+        },
+        "name": "Read",
+        "type": "tool_use"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01NPMd9HDCoNRh9dEWoiYFM9",
+    "model": "claude-haiku-4-5-20251001",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 2493
+      },
+      "cache_creation_input_tokens": 2493,
+      "cache_read_input_tokens": 78978,
+      "inference_geo": "",
+      "input_tokens": 5,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 2493
+          },
+          "cache_creation_input_tokens": 2493,
+          "cache_read_input_tokens": 78978,
+          "input_tokens": 5,
+          "output_tokens": 111,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 111,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "5a13ec44-e6be-4319-aae1-8a4dff82237b",
+  "requestId": "req_011Caahpizy3mHYWfSohF7pa",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T21:58:05.689Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "b51db8ba-eb73-4343-bef7-75da702ea0bd",
+  "version": "2.1.123"
+}

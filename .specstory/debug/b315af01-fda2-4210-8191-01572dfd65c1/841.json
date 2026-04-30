@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "// Stub for node:os — limited availability in CF Workers.\nexport const platform = () =\u003e \"linux\";\nexport const arch = () =\u003e \"x64\";\nexport const hostname = () =\u003e \"cf-worker\";\nexport const homedir = () =\u003e \"/tmp\";\nexport const tmpdir = () =\u003e \"/tmp\";\nexport const cpus = () =\u003e [{ model: \"CF Worker\", speed: 0 }];\nexport const totalmem = () =\u003e 0;\nexport const freemem = () =\u003e 0;\nexport const uptime = () =\u003e 0;\nexport const networkInterfaces = () =\u003e ({});\nexport const userInfo = () =\u003e ({ username: \"worker\", uid: 0, gid: 0, shell: null, homedir: \"/tmp\" });\nexport const EOL = \"\\n\";\nexport const type = () =\u003e \"Linux\";\nexport const release = () =\u003e \"cf\";\nexport const version = () =\u003e \"cf\";\nexport default { platform, arch, hostname, homedir, tmpdir, cpus, totalmem, freemem,\n  uptime, networkInterfaces, userInfo, EOL, type, release, version };\n===\n// Stub for node:child_process — not available in CF Workers.\nconst notAvailable = (name: string) =\u003e () =\u003e { throw new Error(`node:child_process.${name} not available in CF Workers`); };\nexport const spawn = notAvailable(\"spawn\");\nexport const exec = notAvailable(\"exec\");\nexport const execFile = notAvailable(\"execFile\");\nexport const execFileSync = notAvailable(\"execFileSync\");\nexport const execSync = notAvailable(\"execSync\");\nexport const spawnSync = notAvailable(\"spawnSync\");\nexport const fork = notAvailable(\"fork\");\nexport default { spawn, exec, execFile, execFileSync, execSync, spawnSync, fork };\n===\n// Stub for node:readline — not available in CF Workers.\nexport function createInterface() { throw new Error(\"node:readline not available in CF Workers\"); }\nexport function question() { throw new Error(\"node:readline not available in CF Workers\"); }\nexport default { createInterface, question };",
+        "is_error": false,
+        "tool_use_id": "toolu_01Sz1tksGRMTMwXGnHPWbMeJ",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "8332f3bf-1274-455e-9bcd-6a0384ab5631",
+  "promptId": "285fd922-5736-481c-a4fc-cf130aed3e81",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "8332f3bf-1274-455e-9bcd-6a0384ab5631",
+  "timestamp": "2026-04-30T17:48:17.957Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "// Stub for node:os — limited availability in CF Workers.\nexport const platform = () =\u003e \"linux\";\nexport const arch = () =\u003e \"x64\";\nexport const hostname = () =\u003e \"cf-worker\";\nexport const homedir = () =\u003e \"/tmp\";\nexport const tmpdir = () =\u003e \"/tmp\";\nexport const cpus = () =\u003e [{ model: \"CF Worker\", speed: 0 }];\nexport const totalmem = () =\u003e 0;\nexport const freemem = () =\u003e 0;\nexport const uptime = () =\u003e 0;\nexport const networkInterfaces = () =\u003e ({});\nexport const userInfo = () =\u003e ({ username: \"worker\", uid: 0, gid: 0, shell: null, homedir: \"/tmp\" });\nexport const EOL = \"\\n\";\nexport const type = () =\u003e \"Linux\";\nexport const release = () =\u003e \"cf\";\nexport const version = () =\u003e \"cf\";\nexport default { platform, arch, hostname, homedir, tmpdir, cpus, totalmem, freemem,\n  uptime, networkInterfaces, userInfo, EOL, type, release, version };\n===\n// Stub for node:child_process — not available in CF Workers.\nconst notAvailable = (name: string) =\u003e () =\u003e { throw new Error(`node:child_process.${name} not available in CF Workers`); };\nexport const spawn = notAvailable(\"spawn\");\nexport const exec = notAvailable(\"exec\");\nexport const execFile = notAvailable(\"execFile\");\nexport const execFileSync = notAvailable(\"execFileSync\");\nexport const execSync = notAvailable(\"execSync\");\nexport const spawnSync = notAvailable(\"spawnSync\");\nexport const fork = notAvailable(\"fork\");\nexport default { spawn, exec, execFile, execFileSync, execSync, spawnSync, fork };\n===\n// Stub for node:readline — not available in CF Workers.\nexport function createInterface() { throw new Error(\"node:readline not available in CF Workers\"); }\nexport function question() { throw new Error(\"node:readline not available in CF Workers\"); }\nexport default { createInterface, question };"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "0957b1a0-2c5f-4f2d-8519-e35d43aa709f",
+  "version": "2.1.123"
+}

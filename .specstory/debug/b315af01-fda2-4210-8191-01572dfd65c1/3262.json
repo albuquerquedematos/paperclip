@@ -1,0 +1,56 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/wrangler.toml has been updated successfully.",
+        "tool_use_id": "toolu_019dK1F76k1KWTZ8UHBojQKk",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "983992ba-5fed-492f-a815-f5dd5393e752",
+  "promptId": "7323a41a-dd8a-4783-b590-aea4ab5316a7",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "983992ba-5fed-492f-a815-f5dd5393e752",
+  "timestamp": "2026-04-30T21:38:34.118Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/wrangler.toml",
+    "newString": "[dev]\n# CF Containers require Docker at the machine level; disable them for local dev so\n# `wrangler dev` starts without Docker. The SidecarContainer / PluginContainer DOs\n# fall back in order: SIDECAR_URL env var (.dev.vars) → KV SANDBOX_BRIDGE_URL →\n# localhost:8788. Set SIDECAR_URL in .dev.vars to point at `pnpm dev:server`.\nenable_containers = false",
+    "oldString": "[dev]\n# Containers require Docker; disable in local dev so wrangler dev starts without it.\n# The SidecarContainer / PluginContainer DOs fall back to SANDBOX_BRIDGE_URL from KV.\nenable_containers = false",
+    "originalFile": "# =============================================================================\n# Paperclip — Cloudflare Workers deployment configuration\n#\n# After running `wrangler deploy` for the first time, fill in the placeholder\n# IDs that Cloudflare generates (search for \"FILL_IN_AFTER_DEPLOY\").\n#\n# Quick start:\n#   1. wrangler deploy\n#   2. wrangler hyperdrive create paperclip-hyperdrive --connection-string=\"\u003cneon-url\u003e\"\n#      Then paste the returned ID into [hyperdrive] binding below.\n#   3. Open https://\u003cyour-worker\u003e.workers.dev/setup to complete first-run setup.\n# =============================================================================\n\nname = \"paperclip-api\"\ncompatibility_date = \"2025-03-01\"\ncompatibility_flags = [\"nodejs_compat\"]\nmain = \"dist/worker.js\"\n\n# ---------------------------------------------------------------------------\n# Static assets — serves the React UI build from ui/dist alongside the Worker.\n# not_found_handling = \"single-page-application\" makes CF serve index.html for\n# any path that doesn't match a static file (needed for client-side routing).\n# The Worker gets an ASSETS Fetcher binding to delegate non-API requests.\n# ---------------------------------------------------------------------------\n[assets]\ndirectory = \"../../ui/dist\"\nbinding = \"ASSETS\"\nnot_found_handling = \"single-page-application\"\n\n# ---------------------------------------------------------------------------\n# Local dev settings\n# ---------------------------------------------------------------------------\n[dev]\n# Containers require Docker; disable in local dev so wrangler dev starts without it.\n# The SidecarContainer / PluginContainer DOs fall back to SANDBOX_BRIDGE_URL from KV.\nenable_containers = false\n\n# ---------------------------------------------------------------------------\n# Variables (non-secret; override secrets via `wrangler secret put`)\n# ---------------------------------------------------------------------------\n[vars]\nDEPLOYMENT_PLATFORM = \"cloudflare\"\nDEPLOYMENT_MODE = \"authenticated\"\nDEPLOYMENT_EXPOSURE = \"public\"\n\n# ---------------------------------------------------------------------------\n# R2 object storage — artifacts, skill bundles, attachments, DB backups\n# ---------------------------------------------------------------------------\n[[r2_buckets]]\nbinding = \"PAPERCLIP_STORAGE\"\nbucket_name = \"paperclip-storage\"\n# preview_bucket_name = \"paperclip-storage-preview\"\n\n# ---------------------------------------------------------------------------\n# KV — sessions cache, hot config, first-run setup flag\n# ---------------------------------------------------------------------------\n[[kv_namespaces]]\nbinding = \"PAPERCLIP_KV\"\nid = \"FILL_IN_AFTER_DEPLOY\"\n# preview_id = \"FILL_IN_AFTER_DEPLOY_PREVIEW\"\n\n# ---------------------------------------------------------------------------\n# Hyperdrive — Phase 1: wraps Neon/Postgres for low-latency DB access\n# After deploying: wrangler hyperdrive create paperclip-hyperdrive --connection-string=\"\u003cneon-url\u003e\"\n# ---------------------------------------------------------------------------\n[[hyperdrive]]\nbinding = \"HYPERDRIVE\"\nid = \"FILL_IN_AFTER_DEPLOY\"\nlocalConnectionString = \"postgres://paperclip:paperclip@127.0.0.1:54329/paperclip\"\n\n# ---------------------------------------------------------------------------\n# Queues — background fanout (cost rollups, activity log flush, plugin jobs)\n# ---------------------------------------------------------------------------\n[[queues.producers]]\nbinding = \"PAPERCLIP_QUEUE\"\nqueue = \"paperclip-jobs\"\n\n[[queues.consumers]]\nqueue = \"paperclip-jobs\"\nmax_batch_size = 10\nmax_batch_timeout = 5\nmax_retries = 3\ndead_letter_queue = \"paperclip-jobs-dlq\"\n\n# ---------------------------------------------------------------------------\n# Durable Objects — per-task state, per-agent-run state, scheduler alarms\n# ---------------------------------------------------------------------------\n[[durable_objects.bindings]]\nname = \"TASK_DO\"\nclass_name = \"TaskDO\"\n\n[[durable_objects.bindings]]\nname = \"AGENT_RUN_DO\"\nclass_name = \"AgentRunDO\"\n\n[[durable_objects.bindings]]\nname = \"SCHEDULER_DO\"\nclass_name = \"SchedulerDO\"\n\n# Container DO bindings — each wraps a CF Container (Docker image).\n# The DO proxies HTTP to the container via getTcpPort(); falls back to\n# SANDBOX_BRIDGE_URL from KV when running locally without Docker.\n[[durable_objects.bindings]]\nname = \"SIDECAR_SERVICE\"\nclass_name = \"SidecarContainer\"\n\n[[durable_objects.bindings]]\nname = \"PLUGIN_CONTAINER\"\nclass_name = \"PluginContainer\"\n\n# DO migrations — bump new_classes when adding a new DO class\n[[migrations]]\ntag = \"v1\"\nnew_classes = [\"TaskDO\", \"AgentRunDO\", \"SchedulerDO\"]\n\n[[migrations]]\ntag = \"v2\"\nnew_classes = [\"SidecarContainer\", \"PluginContainer\"]\n\n# ---------------------------------------------------------------------------\n# Workflows — checkpointed multi-step agent execution\n# ---------------------------------------------------------------------------\n[[workflows]]\nbinding = \"HEARTBEAT_WORKFLOW\"\nname = \"heartbeat-workflow\"\nclass_name = \"HeartbeatWorkflow\"\nscript_name = \"paperclip-api\"\n\n[[workflows]]\nbinding = \"PLUGIN_DISPATCH_WORKFLOW\"\nname = \"plugin-dispatch-workflow\"\nclass_name = \"PluginDispatchWorkflow\"\nscript_name = \"paperclip-api\"\n\n# ---------------------------------------------------------------------------\n# Cron triggers — fire heartbeat sweep, budget checks, DB backup\n# Adjust intervals to taste; avoid high-frequency triggers (see CLOUDFLARE.md §10)\n# ---------------------------------------------------------------------------\n[triggers]\ncrons = [\n  \"*/5 * * * *\",   # heartbeat sweep every 5 minutes\n  \"0 * * * *\",     # budget threshold check every hour\n  \"0 3 * * *\",     # DB backup daily at 03:00 UTC\n]\n\n# ---------------------------------------------------------------------------\n# Cloudflare Containers — run execution services natively on Cloudflare.\n#\n# CF Containers (beta) let Workers communicate with Docker containers via\n# a Fetcher service binding. No external servers needed.\n#\n# Required secrets (set via `wrangler secret put`):\n#   - none for containers (authentication is implicit via the binding)\n#\n# For external sidecar fallback (optional, for non-CF deployments):\n#   wrangler secret put SIDECAR_URL\n#   wrangler secret put SIDECAR_API_KEY\n# ---------------------------------------------------------------------------\n\n# Sidecar — companion Node.js server for agent heartbeat execution, plugin job\n# lifecycle (claim/execute/complete), filesystem and git operations.\n# The SidecarContainer DO class wraps this image (see src/worker/containers.ts).\n[[containers]]\nclass_name = \"SidecarContainer\"\nimage = \"ghcr.io/paperclipai/paperclip-sidecar:latest\"\n\n# Plugin sandbox — isolated command execution environment for adapter plugins.\n# Exposes POST /execute and POST /cancel/:runId.\n[[containers]]\nclass_name = \"PluginContainer\"\nimage = \"ghcr.io/paperclipai/plugin-sandbox:latest\"\n",
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          " # Local dev settings",
+          " # ---------------------------------------------------------------------------",
+          " [dev]",
+          "-# Containers require Docker; disable in local dev so wrangler dev starts without it.",
+          "-# The SidecarContainer / PluginContainer DOs fall back to SANDBOX_BRIDGE_URL from KV.",
+          "+# CF Containers require Docker at the machine level; disable them for local dev so",
+          "+# `wrangler dev` starts without Docker. The SidecarContainer / PluginContainer DOs",
+          "+# fall back in order: SIDECAR_URL env var (.dev.vars) → KV SANDBOX_BRIDGE_URL →",
+          "+# localhost:8788. Set SIDECAR_URL in .dev.vars to point at `pnpm dev:server`.",
+          " enable_containers = false",
+          " ",
+          " # ---------------------------------------------------------------------------"
+        ],
+        "newLines": 10,
+        "newStart": 31,
+        "oldLines": 8,
+        "oldStart": 31
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "44f3e8e3-7072-4334-b196-45fd16d547fa",
+  "version": "2.1.123"
+}

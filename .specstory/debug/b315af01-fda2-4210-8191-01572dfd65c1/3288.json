@@ -1,0 +1,61 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "text": "Let me examine the key handlers I need to mirror:",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_01RN9qzhkZrU8dj8UqmkjPGq",
+    "model": "claude-opus-4-7",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1750,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 1750,
+      "cache_read_input_tokens": 167935,
+      "inference_geo": "",
+      "input_tokens": 1,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 1750,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 1750,
+          "cache_read_input_tokens": 167935,
+          "input_tokens": 1,
+          "output_tokens": 1133,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 1133,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "a5dcfb43-1477-4cdf-9bbc-b96a6fb61356",
+  "requestId": "req_011Caah6pREgPsuDKuGKxXjo",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T21:48:46.979Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "91fb19d8-fd80-4378-ab42-ce5ac6c53918",
+  "version": "2.1.123"
+}

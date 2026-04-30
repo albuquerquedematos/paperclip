@@ -1,0 +1,37 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": [
+          {
+            "text": "### Ran Playwright code\n```js\nawait page.goto('http://localhost:8787/ALM/settings/members');\n```\n### Page\n- Page URL: http://localhost:8787/instance/settings/general\n- Page Title: General · Instance Settings · Paperclip\n### Snapshot\n- [Snapshot](.playwright-mcp/page-2026-04-30T18-53-47-912Z.yml)",
+            "type": "text"
+          }
+        ],
+        "tool_use_id": "toolu_017JZHuJ6HzNnWv4rngzVQRM",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "e348a413-8949-49cb-adcf-48fbee2c7ecc",
+  "promptId": "6578f9d8-71c9-42ed-bd5d-4cac4f413d52",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "e348a413-8949-49cb-adcf-48fbee2c7ecc",
+  "timestamp": "2026-04-30T18:53:48.028Z",
+  "toolUseResult": [
+    {
+      "text": "### Ran Playwright code\n```js\nawait page.goto('http://localhost:8787/ALM/settings/members');\n```\n### Page\n- Page URL: http://localhost:8787/instance/settings/general\n- Page Title: General · Instance Settings · Paperclip\n### Snapshot\n- [Snapshot](.playwright-mcp/page-2026-04-30T18-53-47-912Z.yml)",
+      "type": "text"
+    }
+  ],
+  "type": "user",
+  "userType": "external",
+  "uuid": "fa9bedcd-1f87-4a45-9763-194ead34d5c5",
+  "version": "2.1.123"
+}

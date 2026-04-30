@@ -1,0 +1,27 @@
+{
+  "agentId": "ae240282fd51e7edd",
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": true,
+  "message": {
+    "content": [
+      {
+        "content": "1\timport type {\n2\t  AdapterExecutionContext,\n3\t  AdapterExecutionResult,\n4\t  AdapterRuntimeServiceReport,\n5\t} from \"@paperclipai/adapter-utils\";\n6\timport {\n7\t  asNumber,\n8\t  asString,\n9\t  buildPaperclipEnv,\n10\t  parseObject,\n11\t  renderPaperclipWakePrompt,\n12\t  stringifyPaperclipWakePayload,\n13\t} from \"@paperclipai/adapter-utils/server-utils\";\n14\timport crypto, { randomUUID } from \"node:crypto\";\n15\timport { WebSocket } from \"ws\";\n16\t\n17\ttype SessionKeyStrategy = \"fixed\" | \"issue\" | \"run\";\n18\t\n19\ttype WakePayload = {\n20\t  runId: string;\n21\t  agentId: string;\n22\t  companyId: string;\n23\t  taskId: string | null;\n24\t  issueId: string | null;\n25\t  wakeReason: string | null;\n26\t  wakeCommentId: string | null;\n27\t  approvalId: string | null;\n28\t  approvalStatus: string | null;\n29\t  issueIds: string[];\n30\t};\n31\t\n32\ttype GatewayDeviceIdentity = {\n33\t  deviceId: string;\n34\t  publicKeyRawBase64Url: string;\n35\t  privateKeyPem: string;\n36\t  source: \"configured\" | \"ephemeral\";\n37\t};\n38\t\n39\ttype GatewayRequestFrame = {\n40\t  type: \"req\";\n41\t  id: string;\n42\t  method: string;\n43\t  params?: unknown;\n44\t};\n45\t\n46\ttype GatewayResponseFrame = {\n47\t  type: \"res\";\n48\t  id: string;\n49\t  ok: boolean;\n50\t  payload?: unknown;\n51\t  error?: {\n52\t    code?: unknown;\n53\t    message?: unknown;\n54\t  };\n55\t};\n56\t\n57\ttype GatewayEventFrame = {\n58\t  type: \"event\";\n59\t  event: string;\n60\t  payload?: unknown;\n61\t  seq?: number;\n62\t};\n63\t\n64\ttype PendingRequest = {\n65\t  resolve: (value: unknown) =\u003e void;\n66\t  reject: (err: Error) =\u003e void;\n67\t  expectFinal: boolean;\n68\t  timer: ReturnType\u003ctypeof setTimeout\u003e | null;\n69\t};\n70\t\n71\ttype GatewayResponseError = Error \u0026 {\n72\t  gatewayCode?: string;\n73\t  gatewayDetails?: Record\u003cstring, unknown\u003e;\n74\t};\n75\t\n76\ttype GatewayClientOptions = {\n77\t  url: string;\n78\t  headers: Record\u003cstring, string\u003e;\n79\t  onEvent: (frame: GatewayEventFrame) =\u003e Promise\u003cvoid\u003e | void;\n80\t  onLog: AdapterExecutionContext[\"onLog\"];\n81\t};\n82\t\n83\ttype GatewayClientRequestOptions = {\n84\t  timeoutMs: number;\n85\t  expectFinal?: boolean;\n86\t};\n87\t\n88\tconst PROTOCOL_VERSION = 3;\n89\tconst DEFAULT_SCOPES = [\"operator.admin\"];\n90\tconst DEFAULT_CLIENT_ID = \"gateway-client\";\n91\tconst DEFAULT_CLIENT_MODE = \"backend\";\n92\tconst DEFAULT_CLIENT_VERSION = \"paperclip\";\n93\tconst DEFAULT_ROLE = \"operator\";\n94\t\n95\tconst SENSITIVE_LOG_KEY_PATTERN =\n96\t  /(^|[_-])(auth|authorization|token|secret|password|api[_-]?key|private[_-]?key)([_-]|$)|^x-openclaw-(auth|token)$/i;\n97\t\n98\tconst ED25519_SPKI_PREFIX = Buffer.from(\"302a300506032b6570032100\", \"hex\");\n99\t\n100\tfunction asRecord(value: unknown): Record\u003cstring, unknown\u003e | null {\n\n\u003csystem-reminder\u003e\nWhenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.\n\u003c/system-reminder\u003e\n",
+        "tool_use_id": "toolu_01Ha28JHwBCiW3f1NKBfuVXn",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "bb03a312-4aab-4651-a1f0-374f64ef75cb",
+  "promptId": "0d05d433-ef46-4bba-8105-f1d502a42e1e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "bb03a312-4aab-4651-a1f0-374f64ef75cb",
+  "timestamp": "2026-04-30T19:28:22.644Z",
+  "type": "user",
+  "userType": "external",
+  "uuid": "b0cc5d2c-d867-40ae-8df9-285ae614ee94",
+  "version": "2.1.123"
+}

@@ -1,0 +1,51 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "The file /Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/http/cf-express-bridge.ts has been updated successfully.",
+        "tool_use_id": "toolu_01B71bb3PdoTWJEiKMQBM1XU",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "1cebc2f0-eedf-4be5-95f6-06de393168a0",
+  "promptId": "6578f9d8-71c9-42ed-bd5d-4cac4f413d52",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "1cebc2f0-eedf-4be5-95f6-06de393168a0",
+  "timestamp": "2026-04-30T19:21:17.437Z",
+  "toolUseResult": {
+    "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/http/cf-express-bridge.ts",
+    "newString": "  const res: MockRes = {\n    _status: 200,\n    _headers: new Headers(),\n    _settled: false,\n    _resolve,\n    _reject(e: unknown) { if (!this._settled) { this._settled = true; _rejectInner(e); } },\n    promise,",
+    "oldString": "  const res: MockRes = {\n    _status: 200,\n    _headers: new Headers(),\n    _settled: false,\n    _resolve,\n    promise,",
+    "originalFile": null,
+    "replaceAll": false,
+    "structuredPatch": [
+      {
+        "lines": [
+          "     _headers: new Headers(),",
+          "     _settled: false,",
+          "     _resolve,",
+          "+    _reject(e: unknown) { if (!this._settled) { this._settled = true; _rejectInner(e); } },",
+          "     promise,",
+          "     status(code) { this._status = code; return this; },",
+          "     json(data) {"
+        ],
+        "newLines": 7,
+        "newStart": 100,
+        "oldLines": 6,
+        "oldStart": 100
+      }
+    ],
+    "userModified": false
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "57d16330-a396-455d-9bc8-50f99f75bee6",
+  "version": "2.1.123"
+}

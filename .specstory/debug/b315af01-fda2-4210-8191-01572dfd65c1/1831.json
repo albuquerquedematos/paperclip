@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "import { and, eq } from \"drizzle-orm\";\nimport type { Db } from \"@paperclipai/db\";\nimport { agents } from \"@paperclipai/db\";\nimport type { HireApprovedPayload } from \"@paperclipai/adapter-utils\";\nimport { findActiveServerAdapter } from \"../adapters/registry.js\";\nimport { logger } from \"../middleware/logger.js\";\nimport { logActivity } from \"./activity-log.js\";\n\nconst HIRE_APPROVED_MESSAGE =\n  \"Tell your user that your hire was approved, now they should assign you a task in Paperclip or ask you to create issues.\";\n\nexport interface NotifyHireApprovedInput {\n  companyId: string;\n  agentId: string;\n  source: \"join_request\" | \"approval\";\n  sourceId: string;\n  approvedAt?: Date;\n}\n\n/**\n * Invokes the adapter's onHireApproved hook when an agent is approved (join-request or hire_agent approval).\n * Failures are non-fatal: we log and write to activity, never throw.\n */\nexport async function notifyHireApproved(\n  db: Db,\n  input: NotifyHireApprovedInput,\n): Promise\u003cvoid\u003e {\n  const { companyId, agentId, source, sourceId } = input;\n  const approvedAt = input.approvedAt ?? new Date();\n\n  const row = await db\n    .select()\n    .from(agents)\n    .where(and(eq(agents.id, agentId), eq(agents.companyId, companyId)))\n    .then((rows) =\u003e rows[0] ?? null);\n\n  if (!row) {\n    logger.warn({ companyId, agentId, source, sourceId }, \"hire hook: agent not found in company, skipping\");\n    return;\n  }\n\n  const adapterType = row.adapterType ?? \"process\";\n  const adapter = findActiveServerAdapter(adapterType);\n  const onHireApproved = adapter?.onHireApproved;\n  if (!onHireApproved) {\n    return;\n  }\n\n  const payload: HireApprovedPayload = {\n    companyId,",
+        "is_error": false,
+        "tool_use_id": "toolu_011M2ETCvCsXTZmJCNVNmJi4",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "2fef260c-176f-428a-a7cb-a6a9e1281fe3",
+  "promptId": "6578f9d8-71c9-42ed-bd5d-4cac4f413d52",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "2fef260c-176f-428a-a7cb-a6a9e1281fe3",
+  "timestamp": "2026-04-30T19:05:43.391Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "import { and, eq } from \"drizzle-orm\";\nimport type { Db } from \"@paperclipai/db\";\nimport { agents } from \"@paperclipai/db\";\nimport type { HireApprovedPayload } from \"@paperclipai/adapter-utils\";\nimport { findActiveServerAdapter } from \"../adapters/registry.js\";\nimport { logger } from \"../middleware/logger.js\";\nimport { logActivity } from \"./activity-log.js\";\n\nconst HIRE_APPROVED_MESSAGE =\n  \"Tell your user that your hire was approved, now they should assign you a task in Paperclip or ask you to create issues.\";\n\nexport interface NotifyHireApprovedInput {\n  companyId: string;\n  agentId: string;\n  source: \"join_request\" | \"approval\";\n  sourceId: string;\n  approvedAt?: Date;\n}\n\n/**\n * Invokes the adapter's onHireApproved hook when an agent is approved (join-request or hire_agent approval).\n * Failures are non-fatal: we log and write to activity, never throw.\n */\nexport async function notifyHireApproved(\n  db: Db,\n  input: NotifyHireApprovedInput,\n): Promise\u003cvoid\u003e {\n  const { companyId, agentId, source, sourceId } = input;\n  const approvedAt = input.approvedAt ?? new Date();\n\n  const row = await db\n    .select()\n    .from(agents)\n    .where(and(eq(agents.id, agentId), eq(agents.companyId, companyId)))\n    .then((rows) =\u003e rows[0] ?? null);\n\n  if (!row) {\n    logger.warn({ companyId, agentId, source, sourceId }, \"hire hook: agent not found in company, skipping\");\n    return;\n  }\n\n  const adapterType = row.adapterType ?? \"process\";\n  const adapter = findActiveServerAdapter(adapterType);\n  const onHireApproved = adapter?.onHireApproved;\n  if (!onHireApproved) {\n    return;\n  }\n\n  const payload: HireApprovedPayload = {\n    companyId,"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "598987be-5ce8-4a3a-8342-202bdd05959f",
+  "version": "2.1.123"
+}

@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "8d8fd3137 fix(server): resolve projects by URL key + permissive agent middleware\n124a6e447 fix(server): resolve agents by URL key + pass agent.id to downstream calls\nc887ac327 test(cf-smoke): vitest suite exercising the live CF Worker\n8bbee7bd6 fix(server): pass resolved issue.id to downstream calls in issue routes\n3e8e89763 feat(deploy-cloudflare): auto-fallback to sidecar on CF-shim errors\n24862ad47 fix(deploy-cloudflare): proxy adapter test-environment + detect-model to sidecar\ncbff82564 feat(deploy-cloudflare): proxy heartbeat/wakeup to sidecar; scaffold direct-API adapter\nb76487e31 feat(deploy-cloudflare): close remaining 501 gaps; add esbuild watch in dev\ne16a35beb feat(deploy-cloudflare): implement full plugin REST API surface\na9edf9338 fix(deploy-cloudflare): remove dynamic import in adapters route; clarify wrangler.toml comments\neef8d3fed refactor(deploy-cloudflare): extract shared sidecar routing and deduplicate pathToRegex\n9d2018c43 fix(deploy-cloudflare): security, correctness, and noise hardening\ne8aca7c45 chore: run Node server and CF worker together in dev:cf\n51a5c260a fix(deploy-cloudflare): handle sidecar unreachable for examples and install\ne02d01476 fix(deploy-cloudflare): proxy GET /api/plugins/examples to sidecar\n296133bb8 fix(deploy-cloudflare): rewrite isLocalPath:true to npm install for CF plugin installs\n3ce3b4968 feat(deploy-cloudflare): implement GET /api/plugins/examples and POST /api/plugins/install\n214d291b2 fix(deploy-cloudflare): disable containers in local dev (no Docker required)\n069f147b8 chore: add deploy:cf script and make dev:cf bun-compatible\n7198153b3 fix(deploy-cloudflare): implement proper CF Containers DO wrapper pattern",
+        "is_error": false,
+        "tool_use_id": "toolu_019eiGLaBvfoR2n8cDFnX5GS",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "463fb34e-819b-4e23-ab22-ae492a581604",
+  "promptId": "9c330224-80ed-4565-95bd-6a85206b6852",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "463fb34e-819b-4e23-ab22-ae492a581604",
+  "timestamp": "2026-04-30T23:19:32.787Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "8d8fd3137 fix(server): resolve projects by URL key + permissive agent middleware\n124a6e447 fix(server): resolve agents by URL key + pass agent.id to downstream calls\nc887ac327 test(cf-smoke): vitest suite exercising the live CF Worker\n8bbee7bd6 fix(server): pass resolved issue.id to downstream calls in issue routes\n3e8e89763 feat(deploy-cloudflare): auto-fallback to sidecar on CF-shim errors\n24862ad47 fix(deploy-cloudflare): proxy adapter test-environment + detect-model to sidecar\ncbff82564 feat(deploy-cloudflare): proxy heartbeat/wakeup to sidecar; scaffold direct-API adapter\nb76487e31 feat(deploy-cloudflare): close remaining 501 gaps; add esbuild watch in dev\ne16a35beb feat(deploy-cloudflare): implement full plugin REST API surface\na9edf9338 fix(deploy-cloudflare): remove dynamic import in adapters route; clarify wrangler.toml comments\neef8d3fed refactor(deploy-cloudflare): extract shared sidecar routing and deduplicate pathToRegex\n9d2018c43 fix(deploy-cloudflare): security, correctness, and noise hardening\ne8aca7c45 chore: run Node server and CF worker together in dev:cf\n51a5c260a fix(deploy-cloudflare): handle sidecar unreachable for examples and install\ne02d01476 fix(deploy-cloudflare): proxy GET /api/plugins/examples to sidecar\n296133bb8 fix(deploy-cloudflare): rewrite isLocalPath:true to npm install for CF plugin installs\n3ce3b4968 feat(deploy-cloudflare): implement GET /api/plugins/examples and POST /api/plugins/install\n214d291b2 fix(deploy-cloudflare): disable containers in local dev (no Docker required)\n069f147b8 chore: add deploy:cf script and make dev:cf bun-compatible\n7198153b3 fix(deploy-cloudflare): implement proper CF Containers DO wrapper pattern"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "36d1424a-c618-4674-85c0-0f5c5f6ee785",
+  "version": "2.1.123"
+}

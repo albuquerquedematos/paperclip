@@ -1,0 +1,36 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "22\t * Keep in sync with `src/worker/env.ts`.\n23\t */\n24\tinterface Env {\n25\t  AGENT_RUN_DO: DurableObjectNamespace;\n26\t  PAPERCLIP_KV: KVNamespace;\n27\t  // CF-native: Fetcher bindings to CF Containers.\n28\t  // When present these are preferred over SANDBOX_BRIDGE_URL from KV.\n29\t  SIDECAR_SERVICE?: Fetcher;   // handles plugin job lifecycle (claim/complete)\n30\t  PLUGIN_CONTAINER?: Fetcher;  // handles command execution (POST /execute)\n31\t}\n32\t\n33\t/**",
+        "tool_use_id": "toolu_016NXneD4aXaNyTtWnpVAYLF",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "4d8a2f87-7094-4f8b-8808-cc91f13054ac",
+  "promptId": "90af47bf-faac-4347-b1a7-d8ed0c820fb6",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "4d8a2f87-7094-4f8b-8808-cc91f13054ac",
+  "timestamp": "2026-04-30T20:36:47.153Z",
+  "toolUseResult": {
+    "file": {
+      "content": " * Keep in sync with `src/worker/env.ts`.\n */\ninterface Env {\n  AGENT_RUN_DO: DurableObjectNamespace;\n  PAPERCLIP_KV: KVNamespace;\n  // CF-native: Fetcher bindings to CF Containers.\n  // When present these are preferred over SANDBOX_BRIDGE_URL from KV.\n  SIDECAR_SERVICE?: Fetcher;   // handles plugin job lifecycle (claim/complete)\n  PLUGIN_CONTAINER?: Fetcher;  // handles command execution (POST /execute)\n}\n\n/**",
+      "filePath": "/Users/migmac/Documents/GitHub/_ABM/paperclip/packages/deploy-cloudflare/src/runtime/workflows/plugin-dispatch.ts",
+      "numLines": 12,
+      "startLine": 22,
+      "totalLines": 158
+    },
+    "type": "text"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "191ead95-9aa6-4f7a-b6dd-fa29e8e90215",
+  "version": "2.1.123"
+}

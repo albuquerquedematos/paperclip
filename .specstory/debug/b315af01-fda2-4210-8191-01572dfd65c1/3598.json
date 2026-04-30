@@ -1,0 +1,61 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "text": "The error keeps happening — that means either the wrangler dev is still running the old bundle, or the heartbeat is triggered through a different code path I haven't blocked. Let me check the queue consumer and workflow paths:",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "id": "msg_015zNeQGxsxWWqPXG1RHh6hu",
+    "model": "claude-opus-4-7",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 620,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 620,
+      "cache_read_input_tokens": 268814,
+      "inference_geo": "",
+      "input_tokens": 6,
+      "iterations": [
+        {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 620,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 620,
+          "cache_read_input_tokens": 268814,
+          "input_tokens": 6,
+          "output_tokens": 1597,
+          "type": "message"
+        }
+      ],
+      "output_tokens": 1597,
+      "server_tool_use": {
+        "web_fetch_requests": 0,
+        "web_search_requests": 0
+      },
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  },
+  "parentUuid": "70d764ae-d18a-4ee9-9b75-5b94097640e2",
+  "requestId": "req_011CaamVe4VvBa79euECFPZi",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "timestamp": "2026-04-30T22:46:32.620Z",
+  "type": "assistant",
+  "userType": "external",
+  "uuid": "61c51f3f-6b5d-4e53-94fa-79d6d901f9f0",
+  "version": "2.1.123"
+}

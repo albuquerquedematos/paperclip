@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/migmac/Documents/GitHub/_ABM/paperclip",
+  "entrypoint": "claude-vscode",
+  "gitBranch": "feat/cloudflare-deployment",
+  "isSidechain": false,
+  "message": {
+    "content": [
+      {
+        "content": "import { spawn } from \"node:child_process\";\nimport { createRequire } from \"node:module\";\nimport path from \"node:path\";\nimport { fileURLToPath } from \"node:url\";\nimport { resolveServerDevWatchIgnorePaths } from \"../src/dev-watch-ignore.ts\";\n\nconst require = createRequire(import.meta.url);\nconst tsxCliPath = require.resolve(\"tsx/cli\");\nconst serverRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), \"..\");\nconst ignoreArgs = resolveServerDevWatchIgnorePaths(serverRoot).flatMap((ignorePath) =\u003e [\"--exclude\", ignorePath]);\n\nconst child = spawn(\n  process.execPath,\n  [tsxCliPath, \"watch\", ...ignoreArgs, \"src/index.ts\"],\n  {\n    cwd: serverRoot,\n    env: process.env,\n    stdio: \"inherit\",\n  },\n);\n\nchild.on(\"exit\", (code, signal) =\u003e {\n  if (signal) {\n    process.kill(process.pid, signal);\n    return;\n  }\n  process.exit(code ?? 0);\n});\n\nchild.on(\"error\", (error) =\u003e {",
+        "is_error": false,
+        "tool_use_id": "toolu_01UmatVfwraraSXLBhZpRUwN",
+        "type": "tool_result"
+      }
+    ],
+    "role": "user"
+  },
+  "parentUuid": "d988594a-35bb-46b1-a317-a2958238cb2c",
+  "promptId": "0c147d6f-915f-4b9e-a139-f26417e7157e",
+  "sessionId": "b315af01-fda2-4210-8191-01572dfd65c1",
+  "slug": "wiggly-splashing-alpaca",
+  "sourceToolAssistantUUID": "d988594a-35bb-46b1-a317-a2958238cb2c",
+  "timestamp": "2026-04-30T23:10:58.529Z",
+  "toolUseResult": {
+    "interrupted": false,
+    "isImage": false,
+    "noOutputExpected": false,
+    "stderr": "",
+    "stdout": "import { spawn } from \"node:child_process\";\nimport { createRequire } from \"node:module\";\nimport path from \"node:path\";\nimport { fileURLToPath } from \"node:url\";\nimport { resolveServerDevWatchIgnorePaths } from \"../src/dev-watch-ignore.ts\";\n\nconst require = createRequire(import.meta.url);\nconst tsxCliPath = require.resolve(\"tsx/cli\");\nconst serverRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), \"..\");\nconst ignoreArgs = resolveServerDevWatchIgnorePaths(serverRoot).flatMap((ignorePath) =\u003e [\"--exclude\", ignorePath]);\n\nconst child = spawn(\n  process.execPath,\n  [tsxCliPath, \"watch\", ...ignoreArgs, \"src/index.ts\"],\n  {\n    cwd: serverRoot,\n    env: process.env,\n    stdio: \"inherit\",\n  },\n);\n\nchild.on(\"exit\", (code, signal) =\u003e {\n  if (signal) {\n    process.kill(process.pid, signal);\n    return;\n  }\n  process.exit(code ?? 0);\n});\n\nchild.on(\"error\", (error) =\u003e {"
+  },
+  "type": "user",
+  "userType": "external",
+  "uuid": "ca9d2261-6332-4dca-ae68-1c2401e304fd",
+  "version": "2.1.123"
+}
