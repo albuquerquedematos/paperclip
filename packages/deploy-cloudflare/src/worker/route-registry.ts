@@ -26,6 +26,7 @@ import type { Db } from "@paperclipai/db";
 // Route factory imports
 import { companyRoutes } from "../../../../server/src/routes/companies.js";
 import { accessRoutes } from "../../../../server/src/routes/access.js";
+import { adapterRoutes } from "../../../../server/src/routes/adapters.js";
 import { agentRoutes } from "../../../../server/src/routes/agents.js";
 import { assetRoutes } from "../../../../server/src/routes/assets.js";
 import { projectRoutes } from "../../../../server/src/routes/projects.js";
@@ -135,6 +136,8 @@ export function buildRequestResources(env: Env): RequestResources {
     ...ext(instanceSettingsRoutes(db), "/api"),
     ...ext(llmRoutes(db), "/api"),
     ...ext(authRoutes(db), "/api/auth"),
+    // adapterRoutes needs no db/storage (uses in-memory registry + sentinel proxies)
+    ...ext(adapterRoutes(), "/api"),
     // Access routes use raw Express handlers — use the CF bridge to capture all of them
     ...extractAllRoutesFromRouter(
       accessRoutes(db, {
