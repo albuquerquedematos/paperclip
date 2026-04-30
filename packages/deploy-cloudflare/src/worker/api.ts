@@ -18,10 +18,15 @@
  *   - accessRoutes        -- reads bundled SKILL.md files from disk
  *   - instanceDatabaseBackupRoutes -- pg_dump
  *
- * Architecture note: Hono route registration happens once at module load time.
- * Per-request dependencies (db, storage, actor) are resolved inside each route
- * handler by reading the Env binding from the Hono context. This avoids the
- * anti-pattern of re-registering routes on every request.
+ * Architecture note on per-request DB injection:
+ *   Route handlers (Handler functions) capture a `db` and `storage` reference
+ *   from the service factories at the time the Express Router is built. Because
+ *   the real `db` comes from Hyperdrive (a per-request binding), we rebuild the
+ *   Express Routers on the FIRST request of each cold start and cache the
+ *   extracted route definitions for subsequent requests in the same isolate.
+ *
+ *   Hono routes are registered at module load time as thin proxies that
+ *   forward to the lazily-built route definitions.
  */
 
 import { Hono } from "hono";
@@ -34,14 +39,14 @@ import { createHyperdriveDb } from "../db/hyperdrive.js";
 import { R2Provider } from "../storage/r2-provider.js";
 import { createCfStorageService } from "../storage/cf-storage-service.js";
 import { extractRoutesFromRouter } from "../http/express-router-bridge.js";
-import { mountRoutes } from "../http/hono-adapter.js";
 import { resolveActorFromRequest } from "../auth/resolve-actor.js";
 import { runHeartbeatSweep } from "../cron/heartbeat-sweep.js";
-import { mountUploadRoutes } from "../routes/cf-uploads.js";
+import { HttpError } from "../../../server/src/errors.js";
 import type { RouteDefinition } from "../../../server/src/http/types.js";
+import type { StorageService } from "../../../server/src/storage/types.js";
+import type { Db } from "@paperclipai/db";
 
-// Server-side route factories (transport-agnostic, no Node-only deps at factory
-// call time -- Node deps are only invoked inside individual handler closures).
+// Server-side route factories
 import { companyRoutes } from "../../../server/src/routes/companies.js";
 import { agentRoutes } from "../../../server/src/routes/agents.js";
 import { assetRoutes } from "../../../server/src/routes/assets.js";
@@ -98,99 +103,110 @@ export interface Env {
   STORAGE_R2_BUCKET?: string;
   STORAGE_R2_PREFIX?: string;
 
-  // Secrets (set via `wrangler secret put`)
-  // MASTER_ENCRYPTION_KEY: string  -- encrypts all other secrets stored in DB
-  // SANDBOX_BRIDGE_URL: string
-  // SANDBOX_BRIDGE_API_KEY: string
-
   // Sidecar -- the Node server running alongside the Workers deployment.
   SIDECAR_URL: string;
   SIDECAR_API_KEY: string;
 }
 
 // ---------------------------------------------------------------------------
-// Route extraction -- done once at module load time.
+// Per-isolate route cache
 //
-// We create a throwaway DB stub to satisfy TypeScript. The route factories only
-// use the db at request time (inside handler closures). At module load, they
-// just construct a Router and call router.get/post/etc which is synchronous and
-// has no DB access.
+// Workers isolates are long-lived within a datacenter edge node. We build the
+// Express Routers (and extract RouteDefinitions) once per isolate, keyed on
+// the Hyperdrive connection string (proxy for "same DB config").
 //
-// IMPORTANT: The stub is never used at runtime -- each handler gets a real DB
-// from the Hono middleware defined below.
+// Subsequent requests in the same isolate reuse the cached routes, skipping
+// the router construction overhead.
 // ---------------------------------------------------------------------------
 
-/**
- * Build a null-object stub that satisfies the Db type for route factory calls.
- * Throws if any method is called (which would only happen if the factory tried
- * to query the DB during initialization, which none of them do).
- */
-function makeDbStub(): import("@paperclipai/db").Db {
-  return new Proxy({} as import("@paperclipai/db").Db, {
-    get(_target, prop) {
-      throw new Error(
-        `[CF Worker] DB method '${String(prop)}' called during route factory initialization. ` +
-        "Route factories must not perform DB queries at initialization time.",
-      );
-    },
+interface CompiledRoute {
+  route: RouteDefinition;
+  re: RegExp;
+  paramNames: string[];
+}
+
+interface RouteCache {
+  routes: RouteDefinition[];
+  compiled: CompiledRoute[];
+  db: Db;
+  storage: StorageService;
+  hyperdriveConnStr: string;
+}
+
+let routeCache: RouteCache | null = null;
+
+// Convert an Express-style path pattern (with :param segments) to a RegExp.
+function pathToRegex(path: string): { re: RegExp; paramNames: string[] } {
+  const paramNames: string[] = [];
+  const pattern = path
+    .replace(/[$()*+.?[\\\]^{|}]/g, "\\$&")
+    .replace(/:([a-zA-Z_][a-zA-Z0-9_]*)/g, (_match, name: string) => {
+      paramNames.push(name);
+      return "([^/]+)";
+    });
+  return { re: new RegExp(`^${pattern}$`), paramNames };
+}
+
+function buildRouteCache(env: Env): RouteCache {
+  const db = createHyperdriveDb(env.HYPERDRIVE);
+  const r2Provider = new R2Provider(env.PAPERCLIP_STORAGE, {
+    bucket: env.STORAGE_R2_BUCKET ?? "paperclip-storage",
+    prefix: env.STORAGE_R2_PREFIX ?? "",
   });
+  const storage = createCfStorageService(r2Provider) as unknown as StorageService;
+
+  function ext(router: unknown, prefix: string): RouteDefinition[] {
+    return extractRoutesFromRouter(router, prefix);
+  }
+
+  const routes: RouteDefinition[] = [
+    ...ext(companyRoutes(db, storage), "/api/companies"),
+    ...ext(agentRoutes(db, {}), "/api"),
+    ...ext(assetRoutes(db, storage), "/api"),
+    ...ext(projectRoutes(db), "/api"),
+    ...ext(issueRoutes(db, storage, {}), "/api"),
+    ...ext(issueTreeControlRoutes(db), "/api"),
+    ...ext(routineRoutes(db, {}), "/api"),
+    ...ext(environmentRoutes(db, {}), "/api"),
+    ...ext(executionWorkspaceRoutes(db), "/api"),
+    ...ext(goalRoutes(db), "/api"),
+    ...ext(approvalRoutes(db, {}), "/api"),
+    ...ext(secretRoutes(db), "/api"),
+    ...ext(costRoutes(db, {}), "/api"),
+    ...ext(activityRoutes(db), "/api"),
+    ...ext(dashboardRoutes(db), "/api"),
+    ...ext(userProfileRoutes(db), "/api"),
+    ...ext(sidebarBadgeRoutes(db), "/api"),
+    ...ext(sidebarPreferenceRoutes(db), "/api"),
+    ...ext(inboxDismissalRoutes(db), "/api"),
+    ...ext(instanceSettingsRoutes(db), "/api"),
+    ...ext(llmRoutes(db), "/api"),
+    ...ext(authRoutes(db), "/api"),
+  ];
+
+  const compiled: CompiledRoute[] = routes.map((route) => ({
+    route,
+    ...pathToRegex(route.path),
+  }));
+
+  return { routes, compiled, db, storage, hyperdriveConnStr: env.HYPERDRIVE.connectionString };
 }
 
-function makeStorageStub(): import("../../../server/src/storage/types.js").StorageService {
-  return new Proxy({} as import("../../../server/src/storage/types.js").StorageService, {
-    get(_target, prop) {
-      throw new Error(
-        `[CF Worker] StorageService method '${String(prop)}' called during route factory initialization.`,
-      );
-    },
-  });
+function getRouteCache(env: Env): RouteCache {
+  if (!routeCache || routeCache.hyperdriveConnStr !== env.HYPERDRIVE.connectionString) {
+    routeCache = buildRouteCache(env);
+    console.log(`[CF Worker] Built route cache: ${routeCache.routes.length} routes`);
+  }
+  return routeCache;
 }
-
-const _stubDb = makeDbStub();
-const _stubStorage = makeStorageStub();
-
-/**
- * Extract RouteDefinitions from an Express Router, prepending prefix to each path.
- * The router is built with the stub DB/storage which are never actually called
- * during extraction -- only the router's structural metadata is read.
- */
-function extractWithPrefix(router: unknown, prefix: string): RouteDefinition[] {
-  return extractRoutesFromRouter(router, prefix);
-}
-
-// Extract all route definitions at module load time (once per cold start).
-const allRoutes: RouteDefinition[] = [
-  ...extractWithPrefix(companyRoutes(_stubDb, _stubStorage), "/api/companies"),
-  ...extractWithPrefix(agentRoutes(_stubDb, {}), "/api"),
-  ...extractWithPrefix(assetRoutes(_stubDb, _stubStorage), "/api"),
-  ...extractWithPrefix(projectRoutes(_stubDb), "/api"),
-  ...extractWithPrefix(issueRoutes(_stubDb, _stubStorage, {}), "/api"),
-  ...extractWithPrefix(issueTreeControlRoutes(_stubDb), "/api"),
-  ...extractWithPrefix(routineRoutes(_stubDb, {}), "/api"),
-  ...extractWithPrefix(environmentRoutes(_stubDb, {}), "/api"),
-  ...extractWithPrefix(executionWorkspaceRoutes(_stubDb), "/api"),
-  ...extractWithPrefix(goalRoutes(_stubDb), "/api"),
-  ...extractWithPrefix(approvalRoutes(_stubDb, {}), "/api"),
-  ...extractWithPrefix(secretRoutes(_stubDb), "/api"),
-  ...extractWithPrefix(costRoutes(_stubDb, {}), "/api"),
-  ...extractWithPrefix(activityRoutes(_stubDb), "/api"),
-  ...extractWithPrefix(dashboardRoutes(_stubDb), "/api"),
-  ...extractWithPrefix(userProfileRoutes(_stubDb), "/api"),
-  ...extractWithPrefix(sidebarBadgeRoutes(_stubDb), "/api"),
-  ...extractWithPrefix(sidebarPreferenceRoutes(_stubDb), "/api"),
-  ...extractWithPrefix(inboxDismissalRoutes(_stubDb), "/api"),
-  ...extractWithPrefix(instanceSettingsRoutes(_stubDb), "/api"),
-  ...extractWithPrefix(llmRoutes(_stubDb), "/api"),
-  ...extractWithPrefix(authRoutes(_stubDb), "/api"),
-];
 
 // ---------------------------------------------------------------------------
-// Hono app -- routes registered once at module load time
+// Hono app
 // ---------------------------------------------------------------------------
 
 const app = new Hono<{ Bindings: Env }>();
 
-// Health check -- always reachable, no auth, no setup gate
+// Health check -- always reachable
 app.get("/api/health", (c) =>
   c.json({
     status: "ok",
@@ -212,7 +228,7 @@ app.use("*", async (c, next) => {
   return next();
 });
 
-// Delegate /setup/* to the setup sub-app.
+// Setup sub-app
 app.all("/setup/*", async (c) => {
   const setupSub = createSetupApp(c.env);
   const url = new URL(c.req.url);
@@ -230,40 +246,123 @@ app.all("/setup", async (c) => {
 });
 
 // ---------------------------------------------------------------------------
-// Mount API routes -- registered once, but resolved per-request via closures
-// that capture the Hono context (c.env) to build real db/storage instances.
+// Main API catch-all -- routes through cached route definitions
 //
-// `mountRoutes` registers one Hono handler per RouteDefinition. Each handler
-// calls `resolveActor` and builds a `RequestCtx` inline. We pass lazy factories
-// instead of concrete instances so the real DB/storage/actor are created fresh
-// for each request from the Hono context env bindings.
+// We use a single wildcard handler for /api/* rather than registering one
+// Hono route per server route definition. This avoids blowing Hono's internal
+// route trie limit and is simpler to reason about.
+//
+// Routing is done manually: iterate the route definitions, match method and
+// path pattern, and delegate to the handler.
 // ---------------------------------------------------------------------------
 
-// We mount with placeholder options -- the real per-request deps are injected
-// inside each route's Hono handler by wrapping via the custom resolver below.
-//
-// Rather than the generic mountRoutes (which needs db/storage upfront), we
-// register each route directly to close over the Hono context:
-for (const route of allRoutes) {
-  const method = route.method.toLowerCase() as "get" | "post" | "put" | "patch" | "delete";
-  app[method](route.path, async (c) => {
-    const env = c.env;
+function getCompiledRoutes(env: Env) {
+  const cache = getRouteCache(env);
+  return { compiled: cache.compiled, db: cache.db, storage: cache.storage };
+}
 
-    // Build per-request DB and storage from Env bindings.
-    const db = createHyperdriveDb(env.HYPERDRIVE);
-    const r2Provider = new R2Provider(env.PAPERCLIP_STORAGE, {
-      bucket: env.STORAGE_R2_BUCKET ?? "paperclip-storage",
-      prefix: env.STORAGE_R2_PREFIX ?? "",
-    });
-    const storage = createCfStorageService(r2Provider) as unknown as import(
-      "../../../server/src/storage/types.js"
-    ).StorageService;
+// R2-native upload endpoints (registered before the catch-all)
+app.put("/api/assets/:assetId/upload", async (c) => {
+  const { assets } = await import("@paperclipai/db");
+  const { eq } = await import("drizzle-orm");
+  const { forbidden, notFound, badRequest } = await import("../../../server/src/errors.js");
 
-    const deploymentMode = env.DEPLOYMENT_MODE === "local_trusted"
-      ? "local_trusted" as const
-      : "authenticated" as const;
+  const env = c.env;
+  const { db } = getRouteCache(env);
+  const deploymentMode = env.DEPLOYMENT_MODE === "local_trusted" ? "local_trusted" as const : "authenticated" as const;
+  const actor = await resolveActorFromRequest(c.req.raw, db, { deploymentMode });
 
-    const actor = await resolveActorFromRequest(c.req.raw, db, { deploymentMode });
+  try {
+    const assetId = c.req.param("assetId");
+    if (!assetId) return c.json({ error: "Missing assetId" }, 400);
+    const assetRow = await db.select().from(assets).where(eq(assets.id, assetId)).then((rows) => rows[0] ?? null);
+    if (!assetRow) throw notFound("Asset not found");
+
+    if (!actor) throw forbidden("Authentication required");
+    if (actor.type === "board" && !actor.isInstanceAdmin && !actor.companyIds?.includes(assetRow.companyId)) {
+      throw forbidden("No access to this company");
+    }
+    if (actor.type === "agent" && actor.companyId !== assetRow.companyId) {
+      throw forbidden("No access to this company");
+    }
+
+    const body = c.req.raw.body;
+    if (!body) throw badRequest("Empty request body");
+    const key = `assets/${assetRow.companyId}/${assetId}`;
+    await env.PAPERCLIP_STORAGE.put(key, body, { httpMetadata: { contentType: c.req.header("content-type") ?? "application/octet-stream" } });
+    return c.json({ ok: true, key });
+  } catch (err) {
+    if (err instanceof HttpError) return c.json({ error: err.message }, err.status as 400 | 403 | 404);
+    console.error("[CF Worker] PUT /api/assets/:assetId/upload", err);
+    return c.json({ error: "Internal Server Error" }, 500);
+  }
+});
+
+app.post("/api/issues/:issueId/attachments/upload", async (c) => {
+  const { issues } = await import("@paperclipai/db");
+  const { eq } = await import("drizzle-orm");
+  const { forbidden, notFound, badRequest } = await import("../../../server/src/errors.js");
+
+  const env = c.env;
+  const { db } = getRouteCache(env);
+  const deploymentMode = env.DEPLOYMENT_MODE === "local_trusted" ? "local_trusted" as const : "authenticated" as const;
+  const actor = await resolveActorFromRequest(c.req.raw, db, { deploymentMode });
+
+  try {
+    const issueId = c.req.param("issueId");
+    if (!issueId) return c.json({ error: "Missing issueId" }, 400);
+    const issueRow = await db.select({ id: issues.id, companyId: issues.companyId })
+      .from(issues).where(eq(issues.id, issueId)).then((rows) => rows[0] ?? null);
+    if (!issueRow) throw notFound("Issue not found");
+
+    if (!actor) throw forbidden("Authentication required");
+    if (actor.type === "board" && !actor.isInstanceAdmin && !actor.companyIds?.includes(issueRow.companyId)) {
+      throw forbidden("No access to this company");
+    }
+    if (actor.type === "agent" && actor.companyId !== issueRow.companyId) {
+      throw forbidden("No access to this company");
+    }
+
+    const body = c.req.raw.body;
+    if (!body) throw badRequest("Empty request body");
+    const filename = (c.req.header("x-filename") ?? "attachment").replace(/[^a-zA-Z0-9._-]/g, "_");
+    const key = `issues/${issueRow.companyId}/${issueId}/attachments/${filename}`;
+    await env.PAPERCLIP_STORAGE.put(key, body, { httpMetadata: { contentType: c.req.header("content-type") ?? "application/octet-stream" } });
+    return c.json({ ok: true, key, filename });
+  } catch (err) {
+    if (err instanceof HttpError) return c.json({ error: err.message }, err.status as 400 | 403 | 404);
+    console.error("[CF Worker] POST /api/issues/:issueId/attachments/upload", err);
+    return c.json({ error: "Internal Server Error" }, 500);
+  }
+});
+
+// Main API catch-all -- manual routing through cached route definitions
+app.all("/api/*", async (c) => {
+  const { compiled, db, storage } = getCompiledRoutes(c.env);
+  const pathname = new URL(c.req.url).pathname;
+  const method = c.req.method.toUpperCase();
+
+  for (const { route, re, paramNames } of compiled) {
+    if (route.method !== method) continue;
+    const match = re.exec(pathname);
+    if (!match) continue;
+
+    // Build param map for this match
+    const params: Record<string, string> = {};
+    for (let i = 0; i < paramNames.length; i++) {
+      params[paramNames[i]!] = match[i + 1]!;
+    }
+
+    // Wrap ctx.param to return from our extracted params
+    const actor = await resolveActorFromRequest(
+      c.req.raw,
+      db,
+      {
+        deploymentMode: c.env.DEPLOYMENT_MODE === "local_trusted"
+          ? "local_trusted"
+          : "authenticated",
+      },
+    );
 
     const ctx: import("../../../server/src/http/types.js").RequestCtx = {
       method: c.req.method,
@@ -271,7 +370,7 @@ for (const route of allRoutes) {
       headers: new Headers(c.req.raw.headers),
       json<T>(): Promise<T> { return c.req.json<T>(); },
       text(): Promise<string> { return c.req.text(); },
-      param(name: string): string | undefined { return c.req.param(name); },
+      param(name: string): string | undefined { return params[name]; },
       query(name: string): string | undefined { return c.req.query(name); },
       actor,
       db,
@@ -281,11 +380,10 @@ for (const route of allRoutes) {
     try {
       return await route.handler(ctx);
     } catch (err) {
-      const { HttpError } = await import("../../../server/src/errors.js");
       if (err instanceof HttpError) {
-        return c.json(
+        return Response.json(
           { error: err.message, ...(err.details !== undefined ? { details: err.details } : {}) },
-          err.status as 400 | 401 | 403 | 404 | 409 | 422 | 500,
+          { status: err.status },
         );
       }
       console.error(
@@ -293,127 +391,19 @@ for (const route of allRoutes) {
           err instanceof Error ? err.stack ?? err.message : String(err)
         }`,
       );
-      return c.json({ error: "Internal Server Error" }, 500);
+      return Response.json({ error: "Internal Server Error" }, { status: 500 });
     }
-  });
-}
-
-// R2-native upload endpoints (multer-free replacements).
-// These are registered once here -- mountUploadRoutes takes a factory fn
-// that creates per-request deps.
-// NOTE: mountUploadRoutes needs per-request db which it reads from
-// the Hono context env. We pass a marker db that is overridden inside.
-// Actually, mountUploadRoutes uses a direct Hono handler, so we pass the app.
-// The db is created inside each handler from c.env.
-// We need to adjust mountUploadRoutes to build db from context.
-// Since we can't change that signature without major refactoring, we inline
-// the upload routes here instead.
-
-// PUT /api/assets/:assetId/upload
-app.put("/api/assets/:assetId/upload", async (c) => {
-  const { assets } = await import("@paperclipai/db");
-  const { eq } = await import("drizzle-orm");
-  const { forbidden, notFound, badRequest } = await import("../../../server/src/errors.js");
-
-  const env = c.env;
-  const db = createHyperdriveDb(env.HYPERDRIVE);
-  const deploymentMode = env.DEPLOYMENT_MODE === "local_trusted" ? "local_trusted" as const : "authenticated" as const;
-  const actor = await resolveActorFromRequest(c.req.raw, db, { deploymentMode });
-
-  try {
-    const assetId = c.req.param("assetId");
-    if (!assetId) return c.json({ error: "Missing assetId" }, 400);
-
-    const assetRow = await db.select().from(assets).where(eq(assets.id, assetId)).then((rows) => rows[0] ?? null);
-    if (!assetRow) throw notFound("Asset not found");
-
-    if (!actor) throw forbidden("Authentication required");
-    if (actor.type === "board") {
-      if (!actor.isInstanceAdmin && !actor.companyIds?.includes(assetRow.companyId)) {
-        throw forbidden("No access to this company");
-      }
-    } else if (actor.type === "agent") {
-      if (actor.companyId !== assetRow.companyId) throw forbidden("No access to this company");
-    }
-
-    const body = c.req.raw.body;
-    if (!body) throw badRequest("Empty request body");
-
-    const key = `assets/${assetRow.companyId}/${assetId}`;
-    const contentType = c.req.header("content-type") ?? "application/octet-stream";
-    await env.PAPERCLIP_STORAGE.put(key, body, { httpMetadata: { contentType } });
-
-    return c.json({ ok: true, key });
-  } catch (err) {
-    const { HttpError } = await import("../../../server/src/errors.js");
-    if (err instanceof HttpError) {
-      return c.json({ error: err.message }, err.status as 400 | 403 | 404);
-    }
-    console.error("[CF Worker] PUT /api/assets/:assetId/upload", err);
-    return c.json({ error: "Internal Server Error" }, 500);
   }
-});
 
-// POST /api/issues/:issueId/attachments/upload
-app.post("/api/issues/:issueId/attachments/upload", async (c) => {
-  const { issues } = await import("@paperclipai/db");
-  const { eq } = await import("drizzle-orm");
-  const { forbidden, notFound, badRequest } = await import("../../../server/src/errors.js");
-
-  const env = c.env;
-  const db = createHyperdriveDb(env.HYPERDRIVE);
-  const deploymentMode = env.DEPLOYMENT_MODE === "local_trusted" ? "local_trusted" as const : "authenticated" as const;
-  const actor = await resolveActorFromRequest(c.req.raw, db, { deploymentMode });
-
-  try {
-    const issueId = c.req.param("issueId");
-    if (!issueId) return c.json({ error: "Missing issueId" }, 400);
-
-    const issueRow = await db
-      .select({ id: issues.id, companyId: issues.companyId })
-      .from(issues)
-      .where(eq(issues.id, issueId))
-      .then((rows) => rows[0] ?? null);
-    if (!issueRow) throw notFound("Issue not found");
-
-    if (!actor) throw forbidden("Authentication required");
-    if (actor.type === "board") {
-      if (!actor.isInstanceAdmin && !actor.companyIds?.includes(issueRow.companyId)) {
-        throw forbidden("No access to this company");
-      }
-    } else if (actor.type === "agent") {
-      if (actor.companyId !== issueRow.companyId) throw forbidden("No access to this company");
-    }
-
-    const body = c.req.raw.body;
-    if (!body) throw badRequest("Empty request body");
-
-    const filename = (c.req.header("x-filename") ?? "attachment").replace(/[^a-zA-Z0-9._-]/g, "_");
-    const contentType = c.req.header("content-type") ?? "application/octet-stream";
-    const key = `issues/${issueRow.companyId}/${issueId}/attachments/${filename}`;
-    await env.PAPERCLIP_STORAGE.put(key, body, { httpMetadata: { contentType } });
-
-    return c.json({ ok: true, key, filename });
-  } catch (err) {
-    const { HttpError } = await import("../../../server/src/errors.js");
-    if (err instanceof HttpError) {
-      return c.json({ error: err.message }, err.status as 400 | 403 | 404);
-    }
-    console.error("[CF Worker] POST /api/issues/:issueId/attachments/upload", err);
-    return c.json({ error: "Internal Server Error" }, 500);
-  }
-});
-
-// Skipped routes placeholder
-app.all("/api/*", (c) =>
-  c.json(
+  // No route matched
+  return c.json(
     {
       error: "This API route is not available in the Cloudflare Workers deployment.",
       code: "NOT_IMPLEMENTED",
     },
     501,
-  ),
-);
+  );
+});
 
 // Catch-all SPA fallback
 app.all("*", (c) =>
@@ -434,6 +424,9 @@ export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     // Boot the Cloudflare implementations on first request (idempotent).
     bootCloudflare(env);
+
+    // Ensure route cache is warm before handling the request.
+    getRouteCache(env);
 
     // CF service layer -- instantiated per-request (Workers are stateless).
     const sidecar = new SidecarClient({

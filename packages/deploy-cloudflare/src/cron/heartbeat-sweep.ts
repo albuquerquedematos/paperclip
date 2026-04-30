@@ -23,20 +23,25 @@ import type { Db } from "@paperclipai/db";
 import { agents, heartbeatRuns } from "@paperclipai/db";
 import type { Env } from "../worker/api.js";
 
-/** Minimal heartbeat policy shape read from agent.heartbeatPolicy JSON. */
+/** Minimal heartbeat policy shape read from agent.runtimeConfig.heartbeat JSON. */
 interface HeartbeatPolicy {
   enabled: boolean;
   intervalSec: number;
 }
 
-function parseHeartbeatPolicy(agent: { heartbeatPolicy?: unknown }): HeartbeatPolicy {
-  const policy = agent.heartbeatPolicy;
-  if (!policy || typeof policy !== "object") {
+function parseHeartbeatPolicy(agent: { runtimeConfig?: unknown }): HeartbeatPolicy {
+  const runtimeConfig = agent.runtimeConfig;
+  if (!runtimeConfig || typeof runtimeConfig !== "object") {
     return { enabled: false, intervalSec: 0 };
   }
-  const p = policy as Record<string, unknown>;
-  const enabled = Boolean(p["enabled"]);
-  const intervalSec = typeof p["intervalSec"] === "number" ? p["intervalSec"] : 0;
+  const rc = runtimeConfig as Record<string, unknown>;
+  const heartbeat = rc["heartbeat"];
+  if (!heartbeat || typeof heartbeat !== "object") {
+    return { enabled: false, intervalSec: 0 };
+  }
+  const h = heartbeat as Record<string, unknown>;
+  const enabled = Boolean(h["enabled"]);
+  const intervalSec = typeof h["intervalSec"] === "number" ? h["intervalSec"] : 0;
   return { enabled, intervalSec };
 }
 
@@ -60,7 +65,7 @@ export async function runHeartbeatSweep(env: Env, db: Db): Promise<void> {
       id: agents.id,
       companyId: agents.companyId,
       status: agents.status,
-      heartbeatPolicy: agents.heartbeatPolicy,
+      runtimeConfig: agents.runtimeConfig,
       lastHeartbeatAt: agents.lastHeartbeatAt,
       createdAt: agents.createdAt,
     })
@@ -75,26 +80,26 @@ export async function runHeartbeatSweep(env: Env, db: Db): Promise<void> {
   }> = [];
 
   for (const agent of allAgents) {
-    const policy = parseHeartbeatPolicy(agent as { heartbeatPolicy?: unknown });
+    const policy = parseHeartbeatPolicy(agent);
     if (!policy.enabled || policy.intervalSec <= 0) continue;
 
     const baseline = new Date(agent.lastHeartbeatAt ?? agent.createdAt).getTime();
     const elapsedMs = now.getTime() - baseline;
     if (elapsedMs < policy.intervalSec * 1000) continue;
 
-    // Check if there is already a queued run for this agent to avoid double-
-    // dispatching. We look for any run in "queued" status.
+    // Check if there is already a queued or running run for this agent to avoid
+    // double-dispatching.
+    const { and, inArray } = await import("drizzle-orm");
     const existingQueued = await db
       .select({ id: heartbeatRuns.id })
       .from(heartbeatRuns)
-      .where(eq(heartbeatRuns.agentId, agent.id))
-      .then((rows) =>
-        rows.some(
-          (r) =>
-            (r as unknown as { status?: string }).status === "queued" ||
-            (r as unknown as { status?: string }).status === "running",
+      .where(
+        and(
+          eq(heartbeatRuns.agentId, agent.id),
+          inArray(heartbeatRuns.status, ["queued", "running"]),
         ),
-      );
+      )
+      .then((rows) => rows.length > 0);
 
     if (existingQueued) continue;
 
