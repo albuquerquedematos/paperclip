@@ -92,6 +92,58 @@ registerCfExtraRoutes(app);
 // avoids blowing Hono's internal route trie limit (229+ routes).
 // ---------------------------------------------------------------------------
 
+/**
+ * Detect errors thrown by CF Worker shims for Node-only APIs.
+ * When an auto-bridged handler hits one of these, we transparently retry the
+ * request against the sidecar instead of returning 500 — the sidecar runs
+ * the same handler with full host capabilities.
+ */
+function isCfShimError(err: unknown): boolean {
+  const msg = err instanceof Error ? err.message : String(err);
+  return (
+    msg.includes("not available in CF Workers") ||
+    msg.includes("Command not found in PATH") ||
+    msg.includes("Command is not executable")
+  );
+}
+
+/** Proxy the original request to the sidecar, replaying the buffered body. */
+async function proxyToSidecar(
+  c: Parameters<Parameters<typeof app.all>[1]>[0],
+  bodyBuffer: ArrayBuffer | null,
+): Promise<Response> {
+  const env = c.env;
+  const url = new URL(c.req.url);
+  const path = url.pathname + url.search;
+  const ct = c.req.header("Content-Type");
+  const headers = new Headers();
+  if (ct) headers.set("Content-Type", ct);
+
+  const init: RequestInit = {
+    method: c.req.method,
+    headers,
+    body: bodyBuffer && bodyBuffer.byteLength > 0 ? bodyBuffer : undefined,
+  };
+
+  if (env.SIDECAR_SERVICE) {
+    const stub = env.SIDECAR_SERVICE.get(env.SIDECAR_SERVICE.idFromName("sidecar"));
+    return stub.fetch(`http://sidecar${path}`, init);
+  }
+  const baseUrl = env.SIDECAR_URL;
+  if (!baseUrl) {
+    return Response.json(
+      { error: "This handler requires the sidecar; configure SIDECAR_URL or SIDECAR_SERVICE." },
+      { status: 503 },
+    );
+  }
+  if (env.SIDECAR_API_KEY) headers.set("Authorization", `Bearer ${env.SIDECAR_API_KEY}`);
+  try {
+    return await fetch(`${baseUrl}${path}`, init);
+  } catch {
+    return Response.json({ error: "Sidecar unreachable" }, { status: 503 });
+  }
+}
+
 app.all("/api/*", async (c) => {
   const { compiled, db, storage } = buildRequestResources(c.env);
 
@@ -99,6 +151,21 @@ app.all("/api/*", async (c) => {
   const rawPathname = new URL(c.req.url).pathname;
   const pathname = rawPathname.length > 1 ? rawPathname.replace(/\/$/, "") : rawPathname;
   const method = c.req.method.toUpperCase();
+
+  // Buffer the request body once so the handler can consume it (via ctx.json /
+  // ctx.text) and we can still replay it to the sidecar on shim-error fallback.
+  const bodyBuffer =
+    method === "GET" || method === "HEAD"
+      ? null
+      : await c.req.raw.arrayBuffer().catch(() => null);
+  const decoder = new TextDecoder();
+  let textCache: string | null = null;
+  const readText = async (): Promise<string> => {
+    if (textCache === null) {
+      textCache = bodyBuffer ? decoder.decode(bodyBuffer) : "";
+    }
+    return textCache;
+  };
 
   for (const { route, re, paramNames } of compiled) {
     if (route.method !== method) continue;
@@ -118,8 +185,8 @@ app.all("/api/*", async (c) => {
       method: c.req.method,
       url: new URL(c.req.url),
       headers: new Headers(c.req.raw.headers),
-      json<T>(): Promise<T> { return c.req.json<T>(); },
-      text(): Promise<string> { return c.req.text(); },
+      async json<T>(): Promise<T> { return JSON.parse(await readText()) as T; },
+      text: readText,
       param(name: string): string | undefined { return params[name]; },
       query(name: string): string | undefined { return c.req.query(name); },
       actor,
@@ -135,6 +202,16 @@ app.all("/api/*", async (c) => {
           { error: err.message, ...(err.details !== undefined ? { details: err.details } : {}) },
           { status: err.status },
         );
+      }
+      // CF shim error → transparently retry via sidecar (which has the host
+      // capability the handler needs).
+      if (isCfShimError(err)) {
+        console.debug(
+          `[CF Worker] Falling back to sidecar for ${route.method} ${route.path}: ${
+            err instanceof Error ? err.message : String(err)
+          }`,
+        );
+        return proxyToSidecar(c, bodyBuffer);
       }
       console.error(
         `[CF Worker] Unhandled error in ${route.method} ${route.path}: ${
