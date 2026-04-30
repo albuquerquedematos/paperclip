@@ -1,25 +1,24 @@
 /**
  * routes/company-skills-cf.ts
  *
- * CF-native handler for GET /api/companies/:companyId/skills.
+ * CF-native handlers for /api/companies/:companyId/skills/*.
  *
- * The server-side companySkillService.list() calls ensureSkillInventoryCurrent()
- * which reads SKILL.md files from the host filesystem — this is not available
- * in a CF Worker. This handler mirrors the DB query portion of that service,
- * returning the same shape but skipping filesystem-based inventory sync.
+ * The server-side companySkillService relies on the host filesystem for
+ * SKILL.md inventory sync, file reads, and local-path mutations. CF Workers
+ * have no filesystem, so we split the work two ways:
  *
- * Auth: requires an authenticated actor (board or agent). Unauthenticated
- * requests receive 401.
+ *   1. DB-readable routes (list, detail, update-status) read directly from
+ *      Hyperdrive using `deriveSkillSource` for source metadata. These are
+ *      always available, with `sourcePath: null` and no inventory refresh.
+ *   2. File/install routes (POST/PATCH/DELETE skills, files, install-update)
+ *      proxy to the sidecar, which runs the original server handlers with
+ *      filesystem access.
  *
- * CF-specific caveats:
- *   - No filesystem access; skill inventory is not refreshed in CF.
- *   - sourcePath is always null (local paths are host-only).
- *   - attachedAgentCount is computed via a direct adapterConfig scan rather
- *     than resolveDesiredSkillKeys (which uses non-exported internals).
+ * Auth: every handler resolves an actor; unauthenticated callers get 401.
  */
 
-import type { Hono } from "hono";
-import { asc, eq } from "drizzle-orm";
+import type { Context, Hono } from "hono";
+import { and, asc, eq } from "drizzle-orm";
 import { agents, companySkills } from "@paperclipai/db";
 import { createHyperdriveDb } from "../../db/hyperdrive.js";
 import { resolveActorFromRequest } from "../../auth/resolve-actor.js";
@@ -72,6 +71,49 @@ export function deriveSkillSource(skill: {
     return { editable: true, editableReason: null, sourceLabel: skill.sourceLocator, sourceBadge: "local", sourcePath: null };
   }
   return { editable: false, editableReason: "This skill source is read-only.", sourceLabel: skill.sourceLocator, sourceBadge: "catalog", sourcePath: null };
+}
+
+// ---------------------------------------------------------------------------
+// Sidecar proxy (for filesystem-bound routes)
+// ---------------------------------------------------------------------------
+
+/**
+ * Proxy a request to the sidecar at the same path. Caller Authorization
+ * headers are stripped; SIDECAR_API_KEY is added for direct-URL fallback.
+ */
+async function proxyToSidecar(c: Context<{ Bindings: Env }>): Promise<Response> {
+  const env = c.env;
+  const url = new URL(c.req.url);
+  const path = url.pathname + url.search;
+  const ct = c.req.header("Content-Type");
+  const headers = new Headers();
+  if (ct) headers.set("Content-Type", ct);
+
+  if (env.SIDECAR_SERVICE) {
+    const stub = env.SIDECAR_SERVICE.get(env.SIDECAR_SERVICE.idFromName("sidecar"));
+    return stub.fetch(`http://sidecar${path}`, {
+      method: c.req.method,
+      headers,
+      body: c.req.raw.body,
+    });
+  }
+  const baseUrl = env.SIDECAR_URL;
+  if (!baseUrl) {
+    return c.json(
+      { error: "Operation requires the sidecar: configure SIDECAR_URL or SIDECAR_SERVICE" },
+      503,
+    );
+  }
+  if (env.SIDECAR_API_KEY) headers.set("Authorization", `Bearer ${env.SIDECAR_API_KEY}`);
+  try {
+    return await fetch(`${baseUrl}${path}`, {
+      method: c.req.method,
+      headers,
+      body: c.req.raw.body,
+    });
+  } catch {
+    return c.json({ error: "Sidecar unreachable" }, 503);
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -164,4 +206,70 @@ export function registerCompanySkillRoutes(app: Hono<{ Bindings: Env }>): void {
 
     return c.json(result);
   });
+
+  // -------------------------------------------------------------------------
+  // GET /api/companies/:companyId/skills/:skillId — single skill detail
+  // (DB-only; mirrors svc.detail() without filesystem inventory sync)
+  // -------------------------------------------------------------------------
+  app.get("/api/companies/:companyId/skills/:skillId", async (c) => {
+    const companyId = c.req.param("companyId");
+    const skillId = c.req.param("skillId");
+    const db = createHyperdriveDb(c.env.HYPERDRIVE);
+    const actor = await resolveActorFromRequest(c.req.raw, db, {
+      deploymentMode: resolveDeploymentMode(c.env),
+    });
+    if (!actor) return c.json({ error: "Unauthorized" }, 401);
+
+    const row = await db
+      .select()
+      .from(companySkills)
+      .where(and(eq(companySkills.companyId, companyId), eq(companySkills.id, skillId)))
+      .limit(1)
+      .then((r) => r[0] ?? null);
+    if (!row) return c.json({ error: "Skill not found" }, 404);
+
+    const source = deriveSkillSource({
+      sourceType: row.sourceType,
+      sourceLocator: row.sourceLocator ?? null,
+      metadata: row.metadata,
+    });
+    return c.json({
+      id: row.id,
+      companyId: row.companyId,
+      key: row.key,
+      slug: row.slug,
+      name: row.name,
+      description: row.description ?? null,
+      sourceType: row.sourceType,
+      sourceLocator: row.sourceLocator ?? null,
+      sourceRef: row.sourceRef ?? null,
+      trustLevel: row.trustLevel,
+      compatibility: row.compatibility,
+      fileInventory: Array.isArray(row.fileInventory) ? row.fileInventory : [],
+      metadata: row.metadata ?? null,
+      createdAt: row.createdAt,
+      updatedAt: row.updatedAt,
+      ...source,
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // Filesystem-bound skill routes — proxy to sidecar.
+  // The sidecar runs the original server handlers with disk + git access.
+  // -------------------------------------------------------------------------
+  const proxyHandler = async (c: Context<{ Bindings: Env }>) => {
+    const db = createHyperdriveDb(c.env.HYPERDRIVE);
+    const actor = await resolveActorFromRequest(c.req.raw, db, {
+      deploymentMode: resolveDeploymentMode(c.env),
+    });
+    if (!actor) return c.json({ error: "Unauthorized" }, 401);
+    return proxyToSidecar(c);
+  };
+
+  app.get("/api/companies/:companyId/skills/:skillId/update-status", proxyHandler);
+  app.get("/api/companies/:companyId/skills/:skillId/files", proxyHandler);
+  app.post("/api/companies/:companyId/skills", proxyHandler);
+  app.patch("/api/companies/:companyId/skills/:skillId/files", proxyHandler);
+  app.delete("/api/companies/:companyId/skills/:skillId", proxyHandler);
+  app.post("/api/companies/:companyId/skills/:skillId/install-update", proxyHandler);
 }

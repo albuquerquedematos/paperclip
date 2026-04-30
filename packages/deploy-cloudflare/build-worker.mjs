@@ -20,12 +20,16 @@
  *   - jsdom → external (SVG sanitize path throws at runtime; acceptable for CF)
  */
 
-import { build } from "esbuild";
+import { build, context } from "esbuild";
 import { fileURLToPath } from "url";
 import path from "path";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SHIMS = path.join(__dirname, "src/shims");
+
+// Pass --watch to keep esbuild rebuilding on source changes. Wrangler runs
+// with --no-bundle and watches dist/worker.js, so it reloads automatically.
+const WATCH = process.argv.includes("--watch");
 
 // Node.js built-ins CF Workers DOES provide via nodejs_compat.
 // Mark external → CF runtime resolves them at runtime.
@@ -50,7 +54,7 @@ const CF_PROVIDED_BUILTINS = [
   "jsdom",
 ];
 
-await build({
+const buildOptions = {
   entryPoints: [path.join(__dirname, "src/worker/api.ts")],
   bundle: true,
   outfile: path.join(__dirname, "dist/worker.js"),
@@ -163,6 +167,13 @@ await build({
     "import.meta.url": '"file:///worker.js"',
   },
   logLevel: "info",
-});
+};
 
-console.log("Worker bundle written to dist/worker.js");
+if (WATCH) {
+  const ctx = await context(buildOptions);
+  await ctx.watch();
+  console.log("[esbuild] Watching for changes; bundle at dist/worker.js");
+} else {
+  await build(buildOptions);
+  console.log("Worker bundle written to dist/worker.js");
+}

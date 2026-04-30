@@ -6,6 +6,8 @@
   "main": "./src/boot.ts",
   "scripts": {
     "build": "node build-worker.mjs",
+    "build:watch": "node build-worker.mjs --watch",
+    "dev:wrangler-only": "bash -c 'source \"${NVM_DIR:-$HOME/.nvm}/nvm.sh\" && nvm use 22 && wrangler dev --no-bundle --local'",
     "dev": "node build-worker.mjs && bash -c 'source \"${NVM_DIR:-$HOME/.nvm}/nvm.sh\" && nvm use 22 && wrangler dev --no-bundle --local'",
     "deploy": "node build-worker.mjs && bash -c 'source \"${NVM_DIR:-$HOME/.nvm}/nvm.sh\" && nvm use 22 && wrangler deploy --no-bundle'"
   },
