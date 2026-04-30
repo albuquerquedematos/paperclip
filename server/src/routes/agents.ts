@@ -1508,7 +1508,7 @@ export function agentRoutes(
       return Response.json({ error: "Agent not found" }, { status: 404 });
     }
     await assertCanReadConfigurations(ctx, agent.companyId);
-    const revisions = await svc.listConfigRevisions(id);
+    const revisions = await svc.listConfigRevisions(agent.id);
     return Response.json(revisions.map((revision) => redactConfigRevision(revision)));
   };
 
@@ -1520,7 +1520,7 @@ export function agentRoutes(
       return Response.json({ error: "Agent not found" }, { status: 404 });
     }
     await assertCanReadConfigurations(ctx, agent.companyId);
-    const revision = await svc.getConfigRevision(id, revisionId);
+    const revision = await svc.getConfigRevision(agent.id, revisionId);
     if (!revision) {
       return Response.json({ error: "Revision not found" }, { status: 404 });
     }
@@ -1537,7 +1537,7 @@ export function agentRoutes(
     await assertCanUpdateAgent(ctx, existing);
 
     const actor = getActorInfo(ctx);
-    const updated = await svc.rollbackConfigRevision(id, revisionId, {
+    const updated = await svc.rollbackConfigRevision(existing.id, revisionId, {
       agentId: actor.agentId,
       userId: actor.actorType === "user" ? actor.actorId : null,
     });
@@ -1569,7 +1569,7 @@ export function agentRoutes(
     }
     await assertBoardCanManageAgentsForCompany(ctx, agent.companyId);
     assertCompanyAccess(ctx, agent.companyId);
-    const state = await heartbeat.getRuntimeState(id);
+    const state = await heartbeat.getRuntimeState(agent.id);
     return Response.json(state);
   };
 
@@ -1582,7 +1582,7 @@ export function agentRoutes(
     }
     await assertBoardCanManageAgentsForCompany(ctx, agent.companyId);
     assertCompanyAccess(ctx, agent.companyId);
-    const sessions = await heartbeat.listTaskSessions(id);
+    const sessions = await heartbeat.listTaskSessions(agent.id);
     return Response.json(
       sessions.map((session) => ({
         ...session,
@@ -1606,7 +1606,7 @@ export function agentRoutes(
       typeof body.taskKey === "string" && body.taskKey.trim().length > 0
         ? body.taskKey.trim()
         : null;
-    const state = await heartbeat.resetRuntimeSession(id, { taskKey });
+    const state = await heartbeat.resetRuntimeSession(agent.id, { taskKey });
 
     await logActivity(db, {
       companyId: agent.companyId,
@@ -1614,7 +1614,7 @@ export function agentRoutes(
       actorId: ctx.actor?.type === "board" ? (ctx.actor.userId ?? "board") : "board",
       action: "agent.runtime_session_reset",
       entityType: "agent",
-      entityId: id,
+      entityId: agent.id,
       details: { taskKey: taskKey ?? null },
     });
 
@@ -2475,7 +2475,7 @@ export function agentRoutes(
     const id = ctx.param("id")!;
     const agent = await getAccessibleAgent(ctx, id);
     if (!agent) return Response.json({ error: "Agent not found" }, { status: 404 });
-    const keys = await svc.listKeys(id);
+    const keys = await svc.listKeys(agent.id);
     return Response.json(keys);
   };
 
@@ -2485,7 +2485,7 @@ export function agentRoutes(
     const agent = await getAccessibleAgent(ctx, id);
     if (!agent) return Response.json({ error: "Agent not found" }, { status: 404 });
     const body = await ctx.json<Record<string, unknown>>();
-    const key = await svc.createApiKey(id, body.name as string);
+    const key = await svc.createApiKey(agent.id, body.name as string);
 
     await logActivity(db, {
       companyId: agent.companyId,
@@ -2539,7 +2539,7 @@ export function agentRoutes(
     assertCompanyAccess(ctx, agent.companyId);
 
     if (ctx.actor?.type === "agent") {
-      if (ctx.actor.agentId !== id) {
+      if (ctx.actor.agentId !== agent.id) {
         return Response.json({ error: "Agent can only invoke itself" }, { status: 403 });
       }
     } else {
@@ -2547,7 +2547,7 @@ export function agentRoutes(
     }
 
     const body = await ctx.json<Record<string, unknown>>();
-    const run = await heartbeat.wakeup(id, {
+    const run = await heartbeat.wakeup(agent.id, {
       source: body.source as "timer" | "assignment" | "on_demand" | "automation",
       triggerDetail: ((body.triggerDetail as string | undefined) ?? "manual") as "system" | "manual" | "ping" | "callback",
       reason: (body.reason as string | null) ?? null,

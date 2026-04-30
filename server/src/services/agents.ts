@@ -268,13 +268,29 @@ export function agentService(db: Db) {
   }
 
   async function getById(id: string) {
-    const row = await db
-      .select()
-      .from(agents)
-      .where(eq(agents.id, id))
-      .then((rows) => rows[0] ?? null);
-    if (!row) return null;
-    const [hydrated] = await hydrateAgentSpend([row]);
+    const trimmed = id.trim();
+
+    // UUID — direct lookup.
+    if (isUuidLike(trimmed)) {
+      const row = await db
+        .select()
+        .from(agents)
+        .where(eq(agents.id, trimmed))
+        .then((rows) => rows[0] ?? null);
+      if (!row) return null;
+      const [hydrated] = await hydrateAgentSpend([row]);
+      return normalizeAgentRow(hydrated);
+    }
+
+    // URL key (e.g. "ceo-3" derived from agent.name) — scan candidates and
+    // pick the first whose normalized name matches. The route handler
+    // enforces company access on the resolved agent.
+    const candidate = normalizeAgentUrlKey(trimmed);
+    if (!candidate) return null;
+    const allRows = await db.select().from(agents);
+    const match = allRows.find((row) => normalizeAgentUrlKey(row.name) === candidate) ?? null;
+    if (!match) return null;
+    const [hydrated] = await hydrateAgentSpend([match]);
     return normalizeAgentRow(hydrated);
   }
 

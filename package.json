@@ -10,7 +10,7 @@
     "dev:list": "pnpm --filter @paperclipai/server exec tsx ../scripts/dev-service.ts list",
     "dev:stop": "pnpm --filter @paperclipai/server exec tsx ../scripts/dev-service.ts stop",
     "dev:server": "pnpm --filter @paperclipai/server dev",
-    "dev:cf": "cd packages/deploy-cloudflare && node build-worker.mjs && cd ../.. && concurrently --kill-others-on-fail --names \"server,esbuild,wrangler\" --prefix-colors \"blue,yellow,green\" \"pnpm --filter @paperclipai/server dev\" \"pnpm --filter @paperclipai/deploy-cloudflare build:watch\" \"pnpm --filter @paperclipai/deploy-cloudflare dev:wrangler-only\"",
+    "dev:cf": "cd packages/deploy-cloudflare && node build-worker.mjs && cd ../.. && concurrently --kill-others-on-fail --names \"server,esbuild,wrangler\" --prefix-colors \"blue,yellow,green\" \"pnpm --filter @paperclipai/server dev:watch\" \"pnpm --filter @paperclipai/deploy-cloudflare build:watch\" \"pnpm --filter @paperclipai/deploy-cloudflare dev:wrangler-only\"",
     "deploy:cf": "cd packages/deploy-cloudflare && bun run deploy",
     "dev:ui": "pnpm --filter @paperclipai/ui dev",
     "storybook": "pnpm --filter @paperclipai/ui storybook",
