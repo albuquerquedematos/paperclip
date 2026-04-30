@@ -844,13 +844,16 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
       });
 
     // Diagnostic: confirms the new code path is loaded after `dev:cf` restart.
-    // Logged unconditionally on a non-zero exit so it's easy to grep for.
+    // Logged to BOTH the run log and the server's process stderr so it shows
+    // up regardless of whether the run-log file gets persisted.
     if (sessionId && (initial.proc.exitCode ?? 0) !== 0) {
-      await onLog(
-        "stdout",
+      const diag =
         `[paperclip] claude exit=${initial.proc.exitCode} ` +
-          `unknownSession=${unknownSessionFailure} sessionId=${sessionId}\n`,
-      );
+        `unknownSession=${unknownSessionFailure} sessionId=${sessionId} ` +
+        `stderrPrefix=${(initial.proc.stderr ?? "").slice(0, 120)}`;
+      // eslint-disable-next-line no-console
+      console.warn(diag);
+      await onLog("stdout", diag + "\n");
     }
 
     if (unknownSessionFailure) {
