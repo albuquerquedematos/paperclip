@@ -33,11 +33,12 @@ export interface HyperdriveBinding {
  * @param hyperdrive - The Hyperdrive binding from the Worker `Env`.
  */
 export function createHyperdriveDb(hyperdrive: HyperdriveBinding): Db {
-  // max: 5 keeps connection usage low across concurrent invocations.
+  // max: 1 — we create a new pool per request (CF Workers prohibits reusing
+  // TCP sockets across requests), so a single connection is all we need.
   // prepare: false disables prepared-statement caching because Hyperdrive
   // routes across multiple upstream connections and cannot share PS state.
   const sql = postgres(hyperdrive.connectionString, {
-    max: 5,
+    max: 1,
     prepare: false,
   });
   // drizzle-orm's postgres-js adapter returns a type that is structurally

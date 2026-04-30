@@ -2,7 +2,6 @@
 // Must export every named export that bundled packages try to import.
 
 const notAvailable = (name: string) => () => { throw new Error(`node:fs.${name} not available in CF Workers`); };
-const notAvailableSync = (name: string) => () => { throw new Error(`node:fs.${name} not available in CF Workers`); };
 
 // Commonly needed constants
 export const constants = {
@@ -14,28 +13,28 @@ export const constants = {
 };
 
 // Sync API stubs
-export const readFileSync = notAvailableSync("readFileSync");
-export const writeFileSync = notAvailableSync("writeFileSync");
-export const appendFileSync = notAvailableSync("appendFileSync");
+export const readFileSync = notAvailable("readFileSync");
+export const writeFileSync = notAvailable("writeFileSync");
+export const appendFileSync = notAvailable("appendFileSync");
 export const existsSync = () => false;
-export const mkdirSync = notAvailableSync("mkdirSync");
-export const rmdirSync = notAvailableSync("rmdirSync");
-export const rmSync = notAvailableSync("rmSync");
-export const readdirSync = notAvailableSync("readdirSync");
-export const statSync = notAvailableSync("statSync");
-export const lstatSync = notAvailableSync("lstatSync");
-export const fstatSync = notAvailableSync("fstatSync");
-export const unlinkSync = notAvailableSync("unlinkSync");
-export const renameSync = notAvailableSync("renameSync");
-export const copyFileSync = notAvailableSync("copyFileSync");
-export const chmodSync = notAvailableSync("chmodSync");
-export const chownSync = notAvailableSync("chownSync");
-export const truncateSync = notAvailableSync("truncateSync");
-export const openSync = notAvailableSync("openSync");
-export const closeSync = notAvailableSync("closeSync");
-export const readSync = notAvailableSync("readSync");
-export const writeSync = notAvailableSync("writeSync");
-export const realpathSync = Object.assign(notAvailableSync("realpathSync"), { native: notAvailableSync("realpathSync.native") });
+export const mkdirSync = notAvailable("mkdirSync");
+export const rmdirSync = notAvailable("rmdirSync");
+export const rmSync = notAvailable("rmSync");
+export const readdirSync = notAvailable("readdirSync");
+export const statSync = notAvailable("statSync");
+export const lstatSync = notAvailable("lstatSync");
+export const fstatSync = notAvailable("fstatSync");
+export const unlinkSync = notAvailable("unlinkSync");
+export const renameSync = notAvailable("renameSync");
+export const copyFileSync = notAvailable("copyFileSync");
+export const chmodSync = notAvailable("chmodSync");
+export const chownSync = notAvailable("chownSync");
+export const truncateSync = notAvailable("truncateSync");
+export const openSync = notAvailable("openSync");
+export const closeSync = notAvailable("closeSync");
+export const readSync = notAvailable("readSync");
+export const writeSync = notAvailable("writeSync");
+export const realpathSync = Object.assign(notAvailable("realpathSync"), { native: notAvailable("realpathSync.native") });
 
 // Async callback-style API stubs
 export const readFile = notAvailable("readFile");

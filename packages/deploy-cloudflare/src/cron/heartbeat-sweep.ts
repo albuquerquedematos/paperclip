@@ -21,7 +21,7 @@
 import { eq } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import { agents, heartbeatRuns } from "@paperclipai/db";
-import type { Env } from "../worker/api.js";
+import type { Env } from "../worker/env.js";
 
 /** Minimal heartbeat policy shape read from agent.runtimeConfig.heartbeat JSON. */
 interface HeartbeatPolicy {

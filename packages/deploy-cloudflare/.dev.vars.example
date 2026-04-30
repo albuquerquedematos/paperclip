@@ -1,0 +1,18 @@
+# Copy this file to .dev.vars and fill in values for local CF Workers dev.
+# .dev.vars is gitignored — never commit real credentials.
+#
+# Run: pnpm dev:cf  (from repo root)
+# Wrangler reads .dev.vars automatically when running `wrangler dev`.
+
+# Bypasses auth resolution and the setup KV gate so you can hit API routes
+# without a real session. Set to "authenticated" in staging/production.
+DEPLOYMENT_MODE=local_trusted
+
+# Set by wrangler.toml [vars] — override here only if needed.
+DEPLOYMENT_PLATFORM=cloudflare
+DEPLOYMENT_EXPOSURE=private
+
+# Sidecar Node.js server (runs alongside CF Worker for Node-only operations).
+# Leave blank if you haven't configured a sidecar for local dev.
+SIDECAR_URL=http://127.0.0.1:3101
+SIDECAR_API_KEY=dev-local

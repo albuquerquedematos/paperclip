@@ -1,0 +1,58 @@
+/**
+ * Cloudflare Worker environment bindings and deployment-mode helpers.
+ *
+ * Keeping `Env` in its own file lets every worker sub-module import it
+ * without pulling in the full Hono app or route registry.
+ */
+
+// ---------------------------------------------------------------------------
+// Env -- Cloudflare bindings injected at runtime by the Workers runtime
+// ---------------------------------------------------------------------------
+
+export interface Env {
+  // Databases
+  HYPERDRIVE: { connectionString: string };
+
+  // Object storage
+  PAPERCLIP_STORAGE: R2Bucket;
+
+  // KV -- setup flags, hot config, session cache
+  PAPERCLIP_KV: KVNamespace;
+
+  // Durable Object namespaces
+  TASK_DO: DurableObjectNamespace;
+  AGENT_RUN_DO: DurableObjectNamespace;
+  SCHEDULER_DO: DurableObjectNamespace;
+
+  // Queues
+  PAPERCLIP_QUEUE: Queue;
+
+  // Workflows
+  HEARTBEAT_WORKFLOW: Workflow;
+  PLUGIN_DISPATCH_WORKFLOW: Workflow;
+
+  // Vars (set in wrangler.toml [vars] or .dev.vars for local dev)
+  DEPLOYMENT_PLATFORM: string;
+  DEPLOYMENT_MODE: string;
+  DEPLOYMENT_EXPOSURE: string;
+  STORAGE_R2_BUCKET?: string;
+  STORAGE_R2_PREFIX?: string;
+
+  // Sidecar -- the Node server running alongside the Workers deployment
+  SIDECAR_URL: string;
+  SIDECAR_API_KEY: string;
+}
+
+// ---------------------------------------------------------------------------
+// Deployment mode
+// ---------------------------------------------------------------------------
+
+export type DeploymentMode = "local_trusted" | "authenticated";
+
+/**
+ * Returns the deployment mode for the current request.
+ * `local_trusted` bypasses auth and the setup KV gate for local dev.
+ */
+export function resolveDeploymentMode(env: Env): DeploymentMode {
+  return env.DEPLOYMENT_MODE === "local_trusted" ? "local_trusted" : "authenticated";
+}

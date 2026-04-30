@@ -15,4 +15,4 @@ export const pipeline = notAvailable("pipeline");
 export const open = notAvailable("open");
 export const lstat = notAvailable("lstat");
 export const watch = notAvailable("watch");
-export default { readFile, writeFile, readdir, mkdir, stat, unlink, access, realpath, rm, rename, copyFile };
+export default { readFile, writeFile, readdir, mkdir, stat, lstat, unlink, access, realpath, rm, rename, copyFile, pipeline, open, watch };
