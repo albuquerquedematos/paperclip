@@ -14,6 +14,11 @@
  *   GET    /api/agents/:id/instructions-bundle/file     — fs read of one file
  *   PUT    /api/agents/:id/instructions-bundle/file     — fs write
  *   DELETE /api/agents/:id/instructions-bundle/file     — fs unlink
+ *   POST   /api/companies/:companyId/adapters/:type/test-environment
+ *                                                       — adapter preflight: spawns claude,
+ *                                                         calls fs.access on cwd
+ *   GET    /api/companies/:companyId/adapters/:type/detect-model
+ *                                                       — runs claude to query model
  *
  * Without these CF-native shadows the auto-bridged server handlers run
  * inside the worker and fail with `node:fs/promises not available` or
@@ -92,4 +97,9 @@ export function registerAgentCfRoutes(app: Hono<{ Bindings: Env }>): void {
   app.get("/api/agents/:id/instructions-bundle/file", handler);
   app.put("/api/agents/:id/instructions-bundle/file", handler);
   app.delete("/api/agents/:id/instructions-bundle/file", handler);
+
+  // Adapter preflight + model detection — both spawn the adapter CLI and
+  // touch the filesystem (resolveCommandPath, fs.access on cwd, etc.).
+  app.post("/api/companies/:companyId/adapters/:type/test-environment", handler);
+  app.get("/api/companies/:companyId/adapters/:type/detect-model", handler);
 }
