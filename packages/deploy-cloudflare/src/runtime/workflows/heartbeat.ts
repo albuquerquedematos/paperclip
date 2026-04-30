@@ -1,4 +1,5 @@
 import { WorkflowEntrypoint, type WorkflowStep, type WorkflowEvent } from "cloudflare:workers";
+import { callSidecarService } from "../../sidecar-client.js";
 
 /**
  * Parameters passed when triggering the HeartbeatWorkflow.
@@ -111,35 +112,20 @@ export class HeartbeatWorkflow extends WorkflowEntrypoint<Env, HeartbeatParams> 
         retries: { limit: 2, delay: "5 seconds", backoff: "linear" },
       },
       async () => {
-        const body = JSON.stringify({ agentId, companyId, runId, taskId });
-        const headers = { "Content-Type": "application/json" };
+        const bridgeUrl = this.env.SIDECAR_SERVICE
+          ? null
+          : ((await this.env.PAPERCLIP_KV.get("SANDBOX_BRIDGE_URL")) ?? "http://localhost:8788");
+        const apiKey = this.env.SIDECAR_SERVICE
+          ? null
+          : await this.env.PAPERCLIP_KV.get("SANDBOX_BRIDGE_API_KEY");
 
-        let resp: Response;
-        if (this.env.SIDECAR_SERVICE) {
-          // CF-native path: SidecarContainer DO proxies to the Docker container.
-          // The DO handles container start/lifecycle; we just call fetch().
-          const id = this.env.SIDECAR_SERVICE.idFromName("sidecar");
-          const stub = this.env.SIDECAR_SERVICE.get(id);
-          resp = await stub.fetch(
-            "http://sidecar/internal/heartbeat",
-            { method: "POST", headers, body },
-          );
-        } else {
-          // Fallback: read bridge URL + key from KV and call via fetch().
-          const bridgeUrl =
-            (await this.env.PAPERCLIP_KV.get("SANDBOX_BRIDGE_URL")) ??
-            "http://localhost:8788";
-          const apiKey = await this.env.PAPERCLIP_KV.get("SANDBOX_BRIDGE_API_KEY");
-          resp = await fetch(`${bridgeUrl}/internal/heartbeat`, {
-            method: "POST",
-            headers: {
-              ...headers,
-              ...(apiKey ? { Authorization: `Bearer ${apiKey}` } : {}),
-            },
-            body,
-          });
-        }
-
+        const resp = await callSidecarService(
+          { service: this.env.SIDECAR_SERVICE, url: bridgeUrl, apiKey },
+          "/internal/heartbeat",
+          "POST",
+          { agentId, companyId, runId, taskId },
+        );
+        if (!resp) throw new Error("No sidecar route available: configure SIDECAR_SERVICE or SANDBOX_BRIDGE_URL");
         if (!resp.ok) {
           const text = await resp.text().catch(() => "(unreadable)");
           throw new Error(`Heartbeat execution failed: HTTP ${resp.status}: ${text}`);

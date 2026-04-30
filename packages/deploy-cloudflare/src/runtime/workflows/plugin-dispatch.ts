@@ -1,4 +1,5 @@
 import { WorkflowEntrypoint, type WorkflowStep, type WorkflowEvent } from "cloudflare:workers";
+import { callSidecarService } from "../../sidecar-client.js";
 
 /**
  * Parameters for the PluginDispatchWorkflow.
@@ -65,21 +66,13 @@ export class PluginDispatchWorkflow extends WorkflowEntrypoint<Env, PluginDispat
       bridgeApiKey = await this.env.PAPERCLIP_KV.get("SANDBOX_BRIDGE_API_KEY");
     }
 
+    const sidecarRouting = { service: this.env.SIDECAR_SERVICE, url: bridgeUrl, apiKey: bridgeApiKey };
+
     /** Call the sidecar internal API — SidecarContainer DO preferred, fallback to bridge. */
     const sidecarPost = async (path: string, body: unknown): Promise<Response> => {
-      if (this.env.SIDECAR_SERVICE) {
-        // SidecarContainer DO proxies to the Docker sidecar (or KV bridge in local dev).
-        const id = this.env.SIDECAR_SERVICE.idFromName("sidecar");
-        const stub = this.env.SIDECAR_SERVICE.get(id);
-        return stub.fetch(`http://sidecar${path}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
-        });
-      }
-      const headers: Record<string, string> = { "Content-Type": "application/json" };
-      if (bridgeApiKey) headers.Authorization = `Bearer ${bridgeApiKey}`;
-      return fetch(`${bridgeUrl}${path}`, { method: "POST", headers, body: JSON.stringify(body) });
+      const resp = await callSidecarService(sidecarRouting, path, "POST", body);
+      if (!resp) throw new Error("No sidecar route available: configure SIDECAR_SERVICE or SANDBOX_BRIDGE_URL");
+      return resp;
     };
 
     // ------------------------------------------------------------------

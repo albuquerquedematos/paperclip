@@ -185,10 +185,11 @@ function runChain(
 }
 
 // ---------------------------------------------------------------------------
-// Path-pattern extraction (mirrors route-registry.ts logic)
+// Path-pattern compilation (shared with route-registry.ts)
 // ---------------------------------------------------------------------------
 
-function pathToParamNames(path: string): { re: RegExp; paramNames: string[] } {
+/** Converts an Express-style path (with :param segments) to a RegExp + param names. */
+export function pathToRegex(path: string): { re: RegExp; paramNames: string[] } {
   const paramNames: string[] = [];
   const pattern = path
     .replace(/[$()*+.?[\\\]^{|}]/g, "\\$&")
@@ -216,7 +217,7 @@ export function bridgeExpressHandlers(
   path: string,
   handlers: HandlerLayer[],
 ): Handler {
-  const { re, paramNames } = pathToParamNames(path);
+  const { re, paramNames } = pathToRegex(path);
 
   return async (ctx: RequestCtx): Promise<Response> => {
     // Extract URL path params

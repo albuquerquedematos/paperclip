@@ -16,7 +16,7 @@ import { createHyperdriveDb } from "../db/hyperdrive.js";
 import { R2Provider } from "../storage/r2-provider.js";
 import { createCfStorageService } from "../storage/cf-storage-service.js";
 import { extractRoutesFromRouter } from "../http/express-router-bridge.js";
-import { extractAllRoutesFromRouter } from "../http/cf-express-bridge.js";
+import { extractAllRoutesFromRouter, pathToRegex } from "../http/cf-express-bridge.js";
 import { resolveDeploymentMode } from "./env.js";
 import type { Env } from "./env.js";
 import type { RouteDefinition } from "../../../../server/src/http/types.js";
@@ -77,18 +77,6 @@ let compiledPathCache: {
   fingerprint: string;
   patterns: Array<{ re: RegExp; paramNames: string[] }>;
 } | null = null;
-
-/** Converts an Express-style path (with :param segments) to a RegExp + param names. */
-function pathToRegex(path: string): { re: RegExp; paramNames: string[] } {
-  const paramNames: string[] = [];
-  const pattern = path
-    .replace(/[$()*+.?[\\\]^{|}]/g, "\\$&")
-    .replace(/:([a-zA-Z_][a-zA-Z0-9_]*)/g, (_match, name: string) => {
-      paramNames.push(name);
-      return "([^/]+)";
-    });
-  return { re: new RegExp(`^${pattern}$`), paramNames };
-}
 
 function ext(router: unknown, prefix: string): RouteDefinition[] {
   return extractRoutesFromRouter(router, prefix);

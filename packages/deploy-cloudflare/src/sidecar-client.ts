@@ -22,6 +22,57 @@
  */
 
 // ---------------------------------------------------------------------------
+// Low-level routing primitive
+// ---------------------------------------------------------------------------
+
+/**
+ * Route and call the sidecar internal API: use the SIDECAR_SERVICE DO when
+ * available, otherwise fall back to a direct HTTP URL. Body is serialized as
+ * JSON. For stream-proxy use cases (raw Request body), use the per-route
+ * proxySidecar helper instead of this function.
+ *
+ * The caller is responsible for resolving `url` and `apiKey` from env vars or
+ * KV before calling (so KV reads don't get retried alongside the actual call).
+ * Returns `null` when no route is available (service absent AND url is null).
+ */
+export interface SidecarRouting {
+  /** CF Container DO namespace — preferred path. */
+  service?: DurableObjectNamespace | null;
+  /** Direct fallback URL (already resolved from env var or KV). */
+  url?: string | null;
+  /** API key for the direct URL path. */
+  apiKey?: string | null;
+}
+
+export async function callSidecarService(
+  routing: SidecarRouting,
+  path: string,
+  method: string,
+  body?: unknown,
+): Promise<Response | null> {
+  const headers: Record<string, string> = {};
+  if (body !== undefined) headers["Content-Type"] = "application/json";
+
+  if (routing.service) {
+    const stub = routing.service.get(routing.service.idFromName("sidecar"));
+    return stub.fetch(`http://sidecar${path}`, {
+      method,
+      headers,
+      body: body !== undefined ? JSON.stringify(body) : undefined,
+    });
+  }
+
+  if (!routing.url) return null;
+
+  if (routing.apiKey) headers.Authorization = `Bearer ${routing.apiKey}`;
+  return fetch(`${routing.url}${path}`, {
+    method,
+    headers,
+    body: body !== undefined ? JSON.stringify(body) : undefined,
+  });
+}
+
+// ---------------------------------------------------------------------------
 // Configuration
 // ---------------------------------------------------------------------------
 
