@@ -134,11 +134,14 @@ export async function testEnvironment(
   const configApiKey = env.ANTHROPIC_API_KEY;
   const hostApiKey = considerHostEnv ? process.env.ANTHROPIC_API_KEY : undefined;
 
-  // authMode: per-agent override that lets the operator pin auth without
-  // touching shell env. "subscription" forces Claude Code login by hiding
-  // ANTHROPIC_API_KEY/Bedrock vars from the spawned CLI; "api_key" requires
-  // ANTHROPIC_API_KEY to be set; "auto" (default) is the legacy behaviour.
-  const authMode = asString(config.authMode, "auto").trim().toLowerCase();
+  // authMode resolution order (matches execute.ts):
+  //   1. agent.adapterConfig.authMode             — per-agent override
+  //   2. process.env.PAPERCLIP_CLAUDE_AUTH_MODE   — instance-wide default
+  //   3. "auto"                                   — legacy behaviour
+  const authMode = asString(
+    config.authMode,
+    (considerHostEnv ? process.env.PAPERCLIP_CLAUDE_AUTH_MODE : undefined) ?? "auto",
+  ).trim().toLowerCase();
 
   if (authMode === "subscription") {
     if (isNonEmpty(configApiKey) || isNonEmpty(hostApiKey) || hasBedrock) {

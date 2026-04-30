@@ -359,12 +359,22 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
       (entry): entry is [string, string] => typeof entry[1] === "string",
     ),
   );
-  // authMode: "auto" (default; current behaviour — claude picks subscription
-  // or API key based on whatever env vars are present), "subscription" (force
-  // Claude Code login by stripping API/Bedrock env vars), or "api_key" (keep
-  // ANTHROPIC_API_KEY; surface a config error in test.ts if missing). Lets the
-  // operator pin auth without touching shell env vars.
-  const authMode = asString(config.authMode, "auto").trim().toLowerCase();
+  // authMode resolution order (per-agent wins, then global env, then "auto"):
+  //   1. agent.adapterConfig.authMode             — per-agent override
+  //   2. process.env.PAPERCLIP_CLAUDE_AUTH_MODE   — instance-wide default
+  //   3. "auto"                                   — legacy behaviour
+  //
+  // Values:
+  //   "auto"          claude CLI decides based on env vars (current behaviour)
+  //   "subscription"  force Claude Code login. Strips ANTHROPIC_API_KEY,
+  //                   ANTHROPIC_AUTH_TOKEN, CLAUDE_CODE_USE_BEDROCK,
+  //                   ANTHROPIC_BEDROCK_BASE_URL from the spawned env.
+  //   "api_key"       require ANTHROPIC_API_KEY. test-environment surfaces a
+  //                   hard error if it is missing.
+  const authMode = asString(
+    config.authMode,
+    process.env.PAPERCLIP_CLAUDE_AUTH_MODE ?? "auto",
+  ).trim().toLowerCase();
   const effectiveEnv = (() => {
     if (authMode !== "subscription") return rawEffectiveEnv;
     const scrubbed = { ...rawEffectiveEnv };
