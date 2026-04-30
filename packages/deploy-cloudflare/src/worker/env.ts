@@ -49,6 +49,15 @@ export interface Env {
   SIDECAR_URL?: string;
   SIDECAR_API_KEY?: string;
 
+  // Optional: Anthropic API key for the worker-direct adapter path (future).
+  // When present, agents configured to use the `claude-api` adapter call
+  // api.anthropic.com directly from the worker — no sidecar needed for the
+  // LLM call itself. Tools that require filesystem/exec still proxy to the
+  // sidecar. Set via `wrangler secret put ANTHROPIC_API_KEY`. See
+  // src/adapter-executor/anthropic-api.ts for the executor scaffold and the
+  // outstanding work needed to make it production-ready.
+  ANTHROPIC_API_KEY?: string;
+
   // Static assets binding — serves ui/dist alongside the Worker.
   // Use env.ASSETS.fetch(request) to serve static files or let CF fall
   // back to index.html for SPA routes (not_found_handling = "single-page-application").

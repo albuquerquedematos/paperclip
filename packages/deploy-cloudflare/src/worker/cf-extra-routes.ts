@@ -26,6 +26,7 @@
 import type { Hono } from "hono";
 import type { Env } from "./env.js";
 import { registerAdapterRoutes } from "./routes/adapters.js";
+import { registerAgentCfRoutes } from "./routes/agents-cf.js";
 import { registerPluginRoutes } from "./routes/plugins.js";
 import { registerPluginUiStaticRoutes } from "./routes/plugin-ui-static.js";
 import { registerCompanyAccessRoutes } from "./routes/company-access.js";
@@ -35,6 +36,9 @@ import { registerInstanceBackupRoutes } from "./routes/instance-backups.js";
 
 export function registerCfExtraRoutes(app: Hono<{ Bindings: Env }>): void {
   registerAdapterRoutes(app);
+  // CF shadows for agent routes that spawn `claude` or use node:fs.
+  // Must register BEFORE the auto-bridge catch-all so they take precedence.
+  registerAgentCfRoutes(app);
   registerPluginRoutes(app);
   registerPluginUiStaticRoutes(app);
   registerCompanyAccessRoutes(app);
