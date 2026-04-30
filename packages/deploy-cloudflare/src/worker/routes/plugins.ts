@@ -126,15 +126,14 @@ export function registerPluginRoutes(app: Hono<{ Bindings: Env }>): void {
     });
     if (!actor) return c.json({ error: "Unauthorized" }, 401);
 
-    const resp = await proxySidecar(c.env, "/api/plugins/examples", c.req.raw);
-    if (!resp.ok) {
-      // Sidecar unavailable or doesn't support this endpoint — return empty.
+    try {
+      const resp = await proxySidecar(c.env, "/api/plugins/examples", c.req.raw);
+      if (!resp.ok) return c.json([]);
+      return new Response(resp.body, { status: resp.status, headers: { "Content-Type": "application/json" } });
+    } catch {
+      // Sidecar unreachable (not running locally) — return empty list.
       return c.json([]);
     }
-    return new Response(resp.body, {
-      status: resp.status,
-      headers: { "Content-Type": "application/json" },
-    });
   });
 
   // -------------------------------------------------------------------------
@@ -159,16 +158,20 @@ export function registerPluginRoutes(app: Hono<{ Bindings: Env }>): void {
       ? { packageName: body.packageName, version: body.version, isLocalPath: false }
       : body;
 
-    const resp = await proxySidecar(c.env, "/api/plugins/install",
-      new Request(c.req.url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(rewritten),
-      }),
-    );
-    return new Response(resp.body, {
-      status: resp.status,
-      headers: { "Content-Type": "application/json" },
-    });
+    try {
+      const resp = await proxySidecar(c.env, "/api/plugins/install",
+        new Request(c.req.url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(rewritten),
+        }),
+      );
+      return new Response(resp.body, { status: resp.status, headers: { "Content-Type": "application/json" } });
+    } catch {
+      return c.json(
+        { error: "Plugin install requires the Node.js server to be running (pnpm dev or bun run dev)" },
+        503,
+      );
+    }
   });
 }
