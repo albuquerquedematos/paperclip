@@ -556,7 +556,10 @@ function ExportPreviewPane({
 
 // ── Main page ─────────────────────────────────────────────────────────
 
-/** Extract the file path from the current URL pathname (after /company/export/files/) */
+/** Extract the file path from the current URL pathname (after .../company/export/files/).
+ * The route mounts under /:companyPrefix/company/export/* — the prefix segment
+ * is variable, so match the marker by suffix rather than a fixed leading path.
+ */
 function filePathFromLocation(pathname: string): string | null {
   const marker = "/company/export/files/";
   const idx = pathname.indexOf(marker);
@@ -640,17 +643,23 @@ export function CompanyExport() {
   );
 
   // Navigate-aware file selection: updates state + URL without page reload.
+  // The export route mounts at /:companyPrefix/company/export/*, so URLs we
+  // push need the company prefix; otherwise React Router would parse "company"
+  // as the prefix and we'd hit the "No company matches prefix COMPANY" 404.
   // `replace` = true skips history entry (used for initial load); false = pushes (used for clicks).
+  const exportBasePath = selectedCompany
+    ? `/${selectedCompany.issuePrefix}/company/export`
+    : "/company/export";
   const selectFile = useCallback(
     (filePath: string | null, replace = false) => {
       setSelectedFile(filePath);
       if (filePath) {
-        navigate(`/company/export/files/${encodeURI(filePath)}`, { replace });
+        navigate(`${exportBasePath}/files/${encodeURI(filePath)}`, { replace });
       } else {
-        navigate("/company/export", { replace });
+        navigate(exportBasePath, { replace });
       }
     },
-    [navigate],
+    [navigate, exportBasePath],
   );
 
   // Sync selectedFile from URL on browser back/forward

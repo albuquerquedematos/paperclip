@@ -476,17 +476,17 @@ export function CompanySettings() {
         <div className="rounded-md border border-border px-4 py-4">
           <p className="text-sm text-muted-foreground">
             Import and export have moved to dedicated pages accessible from the{" "}
-            <a href="/org" className="underline hover:text-foreground">Org Chart</a> header.
+            <a href={selectedCompany ? `/${selectedCompany.issuePrefix}/org` : "/org"} className="underline hover:text-foreground">Org Chart</a> header.
           </p>
           <div className="mt-3 flex items-center gap-2">
-            <Button size="sm" variant="outline" asChild>
-              <a href="/company/export">
+            <Button size="sm" variant="outline" asChild disabled={!selectedCompany}>
+              <a href={selectedCompany ? `/${selectedCompany.issuePrefix}/company/export` : "#"}>
                 <Download className="mr-1.5 h-3.5 w-3.5" />
                 Export
               </a>
             </Button>
-            <Button size="sm" variant="outline" asChild>
-              <a href="/company/import">
+            <Button size="sm" variant="outline" asChild disabled={!selectedCompany}>
+              <a href={selectedCompany ? `/${selectedCompany.issuePrefix}/company/import` : "#"}>
                 <Upload className="mr-1.5 h-3.5 w-3.5" />
                 Import
               </a>

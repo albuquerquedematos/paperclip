@@ -171,7 +171,7 @@ const defaultDotColor = "#a3a3a3";
 // ── Main component ──────────────────────────────────────────────────────
 
 export function OrgChart() {
-  const { selectedCompanyId } = useCompany();
+  const { selectedCompanyId, selectedCompany } = useCompany();
   const { setBreadcrumbs } = useBreadcrumbs();
   const navigate = useNavigate();
 
@@ -443,14 +443,14 @@ export function OrgChart() {
   return (
     <div className="flex h-[calc(100dvh-9rem)] min-h-[420px] flex-col md:h-full md:min-h-0">
       <div className="mb-2 flex shrink-0 flex-wrap items-center justify-start gap-2">
-        <Link to="/company/import">
-          <Button variant="outline" size="sm">
+        <Link to={selectedCompany ? `/${selectedCompany.issuePrefix}/company/import` : "#"}>
+          <Button variant="outline" size="sm" disabled={!selectedCompany}>
             <Upload className="mr-1.5 h-3.5 w-3.5" />
             Import company
           </Button>
         </Link>
-        <Link to="/company/export">
-          <Button variant="outline" size="sm">
+        <Link to={selectedCompany ? `/${selectedCompany.issuePrefix}/company/export` : "#"}>
+          <Button variant="outline" size="sm" disabled={!selectedCompany}>
             <Download className="mr-1.5 h-3.5 w-3.5" />
             Export company
           </Button>
