@@ -1505,10 +1505,17 @@ export async function runChildProcess(
 
     // Caller-requested deletions (e.g. authMode=subscription strips
     // ANTHROPIC_API_KEY so claude falls back to the subscription credentials).
-    if (opts.envDeletes) {
+    if (opts.envDeletes && opts.envDeletes.length > 0) {
       for (const key of opts.envDeletes) {
         delete rawMerged[key];
       }
+      // Diagnostic: surface in the server stdout so the operator can confirm
+      // the deletions actually happened. Remove once fix is verified.
+      // eslint-disable-next-line no-console
+      console.warn(
+        `[runChildProcess] command=${command} envDeletes=${opts.envDeletes.join(",")} ` +
+          `ANTHROPIC_API_KEY_present_after=${rawMerged.ANTHROPIC_API_KEY != null}`,
+      );
     }
 
     const mergedEnv = ensurePathInEnv(rawMerged);
