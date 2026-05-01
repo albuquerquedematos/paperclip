@@ -1462,6 +1462,15 @@ export async function runChildProcess(
   opts: {
     cwd: string;
     env: Record<string, string>;
+    /**
+     * Env var names to drop from the spawned child's environment AFTER
+     * merging process.env with opts.env. Use this when you need the child
+     * to behave as if a process-wide env var were unset (e.g. forcing
+     * `claude` to ignore a host-level ANTHROPIC_API_KEY when the operator
+     * picked subscription auth). Values present in opts.env are also
+     * removed; you do not need to set them to "" beforehand.
+     */
+    envDeletes?: readonly string[];
     timeoutSec: number;
     graceSec: number;
     onLog: (stream: "stdout" | "stderr", chunk: string) => Promise<void>;
@@ -1492,6 +1501,14 @@ export async function runChildProcess(
     ] as const;
     for (const key of CLAUDE_CODE_NESTING_VARS) {
       delete rawMerged[key];
+    }
+
+    // Caller-requested deletions (e.g. authMode=subscription strips
+    // ANTHROPIC_API_KEY so claude falls back to the subscription credentials).
+    if (opts.envDeletes) {
+      for (const key of opts.envDeletes) {
+        delete rawMerged[key];
+      }
     }
 
     const mergedEnv = ensurePathInEnv(rawMerged);

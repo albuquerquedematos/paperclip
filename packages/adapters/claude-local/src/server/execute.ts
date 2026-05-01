@@ -375,13 +375,21 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
     config.authMode,
     process.env.PAPERCLIP_CLAUDE_AUTH_MODE ?? "auto",
   ).trim().toLowerCase();
+  // Names to strip from the spawned `claude` process env when auth is forced
+  // to subscription. Both rawEffectiveEnv (for billing/auth detection in this
+  // process) and the spawn merge (process.env + opts.env) need to be cleared.
+  const SUBSCRIPTION_ENV_DELETES = [
+    "ANTHROPIC_API_KEY",
+    "ANTHROPIC_AUTH_TOKEN",
+    "CLAUDE_CODE_USE_BEDROCK",
+    "ANTHROPIC_BEDROCK_BASE_URL",
+  ] as const;
+  const envDeletes: readonly string[] =
+    authMode === "subscription" ? SUBSCRIPTION_ENV_DELETES : [];
   const effectiveEnv = (() => {
     if (authMode !== "subscription") return rawEffectiveEnv;
     const scrubbed = { ...rawEffectiveEnv };
-    delete scrubbed.ANTHROPIC_API_KEY;
-    delete scrubbed.ANTHROPIC_AUTH_TOKEN;
-    delete scrubbed.CLAUDE_CODE_USE_BEDROCK;
-    delete scrubbed.ANTHROPIC_BEDROCK_BASE_URL;
+    for (const k of SUBSCRIPTION_ENV_DELETES) delete scrubbed[k];
     return scrubbed;
   })();
   const billingType = resolveClaudeBillingType(effectiveEnv);
@@ -668,6 +676,7 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
     const proc = await runAdapterExecutionTargetProcess(runId, executionTarget, command, args, {
       cwd,
       env,
+      envDeletes,
       stdin: prompt,
       timeoutSec,
       graceSec,

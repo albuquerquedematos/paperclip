@@ -75,6 +75,13 @@ export interface PreparedAdapterExecutionTargetRuntime {
 export interface AdapterExecutionTargetProcessOptions {
   cwd: string;
   env: Record<string, string>;
+  /**
+   * Env var names to drop from the spawned child's environment. Forwarded
+   * to runChildProcess so adapters can force a process-wide env var (set
+   * in the operator's shell) to be invisible to the child without
+   * mutating Paperclip's own process.env.
+   */
+  envDeletes?: readonly string[];
   stdin?: string;
   timeoutSec: number;
   graceSec: number;
@@ -268,6 +275,7 @@ export async function runAdapterExecutionTargetProcess(
   return await runChildProcess(runId, command, args, {
     cwd: options.cwd,
     env: options.env,
+    envDeletes: options.envDeletes,
     stdin: options.stdin,
     timeoutSec: options.timeoutSec,
     graceSec: options.graceSec,
