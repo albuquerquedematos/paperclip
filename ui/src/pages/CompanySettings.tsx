@@ -1,4 +1,5 @@
 import { ChangeEvent, useEffect, useState } from "react";
+import { Link } from "@/lib/router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useCompany } from "../context/CompanyContext";
 import { useBreadcrumbs } from "../context/BreadcrumbContext";
@@ -476,20 +477,26 @@ export function CompanySettings() {
         <div className="rounded-md border border-border px-4 py-4">
           <p className="text-sm text-muted-foreground">
             Import and export have moved to dedicated pages accessible from the{" "}
-            <a href={selectedCompany ? `/${selectedCompany.issuePrefix}/org` : "/org"} className="underline hover:text-foreground">Org Chart</a> header.
+            <Link
+              to={selectedCompany ? `/${selectedCompany.issuePrefix}/org` : "/org"}
+              className="underline hover:text-foreground"
+            >
+              Org Chart
+            </Link>{" "}
+            header.
           </p>
           <div className="mt-3 flex items-center gap-2">
             <Button size="sm" variant="outline" asChild disabled={!selectedCompany}>
-              <a href={selectedCompany ? `/${selectedCompany.issuePrefix}/company/export` : "#"}>
+              <Link to={selectedCompany ? `/${selectedCompany.issuePrefix}/company/export` : "#"}>
                 <Download className="mr-1.5 h-3.5 w-3.5" />
                 Export
-              </a>
+              </Link>
             </Button>
             <Button size="sm" variant="outline" asChild disabled={!selectedCompany}>
-              <a href={selectedCompany ? `/${selectedCompany.issuePrefix}/company/import` : "#"}>
+              <Link to={selectedCompany ? `/${selectedCompany.issuePrefix}/company/import` : "#"}>
                 <Upload className="mr-1.5 h-3.5 w-3.5" />
                 Import
-              </a>
+              </Link>
             </Button>
           </div>
         </div>
