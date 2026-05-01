@@ -65,11 +65,15 @@ if (buildExit !== 0) {
 // on workspace-package CLI resolution.
 const concurrentlyBin = path.join(repoRoot, "node_modules/.bin/concurrently");
 
-const wranglerCmd = [
-  "bash",
-  "-c",
-  `source "\${NVM_DIR:-$HOME/.nvm}/nvm.sh" && nvm use 22 && wrangler dev --no-bundle --local --var SIDECAR_URL:${sidecarUrl}`,
-].map((s) => JSON.stringify(s)).join(" ");
+// concurrently feeds each command string to a shell. We need wrangler to
+// run from packages/deploy-cloudflare (where wrangler.toml lives), with
+// nvm-loaded Node 22 and the picked SIDECAR_URL injected via --var (so it
+// overrides anything in .dev.vars). Outer single quotes keep the bash -c
+// argument verbatim; in JS template literals \${...} avoids JS interpolation.
+const wranglerCmd =
+  `bash -c 'cd packages/deploy-cloudflare && ` +
+  `source "\${NVM_DIR:-$HOME/.nvm}/nvm.sh" && nvm use 22 && ` +
+  `wrangler dev --no-bundle --local --var SIDECAR_URL:${sidecarUrl}'`;
 
 const args = [
   "--kill-others-on-fail",
