@@ -49,16 +49,53 @@ const port = await findFreePort(START_PORT, MAX_ATTEMPTS);
 const sidecarUrl = `http://127.0.0.1:${port}`;
 console.log(`[dev:cf] picked server port ${port} (sidecarUrl=${sidecarUrl})`);
 
-// Build the worker bundle once before launching wrangler. esbuild --watch
-// keeps it fresh thereafter.
-const buildResult = spawn("node", ["build-worker.mjs"], {
-  cwd: path.join(repoRoot, "packages/deploy-cloudflare"),
-  stdio: "inherit",
-});
-const buildExit = await new Promise((resolve) => buildResult.once("exit", resolve));
-if (buildExit !== 0) {
-  console.error(`[dev:cf] initial worker build failed (exit ${buildExit})`);
-  process.exit(buildExit ?? 1);
+// Build the worker bundle and the UI dist BEFORE launching wrangler. The
+// worker uses esbuild --watch, the UI uses vite build --watch — but the
+// initial build has to be present on disk because:
+//   • dist/worker.js is what wrangler --no-bundle loads at startup
+//   • ui/dist/* is served by the ASSETS binding; if it's stale, wrangler
+//     hands the operator an outdated SPA bundle even after edits to ui/src
+async function runOnce(label, command, args, cwd) {
+  const child = spawn(command, args, { cwd, stdio: "inherit" });
+  const exitCode = await new Promise((resolve) => child.once("exit", resolve));
+  if (exitCode !== 0) {
+    console.error(`[dev:cf] initial ${label} build failed (exit ${exitCode})`);
+    process.exit(exitCode ?? 1);
+  }
+}
+await runOnce("worker", "node", ["build-worker.mjs"], path.join(repoRoot, "packages/deploy-cloudflare"));
+// Skip the UI build if dist already has a recent index. This keeps quick
+// restarts fast (vite build is ~8s) while still guaranteeing freshness.
+const uiDistFresh = await isUiDistFresh();
+if (!uiDistFresh) {
+  console.log("[dev:cf] ui/dist is stale or missing — running initial vite build (~8s)");
+  await runOnce("ui", "pnpm", ["--filter", "@paperclipai/ui", "build"], repoRoot);
+}
+
+async function isUiDistFresh() {
+  const fs = await import("node:fs/promises");
+  const distAssets = path.join(repoRoot, "ui/dist/assets");
+  const srcDir = path.join(repoRoot, "ui/src");
+  try {
+    const distFiles = await fs.readdir(distAssets);
+    if (distFiles.length === 0) return false;
+    // Newest dist mtime vs newest src mtime.
+    async function newestMtime(dir) {
+      let newest = 0;
+      const entries = await fs.readdir(dir, { withFileTypes: true });
+      for (const entry of entries) {
+        const full = path.join(dir, entry.name);
+        if (entry.isDirectory()) newest = Math.max(newest, await newestMtime(full));
+        else newest = Math.max(newest, (await fs.stat(full)).mtimeMs);
+      }
+      return newest;
+    }
+    const distMtime = await newestMtime(distAssets);
+    const srcMtime = await newestMtime(srcDir);
+    return distMtime >= srcMtime;
+  } catch {
+    return false;
+  }
 }
 
 // concurrently is at the root; reach it directly so this script doesn't depend
@@ -91,12 +128,16 @@ const wranglerCmd =
 
 const args = [
   "--kill-others-on-fail",
-  "--names", "server,esbuild,wrangler",
-  "--prefix-colors", "blue,yellow,green",
+  "--names", "server,esbuild,vite,wrangler",
+  "--prefix-colors", "blue,yellow,magenta,green",
   // server: pinned to the picked port
   `PORT=${port} pnpm --filter @paperclipai/server dev:watch`,
-  // esbuild watch: rebuilds dist/worker.js on source edits
+  // esbuild watch: rebuilds dist/worker.js on worker source edits
   "pnpm --filter @paperclipai/deploy-cloudflare build:watch",
+  // vite watch: rebuilds ui/dist on UI source edits so wrangler's ASSETS
+  // binding always serves the latest SPA bundle. Without this, edits to
+  // ui/src/* never reach the browser via /api/*-relative dev:cf flow.
+  "pnpm --filter @paperclipai/ui build:watch",
   // wrangler: same launch as before, but injects SIDECAR_URL via --var so
   // it always matches the picked port, regardless of .dev.vars contents.
   wranglerCmd,
