@@ -36,6 +36,36 @@ import type { Env } from "./env.js";
 export type { Env };
 
 // ---------------------------------------------------------------------------
+// Process-level error guards
+//
+// Async failures that fire AFTER the request handler returned (e.g. postgres
+// reconnect attempts, postgres-js pool maintenance) bypass our try/catch.
+// In `wrangler dev --local` an unhandled rejection crashes workerd and the
+// dev server exits with code 1. These listeners convert those into log
+// lines so the worker stays alive across sidecar / DB restart races.
+// ---------------------------------------------------------------------------
+
+if (typeof addEventListener === "function") {
+  try {
+    addEventListener("unhandledrejection", (ev: PromiseRejectionEvent) => {
+      const reason = ev.reason;
+      const msg = reason instanceof Error ? reason.stack ?? reason.message : String(reason);
+      console.warn(`[CF Worker] unhandledrejection: ${msg}`);
+      ev.preventDefault();
+    });
+  } catch { /* not all runtimes accept this listener; safe to skip */ }
+  try {
+    addEventListener("error", (ev: ErrorEvent) => {
+      const msg = ev.error instanceof Error
+        ? ev.error.stack ?? ev.error.message
+        : ev.message;
+      console.warn(`[CF Worker] uncaught error event: ${msg}`);
+      ev.preventDefault?.();
+    });
+  } catch { /* same */ }
+}
+
+// ---------------------------------------------------------------------------
 // Workers fetch handler
 // ---------------------------------------------------------------------------
 

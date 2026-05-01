@@ -67,11 +67,25 @@ const concurrentlyBin = path.join(repoRoot, "node_modules/.bin/concurrently");
 
 // concurrently feeds each command string to a shell. We need wrangler to
 // run from packages/deploy-cloudflare (where wrangler.toml lives), with
-// nvm-loaded Node 22 and the picked SIDECAR_URL injected via --var (so it
-// overrides anything in .dev.vars). Outer single quotes keep the bash -c
-// argument verbatim; in JS template literals \${...} avoids JS interpolation.
+// nvm-loaded Node 22 and the picked SIDECAR_URL injected via --var.
+//
+// Boot race fix: poll the server's /api/health BEFORE starting wrangler.
+// The server takes a few seconds to bring up embedded postgres; if wrangler
+// starts first and the UI immediately fires requests, the worker tries to
+// open a postgres TCP connection that fails with ECONNREFUSED, and the
+// async rejection takes down workerd. Polling adds at most a couple of
+// seconds at startup and eliminates that whole class of crash.
+//
+// Outer single quotes keep the bash -c argument verbatim; in JS template
+// literals \${...} avoids JS interpolation.
 const wranglerCmd =
-  `bash -c 'cd packages/deploy-cloudflare && ` +
+  `bash -c 'echo "[dev:cf] waiting for server on ${sidecarUrl}/api/health ..." && ` +
+  `for i in $(seq 1 60); do ` +
+  `  curl -sf -o /dev/null --max-time 1 ${sidecarUrl}/api/health && ` +
+  `    echo "[dev:cf] server ready, starting wrangler" && break; ` +
+  `  sleep 1; ` +
+  `done && ` +
+  `cd packages/deploy-cloudflare && ` +
   `source "\${NVM_DIR:-$HOME/.nvm}/nvm.sh" && nvm use 22 && ` +
   `wrangler dev --no-bundle --local --var SIDECAR_URL:${sidecarUrl}'`;
 
