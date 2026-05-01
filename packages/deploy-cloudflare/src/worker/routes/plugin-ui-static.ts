@@ -15,30 +15,17 @@
  */
 
 import type { Hono } from "hono";
+import { safeProxyToSidecar } from "../../sidecar-client.js";
 import type { Env } from "../env.js";
 
 export function registerPluginUiStaticRoutes(app: Hono<{ Bindings: Env }>): void {
   app.get("/_plugins/:pluginId/ui/*", async (c) => {
     const url = new URL(c.req.url);
-    const path = url.pathname + url.search;
-
-    if (c.env.SIDECAR_SERVICE) {
-      const stub = c.env.SIDECAR_SERVICE.get(c.env.SIDECAR_SERVICE.idFromName("sidecar"));
-      return stub.fetch(`http://sidecar${path}`, { method: "GET" });
-    }
-    const baseUrl = c.env.SIDECAR_URL;
-    if (!baseUrl) {
-      return c.json(
-        { error: "Plugin UI assets unavailable: configure SIDECAR_URL or SIDECAR_SERVICE" },
-        503,
-      );
-    }
-    const headers = new Headers();
-    if (c.env.SIDECAR_API_KEY) headers.set("Authorization", `Bearer ${c.env.SIDECAR_API_KEY}`);
-    try {
-      return await fetch(`${baseUrl}${path}`, { method: "GET", headers });
-    } catch {
-      return c.json({ error: "Sidecar unreachable" }, 503);
-    }
+    return safeProxyToSidecar({
+      env: c.env,
+      path: url.pathname + url.search,
+      method: "GET",
+      contentType: null,
+    });
   });
 }

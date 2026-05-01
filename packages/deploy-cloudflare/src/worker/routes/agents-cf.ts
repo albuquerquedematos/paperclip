@@ -43,46 +43,20 @@
 import type { Context, Hono } from "hono";
 import { createHyperdriveDb } from "../../db/hyperdrive.js";
 import { resolveActorFromRequest } from "../../auth/resolve-actor.js";
+import { safeProxyToSidecar } from "../../sidecar-client.js";
 import { resolveDeploymentMode } from "../env.js";
 import type { Env } from "../env.js";
 
-/** Strip caller auth and forward the request to the sidecar at the same path. */
+/** Forward the current request to the sidecar at the same path (with crash protection). */
 async function proxyToSidecar(c: Context<{ Bindings: Env }>): Promise<Response> {
-  const env = c.env;
   const url = new URL(c.req.url);
-  const path = url.pathname + url.search;
-  const ct = c.req.header("Content-Type");
-  const headers = new Headers();
-  if (ct) headers.set("Content-Type", ct);
-
-  if (env.SIDECAR_SERVICE) {
-    const stub = env.SIDECAR_SERVICE.get(env.SIDECAR_SERVICE.idFromName("sidecar"));
-    return stub.fetch(`http://sidecar${path}`, {
-      method: c.req.method,
-      headers,
-      body: c.req.raw.body,
-    });
-  }
-  const baseUrl = env.SIDECAR_URL;
-  if (!baseUrl) {
-    return c.json(
-      { error: "Agent execution requires the sidecar: configure SIDECAR_URL or SIDECAR_SERVICE" },
-      503,
-    );
-  }
-  if (env.SIDECAR_API_KEY) headers.set("Authorization", `Bearer ${env.SIDECAR_API_KEY}`);
-  try {
-    return await fetch(`${baseUrl}${path}`, {
-      method: c.req.method,
-      headers,
-      body: c.req.raw.body,
-    });
-  } catch {
-    return c.json(
-      { error: "Sidecar unreachable. Start the Node server with `pnpm dev:server` (or `pnpm dev:cf` to run both)." },
-      503,
-    );
-  }
+  return safeProxyToSidecar({
+    env: c.env,
+    path: url.pathname + url.search,
+    method: c.req.method,
+    contentType: c.req.header("Content-Type") ?? null,
+    body: c.req.raw.body,
+  });
 }
 
 export function registerAgentCfRoutes(app: Hono<{ Bindings: Env }>): void {

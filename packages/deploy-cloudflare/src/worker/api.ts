@@ -5,6 +5,10 @@
  * queue consumer, and cron handlers, then re-exports named Durable Object
  * and Workflow classes so Wrangler can register them.
  *
+ * Stability: every entry point (fetch / queue / scheduled) is wrapped in a
+ * top-level try/catch. An uncaught throw in any handler used to bubble up
+ * to workerd and exit the dev server with code 1; now it logs and recovers.
+ *
  * Routes skipped (use Node-only features):
  *   - pluginUiStaticRoutes    fs.readFileSync / res.sendFile
  *   - instanceDatabaseBackupRoutes  pg_dump
@@ -36,10 +40,21 @@ export type { Env };
 // ---------------------------------------------------------------------------
 
 export default {
-  fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
-    // Boot CF implementations (idempotent — safe to call on every request).
-    bootCloudflare(env);
-    return Promise.resolve(app.fetch(request, env, ctx));
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+    try {
+      // Boot CF implementations (idempotent — safe to call on every request).
+      bootCloudflare(env);
+      return await app.fetch(request, env, ctx);
+    } catch (err) {
+      // Last-line-of-defense: an uncaught throw from app.fetch reaches here
+      // and would otherwise crash workerd. Convert to a 500 so wrangler dev
+      // stays alive even if a handler hits an unexpected failure mode.
+      console.error("[CF Worker] fetch handler threw:", err);
+      return Response.json(
+        { error: "Internal Server Error", code: "WORKER_FETCH_THREW" },
+        { status: 500 },
+      );
+    }
   },
 
   // -------------------------------------------------------------------------
@@ -47,47 +62,17 @@ export default {
   // -------------------------------------------------------------------------
   async queue(batch: MessageBatch<unknown>, env: Env): Promise<void> {
     for (const message of batch.messages) {
-      const body = message.body as Record<string, unknown>;
-      const type = body?.type as string | undefined;
-
-      if (type === "plugin_job_dispatch") {
-        const pluginJobId = body.pluginJobId as string;
-        const pluginSlug = body.pluginSlug as string;
-        const companyId = body.companyId as string;
-        const executorMode = (body.executorMode as "sandbox_bridge" | "container") ?? "sandbox_bridge";
-        try {
-          await env.PLUGIN_DISPATCH_WORKFLOW.create({
-            id: `plugin-job-${pluginJobId}`,
-            params: { pluginJobId, pluginSlug, companyId, executorMode },
-          });
-          message.ack();
-        } catch (err) {
-          console.error(`[Queue] Failed to start PluginDispatchWorkflow for job ${pluginJobId}: ${err instanceof Error ? err.message : String(err)}`);
-          message.retry();
-        }
-        continue;
+      try {
+        await processQueueMessage(message, env);
+      } catch (err) {
+        console.error(
+          `[Queue] message processing threw (id=${message.id}): ${err instanceof Error ? err.message : String(err)}`,
+        );
+        // Ack the message rather than retrying — retrying a malformed body
+        // just thrashes. Real failures inside processQueueMessage already
+        // call message.retry() themselves before throwing.
+        try { message.ack(); } catch { /* nothing we can do */ }
       }
-
-      if (type === "heartbeat_dispatch") {
-        const agentId = body.agentId as string;
-        const companyId = body.companyId as string;
-        const runId = body.runId as string;
-        const taskId = body.taskId as string | undefined;
-        try {
-          await env.HEARTBEAT_WORKFLOW.create({
-            id: `heartbeat-${runId}`,
-            params: { agentId, companyId, runId, taskId },
-          });
-          message.ack();
-        } catch (err) {
-          console.error(`[Queue] Failed to start HeartbeatWorkflow for run ${runId}: ${err instanceof Error ? err.message : String(err)}`);
-          message.retry();
-        }
-        continue;
-      }
-
-      console.warn(`[Queue] Unknown message type: ${type ?? "(none)"}`);
-      message.ack();
     }
   },
 
@@ -95,15 +80,71 @@ export default {
   // Cron triggers
   // -------------------------------------------------------------------------
   async scheduled(event: ScheduledEvent, env: Env, _ctx: ExecutionContext): Promise<void> {
-    if (event.cron === "*/5 * * * *") {
-      const db = createHyperdriveDb(env.HYPERDRIVE);
-      await runHeartbeatSweep(env, db);
-      return;
+    try {
+      if (event.cron === "*/5 * * * *") {
+        const db = createHyperdriveDb(env.HYPERDRIVE);
+        await runHeartbeatSweep(env, db);
+      }
+      // "0 * * * *"  — budget threshold check (not yet implemented)
+      // "0 3 * * *"  — DB backup (not yet implemented)
+    } catch (err) {
+      // CF retries the cron later if we throw, but we don't want a single
+      // bad sweep to take down the worker process.
+      console.error(
+        `[Cron] handler for ${event.cron} threw: ${err instanceof Error ? err.message : String(err)}`,
+      );
     }
-    // "0 * * * *"  — budget threshold check (not yet implemented)
-    // "0 3 * * *"  — DB backup (not yet implemented)
   },
 };
+
+/** Extracted per-message handler so the outer loop can unconditionally try/catch. */
+async function processQueueMessage(message: Message<unknown>, env: Env): Promise<void> {
+  const body = message.body as Record<string, unknown>;
+  const type = body?.type as string | undefined;
+
+  if (type === "plugin_job_dispatch") {
+    const pluginJobId = body.pluginJobId as string;
+    const pluginSlug = body.pluginSlug as string;
+    const companyId = body.companyId as string;
+    const executorMode = (body.executorMode as "sandbox_bridge" | "container") ?? "sandbox_bridge";
+    try {
+      await env.PLUGIN_DISPATCH_WORKFLOW.create({
+        id: `plugin-job-${pluginJobId}`,
+        params: { pluginJobId, pluginSlug, companyId, executorMode },
+      });
+      message.ack();
+    } catch (err) {
+      console.error(
+        `[Queue] Failed to start PluginDispatchWorkflow for job ${pluginJobId}: ${err instanceof Error ? err.message : String(err)}`,
+      );
+      message.retry();
+    }
+    return;
+  }
+
+  if (type === "heartbeat_dispatch") {
+    const agentId = body.agentId as string;
+    const companyId = body.companyId as string;
+    const runId = body.runId as string;
+    const taskId = body.taskId as string | undefined;
+    try {
+      await env.HEARTBEAT_WORKFLOW.create({
+        id: `heartbeat-${runId}`,
+        params: { agentId, companyId, runId, taskId },
+      });
+      message.ack();
+    } catch (err) {
+      console.error(
+        `[Queue] Failed to start HeartbeatWorkflow for run ${runId}: ${err instanceof Error ? err.message : String(err)}`,
+      );
+      message.retry();
+    }
+    return;
+  }
+
+  console.warn(`[Queue] Unknown message type: ${type ?? "(none)"}`);
+  message.ack();
+}
 
 // ---------------------------------------------------------------------------
 // Named Durable Object + Workflow exports

@@ -81,16 +81,28 @@ export default {
       // wall-clock time may be subject to the Workers connection timeout.
       // For production use, consider the Durable Objects WebSocket
       // Hibernation API instead of SSE for persistent connections.
+      let writerClosed = false;
       const keepaliveInterval = setInterval(() => {
-        void write(": keepalive\n\n");
+        if (writerClosed) return;
+        write(": keepalive\n\n").catch((err) => {
+          // Writer was closed (client disconnected) between the check and
+          // the write. Stop firing so we don't surface unhandled rejections
+          // every interval tick.
+          writerClosed = true;
+          clearInterval(keepaliveInterval);
+          console.debug(
+            `[MCP-SSE] keepalive write failed (client likely disconnected): ${err instanceof Error ? err.message : String(err)}`,
+          );
+        });
       }, SSE_KEEPALIVE_INTERVAL_MS);
 
       // Clean up the interval when the client disconnects
       request.signal.addEventListener("abort", () => {
+        writerClosed = true;
         clearInterval(keepaliveInterval);
-        void writer.close();
+        writer.close().catch(() => { /* already closed */ });
         // Remove the session from KV on disconnect
-        void env.PAPERCLIP_KV.delete(`mcp:session:${sessionId}`);
+        env.PAPERCLIP_KV.delete(`mcp:session:${sessionId}`).catch(() => { /* best effort */ });
       });
 
       return new Response(readable, {

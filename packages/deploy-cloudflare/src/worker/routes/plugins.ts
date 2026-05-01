@@ -33,52 +33,28 @@ import {
 import { getPluginUiContributionMetadata } from "../../../../../server/src/services/plugin-loader.js";
 import { createHyperdriveDb } from "../../db/hyperdrive.js";
 import { resolveActorFromRequest } from "../../auth/resolve-actor.js";
+import { safeProxyToSidecar } from "../../sidecar-client.js";
 import { resolveDeploymentMode } from "../env.js";
 import type { Env } from "../env.js";
 
-/**
- * Proxy a request to the sidecar companion server. Caller Authorization
- * headers are stripped: the SIDECAR_SERVICE DO uses internal CF network auth;
- * direct SIDECAR_URL calls use SIDECAR_API_KEY.
- */
+/** Forward a request to the sidecar with full crash protection. */
 async function proxySidecar(env: Env, path: string, req: Request): Promise<Response> {
-  const ct = req.headers.get("Content-Type");
-  const internalHeaders = new Headers();
-  if (ct) internalHeaders.set("Content-Type", ct);
-
-  if (env.SIDECAR_SERVICE) {
-    const stub = env.SIDECAR_SERVICE.get(env.SIDECAR_SERVICE.idFromName("sidecar"));
-    return stub.fetch(`http://sidecar${path}`, {
-      method: req.method,
-      headers: internalHeaders,
-      body: req.body,
-    });
-  }
-  const baseUrl = env.SIDECAR_URL;
-  if (!baseUrl) {
-    return Response.json(
-      { error: "Plugin operation not available: configure SIDECAR_URL or SIDECAR_SERVICE" },
-      { status: 503 },
-    );
-  }
-  if (env.SIDECAR_API_KEY) internalHeaders.set("Authorization", `Bearer ${env.SIDECAR_API_KEY}`);
-  return fetch(`${baseUrl}${path}`, { method: req.method, headers: internalHeaders, body: req.body });
+  return safeProxyToSidecar({
+    env,
+    path,
+    method: req.method,
+    contentType: req.headers.get("Content-Type"),
+    body: req.body,
+  });
 }
 
-/** Forward a sidecar response back through Hono, preserving status and JSON content-type. */
+/** Same as proxySidecar but normalises Content-Type to JSON for the response. */
 async function relaySidecarResponse(env: Env, path: string, req: Request): Promise<Response> {
-  try {
-    const resp = await proxySidecar(env, path, req);
-    return new Response(resp.body, {
-      status: resp.status,
-      headers: { "Content-Type": "application/json" },
-    });
-  } catch {
-    return Response.json(
-      { error: "Plugin operation requires the Node.js server to be running (pnpm dev or bun run dev)" },
-      { status: 503 },
-    );
-  }
+  const resp = await proxySidecar(env, path, req);
+  return new Response(resp.body, {
+    status: resp.status,
+    headers: { "Content-Type": "application/json" },
+  });
 }
 
 export function registerPluginRoutes(app: Hono<{ Bindings: Env }>): void {

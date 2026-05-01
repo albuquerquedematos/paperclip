@@ -22,6 +22,96 @@
  */
 
 // ---------------------------------------------------------------------------
+// Stream-proxy helper (for raw HTTP request forwarding from route handlers)
+// ---------------------------------------------------------------------------
+
+/**
+ * Inputs every CF-native shadow handler needs to proxy an HTTP request to
+ * the sidecar. We accept a request-like shape (method, url, headers,
+ * body) so callers can forward raw streams (e.g. multipart uploads) and
+ * a Hono context-like env wrapper.
+ */
+export interface SafeProxyInput {
+  env: {
+    SIDECAR_SERVICE?: DurableObjectNamespace;
+    SIDECAR_URL?: string;
+    SIDECAR_API_KEY?: string;
+  };
+  /** Path to forward (path + search). */
+  path: string;
+  method: string;
+  /** Pulled from the original request; only Content-Type is forwarded. */
+  contentType: string | null;
+  /** Original request body stream, or null/undefined for GET-style. */
+  body?: ReadableStream | ArrayBuffer | null;
+}
+
+/**
+ * Forward a request to the sidecar with bullet-proof error handling.
+ * NEVER throws — on any failure (sidecar unreachable, DO error, fetch
+ * exception) returns a Response (503) instead. This is the single boundary
+ * route handlers should use; uncaught throws here had been crashing
+ * workerd as `Network connection lost` in dispatch().
+ *
+ * Caller authorization headers are intentionally stripped: the sidecar is
+ * an internal endpoint and uses SIDECAR_API_KEY (or implicit DO-binding
+ * auth in production CF deployments).
+ */
+export async function safeProxyToSidecar(input: SafeProxyInput): Promise<Response> {
+  const { env, path, method, contentType, body } = input;
+  const headers = new Headers();
+  if (contentType) headers.set("Content-Type", contentType);
+
+  // Production / preferred: SIDECAR_SERVICE Durable Object.
+  if (env.SIDECAR_SERVICE) {
+    try {
+      const stub = env.SIDECAR_SERVICE.get(env.SIDECAR_SERVICE.idFromName("sidecar"));
+      return await stub.fetch(`http://sidecar${path}`, {
+        method,
+        headers,
+        body: body ?? undefined,
+      });
+    } catch (err) {
+      console.warn(`[safeProxyToSidecar] DO fetch failed for ${method} ${path}: ${
+        err instanceof Error ? err.message : String(err)
+      }`);
+      return Response.json(
+        {
+          error: "Sidecar unreachable",
+          detail: err instanceof Error ? err.message : String(err),
+        },
+        { status: 503 },
+      );
+    }
+  }
+
+  // Local-dev / fallback: direct HTTP to SIDECAR_URL (set in .dev.vars or
+  // via wrangler --var by scripts/dev-cf.mjs).
+  const baseUrl = env.SIDECAR_URL;
+  if (!baseUrl) {
+    return Response.json(
+      { error: "Sidecar route not configured (set SIDECAR_URL or bind SIDECAR_SERVICE)" },
+      { status: 503 },
+    );
+  }
+  if (env.SIDECAR_API_KEY) headers.set("Authorization", `Bearer ${env.SIDECAR_API_KEY}`);
+  try {
+    return await fetch(`${baseUrl}${path}`, { method, headers, body: body ?? undefined });
+  } catch (err) {
+    console.warn(`[safeProxyToSidecar] direct fetch failed for ${method} ${path}: ${
+      err instanceof Error ? err.message : String(err)
+    }`);
+    return Response.json(
+      {
+        error: "Sidecar unreachable",
+        detail: err instanceof Error ? err.message : String(err),
+      },
+      { status: 503 },
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Low-level routing primitive
 // ---------------------------------------------------------------------------
 

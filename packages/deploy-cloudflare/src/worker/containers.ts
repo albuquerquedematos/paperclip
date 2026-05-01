@@ -85,9 +85,14 @@ export class SidecarContainer implements DurableObject {
       }
       // Internal CF network: no auth header needed; strip caller headers.
       const fetcher = container.getTcpPort(SIDECAR_PORT);
-      return fetcher.fetch(
-        buildInternalRequest(url.pathname + url.search, request.method, ct, request.body),
-      );
+      try {
+        return await fetcher.fetch(
+          buildInternalRequest(url.pathname + url.search, request.method, ct, request.body),
+        );
+      } catch (err) {
+        console.warn(`[SidecarContainer] container fetch failed: ${err instanceof Error ? err.message : String(err)}`);
+        return Response.json({ error: "Sidecar container unreachable" }, { status: 503 });
+      }
     }
 
     // Local-dev fallback: SIDECAR_URL env var → KV SANDBOX_BRIDGE_URL → localhost:8788.
@@ -100,11 +105,16 @@ export class SidecarContainer implements DurableObject {
       (await this.env.PAPERCLIP_KV.get("SANDBOX_BRIDGE_API_KEY"));
 
     const proxyUrl = `${baseUrl}${url.pathname}${url.search}`;
-    return fetch(
-      buildInternalRequest(proxyUrl, request.method, ct, request.body, apiKey),
-      // @ts-expect-error CF-specific duplex option
-      { duplex: "half" },
-    );
+    try {
+      return await fetch(
+        buildInternalRequest(proxyUrl, request.method, ct, request.body, apiKey),
+        // @ts-expect-error CF-specific duplex option
+        { duplex: "half" },
+      );
+    } catch (err) {
+      console.warn(`[SidecarContainer] fallback fetch failed: ${err instanceof Error ? err.message : String(err)}`);
+      return Response.json({ error: "Sidecar bridge unreachable" }, { status: 503 });
+    }
   }
 }
 
@@ -140,9 +150,14 @@ export class PluginContainer implements DurableObject {
         container.start();
       }
       const fetcher = container.getTcpPort(SIDECAR_PORT);
-      return fetcher.fetch(
-        buildInternalRequest(url.pathname + url.search, request.method, ct, request.body),
-      );
+      try {
+        return await fetcher.fetch(
+          buildInternalRequest(url.pathname + url.search, request.method, ct, request.body),
+        );
+      } catch (err) {
+        console.warn(`[PluginContainer] container fetch failed: ${err instanceof Error ? err.message : String(err)}`);
+        return Response.json({ error: "Plugin container unreachable" }, { status: 503 });
+      }
     }
 
     // Fallback: same bridge service as SidecarContainer.
@@ -155,10 +170,15 @@ export class PluginContainer implements DurableObject {
       (await this.env.PAPERCLIP_KV.get("SANDBOX_BRIDGE_API_KEY"));
 
     const proxyUrl = `${baseUrl}${url.pathname}${url.search}`;
-    return fetch(
-      buildInternalRequest(proxyUrl, request.method, ct, request.body, apiKey),
-      // @ts-expect-error CF-specific duplex option
-      { duplex: "half" },
-    );
+    try {
+      return await fetch(
+        buildInternalRequest(proxyUrl, request.method, ct, request.body, apiKey),
+        // @ts-expect-error CF-specific duplex option
+        { duplex: "half" },
+      );
+    } catch (err) {
+      console.warn(`[PluginContainer] fallback fetch failed: ${err instanceof Error ? err.message : String(err)}`);
+      return Response.json({ error: "Plugin bridge unreachable" }, { status: 503 });
+    }
   }
 }

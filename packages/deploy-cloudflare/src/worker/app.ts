@@ -13,6 +13,7 @@ import { buildRequestResources } from "./route-registry.js";
 import { resolveActorFromRequest } from "../auth/resolve-actor.js";
 import { registerUploadHandlers } from "./upload-handlers.js";
 import { registerCfExtraRoutes } from "./cf-extra-routes.js";
+import { safeProxyToSidecar } from "../sidecar-client.js";
 import { HttpError } from "../../../../server/src/errors.js";
 import type { Env } from "./env.js";
 import { resolveDeploymentMode } from "./env.js";
@@ -58,17 +59,27 @@ app.use("*", async (c, next) => {
 // ---------------------------------------------------------------------------
 
 app.all("/setup/*", async (c) => {
-  const setupSub = createSetupApp(c.env);
-  const url = new URL(c.req.url);
-  url.pathname = url.pathname.replace(/^\/setup/, "") || "/";
-  return setupSub.fetch(new Request(url.toString(), c.req.raw));
+  try {
+    const setupSub = createSetupApp(c.env);
+    const url = new URL(c.req.url);
+    url.pathname = url.pathname.replace(/^\/setup/, "") || "/";
+    return await setupSub.fetch(new Request(url.toString(), c.req.raw));
+  } catch (err) {
+    console.error("[setup] sub-app threw:", err);
+    return new Response("Setup encountered an internal error.", { status: 500 });
+  }
 });
 
 app.all("/setup", async (c) => {
-  const setupSub = createSetupApp(c.env);
-  const url = new URL(c.req.url);
-  url.pathname = "/";
-  return setupSub.fetch(new Request(url.toString(), c.req.raw));
+  try {
+    const setupSub = createSetupApp(c.env);
+    const url = new URL(c.req.url);
+    url.pathname = "/";
+    return await setupSub.fetch(new Request(url.toString(), c.req.raw));
+  } catch (err) {
+    console.error("[setup] sub-app threw:", err);
+    return new Response("Setup encountered an internal error.", { status: 500 });
+  }
 });
 
 // ---------------------------------------------------------------------------
@@ -112,36 +123,14 @@ async function proxyToSidecar(
   c: Parameters<Parameters<typeof app.all>[1]>[0],
   bodyBuffer: ArrayBuffer | null,
 ): Promise<Response> {
-  const env = c.env;
   const url = new URL(c.req.url);
-  const path = url.pathname + url.search;
-  const ct = c.req.header("Content-Type");
-  const headers = new Headers();
-  if (ct) headers.set("Content-Type", ct);
-
-  const init: RequestInit = {
+  return safeProxyToSidecar({
+    env: c.env,
+    path: url.pathname + url.search,
     method: c.req.method,
-    headers,
-    body: bodyBuffer && bodyBuffer.byteLength > 0 ? bodyBuffer : undefined,
-  };
-
-  if (env.SIDECAR_SERVICE) {
-    const stub = env.SIDECAR_SERVICE.get(env.SIDECAR_SERVICE.idFromName("sidecar"));
-    return stub.fetch(`http://sidecar${path}`, init);
-  }
-  const baseUrl = env.SIDECAR_URL;
-  if (!baseUrl) {
-    return Response.json(
-      { error: "This handler requires the sidecar; configure SIDECAR_URL or SIDECAR_SERVICE." },
-      { status: 503 },
-    );
-  }
-  if (env.SIDECAR_API_KEY) headers.set("Authorization", `Bearer ${env.SIDECAR_API_KEY}`);
-  try {
-    return await fetch(`${baseUrl}${path}`, init);
-  } catch {
-    return Response.json({ error: "Sidecar unreachable" }, { status: 503 });
-  }
+    contentType: c.req.header("Content-Type") ?? null,
+    body: bodyBuffer && bodyBuffer.byteLength > 0 ? bodyBuffer : null,
+  });
 }
 
 app.all("/api/*", async (c) => {
@@ -234,4 +223,25 @@ app.all("/api/*", async (c) => {
 // (not_found_handling = "single-page-application" in wrangler.toml).
 // ---------------------------------------------------------------------------
 
-app.all("*", (c) => c.env.ASSETS.fetch(c.req.raw));
+app.all("*", async (c) => {
+  try {
+    return await c.env.ASSETS.fetch(c.req.raw);
+  } catch (err) {
+    console.error("[SPA fallback] ASSETS.fetch threw:", err);
+    return new Response("Static assets are temporarily unavailable.", { status: 503 });
+  }
+});
+
+// ---------------------------------------------------------------------------
+// Top-level Hono error handler — last line of defense.
+// Any uncaught throw inside a Hono handler bubbles up to here. Without this,
+// the throw escapes into workerd and the dev server exits with code 1.
+// ---------------------------------------------------------------------------
+
+app.onError((err, c) => {
+  console.error(`[CF Worker] Unhandled in ${c.req.method} ${c.req.url}:`, err);
+  return c.json(
+    { error: "Internal Server Error", code: "WORKER_UNHANDLED" },
+    500,
+  );
+});

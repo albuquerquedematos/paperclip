@@ -15,6 +15,7 @@
 import type { Hono } from "hono";
 import { createHyperdriveDb } from "../../db/hyperdrive.js";
 import { resolveActorFromRequest } from "../../auth/resolve-actor.js";
+import { safeProxyToSidecar } from "../../sidecar-client.js";
 import { resolveDeploymentMode } from "../env.js";
 import type { Env } from "../env.js";
 
@@ -26,35 +27,12 @@ export function registerInstanceBackupRoutes(app: Hono<{ Bindings: Env }>): void
     });
     if (!actor) return c.json({ error: "Unauthorized" }, 401);
 
-    const ct = c.req.header("Content-Type");
-    const headers = new Headers();
-    if (ct) headers.set("Content-Type", ct);
-    const path = "/api/instance/database-backups";
-
-    if (c.env.SIDECAR_SERVICE) {
-      const stub = c.env.SIDECAR_SERVICE.get(c.env.SIDECAR_SERVICE.idFromName("sidecar"));
-      return stub.fetch(`http://sidecar${path}`, {
-        method: "POST",
-        headers,
-        body: c.req.raw.body,
-      });
-    }
-    const baseUrl = c.env.SIDECAR_URL;
-    if (!baseUrl) {
-      return c.json(
-        { error: "Database backup requires the sidecar: configure SIDECAR_URL or SIDECAR_SERVICE" },
-        503,
-      );
-    }
-    if (c.env.SIDECAR_API_KEY) headers.set("Authorization", `Bearer ${c.env.SIDECAR_API_KEY}`);
-    try {
-      return await fetch(`${baseUrl}${path}`, {
-        method: "POST",
-        headers,
-        body: c.req.raw.body,
-      });
-    } catch {
-      return c.json({ error: "Sidecar unreachable" }, 503);
-    }
+    return safeProxyToSidecar({
+      env: c.env,
+      path: "/api/instance/database-backups",
+      method: "POST",
+      contentType: c.req.header("Content-Type") ?? null,
+      body: c.req.raw.body,
+    });
   });
 }
