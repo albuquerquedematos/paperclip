@@ -1058,7 +1058,20 @@ export function agentRoutes(
 
   router.param("id", async (req: Request, _res: ExpressResponse, next: NextFunction, rawId: string) => {
     try {
-      req.params.id = await normalizeAgentReference(req as unknown as RequestCtx, String(rawId));
+      // Build a minimal RequestCtx wrapper. The Express req exposes `query`
+      // as an object; RequestCtx expects `query(name)` as a function. Casting
+      // req directly threw `ctx.query is not a function` whenever a non-UUID
+      // :id (e.g. "ceo") forced normalizeAgentReference to read companyId
+      // from the query string. Mirrors the wrapper in routes/projects.ts.
+      const minCtx = {
+        actor: (req as Request & { actor?: unknown }).actor ?? null,
+        method: req.method,
+        query(name: string) {
+          const v = req.query[name];
+          return typeof v === "string" ? v : undefined;
+        },
+      } as unknown as RequestCtx;
+      req.params.id = await normalizeAgentReference(minCtx, String(rawId));
       next();
     } catch (err) {
       next(err);
