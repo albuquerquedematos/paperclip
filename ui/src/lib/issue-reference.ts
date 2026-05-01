@@ -5,9 +5,15 @@ type MarkdownNode = {
   children?: MarkdownNode[];
 };
 
-const BARE_ISSUE_IDENTIFIER_RE = /^[A-Z][A-Z0-9]+-\d+$/i;
+// Issue keys are auto-generated as `<3+-letter project prefix>-<digits>`
+// (e.g. ALM-1, PAP-224, ZED-24). The 3-character minimum filters out
+// real-world short codes that share the same shape but are NOT issue
+// references — e.g. USCIS visa categories like EB-1, H-1, O-1, L-1, TN-2
+// — which used to trigger spurious /api/issues/EB-1 → 404 fetches when
+// they appeared in markdown content authored by agents.
+const BARE_ISSUE_IDENTIFIER_RE = /^[A-Z][A-Z0-9]{2,}-\d+$/i;
 const ISSUE_SCHEME_RE = /^issue:\/\/:?([^?#\s]+)(?:[?#].*)?$/i;
-const ISSUE_REFERENCE_TOKEN_RE = /issue:\/\/:?[^\s<>()]+|https?:\/\/[^\s<>()]+|\/(?:[^\s<>()/]+\/)*issues\/[A-Z][A-Z0-9]+-\d+(?=$|[\s<>)\],.;!?:])|\b[A-Z][A-Z0-9]+-\d+\b/gi;
+const ISSUE_REFERENCE_TOKEN_RE = /issue:\/\/:?[^\s<>()]+|https?:\/\/[^\s<>()]+|\/(?:[^\s<>()/]+\/)*issues\/[A-Z][A-Z0-9]{2,}-\d+(?=$|[\s<>)\],.;!?:])|\b[A-Z][A-Z0-9]{2,}-\d+\b/gi;
 
 export function parseIssuePathIdFromPath(pathOrUrl: string | null | undefined): string | null {
   if (!pathOrUrl) return null;
