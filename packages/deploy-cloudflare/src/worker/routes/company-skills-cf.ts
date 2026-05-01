@@ -20,6 +20,7 @@
 import type { Context, Hono } from "hono";
 import { and, asc, eq } from "drizzle-orm";
 import { agents, companySkills } from "@paperclipai/db";
+import { deriveAgentUrlKey } from "@paperclipai/shared";
 import { createHyperdriveDb } from "../../db/hyperdrive.js";
 import { resolveActorFromRequest } from "../../auth/resolve-actor.js";
 import { safeProxyToSidecar } from "../../sidecar-client.js";
@@ -207,6 +208,42 @@ export function registerCompanySkillRoutes(app: Hono<{ Bindings: Env }>): void {
       sourceLocator: row.sourceLocator ?? null,
       metadata: row.metadata,
     });
+
+    // usedByAgents: agents whose adapterConfig.skills references this skill.
+    // The UI's CompanySkills detail panel reads `detail.usedByAgents.length`
+    // and crashes if missing — so we always populate at least an empty array.
+    // Mirrors the list-endpoint scan but keeps full agent records (vs. just count).
+    const agentRows = await db
+      .select({
+        id: agents.id,
+        name: agents.name,
+        adapterType: agents.adapterType,
+        adapterConfig: agents.adapterConfig,
+      })
+      .from(agents)
+      .where(eq(agents.companyId, companyId));
+
+    const usedByAgents = agentRows
+      .filter((agent) => {
+        const cfg = agent.adapterConfig;
+        if (!cfg || typeof cfg !== "object" || Array.isArray(cfg)) return false;
+        const skillsValue = (cfg as Record<string, unknown>).skills;
+        if (!Array.isArray(skillsValue)) return false;
+        return skillsValue.some(
+          (entry) =>
+            (typeof entry === "string" && entry === row.key) ||
+            (entry && typeof entry === "object" && (entry as Record<string, unknown>).key === row.key),
+        );
+      })
+      .map((agent) => ({
+        id: agent.id,
+        name: agent.name,
+        urlKey: deriveAgentUrlKey(agent.name, agent.id),
+        adapterType: agent.adapterType,
+        desired: true,
+        actualState: null,
+      }));
+
     return c.json({
       id: row.id,
       companyId: row.companyId,
@@ -223,6 +260,8 @@ export function registerCompanySkillRoutes(app: Hono<{ Bindings: Env }>): void {
       metadata: row.metadata ?? null,
       createdAt: row.createdAt,
       updatedAt: row.updatedAt,
+      attachedAgentCount: usedByAgents.length,
+      usedByAgents,
       ...source,
     });
   });
