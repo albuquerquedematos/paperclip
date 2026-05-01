@@ -279,22 +279,13 @@ export function App() {
             <Route path="adapters" element={<AdapterManager />} />
           </Route>
           <Route path="companies" element={<UnprefixedBoardRedirect />} />
-          <Route path="dashboard" element={<UnprefixedBoardRedirect />} />
-          <Route path="dashboard/live" element={<UnprefixedBoardRedirect />} />
-          <Route path="inbox" element={<UnprefixedBoardRedirect />} />
-          <Route path="inbox/:tab" element={<UnprefixedBoardRedirect />} />
-          <Route path="org" element={<UnprefixedBoardRedirect />} />
-          <Route path="goals" element={<UnprefixedBoardRedirect />} />
-          <Route path="goals/:goalId" element={<UnprefixedBoardRedirect />} />
-          <Route path="costs" element={<UnprefixedBoardRedirect />} />
+          <Route path="dashboard/*" element={<UnprefixedBoardRedirect />} />
+          <Route path="inbox/*" element={<UnprefixedBoardRedirect />} />
+          <Route path="org/*" element={<UnprefixedBoardRedirect />} />
+          <Route path="goals/*" element={<UnprefixedBoardRedirect />} />
           <Route path="costs/*" element={<UnprefixedBoardRedirect />} />
-          <Route path="activity" element={<UnprefixedBoardRedirect />} />
           <Route path="activity/*" element={<UnprefixedBoardRedirect />} />
-          <Route path="company/settings" element={<UnprefixedBoardRedirect />} />
-          <Route path="company/settings/*" element={<UnprefixedBoardRedirect />} />
-          <Route path="company/export" element={<UnprefixedBoardRedirect />} />
-          <Route path="company/export/*" element={<UnprefixedBoardRedirect />} />
-          <Route path="company/import" element={<UnprefixedBoardRedirect />} />
+          <Route path="company/*" element={<UnprefixedBoardRedirect />} />
           <Route path="issues" element={<UnprefixedBoardRedirect />} />
           <Route path="issues/:issueId" element={<UnprefixedBoardRedirect />} />
           <Route path="routines" element={<UnprefixedBoardRedirect />} />
