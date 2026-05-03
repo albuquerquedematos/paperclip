@@ -63,7 +63,7 @@ export function goalRoutes(db: Db) {
     assertCompanyAccess(ctx, existing.companyId);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const body = (await ctx.json()) as any;
-    const goal = await svc.update(id, body);
+    const goal = await svc.update(existing.id, body);
     if (!goal) {
       return Response.json({ error: "Goal not found" }, { status: 404 });
     }

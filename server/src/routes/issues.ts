@@ -1930,7 +1930,7 @@ export function issueRoutes(
         const decision = transition.decision;
         issue = await db.transaction(async (tx) => {
           const updated = await svc.update(
-            id,
+            existing.id,
             {
               ...updateFields,
               actorAgentId: actor.agentId ?? null,
@@ -1956,7 +1956,7 @@ export function issueRoutes(
           return updated;
         });
       } else {
-        issue = await svc.update(id, {
+        issue = await svc.update(existing.id, {
           ...updateFields,
           actorAgentId: actor.agentId ?? null,
           actorUserId: actor.actorType === "user" ? actor.actorId : null,
@@ -3176,7 +3176,7 @@ export function issueRoutes(
     const commentReferenceSummaryBefore = await issueReferencesSvc.listIssueReferenceSummary(issue.id);
 
     if (effectiveMoveToTodoRequested && (isClosed || (isBlocked && !hasUnresolvedFirstClassBlockers))) {
-      const reopenedIssue = await svc.update(id, { status: "todo" });
+      const reopenedIssue = await svc.update(issue.id, { status: "todo" });
       if (!reopenedIssue) {
         return Response.json({ error: "Issue not found" }, { status: 404 });
       }
@@ -3229,7 +3229,7 @@ export function issueRoutes(
       }
     }
 
-    const comment = await svc.addComment(id, body.body as string, {
+    const comment = await svc.addComment(currentIssue.id, body.body as string, {
       agentId: actor.agentId ?? undefined,
       userId: actor.actorType === "user" ? actor.actorId : undefined,
       runId: actor.runId,

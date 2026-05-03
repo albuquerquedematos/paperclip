@@ -290,16 +290,18 @@ describe("CF Worker smoke — plugin-scoped reads", () => {
 
 describe("CF Worker smoke — issue lifecycle mutation", () => {
   let createdIssueId: string | null = null;
+  let createdIssueHumanKey: string | null = null;
 
   it("POST /api/companies/:id/issues creates an issue", async () => {
     if (!company) return;
-    const r = await post<{ id: string }>(`/api/companies/${company.id}/issues`, {
+    const r = await post<{ id: string; identifier?: string }>(`/api/companies/${company.id}/issues`, {
       title: "cf-smoke synthetic issue",
       description: "Created by tests/cf-smoke. Safe to delete.",
     });
     expectNoCrash("POST /api/companies/:id/issues", r.status);
     if (r.status >= 200 && r.status < 300 && r.body?.id) {
       createdIssueId = r.body.id;
+      createdIssueHumanKey = r.body.identifier ?? null;
     }
   });
 
@@ -314,6 +316,68 @@ describe("CF Worker smoke — issue lifecycle mutation", () => {
     if (!createdIssueId) return;
     const r = await get(`/api/issues/${createdIssueId}/attachments`);
     expectNoCrash("GET /api/issues/:id/attachments (new issue)", r.status);
+  });
+
+  // Mutation routes that take :id MUST resolve human keys to UUIDs internally.
+  // Each one of these had previously surfaced a 500 with
+  // `PostgresError: invalid input syntax for type uuid` when called with the
+  // human key — these tests lock that in.
+  it("POST /api/issues/:humanKey/comments accepts human key (regression)", async () => {
+    if (!createdIssueHumanKey) return;
+    const r = await post(`/api/issues/${createdIssueHumanKey}/comments`, {
+      body: "cf-smoke regression comment",
+    });
+    expectNoCrash(`POST /api/issues/${createdIssueHumanKey}/comments`, r.status);
+    expect(r.status, "POST comment with human key must not 500").toBeLessThan(500);
+  });
+
+  it("PATCH /api/issues/:humanKey accepts human key (regression)", async () => {
+    if (!createdIssueHumanKey) return;
+    const raw = await fetch(`${BASE_URL}/api/issues/${createdIssueHumanKey}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ description: "smoke-touched" }),
+    });
+    expectNoCrash(`PATCH /api/issues/${createdIssueHumanKey}`, raw.status);
+    expect(raw.status, "PATCH issue with human key must not 500").toBeLessThan(500);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 6b. Agent mutation regression — URL-key inputs to PATCH /agents/:id and
+//     POST /agents/:id/wakeup must not 500 with uuid-syntax errors.
+// ---------------------------------------------------------------------------
+
+describe("CF Worker smoke — agent mutation (regression: URL-key resolution)", () => {
+  it("PATCH /api/agents/:urlKey accepts URL key (no-op patch)", async () => {
+    if (!agent?.urlKey) return;
+    const raw = await fetch(`${BASE_URL}/api/agents/${agent.urlKey}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({}),
+    });
+    expectNoCrash(`PATCH /api/agents/${agent.urlKey}`, raw.status);
+    expect(raw.status, "PATCH agent with URL key must not 500").toBeLessThan(500);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 6c. Goal mutation regression — PATCH /goals/:id with a stale (human-keyish)
+//     id had the same uuid-syntax bug.
+// ---------------------------------------------------------------------------
+
+describe("CF Worker smoke — goal mutation (regression: id resolution)", () => {
+  it("PATCH /api/goals/:nonUuid returns 4xx (not 500) for unknown ids", async () => {
+    // Don't need a real goal — passing a bogus non-UUID id should resolve to
+    // 404 (not found), NEVER 500. Before the fix this would crash with
+    // \"invalid input syntax for type uuid\" because svc.update was called
+    // with the raw id.
+    const raw = await fetch(`${BASE_URL}/api/goals/cf-smoke-nonexistent`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ description: "regression test" }),
+    });
+    expect(raw.status, "PATCH non-UUID goal must not 500").toBeLessThan(500);
   });
 });
 

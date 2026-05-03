@@ -2103,7 +2103,7 @@ export function agentRoutes(
       { strictMode: strictSecretsMode },
     );
     await svc.update(
-      id,
+      existing.id,
       { adapterConfig: normalizedAdapterConfig },
       {
         recordRevision: {
@@ -2165,7 +2165,7 @@ export function agentRoutes(
       { strictMode: strictSecretsMode },
     );
     await svc.update(
-      id,
+      existing.id,
       { adapterConfig: normalizedAdapterConfig },
       {
         recordRevision: {
@@ -2339,7 +2339,7 @@ export function agentRoutes(
     }
 
     const actor = getActorInfo(ctx);
-    const agent = await svc.update(id, patchData, {
+    const agent = await svc.update(existing.id, patchData, {
       recordRevision: {
         createdByAgentId: actor.agentId,
         createdByUserId: actor.actorType === "user" ? actor.actorId : null,

@@ -520,7 +520,7 @@ export function executionWorkspaceRoutes(db: Db) {
       }
 
       const closedAt = new Date();
-      const archivedWorkspace = await svc.update(id, {
+      const archivedWorkspace = await svc.update(existing.id, {
         ...patch,
         status: "archived",
         closedAt,
@@ -595,12 +595,12 @@ export function executionWorkspaceRoutes(db: Db) {
           cleanupPatch.status = "cleanup_failed";
         }
         if (cleanupResult.warnings.length > 0 || !cleanupResult.cleaned) {
-          workspace = (await svc.update(id, cleanupPatch)) ?? workspace;
+          workspace = (await svc.update(existing.id, cleanupPatch)) ?? workspace;
         }
       } catch (error) {
         const failureReason = error instanceof Error ? error.message : String(error);
         workspace =
-          (await svc.update(id, {
+          (await svc.update(existing.id, {
             status: "cleanup_failed",
             closedAt,
             cleanupReason: failureReason,
@@ -610,7 +610,7 @@ export function executionWorkspaceRoutes(db: Db) {
         }, { status: 500 });
       }
     } else {
-      const updatedWorkspace = await svc.update(id, patch);
+      const updatedWorkspace = await svc.update(existing.id, patch);
       if (!updatedWorkspace) {
         return Response.json({ error: "Execution workspace not found" }, { status: 404 });
       }
