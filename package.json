@@ -45,6 +45,7 @@
     "test:release-smoke": "npx playwright test --config tests/release-smoke/playwright.config.ts",
     "test:release-smoke:headed": "npx playwright test --config tests/release-smoke/playwright.config.ts --headed",
     "test:cf-smoke": "vitest run --config tests/cf-smoke/vitest.config.ts",
+    "test:cf-smoke:watch": "vitest --config tests/cf-smoke/vitest.config.ts",
     "metrics:paperclip-commits": "tsx scripts/paperclip-commit-metrics.ts"
   },
   "devDependencies": {
