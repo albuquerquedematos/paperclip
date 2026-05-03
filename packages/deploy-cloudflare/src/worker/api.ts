@@ -38,11 +38,23 @@ export type { Env };
 // ---------------------------------------------------------------------------
 // Process-level error guards
 //
-// Async failures that fire AFTER the request handler returned (e.g. postgres
-// reconnect attempts, postgres-js pool maintenance) bypass our try/catch.
-// In `wrangler dev --local` an unhandled rejection crashes workerd and the
-// dev server exits with code 1. These listeners convert those into log
-// lines so the worker stays alive across sidecar / DB restart races.
+// Async failures that fire AFTER the request handler returned (postgres
+// reconnect attempts, postgres-js pool maintenance, raw TCP read errors
+// when the sidecar restarts mid-request) bypass our try/catch. In
+// `wrangler dev --local` an uncaught error crashes workerd and the dev
+// server exits with code 1. We install three guards covering the three
+// distinct failure shapes:
+//
+//   1. addEventListener("unhandledrejection") — async/await rejections
+//   2. addEventListener("error")              — sync throws in callbacks
+//   3. process.on("uncaughtException")        — raw EventEmitter errors
+//                                                (Node TCP sockets, etc.)
+//
+// (3) is the one that catches `Error: read ECONNRESET` from postgres-js's
+// underlying node:net Socket when the embedded postgres or the sidecar
+// restarts while a connection is held open. The workerd nodejs_compat
+// layer surfaces these as Node-style uncaught exceptions, so the
+// browser-spec listeners alone aren't enough.
 // ---------------------------------------------------------------------------
 
 if (typeof addEventListener === "function") {
@@ -63,6 +75,31 @@ if (typeof addEventListener === "function") {
       ev.preventDefault?.();
     });
   } catch { /* same */ }
+}
+
+// Node-style uncaughtException — only present in workerd's nodejs_compat
+// runtime. In production CF Workers this is a no-op (process.on isn't
+// callable), so the guard is purely defensive for `wrangler dev --local`.
+if (
+  typeof process !== "undefined" &&
+  typeof (process as { on?: unknown }).on === "function"
+) {
+  try {
+    (process as unknown as { on: (event: string, cb: (err: unknown) => void) => void }).on(
+      "uncaughtException",
+      (err) => {
+        const msg = err instanceof Error ? err.stack ?? err.message : String(err);
+        console.warn(`[CF Worker] uncaughtException: ${msg}`);
+      },
+    );
+    (process as unknown as { on: (event: string, cb: (reason: unknown) => void) => void }).on(
+      "unhandledRejection",
+      (reason) => {
+        const msg = reason instanceof Error ? reason.stack ?? reason.message : String(reason);
+        console.warn(`[CF Worker] unhandledRejection (process): ${msg}`);
+      },
+    );
+  } catch { /* runtime didn't allow it */ }
 }
 
 // ---------------------------------------------------------------------------
