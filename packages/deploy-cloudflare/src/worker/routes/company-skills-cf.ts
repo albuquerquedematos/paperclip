@@ -285,4 +285,9 @@ export function registerCompanySkillRoutes(app: Hono<{ Bindings: Env }>): void {
   app.patch("/api/companies/:companyId/skills/:skillId/files", proxyHandler);
   app.delete("/api/companies/:companyId/skills/:skillId", proxyHandler);
   app.post("/api/companies/:companyId/skills/:skillId/install-update", proxyHandler);
+  // Bulk-import skills from a URL/path/repo — touches fs (clones, reads .md),
+  // so always goes to the sidecar.
+  app.post("/api/companies/:companyId/skills/import", proxyHandler);
+  // Scan repos/projects for skills to import.
+  app.post("/api/companies/:companyId/skills/scan-projects", proxyHandler);
 }
